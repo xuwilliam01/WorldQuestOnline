@@ -1,2 +1,2 @@
-# WorldQuestRPG
+# WorldQuestOnline
 Final game
