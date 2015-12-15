@@ -13,7 +13,7 @@ import java.net.Socket;
 public class Server implements Runnable
 {
 	private ServerSocket socket;
-	private Engine world;
+	private Engine engine;
 	private int port;
 
 	public Server()
@@ -36,9 +36,9 @@ public class Server implements Runnable
 	{
 		// Construct the new world
 		System.out.println("Creating world...");
-		world = new Engine();
-		Thread newWorld = new Thread(world);
-		newWorld.start();
+		engine = new Engine();
+		Thread newEngine = new Thread(engine);
+		newEngine.start();
 		
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
@@ -47,7 +47,9 @@ public class Server implements Runnable
 			try
 			{
 				Socket newClient = socket.accept();
-				Player newPlayer = new Player(newClient,this,world);
+				Player newPlayer = new Player(newClient,this,engine);
+				engine.addPlayer(newPlayer);
+				
 				System.out.println("A new client has connected");
 			}
 			catch (IOException e)
