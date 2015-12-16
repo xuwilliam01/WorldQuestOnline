@@ -2,6 +2,8 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -9,12 +11,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class Client extends JPanel implements KeyListener
+public class Client extends JPanel implements KeyListener, ActionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -24,6 +26,7 @@ public class Client extends JPanel implements KeyListener
 	private Socket mySocket;
 	private PrintWriter output;
 	private BufferedReader input;
+	private Timer framerate;
 	
 	/**
 	 * The current message that the client is sending to the server
@@ -87,7 +90,7 @@ public class Client extends JPanel implements KeyListener
 	{	
 		// Create the player object
 		player = new ClientPlayer();
-		
+		framerate = new Timer(FRAME_DELAY,this);
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.DARK_GRAY);
@@ -127,27 +130,7 @@ public class Client extends JPanel implements KeyListener
 		inputThread.start();
 		
 		// Start the game
-		run();
-	}
-
-	/**
-	 * Method that runs the game constantly at a fixed framerate
-	 */
-	private void run()
-	{
-		while (true)
-		{
-			try
-			{
-				repaint();
-				Thread.sleep(FRAME_DELAY);
-			}
-			catch (InterruptedException e)
-			{
-				//System.out.println("Error delaying the thread");
-				e.printStackTrace();
-			}
-		}
+		framerate.start();
 	}
 
 	/**
@@ -168,27 +151,21 @@ public class Client extends JPanel implements KeyListener
 		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("RIGHT"))
 		{
 			currentMessage = "RIGHT";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("LEFT"))
 		{
 			currentMessage = "LEFT";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("UP"))
 		{
 			currentMessage = "UP";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("DOWN"))
 		{
-			currentMessage = "DOWN";
-			output.println(currentMessage);
-			output.flush();
+			currentMessage = "DOWN";		
 		}
+		output.println(currentMessage);
+		output.flush();
 	}
 
 	@Override
@@ -197,33 +174,33 @@ public class Client extends JPanel implements KeyListener
 		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("STOP RIGHT"))
 		{
 			currentMessage = "STOP RIGHT";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("STOP LEFT"))
 		{
 			currentMessage = "STOP LEFT";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("STOP UP"))
 		{
 			currentMessage = "STOP UP";
-			output.println(currentMessage);
-			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("STOP DOWN"))
 		{
 			currentMessage = "STOP DOWN";
-			output.println(currentMessage);
-			output.flush();
 		}
+		output.println(currentMessage);
+		output.flush();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent key)
 	{
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		repaint();
+		
 	}
 
 }
