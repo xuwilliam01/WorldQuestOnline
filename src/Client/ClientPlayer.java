@@ -14,8 +14,8 @@ public class ClientPlayer
 	{
 		this.x = 0;
 		this.y = 0;
-		this.width = 100;
-		this.height = 100;
+		this.width = 30;
+		this.height = 30;
 	}
 
 	public int getX()

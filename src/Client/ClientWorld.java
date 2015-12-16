@@ -1,31 +1,44 @@
 package Client;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class ClientWorld {
 
-	private int[][] visibleGrid;
-	
-	public void update(int[][] newGrid)
+	private ArrayList<Object> objects = new ArrayList<Object>();
+
+	public void add(Object object)
 	{
-		visibleGrid = newGrid;
+		objects.add(object);
 	}
 
-	public void draw(Graphics graphics, int xStart, int yStart)
+	public void draw(Graphics graphics)
 	{
-		int x = xStart;
-		int y = yStart;
-		for(int row = 0; row < visibleGrid.length;row++)
-		{
-			for(int col = 0; col < visibleGrid[row].length;col++)
+		synchronized(objects){
+			for(Object object : objects)
 			{
-				graphics.fillRect(x,y,x+Client.TILE_SIZE*(col+1),y+Client.TILE_SIZE*(row+1));
+				if(object.getDesc().equals("TILE"))
+				{
+					Tile tile = (Tile)object;
+					if(tile.getType() == 1)
+						graphics.setColor(Color.BLACK);
+					else if(tile.getType() == 0)
+						graphics.setColor(Color.RED);
+					graphics.fillRect(tile.getX(), tile.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
+				}
 			}
 		}
 	}
-	public int[][] getVisibleGrid() {
-		return visibleGrid;
+	public ArrayList<Object> getObjects() {
+		return objects;
 	}
-
 	
+	public boolean contains(Object object)
+	{
+		for(Object obj : objects)
+			if(obj.getX() == object.getX() && obj.getY() == object.getY() && object.getDesc().equals(obj.getDesc()))
+				return true;
+		return false;
+	}
 }

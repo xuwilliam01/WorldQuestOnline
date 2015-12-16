@@ -83,6 +83,11 @@ public class Engine implements Runnable, ActionListener
 		listOfPlayers.add(newPlayer);
 	}
 
+	
+	public World getWorld() {
+		return world;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Move all the objects around

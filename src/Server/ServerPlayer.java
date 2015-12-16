@@ -227,14 +227,11 @@ public class ServerPlayer implements Runnable
 	public void update()
 	{
 		//Send new grid
-		if(xUpdated || yUpdated)
-		{
-			int tilesX = SCREEN_WIDTH/TILE_SIZE +3;
-			int tilesY = SCREEN_HEIGHT/TILE_SIZE +3;
-			queueMessage("GRID "+tilesX+" "+tilesY);
-			
-			
-		}
+		int[][] grid = world.getWorld().getGrid();
+		for(int row = 0; row < grid.length;row++)
+			for(int col = 0; col < grid[row].length;col++)
+				queueMessage("TILE "+grid[row][col]+" "+col*TILE_SIZE+" "+row*TILE_SIZE);
+
 		if (xUpdated)
 		{
 			queueMessage("x " + x);
@@ -250,6 +247,11 @@ public class ServerPlayer implements Runnable
 	}
 
 	public int[] getPlayerOnGrid()
+	{
+		return new int[]{x/TILE_SIZE,y/TILE_SIZE};
+	}
+
+	public int[] getObjectOnGrid(int x, int y)
 	{
 		return new int[]{x/TILE_SIZE,y/TILE_SIZE};
 	}

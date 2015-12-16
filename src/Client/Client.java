@@ -68,6 +68,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 				try
 				{
 					String message = input.readLine();
+					System.out.println(message);
 					String[] tokens = message.split(" ");
 					if (tokens[0].equals("x"))
 					{
@@ -76,6 +77,12 @@ public class Client extends JPanel implements KeyListener, ActionListener
 					else if (tokens[0].equals("y"))
 					{
 						player.setY(Integer.parseInt(tokens[1]));
+					}
+					else if(tokens[0].equals("TILE"))
+					{
+						Tile newTile = new Tile("TILE",Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
+						if(!world.contains(newTile))
+							world.add(newTile);
 					}
 				}
 				catch (IOException e)
@@ -144,7 +151,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-	//	world.draw(graphics,0,0);
+		world.draw(graphics);
 		graphics.setColor(Color.GREEN);
 		graphics.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		graphics.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
