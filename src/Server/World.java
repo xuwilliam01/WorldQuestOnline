@@ -7,5 +7,8 @@ package Server;
  */
 public class World
 {
-
+	int[][] grid;
+	
+	
+	
 }

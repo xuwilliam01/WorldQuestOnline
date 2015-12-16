@@ -26,6 +26,7 @@ public class StartClient
 		
 		Frame myFrame = new Frame();
 		Client client = new Client(mySocket);
+		myFrame.add(client);
 		client.initialize();
 	}
 }

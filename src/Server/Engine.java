@@ -1,13 +1,17 @@
 package Server;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
 
 /**
  * Runs the actual game
  * @author William Xu & Alex Raita
  *
  */
-public class Engine implements Runnable
+public class Engine implements Runnable, ActionListener
 {
 
 	/**
@@ -25,6 +29,7 @@ public class Engine implements Runnable
 	 */
 	public final int UPDATE_RATE = 15;
 
+	private Timer updateTimer;
 	/**
 	 * Constructor for the engine
 	 */
@@ -40,24 +45,8 @@ public class Engine implements Runnable
 	 */
 	public void run()
 	{
-		while (true)
-		{
-			// Move all the objects around
-			moveObjects();
-			
-			// Update all the clients with the new player data
-			updatePlayers();
-
-			try
-			{
-				Thread.sleep(UPDATE_RATE);
-			}
-			catch (InterruptedException e)
-			{
-				System.out.println("Error with the update timer");
-				e.printStackTrace();
-			}
-		}
+		updateTimer = new Timer(UPDATE_RATE,this);
+		updateTimer.start();
 	}
 
 	/**
@@ -77,9 +66,8 @@ public class Engine implements Runnable
 	public void moveObjects()
 	{
 		// Move players around (will be changed once scrolling is implemented)
-		for (int playerNo = 0; playerNo < listOfPlayers.size(); playerNo++)
+		for (ServerPlayer player : listOfPlayers)
 		{
-			ServerPlayer player = listOfPlayers.get(playerNo);
 			player.setX(player.getX()+player.getHSpeed());
 			player.setY(player.getY()+player.getVSpeed());
 		}
@@ -92,5 +80,15 @@ public class Engine implements Runnable
 	public void addPlayer(ServerPlayer newPlayer)
 	{
 		listOfPlayers.add(newPlayer);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// Move all the objects around
+		moveObjects();
+
+		// Update all the clients with the new player data
+		updatePlayers();
+
 	}
 }
