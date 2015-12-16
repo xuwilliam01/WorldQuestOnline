@@ -68,7 +68,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 				try
 				{
 					String message = input.readLine();
-					System.out.println(message);
+				//	System.out.println(message);
 					String[] tokens = message.split(" ");
 					if (tokens[0].equals("x"))
 					{
@@ -151,10 +151,10 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.draw(graphics);
+		world.draw(graphics, player.getX(), player.getY());
 		graphics.setColor(Color.GREEN);
-		graphics.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
-		graphics.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		graphics.fillRect(SCREEN_WIDTH/2 - player.getWidth()/2, SCREEN_HEIGHT/2 - player.getHeight()/2, player.getWidth(), player.getHeight());
+		//graphics.drawRect(SCREEN_WIDTH/2 - player.getWidth()/2, player.getY(), player.getWidth(), player.getHeight());
 	}
 
 	@Override

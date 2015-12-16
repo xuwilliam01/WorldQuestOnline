@@ -80,8 +80,8 @@ public class ServerPlayer implements Runnable
 		this.world = world;
 
 		// Set initial x and y coordinates
-		x = 50;
-		y = 50;
+		x = SCREEN_WIDTH/2 - TILE_SIZE/2;
+		y = SCREEN_HEIGHT/2 - TILE_SIZE/2;
 		xUpdated = true;
 		yUpdated = true;
 		movementSpeed = 5;
@@ -227,6 +227,8 @@ public class ServerPlayer implements Runnable
 	public void update()
 	{
 		//Send new grid
+		int minRow;
+		int minCol;
 		int[][] grid = world.getWorld().getGrid();
 		for(int row = 0; row < grid.length;row++)
 			for(int col = 0; col < grid[row].length;col++)

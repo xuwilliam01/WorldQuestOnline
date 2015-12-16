@@ -3,6 +3,8 @@ package Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 public class ClientWorld {
 
@@ -13,9 +15,9 @@ public class ClientWorld {
 		objects.add(object);
 	}
 
-	public void draw(Graphics graphics)
+	public void draw(Graphics graphics, int playerX, int playerY)
 	{
-		synchronized(objects){
+		try{
 			for(Object object : objects)
 			{
 				if(object.getDesc().equals("TILE"))
@@ -25,15 +27,20 @@ public class ClientWorld {
 						graphics.setColor(Color.BLACK);
 					else if(tile.getType() == 0)
 						graphics.setColor(Color.RED);
-					graphics.fillRect(tile.getX(), tile.getY(), Client.TILE_SIZE, Client.TILE_SIZE);
+					graphics.fillRect(tile.getX()-playerX + Client.SCREEN_WIDTH/2 - Client.TILE_SIZE/2, tile.getY()-playerY + Client.SCREEN_HEIGHT/2 - Client.TILE_SIZE/2 , Client.TILE_SIZE, Client.TILE_SIZE);
 				}
 			}
 		}
+		catch(ConcurrentModificationException E)
+		{
+
+		}
+
 	}
 	public ArrayList<Object> getObjects() {
 		return objects;
 	}
-	
+
 	public boolean contains(Object object)
 	{
 		for(Object obj : objects)
