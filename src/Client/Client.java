@@ -21,6 +21,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
+	public final static int TILE_SIZE = 20;
 
 	
 	private Socket mySocket;
@@ -36,8 +37,13 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	/**
 	 * Object storing all player data
 	 */
-	ClientPlayer player;
+	private ClientPlayer player;
 
+	/**
+	 * Stores the visible world of the client
+	 */
+	private ClientWorld world;
+	
 	/**
 	 * The framerate of the client
 	 */
@@ -51,8 +57,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 		mySocket = socket;
 		currentMessage = "";
 	}
-	
-	
+
 	private class ServerInput implements Runnable
 	{
 
@@ -91,6 +96,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 		// Create the player object
 		player = new ClientPlayer();
 		framerate = new Timer(FRAME_DELAY,this);
+		world = new ClientWorld();
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.DARK_GRAY);
@@ -139,7 +145,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		
+		world.draw(graphics,0,0);
 		graphics.setColor(Color.GREEN);
 		graphics.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		graphics.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());

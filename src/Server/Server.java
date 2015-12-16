@@ -36,7 +36,11 @@ public class Server implements Runnable
 	{
 		// Construct the new world
 		System.out.println("Creating world...");
-		engine = new Engine();
+		try {
+			engine = new Engine();
+		} catch (IOException e1) {
+			System.out.println("Error with Creating World and/or Engine");
+		}
 		Thread newEngine = new Thread(engine);
 		newEngine.start();
 		

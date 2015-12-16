@@ -14,6 +14,10 @@ import java.net.Socket;
  */
 public class ServerPlayer implements Runnable
 {
+	// Width and height of the screen
+	public final static int SCREEN_WIDTH = 1024;
+	public final static int SCREEN_HEIGHT = 768;
+	public final static int TILE_SIZE = 20;
 
 	private Socket socket;
 	private PrintWriter output;
@@ -24,7 +28,7 @@ public class ServerPlayer implements Runnable
 	//////////////////////////////////////////////////////////////////////
 	// X and Y coordinates will be changed once scrolling is implemented//
 	//////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * The x-coordinate of the player
 	 */
@@ -62,7 +66,7 @@ public class ServerPlayer implements Runnable
 	 * -- right)
 	 */
 	private int direction;
-	
+
 	/**
 	 * The speed at which the player moves
 	 */
@@ -81,7 +85,7 @@ public class ServerPlayer implements Runnable
 		xUpdated = true;
 		yUpdated = true;
 		movementSpeed = 5;
-		
+
 		// Set up the output
 		try
 		{
@@ -110,7 +114,7 @@ public class ServerPlayer implements Runnable
 	@Override
 	public void run()
 	{
-		
+
 		System.out.println("Running");
 		// Get input from the player
 		while (true)
@@ -119,8 +123,8 @@ public class ServerPlayer implements Runnable
 			{
 				String command = input.readLine();
 				System.out.println(command);
-				
-				
+
+
 				if (command.equals("RIGHT"))
 				{
 					hSpeed = movementSpeed;
@@ -222,6 +226,15 @@ public class ServerPlayer implements Runnable
 	 */
 	public void update()
 	{
+		//Send new grid
+		if(xUpdated || yUpdated)
+		{
+			int tilesX = SCREEN_WIDTH/TILE_SIZE +3;
+			int tilesY = SCREEN_HEIGHT/TILE_SIZE +3;
+			queueMessage("GRID "+tilesX+" "+tilesY);
+			
+			
+		}
 		if (xUpdated)
 		{
 			queueMessage("x " + x);
@@ -232,10 +245,14 @@ public class ServerPlayer implements Runnable
 			queueMessage("y " + y);
 			yUpdated = false;
 		}
-		
+
 		flushWriter();
 	}
 
+	public int[] getPlayerOnGrid()
+	{
+		return new int[]{x/TILE_SIZE,y/TILE_SIZE};
+	}
 	public int getX()
 	{
 		return x;

@@ -2,6 +2,7 @@ package Server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
@@ -33,7 +34,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * Constructor for the engine
 	 */
-	public Engine()
+	public Engine() throws IOException
 	{
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new World();
