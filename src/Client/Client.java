@@ -23,7 +23,6 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	public final static int SCREEN_HEIGHT = 768;
 	public final static int TILE_SIZE = 20;
 
-	
 	private Socket mySocket;
 	private PrintWriter output;
 	private BufferedReader input;
@@ -47,7 +46,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	/**
 	 * The framerate of the client
 	 */
-	public final static int FRAME_DELAY = 1;
+	public final static int FRAME_DELAY = 15;
 
 	/**
 	 * Constructor for the client
@@ -145,7 +144,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.draw(graphics,0,0);
+	//	world.draw(graphics,0,0);
 		graphics.setColor(Color.GREEN);
 		graphics.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
 		graphics.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
@@ -157,21 +156,28 @@ public class Client extends JPanel implements KeyListener, ActionListener
 		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("RIGHT"))
 		{
 			currentMessage = "RIGHT";
+			output.println(currentMessage);
+			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("LEFT"))
 		{
 			currentMessage = "LEFT";
+			output.println(currentMessage);
+			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("UP"))
 		{
 			currentMessage = "UP";
+			output.println(currentMessage);
+			output.flush();
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("DOWN"))
 		{
-			currentMessage = "DOWN";		
+			currentMessage = "DOWN";	
+			output.println(currentMessage);
+			output.flush();
 		}
-		output.println(currentMessage);
-		output.flush();
+		
 	}
 
 	@Override
@@ -179,22 +185,23 @@ public class Client extends JPanel implements KeyListener, ActionListener
 	{
 		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("STOP RIGHT"))
 		{
-			currentMessage = "STOP RIGHT";
+			currentMessage = "STOP RIGHT";		
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("STOP LEFT"))
 		{
-			currentMessage = "STOP LEFT";
+			currentMessage = "STOP LEFT";	
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("STOP UP"))
 		{
-			currentMessage = "STOP UP";
+			currentMessage = "STOP UP";	
 		}
 		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("STOP DOWN"))
 		{
-			currentMessage = "STOP DOWN";
+			currentMessage = "STOP DOWN";		
 		}
 		output.println(currentMessage);
 		output.flush();
+	
 	}
 
 	@Override
