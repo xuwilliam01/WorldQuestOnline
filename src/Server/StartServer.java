@@ -1,6 +1,6 @@
 package Server;
 
-public class RunServer
+public class StartServer
 {
 
 	public static void main(String[] args)

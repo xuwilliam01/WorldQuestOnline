@@ -13,7 +13,7 @@ public class Engine implements Runnable
 	/**
 	 * A list of all the players in the server
 	 */
-	private ArrayList<Player> listOfPlayers;
+	private ArrayList<ServerPlayer> listOfPlayers;
 
 	/**
 	 * The world the engine works with
@@ -23,14 +23,14 @@ public class Engine implements Runnable
 	/**
 	 * The rate at which the game runs at, in milliseconds
 	 */
-	public final int UPDATE_RATE = 30;
+	public final int UPDATE_RATE = 15;
 
 	/**
 	 * Constructor for the engine
 	 */
 	public Engine()
 	{
-		listOfPlayers = new ArrayList<Player>();
+		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new World();
 	}
 
@@ -79,7 +79,7 @@ public class Engine implements Runnable
 		// Move players around (will be changed once scrolling is implemented)
 		for (int playerNo = 0; playerNo < listOfPlayers.size(); playerNo++)
 		{
-			Player player = listOfPlayers.get(playerNo);
+			ServerPlayer player = listOfPlayers.get(playerNo);
 			player.setX(player.getX()+player.getHSpeed());
 			player.setY(player.getY()+player.getVSpeed());
 		}
@@ -89,7 +89,7 @@ public class Engine implements Runnable
 	 * Add a new player to the game
 	 * @param newPlayer the new player
 	 */
-	public void addPlayer(Player newPlayer)
+	public void addPlayer(ServerPlayer newPlayer)
 	{
 		listOfPlayers.add(newPlayer);
 	}

@@ -47,8 +47,10 @@ public class Server implements Runnable
 			try
 			{
 				Socket newClient = socket.accept();
-				Player newPlayer = new Player(newClient,this,engine);
+				ServerPlayer newPlayer = new ServerPlayer(newClient,this,engine);
 				engine.addPlayer(newPlayer);
+				Thread playerThread = new Thread(newPlayer);
+				playerThread.start();
 				
 				System.out.println("A new client has connected");
 			}

@@ -12,7 +12,7 @@ import java.net.Socket;
  * @author William Xu & Alex Raita
  *
  */
-public class Player implements Runnable
+public class ServerPlayer implements Runnable
 {
 
 	private Socket socket;
@@ -26,7 +26,7 @@ public class Player implements Runnable
 	//////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * The x-coordinate of the player (left)
+	 * The x-coordinate of the player
 	 */
 	private int x;
 
@@ -37,7 +37,7 @@ public class Player implements Runnable
 	private boolean xUpdated;
 
 	/**
-	 * The y-coordinate of the player (bottom)
+	 * The y-coordinate of the player
 	 */
 	private int y;
 
@@ -53,7 +53,7 @@ public class Player implements Runnable
 	private int hSpeed;
 
 	/**
-	 * The vertical speed of the player (negative -- down, positive -- up)
+	 * The vertical speed of the player (negative -- up, positive -- down)
 	 */
 	private int vSpeed;
 
@@ -62,8 +62,13 @@ public class Player implements Runnable
 	 * -- right)
 	 */
 	private int direction;
+	
+	/**
+	 * The speed at which the player moves
+	 */
+	private int movementSpeed;
 
-	public Player(Socket socket, Server server, Engine world)
+	public ServerPlayer(Socket socket, Server server, Engine world)
 	{
 		// Import the socket, server, and world
 		this.socket = socket;
@@ -71,10 +76,11 @@ public class Player implements Runnable
 		this.world = world;
 
 		// Set initial x and y coordinates
-		x = 0;
-		y = 0;
+		x = 50;
+		y = 50;
 		xUpdated = true;
 		yUpdated = true;
+		movementSpeed = 5;
 		
 		// Set up the output
 		try
@@ -104,16 +110,20 @@ public class Player implements Runnable
 	@Override
 	public void run()
 	{
+		
+		System.out.println("Running");
 		// Get input from the player
 		while (true)
 		{
 			try
 			{
 				String command = input.readLine();
-
+				System.out.println(command);
+				
+				
 				if (command.equals("RIGHT"))
 				{
-					hSpeed = 5;
+					hSpeed = movementSpeed;
 					direction = 1;
 				}
 				else if (command.equals("STOP RIGHT"))
@@ -125,7 +135,7 @@ public class Player implements Runnable
 				}
 				else if (command.equals("LEFT"))
 				{
-					hSpeed = -5;
+					hSpeed = -movementSpeed;
 					direction = -1;
 				}
 				else if (command.equals("STOP LEFT"))
@@ -135,10 +145,31 @@ public class Player implements Runnable
 						hSpeed = 0;
 					}
 				}
+				else if (command.equals("UP"))
+				{
+					vSpeed = -movementSpeed;
+				}
+				else if (command.equals("STOP UP"))
+				{
+					if (vSpeed < 0)
+					{
+						vSpeed = 0;
+					}
+				}
+				else if (command.equals("DOWN"))
+				{
+					vSpeed = movementSpeed;
+				}
+				else if (command.equals("STOP DOWN"))
+				{
+					if (vSpeed > 0)
+					{
+						vSpeed = 0;
+					}
+				}
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
 				break;
 			}
 		}
