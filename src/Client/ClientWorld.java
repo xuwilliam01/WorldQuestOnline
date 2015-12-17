@@ -15,8 +15,15 @@ public class ClientWorld {
 		objects.add(object);
 	}
 
+	/**
+	 * Draws the world
+	 * @param graphics the graphics component to be drawn on
+	 * @param playerX the position of the player
+	 * @param playerY the position of the player
+	 */
 	public void draw(Graphics graphics, int playerX, int playerY)
 	{
+		//Go through each object in the wrold and draw it relative to the player's position
 		try{
 			Iterator<Object> itr = objects.iterator();
 			//while(itr.hasNext())
@@ -25,12 +32,14 @@ public class ClientWorld {
 				//Object object = itr.next();
 				//if(object == null)
 					//break;
+				int x = object.getX()-playerX + Client.SCREEN_WIDTH/2 - Client.TILE_SIZE/2;
+				int y = object.getY()-playerY + Client.SCREEN_HEIGHT/2 - Client.TILE_SIZE/2;
+				
 				if(object.getDesc().equals("TILE"))
 				{
 					Tile tile = (Tile)object;
 					//If tile is not on the grid, remove it from the list
-					int x = tile.getX()-playerX + Client.SCREEN_WIDTH/2 - Client.TILE_SIZE/2;
-					int y = tile.getY()-playerY + Client.SCREEN_HEIGHT/2 - Client.TILE_SIZE/2;
+					
 //					if(x-Client.TILE_SIZE < 0 || x > Client.SCREEN_WIDTH)
 //					{
 //						itr.remove();
@@ -49,6 +58,12 @@ public class ClientWorld {
 						graphics.fillRect(x,y, Client.TILE_SIZE, Client.TILE_SIZE);
 					}
 				}
+				else if(object.getDesc().equals("PLAYER"))
+				{
+					OtherPlayer player = (OtherPlayer)object;
+					graphics.setColor(player.getColour());
+					graphics.fillRect(x,y, Client.TILE_SIZE, Client.TILE_SIZE);
+				}
 			}
 		}
 		//this might cause some problems in the future
@@ -62,11 +77,29 @@ public class ClientWorld {
 		return objects;
 	}
 	
+	/**
+	 * Checks if the world contains a given object
+	 * @param object the object to be checked
+	 * @return true if the object is found in the world, false if not
+	 */
 	public boolean contains(Object object)
 	{
 		for(Object obj : objects)
-			if(obj.getX() == object.getX() && obj.getY() == object.getY() && obj.getDesc().equals(object.getDesc()))
+			if(obj.compareTo(object) == 0)
 				return true;
 		return false;
+	}
+	
+	/**
+	 * Gets the actual object in the world
+	 * @param object the object to be fetched
+	 * @return the desired object
+	 */
+	public Object get(Object object)
+	{
+		for(Object obj : objects)
+			if(obj.compareTo(object) == 0)
+				return obj;
+		return null;
 	}
 }

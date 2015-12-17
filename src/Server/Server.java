@@ -1,5 +1,6 @@
 package Server;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -46,12 +47,15 @@ public class Server implements Runnable
 		
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
+	
+		int playerNum = 0;
 		while (true)
 		{
 			try
 			{
 				Socket newClient = socket.accept();
-				ServerPlayer newPlayer = new ServerPlayer(newClient,this,engine);
+				ServerPlayer newPlayer = new ServerPlayer(newClient,this,engine,"cyan", playerNum);
+				playerNum++;
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();

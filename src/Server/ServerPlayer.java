@@ -1,5 +1,6 @@
 package Server;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,7 +73,10 @@ public class ServerPlayer implements Runnable
 	 */
 	private int movementSpeed;
 
-	public ServerPlayer(Socket socket, Server server, Engine world)
+	private String colour;
+	private int playerNum;
+	
+	public ServerPlayer(Socket socket, Server server, Engine world, String colour, int playerNum)
 	{
 		// Import the socket, server, and world
 		this.socket = socket;
@@ -82,6 +86,8 @@ public class ServerPlayer implements Runnable
 		// Set initial x and y coordinates
 		x = SCREEN_WIDTH/2 - TILE_SIZE/2;
 		y = SCREEN_HEIGHT/2 - TILE_SIZE/2;
+		this.colour = colour;
+		this.playerNum = playerNum;
 		xUpdated = true;
 		yUpdated = true;
 		movementSpeed = 5;
@@ -247,7 +253,26 @@ public class ServerPlayer implements Runnable
 			yUpdated = false;
 		}
 
+		//Update player locations
+		for(ServerPlayer player : world.getListOfPlayers())
+		{
+			//If it is not this player
+			if(player.getPlayerNum() != playerNum)
+				queueMessage("PLAYER "+player.getColour()+" "+player.x+" "+player.y+" "+player.getPlayerNum());
+		}
 		flushWriter();
+	}
+
+	public boolean isxUpdated() {
+		return xUpdated;
+	}
+
+	public boolean isyUpdated() {
+		return yUpdated;
+	}
+
+	public int getPlayerNum() {
+		return playerNum;
 	}
 
 	public int[] getPlayerOnGrid()
@@ -307,4 +332,13 @@ public class ServerPlayer implements Runnable
 		this.vSpeed = vSpeed;
 	}
 
+	public String getColour() {
+		return colour;
+	}
+
+	public void setColour(String colour) {
+		this.colour = colour;
+	}
+
+	
 }

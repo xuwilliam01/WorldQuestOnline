@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.awt.Graphics;
 
@@ -70,6 +71,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 					String message = input.readLine();
 					System.out.println(message);
 					String[] tokens = message.split(" ");
+					//If our player has moved
 					if (tokens[0].equals("x"))
 					{
 						player.setX(Integer.parseInt(tokens[1]));
@@ -78,11 +80,49 @@ public class Client extends JPanel implements KeyListener, ActionListener
 					{
 						player.setY(Integer.parseInt(tokens[1]));
 					}
+					//If there is a tile to be updated
 					else if(tokens[0].equals("TILE"))
 					{
 						Tile newTile = new Tile("TILE",Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
 						if(!world.contains(newTile))
 							world.add(newTile);
+					}
+					//If there is a player to be updated
+					else if(tokens[0].equals("PLAYER"))
+					{
+						//Get the player's colour and add them
+						Color colour = Color.YELLOW;
+						Field field = null;
+						try {
+							field = Class.forName("java.awt.Color").getField(tokens[1].toLowerCase());
+							colour = (Color)field.get(null);
+						} catch (NoSuchFieldException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (SecurityException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} // toLowerCase because the color fields are RED or red, not Red
+						catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						OtherPlayer newPlayer = new OtherPlayer("PLAYER",Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]),colour,Integer.parseInt(tokens[4]));
+						if(!world.contains(newPlayer))
+							world.add(newPlayer);
+						else
+						{
+							//If the player already exists, update his position
+							OtherPlayer player = (OtherPlayer) world.get(newPlayer);
+							player.setX(Integer.parseInt(tokens[2]));
+							player.setY(Integer.parseInt(tokens[3]));
+						}
 					}
 				}
 				catch (IOException e)

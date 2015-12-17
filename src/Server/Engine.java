@@ -55,10 +55,8 @@ public class Engine implements Runnable, ActionListener
 	 */
 	public void updatePlayers()
 	{
-		for (int playerNo = 0; playerNo < listOfPlayers.size(); playerNo++)
-		{
-			listOfPlayers.get(playerNo).update();
-		}
+		for(ServerPlayer player : listOfPlayers)
+			player.update();
 	}
 
 	/**
@@ -83,9 +81,18 @@ public class Engine implements Runnable, ActionListener
 		listOfPlayers.add(newPlayer);
 	}
 
-	
+
 	public World getWorld() {
 		return world;
+	}
+
+	
+	public ArrayList<ServerPlayer> getListOfPlayers() {
+		return listOfPlayers;
+	}
+
+	public void setListOfPlayers(ArrayList<ServerPlayer> listOfPlayers) {
+		this.listOfPlayers = listOfPlayers;
 	}
 
 	@Override
