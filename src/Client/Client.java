@@ -95,8 +95,8 @@ public class Client extends JPanel implements KeyListener
 						else if(tokens[0].equals("TILE"))
 						{
 							Tile newTile = new Tile("TILE",Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
-							if(!world.contains(newTile))
-								world.add(newTile);
+							//if(!world.contains(newTile))
+							world.add(newTile);
 						}
 						//If there is a player to be updated
 						else if(tokens[0].equals("PLAYER"))
@@ -125,15 +125,15 @@ public class Client extends JPanel implements KeyListener
 								a.printStackTrace();
 							}
 							OtherPlayer newPlayer = new OtherPlayer("PLAYER",Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]),colour,Integer.parseInt(tokens[4]));
-							if(!world.contains(newPlayer))
-								world.add(newPlayer);
-							else
-							{
-								//If the player already exists, update his position
-								OtherPlayer player = (OtherPlayer) world.get(newPlayer);
-								player.setX(Integer.parseInt(tokens[2]));
-								player.setY(Integer.parseInt(tokens[3]));
-							}
+							//if(!world.contains(newPlayer))
+							world.add(newPlayer);
+//							else
+//							{
+//								//If the player already exists, update his position
+//								OtherPlayer player = (OtherPlayer) world.get(newPlayer);
+//								player.setX(Integer.parseInt(tokens[2]));
+//								player.setY(Integer.parseInt(tokens[3]));
+//							}
 						}
 					}
 				}
