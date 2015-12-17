@@ -218,7 +218,7 @@ public class ServerPlayer implements Runnable {
 		int minCol = Math
 				.max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
 						/ 2)[1], 0);
-		int[][] grid = world.getWorld().getGrid();
+		char[][] grid = world.getWorld().getGrid();
 		for (int row = minRow; row < Math.min(minRow + SCREEN_HEIGHT / 20 + 2,
 				grid.length); row++)
 			for (int col = minCol; col < Math.min(minCol + SCREEN_WIDTH / 20

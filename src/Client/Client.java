@@ -94,7 +94,7 @@ public class Client extends JPanel implements KeyListener
 						//If there is a tile to be updated
 						else if(tokens[0].equals("TILE"))
 						{
-							Tile newTile = new Tile("TILE",Integer.parseInt(tokens[1]),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
+							Tile newTile = new Tile("TILE",tokens[1].charAt(0),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
 							//if(!world.contains(newTile))
 							world.add(newTile);
 						}

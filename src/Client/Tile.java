@@ -6,18 +6,18 @@ package Client;
  */
 public class Tile extends Object{
 
-	private int type;
+	private char type;
 	
-	public Tile(String description, int type, int x, int y) {
+	public Tile(String description, char type, int x, int y) {
 		super(description, x, y);
 		this.type = type;
 	}
 
-	public int getType() {
+	public char getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 	

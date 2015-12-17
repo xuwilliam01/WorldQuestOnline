@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  */
 public class World
 {
-	private int[][] grid;
+	private char[][] grid;
 
 	public World() throws IOException
 	{
@@ -22,23 +22,23 @@ public class World
 		BufferedReader worldInput = new BufferedReader(new FileReader("World"));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 		
-		grid = new int[Integer.parseInt(tokenizer.nextToken())][Integer.parseInt(tokenizer.nextToken())];
+		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer.parseInt(tokenizer.nextToken())];
 		String line;
 		for(int row = 0; row < grid.length;row++)
 		{
 			line = worldInput.readLine();
 			for(int col = 0; col < grid[row].length;col++)
-				grid[row][col] = (int)(line.charAt(col)-'0');
+				grid[row][col] = line.charAt(col);
 		}
 		
 		worldInput.close();
 	}
 	
-	public int[][] getGrid() {
+	public char[][] getGrid() {
 		return grid;
 	}
 
-	public void setGrid(int[][] grid) {
+	public void setGrid(char[][] grid) {
 		this.grid = grid;
 	}
 	
