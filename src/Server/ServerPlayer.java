@@ -233,15 +233,16 @@ public class ServerPlayer implements Runnable
 	public void update()
 	{
 		//Update the grid
-		if(xUpdated  ||yUpdated)
-		{
+		queueMessage("START");
+		//if(xUpdated  ||yUpdated)
+		//{
 			int minRow = Math.max(getObjectOnGrid(x-SCREEN_WIDTH/2,y - SCREEN_HEIGHT/2)[0],0);
 			int minCol = Math.max(getObjectOnGrid(x-SCREEN_WIDTH/2,y - SCREEN_HEIGHT/2)[1],0);
 			int[][] grid = world.getWorld().getGrid();
-			for(int row = minRow; row < Math.min(minRow+SCREEN_HEIGHT/20+1,grid.length);row++)
-				for(int col = minCol; col < Math.min(minCol + SCREEN_WIDTH/20+1,grid[row].length);col++)
+			for(int row = minRow; row < Math.min(minRow+SCREEN_HEIGHT/20+2,grid.length);row++)
+				for(int col = minCol; col < Math.min(minCol + SCREEN_WIDTH/20+2,grid[row].length);col++)
 					queueMessage("TILE "+grid[row][col]+" "+col*TILE_SIZE+" "+row*TILE_SIZE);
-		}
+		//}
 		if (xUpdated)
 		{
 			queueMessage("x " + x);
@@ -260,6 +261,7 @@ public class ServerPlayer implements Runnable
 			if(player.getPlayerNum() != playerNum)
 				queueMessage("PLAYER "+player.getColour()+" "+player.x+" "+player.y+" "+player.getPlayerNum());
 		}
+		queueMessage("DONE");
 		flushWriter();
 	}
 
