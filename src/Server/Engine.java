@@ -119,6 +119,5 @@ public class Engine implements Runnable, ActionListener
 
 		// Update all the clients with the new player data
 		updatePlayers();
-		
 	}
 }
