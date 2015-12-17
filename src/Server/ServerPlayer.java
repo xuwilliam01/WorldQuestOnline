@@ -209,7 +209,7 @@ public class ServerPlayer implements Runnable {
 	 */
 	public void update() {
 		// Update the grid
-		queueMessage("START");
+		queueMessage("START QUEUE");
 		// if(xUpdated ||yUpdated)
 		// {
 		int minRow = Math
