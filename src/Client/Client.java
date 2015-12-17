@@ -27,6 +27,9 @@ public class Client extends JPanel implements KeyListener
 	private Socket mySocket;
 	private PrintWriter output;
 	private BufferedReader input;
+	
+	private long ping;
+	private String pingString = "LATENCY: (PRESS P)";
 
 	/**
 	 * The current message that the client is sending to the server
@@ -135,6 +138,10 @@ public class Client extends JPanel implements KeyListener
 //								player.setY(Integer.parseInt(tokens[3]));
 //							}
 						}
+						else if (tokens[0].equals("REPING"))
+						{
+							pingString = "LATENCY: " + (System.currentTimeMillis()-ping);
+						}
 					}
 				}
 			}
@@ -203,7 +210,11 @@ public class Client extends JPanel implements KeyListener
 		world.draw(graphics, player.getX(), player.getY());
 		graphics.setColor(Color.GREEN);
 		graphics.fillRect(SCREEN_WIDTH/2 - player.getWidth()/2, SCREEN_HEIGHT/2 - player.getHeight()/2, player.getWidth(), player.getHeight());
+		graphics.setColor(Color.WHITE);
+		graphics.drawString(pingString, 20, 20);
+		
 		//graphics.drawRect(SCREEN_WIDTH/2 - player.getWidth()/2, player.getY(), player.getWidth(), player.getHeight());
+		
 	}
 
 	@Override
@@ -231,6 +242,12 @@ public class Client extends JPanel implements KeyListener
 		{
 			currentMessage = "DOWN";	
 			output.println(currentMessage);
+			output.flush();
+		}
+		else if (key.getKeyCode()==KeyEvent.VK_P)
+		{
+			ping = System.currentTimeMillis();
+			output.println("PING");
 			output.flush();
 		}
 

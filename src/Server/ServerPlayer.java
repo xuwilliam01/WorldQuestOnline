@@ -149,6 +149,10 @@ public class ServerPlayer implements Runnable {
 						vSpeed = 0;
 					}
 				}
+				else if (command.equals("PING"))
+				{
+					sendMessage("REPING");
+				}
 			} catch (IOException e) {
 				break;
 			}
@@ -221,10 +225,14 @@ public class ServerPlayer implements Runnable {
 		char[][] grid = world.getWorld().getGrid();
 		for (int row = minRow; row < Math.min(minRow + SCREEN_HEIGHT / 20 + 2,
 				grid.length); row++)
+		{
 			for (int col = minCol; col < Math.min(minCol + SCREEN_WIDTH / 20
 					+ 2, grid[row].length); col++)
+			{
 				queueMessage("TILE " + grid[row][col] + " " + col * TILE_SIZE
 						+ " " + row * TILE_SIZE);
+			}
+		}
 		// }
 		if (xUpdated) {
 			queueMessage("x " + x);
