@@ -68,7 +68,7 @@ public class Client extends JPanel implements KeyListener, ActionListener
 				try
 				{
 					String message = input.readLine();
-				//	System.out.println(message);
+					System.out.println(message);
 					String[] tokens = message.split(" ");
 					if (tokens[0].equals("x"))
 					{

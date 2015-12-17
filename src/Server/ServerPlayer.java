@@ -226,14 +226,16 @@ public class ServerPlayer implements Runnable
 	 */
 	public void update()
 	{
-		//Send new grid
-		int minRow;
-		int minCol;
-		int[][] grid = world.getWorld().getGrid();
-		for(int row = 0; row < grid.length;row++)
-			for(int col = 0; col < grid[row].length;col++)
-				queueMessage("TILE "+grid[row][col]+" "+col*TILE_SIZE+" "+row*TILE_SIZE);
-
+		//Update the grid
+		if(xUpdated  ||yUpdated)
+		{
+			int minRow = Math.max(getObjectOnGrid(x-SCREEN_WIDTH/2,y - SCREEN_HEIGHT/2)[0],0);
+			int minCol = Math.max(getObjectOnGrid(x-SCREEN_WIDTH/2,y - SCREEN_HEIGHT/2)[1],0);
+			int[][] grid = world.getWorld().getGrid();
+			for(int row = minRow; row < Math.min(minRow+SCREEN_HEIGHT/20+1,grid.length);row++)
+				for(int col = minCol; col < Math.min(minCol + SCREEN_WIDTH/20+1,grid[row].length);col++)
+					queueMessage("TILE "+grid[row][col]+" "+col*TILE_SIZE+" "+row*TILE_SIZE);
+		}
 		if (xUpdated)
 		{
 			queueMessage("x " + x);
@@ -250,12 +252,12 @@ public class ServerPlayer implements Runnable
 
 	public int[] getPlayerOnGrid()
 	{
-		return new int[]{x/TILE_SIZE,y/TILE_SIZE};
+		return new int[]{y/TILE_SIZE,x/TILE_SIZE};
 	}
 
 	public int[] getObjectOnGrid(int x, int y)
 	{
-		return new int[]{x/TILE_SIZE,y/TILE_SIZE};
+		return new int[]{y/TILE_SIZE,x/TILE_SIZE};
 	}
 	public int getX()
 	{
