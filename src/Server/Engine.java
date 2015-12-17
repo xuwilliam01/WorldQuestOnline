@@ -53,7 +53,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * Send messages to all the clients updating their player's data
 	 */
-	public void updatePlayers()
+	public synchronized void updatePlayers()
 	{
 		for(ServerPlayer player : listOfPlayers)
 			player.update();
@@ -97,11 +97,28 @@ public class Engine implements Runnable, ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		ArrayList <ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
+		
+		// Remove disconnected players
+		for(ServerPlayer player : listOfPlayers)
+		{
+			if (player.isDisconnected())
+			{
+				listOfRemovedPlayers.add(player);
+			}
+		}
+		
+		for(ServerPlayer player : listOfRemovedPlayers)
+		{
+			listOfPlayers.remove(player);
+		}
+		
+		
 		// Move all the objects around
 		moveObjects();
 
 		// Update all the clients with the new player data
 		updatePlayers();
-
+		
 	}
 }
