@@ -46,7 +46,7 @@ public class Client extends JPanel implements KeyListener
 	/**
 	 * The framerate of the client
 	 */
-	public final static int FRAME_DELAY = 10;
+	public final static int FRAME_DELAY = 1;
 
 	/**
 	 * Constructor for the client
