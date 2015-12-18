@@ -147,11 +147,19 @@ public class Client extends JPanel implements KeyListener
 			}
 			catch (IOException E)
 			{
-				System.out.println("You have disconnected");
+				serverClosed();
 			}
 			repaint();
 
 		}
+	}
+	
+	/**
+	 * Call when the server closes (Add more later)
+	 */
+	private void serverClosed()
+	{
+		System.out.println("Server was closed");
 	}
 
 	/**
@@ -161,7 +169,6 @@ public class Client extends JPanel implements KeyListener
 	{	
 		// Create the player object
 		player = new ClientPlayer();
-		world = new ClientWorld();
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.DARK_GRAY);
@@ -194,11 +201,50 @@ public class Client extends JPanel implements KeyListener
 			//System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
-
+		
+		importMap();
+		
 		// Thread constantly getting input from the server
 		ServerInput serverInput = new ServerInput();
 		Thread inputThread = new Thread (serverInput);
 		inputThread.start();
+	}
+	
+	/**
+	 * Import the map
+	 */
+	private void importMap()
+	{
+		// Get the 2D grid from the server
+		String gridSize;
+		
+		try
+		{
+			gridSize = input.readLine();
+			String dimensions[] = gridSize.split(" ");
+			int height = Integer.parseInt(dimensions[0]);
+			int width = Integer.parseInt(dimensions[1]);
+			int startX = Integer.parseInt(dimensions[2]);
+			int startY = Integer.parseInt(dimensions[3]);
+			int tileSize = Integer.parseInt(dimensions[4]);
+			
+			char grid[][] = new char[height][width];
+			
+			for (int row = 0; row < height; row++)
+			{
+				String gridRow = input.readLine();
+				for (int column = 0; column < width; column ++)
+				{
+					grid[row][column]=gridRow.charAt(column);
+				}
+			}
+			
+			world = new ClientWorld(grid, startX, startY, tileSize);
+		}
+		catch (IOException e)
+		{
+			serverClosed();
+		}
 	}
 
 	/**

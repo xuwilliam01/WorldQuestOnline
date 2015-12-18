@@ -8,8 +8,26 @@ import java.util.Iterator;
 
 public class ClientWorld {
 
-	private ArrayList<Object> objects = new ArrayList<Object>();
+	private char [][] grid;
+	private ArrayList<Object> objects;
+	private int startX;
+	private int startY;
+	private int tileSize;
 
+	/**
+	 * Constructor for the client's side of the world
+	 * @param rows the number of rows in the tile grid
+	 * @param columns the number of columns in the tile grid
+	 * @param grid the tile grid
+	 */
+	public ClientWorld(char[][]grid, int startX, int startY, int tileSize)
+	{
+		this.startX = startX;
+		this.startY = startY;
+		this.tileSize = tileSize;
+		this.grid = grid;
+	}
+	
 	public void add(Object object)
 	{
 		objects.add(object);
@@ -34,7 +52,7 @@ public class ClientWorld {
 				{
 					Tile tile = (Tile)object;
 
-					//Figure out tyep of tile and place it
+					// Figure out type of tile and place it
 					if(tile.getType() == '1')
 						graphics.setColor(Color.BLACK);
 					else if(tile.getType() == '0')
