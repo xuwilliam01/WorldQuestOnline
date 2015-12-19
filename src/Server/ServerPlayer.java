@@ -13,7 +13,8 @@ import java.net.Socket;
  * @author William Xu & Alex Raita
  *
  */
-public class ServerPlayer implements Runnable {
+public class ServerPlayer implements Runnable
+{
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
@@ -25,7 +26,7 @@ public class ServerPlayer implements Runnable {
 	private PrintWriter output;
 	private BufferedReader input;
 	private Server server;
-	private Engine world;
+	private Engine engine;
 
 	// ////////////////////////////////////////////////////////////////////
 	// X and Y coordinates will be changed once scrolling is implemented//
@@ -78,11 +79,12 @@ public class ServerPlayer implements Runnable {
 	private int playerNum;
 
 	public ServerPlayer(Socket socket, Server server, Engine world,
-			String colour, int playerNum) {
+			String colour, int playerNum)
+	{
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.server = server;
-		this.world = world;
+		this.engine = world;
 
 		// Set initial x and y coordinates
 		x = SCREEN_WIDTH / 2 - TILE_SIZE / 2;
@@ -94,58 +96,113 @@ public class ServerPlayer implements Runnable {
 		movementSpeed = 5;
 
 		// Set up the output
-		try {
+		try
+		{
 			output = new PrintWriter(this.socket.getOutputStream());
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			System.err.println("Error getting client's output stream");
 			e.printStackTrace();
 		}
 
 		// Set up the input
-		try {
+		try
+		{
 			input = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			System.err.println("Error getting client's input stream");
 			e.printStackTrace();
 		}
 
+		// Send the 2D grid of the world to the client
+		sendMap();
+	}
+
+	/**
+	 * Send the player the entire map
+	 */
+	public void sendMap()
+	{
+		ServerWorld world = engine.getWorld();
+		char[][] grid = world.getGrid();
+
+		// Send to the client the height and width of the grid, the starting x
+		// and y position of the grid (top left) and the side length of each
+		// tile
+		queueMessage(grid.length + " " + grid[0].length + " " + world.START_X
+				+ " " + world.START_Y + " " + world.TILE_SIZE);
+		for (int row = 0; row < grid.length; row++)
+		{
+			String message = "";
+			for (int column = 0; column < grid.length; column++)
+			{
+				message += grid[row][column] + ' ';
+			}
+			queueMessage(message);
+		}
+		flushWriter();
 	}
 
 	@Override
-	public void run() {
+	public void run()
+	{
 
 		System.out.println("Running");
 		// Get input from the player
-		while (true) {
-			try {
+		while (true)
+		{
+			try
+			{
 				String command = input.readLine();
 				System.out.println(command);
 
-				if (command.equals("RIGHT")) {
+				if (command.equals("RIGHT"))
+				{
 					hSpeed = movementSpeed;
 					direction = 1;
-				} else if (command.equals("STOP RIGHT")) {
-					if (hSpeed > 0) {
+				}
+				else if (command.equals("STOP RIGHT"))
+				{
+					if (hSpeed > 0)
+					{
 						hSpeed = 0;
 					}
-				} else if (command.equals("LEFT")) {
+				}
+				else if (command.equals("LEFT"))
+				{
 					hSpeed = -movementSpeed;
 					direction = -1;
-				} else if (command.equals("STOP LEFT")) {
-					if (hSpeed < 0) {
+				}
+				else if (command.equals("STOP LEFT"))
+				{
+					if (hSpeed < 0)
+					{
 						hSpeed = 0;
 					}
-				} else if (command.equals("UP")) {
+				}
+				else if (command.equals("UP"))
+				{
 					vSpeed = -movementSpeed;
-				} else if (command.equals("STOP UP")) {
-					if (vSpeed < 0) {
+				}
+				else if (command.equals("STOP UP"))
+				{
+					if (vSpeed < 0)
+					{
 						vSpeed = 0;
 					}
-				} else if (command.equals("DOWN")) {
+				}
+				else if (command.equals("DOWN"))
+				{
 					vSpeed = movementSpeed;
-				} else if (command.equals("STOP DOWN")) {
-					if (vSpeed > 0) {
+				}
+				else if (command.equals("STOP DOWN"))
+				{
+					if (vSpeed > 0)
+					{
 						vSpeed = 0;
 					}
 				}
@@ -153,40 +210,47 @@ public class ServerPlayer implements Runnable {
 				{
 					sendMessage("REPING");
 				}
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				break;
 			}
 		}
-		
+
 		// If the buffered reader breaks, the player has disconnected
 		System.out.println("A client has disconnected");
-		try {
+		try
+		{
 			input.close();
-		} catch (IOException e1) {
+		}
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 			System.out.println("Error closing buffered reader");
 		}
-		
+
 		output.close();
-		
+
 		disconnected = true;
 	}
 
-	public boolean isDisconnected() {
+	public boolean isDisconnected()
+	{
 		return disconnected;
 	}
 
-	public void setDisconnected(boolean disconnected) {
+	public void setDisconnected(boolean disconnected)
+	{
 		this.disconnected = disconnected;
 	}
 
 	/**
 	 * Send a message to the client (flushing included)
 	 * 
-	 * @param message
-	 *            the string command to send to the client
+	 * @param message the string command to send to the client
 	 */
-	public void sendMessage(String message) {
+	public void sendMessage(String message)
+	{
 		output.println(message);
 		output.flush();
 	}
@@ -194,129 +258,156 @@ public class ServerPlayer implements Runnable {
 	/**
 	 * Queue a message without flushing
 	 * 
-	 * @param message
-	 *            the string command to send to the client
+	 * @param message the string command to send to the client
 	 */
-	public void queueMessage(String message) {
+	public void queueMessage(String message)
+	{
 		output.println(message);
 	}
 
 	/**
 	 * Flush all queued messages to the client
 	 */
-	public void flushWriter() {
+	public void flushWriter()
+	{
 		output.flush();
 	}
 
 	/**
 	 * Send to the client all the updated values
 	 */
-	public void update() {
+	public void update()
+	{
 		// Update the grid
-		queueMessage("START QUEUE");
+		queueMessage("{");
+
 		// if(xUpdated ||yUpdated)
 		// {
-		int minRow = Math
-				.max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
-						/ 2)[0], 0);
-		int minCol = Math
-				.max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
-						/ 2)[1], 0);
-		char[][] grid = world.getWorld().getGrid();
-		for (int row = minRow; row < Math.min(minRow + SCREEN_HEIGHT / 20 + 2,
-				grid.length); row++)
-		{
-			for (int col = minCol; col < Math.min(minCol + SCREEN_WIDTH / 20
-					+ 2, grid[row].length); col++)
-			{
-				queueMessage("TILE " + grid[row][col] + " " + col * TILE_SIZE
-						+ " " + row * TILE_SIZE);
-			}
-		}
+		// int minRow = Math
+		// .max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
+		// / 2)[0], 0);
+		// int minCol = Math
+		// .max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
+		// / 2)[1], 0);
+		// char[][] grid = world.getWorld().getGrid();
+		// for (int row = minRow; row < Math.min(minRow + SCREEN_HEIGHT / 20 +
+		// 2,
+		// grid.length); row++)
+		// {
+		// for (int col = minCol; col < Math.min(minCol + SCREEN_WIDTH / 20
+		// + 2, grid[row].length); col++)
+		// {
+		// queueMessage("TILE " + grid[row][col] + " " + col * TILE_SIZE
+		// + " " + row * TILE_SIZE);
 		// }
-		if (xUpdated) {
+		// }
+		// // }
+
+		if (xUpdated)
+		{
 			queueMessage("x " + x);
 			xUpdated = false;
 		}
-		if (yUpdated) {
+		if (yUpdated)
+		{
 			queueMessage("y " + y);
 			yUpdated = false;
 		}
 
 		// Update player locations
-		for (ServerPlayer player : world.getListOfPlayers()) {
+		for (ServerPlayer player : engine.getListOfPlayers())
+		{
 			// If it is not this player
 			if (player.getPlayerNum() != playerNum)
-				queueMessage("PLAYER " + player.getColour() + " " + player.x
+				queueMessage("P " + player.getColour() + " " + player.x
 						+ " " + player.y + " " + player.getPlayerNum());
 		}
-		queueMessage("DONE");
+
+		// Signal the end of the update
+		queueMessage("}");
 		flushWriter();
 	}
 
-	public boolean isxUpdated() {
+	public boolean isxUpdated()
+	{
 		return xUpdated;
 	}
 
-	public boolean isyUpdated() {
+	public boolean isyUpdated()
+	{
 		return yUpdated;
 	}
 
-	public int getPlayerNum() {
+	public int getPlayerNum()
+	{
 		return playerNum;
 	}
 
-	public int[] getPlayerOnGrid() {
+	public int[] getPlayerOnGrid()
+	{
 		return new int[] { y / TILE_SIZE, x / TILE_SIZE };
 	}
 
-	public int[] getObjectOnGrid(int x, int y) {
+	public int[] getObjectOnGrid(int x, int y)
+	{
 		return new int[] { y / TILE_SIZE, x / TILE_SIZE };
 	}
 
-	public int getX() {
+	public int getX()
+	{
 		return x;
 	}
 
-	public void setX(int x) {
-		if (this.x != x) {
+	public void setX(int x)
+	{
+		if (this.x != x)
+		{
 			this.x = x;
 			xUpdated = true;
 		}
 	}
 
-	public int getY() {
+	public int getY()
+	{
 		return y;
 	}
 
-	public void setY(int y) {
-		if (this.y != y) {
+	public void setY(int y)
+	{
+		if (this.y != y)
+		{
 			this.y = y;
 			yUpdated = true;
 		}
 	}
 
-	public int getHSpeed() {
+	public int getHSpeed()
+	{
 		return hSpeed;
 	}
 
-	public void setHSpeed(int hSpeed) {
+	public void setHSpeed(int hSpeed)
+	{
 		this.hSpeed = hSpeed;
 	}
 
-	public int getVSpeed() {
+	public int getVSpeed()
+	{
 		return vSpeed;
 	}
 
-	public void setVSpeed(int vSpeed) {
+	public void setVSpeed(int vSpeed)
+	{
 		this.vSpeed = vSpeed;
 	}
 
-	public String getColour() {
+	public String getColour()
+	{
 		return colour;
 	}
 
-	public void setColour(String colour) {
+	public void setColour(String colour)
+	{
 		this.colour = colour;
 	}
 

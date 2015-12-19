@@ -23,7 +23,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * The world the engine works with
 	 */
-	private World world;
+	private ServerWorld world;
 
 	/**
 	 * The rate at which the game runs at, in milliseconds
@@ -37,7 +37,7 @@ public class Engine implements Runnable, ActionListener
 	public Engine() throws IOException
 	{
 		listOfPlayers = new ArrayList<ServerPlayer>();
-		world = new World();
+		world = new ServerWorld();
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class Engine implements Runnable, ActionListener
 	}
 
 
-	public World getWorld() {
+	public ServerWorld getWorld() {
 		return world;
 	}
 

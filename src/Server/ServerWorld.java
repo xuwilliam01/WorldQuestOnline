@@ -8,11 +8,14 @@ import java.util.StringTokenizer;
  * @author William Xu and Alex Raita
  *
  */
-public class World
+public class ServerWorld
 {
 	private char[][] grid;
-
-	public World() throws IOException
+	public final int START_X = 0;
+	public final int START_Y = 0;
+	public final int TILE_SIZE = 16;
+	
+	public ServerWorld() throws IOException
 	{
 		newWorld();
 	}
