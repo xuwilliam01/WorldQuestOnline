@@ -13,7 +13,7 @@ public class Frame extends JFrame
 	public Frame()
 	{
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT));
-		setResizable(false);
+		setResizable(true);
 		setTitle("WorldQuest Online");
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

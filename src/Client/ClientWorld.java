@@ -34,7 +34,7 @@ public class ClientWorld {
 				{
 					Tile tile = (Tile)object;
 
-					//Figure out tyep of tile and place it
+					//Figure out type of tile and place it
 					if(tile.getType() == '1')
 						graphics.setColor(Color.BLACK);
 					else if(tile.getType() == '0')
