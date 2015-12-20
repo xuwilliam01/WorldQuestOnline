@@ -25,8 +25,8 @@ public class Images
 		if (images == null)
 		{
 			images = new ArrayList<GameImage>();
-			images.add(new GameImage("player_right.png"));
-			images.add(new GameImage("player_left.png"));
+			images.add(new GameImage("PLAYER RIGHT.png"));
+			images.add(new GameImage("PLAYER LEFT.png"));
 		}
 	}
 

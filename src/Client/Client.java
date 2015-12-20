@@ -207,6 +207,8 @@ public class Client extends JPanel implements KeyListener
 	 */
 	private void importMap()
 	{
+		System.out.println("Importing the map from the server...");
+		
 		// Get the 2D grid from the server
 		String gridSize;
 
@@ -216,9 +218,7 @@ public class Client extends JPanel implements KeyListener
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
 			int width = Integer.parseInt(dimensions[1]);
-			int startX = Integer.parseInt(dimensions[2]);
-			int startY = Integer.parseInt(dimensions[3]);
-			int tileSize = Integer.parseInt(dimensions[4]);
+			int tileSize = Integer.parseInt(dimensions[2]);
 
 			char grid[][] = new char[height][width];
 
@@ -237,6 +237,8 @@ public class Client extends JPanel implements KeyListener
 		{
 			serverClosed();
 		}
+		
+		System.out.println("Map import has finished");
 	}
 
 	/**
