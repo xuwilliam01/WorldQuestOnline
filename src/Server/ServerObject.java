@@ -93,8 +93,7 @@ public class ServerObject
 	public String getBaseImage()
 	{
 		// The first word is always the base image
-		String[] tokens = image.split(" ");
-
+		String[] tokens = image.split("_");
 		return tokens[0];
 	}
 

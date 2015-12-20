@@ -48,6 +48,11 @@ public class Client extends JPanel implements KeyListener
 	private ClientWorld world;
 
 	/**
+	 * The framerate of the client
+	 */
+	public final static int FRAME_DELAY = 0;
+
+	/**
 	 * Constructor for the client
 	 */
 	public Client(Socket socket)
@@ -106,15 +111,31 @@ public class Client extends JPanel implements KeyListener
 		// Import the map from the server
 		importMap();
 
-		// Create the player object (TEMP: Do it another way later)
-		player = new ClientObject(0, 0, 0, "PLAYER RIGHT.png");
-		world.add(player);
+		// Get the user's player
+		try
+		{
+			String message = input.readLine();
+			String[] tokens = message.split(" ");
+
+			int id = Integer.parseInt(tokens[0]);
+			int x = Integer.parseInt(tokens[1]);
+			int y = Integer.parseInt(tokens[2]);
+			String image = tokens[3];
+
+			player = new ClientObject(id, x, y, image);
+
+			world.add(player);
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error getting player from server");
+			e.printStackTrace();
+		}
 
 		// Start the actual game
-		Thread gameThread = new Thread (new runGame());
+		Thread gameThread = new Thread(new runGame());
 		gameThread.start();
 
-		
 		System.out.println("Game started");
 	}
 
@@ -128,53 +149,63 @@ public class Client extends JPanel implements KeyListener
 		@Override
 		public void run()
 		{
+			try
+			{
 				while (true)
 				{
-					try
+					if (input.ready())
 					{
-						if (input.ready())
-						{
-							String message = input.readLine();
-							String[] tokens = message.split(" ");
+						String message = input.readLine();
+						String[] tokens = message.split(" ");
 
-							// If our player has moved
-							if (tokens[0].equals("x"))
+						// If our player has moved
+						if (tokens[0].equals("U"))
+						{
+							repaint();
+						}
+						// If there is a player to be updated
+						else if (tokens[0].equals("P"))
+						{
+							int id = Integer.parseInt(tokens[1]);
+							if (id == player.getID())
 							{
-								player.setX(Integer.parseInt(tokens[1]));
+								player.setX(Integer.parseInt(tokens[2]));
+								player.setY(Integer.parseInt(tokens[3]));
+								player.setImage(tokens[4]);
 							}
-							else if (tokens[0].equals("y"))
+							else if (world.contains(id))
 							{
-								player.setY(Integer.parseInt(tokens[1]));
+								ClientObject otherPlayer = world.get(id);
+								otherPlayer.setX(Integer.parseInt(tokens[2]));
+								otherPlayer.setY(Integer.parseInt(tokens[3]));
+								otherPlayer.setImage(tokens[4]);
 							}
-							// If there is a player to be updated
-							else if (tokens[0].equals("PLAYER"))
+							else
 							{
-								// OtherPlayer newPlayer = new OtherPlayer("PLAYER",
-								// Integer.parseInt(tokens[2]),
-								// Integer.parseInt(tokens[3]), colour,
-								// Integer.parseInt(tokens[4]));
-								// world.add(newPlayer);
-							}
-							else if (tokens[0].equals("REPING"))
-							{
-								pingString = "LATENCY: "
-										+ (System.currentTimeMillis() - ping);
+								ClientObject otherPlayer = new ClientObject(id,
+										Integer.parseInt(tokens[2]),
+										Integer.parseInt(tokens[3]), tokens[4]);
+								world.add(otherPlayer);
 							}
 						}
+						else if (tokens[0].equals("REPING"))
+						{
+							pingString = "LATENCY: "
+									+ (System.currentTimeMillis() - ping);
+						}
 					}
-					catch (NumberFormatException e1)
-					{
-						e1.printStackTrace();
-					}
-					catch (IOException e1)
-					{
-						System.out.println("Server has closed");
-						break;
-					}
-					
-					repaint();
 				}
+			}
+			catch (NumberFormatException e1)
+			{
+				e1.printStackTrace();
+			}
+			catch (IOException e1)
+			{
+				System.out.println("Server has closed");
+			}
 		}
+
 	}
 
 	/**
@@ -224,6 +255,9 @@ public class Client extends JPanel implements KeyListener
 		super.paintComponent(graphics);
 		world.draw(graphics, player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
+
+		graphics.setColor(Color.black);
+		graphics.drawString(pingString, 20, 20);
 	}
 
 	@Override

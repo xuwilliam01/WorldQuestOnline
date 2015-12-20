@@ -115,6 +115,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 		// Send the 2D grid of the world to the client
 		sendMap();
+
+		// Send the player's information
+		sendMessage(ID + " " + x + " " + y + " " + image);
 	}
 
 	/**
@@ -236,11 +239,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 		direction = newDirection;
 		if (direction == 'R')
 		{
-			setImage(getBaseImage() + " RIGHT" + Images.IMAGE_FORMAT);
+			setImage(getBaseImage() + "_RIGHT" + Images.IMAGE_FORMAT);
 		}
 		else if (direction == 'L')
 		{
-			setImage(getBaseImage() + " LEFT" + Images.IMAGE_FORMAT);
+			setImage(getBaseImage() + "_LEFT" + Images.IMAGE_FORMAT);
 		}
 	}
 
@@ -288,25 +291,14 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void update()
 	{
-		if (xUpdated)
-		{
-			queueMessage("x " + getX());
-			xUpdated = false;
-		}
-		if (yUpdated)
-		{
-			queueMessage("y " + getY());
-			yUpdated = false;
-		}
-
 		// Update player locations
 		for (ServerPlayer player : engine.getListOfPlayers())
 		{
-			// If it is not this player
-			if (player.getID() != getID())
-				queueMessage("P " + player.getID() + " " + player.getX()
-						+ " " + player.getY() + " " + player.getImage());
+
+			queueMessage("P " + player.getID() + " " + player.getX()
+					+ " " + player.getY() + " " + player.getImage());
 		}
+		queueMessage("U");
 		flushWriter();
 	}
 

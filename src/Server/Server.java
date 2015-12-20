@@ -59,7 +59,7 @@ public class Server implements Runnable
 				Socket newClient = socket.accept();
 				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
 						ServerPlayer.PLAYER_X, ServerPlayer.PLAYER_Y, -1, -1,
-						engine.useNextID(), "PLAYER RIGHT"
+						engine.useNextID(), "PLAYER_RIGHT"
 								+ Images.IMAGE_FORMAT);
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);

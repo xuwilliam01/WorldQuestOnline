@@ -36,7 +36,7 @@ public class GameImage
 		this.name = name;
 		try
 		{
-			image = (ImageIO.read(new File(name))).getScaledInstance(64, 64, 0);
+			image = ImageIO.read(new File(name));
 		}
 		catch (IOException e)
 		{

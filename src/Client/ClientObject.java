@@ -1,4 +1,5 @@
 package Client;
+
 import java.awt.Image;
 
 import Imports.Images;
@@ -7,33 +8,39 @@ import Imports.Images;
  * A class that acts as a blueprint for all objects in the game
  * @author Alex Raita & William Xu
  */
-public class ClientObject {
+public class ClientObject implements Comparable<ClientObject>
+{
 
 	/**
 	 * The x coordinate of the object (left)
 	 */
 	private int x;
-	
+
 	/**
 	 * The y coordinate of the object (top)
 	 */
 	private int y;
-	
+
 	/**
 	 * The image of the object to draw
 	 */
 	private Image image;
-	
+
+	/**
+	 * The name of the image of the object to draw
+	 */
+	private String imageName;
+
 	/**
 	 * The height of the image
 	 */
 	private int height;
-	
+
 	/**
 	 * The width of the image
 	 */
 	private int width;
-	
+
 	/**
 	 * The unique ID of the object
 	 */
@@ -42,26 +49,35 @@ public class ClientObject {
 	/**
 	 * Constructor
 	 */
-	public ClientObject(int x, int y, int id, String image)
+	public ClientObject(int id, int x, int y, String image)
 	{
 		this.x = x;
 		this.y = y;
-		this.id=id;
+		this.id = id;
+		this.imageName = image;
 		this.image = Images.getImage(image);
 		height = this.image.getHeight(null);
 		width = this.image.getWidth(null);
 	}
-	
+
 	public Image getImage()
 	{
 		return image;
 	}
 
-	public void setImage(Image image)
+	/**
+	 * Change the image of the object
+	 * @param image
+	 */
+	public void setImage(String image)
 	{
-		this.image = image;
-		height = this.image.getHeight(null);
-		width = this.image.getWidth(null);
+		if (!image.equals(imageName))
+		{
+			imageName = image;
+			this.image = Images.getImage(image);
+			height = this.image.getHeight(null);
+			width = this.image.getWidth(null);
+		}
 	}
 
 	public int getID()
@@ -69,19 +85,23 @@ public class ClientObject {
 		return id;
 	}
 
-	public int getX() {
+	public int getX()
+	{
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(int x)
+	{
 		this.x = x;
 	}
 
-	public int getY() {
+	public int getY()
+	{
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(int y)
+	{
 		this.y = y;
 	}
 
@@ -95,5 +115,10 @@ public class ClientObject {
 		return width;
 	}
 
+	@Override
+	public int compareTo(ClientObject other)
+	{
+		return id - other.getID();
+	}
 
 }

@@ -43,7 +43,7 @@ public class ClientWorld
 		this.tileSize = tileSize;
 		this.grid = grid;
 		objects = new ArrayList<ClientObject>();
-		objectIDs = new boolean [100000];
+		objectIDs = new boolean[100000];
 	}
 
 	/**
@@ -71,14 +71,14 @@ public class ClientWorld
 		{
 			for (ClientObject object : objects)
 			{
-				int x = object.getX() - playerX + Client.SCREEN_WIDTH / 2
-						+ playerWidth / 2;
-				int y = object.getY() - playerY + Client.SCREEN_HEIGHT / 2
-						+ playerHeight / 2;
+				int x = Client.SCREEN_WIDTH / 2 - object.getWidth() / 2; // +
+																			// (object.getX()-playerX);
+				int y = Client.SCREEN_HEIGHT / 2 - object.getHeight() / 2;// +
+																			// (object.getY()-playerY);
 
 				graphics.setColor(Color.blue);
-				//graphics.fillRect(playerX, playerY, 20,20);
-				graphics.drawImage(object.getImage(), playerX, playerY, null);
+
+				graphics.drawImage(object.getImage(), object.getX(), object.getY(), null);
 			}
 		}
 		// this might cause some problems in the future
@@ -89,9 +89,20 @@ public class ClientWorld
 
 	}
 
-	public ArrayList<ClientObject> getObjects()
+	/**
+	 * Get a specific object from the list
+	 * @return the desired object
+	 */
+	public ClientObject get(int id)
 	{
-		return objects;
+		for (ClientObject object : objects)
+		{
+			if (object.getID() == id)
+			{
+				return object;
+			}
+		}
+		return null;
 	}
 
 	public void clear()
@@ -100,13 +111,13 @@ public class ClientWorld
 	}
 
 	/**
-	 * Checks if the world contains a given object
+	 * Checks if the world contains a given object (id)
 	 * @param object the object to be checked
 	 * @return true if the object is found in the world, false if not
 	 */
-	public boolean contains(ClientObject object)
+	public boolean contains(int id)
 	{
-		if (objectIDs[object.getID()])
+		if (objectIDs[id])
 		{
 			return true;
 		}
