@@ -6,12 +6,30 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
-public class ClientWorld {
+public class ClientWorld
+{
 
-	private char [][] grid;
-	private ArrayList<Object> objects;
-	private int startX;
-	private int startY;
+	/**
+	 * The grid of tiles
+	 */
+	private char[][] grid;
+
+	/**
+	 * Long boolean array where the index of an object is its ID, while true or
+	 * false represents whether it already exists in the array list of objects
+	 */
+	private boolean[] objectIDs;
+
+	/**
+	 * List of objects stored in the client. Instead of calling a .contains when
+	 * checking whether an object exists in the list, just check the index in
+	 * the objectIDs boolean array
+	 */
+	private ArrayList<ClientObject> objects;
+	
+	/**
+	 * The side length of one square tile in pixels
+	 */
 	private int tileSize;
 
 	/**
@@ -20,17 +38,20 @@ public class ClientWorld {
 	 * @param columns the number of columns in the tile grid
 	 * @param grid the tile grid
 	 */
-	public ClientWorld(char[][]grid, int startX, int startY, int tileSize)
+	public ClientWorld(char[][] grid, int tileSize)
 	{
-		this.startX = startX;
-		this.startY = startY;
 		this.tileSize = tileSize;
 		this.grid = grid;
 	}
-	
-	public void add(Object object)
+
+	/**
+	 * Add an object (not a tile) to the client
+	 * @param object the object to add
+	 */
+	public void add(ClientObject object)
 	{
 		objects.add(object);
+		addID(object.getID());
 	}
 
 	/**
@@ -41,42 +62,35 @@ public class ClientWorld {
 	 */
 	public void draw(Graphics graphics, int playerX, int playerY)
 	{
-		//Go through each object in the world and draw it relative to the player's position
-		try{
-			for(Object object : objects)
+		// Go through each object in the world and draw it relative to the
+		// player's position
+		try
+		{
+			for (ClientObject object : objects)
 			{
-				int x = object.getX()-playerX + Client.SCREEN_WIDTH/2 - Client.TILE_SIZE/2;
-				int y = object.getY()-playerY + Client.SCREEN_HEIGHT/2 - Client.TILE_SIZE/2;
+				int x = object.getX() - playerX + Client.SCREEN_WIDTH / 2
+						- Client.TILE_SIZE / 2;
+				int y = object.getY() - playerY + Client.SCREEN_HEIGHT / 2
+						- Client.TILE_SIZE / 2;
 
-				if(object.getDesc().equals("TILE"))
+				if (object.getDesc().equals("PLAYER"))
 				{
-					Tile tile = (Tile)object;
-
-					// Figure out type of tile and place it
-					// Figure out type of tile and place it
-					if(tile.getType() == '1')
-						graphics.setColor(Color.BLACK);
-					else if(tile.getType() == '0')
-						graphics.setColor(Color.RED);
-					graphics.fillRect(x,y, Client.TILE_SIZE, Client.TILE_SIZE);
-
-				}
-				else if(object.getDesc().equals("PLAYER"))
-				{
-					OtherPlayer player = (OtherPlayer)object;
+					OtherPlayer player = (OtherPlayer) object;
 					graphics.setColor(player.getColour());
-					graphics.fillRect(x,y, Client.TILE_SIZE, Client.TILE_SIZE);
+					graphics.fillRect(x, y, Client.TILE_SIZE, Client.TILE_SIZE);
 				}
 			}
 		}
-		//this might cause some problems in the future
-		catch(ConcurrentModificationException E)
+		// this might cause some problems in the future
+		catch (ConcurrentModificationException E)
 		{
 
 		}
 
 	}
-	public ArrayList<Object> getObjects() {
+
+	public ArrayList<ClientObject> getObjects()
+	{
 		return objects;
 	}
 
@@ -84,17 +98,37 @@ public class ClientWorld {
 	{
 		objects.clear();
 	}
+
 	/**
 	 * Checks if the world contains a given object
 	 * @param object the object to be checked
 	 * @return true if the object is found in the world, false if not
 	 */
-	public boolean contains(Object object)
+	public boolean contains(ClientObject object)
 	{
-		for(Object obj : objects)
-			if(obj.compareTo(object) == 0)
-				return true;
+		if (objectIDs[object.getID()])
+		{
+			return true;
+		}
 		return false;
+	}
+
+	/**
+	 * Set an ID's usage to true
+	 * @param id
+	 */
+	public void addID(int id)
+	{
+		objectIDs[id]=true;
+	}
+	
+	/**
+	 * Set an ID's usage to false
+	 * @param id
+	 */
+	public void removeID(int id)
+	{
+		objectIDs[id]=false;
 	}
 
 	/**
@@ -102,10 +136,10 @@ public class ClientWorld {
 	 * @param object the object to be fetched
 	 * @return the desired object
 	 */
-	public Object get(Object object)
+	public ClientObject get(ClientObject object)
 	{
-		for(Object obj : objects)
-			if(obj.compareTo(object) == 0)
+		for (ClientObject obj : objects)
+			if (obj.compareTo(object) == 0)
 				return obj;
 		return null;
 	}

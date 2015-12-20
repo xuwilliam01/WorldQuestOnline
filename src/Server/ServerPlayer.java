@@ -7,25 +7,29 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import Imports.Images;
+
 /**
  * The player
  * 
  * @author William Xu & Alex Raita
  *
  */
-public class ServerPlayer implements Runnable
+public class ServerPlayer extends ServerObject implements Runnable
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
-	public final static int TILE_SIZE = 20;
+	
+	// The starting locations of the player, to change later on
+	public final static int PLAYER_X = 50;
+	public final static int PLAYER_Y = 50;
 
 	private boolean disconnected = false;
 
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
-	private Server server;
 	private Engine engine;
 
 	// ////////////////////////////////////////////////////////////////////
@@ -33,20 +37,10 @@ public class ServerPlayer implements Runnable
 	// ////////////////////////////////////////////////////////////////////
 
 	/**
-	 * The x-coordinate of the player
-	 */
-	private int x;
-
-	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
 	 * last flush
 	 */
 	private boolean xUpdated;
-
-	/**
-	 * The y-coordinate of the player
-	 */
-	private int y;
 
 	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
@@ -65,32 +59,34 @@ public class ServerPlayer implements Runnable
 	private int vSpeed;
 
 	/**
-	 * The horizontal direction the player is facing (negative -- left, positive
-	 * -- right)
+	 * The horizontal direction the player is facing ('R' is right, 'L' is left)
 	 */
-	private int direction;
+	private char direction;
 
 	/**
 	 * The speed at which the player moves
 	 */
 	private int movementSpeed;
 
-	private String colour;
-	private int playerNum;
 
-	public ServerPlayer(Socket socket, Server server, Engine world,
-			String colour, int playerNum)
+	/**
+	 * Constructor for a player in the server
+	 * @param socket
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param ID
+	 * @param image
+	 */
+	public ServerPlayer(Socket socket, Engine world, int x, int y, int width,int height, int ID, String image)
 	{
+		super (x,y,width,height,ID,image);
 		// Import the socket, server, and world
 		this.socket = socket;
-		this.server = server;
 		this.engine = world;
-
-		// Set initial x and y coordinates
-		x = SCREEN_WIDTH / 2 - TILE_SIZE / 2;
-		y = SCREEN_HEIGHT / 2 - TILE_SIZE / 2;
-		this.colour = colour;
-		this.playerNum = playerNum;
+		
 		xUpdated = true;
 		yUpdated = true;
 		movementSpeed = 5;
@@ -133,8 +129,7 @@ public class ServerPlayer implements Runnable
 		// Send to the client the height and width of the grid, the starting x
 		// and y position of the grid (top left) and the side length of each
 		// tile
-		queueMessage(grid.length + " " + grid[0].length + " " + world.START_X
-				+ " " + world.START_Y + " " + world.TILE_SIZE);
+		queueMessage(grid.length + " " + grid[0].length + " " + ServerWorld.TILE_SIZE);
 		for (int row = 0; row < grid.length; row++)
 		{
 			String message = "";
@@ -150,8 +145,8 @@ public class ServerPlayer implements Runnable
 	@Override
 	public void run()
 	{
-
 		System.out.println("Running");
+		
 		// Get input from the player
 		while (true)
 		{
@@ -163,7 +158,7 @@ public class ServerPlayer implements Runnable
 				if (command.equals("RIGHT"))
 				{
 					hSpeed = movementSpeed;
-					direction = 1;
+					setDirection('R');
 				}
 				else if (command.equals("STOP RIGHT"))
 				{
@@ -175,7 +170,7 @@ public class ServerPlayer implements Runnable
 				else if (command.equals("LEFT"))
 				{
 					hSpeed = -movementSpeed;
-					direction = -1;
+					setDirection('L');
 				}
 				else if (command.equals("STOP LEFT"))
 				{
@@ -233,6 +228,23 @@ public class ServerPlayer implements Runnable
 
 		disconnected = true;
 	}
+	
+	/**
+	 * Set the direction while also changing the player's image
+	 * @param newDirection
+	 */
+	public void setDirection(char newDirection)
+	{
+		direction = newDirection;
+		if (direction =='R')
+		{
+			setImage(getBaseImage() + " RIGHT" + Images.IMAGE_FORMAT);
+		}
+		else if (direction =='L')
+		{
+			setImage(getBaseImage() + " LEFT" + Images.IMAGE_FORMAT);
+		}
+	}
 
 	public boolean isDisconnected()
 	{
@@ -278,39 +290,14 @@ public class ServerPlayer implements Runnable
 	 */
 	public void update()
 	{
-		// Update the grid
-		queueMessage("{");
-
-		// if(xUpdated ||yUpdated)
-		// {
-		// int minRow = Math
-		// .max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
-		// / 2)[0], 0);
-		// int minCol = Math
-		// .max(getObjectOnGrid(x - SCREEN_WIDTH / 2, y - SCREEN_HEIGHT
-		// / 2)[1], 0);
-		// char[][] grid = world.getWorld().getGrid();
-		// for (int row = minRow; row < Math.min(minRow + SCREEN_HEIGHT / 20 +
-		// 2,
-		// grid.length); row++)
-		// {
-		// for (int col = minCol; col < Math.min(minCol + SCREEN_WIDTH / 20
-		// + 2, grid[row].length); col++)
-		// {
-		// queueMessage("TILE " + grid[row][col] + " " + col * TILE_SIZE
-		// + " " + row * TILE_SIZE);
-		// }
-		// }
-		// // }
-
 		if (xUpdated)
 		{
-			queueMessage("x " + x);
+			queueMessage("x " + getX());
 			xUpdated = false;
 		}
 		if (yUpdated)
 		{
-			queueMessage("y " + y);
+			queueMessage("y " + getY());
 			yUpdated = false;
 		}
 
@@ -318,13 +305,10 @@ public class ServerPlayer implements Runnable
 		for (ServerPlayer player : engine.getListOfPlayers())
 		{
 			// If it is not this player
-			if (player.getPlayerNum() != playerNum)
-				queueMessage("P " + player.getColour() + " " + player.x
-						+ " " + player.y + " " + player.getPlayerNum());
+			if (player.getID() != getID())
+				queueMessage("P " + player.getID() + " " + player.getX()
+						+ " " + player.getY() + " " + player.getImage());
 		}
-
-		// Signal the end of the update
-		queueMessage("}");
 		flushWriter();
 	}
 
@@ -338,47 +322,14 @@ public class ServerPlayer implements Runnable
 		return yUpdated;
 	}
 
-	public int getPlayerNum()
-	{
-		return playerNum;
-	}
-
 	public int[] getPlayerOnGrid()
 	{
-		return new int[] { y / TILE_SIZE, x / TILE_SIZE };
+		return new int[] { getY() / ServerWorld.TILE_SIZE, getX() / ServerWorld.TILE_SIZE };
 	}
 
 	public int[] getObjectOnGrid(int x, int y)
 	{
-		return new int[] { y / TILE_SIZE, x / TILE_SIZE };
-	}
-
-	public int getX()
-	{
-		return x;
-	}
-
-	public void setX(int x)
-	{
-		if (this.x != x)
-		{
-			this.x = x;
-			xUpdated = true;
-		}
-	}
-
-	public int getY()
-	{
-		return y;
-	}
-
-	public void setY(int y)
-	{
-		if (this.y != y)
-		{
-			this.y = y;
-			yUpdated = true;
-		}
+		return new int[] { y / ServerWorld.TILE_SIZE, x / ServerWorld.TILE_SIZE };
 	}
 
 	public int getHSpeed()
@@ -401,14 +352,5 @@ public class ServerPlayer implements Runnable
 		this.vSpeed = vSpeed;
 	}
 
-	public String getColour()
-	{
-		return colour;
-	}
-
-	public void setColour(String colour)
-	{
-		this.colour = colour;
-	}
 
 }

@@ -4,20 +4,31 @@ package Client;
  * A class that acts as a blueprint for all objects in the game
  * @author Alex Raita & William Xu
  */
-public class Object implements Comparable<Object> {
+public class ClientObject implements Comparable<ClientObject> {
 
 	private int x;
 	private int y;
 	private String description;
+	
+	/**
+	 * The unique ID of the object
+	 */
+	private int id;
 
 	/**
 	 * Constructor
 	 */
-	public Object(String description, int x, int y)
+	public ClientObject(String description, int x, int y, int id)
 	{
 		this.x = x;
 		this.y = y;
 		this.description = description;
+		this.id=id;
+	}
+
+	public int getID()
+	{
+		return id;
 	}
 
 	public int getX() {
@@ -45,7 +56,7 @@ public class Object implements Comparable<Object> {
 	}
 
 
-	public int compareTo(Object o) {
+	public int compareTo(ClientObject o) {
 		if(x == o.x && y == o.y && description.equals(o.description))
 			return 0;
 		return -1;

@@ -11,9 +11,7 @@ import java.util.StringTokenizer;
 public class ServerWorld
 {
 	private char[][] grid;
-	public final int START_X = 0;
-	public final int START_Y = 0;
-	public final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 16;
 	
 	public ServerWorld() throws IOException
 	{

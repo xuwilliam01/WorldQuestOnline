@@ -1,7 +1,10 @@
 package Server;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import Imports.Images;
 
 /**
  * Creates a new world and accepts new client connections
@@ -35,29 +38,35 @@ public class Server implements Runnable
 	{
 		// Construct the new world
 		System.out.println("Creating world...");
-		try {
+		try
+		{
 			engine = new Engine();
-		} catch (IOException e1) {
+		}
+		catch (IOException e1)
+		{
 			System.out.println("Error with Creating World and/or Engine");
 		}
 		Thread newEngine = new Thread(engine);
 		newEngine.start();
-		
+
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
-	
+
 		int playerNum = 0;
 		while (true)
 		{
 			try
 			{
 				Socket newClient = socket.accept();
-				ServerPlayer newPlayer = new ServerPlayer(newClient,this,engine,"cyan", playerNum);
+				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
+						ServerPlayer.PLAYER_X, ServerPlayer.PLAYER_Y, -1, -1,
+						engine.useNextID(), "PLAYER RIGHT"
+								+ Images.IMAGE_FORMAT);
 				playerNum++;
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
-				
+
 				System.out.println("A new client has connected");
 			}
 			catch (IOException e)

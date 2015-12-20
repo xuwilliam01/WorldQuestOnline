@@ -27,7 +27,7 @@ public class Client extends JPanel implements KeyListener
 	private Socket mySocket;
 	private PrintWriter output;
 	private BufferedReader input;
-	
+
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
 
@@ -47,46 +47,31 @@ public class Client extends JPanel implements KeyListener
 	private ClientWorld world;
 
 	/**
-	 * The framerate of the client
-	 */
-	public final static int FRAME_DELAY = 1;
-
-	/**
 	 * Constructor for the client
 	 */
 	public Client(Socket socket)
 	{
+		importImages();
 		mySocket = socket;
 		currentMessage = "";
 	}
 
-	private class ServerInput implements Runnable, ActionListener
+	private class ServerInput implements Runnable
 	{
-
-		Timer inputTimer = new Timer(FRAME_DELAY,this);
 		@Override
 		public void run()
 		{
-			inputTimer.start();
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
 			try
 			{
-				while(true)
+				while (true)
 				{
-					if(input.ready())
+					if (input.ready())
 					{
 						String message = input.readLine();
-						//System.out.println(message);
 						String[] tokens = message.split(" ");
-						//If our player has moved
-						if(tokens[0].equals("DONE"))
-							break;
-						else if(tokens[0].equals("START"))
-							world.clear();
-						else if (tokens[0].equals("x"))
+
+						// If our player has moved
+						if (tokens[0].equals("x"))
 						{
 							player.setX(Integer.parseInt(tokens[1]));
 						}
@@ -94,53 +79,50 @@ public class Client extends JPanel implements KeyListener
 						{
 							player.setY(Integer.parseInt(tokens[1]));
 						}
-						//If there is a tile to be updated
-						else if(tokens[0].equals("TILE"))
+
+
+						// If there is a player to be updated
+						else if (tokens[0].equals("PLAYER"))
 						{
-							Tile newTile = new Tile("TILE",tokens[1].charAt(0),Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]));
-							//if(!world.contains(newTile))
-							world.add(newTile);
-						}
-						//If there is a player to be updated
-						else if(tokens[0].equals("PLAYER"))
-						{
-							//Get the player's colour and add them
+							// Get the player's colour and add them
 							Color colour = Color.YELLOW;
 							Field field = null;
-							try {
-								field = Class.forName("java.awt.Color").getField(tokens[1].toLowerCase());
-								colour = (Color)field.get(null);
-							} catch (NoSuchFieldException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-							} catch (SecurityException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-							} catch (ClassNotFoundException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-							} // toLowerCase because the color fields are RED or red, not Red
-							catch (IllegalArgumentException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-							} catch (IllegalAccessException a) {
-								// TODO Auto-generated catch block
+							try
+							{
+								field = Class.forName("java.awt.Color")
+										.getField(tokens[1].toLowerCase());
+								colour = (Color) field.get(null);
+							}
+							catch (NoSuchFieldException a)
+							{
 								a.printStackTrace();
 							}
-							OtherPlayer newPlayer = new OtherPlayer("PLAYER",Integer.parseInt(tokens[2]),Integer.parseInt(tokens[3]),colour,Integer.parseInt(tokens[4]));
-							//if(!world.contains(newPlayer))
-							world.add(newPlayer);
-//							else
-//							{
-//								//If the player already exists, update his position
-//								OtherPlayer player = (OtherPlayer) world.get(newPlayer);
-//								player.setX(Integer.parseInt(tokens[2]));
-//								player.setY(Integer.parseInt(tokens[3]));
-//							}
+							catch (SecurityException a)
+							{
+								a.printStackTrace();
+							}
+							catch (ClassNotFoundException a)
+							{
+								a.printStackTrace();
+							}
+							catch (IllegalArgumentException a)
+							{
+								a.printStackTrace();
+							}
+							catch (IllegalAccessException a)
+							{
+								a.printStackTrace();
+							}
+//							OtherPlayer newPlayer = new OtherPlayer("PLAYER",
+//									Integer.parseInt(tokens[2]),
+//									Integer.parseInt(tokens[3]), colour,
+//									Integer.parseInt(tokens[4]));
+//							world.add(newPlayer);
 						}
 						else if (tokens[0].equals("REPING"))
 						{
-							pingString = "LATENCY: " + (System.currentTimeMillis()-ping);
+							pingString = "LATENCY: "
+									+ (System.currentTimeMillis() - ping);
 						}
 					}
 				}
@@ -150,10 +132,9 @@ public class Client extends JPanel implements KeyListener
 				serverClosed();
 			}
 			repaint();
-
 		}
 	}
-	
+
 	/**
 	 * Call when the server closes (Add more later)
 	 */
@@ -161,12 +142,15 @@ public class Client extends JPanel implements KeyListener
 	{
 		System.out.println("Server was closed");
 	}
-
+	
 	/**
 	 * Start the client
 	 */
 	public void initialize()
-	{	
+	{
+		// Import the images
+		
+		
 		// Create the player object
 		player = new ClientPlayer();
 		// Create the screen
@@ -187,7 +171,7 @@ public class Client extends JPanel implements KeyListener
 		}
 		catch (IOException e)
 		{
-			//System.out.println("Error creating buffered reader");
+			// System.out.println("Error creating buffered reader");
 			e.printStackTrace();
 		}
 
@@ -198,18 +182,26 @@ public class Client extends JPanel implements KeyListener
 		}
 		catch (IOException e)
 		{
-			//System.out.println("Error creating print writer");
+			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
-		
+
 		importMap();
-		
+
 		// Thread constantly getting input from the server
 		ServerInput serverInput = new ServerInput();
-		Thread inputThread = new Thread (serverInput);
+		Thread inputThread = new Thread(serverInput);
 		inputThread.start();
 	}
 	
+	/**
+	 * Import the images from the file
+	 */
+	private void importImages()
+	{
+		
+	}
+
 	/**
 	 * Import the map
 	 */
@@ -217,7 +209,7 @@ public class Client extends JPanel implements KeyListener
 	{
 		// Get the 2D grid from the server
 		String gridSize;
-		
+
 		try
 		{
 			gridSize = input.readLine();
@@ -227,19 +219,19 @@ public class Client extends JPanel implements KeyListener
 			int startX = Integer.parseInt(dimensions[2]);
 			int startY = Integer.parseInt(dimensions[3]);
 			int tileSize = Integer.parseInt(dimensions[4]);
-			
+
 			char grid[][] = new char[height][width];
-			
+
 			for (int row = 0; row < height; row++)
 			{
 				String gridRow = input.readLine();
-				for (int column = 0; column < width; column ++)
+				for (int column = 0; column < width; column++)
 				{
-					grid[row][column]=gridRow.charAt(column);
+					grid[row][column] = gridRow.charAt(column);
 				}
 			}
-			
-			world = new ClientWorld(grid, startX, startY, tileSize);
+
+			world = new ClientWorld(grid, tileSize);
 		}
 		catch (IOException e)
 		{
@@ -255,42 +247,49 @@ public class Client extends JPanel implements KeyListener
 		super.paintComponent(graphics);
 		world.draw(graphics, player.getX(), player.getY());
 		graphics.setColor(Color.GREEN);
-		graphics.fillRect(SCREEN_WIDTH/2 - player.getWidth()/2, SCREEN_HEIGHT/2 - player.getHeight()/2, player.getWidth(), player.getHeight());
+		graphics.fillRect(SCREEN_WIDTH / 2 - player.getWidth() / 2,
+				SCREEN_HEIGHT / 2 - player.getHeight() / 2, player.getWidth(),
+				player.getHeight());
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(pingString, 20, 20);
-		
-		//graphics.drawRect(SCREEN_WIDTH/2 - player.getWidth()/2, player.getY(), player.getWidth(), player.getHeight());
-		
+
+		// graphics.drawRect(SCREEN_WIDTH/2 - player.getWidth()/2,
+		// player.getY(), player.getWidth(), player.getHeight());
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent key)
 	{
-		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("RIGHT"))
+		if (key.getKeyCode() == KeyEvent.VK_RIGHT
+				&& !currentMessage.equals("RIGHT"))
 		{
 			currentMessage = "RIGHT";
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("LEFT"))
+		else if (key.getKeyCode() == KeyEvent.VK_LEFT
+				&& !currentMessage.equals("LEFT"))
 		{
 			currentMessage = "LEFT";
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("UP"))
+		else if (key.getKeyCode() == KeyEvent.VK_UP
+				&& !currentMessage.equals("UP"))
 		{
 			currentMessage = "UP";
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("DOWN"))
+		else if (key.getKeyCode() == KeyEvent.VK_DOWN
+				&& !currentMessage.equals("DOWN"))
 		{
-			currentMessage = "DOWN";	
+			currentMessage = "DOWN";
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_P)
+		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
 			ping = System.currentTimeMillis();
 			output.println("PING");
@@ -302,21 +301,25 @@ public class Client extends JPanel implements KeyListener
 	@Override
 	public void keyReleased(KeyEvent key)
 	{
-		if (key.getKeyCode()==KeyEvent.VK_RIGHT && !currentMessage.equals("STOP RIGHT"))
+		if (key.getKeyCode() == KeyEvent.VK_RIGHT
+				&& !currentMessage.equals("STOP RIGHT"))
 		{
-			currentMessage = "STOP RIGHT";		
+			currentMessage = "STOP RIGHT";
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_LEFT && !currentMessage.equals("STOP LEFT"))
+		else if (key.getKeyCode() == KeyEvent.VK_LEFT
+				&& !currentMessage.equals("STOP LEFT"))
 		{
-			currentMessage = "STOP LEFT";	
+			currentMessage = "STOP LEFT";
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_UP && !currentMessage.equals("STOP UP"))
+		else if (key.getKeyCode() == KeyEvent.VK_UP
+				&& !currentMessage.equals("STOP UP"))
 		{
-			currentMessage = "STOP UP";	
+			currentMessage = "STOP UP";
 		}
-		else if (key.getKeyCode()==KeyEvent.VK_DOWN && !currentMessage.equals("STOP DOWN"))
+		else if (key.getKeyCode() == KeyEvent.VK_DOWN
+				&& !currentMessage.equals("STOP DOWN"))
 		{
-			currentMessage = "STOP DOWN";		
+			currentMessage = "STOP DOWN";
 		}
 		output.println(currentMessage);
 		output.flush();

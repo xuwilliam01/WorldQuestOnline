@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
+import Imports.Images;
+
 /**
  * Runs the actual game
  * @author William Xu & Alex Raita
@@ -21,6 +23,19 @@ public class Engine implements Runnable, ActionListener
 	private ArrayList<ServerPlayer> listOfPlayers;
 
 	/**
+	 * A list of IDs currently used in the game (index is the ID, true means
+	 * used, false means unused). Note that IDs can be freed when the object is
+	 * deleted and re-assigned to another object
+	 */
+	private boolean[] objectIDs;
+
+	/**
+	 * The number of possible ID's for any objects. The number of objects
+	 * existing the game (aside from tiles) cannot exceed this limit
+	 */
+	public final int NUMBER_OF_IDS = 100000;
+
+	/**
 	 * The world the engine works with
 	 */
 	private ServerWorld world;
@@ -31,13 +46,19 @@ public class Engine implements Runnable, ActionListener
 	public final int UPDATE_RATE = 15;
 
 	private Timer updateTimer;
+
 	/**
 	 * Constructor for the engine
 	 */
 	public Engine() throws IOException
 	{
+		// Start importing the images from the file (place in a loading screen or something later)
+		Images.importImages();
+		
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new ServerWorld();
+		objectIDs = new boolean[NUMBER_OF_IDS];
+		
 	}
 
 	@Override
@@ -46,7 +67,7 @@ public class Engine implements Runnable, ActionListener
 	 */
 	public void run()
 	{
-		updateTimer = new Timer(UPDATE_RATE,this);
+		updateTimer = new Timer(UPDATE_RATE, this);
 		updateTimer.start();
 	}
 
@@ -55,7 +76,7 @@ public class Engine implements Runnable, ActionListener
 	 */
 	public synchronized void updatePlayers()
 	{
-		for(ServerPlayer player : listOfPlayers)
+		for (ServerPlayer player : listOfPlayers)
 			player.update();
 	}
 
@@ -67,8 +88,8 @@ public class Engine implements Runnable, ActionListener
 		// Move players around (will be changed once scrolling is implemented)
 		for (ServerPlayer player : listOfPlayers)
 		{
-			player.setX(player.getX()+player.getHSpeed());
-			player.setY(player.getY()+player.getVSpeed());
+			player.setX(player.getX() + player.getHSpeed());
+			player.setY(player.getY() + player.getVSpeed());
 		}
 	}
 
@@ -81,39 +102,58 @@ public class Engine implements Runnable, ActionListener
 		listOfPlayers.add(newPlayer);
 	}
 
-
-	public ServerWorld getWorld() {
+	public ServerWorld getWorld()
+	{
 		return world;
 	}
 
-	
-	public ArrayList<ServerPlayer> getListOfPlayers() {
+	public ArrayList<ServerPlayer> getListOfPlayers()
+	{
 		return listOfPlayers;
 	}
 
-	public void setListOfPlayers(ArrayList<ServerPlayer> listOfPlayers) {
+	public void setListOfPlayers(ArrayList<ServerPlayer> listOfPlayers)
+	{
 		this.listOfPlayers = listOfPlayers;
+	}
+	
+	
+	/**
+	 * Use and reserve the next available ID in the list of booleans
+	 * @return the id
+	 */
+	public int useNextID()
+	{
+		for (int id = 0; id < objectIDs.length; id++)
+		{
+			if (!objectIDs[id])
+			{
+				objectIDs[id] = true;
+				return id;
+			}
+		}
+		return -1;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		ArrayList <ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
-		
+	public void actionPerformed(ActionEvent e)
+	{
+		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
+
 		// Remove disconnected players
-		for(ServerPlayer player : listOfPlayers)
+		for (ServerPlayer player : listOfPlayers)
 		{
 			if (player.isDisconnected())
 			{
 				listOfRemovedPlayers.add(player);
 			}
 		}
-		
-		for(ServerPlayer player : listOfRemovedPlayers)
+
+		for (ServerPlayer player : listOfRemovedPlayers)
 		{
 			listOfPlayers.remove(player);
 		}
-		
-		
+
 		// Move all the objects around
 		moveObjects();
 
