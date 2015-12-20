@@ -26,7 +26,7 @@ public class ClientWorld
 	 * the objectIDs boolean array
 	 */
 	private ArrayList<ClientObject> objects;
-	
+
 	/**
 	 * The side length of one square tile in pixels
 	 */
@@ -42,6 +42,8 @@ public class ClientWorld
 	{
 		this.tileSize = tileSize;
 		this.grid = grid;
+		objects = new ArrayList<ClientObject>();
+		objectIDs = new boolean [100000];
 	}
 
 	/**
@@ -60,7 +62,8 @@ public class ClientWorld
 	 * @param playerX the position of the player
 	 * @param playerY the position of the player
 	 */
-	public void draw(Graphics graphics, int playerX, int playerY)
+	public void draw(Graphics graphics, int playerX, int playerY,
+			int playerWidth, int playerHeight)
 	{
 		// Go through each object in the world and draw it relative to the
 		// player's position
@@ -69,11 +72,13 @@ public class ClientWorld
 			for (ClientObject object : objects)
 			{
 				int x = object.getX() - playerX + Client.SCREEN_WIDTH / 2
-						- tileSize / 2;
+						+ playerWidth / 2;
 				int y = object.getY() - playerY + Client.SCREEN_HEIGHT / 2
-						- tileSize / 2;
+						+ playerHeight / 2;
 
-				graphics.drawImage(object.getImage(),x,y,null);
+				graphics.setColor(Color.blue);
+				//graphics.fillRect(playerX, playerY, 20,20);
+				graphics.drawImage(object.getImage(), playerX, playerY, null);
 			}
 		}
 		// this might cause some problems in the future
@@ -114,16 +119,16 @@ public class ClientWorld
 	 */
 	public void addID(int id)
 	{
-		objectIDs[id]=true;
+		objectIDs[id] = true;
 	}
-	
+
 	/**
 	 * Set an ID's usage to false
 	 * @param id
 	 */
 	public void removeID(int id)
 	{
-		objectIDs[id]=false;
+		objectIDs[id] = false;
 	}
 
 	public char[][] getGrid()
@@ -160,5 +165,5 @@ public class ClientWorld
 	{
 		this.objects = objects;
 	}
-	
+
 }

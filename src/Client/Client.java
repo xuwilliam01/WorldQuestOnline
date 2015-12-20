@@ -57,56 +57,6 @@ public class Client extends JPanel implements KeyListener
 		currentMessage = "";
 	}
 
-	private class ServerInput implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				while (true)
-				{
-					if (input.ready())
-					{
-						String message = input.readLine();
-						String[] tokens = message.split(" ");
-
-						// If our player has moved
-						if (tokens[0].equals("x"))
-						{
-							player.setX(Integer.parseInt(tokens[1]));
-						}
-						else if (tokens[0].equals("y"))
-						{
-							player.setY(Integer.parseInt(tokens[1]));
-						}
-
-
-						// If there is a player to be updated
-						else if (tokens[0].equals("PLAYER"))
-						{
-//							OtherPlayer newPlayer = new OtherPlayer("PLAYER",
-//									Integer.parseInt(tokens[2]),
-//									Integer.parseInt(tokens[3]), colour,
-//									Integer.parseInt(tokens[4]));
-//							world.add(newPlayer);
-						}
-						else if (tokens[0].equals("REPING"))
-						{
-							pingString = "LATENCY: "
-									+ (System.currentTimeMillis() - ping);
-						}
-					}
-				}
-			}
-			catch (IOException E)
-			{
-				serverClosed();
-			}
-			repaint();
-		}
-	}
-
 	/**
 	 * Call when the server closes (Add more later)
 	 */
@@ -114,20 +64,15 @@ public class Client extends JPanel implements KeyListener
 	{
 		System.out.println("Server was closed");
 	}
-	
+
 	/**
 	 * Start the client
 	 */
 	public void initialize()
 	{
-
-		// Create the player object (TEMP: Do it another way later)
-		player = new ClientObject(0,0,0,"PLAYER RIGHT.png");
-		
-		
 		// Create the screen
 		setDoubleBuffered(true);
-		setBackground(Color.DARK_GRAY);
+		setBackground(Color.white);
 
 		// Add listeners
 		addKeyListener(this);
@@ -158,12 +103,78 @@ public class Client extends JPanel implements KeyListener
 			e.printStackTrace();
 		}
 
+		// Import the map from the server
 		importMap();
 
-		// Thread constantly getting input from the server
-		ServerInput serverInput = new ServerInput();
-		Thread inputThread = new Thread(serverInput);
-		inputThread.start();
+		// Create the player object (TEMP: Do it another way later)
+		player = new ClientObject(0, 0, 0, "PLAYER RIGHT.png");
+		world.add(player);
+
+		// Start the actual game
+		Thread gameThread = new Thread (new runGame());
+		gameThread.start();
+
+		
+		System.out.println("Game started");
+	}
+
+	/**
+	 * Thread for running the actual game
+	 * @author William Xu && Alex Raita
+	 *
+	 */
+	class runGame implements Runnable
+	{
+		@Override
+		public void run()
+		{
+				while (true)
+				{
+					try
+					{
+						if (input.ready())
+						{
+							String message = input.readLine();
+							String[] tokens = message.split(" ");
+
+							// If our player has moved
+							if (tokens[0].equals("x"))
+							{
+								player.setX(Integer.parseInt(tokens[1]));
+							}
+							else if (tokens[0].equals("y"))
+							{
+								player.setY(Integer.parseInt(tokens[1]));
+							}
+							// If there is a player to be updated
+							else if (tokens[0].equals("PLAYER"))
+							{
+								// OtherPlayer newPlayer = new OtherPlayer("PLAYER",
+								// Integer.parseInt(tokens[2]),
+								// Integer.parseInt(tokens[3]), colour,
+								// Integer.parseInt(tokens[4]));
+								// world.add(newPlayer);
+							}
+							else if (tokens[0].equals("REPING"))
+							{
+								pingString = "LATENCY: "
+										+ (System.currentTimeMillis() - ping);
+							}
+						}
+					}
+					catch (NumberFormatException e1)
+					{
+						e1.printStackTrace();
+					}
+					catch (IOException e1)
+					{
+						System.out.println("Server has closed");
+						break;
+					}
+					
+					repaint();
+				}
+		}
 	}
 
 	/**
@@ -172,7 +183,7 @@ public class Client extends JPanel implements KeyListener
 	private void importMap()
 	{
 		System.out.println("Importing the map from the server...");
-		
+
 		// Get the 2D grid from the server
 		String gridSize;
 
@@ -201,7 +212,7 @@ public class Client extends JPanel implements KeyListener
 		{
 			serverClosed();
 		}
-		
+
 		System.out.println("Map import has finished");
 	}
 
@@ -211,17 +222,8 @@ public class Client extends JPanel implements KeyListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.draw(graphics, player.getX(), player.getY());
-		graphics.setColor(Color.GREEN);
-		graphics.fillRect(SCREEN_WIDTH / 2 - player.getWidth() / 2,
-				SCREEN_HEIGHT / 2 - player.getHeight() / 2, player.getWidth(),
+		world.draw(graphics, player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(pingString, 20, 20);
-
-		// graphics.drawRect(SCREEN_WIDTH/2 - player.getWidth()/2,
-		// player.getY(), player.getWidth(), player.getHeight());
-
 	}
 
 	@Override
@@ -261,7 +263,6 @@ public class Client extends JPanel implements KeyListener
 			output.println("PING");
 			output.flush();
 		}
-
 	}
 
 	@Override

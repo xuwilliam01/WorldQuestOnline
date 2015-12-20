@@ -1,4 +1,5 @@
 package Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +19,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
-	
+
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
@@ -66,7 +67,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	private int movementSpeed;
 
-
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -78,13 +78,14 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * @param ID
 	 * @param image
 	 */
-	public ServerPlayer(Socket socket, Engine world, int x, int y, int width,int height, int ID, String image)
+	public ServerPlayer(Socket socket, Engine world, int x, int y, int width,
+			int height, int ID, String image)
 	{
-		super (x,y,width,height,ID,image);
+		super(x, y, width, height, ID, image);
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = world;
-		
+
 		xUpdated = true;
 		yUpdated = true;
 		movementSpeed = 5;
@@ -96,7 +97,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		}
 		catch (IOException e)
 		{
-			System.err.println("Error getting client's output stream");
+			System.out.println("Error getting client's output stream");
 			e.printStackTrace();
 		}
 
@@ -108,7 +109,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		}
 		catch (IOException e)
 		{
-			System.err.println("Error getting client's input stream");
+			System.out.println("Error getting client's input stream");
 			e.printStackTrace();
 		}
 
@@ -127,7 +128,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 		// Send to the client the height and width of the grid, the starting x
 		// and y position of the grid (top left) and the side length of each
 		// tile
-		queueMessage(grid.length + " " + grid[0].length + " " + ServerWorld.TILE_SIZE);
+		queueMessage(grid.length + " " + grid[0].length + " "
+				+ ServerWorld.TILE_SIZE);
 		for (int row = 0; row < grid.length; row++)
 		{
 			String message = "";
@@ -143,15 +145,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 	@Override
 	public void run()
 	{
-		System.out.println("Running");
-		
 		// Get input from the player
 		while (true)
 		{
 			try
 			{
 				String command = input.readLine();
-				System.out.println(command);
+				// System.out.println(command);
 
 				if (command.equals("RIGHT"))
 				{
@@ -226,7 +226,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 		disconnected = true;
 	}
-	
+
 	/**
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
@@ -234,11 +234,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public void setDirection(char newDirection)
 	{
 		direction = newDirection;
-		if (direction =='R')
+		if (direction == 'R')
 		{
 			setImage(getBaseImage() + " RIGHT" + Images.IMAGE_FORMAT);
 		}
-		else if (direction =='L')
+		else if (direction == 'L')
 		{
 			setImage(getBaseImage() + " LEFT" + Images.IMAGE_FORMAT);
 		}
@@ -310,6 +310,25 @@ public class ServerPlayer extends ServerObject implements Runnable
 		flushWriter();
 	}
 
+	public void setX(int x)
+	{
+		if (x != super.getX())
+		{
+			xUpdated = true;
+			super.setX(x);
+		}
+
+	}
+
+	public void setY(int y)
+	{
+		if (y != super.getY())
+		{
+			super.setY(y);
+			yUpdated = true;
+		}
+	}
+
 	public boolean isxUpdated()
 	{
 		return xUpdated;
@@ -322,7 +341,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 	public int[] getPlayerOnGrid()
 	{
-		return new int[] { getY() / ServerWorld.TILE_SIZE, getX() / ServerWorld.TILE_SIZE };
+		return new int[] { getY() / ServerWorld.TILE_SIZE,
+				getX() / ServerWorld.TILE_SIZE };
 	}
 
 	public int[] getObjectOnGrid(int x, int y)
@@ -349,6 +369,5 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		this.vSpeed = vSpeed;
 	}
-
 
 }
