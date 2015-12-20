@@ -1,14 +1,38 @@
 package Client;
+import java.awt.Image;
+
+import Imports.Images;
 
 /**
  * A class that acts as a blueprint for all objects in the game
  * @author Alex Raita & William Xu
  */
-public class ClientObject implements Comparable<ClientObject> {
+public class ClientObject {
 
+	/**
+	 * The x coordinate of the object (left)
+	 */
 	private int x;
+	
+	/**
+	 * The y coordinate of the object (top)
+	 */
 	private int y;
-	private String description;
+	
+	/**
+	 * The image of the object to draw
+	 */
+	private Image image;
+	
+	/**
+	 * The height of the image
+	 */
+	private int height;
+	
+	/**
+	 * The width of the image
+	 */
+	private int width;
 	
 	/**
 	 * The unique ID of the object
@@ -18,12 +42,26 @@ public class ClientObject implements Comparable<ClientObject> {
 	/**
 	 * Constructor
 	 */
-	public ClientObject(String description, int x, int y, int id)
+	public ClientObject(int x, int y, int id, String image)
 	{
 		this.x = x;
 		this.y = y;
-		this.description = description;
 		this.id=id;
+		this.image = Images.getImage(image);
+		height = this.image.getHeight(null);
+		width = this.image.getWidth(null);
+	}
+	
+	public Image getImage()
+	{
+		return image;
+	}
+
+	public void setImage(Image image)
+	{
+		this.image = image;
+		height = this.image.getHeight(null);
+		width = this.image.getWidth(null);
 	}
 
 	public int getID()
@@ -47,19 +85,14 @@ public class ClientObject implements Comparable<ClientObject> {
 		this.y = y;
 	}
 
-	public String getDesc() {
-		return description;
+	public int getHeight()
+	{
+		return height;
 	}
 
-	public void setDesc(String description) {
-		this.description = description;
-	}
-
-
-	public int compareTo(ClientObject o) {
-		if(x == o.x && y == o.y && description.equals(o.description))
-			return 0;
-		return -1;
+	public int getWidth()
+	{
+		return width;
 	}
 
 

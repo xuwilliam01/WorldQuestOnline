@@ -69,16 +69,11 @@ public class ClientWorld
 			for (ClientObject object : objects)
 			{
 				int x = object.getX() - playerX + Client.SCREEN_WIDTH / 2
-						- Client.TILE_SIZE / 2;
+						- tileSize / 2;
 				int y = object.getY() - playerY + Client.SCREEN_HEIGHT / 2
-						- Client.TILE_SIZE / 2;
+						- tileSize / 2;
 
-				if (object.getDesc().equals("PLAYER"))
-				{
-					OtherPlayer player = (OtherPlayer) object;
-					graphics.setColor(player.getColour());
-					graphics.fillRect(x, y, Client.TILE_SIZE, Client.TILE_SIZE);
-				}
+				graphics.drawImage(object.getImage(),x,y,null);
 			}
 		}
 		// this might cause some problems in the future
@@ -131,16 +126,39 @@ public class ClientWorld
 		objectIDs[id]=false;
 	}
 
-	/**
-	 * Gets the actual object in the world
-	 * @param object the object to be fetched
-	 * @return the desired object
-	 */
-	public ClientObject get(ClientObject object)
+	public char[][] getGrid()
 	{
-		for (ClientObject obj : objects)
-			if (obj.compareTo(object) == 0)
-				return obj;
-		return null;
+		return grid;
 	}
+
+	public void setGrid(char[][] grid)
+	{
+		this.grid = grid;
+	}
+
+	public boolean[] getObjectIDs()
+	{
+		return objectIDs;
+	}
+
+	public void setObjectIDs(boolean[] objectIDs)
+	{
+		this.objectIDs = objectIDs;
+	}
+
+	public int getTileSize()
+	{
+		return tileSize;
+	}
+
+	public void setTileSize(int tileSize)
+	{
+		this.tileSize = tileSize;
+	}
+
+	public void setObjects(ArrayList<ClientObject> objects)
+	{
+		this.objects = objects;
+	}
+	
 }

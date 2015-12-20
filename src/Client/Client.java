@@ -17,12 +17,13 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import Imports.Images;
+
 public class Client extends JPanel implements KeyListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
-	public final static int TILE_SIZE = 20;
 
 	private Socket mySocket;
 	private PrintWriter output;
@@ -39,7 +40,7 @@ public class Client extends JPanel implements KeyListener
 	/**
 	 * Object storing all player data
 	 */
-	private ClientPlayer player;
+	private ClientObject player;
 
 	/**
 	 * Stores the visible world of the client
@@ -51,7 +52,7 @@ public class Client extends JPanel implements KeyListener
 	 */
 	public Client(Socket socket)
 	{
-		importImages();
+		Images.importImages();
 		mySocket = socket;
 		currentMessage = "";
 	}
@@ -84,35 +85,6 @@ public class Client extends JPanel implements KeyListener
 						// If there is a player to be updated
 						else if (tokens[0].equals("PLAYER"))
 						{
-							// Get the player's colour and add them
-							Color colour = Color.YELLOW;
-							Field field = null;
-							try
-							{
-								field = Class.forName("java.awt.Color")
-										.getField(tokens[1].toLowerCase());
-								colour = (Color) field.get(null);
-							}
-							catch (NoSuchFieldException a)
-							{
-								a.printStackTrace();
-							}
-							catch (SecurityException a)
-							{
-								a.printStackTrace();
-							}
-							catch (ClassNotFoundException a)
-							{
-								a.printStackTrace();
-							}
-							catch (IllegalArgumentException a)
-							{
-								a.printStackTrace();
-							}
-							catch (IllegalAccessException a)
-							{
-								a.printStackTrace();
-							}
 //							OtherPlayer newPlayer = new OtherPlayer("PLAYER",
 //									Integer.parseInt(tokens[2]),
 //									Integer.parseInt(tokens[3]), colour,
@@ -148,11 +120,11 @@ public class Client extends JPanel implements KeyListener
 	 */
 	public void initialize()
 	{
-		// Import the images
+
+		// Create the player object (TEMP: Do it another way later)
+		player = new ClientObject(0,0,0,"PLAYER RIGHT.png");
 		
 		
-		// Create the player object
-		player = new ClientPlayer();
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.DARK_GRAY);
@@ -192,14 +164,6 @@ public class Client extends JPanel implements KeyListener
 		ServerInput serverInput = new ServerInput();
 		Thread inputThread = new Thread(serverInput);
 		inputThread.start();
-	}
-	
-	/**
-	 * Import the images from the file
-	 */
-	private void importImages()
-	{
-		
 	}
 
 	/**
