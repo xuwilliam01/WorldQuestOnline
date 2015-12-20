@@ -88,8 +88,31 @@ public class Engine implements Runnable, ActionListener
 		// Move players around (will be changed once scrolling is implemented)
 		for (ServerPlayer player : listOfPlayers)
 		{
+			System.out.println(player.getY());
+			
 			player.setX(player.getX() + player.getHSpeed());
+			
+			if (player.getY()+player.getHeight()+player.getVSpeed()<700)
+			{
 			player.setY(player.getY() + player.getVSpeed());
+			}
+			else
+			{
+				player.setY(700-player.getHeight());
+				player.setVSpeed(0);
+			}
+		}
+	}
+	
+	/**
+	 * Apply gravity to the vSpeed
+	 */
+	public void applyGravity()
+	{
+		// Move players around (will be changed once scrolling is implemented)
+		for (ServerPlayer player : listOfPlayers)
+		{
+			player.setVSpeed(player.getVSpeed()+world.getGravity());
 		}
 	}
 
@@ -153,9 +176,14 @@ public class Engine implements Runnable, ActionListener
 		{
 			listOfPlayers.remove(player);
 		}
-
+		
+		// Apply the gravity
+		applyGravity();
+		
+		
 		// Move all the objects around
 		moveObjects();
+		
 
 		// Update all the clients with the new player data
 		updatePlayers();

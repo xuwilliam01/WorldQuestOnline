@@ -11,8 +11,21 @@ import java.util.StringTokenizer;
 public class ServerWorld
 {
 	private char[][] grid;
+	
+	/**
+	 * The size of each tile
+	 */
 	public static final int TILE_SIZE = 16;
 	
+	/**
+	 * The amount of gravity per refresh
+	 */
+	private int gravity = 1;
+	
+	/**
+	 * Constructor for server
+	 * @throws IOException
+	 */
 	public ServerWorld() throws IOException
 	{
 		newWorld();
@@ -42,5 +55,16 @@ public class ServerWorld
 	public void setGrid(char[][] grid) {
 		this.grid = grid;
 	}
+
+	public int getGravity()
+	{
+		return gravity;
+	}
+
+	public void setGravity(int gravity)
+	{
+		this.gravity = gravity;
+	}
+	
 	
 }

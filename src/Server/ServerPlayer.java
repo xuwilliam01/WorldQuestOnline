@@ -23,6 +23,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
+	
+	
 
 	private boolean disconnected = false;
 
@@ -66,6 +68,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * The speed at which the player moves
 	 */
 	private int movementSpeed;
+	
+	/**
+	 * The speed the player jumps at 
+	 */
+	private int jumpSpeed = 25;
 
 	/**
 	 * Constructor for a player in the server
@@ -180,27 +187,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 						hSpeed = 0;
 					}
 				}
-				else if (command.equals("UP"))
+				else if (command.equals("UP") && getY()==700-getHeight())
 				{
-					vSpeed = -movementSpeed;
-				}
-				else if (command.equals("STOP UP"))
-				{
-					if (vSpeed < 0)
-					{
-						vSpeed = 0;
-					}
-				}
-				else if (command.equals("DOWN"))
-				{
-					vSpeed = movementSpeed;
-				}
-				else if (command.equals("STOP DOWN"))
-				{
-					if (vSpeed > 0)
-					{
-						vSpeed = 0;
-					}
+					vSpeed = -jumpSpeed;
 				}
 				else if (command.equals("PING"))
 				{

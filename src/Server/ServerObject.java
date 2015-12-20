@@ -61,27 +61,18 @@ public class ServerObject
 		this.y = y;
 		this.id = ID;
 		this.image = image;
-		this.width = width;
-		this.height = height;
-	}
-
-	/**
-	 * Constructor for an object, using the image dimensions as the height and
-	 * width
-	 * @param x
-	 * @param y
-	 * @param ID
-	 * @param image
-	 */
-	public ServerObject(int x, int y, int ID, String image)
-	{
-		useImageDimensions = true;
-		this.x = x;
-		this.y = y;
-		this.id = ID;
-		this.image = image;
-		width = Images.getGameImage(image).getWidth();
-		height = Images.getGameImage(image).getHeight();
+		if (width == -1)
+		{
+			this.width = Images.getGameImage(image).getWidth();
+			this.height = Images.getGameImage(image).getHeight();
+			useImageDimensions = true;
+		}
+		else
+		{
+			this.width = width;
+			this.height = height;
+			useImageDimensions = false;
+		}
 	}
 
 	/**
