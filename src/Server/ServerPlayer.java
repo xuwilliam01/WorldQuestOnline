@@ -179,9 +179,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 				else if (command.equals("UP") && isOnSurface())
 				{
 					setVSpeed(jumpSpeed);
-					
-					System.out.println(getVSpeed());
-					
 					setOnSurface(false);
 				}
 				else if (command.equals("PING"))
