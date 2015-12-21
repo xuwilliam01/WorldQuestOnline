@@ -1,10 +1,6 @@
 package Client;
-
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
 import Imports.Images;
 

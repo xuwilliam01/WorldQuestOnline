@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Connection implements Runnable
 {
 	// IP address and port of the server
-	private String serverIP = "127.0.0.1";
+	private String serverIP = "192.168.0.11";
 	private int port = 5000;
 	
 	

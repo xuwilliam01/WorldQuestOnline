@@ -17,7 +17,8 @@ public class Frame extends JFrame
 		setTitle("WorldQuest Online");
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
 		pack();
+		setVisible(true);
+		
 	}
 }

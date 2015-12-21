@@ -154,6 +154,7 @@ public class ServerWorld
 				else
 				{
 					object.setY(y1 + vSpeed);
+					object.setOnSurface(false);
 				}
 			}
 			else
