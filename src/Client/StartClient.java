@@ -29,5 +29,6 @@ public class StartClient
 		myFrame.add(client);
 		client.initialize();
 		client.revalidate();
+		
 	}
 }
