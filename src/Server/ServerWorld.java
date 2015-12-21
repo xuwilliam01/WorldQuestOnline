@@ -22,12 +22,18 @@ public class ServerWorld
 	public static final int TILE_SIZE = 16;
 
 	/**
+	 * Max speed (or game may glitch out)
+	 */
+	private static final int MAX_SPEED = TILE_SIZE;
+
+	/**
 	 * The amount of gravity per refresh
 	 */
 	private int gravity = 1;
-	
+
 	/**
-	 * List of all the non-tile objects in the world (for movement and collision detection)
+	 * List of all the non-tile objects in the world (for movement and collision
+	 * detection)
 	 */
 	private ArrayList<ServerObject> objects;
 
@@ -43,7 +49,7 @@ public class ServerWorld
 
 	public void newWorld() throws IOException
 	{
-		BufferedReader worldInput = new BufferedReader(new FileReader("World"));
+		BufferedReader worldInput = new BufferedReader(new FileReader(new File("Resources","World.txt")));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
@@ -64,18 +70,28 @@ public class ServerWorld
 	 */
 	public void moveObjects()
 	{
+
 		char[][] grid = getGrid();
-		
+
 		// Move objects around (will be changed once scrolling is implemented)
 		for (ServerObject object : objects)
 		{
+			// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
+			if (object.getVSpeed() < MAX_SPEED)
+			{
+				object.setVSpeed(object.getVSpeed()+gravity);
+			}
+			
+			int vSpeed = object.getVSpeed();
+			int hSpeed = object.getHSpeed();
+			
+			int absVSpeed = Math.abs(vSpeed);
+			int absHSpeed = Math.abs(hSpeed);
+
 			int x1 = object.getX();
 			int x2 = object.getX() + object.getWidth();
 			int y1 = object.getY();
 			int y2 = object.getY() + object.getHeight();
-
-			int absVSpeed = Math.abs(object.getVSpeed());
-			int absHSpeed = Math.abs(object.getHSpeed());
 
 			int startRow = (y1 - absVSpeed) / TILE_SIZE - 1;
 			if (startRow < 0)
@@ -102,7 +118,7 @@ public class ServerWorld
 			boolean moveVertical = true;
 			boolean moveHorizontal = true;
 
-			if (object.getVSpeed() > 0)
+			if (vSpeed > 0)
 			{
 				// The row and column of the tile that was collided with
 				int collideRow = 0;
@@ -115,7 +131,8 @@ public class ServerWorld
 								&& column * TILE_SIZE < x2
 								&& column * TILE_SIZE + TILE_SIZE > x1)
 						{
-							if (y2 + absVSpeed >= row * TILE_SIZE && y2 <= row * TILE_SIZE)
+							if (y2 + absVSpeed >= row * TILE_SIZE
+									&& y2 <= row * TILE_SIZE)
 							{
 								moveVertical = false;
 								collideRow = row;
@@ -136,7 +153,7 @@ public class ServerWorld
 				}
 				else
 				{
-					object.setY(object.getY() + object.getVSpeed());
+					object.setY(y1 + vSpeed);
 				}
 			}
 			else
@@ -147,7 +164,7 @@ public class ServerWorld
 			object.setX(object.getX() + object.getHSpeed());
 		}
 	}
-	
+
 	/**
 	 * Add a new object to the list of objects in the world
 	 * @param object
@@ -156,7 +173,7 @@ public class ServerWorld
 	{
 		objects.add(object);
 	}
-	
+
 	/**
 	 * Remove an object from the list of objects in the world
 	 * @param object

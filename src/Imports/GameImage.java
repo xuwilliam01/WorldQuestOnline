@@ -51,7 +51,7 @@ public class GameImage
 	 * Constructor for a game image with scaling
 	 * @param name
 	 */
-	public GameImage(String name,int width, int height)
+	public GameImage(String name, int width, int height)
 	{
 		this.name = name;
 		try

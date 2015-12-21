@@ -106,20 +106,6 @@ public class Engine implements Runnable, ActionListener
 		broadcast("R " + remove.getID());
 	}
 
-
-
-	/**
-	 * Apply gravity to the vSpeed
-	 */
-	public void applyGravity()
-	{
-		// Move players around (will be changed once scrolling is implemented)
-		for (ServerPlayer player : listOfPlayers)
-		{
-			player.setVSpeed(player.getVSpeed() + world.getGravity());
-		}
-	}
-
 	/**
 	 * Add a new player to the game
 	 * @param newPlayer the new player
@@ -180,9 +166,6 @@ public class Engine implements Runnable, ActionListener
 		{
 			listOfPlayers.remove(player);
 		}
-
-		// Apply the gravity
-		applyGravity();
 
 		// Move all the objects around
 		world.moveObjects();
