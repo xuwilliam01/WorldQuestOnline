@@ -153,54 +153,58 @@ public class Client extends JPanel implements KeyListener
 			{
 				while (true)
 				{
-					if (input.ready())
+
+					String message = input.readLine();
+					String[] tokens = message.split(" ");
+
+					for (int token = 0; token < tokens.length; token++)
 					{
-						String message = input.readLine();
-						String[] tokens = message.split(" ");
-
-						for(int token = 0; token < tokens.length;token++)
+						// If our player has moved
+						if (tokens[token].equals("U"))
 						{
-							// If our player has moved
-							if (tokens[token].equals("U"))
+							repaint();
+						}
+						// If there is a player to be updated
+						else if (tokens[token].equals("P"))
+						{
+							int id = Integer.parseInt(tokens[++token]);
+							if (id == player.getID())
 							{
-								repaint();
+								player.setX(Integer
+										.parseInt(tokens[++token]));
+								player.setY(Integer
+										.parseInt(tokens[++token]));
+								player.setImage(tokens[++token]);
 							}
-							// If there is a player to be updated
-							else if (tokens[token].equals("P"))
+							else if (world.contains(id))
 							{
-								int id = Integer.parseInt(tokens[++token]);
-								if (id == player.getID())
-								{
-									player.setX(Integer.parseInt(tokens[++token]));
-									player.setY(Integer.parseInt(tokens[++token]));
-									player.setImage(tokens[++token]);
-								}
-								else if (world.contains(id))
-								{
-									ClientObject otherPlayer = world.get(id);
-									otherPlayer.setX(Integer.parseInt(tokens[++token]));
-									otherPlayer.setY(Integer.parseInt(tokens[++token]));
-									otherPlayer.setImage(tokens[++token]);
-								}
-								else
-								{
-									ClientObject otherPlayer = new ClientObject(id,
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]), tokens[++token]);
-									world.add(otherPlayer);
-								}
+								ClientObject otherPlayer = world.get(id);
+								otherPlayer.setX(Integer
+										.parseInt(tokens[++token]));
+								otherPlayer.setY(Integer
+										.parseInt(tokens[++token]));
+								otherPlayer.setImage(tokens[++token]);
 							}
-							else if (tokens[token].equals("REPING"))
+							else
 							{
-								pingString = "LATENCY: "
-										+ (System.currentTimeMillis() - ping);
+								ClientObject otherPlayer = new ClientObject(
+										id,
+										Integer.parseInt(tokens[++token]),
+										Integer.parseInt(tokens[++token]),
+										tokens[++token]);
+								world.add(otherPlayer);
 							}
+						}
+						else if (tokens[token].equals("REPING"))
+						{
+							pingString = "LATENCY: "
+									+ (System.currentTimeMillis() - ping);
+						}
 
-							// Remove a player after disconnecting
-							else if (tokens[token].equals("R"))
-							{
-								world.remove(Integer.parseInt(tokens[++token]));
-							}
+						// Remove a player after disconnecting
+						else if (tokens[token].equals("R"))
+						{
+							world.remove(Integer.parseInt(tokens[++token]));
 						}
 					}
 				}
@@ -209,12 +213,11 @@ public class Client extends JPanel implements KeyListener
 			{
 				e1.printStackTrace();
 			}
-			catch (IOException e1)
+			catch (IOException e2)
 			{
 				System.out.println("Server has closed");
 			}
 		}
-
 	}
 
 	/**

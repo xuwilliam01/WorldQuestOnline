@@ -10,10 +10,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import Client.Client;
-import Client.ClientObject;
-import Imports.Images;
-
 public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 
 	private ServerWorld world;
@@ -22,7 +18,7 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	private int posY = 200;
 	Timer repaintTimer;
 
-	//Movement booleans
+	// Movement booleans
 	private boolean up = false;
 	private boolean down = false;
 	private boolean left = false;
@@ -150,6 +146,9 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	public void keyTyped(KeyEvent arg0) {
 	}
 
+	/**
+	 * Scroll the minimap
+	 */
 	public void movePos()
 	{
 		if(right)
