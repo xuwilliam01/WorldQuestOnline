@@ -7,12 +7,13 @@ import javax.swing.JFrame;
 public class ServerFrame extends JFrame
 {
 
+	public static final int FRAME_FACTOR = 2;
 	/**
 	 * Constructor for the game frame
 	 */
 	public ServerFrame()
 	{
-		setPreferredSize(new Dimension(ServerPlayer.SCREEN_WIDTH, ServerPlayer.SCREEN_HEIGHT));
+		setPreferredSize(new Dimension(ServerPlayer.SCREEN_WIDTH/FRAME_FACTOR, ServerPlayer.SCREEN_HEIGHT/FRAME_FACTOR));
 		setResizable(false);
 		setTitle("WorldQuest Online - Server Map");
 		setLocationRelativeTo(null);

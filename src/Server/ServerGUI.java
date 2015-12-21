@@ -18,10 +18,16 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 
 	private ServerWorld world;
 	private char[][] grid;
-	private int posX = 500;
-	private int posY = 500;
+	private int posX = 200;
+	private int posY = 200;
 	Timer repaintTimer;
 
+	//Movement booleans
+	private boolean up = false;
+	private boolean down = false;
+	private boolean left = false;
+	private boolean right = false;
+	
 	public ServerGUI(ServerWorld world)
 	{
 		// Create the screen
@@ -47,26 +53,27 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		super.paintComponent(graphics);
 
 		//Center of the screen
-		int centreX = ServerPlayer.SCREEN_WIDTH/2;
-		int centreY = ServerPlayer.SCREEN_HEIGHT/2;
+		int centreX = ServerPlayer.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR/2;
+		int centreY = ServerPlayer.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR/2;
+		int tileSize = ServerWorld.TILE_SIZE/ServerFrame.FRAME_FACTOR/2;
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int)((posY - centreY-5)/world.TILE_SIZE);
+		int startRow = (int)((posY - centreY-5)/tileSize);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int)((centreY+posY+5)/world.TILE_SIZE);
+		int endRow = (int)((centreY+posY+5)/tileSize);
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length-1;
 		}
-		int startColumn = (int)((posX - centreX-5)/world.TILE_SIZE);
+		int startColumn = (int)((posX - centreX-5)/tileSize);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int)((centreX+posX+5)/world.TILE_SIZE);
+		int endColumn = (int)((centreX+posX+5)/tileSize);
 		if (endColumn >= grid.length)
 		{
 			endColumn= grid[0].length-1;
@@ -78,12 +85,12 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 				if (grid[row][column]=='0')
 				{
 					graphics.setColor(Color.GREEN);
-					graphics.fillRect(centreX + column* world.TILE_SIZE - posX, centreY + row*world.TILE_SIZE - posY,world.TILE_SIZE,world.TILE_SIZE);
+					graphics.fillRect(centreX + column* tileSize - posX, centreY + row*tileSize - posY,tileSize,tileSize);
 				}
 				else if (grid[row][column]=='1')
 				{
 					graphics.setColor(Color.RED);
-					graphics.fillRect(centreX + column* world.TILE_SIZE - posX, centreY + row*world.TILE_SIZE - posY,world.TILE_SIZE,world.TILE_SIZE);
+					graphics.fillRect(centreX + column* tileSize - posX, centreY + row*tileSize - posY,tileSize,tileSize);
 				}
 			}
 		}
@@ -91,9 +98,10 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		// Go through each object in the world and draw it relative to the
 		// player's position
 		for (ServerObject object : world.getObjects())
-		{			
-			//graphics.drawImage(object.getImage(), centreX + object.getX() - posX, centreY + object.getY() - posY,
-				//	null);
+		{		
+			graphics.setColor(Color.BLACK);
+			graphics.fillRect(centreX + object.getX()/ServerFrame.FRAME_FACTOR/2 - posX, centreY + object.getY()/ServerFrame.FRAME_FACTOR/2 - posY,object.getWidth()/ServerFrame.FRAME_FACTOR/2,object.getHeight()/ServerFrame.FRAME_FACTOR/2);
+				
 		}
 
 	}
@@ -102,29 +110,61 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		System.out.println("working");
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
-			posX += 20;		
+			right = true;	
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_LEFT)
 		{
-			posX -= 20;
+			left = true;
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_UP)
 		{
-			posY -= 20;
+			up = true;
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_DOWN)
 		{
-			posY += 20;
+			down = true;
 		}	
 	}
 
-	public void keyReleased(KeyEvent arg0) {
+	public void keyReleased(KeyEvent key) {
+		
+		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
+		{
+			right = false;	
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_LEFT)
+		{
+			left= false;	
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_UP)
+		{
+			up = false;	
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_DOWN)
+		{
+			down = false;	
+		}	
+		
 	}
 
 	public void keyTyped(KeyEvent arg0) {
 	}
 
+	public void movePos()
+	{
+		if(right)
+			posX+=10;
+		else if(left)
+			posX-=10;
+		if(up)
+			posY-=10;
+		else if(down)
+			posY+=10;
+	}
+	
 	public void actionPerformed(ActionEvent arg0) {
+		//Move and repaint
+		movePos();
 		repaint();
 
 	}
