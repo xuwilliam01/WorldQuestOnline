@@ -28,5 +28,6 @@ public class StartClient
 		Client client = new Client(mySocket);
 		myFrame.add(client);
 		client.initialize();
+		client.revalidate();
 	}
 }

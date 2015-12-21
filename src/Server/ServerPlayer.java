@@ -24,7 +24,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
 	
-	
+	private String message="";
 
 	private boolean disconnected = false;
 
@@ -254,7 +254,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		output.println(message);
+		if(message.length() != 0)
+			this.message += " "+message;
+		else
+			this.message+=message;
 	}
 
 	/**
@@ -262,7 +265,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void flushWriter()
 	{
+		output.println(message);
 		output.flush();
+		message="";
 	}
 
 	/**

@@ -158,46 +158,49 @@ public class Client extends JPanel implements KeyListener
 						String message = input.readLine();
 						String[] tokens = message.split(" ");
 
-						// If our player has moved
-						if (tokens[0].equals("U"))
+						for(int token = 0; token < tokens.length;token++)
 						{
-							repaint();
-						}
-						// If there is a player to be updated
-						else if (tokens[0].equals("P"))
-						{
-							int id = Integer.parseInt(tokens[1]);
-							if (id == player.getID())
+							// If our player has moved
+							if (tokens[token].equals("U"))
 							{
-								player.setX(Integer.parseInt(tokens[2]));
-								player.setY(Integer.parseInt(tokens[3]));
-								player.setImage(tokens[4]);
+								repaint();
 							}
-							else if (world.contains(id))
+							// If there is a player to be updated
+							else if (tokens[token].equals("P"))
 							{
-								ClientObject otherPlayer = world.get(id);
-								otherPlayer.setX(Integer.parseInt(tokens[2]));
-								otherPlayer.setY(Integer.parseInt(tokens[3]));
-								otherPlayer.setImage(tokens[4]);
+								int id = Integer.parseInt(tokens[++token]);
+								if (id == player.getID())
+								{
+									player.setX(Integer.parseInt(tokens[++token]));
+									player.setY(Integer.parseInt(tokens[++token]));
+									player.setImage(tokens[++token]);
+								}
+								else if (world.contains(id))
+								{
+									ClientObject otherPlayer = world.get(id);
+									otherPlayer.setX(Integer.parseInt(tokens[++token]));
+									otherPlayer.setY(Integer.parseInt(tokens[++token]));
+									otherPlayer.setImage(tokens[++token]);
+								}
+								else
+								{
+									ClientObject otherPlayer = new ClientObject(id,
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]), tokens[++token]);
+									world.add(otherPlayer);
+								}
 							}
-							else
+							else if (tokens[token].equals("REPING"))
 							{
-								ClientObject otherPlayer = new ClientObject(id,
-										Integer.parseInt(tokens[2]),
-										Integer.parseInt(tokens[3]), tokens[4]);
-								world.add(otherPlayer);
+								pingString = "LATENCY: "
+										+ (System.currentTimeMillis() - ping);
 							}
-						}
-						else if (tokens[0].equals("REPING"))
-						{
-							pingString = "LATENCY: "
-									+ (System.currentTimeMillis() - ping);
-						}
-						
-						// Remove a player after disconnecting
-						else if (tokens[0].equals("R"))
-						{
-							world.remove(Integer.parseInt(tokens[1]));
+
+							// Remove a player after disconnecting
+							else if (tokens[token].equals("R"))
+							{
+								world.remove(Integer.parseInt(tokens[++token]));
+							}
 						}
 					}
 				}
@@ -233,7 +236,7 @@ public class Client extends JPanel implements KeyListener
 			int tileSize = Integer.parseInt(dimensions[2]);
 
 			char grid[][] = new char[height][width];
-			
+
 			for (int row = 0; row < height; row++)
 			{
 				String gridRow = input.readLine();
