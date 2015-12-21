@@ -204,4 +204,8 @@ public class ServerWorld
 		this.gravity = gravity;
 	}
 
+	public ArrayList<ServerObject> getObjects()
+	{
+		return objects;
+	}
 }

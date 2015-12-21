@@ -74,5 +74,10 @@ public class Server implements Runnable
 			}
 		}
 	}
+	
+	public Engine getEngine()
+	{
+		return engine;
+	}
 
 }

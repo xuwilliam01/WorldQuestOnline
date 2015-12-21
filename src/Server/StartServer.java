@@ -11,6 +11,12 @@ public class StartServer
 		Thread serverThread = new Thread(server);
 
 		serverThread.start();
+		
+		ServerFrame myFrame = new ServerFrame();
+		ServerGUI gui = new ServerGUI(server.getEngine().getWorld());
+		myFrame.add(gui);
+		gui.revalidate();
+		
 	
 	}
 

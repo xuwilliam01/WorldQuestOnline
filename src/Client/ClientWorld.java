@@ -133,11 +133,7 @@ public class ClientWorld
 		// Go through each object in the world and draw it relative to the
 		// player's position
 		for (ClientObject object : objects)
-		{
-			// ADD SCROLLING
-			//int x = Client.SCREEN_WIDTH / 2 - object.getWidth() / 2;															// (object.getX()-playerX);
-			//int y = Client.SCREEN_HEIGHT / 2 - object.getHeight() / 2;
-			
+		{			
 			graphics.drawImage(object.getImage(), centreX + object.getX() - playerX, centreY + object.getY() - playerY,
 					null);
 		}

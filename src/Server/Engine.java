@@ -44,7 +44,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * The rate at which the game runs at, in milliseconds
 	 */
-	public final int UPDATE_RATE = 15;
+	public final static int UPDATE_RATE = 15;
 
 	private Timer updateTimer;
 
