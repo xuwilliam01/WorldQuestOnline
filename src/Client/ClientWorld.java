@@ -92,6 +92,10 @@ public class ClientWorld
 	public void draw(Graphics graphics, int playerX, int playerY,
 			int playerWidth, int playerHeight)
 	{
+		//Center of the screen
+		int centreX = Client.SCREEN_WIDTH/2;
+		int centreY = Client.SCREEN_HEIGHT/2;
+		
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int)(0/tileSize - 0.5);
 		if (startRow < 0)
@@ -119,12 +123,12 @@ public class ClientWorld
 			{
 				if (grid[row][column]=='0')
 				{
-					graphics.drawImage(Images.getImage("GRASS.png"), column* tileSize, row*tileSize,
+					graphics.drawImage(Images.getImage("GRASS.png"), centreX + column* tileSize - playerX, centreY + row*tileSize - playerY,
 							null);
 				}
 				else if (grid[row][column]=='1')
 				{
-					graphics.drawImage(Images.getImage("BRICK.png"), column* tileSize, row*tileSize,
+					graphics.drawImage(Images.getImage("BRICK.png"),  centreX + column* tileSize - playerX, centreY + row*tileSize - playerY,
 							null);
 				}
 			}
@@ -138,7 +142,7 @@ public class ClientWorld
 			//int x = Client.SCREEN_WIDTH / 2 - object.getWidth() / 2;															// (object.getX()-playerX);
 			//int y = Client.SCREEN_HEIGHT / 2 - object.getHeight() / 2;
 			
-			graphics.drawImage(object.getImage(), object.getX(), object.getY(),
+			graphics.drawImage(object.getImage(), centreX + object.getX() - playerX, centreY + object.getY() - playerY,
 					null);
 		}
 	}
