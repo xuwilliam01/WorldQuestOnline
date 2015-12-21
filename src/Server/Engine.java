@@ -22,6 +22,7 @@ public class Engine implements Runnable, ActionListener
 	 */
 	private ArrayList<ServerPlayer> listOfPlayers;
 
+	
 	/**
 	 * A list of IDs currently used in the game (index is the ID, true means
 	 * used, false means unused). Note that IDs can be freed when the object is
@@ -52,13 +53,14 @@ public class Engine implements Runnable, ActionListener
 	 */
 	public Engine() throws IOException
 	{
-		// Start importing the images from the file (place in a loading screen or something later)
+		// Start importing the images from the file (place in a loading screen
+		// or something later)
 		Images.importImages();
-		
+
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new ServerWorld();
 		objectIDs = new boolean[NUMBER_OF_IDS];
-		
+
 	}
 
 	@Override
@@ -77,33 +79,35 @@ public class Engine implements Runnable, ActionListener
 	public synchronized void updatePlayers()
 	{
 		for (ServerPlayer player : listOfPlayers)
+		{
 			player.update();
+		}
 	}
 
 	/**
-	 * Move objects around by updating their x and y coordinates
+	 * Send an instant message to all clients
 	 */
-	public void moveObjects()
+	public void broadcast(String message)
 	{
-		// Move players around (will be changed once scrolling is implemented)
 		for (ServerPlayer player : listOfPlayers)
 		{
-			System.out.println(player.getY());
-			
-			player.setX(player.getX() + player.getHSpeed());
-			
-			if (player.getY()+player.getHeight()+player.getVSpeed()<700)
-			{
-			player.setY(player.getY() + player.getVSpeed());
-			}
-			else
-			{
-				player.setY(700-player.getHeight());
-				player.setVSpeed(0);
-			}
+			player.sendMessage(message);
 		}
 	}
-	
+
+	/**
+	 * Remove a player from the array list
+	 * @param remove
+	 */
+	public synchronized void removePlayer(ServerPlayer remove)
+	{
+		listOfPlayers.remove(remove);
+		world.remove(remove);
+		broadcast("R " + remove.getID());
+	}
+
+
+
 	/**
 	 * Apply gravity to the vSpeed
 	 */
@@ -112,7 +116,7 @@ public class Engine implements Runnable, ActionListener
 		// Move players around (will be changed once scrolling is implemented)
 		for (ServerPlayer player : listOfPlayers)
 		{
-			player.setVSpeed(player.getVSpeed()+world.getGravity());
+			player.setVSpeed(player.getVSpeed() + world.getGravity());
 		}
 	}
 
@@ -123,6 +127,7 @@ public class Engine implements Runnable, ActionListener
 	public void addPlayer(ServerPlayer newPlayer)
 	{
 		listOfPlayers.add(newPlayer);
+		world.add(newPlayer);
 	}
 
 	public ServerWorld getWorld()
@@ -139,8 +144,7 @@ public class Engine implements Runnable, ActionListener
 	{
 		this.listOfPlayers = listOfPlayers;
 	}
-	
-	
+
 	/**
 	 * Use and reserve the next available ID in the list of booleans
 	 * @return the id
@@ -176,14 +180,12 @@ public class Engine implements Runnable, ActionListener
 		{
 			listOfPlayers.remove(player);
 		}
-		
+
 		// Apply the gravity
 		applyGravity();
-		
-		
+
 		// Move all the objects around
-		moveObjects();
-		
+		world.moveObjects();
 
 		// Update all the clients with the new player data
 		updatePlayers();

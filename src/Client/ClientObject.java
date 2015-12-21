@@ -80,6 +80,7 @@ public class ClientObject implements Comparable<ClientObject>
 		}
 	}
 
+
 	public int getID()
 	{
 		return id;

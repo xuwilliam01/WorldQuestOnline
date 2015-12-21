@@ -50,16 +50,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private boolean yUpdated;
 
 	/**
-	 * The horizontal speed of the player (negative -- left, positive -- right)
-	 */
-	private int hSpeed;
-
-	/**
-	 * The vertical speed of the player (negative -- up, positive -- down)
-	 */
-	private int vSpeed;
-
-	/**
 	 * The horizontal direction the player is facing ('R' is right, 'L' is left)
 	 */
 	private char direction;
@@ -67,12 +57,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 	/**
 	 * The speed at which the player moves
 	 */
-	private int movementSpeed;
+	private int movementSpeed = 5;
 	
 	/**
-	 * The speed the player jumps at 
+	 * The initial speed the player jumps at 
 	 */
-	private int jumpSpeed = 25;
+	private int jumpSpeed = -15;
 
 	/**
 	 * Constructor for a player in the server
@@ -95,7 +85,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 		xUpdated = true;
 		yUpdated = true;
-		movementSpeed = 5;
 
 		// Set up the output
 		try
@@ -143,9 +132,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 		for (int row = 0; row < grid.length; row++)
 		{
 			String message = "";
-			for (int column = 0; column < grid.length; column++)
+			for (int column = 0; column < grid[0].length; column++)
 			{
-				message += grid[row][column] + ' ';
+				message += grid[row][column];
 			}
 			queueMessage(message);
 		}
@@ -165,31 +154,35 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 				if (command.equals("RIGHT"))
 				{
-					hSpeed = movementSpeed;
+					setHSpeed(movementSpeed);
 					setDirection('R');
 				}
 				else if (command.equals("STOP RIGHT"))
 				{
-					if (hSpeed > 0)
+					if (getHSpeed() > 0)
 					{
-						hSpeed = 0;
+						setHSpeed(0);
 					}
 				}
 				else if (command.equals("LEFT"))
 				{
-					hSpeed = -movementSpeed;
+					setHSpeed(-movementSpeed);
 					setDirection('L');
 				}
 				else if (command.equals("STOP LEFT"))
 				{
-					if (hSpeed < 0)
+					if (getHSpeed() < 0)
 					{
-						hSpeed = 0;
+						setHSpeed(0);
 					}
 				}
-				else if (command.equals("UP") && getY()==700-getHeight())
+				else if (command.equals("UP") && isOnSurface())
 				{
-					vSpeed = -jumpSpeed;
+					setVSpeed(jumpSpeed);
+					
+					System.out.println(getVSpeed());
+					
+					setOnSurface(false);
 				}
 				else if (command.equals("PING"))
 				{
@@ -215,8 +208,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 		}
 
 		output.close();
-
 		disconnected = true;
+		engine.removePlayer(this);
 	}
 
 	/**
@@ -330,25 +323,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		return new int[] { y / ServerWorld.TILE_SIZE, x / ServerWorld.TILE_SIZE };
 	}
-
-	public int getHSpeed()
-	{
-		return hSpeed;
-	}
-
-	public void setHSpeed(int hSpeed)
-	{
-		this.hSpeed = hSpeed;
-	}
-
-	public int getVSpeed()
-	{
-		return vSpeed;
-	}
-
-	public void setVSpeed(int vSpeed)
-	{
-		this.vSpeed = vSpeed;
-	}
+	
+	
 
 }

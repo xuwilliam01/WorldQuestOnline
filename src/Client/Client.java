@@ -193,6 +193,12 @@ public class Client extends JPanel implements KeyListener
 							pingString = "LATENCY: "
 									+ (System.currentTimeMillis() - ping);
 						}
+						
+						// Remove a player after disconnecting
+						else if (tokens[0].equals("R"))
+						{
+							world.remove(Integer.parseInt(tokens[1]));
+						}
 					}
 				}
 			}
@@ -227,7 +233,7 @@ public class Client extends JPanel implements KeyListener
 			int tileSize = Integer.parseInt(dimensions[2]);
 
 			char grid[][] = new char[height][width];
-
+			
 			for (int row = 0; row < height; row++)
 			{
 				String gridRow = input.readLine();

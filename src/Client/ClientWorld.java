@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
+import Imports.Images;
+
 public class ClientWorld
 {
 
@@ -55,6 +57,31 @@ public class ClientWorld
 		objects.add(object);
 		addID(object.getID());
 	}
+	
+	/**
+	 * Remove an object from the client's side
+	 * @param object the object to remove
+	 */
+	public void remove(int id)
+	{
+		int removeIndex=-1;
+		int currentIndex = 0;
+		for (ClientObject object:objects)
+		{
+			if (object.getID()==id)
+			{
+				removeIndex = currentIndex;
+				break;
+			}
+			currentIndex++;
+		}
+		
+		if (removeIndex!=-1)
+		{
+			objects.remove(removeIndex);
+			removeID(id);
+		}
+	}
 
 	/**
 	 * Draws the world
@@ -65,28 +92,55 @@ public class ClientWorld
 	public void draw(Graphics graphics, int playerX, int playerY,
 			int playerWidth, int playerHeight)
 	{
-		// Go through each object in the world and draw it relative to the
-		// player's position
-		try
+		// Draw tiles (draw based on player's position later)
+		int startRow = (int)(0/tileSize - 0.5);
+		if (startRow < 0)
 		{
-			for (ClientObject object : objects)
+			startRow = 0;
+		}
+		int endRow = (int)(Client.SCREEN_HEIGHT/tileSize + 0.5);
+		if (endRow >= grid.length)
+		{
+			endRow = grid.length-1;
+		}
+		int startColumn = (int)(0/tileSize - 0.5);
+		if (startColumn < 0)
+		{
+			startColumn = 0;
+		}
+		int endColumn = (int)(Client.SCREEN_WIDTH/tileSize + 0.5);
+		if (endColumn >= grid.length)
+		{
+			endColumn= grid[0].length-1;
+		}
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
 			{
-				int x = Client.SCREEN_WIDTH / 2 - object.getWidth() / 2; // +
-																			// (object.getX()-playerX);
-				int y = Client.SCREEN_HEIGHT / 2 - object.getHeight() / 2;// +
-																			// (object.getY()-playerY);
-
-				graphics.setColor(Color.blue);
-
-				graphics.drawImage(object.getImage(), object.getX(), object.getY(), null);
+				if (grid[row][column]=='0')
+				{
+					graphics.drawImage(Images.getImage("GRASS.png"), column* tileSize, row*tileSize,
+							null);
+				}
+				else if (grid[row][column]=='1')
+				{
+					graphics.drawImage(Images.getImage("BRICK.png"), column* tileSize, row*tileSize,
+							null);
+				}
 			}
 		}
-		// this might cause some problems in the future
-		catch (ConcurrentModificationException E)
+		
+		// Go through each object in the world and draw it relative to the
+		// player's position
+		for (ClientObject object : objects)
 		{
-
+			// ADD SCROLLING
+			//int x = Client.SCREEN_WIDTH / 2 - object.getWidth() / 2;															// (object.getX()-playerX);
+			//int y = Client.SCREEN_HEIGHT / 2 - object.getHeight() / 2;
+			
+			graphics.drawImage(object.getImage(), object.getX(), object.getY(),
+					null);
 		}
-
 	}
 
 	/**

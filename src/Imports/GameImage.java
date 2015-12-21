@@ -46,6 +46,26 @@ public class GameImage
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 	}
+	
+	/**
+	 * Constructor for a game image with scaling
+	 * @param name
+	 */
+	public GameImage(String name,int width, int height)
+	{
+		this.name = name;
+		try
+		{
+			image = ImageIO.read(new File(name)).getScaledInstance(width, height, 0);
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error loading image: " + name);
+			e.printStackTrace();
+		}
+		this.width = width;
+		this.height = height;
+	}
 
 	public String getName()
 	{

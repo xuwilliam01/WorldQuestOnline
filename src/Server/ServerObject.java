@@ -44,6 +44,21 @@ public class ServerObject
 	 * The image name for the object (ex. pie.png)
 	 */
 	private String image;
+	
+	/**
+	 * The horizontal speed of the player (negative -- left, positive -- right)
+	 */
+	private int hSpeed;
+
+	/**
+	 * The vertical speed of the player (negative -- up, positive -- down)
+	 */
+	private int vSpeed;
+	
+	/**
+	 * Whether or not the object is on top of a surface
+	 */
+	private boolean onSurface;
 
 	/**
 	 * Constructor for an object
@@ -56,6 +71,7 @@ public class ServerObject
 	public ServerObject(int x, int y, int width, int height, int ID,
 			String image)
 	{
+		onSurface = false;
 		useImageDimensions = false;
 		this.x = x;
 		this.y = y;
@@ -117,6 +133,36 @@ public class ServerObject
 			width = Images.getGameImage(image).getWidth();
 			height = Images.getGameImage(image).getHeight();
 		}
+	}
+	
+	public boolean isOnSurface()
+	{
+		return onSurface;
+	}
+
+	public void setOnSurface(boolean onSurface)
+	{
+		this.onSurface = onSurface;
+	}
+	
+	public int getHSpeed()
+	{
+		return hSpeed;
+	}
+
+	public void setHSpeed(int hSpeed)
+	{
+		this.hSpeed = hSpeed;
+	}
+
+	public int getVSpeed()
+	{
+		return vSpeed;
+	}
+
+	public void setVSpeed(int vSpeed)
+	{
+		this.vSpeed = vSpeed;
 	}
 
 	public int getID()
