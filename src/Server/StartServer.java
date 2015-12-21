@@ -11,6 +11,8 @@ public class StartServer
 		Thread serverThread = new Thread(server);
 
 		serverThread.start();
+	
+		
 	}
 
 }
