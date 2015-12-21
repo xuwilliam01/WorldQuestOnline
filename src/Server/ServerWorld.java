@@ -157,11 +157,45 @@ public class ServerWorld
 					object.setOnSurface(false);
 				}
 			}
-			else
-			// Add support for colliding with a tile above
+			else if (vSpeed < 0)
 			{
-				object.setY(object.getY() + object.getVSpeed());
+				// The row and column of the tile that was collided with
+				int collideRow = 0;
+
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						if (grid[row][column] != '0'
+								&& column * TILE_SIZE < x2
+								&& column * TILE_SIZE + TILE_SIZE > x1)
+						{
+							if (y1 - absVSpeed <= row * TILE_SIZE + TILE_SIZE
+									&& y1 >= row * TILE_SIZE + TILE_SIZE)
+							{
+								moveVertical = false;
+								collideRow = row;
+								break;
+							}
+						}
+						if (!moveVertical)
+						{
+							break;
+						}
+					}
+				}
+				if (!moveVertical)
+				{
+					object.setY(collideRow * TILE_SIZE + TILE_SIZE);
+					object.setVSpeed(0);
+				}
+				else
+				{
+					object.setY(y1 + vSpeed);
+				}
 			}
+			
+			// Add horizontal collision
 			object.setX(object.getX() + object.getHSpeed());
 		}
 	}
