@@ -127,7 +127,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		// Send to the client the height and width of the grid, the starting x
 		// and y position of the grid (top left) and the side length of each
 		// tile
-		queueMessage(grid.length + " " + grid[0].length + " "
+		printMessage(grid.length + " " + grid[0].length + " "
 				+ ServerWorld.TILE_SIZE);
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -136,9 +136,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 			{
 				message += grid[row][column];
 			}
-			queueMessage(message);
+			printMessage(message);
 		}
-		flushWriter();
+		flush();
 	}
 
 	@Override
@@ -261,6 +261,15 @@ public class ServerPlayer extends ServerObject implements Runnable
 	}
 
 	/**
+	 * Prints a message to the client
+	 * @param message the message to be printed
+	 */
+	public void printMessage(String message)
+	{
+		output.println(message);
+	}
+	
+	/**
 	 * Flush all queued messages to the client
 	 */
 	public void flushWriter()
@@ -270,6 +279,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 		message="";
 	}
 
+	/**
+	 * Flushes all messages
+	 */
+	public void flush()
+	{
+		output.flush();
+	}
 	/**
 	 * Send to the client all the updated values
 	 */
