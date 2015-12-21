@@ -23,8 +23,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
-	
-	private String message="";
+
+	private String message = "";
 
 	private boolean disconnected = false;
 
@@ -32,6 +32,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private PrintWriter output;
 	private BufferedReader input;
 	private Engine engine;
+	private ServerWorld world;
 
 	// ////////////////////////////////////////////////////////////////////
 	// X and Y coordinates will be changed once scrolling is implemented//
@@ -58,16 +59,16 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * The speed at which the player moves
 	 */
 	private int movementSpeed = 5;
-	
+
 	/**
-	 * The initial speed the player jumps at 
+	 * The initial speed the player jumps at
 	 */
 	private int jumpSpeed = -15;
 
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
-	 * @param world
+	 * @param engine
 	 * @param x
 	 * @param y
 	 * @param width
@@ -75,13 +76,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * @param ID
 	 * @param image
 	 */
-	public ServerPlayer(Socket socket, Engine world, int x, int y, int width,
+	public ServerPlayer(Socket socket, Engine engine, int x, int y, int width,
 			int height, int ID, String image)
 	{
 		super(x, y, width, height, ID, image);
 		// Import the socket, server, and world
 		this.socket = socket;
-		this.engine = world;
+		this.engine = engine;
 
 		xUpdated = true;
 		yUpdated = true;
@@ -121,7 +122,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void sendMap()
 	{
-		ServerWorld world = engine.getWorld();
+		world = engine.getWorld();
 		char[][] grid = world.getGrid();
 
 		// Send to the client the height and width of the grid, the starting x
@@ -139,6 +140,30 @@ public class ServerPlayer extends ServerObject implements Runnable
 			printMessage(message);
 		}
 		flush();
+	}
+
+	/**
+	 * Send to the client all the updated values
+	 */
+	public void update()
+	{
+		// Update object locations
+		for (ServerObject object : world.getObjects())
+		{
+			// Send the object's updated location if the player can see it within their screen
+			if (object.getX() < getX() + getWidth() + SCREEN_WIDTH / 2
+					&& object.getX() + object.getWidth() > getX()
+							- SCREEN_WIDTH / 2
+					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT / 2
+					&& object.getY() + object.getHeight() > getY()
+							- SCREEN_HEIGHT / 2)
+				queueMessage("O " + object.getID() + " " + object.getX()
+						+ " " + object.getY() + " " + object.getImage());
+		}
+		
+		// Signal a repaint
+		queueMessage("U");
+		flushWriter();
 	}
 
 	@Override
@@ -254,10 +279,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		if(message.length() != 0)
-			this.message += " "+message;
+		if (message.length() != 0)
+			this.message += " " + message;
 		else
-			this.message+=message;
+			this.message += message;
 	}
 
 	/**
@@ -268,7 +293,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		output.println(message);
 	}
-	
+
 	/**
 	 * Flush all queued messages to the client
 	 */
@@ -276,7 +301,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		output.println(message);
 		output.flush();
-		message="";
+		message = "";
 	}
 
 	/**
@@ -285,21 +310,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public void flush()
 	{
 		output.flush();
-	}
-	/**
-	 * Send to the client all the updated values
-	 */
-	public void update()
-	{
-		// Update player locations
-		for (ServerPlayer player : engine.getListOfPlayers())
-		{
-
-			queueMessage("P " + player.getID() + " " + player.getX()
-					+ " " + player.getY() + " " + player.getImage());
-		}
-		queueMessage("U");
-		flushWriter();
 	}
 
 	public void setX(int x)
@@ -341,7 +351,5 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		return new int[] { y / ServerWorld.TILE_SIZE, x / ServerWorld.TILE_SIZE };
 	}
-	
-	
 
 }

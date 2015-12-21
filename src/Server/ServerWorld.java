@@ -20,6 +20,11 @@ public class ServerWorld
 	 * The size of each tile
 	 */
 	public static final int TILE_SIZE = 16;
+	
+	/**
+	 * Number of pixels that the collision may be off by that we need to adjust for
+	 */
+	public static final int MARGIN_OF_ERROR = 0;
 
 	/**
 	 * Max speed (or game may glitch out)
@@ -131,7 +136,7 @@ public class ServerWorld
 								&& column * TILE_SIZE < x2
 								&& column * TILE_SIZE + TILE_SIZE > x1)
 						{
-							if (y2 + absVSpeed >= row * TILE_SIZE
+							if (y2 + vSpeed >= row * TILE_SIZE
 									&& y2 <= row * TILE_SIZE)
 							{
 								moveVertical = false;
@@ -170,7 +175,7 @@ public class ServerWorld
 								&& column * TILE_SIZE < x2
 								&& column * TILE_SIZE + TILE_SIZE > x1)
 						{
-							if (y1 - absVSpeed <= row * TILE_SIZE + TILE_SIZE
+							if (y1 + vSpeed <= row * TILE_SIZE + TILE_SIZE
 									&& y1 >= row * TILE_SIZE + TILE_SIZE)
 							{
 								moveVertical = false;
@@ -195,8 +200,80 @@ public class ServerWorld
 				}
 			}
 			
-			// Add horizontal collision
-			object.setX(object.getX() + object.getHSpeed());
+			if (hSpeed > 0)
+			{
+				// The row and column of the tile that was collided with
+				int collideColumn = 0;
+
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						if (grid[row][column] != '0'
+								&& row * TILE_SIZE < y2
+								&& row * TILE_SIZE + TILE_SIZE > y1)
+						{
+							if (x2 + hSpeed >= column * TILE_SIZE
+									&& x2 <= column * TILE_SIZE + MARGIN_OF_ERROR)
+							{
+								moveHorizontal = false;
+								collideColumn = column;
+								break;
+							}
+						}
+						if (!moveHorizontal)
+						{
+							break;
+						}
+					}
+				}
+				if (!moveHorizontal)
+				{
+					object.setX(collideColumn * TILE_SIZE - object.getWidth());
+					object.setHSpeed(0);
+				}
+				else
+				{
+					object.setX(object.getX() + object.getHSpeed());
+				}
+			}
+			else if (hSpeed < 0)
+			{
+				// The row and column of the tile that was collided with
+				int collideColumn = 0;
+
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						if (grid[row][column] != '0'
+								&& row * TILE_SIZE < y2
+								&& row * TILE_SIZE + TILE_SIZE > y1)
+						{
+							if (x1 + hSpeed <= column * TILE_SIZE + TILE_SIZE
+									&& x1 >= column * TILE_SIZE + TILE_SIZE - MARGIN_OF_ERROR)
+							{
+								moveHorizontal = false;
+								collideColumn = column;
+								break;
+							}
+						}
+						if (!moveHorizontal)
+						{
+							break;
+						}
+					}
+				}
+				if (!moveHorizontal)
+				{
+					object.setX(collideColumn * TILE_SIZE + TILE_SIZE);
+					object.setHSpeed(0);
+				}
+				else
+				{
+					object.setX(object.getX() + object.getHSpeed());
+				}
+			}
 		}
 	}
 

@@ -1,22 +1,15 @@
 package Client;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.net.Socket;
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
-import javax.swing.Timer;
-
 import Imports.Images;
 
 public class Client extends JPanel implements KeyListener
@@ -165,7 +158,7 @@ public class Client extends JPanel implements KeyListener
 							repaint();
 						}
 						// If there is a player to be updated
-						else if (tokens[token].equals("P"))
+						else if (tokens[token].equals("O"))
 						{
 							int id = Integer.parseInt(tokens[++token]);
 							if (id == player.getID())
@@ -178,21 +171,20 @@ public class Client extends JPanel implements KeyListener
 							}
 							else if (world.contains(id))
 							{
-								ClientObject otherPlayer = world.get(id);
-								otherPlayer.setX(Integer
+								ClientObject otherObject = world.get(id);
+								otherObject.setX(Integer
 										.parseInt(tokens[++token]));
-								otherPlayer.setY(Integer
+								otherObject.setY(Integer
 										.parseInt(tokens[++token]));
-								otherPlayer.setImage(tokens[++token]);
+								otherObject.setImage(tokens[++token]);
 							}
 							else
 							{
-								ClientObject otherPlayer = new ClientObject(
-										id,
+								ClientObject otherObject = new ClientObject(id,
 										Integer.parseInt(tokens[++token]),
 										Integer.parseInt(tokens[++token]),
 										tokens[++token]);
-								world.add(otherPlayer);
+								world.add(otherObject);
 							}
 						}
 						else if (tokens[token].equals("REPING"))
