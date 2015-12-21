@@ -24,12 +24,12 @@ public class ServerWorld
 	/**
 	 * Number of pixels that the collision may be off by that we need to adjust for
 	 */
-	public static final int MARGIN_OF_ERROR = 0;
+	public static final int MARGIN_OF_ERROR = TILE_SIZE;
 
 	/**
 	 * Max speed (or game may glitch out)
 	 */
-	private static final int MAX_SPEED = TILE_SIZE;
+	private static final int MAX_SPEED = TILE_SIZE * 2;
 
 	/**
 	 * The amount of gravity per refresh
@@ -200,7 +200,7 @@ public class ServerWorld
 				}
 			}
 			
-			if (hSpeed > 0)
+			if (hSpeed >= 0)
 			{
 				// The row and column of the tile that was collided with
 				int collideColumn = 0;
@@ -237,7 +237,7 @@ public class ServerWorld
 					object.setX(object.getX() + object.getHSpeed());
 				}
 			}
-			else if (hSpeed < 0)
+			else if (hSpeed <= 0)
 			{
 				// The row and column of the tile that was collided with
 				int collideColumn = 0;

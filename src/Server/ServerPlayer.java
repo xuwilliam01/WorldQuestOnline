@@ -151,12 +151,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 		for (ServerObject object : world.getObjects())
 		{
 			// Send the object's updated location if the player can see it within their screen
-			if (object.getX() < getX() + getWidth() + SCREEN_WIDTH / 2
+			if (object.getX() < getX() + getWidth() + SCREEN_WIDTH
 					&& object.getX() + object.getWidth() > getX()
-							- SCREEN_WIDTH / 2
-					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT / 2
+							- SCREEN_WIDTH
+					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
-							- SCREEN_HEIGHT / 2)
+							- SCREEN_HEIGHT)
 				queueMessage("O " + object.getID() + " " + object.getX()
 						+ " " + object.getY() + " " + object.getImage());
 		}
