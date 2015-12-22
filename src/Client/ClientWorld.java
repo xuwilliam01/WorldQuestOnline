@@ -1,6 +1,7 @@
 package Client;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import Imports.Images;
 
@@ -53,7 +54,7 @@ public class ClientWorld
 		objects.add(object);
 		addID(object.getID());
 	}
-	
+
 	/**
 	 * Remove an object from the client's side
 	 * @param object the object to remove
@@ -71,7 +72,7 @@ public class ClientWorld
 			}
 			currentIndex++;
 		}
-		
+
 		if (removeIndex!=-1)
 		{
 			objects.remove(removeIndex);
@@ -91,7 +92,7 @@ public class ClientWorld
 		//Center of the screen
 		int centreX = Client.SCREEN_WIDTH/2 - playerWidth/2;
 		int centreY = Client.SCREEN_HEIGHT/2 - playerHeight/2;
-		
+
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int)((playerY - Client.SCREEN_HEIGHT/2-5)/tileSize);
 		if (startRow < 0)
@@ -129,13 +130,20 @@ public class ClientWorld
 				}
 			}
 		}
-		
+
 		// Go through each object in the world and draw it relative to the
 		// player's position
-		for (ClientObject object : objects)
-		{			
-			graphics.drawImage(object.getImage(), centreX + object.getX() - playerX, centreY + object.getY() - playerY,
-					null);
+		try{
+			for (ClientObject object : objects)
+			{			
+				//if(objectIDs[object.getID()])
+				graphics.drawImage(object.getImage(), centreX + object.getX() - playerX, centreY + object.getY() - playerY,
+						null);
+			}
+		}
+		catch(ConcurrentModificationException E)
+		{
+			System.out.println("Tried to acces the object list while it was being used");
 		}
 	}
 

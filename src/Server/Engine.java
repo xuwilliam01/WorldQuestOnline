@@ -58,8 +58,8 @@ public class Engine implements Runnable, ActionListener
 		Images.importImages();
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
-		world = new ServerWorld();
 		objectIDs = new boolean[NUMBER_OF_IDS];
+		world = new ServerWorld(this);
 
 	}
 

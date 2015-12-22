@@ -326,6 +326,10 @@ public class Client extends JPanel implements KeyListener
 		{
 			currentMessage = "STOP DOWN";
 		}
+		else if (key.getKeyCode() == KeyEvent.VK_P)
+		{
+			 pingString = "LATENCY: (PRESS P)";
+		}
 		output.println(currentMessage);
 		output.flush();
 

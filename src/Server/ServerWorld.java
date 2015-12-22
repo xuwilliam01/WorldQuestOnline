@@ -43,15 +43,27 @@ public class ServerWorld
 	private ArrayList<ServerObject> objects;
 
 	/**
+	 * References the engine that contains the world
+	 */
+	Engine engine;
+	
+	/**
 	 * Constructor for server
 	 * @throws IOException
 	 */
-	public ServerWorld() throws IOException
+	public ServerWorld(Engine engine) throws IOException
 	{
+		this.engine = engine;
 		newWorld();
 		objects = new ArrayList<ServerObject>();
+		addEnemies();
 	}
 
+	public void addEnemies()
+	{
+		EnemyAI newEnemy = new EnemyAI(50,50,60,105,engine.useNextID(),"ENEMY.png",100);
+		add(newEnemy);
+	}
 	public void newWorld() throws IOException
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File("Resources","World.txt")));

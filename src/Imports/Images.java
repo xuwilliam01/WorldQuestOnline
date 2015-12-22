@@ -32,10 +32,11 @@ public class Images
 		if (images == null)
 		{
 			images = new ArrayList<GameImage>();
-			images.add(new GameImage("PLAYER_RIGHT.png",34,64));
-			images.add(new GameImage("PLAYER_LEFT.png",34,64));
+			images.add(new GameImage("PLAYER_RIGHT.png",32,64));
+			images.add(new GameImage("PLAYER_LEFT.png",32,64));
 			images.add(new GameImage("BRICK.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
 			images.add(new GameImage("GRASS.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
+			images.add(new GameImage("ENEMY.png",60,105));
 		}
 	}
 
