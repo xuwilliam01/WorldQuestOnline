@@ -1,7 +1,11 @@
 package Server;
-
 import javax.swing.JOptionPane;
 
+/**
+ * Run the Server here
+ * @author William Xu & Alex Raita
+ *
+ */
 public class StartServer
 {
 

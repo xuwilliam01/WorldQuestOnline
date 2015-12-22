@@ -1,7 +1,11 @@
 package Client;
-
 import java.net.Socket;
 
+/**
+ * Run the client here
+ * @author William Xu and Alex Raita
+ *
+ */
 public class StartClient
 {
 	public static void main(String[] args)
@@ -29,6 +33,5 @@ public class StartClient
 		myFrame.add(client);
 		client.initialize();
 		client.revalidate();
-		
 	}
 }
