@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 public class ServerFrame extends JFrame
 {
 
-	public static final int FRAME_FACTOR = 2;
+	public static final int FRAME_FACTOR = 1;
 	/**
 	 * Constructor for the game frame
 	 */

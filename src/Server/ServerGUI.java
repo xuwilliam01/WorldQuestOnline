@@ -17,6 +17,42 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	private int posX = 200;
 	private int posY = 200;
 	Timer repaintTimer;
+	
+	/**
+	 * A color that java doesn't provide
+	 */
+	public static final Color GRASS = new Color (0,224,0); 
+	
+	/**
+	 * A color that java doesn't provide
+	 */
+	public static final Color BRICK = new Color (214,36,0); 
+	
+	/**
+	 * The color of a player
+	 */
+	public static final Color PLAYER = Color.black;
+	
+	/**
+	 * The factor of the scale of the object on the map compared to its actual height and width
+	 */
+	public static final int OBJECT_FACTOR = ServerFrame.FRAME_FACTOR*4;
+	
+
+	/**
+	 * X-value of the centre of the screen
+	 */
+	public static final int CENTRE_X = ServerPlayer.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR/2;
+	
+	/**
+	 * Y-value of the centre of the screen
+	 */
+	public static final int CENTRE_Y = ServerPlayer.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR/2;
+	
+	/**
+	 * The size of a tile on the map
+	 */
+	public static final int SCALED_TILE_SIZE = ServerWorld.TILE_SIZE/OBJECT_FACTOR;
 
 	// Movement booleans
 	private boolean up = false;
@@ -48,28 +84,23 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	{
 		super.paintComponent(graphics);
 
-		//Center of the screen
-		int centreX = ServerPlayer.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR/2;
-		int centreY = ServerPlayer.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR/2;
-		int tileSize = ServerWorld.TILE_SIZE/ServerFrame.FRAME_FACTOR/2;
-
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int)((posY - centreY-5)/tileSize);
+		int startRow = (int)((posY - CENTRE_Y-5)/SCALED_TILE_SIZE);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int)((centreY+posY+5)/tileSize);
+		int endRow = (int)((CENTRE_Y+posY+5)/SCALED_TILE_SIZE);
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length-1;
 		}
-		int startColumn = (int)((posX - centreX-5)/tileSize);
+		int startColumn = (int)((posX - CENTRE_X-5)/SCALED_TILE_SIZE);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int)((centreX+posX+5)/tileSize);
+		int endColumn = (int)((CENTRE_X+posX+5)/SCALED_TILE_SIZE);
 		if (endColumn >= grid.length)
 		{
 			endColumn= grid[0].length-1;
@@ -80,13 +111,13 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 			{
 				if (grid[row][column]=='0')
 				{
-					graphics.setColor(Color.GREEN);
-					graphics.fillRect(centreX + column* tileSize - posX, centreY + row*tileSize - posY,tileSize,tileSize);
+					graphics.setColor(GRASS);
+					graphics.fillRect(CENTRE_X + column* SCALED_TILE_SIZE - posX, CENTRE_Y + row*SCALED_TILE_SIZE - posY,SCALED_TILE_SIZE,SCALED_TILE_SIZE);
 				}
 				else if (grid[row][column]=='1')
 				{
-					graphics.setColor(Color.RED);
-					graphics.fillRect(centreX + column* tileSize - posX, centreY + row*tileSize - posY,tileSize,tileSize);
+					graphics.setColor(BRICK);
+					graphics.fillRect(CENTRE_X + column* SCALED_TILE_SIZE - posX, CENTRE_Y + row*SCALED_TILE_SIZE - posY,SCALED_TILE_SIZE,SCALED_TILE_SIZE);
 				}
 			}
 		}
@@ -95,15 +126,17 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		// player's position
 		for (ServerObject object : world.getObjects())
 		{		
-			graphics.setColor(Color.BLACK);
-			graphics.fillRect(centreX + object.getX()/ServerFrame.FRAME_FACTOR/2 - posX, centreY + object.getY()/ServerFrame.FRAME_FACTOR/2 - posY,object.getWidth()/ServerFrame.FRAME_FACTOR/2,object.getHeight()/ServerFrame.FRAME_FACTOR/2);
+			graphics.setColor(PLAYER);
+			graphics.fillRect(CENTRE_X + object.getX()/OBJECT_FACTOR - posX, CENTRE_Y + object.getY()/OBJECT_FACTOR - posY,object.getWidth()/OBJECT_FACTOR,object.getHeight()/OBJECT_FACTOR);
 				
 		}
 
+		// Tell the user to scroll with arrow keys
+		graphics.setColor(Color.black);
+		graphics.drawString("Scroll with the arrow keys", 10, 25);
 	}
 
 	public void keyPressed(KeyEvent key) {
-		System.out.println("working");
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
 			right = true;	
@@ -152,18 +185,26 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	public void movePos()
 	{
 		if(right)
+		{
 			posX+=10;
+		}
 		else if(left)
+		{
 			posX-=10;
+		}
 		if(up)
+		{
 			posY-=10;
+		}
 		else if(down)
+		{
 			posY+=10;
+		}
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		//Move and repaint
-		movePos();
+		// Move and repaint
+		movePos();	
 		repaint();
 
 	}
