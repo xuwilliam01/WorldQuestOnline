@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class ServerGUI extends JPanel implements KeyListener, ActionListener{
+public class ServerGUI extends JPanel implements KeyListener, ActionListener, MouseWheelListener{
 
 	private ServerWorld world;
 	private char[][] grid;
@@ -34,11 +36,10 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	public static final Color PLAYER = Color.black;
 	
 	/**
-	 * The factor of the scale of the object on the map compared to its actual height and width
+	 * The factor of the scale of the object on the map compared to its actual height and width (can be changed by scrolling mouse wheel)
 	 */
-	public static final int OBJECT_FACTOR = ServerFrame.FRAME_FACTOR*4;
+	private double objectFactor;
 	
-
 	/**
 	 * X-value of the centre of the screen
 	 */
@@ -48,11 +49,6 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	 * Y-value of the centre of the screen
 	 */
 	public static final int CENTRE_Y = ServerPlayer.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR/2;
-	
-	/**
-	 * The size of a tile on the map
-	 */
-	public static final int SCALED_TILE_SIZE = ServerWorld.TILE_SIZE/OBJECT_FACTOR;
 
 	// Movement booleans
 	private boolean up = false;
@@ -62,6 +58,9 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 	
 	public ServerGUI(ServerWorld world)
 	{
+		// Set the scale of objects
+		objectFactor = ServerFrame.FRAME_FACTOR*4;
+		
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
@@ -73,8 +72,9 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		this.world = world;
 		grid = world.getGrid();
 
-		//Add key listener and repaint timer
+		//Add key, mouse wheel listener and repaint timer
 		addKeyListener(this);
+		addMouseWheelListener(this);
 		repaintTimer = new Timer(Engine.UPDATE_RATE,this);
 		repaintTimer.start();
 
@@ -85,22 +85,22 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		super.paintComponent(graphics);
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int)((posY - CENTRE_Y-5)/SCALED_TILE_SIZE);
+		int startRow = (int)((posY - CENTRE_Y-5)/(ServerWorld.TILE_SIZE/objectFactor));
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int)((CENTRE_Y+posY+5)/SCALED_TILE_SIZE);
+		int endRow = (int)((CENTRE_Y+posY+5)/(ServerWorld.TILE_SIZE/objectFactor));
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length-1;
 		}
-		int startColumn = (int)((posX - CENTRE_X-5)/SCALED_TILE_SIZE);
+		int startColumn = (int)((posX - CENTRE_X-5)/(ServerWorld.TILE_SIZE/objectFactor));
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int)((CENTRE_X+posX+5)/SCALED_TILE_SIZE);
+		int endColumn = (int)((CENTRE_X+posX+5)/(ServerWorld.TILE_SIZE/objectFactor));
 		if (endColumn >= grid.length)
 		{
 			endColumn= grid[0].length-1;
@@ -112,12 +112,12 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 				if (grid[row][column]=='0')
 				{
 					graphics.setColor(GRASS);
-					graphics.fillRect(CENTRE_X + column* SCALED_TILE_SIZE - posX, CENTRE_Y + row*SCALED_TILE_SIZE - posY,SCALED_TILE_SIZE,SCALED_TILE_SIZE);
+					graphics.fillRect((int)(CENTRE_X + column* (ServerWorld.TILE_SIZE/objectFactor) - posX)+ 1, (int)(CENTRE_Y + row*(ServerWorld.TILE_SIZE/objectFactor) - posY)+ 1,(int)(ServerWorld.TILE_SIZE/objectFactor)+ 1,(int)(ServerWorld.TILE_SIZE/objectFactor)+ 1);
 				}
 				else if (grid[row][column]=='1')
 				{
 					graphics.setColor(BRICK);
-					graphics.fillRect(CENTRE_X + column* SCALED_TILE_SIZE - posX, CENTRE_Y + row*SCALED_TILE_SIZE - posY,SCALED_TILE_SIZE,SCALED_TILE_SIZE);
+					graphics.fillRect((int)(CENTRE_X + column* (ServerWorld.TILE_SIZE/objectFactor) - posX)+ 1, (int)(CENTRE_Y + row*(ServerWorld.TILE_SIZE/objectFactor) - posY)+ 1,(int)(ServerWorld.TILE_SIZE/objectFactor)+ 1,(int)(ServerWorld.TILE_SIZE/objectFactor)+ 1);
 				}
 			}
 		}
@@ -127,13 +127,13 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		for (ServerObject object : world.getObjects())
 		{		
 			graphics.setColor(PLAYER);
-			graphics.fillRect(CENTRE_X + object.getX()/OBJECT_FACTOR - posX, CENTRE_Y + object.getY()/OBJECT_FACTOR - posY,object.getWidth()/OBJECT_FACTOR,object.getHeight()/OBJECT_FACTOR);
+			graphics.fillRect((int)(CENTRE_X + object.getX()/objectFactor - posX)+1, (int)(CENTRE_Y + object.getY()/objectFactor - posY)+1,(int)(object.getWidth()/objectFactor)+1,(int)(object.getHeight()/objectFactor)+1);
 				
 		}
 
 		// Tell the user to scroll with arrow keys
 		graphics.setColor(Color.black);
-		graphics.drawString("Scroll with the arrow keys", 10, 25);
+		graphics.drawString("Scroll with the arrow keys, zoom with the mouse wheel", 10, 25);
 	}
 
 	public void keyPressed(KeyEvent key) {
@@ -207,5 +207,20 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener{
 		movePos();	
 		repaint();
 
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent scroll)
+	{
+		int notches = scroll.getWheelRotation();
+		
+		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR*64)
+		{
+			objectFactor*=(1.1 * notches);
+		}
+		else if (notches < 0 && objectFactor > ServerFrame.FRAME_FACTOR/64)
+		{
+			objectFactor/=(1.1 * (-notches));
+		}
 	}
 }
