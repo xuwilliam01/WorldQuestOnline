@@ -64,6 +64,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * The initial speed the player jumps at
 	 */
 	private int jumpSpeed = -15;
+	
+	/**
+	 * HP of the player
+	 */
+	private int HP = 100;
 
 	/**
 	 * Constructor for a player in the server
@@ -350,6 +355,16 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public int[] getObjectOnGrid(int x, int y)
 	{
 		return new int[] { y / ServerWorld.TILE_SIZE, x / ServerWorld.TILE_SIZE };
+	}
+	
+	public int getHP()
+	{
+		return HP;
+	}
+	
+	public void damage(int amount)
+	{
+		HP -= amount;
 	}
 
 }

@@ -20,7 +20,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * A list of all the players in the server
 	 */
-	private ArrayList<ServerPlayer> listOfPlayers;
+	private static ArrayList<ServerPlayer> listOfPlayers;
 
 	
 	/**
@@ -121,14 +121,14 @@ public class Engine implements Runnable, ActionListener
 		return world;
 	}
 
-	public ArrayList<ServerPlayer> getListOfPlayers()
+	public static ArrayList<ServerPlayer> getListOfPlayers()
 	{
 		return listOfPlayers;
 	}
 
-	public void setListOfPlayers(ArrayList<ServerPlayer> listOfPlayers)
+	public static void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers)
 	{
-		this.listOfPlayers = listOfPlayers;
+		listOfPlayers = newListOfPlayers;
 	}
 
 	/**

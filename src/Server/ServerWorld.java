@@ -63,6 +63,8 @@ public class ServerWorld
 	{
 		EnemyAI newEnemy = new EnemyAI(50,50,60,105,engine.useNextID(),"ENEMY.png",100);
 		add(newEnemy);
+		newEnemy = new Slime(50,50,60,105,engine.useNextID(),"SLIME.png",100);
+		add(newEnemy);
 	}
 	public void newWorld() throws IOException
 	{
