@@ -17,7 +17,7 @@ public class Slime extends EnemyAI{
 		targetFound = false;
 		if(getTarget() == null)
 			findTarget();
-		else if(getTarget().getHP() <= 0)
+		else if(getTarget().getHP() <= 0 || getTarget().isDisconnected())
 			setTarget(null);
 		else
 		{
@@ -33,8 +33,12 @@ public class Slime extends EnemyAI{
 
 			if(getCounter()%4 == 0)
 			{
-				if(!targetFound && previousX == getX())
+				if(getTarget().isOnSurface()&& !targetFound && previousX == getX())
+				{
 					setVSpeed(-15);
+					getTarget().setOnSurface(false);
+					
+				}
 				previousX = getX();
 			}
 
