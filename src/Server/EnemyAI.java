@@ -20,6 +20,11 @@ public class EnemyAI extends ServerObject implements ActionListener{
 	private Random random;
 	
 	
+	/**
+	 * The range for the A.I. to follow the player. Change later
+	 */
+	private int targetRange = 1000;
+	
 	//Max hp and current hp
 	private int maxHP;
 	private int HP;
@@ -59,14 +64,26 @@ public class EnemyAI extends ServerObject implements ActionListener{
 	{
 		for(ServerPlayer player : Engine.getListOfPlayers())
 		{
-			if(player.getHP() > 0 && getX() - player.getX() < 300 && getX() - player.getX() > - 300 && getY() - player.getY() < 200 && getY() - player.getY() > -200)
+			if(player.getHP() > 0 && Math.sqrt((getX()-player.getX())*(getX()-player.getX()) + (getY()-player.getY())*(getY()-player.getY())) <= targetRange)
 			{
-				target = player;
+				setTarget(player);
 				break;
 			}
 		}
 	}
 	
+	
+	
+	public int getTargetRange()
+	{
+		return targetRange;
+	}
+
+	public void setTargetRange(int targetRange)
+	{
+		this.targetRange = targetRange;
+	}
+
 	public ServerPlayer getTarget()
 	{
 		return target;
