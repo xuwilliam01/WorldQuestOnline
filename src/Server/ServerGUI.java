@@ -214,11 +214,11 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener, Mo
 	{
 		int notches = scroll.getWheelRotation();
 		
-		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR*64)
+		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR*16)
 		{
 			objectFactor*=(1.1 * notches);
 		}
-		else if (notches < 0 && objectFactor > ServerFrame.FRAME_FACTOR/64)
+		else if (notches < 0 && objectFactor > ServerFrame.FRAME_FACTOR)
 		{
 			objectFactor/=(1.1 * (-notches));
 		}

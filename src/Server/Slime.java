@@ -1,29 +1,36 @@
 package Server;
 
-public class Slime extends EnemyAI{
+public class Slime extends EnemyAI
+{
 
 	private int speed = 5;
 	private int previousX;
 	private boolean targetFound = false;
-	
-	public Slime(int x, int y, int width, int height, int ID, String image, int maxHP) {
+
+	private int startCounter = 0;
+
+	public Slime(int x, int y, int width, int height, int ID, String image,
+			int maxHP)
+	{
 		super(x, y, width, height, ID, image, maxHP);
-		previousX = x+1;
+		previousX = x + 1;
 
 	}
-	
+
 	public void move()
 	{
 		targetFound = false;
-		if(getTarget() == null)
+		if (getTarget() == null)
 			findTarget();
-		else if(getTarget().getHP() <= 0 || getTarget().isDisconnected())
+		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected())
 			setTarget(null);
 		else
 		{
-			if(getX() - getTarget().getX() < -getTarget().getWidth() )
+			if (getX() - getTarget().getX() < -getTarget().getWidth()
+					&& !isOnSurface())
 				setHSpeed(speed);
-			else if(getX() - getTarget().getX() > getTarget().getWidth())
+			else if (getX() - getTarget().getX() > getTarget().getWidth()
+					&& !isOnSurface())
 				setHSpeed(-speed);
 			else
 			{
@@ -31,18 +38,18 @@ public class Slime extends EnemyAI{
 				targetFound = true;
 			}
 
-			if(getCounter()%4 == 0)
+			if (isOnSurface())
 			{
-				if(getTarget().isOnSurface()&& !targetFound && previousX == getX())
+				if (getCounter() - startCounter >= 90)
 				{
 					setVSpeed(-15);
-					getTarget().setOnSurface(false);
-					
+					setOnSurface(false);
+					startCounter = getCounter();
 				}
-				previousX = getX();
 			}
 
 		}
+		setCounter(getCounter()+1);
 	}
 
 }
