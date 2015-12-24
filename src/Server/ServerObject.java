@@ -44,7 +44,7 @@ public class ServerObject
 	 * The image name for the object (ex. pie.png)
 	 */
 	private String image;
-	
+
 	/**
 	 * The horizontal speed of the player (negative -- left, positive -- right)
 	 */
@@ -54,7 +54,7 @@ public class ServerObject
 	 * The vertical speed of the player (negative -- up, positive -- down)
 	 */
 	private int vSpeed;
-	
+
 	/**
 	 * Whether or not the object is on top of a surface
 	 */
@@ -134,7 +134,19 @@ public class ServerObject
 			height = Images.getGameImage(image).getHeight();
 		}
 	}
-	
+
+	/**
+	 * Find the distance between two objects
+	 * @param other the other object
+	 * @return the distance between this and the other object
+	 */
+	public int findDistanceBetween(ServerObject other)
+	{
+		return (int) (Math.sqrt((getX() - other.getX())
+				* (getX() - other.getX()) + (getY() - other.getY())
+				* (getY() - other.getY())) + 0.5);
+	}
+
 	public boolean isOnSurface()
 	{
 		return onSurface;
@@ -144,7 +156,7 @@ public class ServerObject
 	{
 		this.onSurface = onSurface;
 	}
-	
+
 	public int getHSpeed()
 	{
 		return hSpeed;

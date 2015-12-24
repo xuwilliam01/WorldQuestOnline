@@ -64,7 +64,7 @@ public class EnemyAI extends ServerObject implements ActionListener{
 	{
 		for(ServerPlayer player : Engine.getListOfPlayers())
 		{
-			if(player.getHP() > 0 && Math.sqrt((getX()-player.getX())*(getX()-player.getX()) + (getY()-player.getY())*(getY()-player.getY())) <= targetRange)
+			if(player.getHP() > 0 && findDistanceBetween(player) <= targetRange)
 			{
 				setTarget(player);
 				break;

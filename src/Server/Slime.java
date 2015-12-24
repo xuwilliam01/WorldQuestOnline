@@ -18,7 +18,7 @@ public class Slime extends EnemyAI
 	{
 		if (getTarget() == null)
 			findTarget();
-		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected() || Math.sqrt((getX()-getTarget().getX())*(getX()-getTarget().getX()) + (getY()-getTarget().getY())*(getY()-getTarget().getY())) > getTargetRange())
+		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected() || findDistanceBetween(getTarget()) > getTargetRange())
 			setTarget(null);
 		else
 		{
