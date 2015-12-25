@@ -187,7 +187,7 @@ public class Client extends JPanel implements KeyListener
 								world.add(otherObject);
 							}
 						}
-						else if (tokens[token].equals("REPING"))
+						else if (tokens[token].equals("P"))
 						{
 							pingString = "LATENCY: "
 									+ (System.currentTimeMillis() - ping);
@@ -268,37 +268,37 @@ public class Client extends JPanel implements KeyListener
 	public void keyPressed(KeyEvent key)
 	{
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT
-				&& !currentMessage.equals("RIGHT"))
+				&& !currentMessage.equals("R"))
 		{
-			currentMessage = "RIGHT";
+			currentMessage = "R";
 			output.println(currentMessage);
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_LEFT
-				&& !currentMessage.equals("LEFT"))
+				&& !currentMessage.equals("L"))
 		{
-			currentMessage = "LEFT";
+			currentMessage = "L";
 			output.println(currentMessage);
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_UP
-				&& !currentMessage.equals("UP"))
+				&& !currentMessage.equals("U"))
 		{
-			currentMessage = "UP";
+			currentMessage = "U";
 			output.println(currentMessage);
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_DOWN
-				&& !currentMessage.equals("DOWN"))
+				&& !currentMessage.equals("D"))
 		{
-			currentMessage = "DOWN";
+			currentMessage = "D";
 			output.println(currentMessage);
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
 			ping = System.currentTimeMillis();
-			output.println("PING");
+			output.println("P");
 			output.flush();
 		}
 	}
@@ -307,24 +307,24 @@ public class Client extends JPanel implements KeyListener
 	public void keyReleased(KeyEvent key)
 	{
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT
-				&& !currentMessage.equals("STOP RIGHT"))
+				&& !currentMessage.equals("!R"))
 		{
-			currentMessage = "STOP RIGHT";
+			currentMessage = "!R";
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_LEFT
-				&& !currentMessage.equals("STOP LEFT"))
+				&& !currentMessage.equals("!L"))
 		{
-			currentMessage = "STOP LEFT";
+			currentMessage = "!L";
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_UP
-				&& !currentMessage.equals("STOP UP"))
+				&& !currentMessage.equals("!U"))
 		{
-			currentMessage = "STOP UP";
+			currentMessage = "!U";
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_DOWN
-				&& !currentMessage.equals("STOP DOWN"))
+				&& !currentMessage.equals("!D"))
 		{
-			currentMessage = "STOP DOWN";
+			currentMessage = "!D";
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{

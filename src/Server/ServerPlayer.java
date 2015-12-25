@@ -119,7 +119,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		sendMap();
 
 		// Send the player's information
-		sendMessage(ID + " " + x + " " + y + " " + image);
+		sendMessage(ID + " " + (int)(x+0.5) + " " + (int)(y+0.5) + " " + image);
 	}
 
 	/**
@@ -162,8 +162,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
 							- SCREEN_HEIGHT)
-				queueMessage("O " + object.getID() + " " + (int)(object.getX()+0.5)
-						+ " " + (int)(object.getY()+0.5) + " " + object.getImage());
+				queueMessage("O " + object.getID() + " " + ((int)(object.getX()+0.5))
+						+ " " + ((int)(object.getY()+0.5)) + " " + object.getImage());
 		}
 		
 		// Signal a repaint
@@ -182,38 +182,38 @@ public class ServerPlayer extends ServerObject implements Runnable
 				String command = input.readLine();
 				// System.out.println(command);
 
-				if (command.equals("RIGHT"))
+				if (command.equals("R"))
 				{
 					setHSpeed(movementSpeed);
 					setDirection('R');
 				}
-				else if (command.equals("STOP RIGHT"))
+				else if (command.equals("!R"))
 				{
 					if (getHSpeed() > 0)
 					{
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("LEFT"))
+				else if (command.equals("L"))
 				{
 					setHSpeed(-movementSpeed);
 					setDirection('L');
 				}
-				else if (command.equals("STOP LEFT"))
+				else if (command.equals("!L"))
 				{
 					if (getHSpeed() < 0)
 					{
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("UP") && isOnSurface())
+				else if (command.equals("U") && isOnSurface())
 				{
 					setVSpeed(jumpSpeed);
 					setOnSurface(false);
 				}
-				else if (command.equals("PING"))
+				else if (command.equals("P"))
 				{
-					sendMessage("REPING");
+					sendMessage("P");
 				}
 			}
 			catch (IOException e)
