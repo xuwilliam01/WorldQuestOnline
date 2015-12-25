@@ -4,13 +4,13 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 
-public class Frame extends JFrame
+public class ClientFrame extends JFrame
 {
 
 	/**
 	 * Constructor for the game frame
 	 */
-	public Frame()
+	public ClientFrame()
 	{
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT));
 		setResizable(true);

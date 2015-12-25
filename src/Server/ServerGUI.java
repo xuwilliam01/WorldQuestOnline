@@ -75,7 +75,7 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener, Mo
 		//Add key, mouse wheel listener and repaint timer
 		addKeyListener(this);
 		addMouseWheelListener(this);
-		repaintTimer = new Timer(Engine.UPDATE_RATE,this);
+		repaintTimer = new Timer(ServerEngine.UPDATE_RATE,this);
 		repaintTimer.start();
 
 

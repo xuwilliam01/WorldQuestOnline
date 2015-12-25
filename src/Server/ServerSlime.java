@@ -1,16 +1,16 @@
 package Server;
 
-public class Slime extends EnemyAI
+public class ServerSlime extends ServerNPC
 {
 
 	private int speed = 5;
 	private int startCounter = 0;
 
 
-	public Slime(int x, int y, int width, int height, int ID, String image,
+	public ServerSlime(double x, double y, int width, int height,double gravity, int ID, String image,
 			int maxHP)
 	{
-		super(x, y, width, height, ID, image, maxHP);
+		super(x, y, width, height,gravity, ID, image, maxHP);
 
 	}
 

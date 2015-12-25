@@ -14,7 +14,7 @@ import Imports.Images;
  * @author William Xu & Alex Raita
  *
  */
-public class Engine implements Runnable, ActionListener
+public class ServerEngine implements Runnable, ActionListener
 {
 
 	/**
@@ -51,7 +51,7 @@ public class Engine implements Runnable, ActionListener
 	/**
 	 * Constructor for the engine
 	 */
-	public Engine() throws IOException
+	public ServerEngine() throws IOException
 	{
 		// Start importing the images from the file (place in a loading screen
 		// or something later)

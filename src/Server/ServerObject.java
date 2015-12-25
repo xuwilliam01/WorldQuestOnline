@@ -18,12 +18,12 @@ public class ServerObject
 	/**
 	 * Y-coordinate of the object (left)
 	 */
-	private int x;
+	private double x;
 
 	/**
 	 * Y-coordinate of the object (top)
 	 */
-	private int y;
+	private double y;
 
 	/**
 	 * Width of the object in pixels
@@ -48,12 +48,17 @@ public class ServerObject
 	/**
 	 * The horizontal speed of the player (negative -- left, positive -- right)
 	 */
-	private int hSpeed;
+	private double hSpeed;
 
 	/**
 	 * The vertical speed of the player (negative -- up, positive -- down)
 	 */
-	private int vSpeed;
+	private double vSpeed;
+	
+	/**
+	 * The specific object's gravity (usually the universal gravity)
+	 */
+	private double gravity;
 
 	/**
 	 * Whether or not the object is on top of a surface
@@ -68,11 +73,12 @@ public class ServerObject
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(int x, int y, int width, int height, int ID,
+	public ServerObject(double x, double y, int width, int height, double gravity, int ID,
 			String image)
 	{
 		onSurface = false;
 		useImageDimensions = false;
+		this.gravity = gravity;	
 		this.x = x;
 		this.y = y;
 		this.id = ID;
@@ -147,6 +153,16 @@ public class ServerObject
 				* (getY() - other.getY())) + 0.5);
 	}
 
+	public double getGravity()
+	{
+		return gravity;
+	}
+
+	public void setGravity(double gravity)
+	{
+		this.gravity = gravity;
+	}
+
 	public boolean isOnSurface()
 	{
 		return onSurface;
@@ -157,22 +173,22 @@ public class ServerObject
 		this.onSurface = onSurface;
 	}
 
-	public int getHSpeed()
+	public double getHSpeed()
 	{
 		return hSpeed;
 	}
 
-	public void setHSpeed(int hSpeed)
+	public void setHSpeed(double hSpeed)
 	{
 		this.hSpeed = hSpeed;
 	}
 
-	public int getVSpeed()
+	public double getVSpeed()
 	{
 		return vSpeed;
 	}
 
-	public void setVSpeed(int vSpeed)
+	public void setVSpeed(double vSpeed)
 	{
 		this.vSpeed = vSpeed;
 	}
@@ -187,22 +203,22 @@ public class ServerObject
 		id = iD;
 	}
 
-	public int getX()
+	public double getX()
 	{
 		return x;
 	}
 
-	public void setX(int x)
+	public void setX(double x)
 	{
 		this.x = x;
 	}
 
-	public int getY()
+	public double getY()
 	{
 		return y;
 	}
 
-	public void setY(int y)
+	public void setY(double y)
 	{
 		this.y = y;
 	}

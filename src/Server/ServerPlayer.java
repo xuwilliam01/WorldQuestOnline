@@ -31,7 +31,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
-	private Engine engine;
+	private ServerEngine engine;
 	private ServerWorld world;
 
 	// ////////////////////////////////////////////////////////////////////
@@ -81,10 +81,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * @param ID
 	 * @param image
 	 */
-	public ServerPlayer(Socket socket, Engine engine, int x, int y, int width,
-			int height, int ID, String image)
+	public ServerPlayer(Socket socket, ServerEngine engine, double x, double y, int width,
+			int height, double gravity,int ID, String image)
 	{
-		super(x, y, width, height, ID, image);
+		super(x, y, width, height, gravity, ID, image);
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -148,7 +148,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	}
 
 	/**
-	 * Send to the client all the updated values
+	 * Send to the client all the updated values (x and y must be rounded to closest integer)
 	 */
 	public void update()
 	{
@@ -162,8 +162,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
 							- SCREEN_HEIGHT)
-				queueMessage("O " + object.getID() + " " + object.getX()
-						+ " " + object.getY() + " " + object.getImage());
+				queueMessage("O " + object.getID() + " " + (int)(object.getX()+0.5)
+						+ " " + (int)(object.getY()+0.5) + " " + object.getImage());
 		}
 		
 		// Signal a repaint
@@ -317,7 +317,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		output.flush();
 	}
 
-	public void setX(int x)
+	public void setX(double x)
 	{
 		if (x != super.getX())
 		{
@@ -327,7 +327,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 
 	}
 
-	public void setY(int y)
+	public void setY(double y)
 	{
 		if (y != super.getY())
 		{
@@ -344,17 +344,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public boolean isyUpdated()
 	{
 		return yUpdated;
-	}
-
-	public int[] getPlayerOnGrid()
-	{
-		return new int[] { getY() / ServerWorld.TILE_SIZE,
-				getX() / ServerWorld.TILE_SIZE };
-	}
-
-	public int[] getObjectOnGrid(int x, int y)
-	{
-		return new int[] { y / ServerWorld.TILE_SIZE, x / ServerWorld.TILE_SIZE };
 	}
 	
 	public int getHP()

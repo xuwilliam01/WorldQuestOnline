@@ -20,9 +20,10 @@ public class ServerWorld
 	 * The size of each tile
 	 */
 	public static final int TILE_SIZE = 16;
-	
+
 	/**
-	 * Number of pixels that the collision may be off by that we need to adjust for
+	 * Number of pixels that the collision may be off by that we need to adjust
+	 * for
 	 */
 	public static final int MARGIN_OF_ERROR = TILE_SIZE;
 
@@ -34,7 +35,7 @@ public class ServerWorld
 	/**
 	 * The amount of gravity per refresh
 	 */
-	private int gravity = 1;
+	public final static double GRAVITY = 1;
 
 	/**
 	 * List of all the non-tile objects in the world (for movement and collision
@@ -45,13 +46,13 @@ public class ServerWorld
 	/**
 	 * References the engine that contains the world
 	 */
-	Engine engine;
-	
+	private ServerEngine engine;
+
 	/**
 	 * Constructor for server
 	 * @throws IOException
 	 */
-	public ServerWorld(Engine engine) throws IOException
+	public ServerWorld(ServerEngine engine) throws IOException
 	{
 		this.engine = engine;
 		newWorld();
@@ -61,14 +62,18 @@ public class ServerWorld
 
 	public void addEnemies()
 	{
-		EnemyAI newEnemy = new EnemyAI(50,50,-1,-1,engine.useNextID(),"ENEMY.png",100);
+		ServerNPC newEnemy = new ServerNPC(50, 50, -1, -1,GRAVITY, engine.useNextID(),
+				"ENEMY.png", 100);
 		add(newEnemy);
-		newEnemy = new Slime(50,50,-1,-1,engine.useNextID(),"SLIME.png",100);
+		newEnemy = new ServerSlime(50, 50, -1, -1, GRAVITY, engine.useNextID(), "SLIME.png",
+				100);
 		add(newEnemy);
 	}
+
 	public void newWorld() throws IOException
 	{
-		BufferedReader worldInput = new BufferedReader(new FileReader(new File("Resources","World.txt")));
+		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
+				"Resources", "World.txt")));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
@@ -98,37 +103,36 @@ public class ServerWorld
 			// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
 			if (object.getVSpeed() < MAX_SPEED)
 			{
-				object.setVSpeed(object.getVSpeed()+gravity);
+				object.setVSpeed(object.getVSpeed() + object.getGravity());
 			}
-			
-			int vSpeed = object.getVSpeed();
-			int hSpeed = object.getHSpeed();
-			
-			int absVSpeed = Math.abs(vSpeed);
-			int absHSpeed = Math.abs(hSpeed);
 
-			int x1 = object.getX();
-			int x2 = object.getX() + object.getWidth();
-			int y1 = object.getY();
-			int y2 = object.getY() + object.getHeight();
+			double vSpeed = object.getVSpeed();
+			double hSpeed = object.getHSpeed();
 
-			int startRow = (y1 - absVSpeed) / TILE_SIZE - 1;
+			double absVSpeed = Math.abs(vSpeed);
+			double absHSpeed = Math.abs(hSpeed);
+
+			double x1 = object.getX();
+			double x2 = object.getX() + object.getWidth();
+			double y1 = object.getY();
+			double y2 = object.getY() + object.getHeight();
+
+			int startRow = (int) ((y1 - absVSpeed) / TILE_SIZE - 1);
 			if (startRow < 0)
 			{
 				startRow = 0;
 			}
-			int endRow = (y2 + absVSpeed) / TILE_SIZE + 1;
+			int endRow = (int) ((y2 + absVSpeed) / TILE_SIZE + 1);
 			if (endRow >= grid.length)
 			{
 				endRow = grid.length - 1;
 			}
-			int startColumn = (x1 - absHSpeed) / TILE_SIZE
-					- 1;
+			int startColumn = (int) ((x1 - absHSpeed) / TILE_SIZE -1);
 			if (startColumn < 0)
 			{
 				startColumn = 0;
 			}
-			int endColumn = (x2 + absHSpeed) / TILE_SIZE + 1;
+			int endColumn = (int)((x2 + absHSpeed) / TILE_SIZE + 1);
 			if (endColumn >= grid[0].length)
 			{
 				endColumn = grid[0].length - 1;
@@ -213,7 +217,7 @@ public class ServerWorld
 					object.setY(y1 + vSpeed);
 				}
 			}
-			
+
 			if (hSpeed >= 0)
 			{
 				// The row and column of the tile that was collided with
@@ -228,7 +232,8 @@ public class ServerWorld
 								&& row * TILE_SIZE + TILE_SIZE > y1)
 						{
 							if (x2 + hSpeed >= column * TILE_SIZE
-									&& x2 <= column * TILE_SIZE + MARGIN_OF_ERROR)
+									&& x2 <= column * TILE_SIZE
+											+ MARGIN_OF_ERROR)
 							{
 								moveHorizontal = false;
 								collideColumn = column;
@@ -265,7 +270,8 @@ public class ServerWorld
 								&& row * TILE_SIZE + TILE_SIZE > y1)
 						{
 							if (x1 + hSpeed <= column * TILE_SIZE + TILE_SIZE
-									&& x1 >= column * TILE_SIZE + TILE_SIZE - MARGIN_OF_ERROR)
+									&& x1 >= column * TILE_SIZE + TILE_SIZE
+											- MARGIN_OF_ERROR)
 							{
 								moveHorizontal = false;
 								collideColumn = column;
@@ -317,16 +323,6 @@ public class ServerWorld
 	public void setGrid(char[][] grid)
 	{
 		this.grid = grid;
-	}
-
-	public int getGravity()
-	{
-		return gravity;
-	}
-
-	public void setGravity(int gravity)
-	{
-		this.gravity = gravity;
 	}
 
 	public ArrayList<ServerObject> getObjects()

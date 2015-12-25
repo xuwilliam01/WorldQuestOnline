@@ -12,7 +12,7 @@ import javax.swing.Timer;
  * @author Alex Raita & William Xu
  *
  */
-public class EnemyAI extends ServerObject implements ActionListener{
+public class ServerNPC extends ServerObject implements ActionListener{
 
 	private Timer movementTimer;
 	private boolean right = true;
@@ -33,9 +33,9 @@ public class EnemyAI extends ServerObject implements ActionListener{
 	private ArrayList<ServerPlayer> players;
 	private ServerPlayer target = null;
 	
-	public EnemyAI(int x, int y, int width, int height, int ID, String image, int maxHP) {
-		super(x, y, width, height, ID, image);
-		movementTimer = new Timer(Engine.UPDATE_RATE,this);
+	public ServerNPC(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP) {
+		super(x, y, width, height, gravity,ID, image);
+		movementTimer = new Timer(ServerEngine.UPDATE_RATE,this);
 		movementTimer.start();
 		random = new Random();
 		this.maxHP = maxHP;
@@ -62,7 +62,7 @@ public class EnemyAI extends ServerObject implements ActionListener{
 	
 	public void findTarget()
 	{
-		for(ServerPlayer player : Engine.getListOfPlayers())
+		for(ServerPlayer player : ServerEngine.getListOfPlayers())
 		{
 			if(player.getHP() > 0 && findDistanceBetween(player) <= targetRange)
 			{

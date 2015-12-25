@@ -10,7 +10,7 @@ public class StartClient
 {
 	public static void main(String[] args)
 	{
-		Connection newConnection = new Connection();
+		ClientConnection newConnection = new ClientConnection();
 		Thread connectThread = new Thread (newConnection);
 		connectThread.start();
 		
@@ -28,7 +28,7 @@ public class StartClient
 		
 		Socket mySocket = newConnection.getSocket();
 		
-		Frame myFrame = new Frame();
+		ClientFrame myFrame = new ClientFrame();
 		Client client = new Client(mySocket);
 		myFrame.add(client);
 		client.initialize();

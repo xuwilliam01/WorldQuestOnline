@@ -15,7 +15,7 @@ import Imports.Images;
 public class Server implements Runnable
 {
 	private ServerSocket socket;
-	private Engine engine;
+	private ServerEngine engine;
 	private int port;
 
 	public Server()
@@ -40,7 +40,7 @@ public class Server implements Runnable
 		System.out.println("Creating world...");
 		try
 		{
-			engine = new Engine();
+			engine = new ServerEngine();
 		}
 		catch (IOException e1)
 		{
@@ -58,7 +58,7 @@ public class Server implements Runnable
 			{
 				Socket newClient = socket.accept();
 				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
-						ServerPlayer.PLAYER_X, ServerPlayer.PLAYER_Y, -1, -1,
+						ServerPlayer.PLAYER_X, ServerPlayer.PLAYER_Y, -1, -1,ServerWorld.GRAVITY,
 						engine.useNextID(), "PLAYER_RIGHT"
 								+ Images.IMAGE_FORMAT);
 				engine.addPlayer(newPlayer);
@@ -75,7 +75,7 @@ public class Server implements Runnable
 		}
 	}
 	
-	public Engine getEngine()
+	public ServerEngine getEngine()
 	{
 		return engine;
 	}

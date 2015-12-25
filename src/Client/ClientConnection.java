@@ -3,7 +3,7 @@ package Client;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Connection implements Runnable
+public class ClientConnection implements Runnable
 {
 	// IP address and port of the server
 	private String serverIP = "127.0.0.1";
