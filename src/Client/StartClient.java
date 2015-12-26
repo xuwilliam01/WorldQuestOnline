@@ -1,5 +1,10 @@
 package Client;
+
+import java.awt.EventQueue;
+import java.io.IOException;
 import java.net.Socket;
+
+import javax.swing.JOptionPane;
 
 /**
  * Run the client here
@@ -10,28 +15,52 @@ public class StartClient
 {
 	public static void main(String[] args)
 	{
-		ClientConnection newConnection = new ClientConnection();
-		Thread connectThread = new Thread (newConnection);
-		connectThread.start();
-		
-		while (!newConnection.isConnected())
+
+		EventQueue.invokeLater(new Runnable()
 		{
-			try
+			public void run()
 			{
-				Thread.sleep(100);
+				boolean connected = false;
+				int port;
+
+				String serverIP = JOptionPane
+						.showInputDialog("Please enter the IP address of the server");
+				if (serverIP.equals(""))
+				{
+					serverIP = "192.168.0.10";
+					port = 5000;
+				}
+				else
+				{
+					port = Integer.parseInt(JOptionPane
+							.showInputDialog("Please enter the port of the server"));
+				}
+
+				Socket mySocket = null;
+
+				while (!connected)
+				{
+					try
+					{
+						mySocket = new Socket(serverIP, port);
+						connected = true;
+					}
+					catch (IOException e)
+					{
+						serverIP = JOptionPane
+								.showInputDialog("Connection Failed. Please a new IP");
+						port = Integer.parseInt(JOptionPane
+								.showInputDialog("Please enter the port of the server"));
+					}
+				}
+				ClientFrame myFrame = new ClientFrame();
+				Client client = new Client(mySocket);
+				myFrame.add(client);
+				client.initialize();
+				client.revalidate();
+				myFrame.setVisible(true);
 			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		Socket mySocket = newConnection.getSocket();
-		
-		ClientFrame myFrame = new ClientFrame();
-		Client client = new Client(mySocket);
-		myFrame.add(client);
-		client.initialize();
-		client.revalidate();
+		});
+
 	}
 }
