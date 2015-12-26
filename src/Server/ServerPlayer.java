@@ -263,6 +263,18 @@ public class ServerPlayer extends ServerObject implements Runnable
 		double speed = 15;
 		double x = getX();
 		double y = getY() + getHeight()/2+0.5;
+		double inaccuracy = 0;
+		
+		if (getHSpeed()!=0)
+		{
+			inaccuracy += Math.PI/9;
+		}
+		
+		if (getVSpeed()!=0)
+		{
+			inaccuracy += Math.PI/6;
+		}
+		
 		if (direction == 'R')
 		{
 			x = getX() + getWidth();
@@ -272,7 +284,9 @@ public class ServerPlayer extends ServerObject implements Runnable
 			angle = Math.PI;
 		}
 		
-		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle, ServerWorld.BULLET_TYPE));
+		
+		
+		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle,inaccuracy, ServerWorld.BULLET_TYPE));
 	}
 
 	/**

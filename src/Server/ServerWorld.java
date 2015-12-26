@@ -66,10 +66,9 @@ public class ServerWorld
 	 */
 	private Queue<ServerObject> objectsToAdd;
 
-	
 	// Create list of objects to remove if doesn't exist anymore
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
-	
+
 	/**
 	 * Constructor for server
 	 * @throws IOException
@@ -90,7 +89,8 @@ public class ServerWorld
 	{
 		for (int no = 0; no < 5; no++)
 		{
-			ServerNPC newEnemy = new ServerSlime(200 * no + 50, 50, -1, -1, GRAVITY,
+			ServerNPC newEnemy = new ServerSlime(200 * no + 50, 50, -1, -1,
+					GRAVITY,
 					engine.useNextID(),
 					"SLIME_0.png",
 					100);
@@ -126,12 +126,12 @@ public class ServerWorld
 	 */
 	public synchronized void updateObjects()
 	{
-		
+
 		// Remove all the objects that no longer exist
 		for (ServerObject object : objectsToRemove)
 		{
 			objects.remove(object);
-			
+
 		}
 		objectsToRemove.clear();
 
@@ -349,6 +349,7 @@ public class ServerWorld
 					}
 				}
 
+
 				// Update specific objects
 				if (object.getType() == SLIME_TYPE)
 				{
@@ -356,7 +357,7 @@ public class ServerWorld
 				}
 				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 				{
-					if (object.getHSpeed() == 0 && object.getVSpeed() == 0)
+					if (!moveHorizontal || !moveVertical)
 					{
 						objectsToRemove.add(object);
 						object.setExists(false);
