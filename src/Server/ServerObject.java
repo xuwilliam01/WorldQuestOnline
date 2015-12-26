@@ -69,6 +69,11 @@ public class ServerObject
 	 * Whether or not the object exists
 	 */
 	private boolean exists;
+	
+	/**
+	 * The type of object this is (subclass)
+	 */
+	private String type;
 
 	/**
 	 * Constructor for an object
@@ -79,8 +84,9 @@ public class ServerObject
 	 * @param ID
 	 */
 	public ServerObject(double x, double y, int width, int height, double gravity, int ID,
-			String image)
+			String image, String type)
 	{
+		this.type = type;
 		exists = true;
 		onSurface = false;
 		useImageDimensions = false;
@@ -263,5 +269,17 @@ public class ServerObject
 	{
 		return image;
 	}
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+	
+	
 
 }

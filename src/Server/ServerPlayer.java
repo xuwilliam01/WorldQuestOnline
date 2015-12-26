@@ -11,7 +11,7 @@ import java.util.Queue;
 import Imports.Images;
 
 /**
- * The player
+ * The player (Type 'P')
  * 
  * @author William Xu & Alex Raita
  *
@@ -86,7 +86,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public ServerPlayer(Socket socket, ServerEngine engine, double x, double y, int width,
 			int height, double gravity,int ID, String image)
 	{
-		super(x, y, width, height, gravity, ID, image);
+		super(x, y, width, height, gravity, ID, image,ServerWorld.PLAYER_TYPE);
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -272,7 +272,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 			angle = Math.PI;
 		}
 		
-		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle));
+		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle, ServerWorld.BULLET_TYPE));
 	}
 
 	/**

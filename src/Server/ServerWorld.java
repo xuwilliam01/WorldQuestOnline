@@ -2,7 +2,6 @@ package Server;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 import sun.misc.Queue;
@@ -14,6 +13,16 @@ import sun.misc.Queue;
  */
 public class ServerWorld
 {
+	// Character definitions for each type of object
+	public final static char PROJECTILE_TYPE = 'P';
+	public final static String BULLET_TYPE = PROJECTILE_TYPE + "B";
+
+	public final static String PLAYER_TYPE = "C";
+
+	public final static char NPC_TYPE = 'N';
+	public final static String SLIME_TYPE = NPC_TYPE + "S";
+	public final static String GHOUL_TYPE = NPC_TYPE + "G";
+
 	/**
 	 * Grid of tiles
 	 */
@@ -52,7 +61,8 @@ public class ServerWorld
 	private ServerEngine engine;
 
 	/**
-	 * List of objects to add to the world next refresh (based on the user's input)
+	 * List of objects to add to the world next refresh (based on the user's
+	 * input)
 	 */
 	private Queue<ServerObject> objectsToAdd;
 
@@ -69,18 +79,25 @@ public class ServerWorld
 		addEnemies();
 	}
 
+	/**
+	 * Spawn enemies in the world
+	 */
 	public void addEnemies()
 	{
-		ServerNPC newEnemy = new ServerNPC(50, 50, -1, -1, GRAVITY,
-				engine.useNextID(),
-				"ENEMY.png", 100);
-		add(newEnemy);
-		newEnemy = new ServerSlime(50, 50, -1, -1, GRAVITY, engine.useNextID(),
-				"SLIME.png",
-				100);
-		add(newEnemy);
+		for (int no = 0; no < 5; no++)
+		{
+			ServerNPC newEnemy = new ServerSlime(200 * no + 50, 50, -1, -1, GRAVITY,
+					engine.useNextID(),
+					"SLIME_0.png",
+					100);
+			add(newEnemy);
+		}
 	}
 
+	/**
+	 * Create a new world
+	 * @throws IOException
+	 */
 	public void newWorld() throws IOException
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
@@ -119,7 +136,7 @@ public class ServerWorld
 				e.printStackTrace();
 			}
 		}
-		
+
 		for (ServerObject object : objects)
 		{
 			// This will remove the object a frame after it stops existing
@@ -321,13 +338,27 @@ public class ServerWorld
 						object.setX(object.getX() + object.getHSpeed());
 					}
 				}
+
+				// Update specific objects
+				if (object.getType() == SLIME_TYPE)
+				{
+					((ServerSlime) object).update();
+				}
+				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
+				{
+					if (object.getHSpeed() == 0 && object.getVSpeed() == 0)
+					{
+						objectsToRemove.add(object);
+					}
+				}
+
 			}
 			else
 			{
 				objectsToRemove.add(object);
 			}
 		}
-		
+
 		// Remove all the objects that no longer exist
 		for (ServerObject object : objectsToRemove)
 		{
@@ -335,7 +366,7 @@ public class ServerWorld
 			System.out.println("Removed something");
 		}
 	}
-	
+
 	/**
 	 * Add a new object to the list of objects in the world
 	 * @param object

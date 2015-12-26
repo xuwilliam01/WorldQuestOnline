@@ -1,8 +1,12 @@
 package Imports;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import Server.ServerWorld;
 
@@ -17,7 +21,7 @@ public class Images
 	 * The format of the images (.jpg, .png, .gif, etc.)
 	 */
 	public static final String IMAGE_FORMAT = ".png";
-	
+
 	/**
 	 * Array list of the game images
 	 */
@@ -25,6 +29,7 @@ public class Images
 
 	/**
 	 * Import the images from the folder
+	 * @throws IOException
 	 */
 	public static void importImages()
 	{
@@ -32,12 +37,32 @@ public class Images
 		if (images == null)
 		{
 			images = new ArrayList<GameImage>();
-			images.add(new GameImage("PLAYER_RIGHT.png",32,64));
-			images.add(new GameImage("PLAYER_LEFT.png",32,64));
-			images.add(new GameImage("BRICK.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
-			images.add(new GameImage("GRASS.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
-			images.add(new GameImage("ENEMY.png",60,90));
-			images.add(new GameImage("SLIME.png",40,40));
+
+			// Import sprite sheets to create images with
+			try
+			{
+				BufferedImage slimeSheet = ImageIO.read(new File(
+						"SLIME_SHEET.png"));
+				for (int no = 0; no < 9; no++)
+				{
+					images.add(new GameImage("SLIME_" + no + IMAGE_FORMAT,
+							slimeSheet.getSubimage(no*19, 0, 19, 17),38,34));
+				}
+			}
+			catch (IOException e)
+			{
+				System.out.println("Error loading sprite sheets");
+				e.printStackTrace();
+			}
+
+			// Add the rest of the images normally
+			images.add(new GameImage("PLAYER_RIGHT.png", 32, 64));
+			images.add(new GameImage("PLAYER_LEFT.png", 32, 64));
+			images.add(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
 		}
 	}
@@ -58,7 +83,7 @@ public class Images
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get a specific game image from the list using the name of the image
 	 * @param name the name of the image

@@ -15,20 +15,19 @@ public class GameImage
 {
 	private String name;
 	private Image image;
-	
+
 	/**
 	 * The width of the image in pixels
 	 */
 	private int width;
-	
+
 	/**
 	 * The height of the image in pixels
 	 */
 	private int height;
-	
-	
+
 	/**
-	 * Constructor for a game image
+	 * Constructor for a game image with just the name (to load from file)
 	 * @param name
 	 */
 	public GameImage(String name)
@@ -46,7 +45,7 @@ public class GameImage
 		width = image.getWidth(null);
 		height = image.getHeight(null);
 	}
-	
+
 	/**
 	 * Constructor for a game image with scaling
 	 * @param name
@@ -56,13 +55,38 @@ public class GameImage
 		this.name = name;
 		try
 		{
-			image = ImageIO.read(new File(name)).getScaledInstance(width, height, 0);
+			image = ImageIO.read(new File(name)).getScaledInstance(width,
+					height, 0);
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error loading image: " + name);
 			e.printStackTrace();
 		}
+		this.width = width;
+		this.height = height;
+	}
+
+	/**
+	 * Constructor for a game image with the image and a name
+	 * @param name
+	 */
+	public GameImage(String name, Image image)
+	{
+		this.name = name;
+		this.image = image;
+		width = image.getWidth(null);
+		height = image.getHeight(null);
+	}
+
+	/**
+	 * Constructor for a game image with scaling with a predetermined image
+	 * @param name
+	 */
+	public GameImage(String name, Image image, int width, int height)
+	{
+		this.name = name;
+		this.image = image.getScaledInstance(width, height, 0);
 		this.width = width;
 		this.height = height;
 	}
