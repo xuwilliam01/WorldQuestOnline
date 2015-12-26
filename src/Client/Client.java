@@ -72,9 +72,6 @@ public class Client extends JPanel implements KeyListener
 		setDoubleBuffered(true);
 		setBackground(Color.white);
 
-		// Add listeners
-		addKeyListener(this);
-
 		setFocusable(true);
 		requestFocusInWindow();
 
@@ -130,6 +127,9 @@ public class Client extends JPanel implements KeyListener
 		gameThread.start();
 
 		System.out.println("Game started");
+		
+		// Add listeners AT THE END
+		addKeyListener(this);
 	}
 
 	/**
