@@ -64,6 +64,11 @@ public class ServerObject
 	 * Whether or not the object is on top of a surface
 	 */
 	private boolean onSurface;
+	
+	/**
+	 * Whether or not the object exists
+	 */
+	private boolean exists;
 
 	/**
 	 * Constructor for an object
@@ -76,6 +81,7 @@ public class ServerObject
 	public ServerObject(double x, double y, int width, int height, double gravity, int ID,
 			String image)
 	{
+		exists = true;
 		onSurface = false;
 		useImageDimensions = false;
 		this.gravity = gravity;	
@@ -151,6 +157,16 @@ public class ServerObject
 		return (int) (Math.sqrt((getX() - other.getX())
 				* (getX() - other.getX()) + (getY() - other.getY())
 				* (getY() - other.getY())) + 0.5);
+	}
+
+	public boolean exists()
+	{
+		return exists;
+	}
+
+	public void setExists(boolean exists)
+	{
+		this.exists = exists;
 	}
 
 	public double getGravity()

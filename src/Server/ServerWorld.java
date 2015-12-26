@@ -2,7 +2,10 @@ package Server;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
+
+import sun.misc.Queue;
 
 /**
  * Stores all the data about the world
@@ -49,6 +52,11 @@ public class ServerWorld
 	private ServerEngine engine;
 
 	/**
+	 * List of objects to add to the world next refresh (based on the user's input)
+	 */
+	private Queue<ServerObject> objectsToAdd;
+
+	/**
 	 * Constructor for server
 	 * @throws IOException
 	 */
@@ -57,15 +65,18 @@ public class ServerWorld
 		this.engine = engine;
 		newWorld();
 		objects = new ArrayList<ServerObject>();
+		objectsToAdd = new Queue<ServerObject>();
 		addEnemies();
 	}
 
 	public void addEnemies()
 	{
-		ServerNPC newEnemy = new ServerNPC(50, 50, -1, -1,GRAVITY, engine.useNextID(),
+		ServerNPC newEnemy = new ServerNPC(50, 50, -1, -1, GRAVITY,
+				engine.useNextID(),
 				"ENEMY.png", 100);
 		add(newEnemy);
-		newEnemy = new ServerSlime(50, 50, -1, -1, GRAVITY, engine.useNextID(), "SLIME.png",
+		newEnemy = new ServerSlime(50, 50, -1, -1, GRAVITY, engine.useNextID(),
+				"SLIME.png",
 				100);
 		add(newEnemy);
 	}
@@ -90,220 +101,248 @@ public class ServerWorld
 	}
 
 	/**
-	 * Move objects around by updating their x and y coordinates
+	 * Update all the objects, doing whatever needs to be done
 	 */
-	public void moveObjects()
+	public synchronized void updateObjects()
 	{
+		// Create list of objects to remove if doesn't exist anymore
+		ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
 
-		char[][] grid = getGrid();
-
-		// Move objects around (will be changed once scrolling is implemented)
-		for (ServerObject object : objects)
+		while (!objectsToAdd.isEmpty())
 		{
-			// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
-			if (object.getVSpeed() < MAX_SPEED)
+			try
 			{
-				object.setVSpeed(object.getVSpeed() + object.getGravity());
+				objects.add(objectsToAdd.dequeue());
 			}
-
-			double vSpeed = object.getVSpeed();
-			double hSpeed = object.getHSpeed();
-
-			double absVSpeed = Math.abs(vSpeed);
-			double absHSpeed = Math.abs(hSpeed);
-
-			double x1 = object.getX();
-			double x2 = object.getX() + object.getWidth();
-			double y1 = object.getY();
-			double y2 = object.getY() + object.getHeight();
-
-			int startRow = (int) ((y1 - absVSpeed) / TILE_SIZE - 1);
-			if (startRow < 0)
+			catch (InterruptedException e)
 			{
-				startRow = 0;
-			}
-			int endRow = (int) ((y2 + absVSpeed) / TILE_SIZE + 1);
-			if (endRow >= grid.length)
-			{
-				endRow = grid.length - 1;
-			}
-			int startColumn = (int) ((x1 - absHSpeed) / TILE_SIZE -1);
-			if (startColumn < 0)
-			{
-				startColumn = 0;
-			}
-			int endColumn = (int)((x2 + absHSpeed) / TILE_SIZE + 1);
-			if (endColumn >= grid[0].length)
-			{
-				endColumn = grid[0].length - 1;
-			}
-
-			boolean moveVertical = true;
-			boolean moveHorizontal = true;
-
-			if (vSpeed > 0)
-			{
-				// The row and column of the tile that was collided with
-				int collideRow = 0;
-
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						if (grid[row][column] != '0'
-								&& column * TILE_SIZE < x2
-								&& column * TILE_SIZE + TILE_SIZE > x1)
-						{
-							if (y2 + vSpeed >= row * TILE_SIZE
-									&& y2 <= row * TILE_SIZE)
-							{
-								moveVertical = false;
-								collideRow = row;
-								break;
-							}
-						}
-						if (!moveVertical)
-						{
-							break;
-						}
-					}
-				}
-				if (!moveVertical)
-				{
-					object.setY(collideRow * TILE_SIZE - object.getHeight());
-					object.setOnSurface(true);
-					object.setVSpeed(0);
-				}
-				else
-				{
-					object.setY(y1 + vSpeed);
-					object.setOnSurface(false);
-				}
-			}
-			else if (vSpeed < 0)
-			{
-				// The row and column of the tile that was collided with
-				int collideRow = 0;
-
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						if (grid[row][column] != '0'
-								&& column * TILE_SIZE < x2
-								&& column * TILE_SIZE + TILE_SIZE > x1)
-						{
-							if (y1 + vSpeed <= row * TILE_SIZE + TILE_SIZE
-									&& y1 >= row * TILE_SIZE + TILE_SIZE)
-							{
-								moveVertical = false;
-								collideRow = row;
-								break;
-							}
-						}
-						if (!moveVertical)
-						{
-							break;
-						}
-					}
-				}
-				if (!moveVertical)
-				{
-					object.setY(collideRow * TILE_SIZE + TILE_SIZE);
-					object.setVSpeed(0);
-				}
-				else
-				{
-					object.setY(y1 + vSpeed);
-				}
-			}
-
-			if (hSpeed >= 0)
-			{
-				// The row and column of the tile that was collided with
-				int collideColumn = 0;
-
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						if (grid[row][column] != '0'
-								&& row * TILE_SIZE < y2
-								&& row * TILE_SIZE + TILE_SIZE > y1)
-						{
-							if (x2 + hSpeed >= column * TILE_SIZE
-									&& x2 <= column * TILE_SIZE
-											+ MARGIN_OF_ERROR)
-							{
-								moveHorizontal = false;
-								collideColumn = column;
-								break;
-							}
-						}
-						if (!moveHorizontal)
-						{
-							break;
-						}
-					}
-				}
-				if (!moveHorizontal)
-				{
-					object.setX(collideColumn * TILE_SIZE - object.getWidth());
-					object.setHSpeed(0);
-				}
-				else
-				{
-					object.setX(object.getX() + object.getHSpeed());
-				}
-			}
-			else if (hSpeed <= 0)
-			{
-				// The row and column of the tile that was collided with
-				int collideColumn = 0;
-
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						if (grid[row][column] != '0'
-								&& row * TILE_SIZE < y2
-								&& row * TILE_SIZE + TILE_SIZE > y1)
-						{
-							if (x1 + hSpeed <= column * TILE_SIZE + TILE_SIZE
-									&& x1 >= column * TILE_SIZE + TILE_SIZE
-											- MARGIN_OF_ERROR)
-							{
-								moveHorizontal = false;
-								collideColumn = column;
-								break;
-							}
-						}
-						if (!moveHorizontal)
-						{
-							break;
-						}
-					}
-				}
-				if (!moveHorizontal)
-				{
-					object.setX(collideColumn * TILE_SIZE + TILE_SIZE);
-					object.setHSpeed(0);
-				}
-				else
-				{
-					object.setX(object.getX() + object.getHSpeed());
-				}
+				e.printStackTrace();
 			}
 		}
-	}
+		
+		for (ServerObject object : objects)
+		{
+			// This will remove the object a frame after it stops existing
+			if (object.exists())
+			{
+				// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
+				if (object.getVSpeed() < MAX_SPEED)
+				{
+					object.setVSpeed(object.getVSpeed() + object.getGravity());
+				}
 
+				double vSpeed = object.getVSpeed();
+				double hSpeed = object.getHSpeed();
+
+				double absVSpeed = Math.abs(vSpeed);
+				double absHSpeed = Math.abs(hSpeed);
+
+				double x1 = object.getX();
+				double x2 = object.getX() + object.getWidth();
+				double y1 = object.getY();
+				double y2 = object.getY() + object.getHeight();
+
+				int startRow = (int) ((y1 - absVSpeed) / TILE_SIZE - 1);
+				if (startRow < 0)
+				{
+					startRow = 0;
+				}
+				int endRow = (int) ((y2 + absVSpeed) / TILE_SIZE + 1);
+				if (endRow >= grid.length)
+				{
+					endRow = grid.length - 1;
+				}
+				int startColumn = (int) ((x1 - absHSpeed) / TILE_SIZE - 1);
+				if (startColumn < 0)
+				{
+					startColumn = 0;
+				}
+				int endColumn = (int) ((x2 + absHSpeed) / TILE_SIZE + 1);
+				if (endColumn >= grid[0].length)
+				{
+					endColumn = grid[0].length - 1;
+				}
+
+				boolean moveVertical = true;
+				boolean moveHorizontal = true;
+
+				if (vSpeed > 0)
+				{
+					// The row and column of the tile that was collided with
+					int collideRow = 0;
+
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
+						{
+							if (grid[row][column] != '0'
+									&& column * TILE_SIZE < x2
+									&& column * TILE_SIZE + TILE_SIZE > x1)
+							{
+								if (y2 + vSpeed >= row * TILE_SIZE
+										&& y2 <= row * TILE_SIZE)
+								{
+									moveVertical = false;
+									collideRow = row;
+									break;
+								}
+							}
+							if (!moveVertical)
+							{
+								break;
+							}
+						}
+					}
+					if (!moveVertical)
+					{
+						object.setY(collideRow * TILE_SIZE - object.getHeight());
+						object.setOnSurface(true);
+						object.setVSpeed(0);
+					}
+					else
+					{
+						object.setY(y1 + vSpeed);
+						object.setOnSurface(false);
+					}
+				}
+				else if (vSpeed < 0)
+				{
+					// The row and column of the tile that was collided with
+					int collideRow = 0;
+
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
+						{
+							if (grid[row][column] != '0'
+									&& column * TILE_SIZE < x2
+									&& column * TILE_SIZE + TILE_SIZE > x1)
+							{
+								if (y1 + vSpeed <= row * TILE_SIZE + TILE_SIZE
+										&& y1 >= row * TILE_SIZE + TILE_SIZE)
+								{
+									moveVertical = false;
+									collideRow = row;
+									break;
+								}
+							}
+							if (!moveVertical)
+							{
+								break;
+							}
+						}
+					}
+					if (!moveVertical)
+					{
+						object.setY(collideRow * TILE_SIZE + TILE_SIZE);
+						object.setVSpeed(0);
+					}
+					else
+					{
+						object.setY(y1 + vSpeed);
+					}
+				}
+
+				if (hSpeed >= 0)
+				{
+					// The row and column of the tile that was collided with
+					int collideColumn = 0;
+
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
+						{
+							if (grid[row][column] != '0'
+									&& row * TILE_SIZE < y2
+									&& row * TILE_SIZE + TILE_SIZE > y1)
+							{
+								if (x2 + hSpeed >= column * TILE_SIZE
+										&& x2 <= column * TILE_SIZE
+												+ MARGIN_OF_ERROR)
+								{
+									moveHorizontal = false;
+									collideColumn = column;
+									break;
+								}
+							}
+							if (!moveHorizontal)
+							{
+								break;
+							}
+						}
+					}
+					if (!moveHorizontal)
+					{
+						object.setX(collideColumn * TILE_SIZE
+								- object.getWidth());
+						object.setHSpeed(0);
+					}
+					else
+					{
+						object.setX(object.getX() + object.getHSpeed());
+					}
+				}
+				else if (hSpeed <= 0)
+				{
+					// The row and column of the tile that was collided with
+					int collideColumn = 0;
+
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
+						{
+							if (grid[row][column] != '0'
+									&& row * TILE_SIZE < y2
+									&& row * TILE_SIZE + TILE_SIZE > y1)
+							{
+								if (x1 + hSpeed <= column * TILE_SIZE
+										+ TILE_SIZE
+										&& x1 >= column * TILE_SIZE + TILE_SIZE
+												- MARGIN_OF_ERROR)
+								{
+									moveHorizontal = false;
+									collideColumn = column;
+									break;
+								}
+							}
+							if (!moveHorizontal)
+							{
+								break;
+							}
+						}
+					}
+					if (!moveHorizontal)
+					{
+						object.setX(collideColumn * TILE_SIZE + TILE_SIZE);
+						object.setHSpeed(0);
+					}
+					else
+					{
+						object.setX(object.getX() + object.getHSpeed());
+					}
+				}
+			}
+			else
+			{
+				objectsToRemove.add(object);
+			}
+		}
+		
+		// Remove all the objects that no longer exist
+		for (ServerObject object : objectsToRemove)
+		{
+			objects.remove(object);
+			System.out.println("Removed something");
+		}
+	}
+	
 	/**
 	 * Add a new object to the list of objects in the world
 	 * @param object
 	 */
-	public void add(ServerObject object)
+	public synchronized void add(ServerObject object)
 	{
-		objects.add(object);
+		objectsToAdd.enqueue(object);
 	}
 
 	/**

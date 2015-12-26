@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import Imports.Images;
 
@@ -88,7 +90,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
-
 		xUpdated = true;
 		yUpdated = true;
 
@@ -162,8 +163,17 @@ public class ServerPlayer extends ServerObject implements Runnable
 					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
 							- SCREEN_HEIGHT)
-				queueMessage("O " + object.getID() + " " + ((int)(object.getX()+0.5))
+			{
+				if (object.exists())
+				{
+					queueMessage("O " + object.getID() + " " + ((int)(object.getX()+0.5))
 						+ " " + ((int)(object.getY()+0.5)) + " " + object.getImage());
+				}
+				else
+				{
+					queueMessage("R " + object.getID());
+				}
+			}
 		}
 		
 		// Signal a repaint
@@ -182,7 +192,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 				String command = input.readLine();
 				// System.out.println(command);
 
-				if (command.equals("R"))
+				if (command.equals("A"))
+				{
+					performAction();
+				}
+				else if (command.equals("R"))
 				{
 					setHSpeed(movementSpeed);
 					setDirection('R');
@@ -237,6 +251,28 @@ public class ServerPlayer extends ServerObject implements Runnable
 		output.close();
 		disconnected = true;
 		engine.removePlayer(this);
+	}
+	
+	/**
+	 * Do a specific action when the action button is pressed
+	 */
+	public void performAction()
+	{
+		// Shoot the projectile for testing
+		double angle = 0;
+		double speed = 15;
+		double x = getX();
+		double y = getY() + getHeight()/2+0.5;
+		if (direction == 'R')
+		{
+			x = getX() + getWidth();
+		}
+		else if (direction == 'L')
+		{
+			angle = Math.PI;
+		}
+		
+		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle));
 	}
 
 	/**

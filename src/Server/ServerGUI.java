@@ -12,13 +12,12 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class ServerGUI extends JPanel implements KeyListener, ActionListener, MouseWheelListener{
+public class ServerGUI extends JPanel implements KeyListener, MouseWheelListener{
 
 	private ServerWorld world;
 	private char[][] grid;
 	private int posX = 200;
 	private int posY = 200;
-	Timer repaintTimer;
 	
 	/**
 	 * A color that java doesn't provide
@@ -75,11 +74,8 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener, Mo
 		//Add key, mouse wheel listener and repaint timer
 		addKeyListener(this);
 		addMouseWheelListener(this);
-		repaintTimer = new Timer(ServerEngine.UPDATE_RATE,this);
-		repaintTimer.start();
-
-
 	}
+	
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -202,11 +198,14 @@ public class ServerGUI extends JPanel implements KeyListener, ActionListener, Mo
 		}
 	}
 	
-	public void actionPerformed(ActionEvent arg0) {
+	/**
+	 * Update the map
+	 */
+	public void update()
+	{
 		// Move and repaint
 		movePos();	
 		repaint();
-
 	}
 	
 	@Override

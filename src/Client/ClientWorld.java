@@ -1,5 +1,7 @@
 package Client;
+
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -61,11 +63,11 @@ public class ClientWorld
 	 */
 	public void remove(int id)
 	{
-		int removeIndex=-1;
+		int removeIndex = -1;
 		int currentIndex = 0;
-		for (ClientObject object:objects)
+		for (ClientObject object : objects)
 		{
-			if (object.getID()==id)
+			if (object.getID() == id)
 			{
 				removeIndex = currentIndex;
 				break;
@@ -73,7 +75,7 @@ public class ClientWorld
 			currentIndex++;
 		}
 
-		if (removeIndex!=-1)
+		if (removeIndex != -1)
 		{
 			objects.remove(removeIndex);
 			removeID(id);
@@ -86,64 +88,91 @@ public class ClientWorld
 	 * @param playerX the position of the player
 	 * @param playerY the position of the player
 	 */
-	public void draw(Graphics graphics, int playerX, int playerY,
+	public void update(Graphics graphics, int playerX, int playerY,
 			int playerWidth, int playerHeight)
 	{
-		//Center of the screen
-		int centreX = Client.SCREEN_WIDTH/2 - playerWidth/2;
-		int centreY = Client.SCREEN_HEIGHT/2 - playerHeight/2;
+		// Center of the screen
+		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int)((playerY - Client.SCREEN_HEIGHT/2-5)/tileSize);
+		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - 5) / tileSize);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int)((Client.SCREEN_HEIGHT/2+playerY+5)/tileSize);
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + 5) / tileSize);
 		if (endRow >= grid.length)
 		{
-			endRow = grid.length-1;
+			endRow = grid.length - 1;
 		}
-		int startColumn = (int)((playerX - Client.SCREEN_WIDTH/2-5)/tileSize);
+		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - 5) / tileSize);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int)((Client.SCREEN_WIDTH/2+playerX+5)/tileSize);
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + 5) / tileSize);
 		if (endColumn >= grid.length)
 		{
-			endColumn= grid[0].length-1;
+			endColumn = grid[0].length - 1;
 		}
 		for (int row = startRow; row <= endRow; row++)
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
-				if (grid[row][column]=='0')
+				if (grid[row][column] == '0')
 				{
-					graphics.drawImage(Images.getImage("GRASS.png"), centreX + column* tileSize - playerX, centreY + row*tileSize - playerY,
+					graphics.drawImage(Images.getImage("GRASS.png"), centreX
+							+ column * tileSize - playerX, centreY + row
+							* tileSize - playerY,
 							null);
 				}
-				else if (grid[row][column]=='1')
+				else if (grid[row][column] == '1')
 				{
-					graphics.drawImage(Images.getImage("BRICK.png"),  centreX + column* tileSize - playerX, centreY + row*tileSize - playerY,
+					graphics.drawImage(Images.getImage("BRICK.png"), centreX
+							+ column * tileSize - playerX, centreY + row
+							* tileSize - playerY,
 							null);
 				}
 			}
 		}
 
+		// Create a list of objects to remove after leaving the screen
+		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
+		
 		// Go through each object in the world and draw it relative to the
-		// player's position
-		try{
+		// player's position. If it is outside of the screen, don't draw it just
+		// remove it
+		try
+		{
 			for (ClientObject object : objects)
-			{			
-				//if(objectIDs[object.getID()])
-				graphics.drawImage(object.getImage(), centreX + object.getX() - playerX, centreY + object.getY() - playerY,
-						null);
+			{
+				int x = centreX + object.getX() - playerX;
+				int y = centreY + object.getY() - playerY;
+				Image image = object.getImage();
+
+				if (x > Client.SCREEN_WIDTH || x + image.getWidth(null) < 0
+						|| y > Client.SCREEN_HEIGHT
+						|| y + image.getHeight(null) < 0)
+				{
+					objectsToRemove.add(object.getID());
+				}
+				else
+				{
+					graphics.drawImage(image, x, y,
+							null);
+				}
+			}
+			
+			for (Integer object : objectsToRemove)
+			{
+				remove(object);
 			}
 		}
-		catch(ConcurrentModificationException E)
+		catch (ConcurrentModificationException E)
 		{
-			System.out.println("Tried to acces the object list while it was being used");
+			System.out
+					.println("Tried to access the object list while it was being used");
 		}
 	}
 

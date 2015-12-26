@@ -193,7 +193,7 @@ public class Client extends JPanel implements KeyListener
 									+ (System.currentTimeMillis() - ping);
 						}
 
-						// Remove a player after disconnecting
+						// Remove an object after disconnection/destruction
 						else if (tokens[token].equals("R"))
 						{
 							world.remove(Integer.parseInt(tokens[++token]));
@@ -257,7 +257,7 @@ public class Client extends JPanel implements KeyListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.draw(graphics, player.getX(), player.getY(), player.getWidth(),
+		world.update(graphics, player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
 
 		graphics.setColor(Color.black);
@@ -267,9 +267,18 @@ public class Client extends JPanel implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent key)
 	{
-		if (key.getKeyCode() == KeyEvent.VK_RIGHT
+		if (key.getKeyCode() == KeyEvent.VK_SPACE
+				&& !currentMessage.equals("A"))
+		{
+			// A for action
+			currentMessage = "A";
+			output.println(currentMessage);
+			output.flush();
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_RIGHT
 				&& !currentMessage.equals("R"))
 		{
+			// R for right
 			currentMessage = "R";
 			output.println(currentMessage);
 			output.flush();
@@ -277,6 +286,7 @@ public class Client extends JPanel implements KeyListener
 		else if (key.getKeyCode() == KeyEvent.VK_LEFT
 				&& !currentMessage.equals("L"))
 		{
+			// L for left
 			currentMessage = "L";
 			output.println(currentMessage);
 			output.flush();
@@ -284,6 +294,7 @@ public class Client extends JPanel implements KeyListener
 		else if (key.getKeyCode() == KeyEvent.VK_UP
 				&& !currentMessage.equals("U"))
 		{
+			// U for up
 			currentMessage = "U";
 			output.println(currentMessage);
 			output.flush();
@@ -291,12 +302,14 @@ public class Client extends JPanel implements KeyListener
 		else if (key.getKeyCode() == KeyEvent.VK_DOWN
 				&& !currentMessage.equals("D"))
 		{
+			// D for down
 			currentMessage = "D";
 			output.println(currentMessage);
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
+			// P for ping
 			ping = System.currentTimeMillis();
 			output.println("P");
 			output.flush();
@@ -306,7 +319,12 @@ public class Client extends JPanel implements KeyListener
 	@Override
 	public void keyReleased(KeyEvent key)
 	{
-		if (key.getKeyCode() == KeyEvent.VK_RIGHT
+		if (key.getKeyCode() == KeyEvent.VK_SPACE
+				&& !currentMessage.equals("!A"))
+		{
+			currentMessage = "!A";
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_RIGHT
 				&& !currentMessage.equals("!R"))
 		{
 			currentMessage = "!R";

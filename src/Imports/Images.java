@@ -38,6 +38,7 @@ public class Images
 			images.add(new GameImage("GRASS.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
 			images.add(new GameImage("ENEMY.png",60,90));
 			images.add(new GameImage("SLIME.png",40,40));
+			images.add(new GameImage("BULLET.png"));
 		}
 	}
 

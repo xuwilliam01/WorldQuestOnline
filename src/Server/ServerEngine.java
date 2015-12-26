@@ -22,7 +22,6 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	private static ArrayList<ServerPlayer> listOfPlayers;
 
-	
 	/**
 	 * A list of IDs currently used in the game (index is the ID, true means
 	 * used, false means unused). Note that IDs can be freed when the object is
@@ -49,6 +48,11 @@ public class ServerEngine implements Runnable, ActionListener
 	private Timer updateTimer;
 
 	/**
+	 * The map for the server
+	 */
+	private ServerGUI gui = null;
+
+	/**
 	 * Constructor for the engine
 	 */
 	public ServerEngine() throws IOException
@@ -61,6 +65,15 @@ public class ServerEngine implements Runnable, ActionListener
 		objectIDs = new boolean[NUMBER_OF_IDS];
 		world = new ServerWorld(this);
 
+	}
+
+	/**
+	 * Set the gui
+	 * @param gui
+	 */
+	public void setGui(ServerGUI gui)
+	{
+		this.gui = gui;
 	}
 
 	@Override
@@ -76,7 +89,7 @@ public class ServerEngine implements Runnable, ActionListener
 	/**
 	 * Send messages to all the clients updating their player's data
 	 */
-	public synchronized void updatePlayers()
+	public synchronized void updateClients()
 	{
 		for (ServerPlayer player : listOfPlayers)
 		{
@@ -168,9 +181,15 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 
 		// Move all the objects around
-		world.moveObjects();
+		world.updateObjects();
 
 		// Update all the clients with the new player data
-		updatePlayers();
+		updateClients();
+
+		// Update the gui
+		if (gui != null)
+		{
+			gui.update();
+		}
 	}
 }
