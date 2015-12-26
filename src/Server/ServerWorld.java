@@ -66,6 +66,10 @@ public class ServerWorld
 	 */
 	private Queue<ServerObject> objectsToAdd;
 
+	
+	// Create list of objects to remove if doesn't exist anymore
+	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
+	
 	/**
 	 * Constructor for server
 	 * @throws IOException
@@ -122,8 +126,14 @@ public class ServerWorld
 	 */
 	public synchronized void updateObjects()
 	{
-		// Create list of objects to remove if doesn't exist anymore
-		ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
+		
+		// Remove all the objects that no longer exist
+		for (ServerObject object : objectsToRemove)
+		{
+			objects.remove(object);
+			
+		}
+		objectsToRemove.clear();
 
 		while (!objectsToAdd.isEmpty())
 		{
@@ -349,6 +359,7 @@ public class ServerWorld
 					if (object.getHSpeed() == 0 && object.getVSpeed() == 0)
 					{
 						objectsToRemove.add(object);
+						object.setExists(false);
 					}
 				}
 
@@ -357,13 +368,6 @@ public class ServerWorld
 			{
 				objectsToRemove.add(object);
 			}
-		}
-
-		// Remove all the objects that no longer exist
-		for (ServerObject object : objectsToRemove)
-		{
-			objects.remove(object);
-			System.out.println("Removed something");
 		}
 	}
 
