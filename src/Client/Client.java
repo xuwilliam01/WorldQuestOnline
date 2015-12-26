@@ -3,16 +3,21 @@ package Client;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.awt.Graphics;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import Imports.Images;
 
-public class Client extends JPanel implements KeyListener
+public class Client extends JPanel implements KeyListener, MouseListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -52,7 +57,7 @@ public class Client extends JPanel implements KeyListener
 	{
 		Images.importImages();
 		mySocket = socket;
-		currentMessage = "";
+		currentMessage = " ";
 	}
 
 	/**
@@ -61,6 +66,7 @@ public class Client extends JPanel implements KeyListener
 	private void serverClosed()
 	{
 		System.out.println("Server was closed");
+		JOptionPane.showMessageDialog(null, "The Server was Closed");
 	}
 
 	/**
@@ -127,9 +133,10 @@ public class Client extends JPanel implements KeyListener
 		gameThread.start();
 
 		System.out.println("Game started");
-		
+
 		// Add listeners AT THE END
 		addKeyListener(this);
+		addMouseListener(this);
 	}
 
 	/**
@@ -207,7 +214,7 @@ public class Client extends JPanel implements KeyListener
 			}
 			catch (IOException e2)
 			{
-				System.out.println("Server has closed");
+				serverClosed();
 			}
 		}
 	}
@@ -267,15 +274,8 @@ public class Client extends JPanel implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent key)
 	{
-		if (key.getKeyCode() == KeyEvent.VK_SPACE
-				&& !currentMessage.equals("A"))
-		{
-			// A for action
-			currentMessage = "A";
-			output.println(currentMessage);
-			output.flush();
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_RIGHT
+
+		if (key.getKeyCode() == KeyEvent.VK_RIGHT
 				&& !currentMessage.equals("R"))
 		{
 			// R for right
@@ -346,7 +346,7 @@ public class Client extends JPanel implements KeyListener
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
-			 pingString = "LATENCY: (PRESS P)";
+			pingString = "LATENCY: (PRESS P)";
 		}
 		output.println(currentMessage);
 		output.flush();
@@ -354,7 +354,57 @@ public class Client extends JPanel implements KeyListener
 	}
 
 	@Override
+	public void mousePressed(MouseEvent event)
+	{
+		if (event.getButton() == MouseEvent.BUTTON1
+				&& currentMessage.charAt(0) != 'A')
+		{
+			// A for action
+			currentMessage = "A";
+			int xDist = event.getX() - SCREEN_WIDTH/2;
+			int yDist = event.getY() - SCREEN_HEIGHT/2;
+			
+			double angle = Math.atan2(yDist, xDist);
+			currentMessage += " " + angle;
+			
+			output.println(currentMessage);
+			output.flush();
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event)
+	{
+		if (event.getButton() == MouseEvent.BUTTON1
+				&& !currentMessage.equals("!A"))
+		{
+			currentMessage = "!A";
+			
+			output.println(currentMessage);
+			output.flush();
+		}
+	}
+
+	@Override
 	public void keyTyped(KeyEvent key)
+	{
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0)
+	{
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0)
+	{
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0)
 	{
 
 	}

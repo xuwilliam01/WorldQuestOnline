@@ -32,9 +32,7 @@ public class ServerFlyingObject extends ServerObject
 	{
 		super (x,y,width,height,gravity,ID,image,type);
 		setHSpeed((Math.round(speed*Math.cos(angle)*100))/100);
-		System.out.println(getHSpeed());
 		setVSpeed((Math.round(speed*Math.sin(angle)*100))/100);
-		System.out.println(getVSpeed());
 	}
 
 	/**

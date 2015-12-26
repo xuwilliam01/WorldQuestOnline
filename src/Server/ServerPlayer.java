@@ -190,11 +190,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 			try
 			{
 				String command = input.readLine();
-				// System.out.println(command);
 
-				if (command.equals("A"))
+				if (command.charAt(0)=='A')
 				{
-					performAction();
+					performAction(Double.parseDouble((command.split(" "))[1]));
 				}
 				else if (command.equals("R"))
 				{
@@ -256,35 +255,27 @@ public class ServerPlayer extends ServerObject implements Runnable
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
-	public void performAction()
+	public void performAction(double angle)
 	{
+		// Get the width and height of the image
+		int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
+		int bulletHeight = Images.getGameImage("BULLET.png").getHeight();
+		
 		// Shoot the projectile for testing
-		double angle = 0;
-		double speed = 15;
-		double x = getX();
-		double y = getY() + getHeight()/2+0.5;
+		double speed = 30;
+		double x = getX() + getWidth()/2.0 - bulletWidth/2.0;
+		double y = getY() + getHeight()/2.0 - bulletHeight/2.0;
 		double inaccuracy = 0;
 		
 		if (getHSpeed()!=0)
 		{
-			inaccuracy += Math.PI/9;
+			inaccuracy += Math.PI/6;
 		}
 		
 		if (getVSpeed()!=0)
 		{
-			inaccuracy += Math.PI/6;
+			inaccuracy += Math.PI/3;
 		}
-		
-		if (direction == 'R')
-		{
-			x = getX() + getWidth();
-		}
-		else if (direction == 'L')
-		{
-			angle = Math.PI;
-		}
-		
-		
 		
 		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle,inaccuracy, ServerWorld.BULLET_TYPE));
 	}
