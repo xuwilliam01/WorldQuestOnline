@@ -26,6 +26,11 @@ public class Images
 	 * Array list of the game images
 	 */
 	public static ArrayList<GameImage> images;
+	
+	/**
+	 * Array list of lists of images (USE LATER)
+	 */
+	public static ArrayList<ArrayList<GameImage>> imageSheets;
 
 	/**
 	 * Import the images from the folder
@@ -41,12 +46,20 @@ public class Images
 			// Import sprite sheets to create images with
 			try
 			{
-				BufferedImage slimeSheet = ImageIO.read(new File(
+				BufferedImage sheet = ImageIO.read(new File(
 						"SLIME_SHEET.png"));
 				for (int no = 0; no < 9; no++)
 				{
 					images.add(new GameImage("SLIME_" + no + IMAGE_FORMAT,
-							slimeSheet.getSubimage(no*19, 0, 19, 17),38,34));
+							sheet.getSubimage(no*19, 0, 19, 17),38,34));
+				}
+				
+				sheet = ImageIO.read(new File(
+						"EXPLOSION_SHEET.png"));
+				for (int no = 0; no < 7; no++)
+				{
+					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
+							sheet.getSubimage(no*32, 0, 32, 32)));
 				}
 			}
 			catch (IOException e)

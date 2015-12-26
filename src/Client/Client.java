@@ -275,7 +275,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	public void keyPressed(KeyEvent key)
 	{
 
-		if (key.getKeyCode() == KeyEvent.VK_RIGHT
+		if (key.getKeyCode() == KeyEvent.VK_D
 				&& !currentMessage.equals("R"))
 		{
 			// R for right
@@ -283,7 +283,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_LEFT
+		else if (key.getKeyCode() == KeyEvent.VK_A
 				&& !currentMessage.equals("L"))
 		{
 			// L for left
@@ -291,7 +291,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_UP
+		else if (key.getKeyCode() == KeyEvent.VK_W
 				&& !currentMessage.equals("U"))
 		{
 			// U for up
@@ -299,7 +299,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_DOWN
+		else if (key.getKeyCode() == KeyEvent.VK_S
 				&& !currentMessage.equals("D"))
 		{
 			// D for down
@@ -319,27 +319,23 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	@Override
 	public void keyReleased(KeyEvent key)
 	{
-		if (key.getKeyCode() == KeyEvent.VK_SPACE
-				&& !currentMessage.equals("!A"))
-		{
-			currentMessage = "!A";
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_RIGHT
+
+		if (key.getKeyCode() == KeyEvent.VK_D
 				&& !currentMessage.equals("!R"))
 		{
 			currentMessage = "!R";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_LEFT
+		else if (key.getKeyCode() == KeyEvent.VK_A
 				&& !currentMessage.equals("!L"))
 		{
 			currentMessage = "!L";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_UP
+		else if (key.getKeyCode() == KeyEvent.VK_W
 				&& !currentMessage.equals("!U"))
 		{
 			currentMessage = "!U";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_DOWN
+		else if (key.getKeyCode() == KeyEvent.VK_S
 				&& !currentMessage.equals("!D"))
 		{
 			currentMessage = "!D";

@@ -54,7 +54,7 @@ public class ServerObject
 	 * The vertical speed of the player (negative -- up, positive -- down)
 	 */
 	private double vSpeed;
-	
+
 	/**
 	 * The specific object's gravity (usually the universal gravity)
 	 */
@@ -64,16 +64,26 @@ public class ServerObject
 	 * Whether or not the object is on top of a surface
 	 */
 	private boolean onSurface;
-	
+
 	/**
 	 * Whether or not the object exists
 	 */
 	private boolean exists;
-	
+
 	/**
 	 * The type of object this is (subclass)
 	 */
 	private String type;
+	
+	/**
+	 * Whether or not the MAP can see the object
+	 */
+	private boolean mapVisible;
+	
+	/**
+	 * Whether or not the object will collide with tiles
+	 */
+	private boolean solid;
 
 	/**
 	 * Constructor for an object
@@ -83,14 +93,17 @@ public class ServerObject
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(double x, double y, int width, int height, double gravity, int ID,
+	public ServerObject(double x, double y, int width, int height,
+			double gravity, int ID,
 			String image, String type)
 	{
+		solid = true;
+		mapVisible = true;
 		this.type = type;
 		exists = true;
 		onSurface = false;
 		useImageDimensions = false;
-		this.gravity = gravity;	
+		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
 		this.id = ID;
@@ -170,9 +183,9 @@ public class ServerObject
 		return exists;
 	}
 
-	public void setExists(boolean exists)
+	public void destroy()
 	{
-		this.exists = exists;
+		exists = false;
 	}
 
 	public double getGravity()
@@ -279,7 +292,26 @@ public class ServerObject
 	{
 		this.type = type;
 	}
-	
-	
 
+	public boolean isMapVisible()
+	{
+		return mapVisible;
+	}
+
+	public void setMapVisible(boolean mapVisible)
+	{
+		this.mapVisible = mapVisible;
+	}
+
+	public boolean isSolid()
+	{
+		return solid;
+	}
+
+	public void setSolid(boolean solid)
+	{
+		this.solid = solid;
+	}
+
+	
 }
