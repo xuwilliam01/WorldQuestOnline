@@ -21,6 +21,8 @@ public class Server implements Runnable
 	private String[] playerImages = { "GIRL_RIGHT.png", "CYCLOPS_RIGHT.png",
 			"KNIGHT_RIGHT.png" };
 
+	int noOfPlayers = 0;
+
 	public Server()
 	{
 		port = 5000;
@@ -55,12 +57,13 @@ public class Server implements Runnable
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
 
-		while (true)
+		while (noOfPlayers < 4)
 		{
 			try
 			{
 				Socket newClient = socket.accept();
 
+				noOfPlayers++;
 				int x = (int) (Math.random() * 1000 + 50);
 				int y = ServerPlayer.PLAYER_Y;
 

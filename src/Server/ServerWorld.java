@@ -94,7 +94,7 @@ public class ServerWorld
 	 */
 	public void addEnemies()
 	{
-		for (int no = 0; no < 9; no++)
+		for (int no = 0; no < 4; no++)
 		{
 			ServerNPC newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
