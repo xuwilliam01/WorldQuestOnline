@@ -31,10 +31,10 @@ public class ServerSlime extends ServerNPC
 	private boolean landed;
 
 	public ServerSlime(double x, double y, int width, int height,
-			double gravity, int ID, String image)
+			double gravity, int ID, String image, ServerWorld world)
 	{
 		super(x, y, width, height, gravity, ID, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE);
+				ServerWorld.SLIME_TYPE,world);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing

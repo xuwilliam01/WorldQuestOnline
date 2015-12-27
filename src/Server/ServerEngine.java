@@ -27,7 +27,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * used, false means unused). Note that IDs can be freed when the object is
 	 * deleted and re-assigned to another object
 	 */
-	private boolean[] objectIDs;
+	private static boolean[] objectIDs;
 
 	/**
 	 * The number of possible ID's for any objects. The number of objects
@@ -148,7 +148,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * Use and reserve the next available ID in the list of booleans
 	 * @return the id
 	 */
-	public int useNextID()
+	public static int useNextID()
 	{
 		for (int id = 0; id < objectIDs.length; id++)
 		{

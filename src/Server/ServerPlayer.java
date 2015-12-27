@@ -352,7 +352,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 				inaccuracy += Math.PI / 3;
 			}
 
-			world.add(new ServerProjectile(x, y, -1, -1, 0, engine.useNextID(),
+			world.add(new ServerProjectile(x, y, -1, -1, 0, ServerEngine.useNextID(),
 					getID(), "BULLET.png", speed, angle, inaccuracy,
 					ServerWorld.BULLET_TYPE));
 		}

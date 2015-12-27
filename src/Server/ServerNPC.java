@@ -32,6 +32,9 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	//Players in server
 	private ServerPlayer target = null;
 	
+	//World that the object is in
+	private ServerWorld world;
+	
 	/**
 	 * 
 	 * @param x
@@ -42,11 +45,13 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	 * @param ID
 	 * @param image
 	 * @param maxHP
+	 * @param world
 	 */
-	public ServerNPC(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type) {
+	public ServerNPC(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type, ServerWorld world) {
 		super(x, y, width, height, gravity,ID, image,type);
 		this.maxHP = maxHP;
 		HP = maxHP;
+		this.world = world;
 	}
 
 	//All this should be overridden by other AI classes
@@ -70,7 +75,10 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 		}
 	}
 	
-	
+	public void dropItem()
+	{
+		world.add(new ServerSword(getX(),getY(),20));
+	}
 	
 	public int getTargetRange()
 	{
@@ -124,6 +132,7 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 		if (HP <= 0)
 		{
 			destroy();
+			dropItem();
 		}
 	}
 }

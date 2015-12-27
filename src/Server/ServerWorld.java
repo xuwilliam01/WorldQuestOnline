@@ -24,6 +24,13 @@ public class ServerWorld
 	public final static char NPC_TYPE = 'N';
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
+	
+	public final static char ITEM_TYPE = 'I';
+	public final static String POTION_TYPE = ITEM_TYPE +"P";
+	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
+	
+	public final static String HP_TYPE = POTION_TYPE+"H";
+	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
 
 	/**
 	 * Grid of tiles
@@ -98,8 +105,8 @@ public class ServerWorld
 		{
 			ServerNPC newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
-					engine.useNextID(),
-					"SLIME_0.png");
+					ServerEngine.useNextID(),
+					"SLIME_0.png",this);
 			add(newEnemy);
 		}
 	}
@@ -115,8 +122,8 @@ public class ServerWorld
 			
 			ServerNPC newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
 					GRAVITY,
-					engine.useNextID(),
-					"SLIME_0.png");
+					ServerEngine.useNextID(),
+					"SLIME_0.png",this);
 			add(newEnemy);
 			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000 + 5000);
 		}

@@ -88,6 +88,9 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
+			
+			images.add(new GameImage("HP_POTION.png",15,15));
+			images.add(new GameImage("SWORD.png",70,30));
 		}
 	}
 
