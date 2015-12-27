@@ -60,7 +60,7 @@ public class StartClient
 				client.initialize();
 				client.revalidate();
 				myFrame.setVisible(true);
-				JOptionPane.showMessageDialog(null, "You have joined #2");
+				JOptionPane.showMessageDialog(null, "You have joined #5");
 			}
 		});
 

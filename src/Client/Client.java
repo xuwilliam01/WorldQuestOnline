@@ -79,7 +79,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	 */
 	public void initialize()
 	{
-		JOptionPane.showMessageDialog(null, "You have joined #3");
+		JOptionPane.showMessageDialog(null, "You have joined #2");
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.black);
@@ -87,7 +87,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 		setFocusable(true);
 		requestFocusInWindow();
 	
-		JOptionPane.showMessageDialog(null, "You have joined #4");
+		JOptionPane.showMessageDialog(null, "You have joined #3");
 		HP = 100;
 
 		// Set up the input
@@ -146,6 +146,8 @@ public class Client extends JPanel implements KeyListener, MouseListener
 		// Add listeners AT THE END
 		addKeyListener(this);
 		addMouseListener(this);
+		
+		JOptionPane.showMessageDialog(null, "You have joined #4");
 	}
 
 	/**
