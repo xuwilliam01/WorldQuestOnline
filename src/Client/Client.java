@@ -81,7 +81,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	{
 		// Create the screen
 		setDoubleBuffered(true);
-		setBackground(Color.white);
+		setBackground(Color.black);
 
 		setFocusable(true);
 		requestFocusInWindow();
