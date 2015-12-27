@@ -192,6 +192,11 @@ public class ServerObject
 	{
 		return gravity;
 	}
+	
+	public void makeExist()
+	{
+		exists = true;
+	}
 
 	public void setGravity(double gravity)
 	{

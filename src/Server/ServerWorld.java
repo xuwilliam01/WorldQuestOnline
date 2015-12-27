@@ -24,23 +24,23 @@ public class ServerWorld
 	public final static char NPC_TYPE = 'N';
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
-	
+
 	public final static char ITEM_TYPE = 'I';
 	public final static String POTION_TYPE = ITEM_TYPE +"P";
 	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
-	
+
 	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
 	public final static String HP_TYPE = POTION_TYPE+"H";
-	
+
 	//These are so we can find the right images
 	public final static String LONG_SWORD = SWORD_TYPE+"L";
-	
+
 	public final static String HP_25 = HP_TYPE+"25";
 	public final static String HP_50 = HP_TYPE+"50";
 	public final static String HP_75 = HP_TYPE+"75";
 	public final static String HP_100 = HP_TYPE+"100";
-	
-	
+
+
 
 	/**
 	 * Grid of tiles
@@ -87,7 +87,7 @@ public class ServerWorld
 
 	// Create list of objects to remove if doesn't exist anymore
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
-	
+
 	/**
 	 * The next time (in milliseconds) to spawn another enemy
 	 */
@@ -120,7 +120,7 @@ public class ServerWorld
 			add(newEnemy);
 		}
 	}
-	
+
 	/**
 	 * Spawn enemies if the current time passes the spawn timer, then reset the timer
 	 */
@@ -129,7 +129,7 @@ public class ServerWorld
 		if (System.currentTimeMillis()>= spawnTimer)
 		{
 			int spawnLocation = (int)(Math.random() * 9);
-			
+
 			ServerNPC newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
 					GRAVITY,
 					ServerEngine.useNextID(),
@@ -150,7 +150,7 @@ public class ServerWorld
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
-				.parseInt(tokenizer.nextToken())];
+		                                                         .parseInt(tokenizer.nextToken())];
 		String line;
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -194,7 +194,9 @@ public class ServerWorld
 			// This will remove the object a frame after it stops existing
 			if (object.exists())
 			{
-
+				if(object.getType().charAt(0) == 'I' && object.isOnSurface())
+					object.setHSpeed(0);
+				
 				// Check collisions with other objects
 				for (ServerObject otherObject : objects)
 				{
@@ -204,12 +206,12 @@ public class ServerWorld
 						{
 							if (otherObject.getType().equals(PLAYER_TYPE)
 									&& otherObject.getID() != ((ServerProjectile) object)
-											.getOwnerID()
+									.getOwnerID()
 									&& object.checkCollision(otherObject))
 							{
 								((ServerPlayer) otherObject)
-										.inflictDamage(((ServerProjectile) object)
-												.getDamage());
+								.inflictDamage(((ServerProjectile) object)
+										.getDamage());
 								((ServerProjectile) object).destroy();
 							}
 							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.checkCollision(otherObject))
@@ -325,7 +327,7 @@ public class ServerWorld
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-													+ TILE_SIZE)
+											+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -360,7 +362,7 @@ public class ServerWorld
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-													+ MARGIN_OF_ERROR)
+											+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -396,8 +398,8 @@ public class ServerWorld
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-													+ TILE_SIZE
-													- MARGIN_OF_ERROR)
+											+ TILE_SIZE
+											- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;

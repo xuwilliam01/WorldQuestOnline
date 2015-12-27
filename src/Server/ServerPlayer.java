@@ -376,8 +376,16 @@ public class ServerPlayer extends ServerObject implements Runnable
 		{
 			for(ServerItem item : inventory)
 			{
-				System.out.println("here");
+				item.setX(getX());
+				item.setY(getY());
+				item.makeExist();
 				world.add(item);
+				item.setVSpeed(-Math.random()*30-5);
+
+				int direction  = 1;
+				if(Math.random() < 0.5)
+					direction = -1;
+				item.setHSpeed(direction*(Math.random()*5 + 3));
 			}
 			
 			inventory.clear();
