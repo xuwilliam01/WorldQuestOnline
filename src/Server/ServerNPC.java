@@ -77,7 +77,7 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	
 	public void dropItem()
 	{
-		world.add(new ServerSword(getX(),getY(),20));
+		world.add(ServerItem.randomItem(getX(), getY()));
 	}
 	
 	public int getTargetRange()

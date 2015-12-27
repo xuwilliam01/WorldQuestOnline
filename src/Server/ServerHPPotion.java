@@ -12,7 +12,7 @@ public class ServerHPPotion extends ServerPotion{
 
 	public ServerHPPotion(double x, double y)
 	{
-		super(x,y,"IPH");
-		this.healAmount = ((int)(Math.random()*4+1))*25;
+		super(x,y,ServerWorld.HP_TYPE + ((int)(Math.random()*4+1))*25);
+		this.healAmount = Integer.parseInt(getType().substring(3));
 	}
 }

@@ -2,11 +2,8 @@ package Server;
 
 public class ServerSword extends ServerWeapon{
 
-	private int damage;
-	
-	public ServerSword(double x, double y, int damage) {
-		super(x, y, "IWS");
-		this.damage = damage;
+	public ServerSword(double x, double y, char type, int damage) {
+		super(x, y, ServerWorld.SWORD_TYPE+type);
 	}
 
 }

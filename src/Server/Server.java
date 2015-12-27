@@ -71,7 +71,7 @@ public class Server implements Runnable
 				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
 						x, y, -1, -1,
 						ServerWorld.GRAVITY,
-						engine.useNextID(), playerImages[characterSelection]);
+						ServerEngine.useNextID(), playerImages[characterSelection]);
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();

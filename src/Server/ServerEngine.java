@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.Timer;
 
@@ -91,9 +92,16 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public synchronized void updateClients()
 	{
-		for (ServerPlayer player : listOfPlayers)
+		try{
+			for (ServerPlayer player : listOfPlayers)
+			{
+				player.update();
+			}
+		}
+		catch(ConcurrentModificationException e)
 		{
-			player.update();
+			System.out.println("Concurrent modification occured");
+			e.printStackTrace();
 		}
 	}
 

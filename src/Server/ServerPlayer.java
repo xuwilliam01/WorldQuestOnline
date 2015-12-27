@@ -374,6 +374,14 @@ public class ServerPlayer extends ServerObject implements Runnable
 		HP -= amount;
 		if (HP <= 0)
 		{
+			for(ServerItem item : inventory)
+			{
+				System.out.println("here");
+				world.add(item);
+			}
+			
+			inventory.clear();
+			
 			setSolid(false);
 			setGravity(0);
 			alive = false;
@@ -383,6 +391,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 			setHeight(64);
 
 			verticalMovement = movementSpeed;
+			
+			
 		}
 	}
 

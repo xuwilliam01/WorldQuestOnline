@@ -29,8 +29,18 @@ public class ServerWorld
 	public final static String POTION_TYPE = ITEM_TYPE +"P";
 	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
 	
-	public final static String HP_TYPE = POTION_TYPE+"H";
 	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
+	public final static String HP_TYPE = POTION_TYPE+"H";
+	
+	//These are so we can find the right images
+	public final static String LONG_SWORD = SWORD_TYPE+"L";
+	
+	public final static String HP_25 = HP_TYPE+"25";
+	public final static String HP_50 = HP_TYPE+"50";
+	public final static String HP_75 = HP_TYPE+"75";
+	public final static String HP_100 = HP_TYPE+"100";
+	
+	
 
 	/**
 	 * Grid of tiles

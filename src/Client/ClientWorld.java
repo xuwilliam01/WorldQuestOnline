@@ -139,7 +139,7 @@ public class ClientWorld
 
 		// Create a list of objects to remove after leaving the screen
 		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
-		
+
 		// Go through each object in the world and draw it relative to the
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
@@ -163,7 +163,7 @@ public class ClientWorld
 							null);
 				}
 			}
-			
+
 			for (Integer object : objectsToRemove)
 			{
 				remove(object);
@@ -172,7 +172,7 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-					.println("Tried to access the object list while it was being used");
+			.println("Tried to access the object list while it was being used");
 		}
 	}
 
@@ -182,12 +182,19 @@ public class ClientWorld
 	 */
 	public ClientObject get(int id)
 	{
-		for (ClientObject object : objects)
-		{
-			if (object.getID() == id)
+		try{
+			for (ClientObject object : objects)
 			{
-				return object;
+				if (object.getID() == id)
+				{
+					return object;
+				}
 			}
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println("Concurrent modification occured");
+			e.printStackTrace();
 		}
 		return null;
 	}
