@@ -89,9 +89,9 @@ public class ServerWorld
 	 */
 	public void addEnemies()
 	{
-		for (int no = 0; no < 5; no++)
+		for (int no = 0; no < 8; no++)
 		{
-			ServerNPC newEnemy = new ServerSlime(200 * no + 50, 50, -1, -1,
+			ServerNPC newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
 					engine.useNextID(),
 					"SLIME_0.png",
@@ -228,7 +228,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != '0'
+								if (grid[row][column] != ' '
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -267,7 +267,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != '0'
+								if (grid[row][column] != ' '
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -303,7 +303,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != '0'
+								if (grid[row][column] != ' '
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
@@ -338,7 +338,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != '0'
+								if (grid[row][column] != ' '
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{

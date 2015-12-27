@@ -66,7 +66,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	/**
 	 * The initial speed the player jumps at
 	 */
-	private int jumpSpeed = 15;
+	private int jumpSpeed = 20;
 
 	/**
 	 * The speed the player moves horizontally
@@ -104,6 +104,20 @@ public class ServerPlayer extends ServerObject implements Runnable
 			int height, double gravity, int ID, String image)
 	{
 		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE);
+		
+		if (image.contains("CYCLOPS"))
+		{
+			HP = 125;
+		}
+		else if (image.contains("GIRL"))
+		{
+			HP = 80;
+		}
+		else if (image.contains("KNIGHT"))
+		{
+			HP = 100;
+		}
+		
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;

@@ -18,6 +18,9 @@ public class Server implements Runnable
 	private ServerEngine engine;
 	private int port;
 
+	private String[] playerImages = { "GIRL_RIGHT.png", "CYCLOPS_RIGHT.png",
+			"KNIGHT_RIGHT.png" };
+
 	public Server()
 	{
 		port = 5000;
@@ -57,10 +60,15 @@ public class Server implements Runnable
 			try
 			{
 				Socket newClient = socket.accept();
+
+				int x = (int) (Math.random() * 1000 + 50);
+				int y = ServerPlayer.PLAYER_Y;
+
+				int characterSelection = (int) (Math.random() * 3);
 				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
-						ServerPlayer.PLAYER_X, ServerPlayer.PLAYER_Y, -1, -1,ServerWorld.GRAVITY,
-						engine.useNextID(), "PLAYER_RIGHT"
-								+ Images.IMAGE_FORMAT);
+						x, y, -1, -1,
+						ServerWorld.GRAVITY,
+						engine.useNextID(), playerImages[characterSelection]);
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
@@ -74,7 +82,7 @@ public class Server implements Runnable
 			}
 		}
 	}
-	
+
 	public ServerEngine getEngine()
 	{
 		return engine;

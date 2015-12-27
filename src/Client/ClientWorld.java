@@ -96,22 +96,22 @@ public class ClientWorld
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - 5) / tileSize);
+		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - playerHeight) / tileSize);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + 5) / tileSize);
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + playerHeight) / tileSize);
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length - 1;
 		}
-		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - 5) / tileSize);
+		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - playerWidth) / tileSize);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + 5) / tileSize);
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + playerWidth) / tileSize);
 		if (endColumn >= grid.length)
 		{
 			endColumn = grid[0].length - 1;
@@ -120,7 +120,7 @@ public class ClientWorld
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
-				if (grid[row][column] == '0')
+				if (grid[row][column] == ' ')
 				{
 					graphics.drawImage(Images.getImage("GRASS.png"), centreX
 							+ column * tileSize - playerX, centreY + row

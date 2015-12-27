@@ -18,7 +18,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 
 	private ServerWorld world;
 	private char[][] grid;
-	private int posX = 200;
+	private int posX = 300;
 	private int posY = 200;
 
 	/**
@@ -110,7 +110,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
-				if (grid[row][column] == '0')
+				if (grid[row][column] == ' ')
 				{
 					graphics.setColor(GRASS);
 					graphics.fillRect(
