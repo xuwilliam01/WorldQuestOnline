@@ -35,7 +35,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private BufferedReader input;
 	private ServerEngine engine;
 	private ServerWorld world;
-	
 
 	// ////////////////////////////////////////////////////////////////////
 	// X and Y coordinates will be changed once scrolling is implemented//
@@ -57,6 +56,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * The horizontal direction the player is facing ('R' is right, 'L' is left)
 	 */
 	private char direction;
+
+	/**
+	 * The direction the player is trying to move (so player continues to move
+	 * in that direction even after collision, until release of the key) (1 is
+	 * right, -1 is left)
+	 */
+	private int movingDirection = 0;
 
 	/**
 	 * The speed at which the player moves
@@ -82,7 +88,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * HP of the player
 	 */
 	private int HP = 100;
-	
+
 	/**
 	 * Whether or not the player is alive
 	 */
@@ -104,7 +110,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 			int height, double gravity, int ID, String image)
 	{
 		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE);
-		
+
 		if (image.contains("CYCLOPS"))
 		{
 			HP = 125;
@@ -117,7 +123,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		{
 			HP = 100;
 		}
-		
+
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -211,6 +217,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 			}
 		}
+		
+		
+		// Try to move the player in the direction that the key is holding
+		setHSpeed(movingDirection*horizontalMovement);
 
 		// Tell the user what hp he has
 		queueMessage("L " + HP);
@@ -237,10 +247,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 				else if (command.equals("R"))
 				{
 					setHSpeed(horizontalMovement);
+					movingDirection = 1;
 					setDirection('R');
 				}
 				else if (command.equals("!R"))
 				{
+					movingDirection = 0;
 					if (getHSpeed() > 0)
 					{
 						setHSpeed(0);
@@ -248,11 +260,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 				else if (command.equals("L"))
 				{
+					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
 					setDirection('L');
 				}
 				else if (command.equals("!L"))
 				{
+					movingDirection = 0;
 					if (getHSpeed() < 0)
 					{
 						setHSpeed(0);
@@ -346,7 +360,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
 	 */
-	public void damage(int amount)
+	public void inflictDamage(int amount)
 	{
 		HP -= amount;
 		if (HP <= 0)
@@ -358,7 +372,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 			setImage("PLAYERGHOST_RIGHT.png");
 			setWidth(59);
 			setHeight(64);
-			
+
 			verticalMovement = movementSpeed;
 		}
 	}
@@ -475,4 +489,15 @@ public class ServerPlayer extends ServerObject implements Runnable
 		return HP;
 	}
 
+	public boolean isAlive()
+	{
+		return alive;
+	}
+
+	public void setAlive(boolean alive)
+	{
+		this.alive = alive;
+	}
+
+	
 }

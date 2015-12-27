@@ -3,6 +3,11 @@ package Server;
 public class ServerSlime extends ServerNPC
 {
 
+	/**
+	 * The default HP of a slime
+	 */
+	public final static int SLIME_HP = 30;
+	
 	private int speed = 5;
 
 	/**
@@ -26,10 +31,9 @@ public class ServerSlime extends ServerNPC
 	private boolean landed;
 
 	public ServerSlime(double x, double y, int width, int height,
-			double gravity, int ID, String image,
-			int maxHP)
+			double gravity, int ID, String image)
 	{
-		super(x, y, width, height, gravity, ID, image, maxHP,
+		super(x, y, width, height, gravity, ID, image, SLIME_HP,
 				ServerWorld.SLIME_TYPE);
 
 		// Set a random counter to start so not every slime does the exact same

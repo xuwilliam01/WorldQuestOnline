@@ -13,16 +13,17 @@ import javax.swing.Timer;
  *
  */
 public abstract class ServerNPC extends ServerObject implements ActionListener{
-
-	private boolean right = true;
+	
+	/**
+	 * Timer for the NPC in server frames
+	 */
 	private int counter;
-	private Random random;
 	
 	
 	/**
 	 * The range for the A.I. to follow the player. Change later
 	 */
-	private int targetRange = 1000;
+	private int targetRange = 500;
 	
 	//Max hp and current hp
 	private int maxHP;
@@ -44,7 +45,6 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	 */
 	public ServerNPC(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type) {
 		super(x, y, width, height, gravity,ID, image,type);
-		random = new Random();
 		this.maxHP = maxHP;
 		HP = maxHP;
 	}
@@ -62,7 +62,7 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	{
 		for(ServerPlayer player : ServerEngine.getListOfPlayers())
 		{
-			if(player.getHP() > 0 && findDistanceBetween(player) <= targetRange)
+			if(player.isAlive() && findDistanceBetween(player) <= targetRange)
 			{
 				setTarget(player);
 				break;
@@ -114,8 +114,16 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 		return HP;
 	}
 	
-	public void addDamage(int amount)
+	/**
+	 * Inflict a certain amount of damage to the npc and destroy if less than 0 hp
+	 * @param amount
+	 */
+	public void inflictDamage(int amount)
 	{
 		HP -= amount;
+		if (HP <= 0)
+		{
+			destroy();
+		}
 	}
 }

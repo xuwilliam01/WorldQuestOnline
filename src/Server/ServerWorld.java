@@ -70,6 +70,11 @@ public class ServerWorld
 
 	// Create list of objects to remove if doesn't exist anymore
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
+	
+	/**
+	 * The next time (in milliseconds) to spawn another enemy
+	 */
+	private long spawnTimer = 0;
 
 	/**
 	 * Constructor for server
@@ -89,14 +94,31 @@ public class ServerWorld
 	 */
 	public void addEnemies()
 	{
-		for (int no = 0; no < 8; no++)
+		for (int no = 0; no < 9; no++)
 		{
 			ServerNPC newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
 					engine.useNextID(),
-					"SLIME_0.png",
-					100);
+					"SLIME_0.png");
 			add(newEnemy);
+		}
+	}
+	
+	/**
+	 * Spawn enemies if the current time passes the spawn timer, then reset the timer
+	 */
+	public void spawnEnemies()
+	{
+		if (System.currentTimeMillis()>= spawnTimer)
+		{
+			int spawnLocation = (int)(Math.random() * 9);
+			
+			ServerNPC newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
+					GRAVITY,
+					engine.useNextID(),
+					"SLIME_0.png");
+			add(newEnemy);
+			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000);
 		}
 	}
 
@@ -160,23 +182,29 @@ public class ServerWorld
 				{
 					if (otherObject.exists())
 					{
-						if (otherObject.getType().equals(PLAYER_TYPE)
-								&& object.getType().equals(BULLET_TYPE)
-								&& otherObject.getID() != ((ServerProjectile) object)
-										.getOwnerID()
-								&& object.checkCollision(otherObject))
+						if (object.getType().equals(BULLET_TYPE))
 						{
-							((ServerPlayer) otherObject)
-									.damage(((ServerProjectile) object)
-											.getDamage());
-							((ServerProjectile) object).destroy();
+							if (otherObject.getType().equals(PLAYER_TYPE)
+									&& otherObject.getID() != ((ServerProjectile) object)
+											.getOwnerID()
+									&& object.checkCollision(otherObject))
+							{
+								((ServerPlayer) otherObject)
+										.inflictDamage(((ServerProjectile) object)
+												.getDamage());
+								((ServerProjectile) object).destroy();
+							}
+							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.checkCollision(otherObject))
+							{
+								((ServerNPC) otherObject).inflictDamage(((ServerProjectile) object).getDamage());
+								((ServerProjectile) object).destroy();
+							}
 						}
 					}
 				}
 				boolean moveVertical = true;
 				boolean moveHorizontal = true;
-				
-				
+
 				if (object.isSolid())
 				{
 					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
@@ -217,7 +245,6 @@ public class ServerWorld
 					{
 						endColumn = grid[0].length - 1;
 					}
-
 
 					if (vSpeed > 0)
 					{
@@ -366,8 +393,7 @@ public class ServerWorld
 						}
 					}
 				}
-				
-				
+
 				if (moveHorizontal)
 				{
 					object.setX(object.getX() + object.getHSpeed());
@@ -384,7 +410,8 @@ public class ServerWorld
 				}
 				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 				{
-					if (!moveHorizontal || !moveVertical && object.getType().equals(BULLET_TYPE))
+					if (!moveHorizontal || !moveVertical
+							&& object.getType().equals(BULLET_TYPE))
 					{
 						((ServerProjectile) object).destroy();
 					}
