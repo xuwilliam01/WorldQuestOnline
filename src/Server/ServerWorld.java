@@ -150,6 +150,7 @@ public class ServerWorld
 	 */
 	public synchronized void updateObjects()
 	{
+		spawnEnemies();
 
 		// Remove all the objects that no longer exist
 		for (ServerObject object : objectsToRemove)
