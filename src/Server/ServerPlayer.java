@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -94,6 +95,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	private boolean alive = true;
 
+	/**
+	 * Stores the inventory of the player 
+	 */
+	private ArrayList<ServerItem>  inventory = new ArrayList<ServerItem>();
+	
+	
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -501,4 +508,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 		this.alive = alive;
 	}
 
+	public ArrayList<ServerItem> getInventory()
+	{
+		return inventory;
+	}
+	
+	public void addItem(ServerItem item)
+	{
+		inventory.add(item);
+	}
 }

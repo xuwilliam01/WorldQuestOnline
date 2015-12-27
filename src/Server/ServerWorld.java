@@ -208,6 +208,12 @@ public class ServerWorld
 								((ServerProjectile) object).destroy();
 							}
 						}
+						//If a player collided with an item
+						else if(otherObject.getType().charAt(0) == 'I' && object.getType().equals(PLAYER_TYPE) && object.checkCollision(otherObject))
+						{
+							((ServerPlayer)object).addItem((ServerItem)otherObject);
+							otherObject.destroy();
+						}
 					}
 				}
 				boolean moveVertical = true;
