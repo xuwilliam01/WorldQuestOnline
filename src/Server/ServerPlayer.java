@@ -35,6 +35,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private BufferedReader input;
 	private ServerEngine engine;
 	private ServerWorld world;
+	
 
 	// ////////////////////////////////////////////////////////////////////
 	// X and Y coordinates will be changed once scrolling is implemented//
@@ -65,12 +66,27 @@ public class ServerPlayer extends ServerObject implements Runnable
 	/**
 	 * The initial speed the player jumps at
 	 */
-	private int jumpSpeed = -15;
-	
+	private int jumpSpeed = 15;
+
+	/**
+	 * The speed the player moves horizontally
+	 */
+	private int horizontalMovement = movementSpeed;
+
+	/**
+	 * The speed the player moves vertically
+	 */
+	private int verticalMovement = jumpSpeed;
+
 	/**
 	 * HP of the player
 	 */
 	private int HP = 100;
+	
+	/**
+	 * Whether or not the player is alive
+	 */
+	private boolean alive = true;
 
 	/**
 	 * Constructor for a player in the server
@@ -83,10 +99,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * @param ID
 	 * @param image
 	 */
-	public ServerPlayer(Socket socket, ServerEngine engine, double x, double y, int width,
-			int height, double gravity,int ID, String image)
+	public ServerPlayer(Socket socket, ServerEngine engine, double x, double y,
+			int width,
+			int height, double gravity, int ID, String image)
 	{
-		super(x, y, width, height, gravity, ID, image,ServerWorld.PLAYER_TYPE);
+		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE);
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -120,7 +137,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 		sendMap();
 
 		// Send the player's information
-		sendMessage(ID + " " + (int)(x+0.5) + " " + (int)(y+0.5) + " " + image);
+		sendMessage(ID + " " + (int) (x + 0.5) + " " + (int) (y + 0.5) + " "
+				+ image);
 	}
 
 	/**
@@ -149,14 +167,16 @@ public class ServerPlayer extends ServerObject implements Runnable
 	}
 
 	/**
-	 * Send to the client all the updated values (x and y must be rounded to closest integer)
+	 * Send to the client all the updated values (x and y must be rounded to
+	 * closest integer)
 	 */
 	public void update()
 	{
 		// Update object locations
 		for (ServerObject object : world.getObjects())
 		{
-			// Send the object's updated location if the player can see it within their screen
+			// Send the object's updated location if the player can see it
+			// within their screen
 			if (object.getX() < getX() + getWidth() + SCREEN_WIDTH
 					&& object.getX() + object.getWidth() > getX()
 							- SCREEN_WIDTH
@@ -166,8 +186,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 			{
 				if (object.exists())
 				{
-					queueMessage("O " + object.getID() + " " + ((int)(object.getX()+0.5))
-						+ " " + ((int)(object.getY()+0.5)) + " " + object.getImage());
+					queueMessage("O " + object.getID() + " "
+							+ ((int) (object.getX() + 0.5))
+							+ " " + ((int) (object.getY() + 0.5)) + " "
+							+ object.getImage());
 				}
 				else
 				{
@@ -175,7 +197,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 			}
 		}
-		
+
+		// Tell the user what hp he has
+		queueMessage("L " + HP);
+
 		// Signal a repaint
 		queueMessage("U");
 		flushWriter();
@@ -191,13 +216,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 			{
 				String command = input.readLine();
 
-				if (command.charAt(0)=='A')
+				if (command.charAt(0) == 'A')
 				{
 					performAction(Double.parseDouble((command.split(" "))[1]));
 				}
 				else if (command.equals("R"))
 				{
-					setHSpeed(movementSpeed);
+					setHSpeed(horizontalMovement);
 					setDirection('R');
 				}
 				else if (command.equals("!R"))
@@ -209,7 +234,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 				else if (command.equals("L"))
 				{
-					setHSpeed(-movementSpeed);
+					setHSpeed(-horizontalMovement);
 					setDirection('L');
 				}
 				else if (command.equals("!L"))
@@ -219,10 +244,28 @@ public class ServerPlayer extends ServerObject implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && isOnSurface())
+				else if (command.equals("U") && (isOnSurface() || !alive))
 				{
-					setVSpeed(jumpSpeed);
+					setVSpeed(-verticalMovement);
 					setOnSurface(false);
+				}
+				else if (command.equals("!U") && !alive)
+				{
+					if (getVSpeed() < 0)
+					{
+						setVSpeed(0);
+					}
+				}
+				else if (command.equals("D") && !alive)
+				{
+					setVSpeed(verticalMovement);
+				}
+				else if (command.equals("!D") && !alive)
+				{
+					if (getVSpeed() > 0)
+					{
+						setVSpeed(0);
+					}
 				}
 				else if (command.equals("P"))
 				{
@@ -251,33 +294,59 @@ public class ServerPlayer extends ServerObject implements Runnable
 		disconnected = true;
 		engine.removePlayer(this);
 	}
-	
+
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
 	public void performAction(double angle)
 	{
-		// Get the width and height of the image
-		int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
-		int bulletHeight = Images.getGameImage("BULLET.png").getHeight();
-		
-		// Shoot the projectile for testing
-		double speed = 30;
-		double x = getX() + getWidth()/2.0 - bulletWidth/2.0;
-		double y = getY() + getHeight()/2.0 - bulletHeight/2.0;
-		double inaccuracy = 0;
-		
-		if (getHSpeed()!=0)
+		if (alive)
 		{
-			inaccuracy += Math.PI/6;
+			// Get the width and height of the image
+			int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
+			int bulletHeight = Images.getGameImage("BULLET.png").getHeight();
+
+			// Shoot the projectile for testing
+			double speed = 30;
+			double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
+			double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
+			double inaccuracy = 0;
+
+			if (getHSpeed() != 0)
+			{
+				inaccuracy += Math.PI / 6;
+			}
+
+			if (getVSpeed() != 0)
+			{
+				inaccuracy += Math.PI / 3;
+			}
+
+			world.add(new ServerProjectile(x, y, -1, -1, 0, engine.useNextID(),
+					getID(), "BULLET.png", speed, angle, inaccuracy,
+					ServerWorld.BULLET_TYPE));
 		}
-		
-		if (getVSpeed()!=0)
+	}
+
+	/**
+	 * Damage the player a certain amount, and destroy if hp is 0 or below
+	 * @param amount
+	 */
+	public void damage(int amount)
+	{
+		HP -= amount;
+		if (HP <= 0)
 		{
-			inaccuracy += Math.PI/3;
+			setSolid(false);
+			setGravity(0);
+			alive = false;
+			setType(ServerWorld.PLAYER_GHOST_TYPE);
+			setImage("PLAYERGHOST_RIGHT.png");
+			setWidth(59);
+			setHeight(64);
+			
+			verticalMovement = movementSpeed;
 		}
-		
-		world.add(new ServerProjectile(x,y,-1,-1,0,engine.useNextID(),"BULLET.png",speed,angle,inaccuracy, ServerWorld.BULLET_TYPE));
 	}
 
 	/**
@@ -386,15 +455,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 	{
 		return yUpdated;
 	}
-	
+
 	public int getHP()
 	{
 		return HP;
-	}
-	
-	public void damage(int amount)
-	{
-		HP -= amount;
 	}
 
 }

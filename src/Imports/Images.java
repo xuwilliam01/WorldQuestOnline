@@ -71,6 +71,9 @@ public class Images
 			// Add the rest of the images normally
 			images.add(new GameImage("PLAYER_RIGHT.png", 32, 64));
 			images.add(new GameImage("PLAYER_LEFT.png", 32, 64));
+			images.add(new GameImage("PLAYERGHOST_RIGHT.png"));
+			images.add(new GameImage("PLAYERGHOST_LEFT.png"));
+			
 			images.add(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
@@ -94,6 +97,8 @@ public class Images
 				return image.getImage();
 			}
 		}
+		
+		System.out.println("Could not get image: " + name);
 		return null;
 	}
 

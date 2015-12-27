@@ -13,6 +13,16 @@ public class ServerProjectile extends ServerFlyingObject
 	private int counter;
 	
 	/**
+	 * The damage this projectile does
+	 */
+	private int damage;
+	
+	/**
+	 * The object that shot the projectile
+	 */
+	private int ownerID;
+	
+	/**
 	 * Constructor for a projectile
 	 * @param x
 	 * @param y
@@ -24,9 +34,16 @@ public class ServerProjectile extends ServerFlyingObject
 	 * @param speed
 	 * @param angle
 	 */
-	public ServerProjectile(double x, double y, int width, int height, double gravity, int ID, String image,double speed, double angle, double inaccuracy, String type)
+	public ServerProjectile(double x, double y, int width, int height, double gravity, int ID, int ownerID, String image,double speed, double angle, double inaccuracy, String type)
 	{
 		super (x,y,width,height,gravity,ID,image, speed, angle+ Math.random()*(inaccuracy) - inaccuracy/2,type);
+		this.ownerID = ownerID;
+		
+		if (type.equals(ServerWorld.BULLET_TYPE))
+		{
+			damage = BULLET_DAMAGE;
+		}
+		
 	}
 	
 	/**
@@ -38,6 +55,7 @@ public class ServerProjectile extends ServerFlyingObject
 		setSpeed(0);
 		setSolid(false);
 		setMapVisible(false);
+		damage = 0;
 		counter = 0;
 	}
 	
@@ -81,4 +99,25 @@ public class ServerProjectile extends ServerFlyingObject
 		counter++;
 		
 	}
+
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+
+	public int getOwnerID()
+	{
+		return ownerID;
+	}
+
+	public void setOwnerID(int ownerID)
+	{
+		this.ownerID = ownerID;
+	}
+	
 }

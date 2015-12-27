@@ -19,6 +19,7 @@ public class ServerWorld
 	public final static String EXPLOSION_TYPE = PROJECTILE_TYPE + "E";
 
 	public final static String PLAYER_TYPE = "C";
+	public final static String PLAYER_GHOST_TYPE = "CG";
 
 	public final static char NPC_TYPE = 'N';
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
@@ -153,6 +154,29 @@ public class ServerWorld
 			// This will remove the object a frame after it stops existing
 			if (object.exists())
 			{
+
+				// Check collisions with other objects
+				for (ServerObject otherObject : objects)
+				{
+					if (otherObject.exists())
+					{
+						if (otherObject.getType().equals(PLAYER_TYPE)
+								&& object.getType().equals(BULLET_TYPE)
+								&& otherObject.getID() != ((ServerProjectile) object)
+										.getOwnerID()
+								&& object.checkCollision(otherObject))
+						{
+							((ServerPlayer) otherObject)
+									.damage(((ServerProjectile) object)
+											.getDamage());
+							((ServerProjectile) object).destroy();
+						}
+					}
+				}
+				boolean moveVertical = true;
+				boolean moveHorizontal = true;
+				
+				
 				if (object.isSolid())
 				{
 					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
@@ -194,8 +218,6 @@ public class ServerWorld
 						endColumn = grid[0].length - 1;
 					}
 
-					boolean moveVertical = true;
-					boolean moveHorizontal = true;
 
 					if (vSpeed > 0)
 					{
@@ -343,15 +365,16 @@ public class ServerWorld
 							object.setHSpeed(0);
 						}
 					}
-
-					if (moveHorizontal)
-					{
-						object.setX(x1 + hSpeed);
-					}
-					if (moveVertical)
-					{
-						object.setY(y1 + vSpeed);
-					}
+				}
+				
+				
+				if (moveHorizontal)
+				{
+					object.setX(object.getX() + object.getHSpeed());
+				}
+				if (moveVertical)
+				{
+					object.setY(object.getY() + object.getVSpeed());
 				}
 
 				// Update specific objects
@@ -361,15 +384,13 @@ public class ServerWorld
 				}
 				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 				{
-					if ((object.getHSpeed() == 0 || object.getVSpeed() == 0)
-							&& object.getType().equals(BULLET_TYPE))
+					if (!moveHorizontal || !moveVertical && object.getType().equals(BULLET_TYPE))
 					{
 						((ServerProjectile) object).destroy();
 					}
 					else if (object.getType().equals(EXPLOSION_TYPE))
 					{
 						((ServerProjectile) object).updateExplosion();
-						System.out.println(object.getHSpeed());
 					}
 				}
 

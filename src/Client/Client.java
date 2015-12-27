@@ -29,7 +29,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
-
+	
 	/**
 	 * The current message that the client is sending to the server
 	 */
@@ -49,6 +49,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	 * The framerate of the client
 	 */
 	public final static int FRAME_DELAY = 0;
+	
+	/**
+	 * The player's current HP
+	 */
+	private int HP;
 
 	/**
 	 * Constructor for the client
@@ -80,6 +85,8 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 		setFocusable(true);
 		requestFocusInWindow();
+		
+		HP = 100;
 
 		// Set up the input
 		try
@@ -160,7 +167,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 					for (int token = 0; token < tokens.length; token++)
 					{
 						// If our player has moved
-						if (tokens[token].equals("U"))
+						if (tokens[token].equals("L"))
+						{
+							HP = Integer.parseInt(tokens[++token]);
+						}
+						else if (tokens[token].equals("U"))
 						{
 							repaint();
 						}
@@ -269,6 +280,16 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 		graphics.setColor(Color.black);
 		graphics.drawString(pingString, 20, 20);
+		if (HP > 0)
+		{
+		graphics.setColor(Color.red);
+		graphics.drawString("Health: " + HP, 20, 40);
+		}
+		else
+		{
+			graphics.setColor(Color.black);
+			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 40);
+		}
 	}
 
 	@Override
@@ -361,6 +382,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			int yDist = event.getY() - SCREEN_HEIGHT/2;
 			
 			double angle = Math.atan2(yDist, xDist);
+			
 			currentMessage += " " + angle;
 			
 			output.println(currentMessage);
