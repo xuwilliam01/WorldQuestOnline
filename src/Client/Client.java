@@ -190,11 +190,18 @@ public class Client extends JPanel implements KeyListener, MouseListener
 							else if (world.contains(id))
 							{
 								ClientObject otherObject = world.get(id);
+								if (otherObject!=null)
+								{
 								otherObject.setX(Integer
 										.parseInt(tokens[++token]));
 								otherObject.setY(Integer
 										.parseInt(tokens[++token]));
 								otherObject.setImage(tokens[++token]);
+								}
+								else
+								{
+									world.removeID(id);
+								}
 							}
 							else
 							{
