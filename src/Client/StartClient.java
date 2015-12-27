@@ -30,7 +30,6 @@ public class StartClient
 					serverIP = "192.168.0.10";
 					port = 5000;
 				}
-				else
 				{
 					port = Integer.parseInt(JOptionPane
 							.showInputDialog("Please enter the port of the server"));

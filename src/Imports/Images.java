@@ -69,11 +69,11 @@ public class Images
 			}
 
 			// Add the rest of the images normally
-			images.add(new GameImage("KNIGHT_RIGHT.png",55,55));
-			images.add(new GameImage("KNIGHT_LEFT.png",55,55));
+			images.add(new GameImage("KNIGHT_RIGHT.png"));
+			images.add(new GameImage("KNIGHT_LEFT.png"));
 			
-			images.add(new GameImage("CYCLOPS_RIGHT.png", 80, 100));
-			images.add(new GameImage("CYCLOPS_LEFT.png", 80, 100));
+			images.add(new GameImage("CYCLOPS_RIGHT.png", 120, 122));
+			images.add(new GameImage("CYCLOPS_LEFT.png", 120, 122));
 			
 			images.add(new GameImage("GIRL_RIGHT.png"));
 			images.add(new GameImage("GIRL_LEFT.png"));
