@@ -78,10 +78,10 @@ public class ServerSlime extends ServerNPC
 		}
 		else
 		{
-			if (getX() - getTarget().getX() < -getTarget().getWidth()
+			if ((getX()+getWidth()) - (getTarget().getX() + getTarget().getWidth()/2) < 0
 					&& !isOnSurface())
 				setHSpeed(speed);
-			else if (getX() - getTarget().getX() > getTarget().getWidth()
+			else if (getX() - (getTarget().getX() + getTarget().getWidth()/2) > 0
 					&& !isOnSurface())
 				setHSpeed(-speed);
 			else
