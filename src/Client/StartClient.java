@@ -30,6 +30,7 @@ public class StartClient
 					serverIP = "192.168.0.10";
 					port = 5000;
 				}
+				else
 				{
 					port = Integer.parseInt(JOptionPane
 							.showInputDialog("Please enter the port of the server"));
@@ -52,12 +53,14 @@ public class StartClient
 								.showInputDialog("Please enter the port of the server"));
 					}
 				}
+				JOptionPane.showMessageDialog(null, "You have joined #1");
 				ClientFrame myFrame = new ClientFrame();
 				Client client = new Client(mySocket);
 				myFrame.add(client);
 				client.initialize();
 				client.revalidate();
 				myFrame.setVisible(true);
+				JOptionPane.showMessageDialog(null, "You have joined #2");
 			}
 		});
 

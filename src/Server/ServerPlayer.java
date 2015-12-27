@@ -217,10 +217,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 			}
 		}
-		
-		
+
 		// Try to move the player in the direction that the key is holding
-		setHSpeed(movingDirection*horizontalMovement);
+		if (movingDirection != 0)
+		{
+			setHSpeed(movingDirection * horizontalMovement);
+		}
 
 		// Tell the user what hp he has
 		queueMessage("L " + HP);
@@ -499,5 +501,4 @@ public class ServerPlayer extends ServerObject implements Runnable
 		this.alive = alive;
 	}
 
-	
 }
