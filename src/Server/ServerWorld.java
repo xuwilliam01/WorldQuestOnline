@@ -118,7 +118,7 @@ public class ServerWorld
 					engine.useNextID(),
 					"SLIME_0.png");
 			add(newEnemy);
-			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000);
+			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000 + 5000);
 		}
 	}
 
