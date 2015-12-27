@@ -57,7 +57,7 @@ public class Server implements Runnable
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
 
-		while (noOfPlayers < 4)
+		while (noOfPlayers < 999)
 		{
 			try
 			{
