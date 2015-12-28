@@ -41,7 +41,6 @@ public class ServerWorld
 	public final static String HP_100 = HP_TYPE+"100";
 
 
-
 	/**
 	 * Grid of tiles
 	 */

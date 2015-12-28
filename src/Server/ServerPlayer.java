@@ -377,14 +377,13 @@ public class ServerPlayer extends ServerObject implements Runnable
 			for(ServerItem item : inventory)
 			{
 				item.setX(getX());
-				item.setY(getY());
+				item.setY(getY()+5);
 				item.makeExist();
 				world.add(item);
+				item.setOnSurface(false);
 				item.setVSpeed(-Math.random()*30-5);
 
-				int direction  = 1;
-				if(Math.random() < 0.5)
-					direction = -1;
+				int direction = Math.random() < 0.5 ? -1 : 1;
 				item.setHSpeed(direction*(Math.random()*5 + 3));
 			}
 			
