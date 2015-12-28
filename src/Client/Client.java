@@ -29,7 +29,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
-	
+
 	/**
 	 * The current message that the client is sending to the server
 	 */
@@ -49,7 +49,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	 * The framerate of the client
 	 */
 	public final static int FRAME_DELAY = 0;
-	
+
 	/**
 	 * The player's current HP
 	 */
@@ -59,7 +59,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	 * The player's inventory
 	 */
 	ClientInventory inventory;
-	
+
+	/**
+	 * Used to clear inventory only once when player dies
+	 */
+	boolean justDied = true;
 	/**
 	 * Constructor for the client
 	 */
@@ -198,11 +202,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 								ClientObject otherObject = world.get(id);
 								if (otherObject!=null)
 								{
-								otherObject.setX(Integer
-										.parseInt(tokens[++token]));
-								otherObject.setY(Integer
-										.parseInt(tokens[++token]));
-								otherObject.setImage(tokens[++token]);
+									otherObject.setX(Integer
+											.parseInt(tokens[++token]));
+									otherObject.setY(Integer
+											.parseInt(tokens[++token]));
+									otherObject.setImage(tokens[++token]);
 								}
 								else
 								{
@@ -301,11 +305,16 @@ public class Client extends JPanel implements KeyListener, MouseListener
 		graphics.drawString(pingString, 20, 20);
 		if (HP > 0)
 		{
-		graphics.setColor(Color.red);
-		graphics.drawString("Health: " + HP, 20, 40);
+			graphics.setColor(Color.red);
+			graphics.drawString("Health: " + HP, 20, 40);
 		}
 		else
 		{
+			if(justDied)
+			{
+				inventory.clear();
+				justDied = false;
+			}
 			graphics.setColor(Color.black);
 			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 40);
 		}
@@ -399,11 +408,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			currentMessage = "A";
 			int xDist = event.getX() - SCREEN_WIDTH/2;
 			int yDist = event.getY() - SCREEN_HEIGHT/2;
-			
+
 			double angle = Math.atan2(yDist, xDist);
-			
+
 			currentMessage += " " + angle;
-			
+
 			output.println(currentMessage);
 			output.flush();
 		}
@@ -416,7 +425,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 				&& !currentMessage.equals("!A"))
 		{
 			currentMessage = "!A";
-			
+
 			output.println(currentMessage);
 			output.flush();
 		}
