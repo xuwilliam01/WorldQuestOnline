@@ -97,10 +97,10 @@ public class Images
 			images.add(new GameImage("BULLET.png"));
 
 			images.add(new GameImage("HP_POTION.png",15,15));
-			images.add(new GameImage("HP_POTION_INVENTORY.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
+			images.add(new GameImage("HP_POTION_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
 			
 			images.add(new GameImage("SWORD.png",70,30));
-			images.add(new GameImage("SWORD_INVENTORY.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
+			images.add(new GameImage("SWORD_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
 		}
 	}
 

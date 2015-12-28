@@ -2,7 +2,8 @@ package Client;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -10,7 +11,7 @@ import javax.swing.JButton;
 
 import Imports.Images;
 
-public class ClientItem extends JButton implements ActionListener{
+public class ClientItem extends JButton implements MouseListener{
 
 	private Image image;
 	private String imageName;
@@ -18,17 +19,17 @@ public class ClientItem extends JButton implements ActionListener{
 
 	public ClientItem(String imageName, int row, int col)
 	{
-		super(new ImageIcon(Images.getImage(imageName.substring(0,imageName.length()-4)+"_INVENTORY.png")));
+		super(new ImageIcon(Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png")));
 		
 		this.imageName = imageName;
-		image = Images.getImage(imageName.substring(0,imageName.length()-4)+"_INVENTORY.png");
+		image = Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png");
 		
 		setSize(Images.INVENTORY_IMAGE_SIZE,Images.INVENTORY_IMAGE_SIZE);
 		setLocation(col*Images.INVENTORY_IMAGE_SIZE+(col+1)*20,row*Images.INVENTORY_IMAGE_SIZE+row*20+50);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
-		addActionListener(this);
 		setFocusable(false);
+		addMouseListener(this);
 	}
 	
 	public Image getImage() {
@@ -55,10 +56,42 @@ public class ClientItem extends JButton implements ActionListener{
 		this.selected = selected;
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		selected = true;
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
-	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(e.getButton()== MouseEvent.BUTTON1)
+		{
+			selected = true;
+			System.out.println("Selected this item");
+		}
+		else if(e.getButton() == MouseEvent.BUTTON3)
+		{
+			System.out.println("Dropped this item");
+			//Drop item
+		}
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
