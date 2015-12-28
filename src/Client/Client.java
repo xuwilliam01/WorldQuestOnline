@@ -56,13 +56,19 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	private int HP;
 
 	/**
+	 * The player's inventory
+	 */
+	ClientInventory inventory;
+	
+	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket)
+	public Client(Socket socket, ClientInventory inventory)
 	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
+		this.inventory = inventory;
 	}
 
 	/**
@@ -85,6 +91,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 		setFocusable(true);
 		requestFocusInWindow();
+		setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
 		HP = 100;
 
 		// Set up the input
@@ -221,6 +228,12 @@ public class Client extends JPanel implements KeyListener, MouseListener
 						else if (tokens[token].equals("R"))
 						{
 							world.remove(Integer.parseInt(tokens[++token]));
+						}
+						else if(tokens[token].equals("I"))
+						{
+							System.out.println("Received an item");
+							inventory.addItem(tokens[++token]);
+							inventory.repaint();
 						}
 					}
 				}
