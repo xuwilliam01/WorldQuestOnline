@@ -56,12 +56,14 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 	private int newHeight;
 	private int newWidth;
 
+	//File
+	String fileName;
 	/**
 	 * Table to reference objects by character
 	 */
 	private CreatorObject[] tiles = new CreatorObject[256];
 
-	public CreatorWorld() throws NumberFormatException, IOException
+	public CreatorWorld(String fileName) throws NumberFormatException, IOException
 	{
 		addKeyListener(this);
 		addMouseListener(this);
@@ -73,8 +75,15 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		requestFocusInWindow();
 		setSize(WIDTH,HEIGHT);
 
-
-		importGrid();
+		this.fileName = fileName;
+		
+		//Check if the file already exists
+		File file = new File(fileName);
+		if(file.exists() && !file.isDirectory()) 
+			importGrid();
+		else
+			clearGrid();
+		
 		Images.importImages();
 		readImages();
 
@@ -82,14 +91,14 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		scrollTimer = new Timer(15,this);
 		scrollTimer.start();	
 	}
-	
+
 	public void importGrid() throws IOException
 	{
-		BufferedReader br = new BufferedReader(new FileReader(new File("Resources","NewWorld.txt")));
+		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",fileName)));
 		String line = br.readLine();
 		String[] tokens = line.split(" ");
 		grid = new char[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])];
-		
+
 		for(int row = 0; row < grid.length;row++)
 		{
 			line = br.readLine();
@@ -98,6 +107,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		}
 		br.close();
 	}
+
 	public void clearGrid()
 	{
 		for(int row = 0; row < grid.length;row++)
@@ -218,7 +228,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 
 	public void save() throws FileNotFoundException
 	{
-		PrintWriter output = new PrintWriter(new File("Resources","NewWorld.txt"));
+		PrintWriter output = new PrintWriter(new File("Resources",fileName));
 		output.println(grid.length+" "+grid[0].length);
 		for(int row = 0; row < grid.length;row++)
 		{
