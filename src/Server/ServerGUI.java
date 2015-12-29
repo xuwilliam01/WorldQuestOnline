@@ -231,8 +231,10 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public void update()
 	{
 		// Move and repaint
+		requestFocusInWindow();
 		movePos();
 		repaint();
+		
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 	public static final int CENTRE_X = WIDTH/2;
 	public static final int CENTRE_Y = HEIGHT/2;
 
-	private final int SCROLL_SPEED = 20;
+	private final int SCROLL_SPEED = 16;
 
 	private char[][] grid = new char[HEIGHT/TILE_SIZE + 1][WIDTH/TILE_SIZE+1];	
 	private int posY = 200;
@@ -74,7 +74,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		setSize(WIDTH,HEIGHT);
 
 
-		clearGrid();
+		importGrid();
 		Images.importImages();
 		readImages();
 
@@ -82,7 +82,22 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		scrollTimer = new Timer(15,this);
 		scrollTimer.start();	
 	}
-
+	
+	public void importGrid() throws IOException
+	{
+		BufferedReader br = new BufferedReader(new FileReader(new File("Resources","NewWorld.txt")));
+		String line = br.readLine();
+		String[] tokens = line.split(" ");
+		grid = new char[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])];
+		
+		for(int row = 0; row < grid.length;row++)
+		{
+			line = br.readLine();
+			for(int col = 0; col < grid[0].length;col++)
+				grid[row][col] = line.charAt(col);
+		}
+		br.close();
+	}
 	public void clearGrid()
 	{
 		for(int row = 0; row < grid.length;row++)

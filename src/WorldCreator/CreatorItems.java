@@ -55,13 +55,13 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 		updateWidth = new JButton("Change Width "+"(Current: "+world.getGrid()[0].length+")");
 		updateWidth.setSize(225,50);
-		updateWidth.setLocation(WIDTH-250,CreatorWorld.HEIGHT-200);
+		updateWidth.setLocation(WIDTH-250,CreatorWorld.HEIGHT-160);
 		updateWidth.addActionListener(this);
 		add(updateWidth);
 
 		updateHeight = new JButton("Change Height "+"(Current: "+world.getGrid().length+")");
 		updateHeight.setSize(225,50);
-		updateHeight.setLocation(WIDTH-250,CreatorWorld.HEIGHT-300);
+		updateHeight.setLocation(WIDTH-250,CreatorWorld.HEIGHT-220);
 		updateHeight.addActionListener(this);
 		add(updateHeight);
 
