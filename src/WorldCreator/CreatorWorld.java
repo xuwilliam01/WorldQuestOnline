@@ -24,12 +24,12 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 
 	public static final int CENTRE_X = WIDTH/2;
 	public static final int CENTRE_Y = HEIGHT/2;
-	
+
 	private final int SCROLL_SPEED = 20;
 
 	private char[][] grid = new char[HEIGHT/TILE_SIZE + 1][WIDTH/TILE_SIZE+1];
-	private int posY = 0;
-	private int posX = 0;
+	private int posY = 200;
+	private int posX = 200;
 
 	//Scrolling variables
 	private boolean up = false;
@@ -37,6 +37,8 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 	private boolean right = false;
 	private boolean left = false;
 	private Timer scrollTimer;
+
+	private char selectedTile = '-';
 	/**
 	 * Table to reference objects by character
 	 */
@@ -44,6 +46,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 
 	public CreatorWorld() throws NumberFormatException, IOException
 	{
+		addKeyListener(this);
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
@@ -54,8 +57,8 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 		clearGrid();
 		Images.importImages();
 		readImages();
-		
-		addKeyListener(this);
+
+
 		scrollTimer = new Timer(15,this);
 		scrollTimer.start();
 	}
@@ -65,6 +68,8 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 		for(int row = 0; row < grid.length;row++)
 			for(int col = 0; col < grid[row].length;col++)
 				grid[row][col] = ' ';
+
+		grid[5][5] = '1';
 	}
 
 	public void readImages() throws NumberFormatException, IOException
@@ -74,7 +79,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 		for(int tile = 0; tile < numTiles;tile++)
 		{
 			String line = br.readLine();
-			tiles[line.charAt(0)] = new CreatorObject(line.charAt(0),line.substring(2));
+			tiles[line.charAt(0)] = new CreatorObject(line.charAt(0),line.substring(2),this);
 		}
 		br.close();
 	}
@@ -124,15 +129,37 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 			posY -= SCROLL_SPEED;
 		else if(down)
 			posY += SCROLL_SPEED;
-		
+
 		if(right)
 			posX += SCROLL_SPEED;
 		else if(left)
 			posX -= SCROLL_SPEED;
+
+		repaint();
 	}
-	@Override
+
+
+	public CreatorObject[] getTiles() {
+		return tiles;
+	}
+
+	public void setTiles(CreatorObject[] tiles) {
+		this.tiles = tiles;
+	}
+
+
+	public char getSelectedTile() {
+		return selectedTile;
+	}
+
+	public void setSelectedTile(char selectedTile) {
+
+		if(this.selectedTile != '-')
+			tiles[this.selectedTile].deselect();
+		this.selectedTile = selectedTile;
+	}
+
 	public void keyPressed(KeyEvent event) {
-		System.out.println("working");
 		if(event.getKeyCode() == KeyEvent.VK_UP)
 			up = true;
 		else if(event.getKeyCode() == KeyEvent.VK_DOWN)
@@ -143,7 +170,6 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 			left = true;
 	}
 
-	@Override
 	public void keyReleased(KeyEvent event) {
 		if(event.getKeyCode() == KeyEvent.VK_UP)
 			up = false;
@@ -153,21 +179,18 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 			right = false;
 		else if(event.getKeyCode() == KeyEvent.VK_LEFT)
 			left = false;
-		
+
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		update();
-		System.out.println(posX+" "+posY);
-		
+		requestFocusInWindow();		
 	}
 }
 
