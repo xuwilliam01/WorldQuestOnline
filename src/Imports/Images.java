@@ -90,7 +90,7 @@ public class Images
 			images.add(new GameImage("BULLET.png"));
 			
 			images.add(new GameImage("HP_POTION.png",15,15));
-			images.add(new GameImage("SWORD.png",70,30));
+			images.add(new GameImage("SWORD.png",120,30));
 		}
 	}
 
