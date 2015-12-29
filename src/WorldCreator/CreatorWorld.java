@@ -2,12 +2,12 @@ package WorldCreator;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -37,8 +37,9 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 	private boolean right = false;
 	private boolean left = false;
 	private Timer scrollTimer;
-
 	private char selectedTile = '-';
+	private int[] selectedBlock = null;
+
 	/**
 	 * Table to reference objects by character
 	 */
@@ -121,6 +122,17 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 						null);
 			}
 		}
+
+		if(selectedTile != '-' && selectedBlock != null && selectedBlock[0] >= startRow && selectedBlock[0] <= endRow && selectedBlock[1] >= startColumn && selectedBlock[1] <= endColumn)
+		{
+			graphics.setColor(Color.white);
+			graphics.drawRect((int) (CENTRE_X + selectedBlock[1]
+					* TILE_SIZE - posX) + 1,
+			(int) (CENTRE_Y + selectedBlock[0]
+					* TILE_SIZE - posY) + 1,TILE_SIZE,TILE_SIZE);
+
+		}
+
 	}
 
 	public void update()
@@ -138,7 +150,12 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 		repaint();
 	}
 
-
+	public int[] getRowCol(int x, int y)
+	{
+		int col = (x - CENTRE_X + posX)/TILE_SIZE;
+		int row = (y - CENTRE_Y + posY)/TILE_SIZE;
+		return new int[]{row,col};
+	}
 	public CreatorObject[] getTiles() {
 		return tiles;
 	}
@@ -179,8 +196,6 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 			right = false;
 		else if(event.getKeyCode() == KeyEvent.VK_LEFT)
 			left = false;
-
-
 	}
 
 	@Override
@@ -189,6 +204,7 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		selectedBlock = getRowCol((int)(MouseInfo.getPointerInfo().getLocation().getX()- this.getLocationOnScreen().getX()),(int)(MouseInfo.getPointerInfo().getLocation().getY()-this.getLocationOnScreen().getY()));
 		update();
 		requestFocusInWindow();		
 	}
