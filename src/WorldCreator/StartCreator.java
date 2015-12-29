@@ -7,7 +7,7 @@ public class StartCreator {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		CreatorFrame frame = new CreatorFrame();
 		CreatorWorld world = new CreatorWorld();
-		CreatorItems items = new CreatorItems(world.getTiles());
+		CreatorItems items = new CreatorItems(world);
 		world.setLocation(0,0);
 		items.setLocation(CreatorWorld.WIDTH,0);
 		

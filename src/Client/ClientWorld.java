@@ -112,7 +112,7 @@ public class ClientWorld
 			startColumn = 0;
 		}
 		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + playerWidth) / tileSize);
-		if (endColumn >= grid.length)
+		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;
 		}

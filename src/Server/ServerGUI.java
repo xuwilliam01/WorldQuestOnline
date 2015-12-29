@@ -102,7 +102,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 			startColumn = 0;
 		}
 		int endColumn = (int) ((CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
-		if (endColumn >= grid.length)
+		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;
 		}

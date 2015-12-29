@@ -40,6 +40,7 @@ public class ServerWorld
 	public final static String HP_75 = HP_TYPE+"75";
 	public final static String HP_100 = HP_TYPE+"100";
 
+	public final static String GRID_FILE = "NewWorld.txt";
 
 	/**
 	 * Grid of tiles
@@ -145,7 +146,7 @@ public class ServerWorld
 	public void newWorld() throws IOException
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
-				"Resources", "World.txt")));
+				"Resources", GRID_FILE)));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
