@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Client.ClientInventory;
 import Server.ServerWorld;
 
 /**
@@ -23,10 +24,16 @@ public class Images
 	public static final String IMAGE_FORMAT = ".png";
 
 	/**
+	 * The size the image will be in the inventory
+	 */
+	public static final int INVENTORY_IMAGE_SIZE = ClientInventory.INVENTORY_WIDTH/(ClientInventory.WIDTH+1)-20;
+
+
+	/**
 	 * Array list of the game images
 	 */
 	public static ArrayList<GameImage> images;
-	
+
 	/**
 	 * Array list of lists of images (USE LATER)
 	 */
@@ -53,7 +60,7 @@ public class Images
 					images.add(new GameImage("SLIME_" + no + IMAGE_FORMAT,
 							sheet.getSubimage(no*19, 0, 19, 17),38,34));
 				}
-				
+
 				sheet = ImageIO.read(new File(
 						"EXPLOSION_SHEET.png"));
 				for (int no = 0; no < 7; no++)
@@ -71,26 +78,29 @@ public class Images
 			// Add the rest of the images normally
 			images.add(new GameImage("KNIGHT_RIGHT.png"));
 			images.add(new GameImage("KNIGHT_LEFT.png"));
-			
+
 			images.add(new GameImage("CYCLOPS_RIGHT.png", 120, 122));
 			images.add(new GameImage("CYCLOPS_LEFT.png", 120, 122));
-			
+
 			images.add(new GameImage("GIRL_RIGHT.png"));
 			images.add(new GameImage("GIRL_LEFT.png"));
-			
-			
+
+
 			images.add(new GameImage("PLAYERGHOST_RIGHT.png"));
 			images.add(new GameImage("PLAYERGHOST_LEFT.png"));
-			
+
 			images.add(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
-			
+
 			images.add(new GameImage("HP_POTION.png",15,15));
-			images.add(new GameImage("SWORD.png",120,30));
+			images.add(new GameImage("HP_POTION_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
+			
+			images.add(new GameImage("SWORD.png",70,30));
+			images.add(new GameImage("SWORD_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
 		}
 	}
 
@@ -108,7 +118,7 @@ public class Images
 				return image.getImage();
 			}
 		}
-		
+
 		System.out.println("Could not get image: " + name);
 		return null;
 	}

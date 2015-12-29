@@ -533,5 +533,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public void addItem(ServerItem item)
 	{
 		inventory.add(item);
+		queueMessage("I "+item.getImage());
 	}
 }

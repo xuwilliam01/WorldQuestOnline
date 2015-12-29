@@ -49,20 +49,30 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	 * The framerate of the client
 	 */
 	public final static int FRAME_DELAY = 0;
-	
+
 	/**
 	 * The player's current HP
 	 */
 	private int HP;
 
 	/**
+	 * The player's inventory
+	 */
+	ClientInventory inventory;
+
+	/**
+	 * Used to clear inventory only once when player dies
+	 */
+	boolean justDied = true;
+	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket)
+	public Client(Socket socket, ClientInventory inventory)
 	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
+		this.inventory = inventory;
 	}
 
 	/**
@@ -85,6 +95,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 
 		setFocusable(true);
 		requestFocusInWindow();
+		setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
 		HP = 100;
 
 		// Set up the input
@@ -191,11 +202,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 								ClientObject otherObject = world.get(id);
 								if (otherObject!=null)
 								{
-								otherObject.setX(Integer
-										.parseInt(tokens[++token]));
-								otherObject.setY(Integer
-										.parseInt(tokens[++token]));
-								otherObject.setImage(tokens[++token]);
+									otherObject.setX(Integer
+											.parseInt(tokens[++token]));
+									otherObject.setY(Integer
+											.parseInt(tokens[++token]));
+									otherObject.setImage(tokens[++token]);
 								}
 								else
 								{
@@ -221,6 +232,12 @@ public class Client extends JPanel implements KeyListener, MouseListener
 						else if (tokens[token].equals("R"))
 						{
 							world.remove(Integer.parseInt(tokens[++token]));
+						}
+						else if(tokens[token].equals("I"))
+						{
+							System.out.println("Received an item");
+							inventory.addItem(tokens[++token]);
+							inventory.repaint();
 						}
 					}
 				}
@@ -288,11 +305,16 @@ public class Client extends JPanel implements KeyListener, MouseListener
 		graphics.drawString(pingString, 20, 20);
 		if (HP > 0)
 		{
-		graphics.setColor(Color.red);
-		graphics.drawString("Health: " + HP, 20, 40);
+			graphics.setColor(Color.red);
+			graphics.drawString("Health: " + HP, 20, 40);
 		}
 		else
 		{
+			if(justDied)
+			{
+				inventory.clear();
+				justDied = false;
+			}
 			graphics.setColor(Color.black);
 			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 40);
 		}
@@ -386,11 +408,11 @@ public class Client extends JPanel implements KeyListener, MouseListener
 			currentMessage = "A";
 			int xDist = event.getX() - SCREEN_WIDTH/2;
 			int yDist = event.getY() - SCREEN_HEIGHT/2;
-			
+
 			double angle = Math.atan2(yDist, xDist);
-			
+
 			currentMessage += " " + angle;
-			
+
 			output.println(currentMessage);
 			output.flush();
 		}
@@ -403,7 +425,7 @@ public class Client extends JPanel implements KeyListener, MouseListener
 				&& !currentMessage.equals("!A"))
 		{
 			currentMessage = "!A";
-			
+
 			output.println(currentMessage);
 			output.flush();
 		}

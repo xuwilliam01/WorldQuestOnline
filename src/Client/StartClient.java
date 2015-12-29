@@ -54,10 +54,17 @@ public class StartClient
 					}
 				}
 				ClientFrame myFrame = new ClientFrame();
-				Client client = new Client(mySocket);
+				
+				ClientInventory inventory = new ClientInventory();
+				Client client = new Client(mySocket,inventory);
+				client.setLocation(0,0);
+				inventory.setLocation(Client.SCREEN_WIDTH,0);
+				
 				myFrame.add(client);
+				myFrame.add(inventory);
 				client.initialize();
 				client.revalidate();
+				inventory.revalidate();
 				myFrame.setVisible(true);
 			}
 		});
