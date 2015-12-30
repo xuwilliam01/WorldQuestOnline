@@ -257,7 +257,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
-					setDirection('R');
+					
 				}
 				else if (command.equals("!R"))
 				{
@@ -271,7 +271,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 				{
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
-					setDirection('L');
 				}
 				else if (command.equals("!L"))
 				{
@@ -303,6 +302,14 @@ public class ServerPlayer extends ServerObject implements Runnable
 					{
 						setVSpeed(0);
 					}
+				}
+				else if (command.equals("DR"))
+				{
+					setDirection('R');
+				}
+				else if (command.equals("DL"))
+				{
+					setDirection('L');
 				}
 				else if (command.equals("P"))
 				{

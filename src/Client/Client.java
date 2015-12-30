@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 
-public class Client extends JPanel implements KeyListener, MouseListener
+public class Client extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -58,12 +59,18 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	/**
 	 * The player's inventory
 	 */
-	ClientInventory inventory;
+	private ClientInventory inventory;
 
 	/**
 	 * Used to clear inventory only once when player dies
 	 */
-	boolean justDied = true;
+	private boolean justDied = true;
+	
+	/**
+	 * The direction that the player is facing
+	 */
+	private char direction;
+	
 	/**
 	 * Constructor for the client
 	 */
@@ -154,6 +161,9 @@ public class Client extends JPanel implements KeyListener, MouseListener
 		// Add listeners AT THE END
 		addKeyListener(this);
 		addMouseListener(this);
+		addMouseMotionListener(this);
+		
+		direction = 'R';
 	}
 
 	/**
@@ -453,6 +463,43 @@ public class Client extends JPanel implements KeyListener, MouseListener
 	public void mouseExited(MouseEvent arg0)
 	{
 
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent event)
+	{
+		// Make the player face the direction of the mouse
+		if (event.getX()>SCREEN_WIDTH/2 && direction!= 'R')
+		{
+			output.println("DR");
+			output.flush();
+			direction = 'R';
+		}
+		else if (event.getX()<SCREEN_WIDTH/2 && direction!= 'L')
+		{
+			output.println("DL");
+			output.flush();
+			direction = 'L';
+		}
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent event)
+	{
+		// Make the player face the direction of the mouse
+		if (event.getX()>SCREEN_WIDTH/2 && direction!= 'R')
+		{
+			output.println("DR");
+			output.flush();
+			direction = 'R';
+		}
+		else if (event.getX()<SCREEN_WIDTH/2 && direction!= 'L')
+		{
+			output.println("DL");
+			output.flush();
+			direction = 'L';
+		}
 	}
 
 }
