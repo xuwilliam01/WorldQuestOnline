@@ -2,18 +2,17 @@ package Server;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 public class ServerGUI extends JPanel implements KeyListener,
-		MouseWheelListener
+		MouseWheelListener, MouseListener, MouseMotionListener
 {
 
 	private ServerWorld world;
@@ -53,6 +52,16 @@ public class ServerGUI extends JPanel implements KeyListener,
 	 */
 	public static final int CENTRE_Y = ServerPlayer.SCREEN_HEIGHT
 			/ ServerFrame.FRAME_FACTOR / 2;
+	
+	/**
+	 * The x-coordinate of where the mouse began to be dragged from
+	 */
+	private int dragSourceX;
+	
+	/**
+	 * The y-coordinate of where the mouse began to be dragged from
+	 */
+	private int dragSourceY;
 
 	// Movement booleans
 	private boolean up = false;
@@ -79,6 +88,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Add key, mouse wheel listener and repaint timer
 		addKeyListener(this);
 		addMouseWheelListener(this);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -250,5 +261,59 @@ public class ServerGUI extends JPanel implements KeyListener,
 		{
 			objectFactor /= (1.1 * (-notches));
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent event)
+	{
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event)
+	{
+		if (event.getButton() == MouseEvent.BUTTON1)
+		{
+			dragSourceX = event.getX();
+			dragSourceY = event.getY();
+		}
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent event)
+	{
+			posX -= event.getX() - dragSourceX;
+			posY -= event.getY() - dragSourceY;
+			dragSourceX = event.getX();
+			dragSourceY = event.getY();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

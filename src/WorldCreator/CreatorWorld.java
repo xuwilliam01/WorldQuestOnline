@@ -199,9 +199,9 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 
 		graphics.setColor(Color.white);
 		graphics.drawString("Use arrow keys to scroll", 10, 20);
-		graphics.drawString("Select a tile using the mouse", 10, 30);
-		graphics.drawString("Place tiles using left click", 10, 40);
-		graphics.drawString("Delete tiles using right click", 10, 50);
+		graphics.drawString("Select a tile using the mouse", 10, 35);
+		graphics.drawString("Place tiles using left click", 10, 50);
+		graphics.drawString("Delete tiles using right click", 10, 65);
 	}
 
 	public void update()
