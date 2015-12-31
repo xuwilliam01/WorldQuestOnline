@@ -255,14 +255,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 				else if (command.equals("R"))
 				{
-					if (direction == 'R')
-					{
 					setHSpeed(horizontalMovement);
-					}
-					else
-					{
-						setHSpeed(2*horizontalMovement/3.0);
-					}
 					movingDirection = 1;
 					
 				}
@@ -276,16 +269,8 @@ public class ServerPlayer extends ServerObject implements Runnable
 				}
 				else if (command.equals("L"))
 				{
-					if (direction == 'L')
-					{
-					setHSpeed(-horizontalMovement);
-					}
-					else
-					{
-						setHSpeed(-2*horizontalMovement/3);
-					}
-					
 					movingDirection = -1;
+					setHSpeed(-horizontalMovement);
 				}
 				else if (command.equals("!L"))
 				{
