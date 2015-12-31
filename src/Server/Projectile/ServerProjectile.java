@@ -1,4 +1,7 @@
-package Server;
+package Server.Projectile;
+
+import Server.ServerFlyingObject;
+import Server.ServerWorld;
 
 public class ServerProjectile extends ServerFlyingObject
 {

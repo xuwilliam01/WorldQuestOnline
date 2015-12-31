@@ -1,5 +1,6 @@
 package Server;
 
+
 /**
  * A more advanced object with absolute speed and angle of movement
  * @author William Xu && Alex Raita

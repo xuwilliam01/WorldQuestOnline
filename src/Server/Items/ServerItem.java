@@ -1,6 +1,9 @@
-package Server;
+package Server.Items;
 
 import Imports.Images;
+import Server.ServerEngine;
+import Server.ServerObject;
+import Server.ServerWorld;
 
 public abstract class ServerItem extends ServerObject {
 

@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import Server.Creatures.ServerEnemy;
+import Server.Creatures.ServerPlayer;
+import Server.Creatures.ServerSlime;
+import Server.Items.ServerItem;
+import Server.Projectile.ServerProjectile;
 import sun.misc.Queue;
 
 /**
@@ -45,7 +50,12 @@ public class ServerWorld
 	/**
 	 * Grid of tiles
 	 */
-	private char[][] grid;
+	private char[][] tileGrid;
+	
+	/**
+	 * Grid of objects
+	 */
+	private ArrayList<ServerObject>[][]objectGrid;
 
 	/**
 	 * The size of each tile
@@ -113,7 +123,7 @@ public class ServerWorld
 	{
 		for (int no = 0; no < 4; no++)
 		{
-			ServerNPC newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
+			ServerEnemy newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
 					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
@@ -130,7 +140,7 @@ public class ServerWorld
 		{
 			int spawnLocation = (int)(Math.random() * 9);
 
-			ServerNPC newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
+			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
 					GRAVITY,
 					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
@@ -143,20 +153,33 @@ public class ServerWorld
 	 * Create a new world
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unchecked")
 	public void newWorld() throws IOException
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
 				"Resources", GRID_FILE)));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
-		grid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
+		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
 		                                                         .parseInt(tokenizer.nextToken())];
+		
+		objectGrid = new ArrayList[tileGrid.length][tileGrid[0].length];
+		
+		// Initialize each arraylist of objects in the objectGrid
+		for (int row = 0; row < objectGrid.length; row++)
+		{
+			for (int column = 0; column < objectGrid[0].length; column++)
+			{
+				objectGrid[row][column] = new ArrayList<ServerObject>();
+			}
+		}
+		
 		String line;
-		for (int row = 0; row < grid.length; row++)
+		for (int row = 0; row < tileGrid.length; row++)
 		{
 			line = worldInput.readLine();
-			for (int col = 0; col < grid[row].length; col++)
-				grid[row][col] = line.charAt(col);
+			for (int col = 0; col < tileGrid[row].length; col++)
+				tileGrid[row][col] = line.charAt(col);
 		}
 
 		worldInput.close();
@@ -216,7 +239,7 @@ public class ServerWorld
 							}
 							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.checkCollision(otherObject))
 							{
-								((ServerNPC) otherObject).inflictDamage(((ServerProjectile) object).getDamage());
+								((ServerEnemy) otherObject).inflictDamage(((ServerProjectile) object).getDamage());
 								((ServerProjectile) object).destroy();
 							}
 						}
@@ -257,9 +280,9 @@ public class ServerWorld
 						startRow = 0;
 					}
 					int endRow = (int) ((y2 + absVSpeed) / TILE_SIZE + 1);
-					if (endRow >= grid.length)
+					if (endRow >= tileGrid.length)
 					{
-						endRow = grid.length - 1;
+						endRow = tileGrid.length - 1;
 					}
 					int startColumn = (int) ((x1 - absHSpeed) / TILE_SIZE - 1);
 					if (startColumn < 0)
@@ -267,9 +290,9 @@ public class ServerWorld
 						startColumn = 0;
 					}
 					int endColumn = (int) ((x2 + absHSpeed) / TILE_SIZE + 1);
-					if (endColumn >= grid[0].length)
+					if (endColumn >= tileGrid[0].length)
 					{
-						endColumn = grid[0].length - 1;
+						endColumn = tileGrid[0].length - 1;
 					}
 
 					if (vSpeed > 0)
@@ -281,7 +304,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != ' '
+								if (tileGrid[row][column] != ' '
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -320,7 +343,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != ' '
+								if (tileGrid[row][column] != ' '
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -356,7 +379,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != ' '
+								if (tileGrid[row][column] != ' '
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
@@ -391,7 +414,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (grid[row][column] != ' '
+								if (tileGrid[row][column] != ' '
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
@@ -475,12 +498,12 @@ public class ServerWorld
 
 	public char[][] getGrid()
 	{
-		return grid;
+		return tileGrid;
 	}
 
 	public void setGrid(char[][] grid)
 	{
-		this.grid = grid;
+		this.tileGrid = grid;
 	}
 
 	public ArrayList<ServerObject> getObjects()

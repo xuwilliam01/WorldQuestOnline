@@ -3,7 +3,8 @@ package WorldCreator;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import Server.ServerPlayer;
+
+import Server.Creatures.ServerPlayer;
 
 public class CreatorFrame extends JFrame{
 

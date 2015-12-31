@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import javax.swing.Timer;
 
 import Imports.Images;
+import Server.Creatures.ServerPlayer;
 
 /**
  * Runs the actual game

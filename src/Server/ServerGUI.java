@@ -9,7 +9,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JPanel;
+
+import Server.Creatures.ServerPlayer;
 
 public class ServerGUI extends JPanel implements KeyListener,
 		MouseWheelListener, MouseListener, MouseMotionListener

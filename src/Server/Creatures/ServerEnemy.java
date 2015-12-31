@@ -1,4 +1,4 @@
-package Server;
+package Server.Creatures;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,33 +7,30 @@ import java.util.Random;
 
 import javax.swing.Timer;
 
+import Server.ServerEngine;
+import Server.ServerObject;
+import Server.ServerWorld;
+import Server.Items.ServerItem;
+
 /**
  * Class to control enemy AIs
  * @author Alex Raita & William Xu
  *
  */
-public abstract class ServerNPC extends ServerObject implements ActionListener{
+public abstract class ServerEnemy extends ServerCreature implements ActionListener{
 	
 	/**
 	 * Timer for the NPC in server frames
 	 */
 	private int counter;
 	
-	
 	/**
 	 * The range for the A.I. to follow the player. Change later
 	 */
 	private int targetRange = 500;
 	
-	//Max hp and current hp
-	private int maxHP;
-	private int HP;
-	
 	//Players in server
 	private ServerPlayer target = null;
-	
-	//World that the object is in
-	private ServerWorld world;
 	
 	/**
 	 * 
@@ -47,11 +44,8 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 	 * @param maxHP
 	 * @param world
 	 */
-	public ServerNPC(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type, ServerWorld world) {
-		super(x, y, width, height, gravity,ID, image,type);
-		this.maxHP = maxHP;
-		HP = maxHP;
-		this.world = world;
+	public ServerEnemy(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type, ServerWorld world) {
+		super(x, y, width, height, gravity,ID, image,type, maxHP, world);
 	}
 
 	//All this should be overridden by other AI classes
@@ -73,11 +67,6 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 				break;
 			}
 		}
-	}
-	
-	public void dropItem()
-	{
-		world.add(ServerItem.randomItem(getX(), getY()));
 	}
 	
 	public int getTargetRange()
@@ -110,29 +99,5 @@ public abstract class ServerNPC extends ServerObject implements ActionListener{
 
 	public void actionPerformed(ActionEvent arg0) {
 		update();
-	}
-
-	public int getMaxHP()
-	{
-		return maxHP;
-	}
-	
-	public int getHP()
-	{
-		return HP;
-	}
-	
-	/**
-	 * Inflict a certain amount of damage to the npc and destroy if less than 0 hp
-	 * @param amount
-	 */
-	public void inflictDamage(int amount)
-	{
-		HP -= amount;
-		if (HP <= 0)
-		{
-			destroy();
-			dropItem();
-		}
 	}
 }

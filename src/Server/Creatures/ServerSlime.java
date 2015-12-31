@@ -1,6 +1,8 @@
-package Server;
+package Server.Creatures;
 
-public class ServerSlime extends ServerNPC
+import Server.ServerWorld;
+
+public class ServerSlime extends ServerEnemy
 {
 
 	/**

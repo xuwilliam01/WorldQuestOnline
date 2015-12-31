@@ -1,4 +1,4 @@
-package Server;
+package Server.Creatures;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,11 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import Imports.Images;
+import Server.ServerEngine;
+import Server.ServerObject;
+import Server.ServerWorld;
+import Server.Items.ServerItem;
+import Server.Projectile.ServerProjectile;
 
 /**
  * The player (Type 'P')
@@ -17,7 +22,7 @@ import Imports.Images;
  * @author William Xu & Alex Raita
  *
  */
-public class ServerPlayer extends ServerObject implements Runnable
+public class ServerPlayer extends ServerCreature implements Runnable
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -26,6 +31,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
+	
+	/**
+	 * The starting max hp of the player
+	 */
+	public final static int PLAYER_START_HP = 100;
 
 	private String message = "";
 
@@ -86,21 +96,10 @@ public class ServerPlayer extends ServerObject implements Runnable
 	private int verticalMovement = jumpSpeed;
 
 	/**
-	 * HP of the player
-	 */
-	private int HP = 100;
-
-	/**
 	 * Whether or not the player is alive
 	 */
 	private boolean alive = true;
 
-	/**
-	 * Stores the inventory of the player 
-	 */
-	private ArrayList<ServerItem>  inventory = new ArrayList<ServerItem>();
-	
-	
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -112,24 +111,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 * @param ID
 	 * @param image
 	 */
-	public ServerPlayer(Socket socket, ServerEngine engine, double x, double y,
+	public ServerPlayer(double x, double y,
 			int width,
-			int height, double gravity, int ID, String image)
+			int height, double gravity, int ID, String image, Socket socket, ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE);
+		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE, PLAYER_START_HP, world);
 
-		if (image.contains("CYCLOPS"))
-		{
-			HP = 125;
-		}
-		else if (image.contains("GIRL"))
-		{
-			HP = 80;
-		}
-		else if (image.contains("KNIGHT"))
-		{
-			HP = 100;
-		}
 
 		// Import the socket, server, and world
 		this.socket = socket;
@@ -232,7 +219,7 @@ public class ServerPlayer extends ServerObject implements Runnable
 		}
 
 		// Tell the user what hp he has
-		queueMessage("L " + HP);
+		queueMessage("L " + getHP());
 
 		// Signal a repaint
 		queueMessage("U");
@@ -378,24 +365,11 @@ public class ServerPlayer extends ServerObject implements Runnable
 	 */
 	public void inflictDamage(int amount)
 	{
-		HP -= amount;
-		if (HP <= 0)
+		setHP(getHP()-amount);
+		if (getHP() <= 0)
 		{
-			for(ServerItem item : inventory)
-			{
-				item.setX(getX());
-				item.setY(getY()+5);
-				item.makeExist();
-				world.add(item);
-				item.setOnSurface(false);
-				item.setVSpeed(-Math.random()*30-5);
 
-				int direction = Math.random() < 0.5 ? -1 : 1;
-				item.setHSpeed(direction*(Math.random()*5 + 3));
-			}
-			
-			inventory.clear();
-			
+			dropInventory();
 			setSolid(false);
 			setGravity(0);
 			alive = false;
@@ -506,6 +480,12 @@ public class ServerPlayer extends ServerObject implements Runnable
 			yUpdated = true;
 		}
 	}
+	
+	public void addItem(ServerItem item)
+	{
+		super.addItem(item);
+		queueMessage("I "+item.getImage());
+	}
 
 	public boolean isxUpdated()
 	{
@@ -517,11 +497,6 @@ public class ServerPlayer extends ServerObject implements Runnable
 		return yUpdated;
 	}
 
-	public int getHP()
-	{
-		return HP;
-	}
-
 	public boolean isAlive()
 	{
 		return alive;
@@ -530,16 +505,5 @@ public class ServerPlayer extends ServerObject implements Runnable
 	public void setAlive(boolean alive)
 	{
 		this.alive = alive;
-	}
-
-	public ArrayList<ServerItem> getInventory()
-	{
-		return inventory;
-	}
-	
-	public void addItem(ServerItem item)
-	{
-		inventory.add(item);
-		queueMessage("I "+item.getImage());
 	}
 }

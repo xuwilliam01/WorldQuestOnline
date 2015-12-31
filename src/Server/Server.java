@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import Imports.Images;
+import Server.Creatures.ServerPlayer;
 
 /**
  * Creates a new world and accepts new client connections
@@ -57,7 +58,7 @@ public class Server implements Runnable
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
 
-		while (noOfPlayers < 999)
+		while (true)
 		{
 			try
 			{
@@ -68,10 +69,9 @@ public class Server implements Runnable
 				int y = ServerPlayer.PLAYER_Y;
 
 				int characterSelection = (int) (Math.random() * 3);
-				ServerPlayer newPlayer = new ServerPlayer(newClient, engine,
-						x, y, -1, -1,
+				ServerPlayer newPlayer = new ServerPlayer(x, y, -1, -1,
 						ServerWorld.GRAVITY,
-						ServerEngine.useNextID(), playerImages[characterSelection]);
+						ServerEngine.useNextID(), playerImages[characterSelection], newClient, engine, engine.getWorld());
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();

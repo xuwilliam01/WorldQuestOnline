@@ -1,4 +1,5 @@
-package Server;
+package Server.Items;
+
 
 public abstract class ServerWeapon extends ServerItem{
 
