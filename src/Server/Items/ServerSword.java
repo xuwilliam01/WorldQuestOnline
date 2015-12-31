@@ -1,5 +1,4 @@
 package Server.Items;
-
 import Server.ServerWorld;
 
 public class ServerSword extends ServerWeapon{

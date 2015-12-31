@@ -481,6 +481,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 	}
 	
+	/**
+	 * Add an item to the player's inventory and also tell the client about it
+	 */
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);

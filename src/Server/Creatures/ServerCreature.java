@@ -96,7 +96,7 @@ public class ServerCreature extends ServerObject
 			item.makeExist();
 			world.add(item);
 			item.setOnSurface(false);
-			item.setVSpeed(-Math.random()*30-5);
+			item.setVSpeed(-Math.random()*15-5);
 
 			int direction = Math.random() < 0.5 ? -1 : 1;
 			item.setHSpeed(direction*(Math.random()*5 + 3));

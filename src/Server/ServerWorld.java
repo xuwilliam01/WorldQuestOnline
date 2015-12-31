@@ -127,6 +127,7 @@ public class ServerWorld
 					GRAVITY,
 					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
+			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
 			add(newEnemy);
 		}
 	}
@@ -145,6 +146,7 @@ public class ServerWorld
 					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
 			add(newEnemy);
+			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
 			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000 + 5000);
 		}
 	}
