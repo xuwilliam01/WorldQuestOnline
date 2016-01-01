@@ -24,10 +24,6 @@ import Server.Projectile.ServerProjectile;
  */
 public class ServerPlayer extends ServerCreature implements Runnable
 {
-	// Width and height of the screen
-	public final static int SCREEN_WIDTH = 1024;
-	public final static int SCREEN_HEIGHT = 768;
-
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
@@ -191,12 +187,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			// Send the object's updated location if the player can see it
 			// within their screen
-			if (object.getX() < getX() + getWidth() + SCREEN_WIDTH
+			if (object.getX() < getX() + getWidth() + Client.Client.SCREEN_WIDTH
 					&& object.getX() + object.getWidth() > getX()
-							- SCREEN_WIDTH
-					&& object.getY() < getY() + getHeight() + SCREEN_HEIGHT
+							- Client.Client.SCREEN_WIDTH
+					&& object.getY() < getY() + getHeight() + Client.Client.SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
-							- SCREEN_HEIGHT)
+							- Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.exists())
 				{
@@ -368,7 +364,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		setHP(getHP()-amount);
 		if (getHP() <= 0)
 		{
-
 			dropInventory();
 			setSolid(false);
 			setGravity(0);
@@ -379,8 +374,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setHeight(64);
 
 			verticalMovement = movementSpeed;
-			
-			
 		}
 	}
 

@@ -91,8 +91,8 @@ public class ServerCreature extends ServerObject
 	{
 		for(ServerItem item : inventory)
 		{
-			item.setX(getX());
-			item.setY(getY()+5);
+			item.setX(getX() + getWidth()/2);
+			item.setY(getY());
 			item.makeExist();
 			world.add(item);
 			item.setOnSurface(false);

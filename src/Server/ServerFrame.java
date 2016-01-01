@@ -15,7 +15,7 @@ public class ServerFrame extends JFrame
 	 */
 	public ServerFrame()
 	{
-		setPreferredSize(new Dimension(ServerPlayer.SCREEN_WIDTH/FRAME_FACTOR, ServerPlayer.SCREEN_HEIGHT/FRAME_FACTOR));
+		setPreferredSize(new Dimension(Client.Client.SCREEN_HEIGHT/FRAME_FACTOR, Client.Client.SCREEN_HEIGHT/FRAME_FACTOR));
 		setResizable(false);
 		setTitle("WorldQuest Online - Server Map");
 		setLocationRelativeTo(null);

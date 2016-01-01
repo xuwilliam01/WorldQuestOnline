@@ -47,13 +47,13 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * X-value of the centre of the screen
 	 */
-	public static final int CENTRE_X = ServerPlayer.SCREEN_WIDTH
+	public static final int CENTRE_X = Client.Client.SCREEN_HEIGHT
 			/ ServerFrame.FRAME_FACTOR / 2;
 
 	/**
 	 * Y-value of the centre of the screen
 	 */
-	public static final int CENTRE_Y = ServerPlayer.SCREEN_HEIGHT
+	public static final int CENTRE_Y = Client.Client.SCREEN_HEIGHT
 			/ ServerFrame.FRAME_FACTOR / 2;
 	
 	/**
