@@ -167,7 +167,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Tell the user to scroll with arrow keys
 		graphics.setColor(Color.black);
 		graphics.drawString(
-				"Scroll with the arrow keys, zoom with the mouse wheel", 10, 25);
+				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel", 10, 25);
 	}
 
 	public void keyPressed(KeyEvent key)
