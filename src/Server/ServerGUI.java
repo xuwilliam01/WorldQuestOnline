@@ -36,7 +36,27 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * The color of a player
 	 */
-	public static final Color PLAYER = Color.black;
+	public static final Color PLAYER = Color.red;
+
+	/**
+	 * The color of an NPC
+	 */
+	public static final Color NPC = Color.magenta;
+
+	/**
+	 * The color of a projectile
+	 */
+	public static final Color PROJECTILE = Color.yellow;
+
+	/**
+	 * The color of an item
+	 */
+	public static final Color ITEM = Color.orange;
+
+	/**
+	 * The color of other objects
+	 */
+	public static final Color OTHER = Color.darkGray;
 
 	/**
 	 * The factor of the scale of the object on the map compared to its actual
@@ -55,12 +75,12 @@ public class ServerGUI extends JPanel implements KeyListener,
 	 */
 	public static final int CENTRE_Y = Client.Client.SCREEN_HEIGHT
 			/ ServerFrame.FRAME_FACTOR / 2;
-	
+
 	/**
 	 * The x-coordinate of where the mouse began to be dragged from
 	 */
 	private int dragSourceX;
-	
+
 	/**
 	 * The y-coordinate of where the mouse began to be dragged from
 	 */
@@ -155,7 +175,26 @@ public class ServerGUI extends JPanel implements KeyListener,
 		{
 			if (object.isMapVisible())
 			{
-				graphics.setColor(PLAYER);
+				if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
+				{
+					graphics.setColor(PROJECTILE);
+				}
+				else if (object.getType().charAt(0) == ServerWorld.ITEM_TYPE)
+				{
+					graphics.setColor(ITEM);
+				}
+				else if (object.getType().charAt(0) == ServerWorld.NPC_TYPE)
+				{
+					graphics.setColor(NPC);
+				}
+				else if (object.getType().charAt(0) == ServerWorld.PLAYER_TYPE.charAt(0))
+				{
+					graphics.setColor(PLAYER);
+				}
+				else
+				{
+					graphics.setColor(OTHER);
+				}
 				graphics.fillRect(
 						(int) (CENTRE_X + object.getX() / objectFactor - posX) + 1,
 						(int) (CENTRE_Y + object.getY() / objectFactor - posY) + 1,
@@ -167,7 +206,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Tell the user to scroll with arrow keys
 		graphics.setColor(Color.black);
 		graphics.drawString(
-				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel", 10, 25);
+				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
+				10, 25);
 	}
 
 	public void keyPressed(KeyEvent key)
@@ -248,7 +288,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 		requestFocusInWindow();
 		movePos();
 		repaint();
-		
+
 	}
 
 	@Override
@@ -276,14 +316,14 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public void mouseEntered(MouseEvent arg0)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -294,29 +334,29 @@ public class ServerGUI extends JPanel implements KeyListener,
 			dragSourceX = event.getX();
 			dragSourceY = event.getY();
 		}
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent event)
 	{
-			posX -= event.getX() - dragSourceX;
-			posY -= event.getY() - dragSourceY;
-			dragSourceX = event.getX();
-			dragSourceY = event.getY();
+		posX -= event.getX() - dragSourceX;
+		posY -= event.getY() - dragSourceY;
+		dragSourceX = event.getX();
+		dragSourceY = event.getY();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }
