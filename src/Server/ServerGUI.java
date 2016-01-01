@@ -119,7 +119,6 @@ public class ServerGUI extends JPanel implements KeyListener,
 	{
 		super.paintComponent(graphics);
 
-		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startRow < 0)
 		{
@@ -147,33 +146,32 @@ public class ServerGUI extends JPanel implements KeyListener,
 				if (grid[row][column] == ' ')
 				{
 					graphics.setColor(GRASS);
-					graphics.fillRect(
-							(int) (CENTRE_X + column
-									* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-							(int) (CENTRE_Y + row
-									* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 				}
 				else if (grid[row][column] == '1')
 				{
 					graphics.setColor(BRICK);
-					graphics.fillRect(
-							(int) (CENTRE_X + column
-									* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-							(int) (CENTRE_Y + row
-									* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 				}
+
+				graphics.fillRect(
+						(int) (CENTRE_X + column
+								* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
+						(int) (CENTRE_Y + row
+								* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+						(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+						(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 			}
 		}
 
-		// Go through each object in the world and draw it relative to the
-		// player's position
+		// Draw each object on the gui if it's inside the screen
 		for (ServerObject object : world.getObjects())
 		{
-			if (object.isMapVisible())
+			if (object.isMapVisible()
+					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1
+							+ (object.getWidth() / objectFactor) + 1) > 0
+					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
+					&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1
+							+ (object.getHeight() / objectFactor) + 1) > 0
+					&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
 				{
@@ -187,7 +185,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 				{
 					graphics.setColor(NPC);
 				}
-				else if (object.getType().charAt(0) == ServerWorld.PLAYER_TYPE.charAt(0))
+				else if (object.getType().charAt(0) == ServerWorld.PLAYER_TYPE
+						.charAt(0))
 				{
 					graphics.setColor(PLAYER);
 				}
