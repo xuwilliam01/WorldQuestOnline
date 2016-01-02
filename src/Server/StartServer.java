@@ -23,6 +23,7 @@ public class StartServer
 		
 			ServerFrame myFrame = new ServerFrame();
 			ServerGUI gui = new ServerGUI(server.getEngine().getWorld());
+			gui.setLocation(0,0);
 			myFrame.add(gui);
 			gui.revalidate();
 			server.getEngine().setGui(gui);

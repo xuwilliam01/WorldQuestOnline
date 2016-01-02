@@ -25,7 +25,7 @@ public class StartCreator {
 		CreatorWorld world = new CreatorWorld(fileName);
 		CreatorItems items = new CreatorItems(world);
 		world.setLocation(0,0);
-		items.setLocation(CreatorWorld.WIDTH,0);
+		items.setLocation(Client.Client.SCREEN_WIDTH,0);
 
 		frame.add(world);
 		frame.add(items);

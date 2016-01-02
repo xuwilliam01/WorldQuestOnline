@@ -67,7 +67,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * X-value of the centre of the screen
 	 */
-	public static final int CENTRE_X = Client.Client.SCREEN_HEIGHT
+	public static final int CENTRE_X = Client.Client.SCREEN_WIDTH
 			/ ServerFrame.FRAME_FACTOR / 2;
 
 	/**
@@ -100,6 +100,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
+		setSize(Client.Client.SCREEN_WIDTH,Client.Client.SCREEN_HEIGHT);
 
 		setFocusable(true);
 		requestFocusInWindow();

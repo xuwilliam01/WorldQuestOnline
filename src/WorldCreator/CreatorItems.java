@@ -36,7 +36,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 		setFocusable(true);
 		requestFocusInWindow();
-		setSize(WIDTH,CreatorWorld.HEIGHT);
+		setSize(WIDTH,Client.Client.SCREEN_HEIGHT);
 		setLayout(null);
 
 		this.world = world;
@@ -44,24 +44,24 @@ public class CreatorItems extends JPanel implements ActionListener{
 		addButtons();
 
 		save.setSize(100,50);
-		save.setLocation(WIDTH-125,CreatorWorld.HEIGHT-100);
+		save.setLocation(WIDTH-125,Client.Client.SCREEN_HEIGHT-100);
 		save.addActionListener(this);
 		add(save);
 
 		clear.setSize(100,50);
-		clear.setLocation(WIDTH-250,CreatorWorld.HEIGHT-100);
+		clear.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-100);
 		clear.addActionListener(this);
 		add(clear);
 
 		updateWidth = new JButton("Change Width "+"(Current: "+world.getGrid()[0].length+")");
 		updateWidth.setSize(225,50);
-		updateWidth.setLocation(WIDTH-250,CreatorWorld.HEIGHT-160);
+		updateWidth.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-160);
 		updateWidth.addActionListener(this);
 		add(updateWidth);
 
 		updateHeight = new JButton("Change Height "+"(Current: "+world.getGrid().length+")");
 		updateHeight.setSize(225,50);
-		updateHeight.setLocation(WIDTH-250,CreatorWorld.HEIGHT-220);
+		updateHeight.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-220);
 		updateHeight.addActionListener(this);
 		add(updateHeight);
 
