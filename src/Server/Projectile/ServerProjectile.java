@@ -37,9 +37,9 @@ public class ServerProjectile extends ServerFlyingObject
 	 * @param speed
 	 * @param angle
 	 */
-	public ServerProjectile(double x, double y, int width, int height, double gravity, int ID, int ownerID, String image,double speed, double angle, double inaccuracy, String type)
+	public ServerProjectile(double x, double y, int width, int height, double gravity, int ownerID, String image,double speed, double angle, double inaccuracy, String type)
 	{
-		super (x,y,width,height,gravity,ID,image, speed, angle+ Math.random()*(inaccuracy) - inaccuracy/2,type);
+		super (x,y,width,height,gravity,image, speed, angle+ Math.random()*(inaccuracy) - inaccuracy/2,type);
 		this.ownerID = ownerID;
 		
 		if (type.equals(ServerWorld.BULLET_TYPE))

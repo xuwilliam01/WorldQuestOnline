@@ -6,7 +6,7 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerItem;
 
-public class ServerCreature extends ServerObject
+public abstract class ServerCreature extends ServerObject
 {
 	/**
 	 * Maximum possible HP of the creature
@@ -43,9 +43,9 @@ public class ServerCreature extends ServerObject
 	 * @param world
 	 */
 	public ServerCreature(double x, double y, int width, int height,
-			double gravity, int ID, String image, String type, int maxHP, ServerWorld world)
+			double gravity, String image, String type, int maxHP, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, ID, image, type);
+		super(x, y, width, height, gravity, image, type);
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;

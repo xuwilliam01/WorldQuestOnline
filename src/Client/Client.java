@@ -415,13 +415,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, MouseM
 				&& currentMessage.charAt(0) != 'A')
 		{
 			// A for action
-			currentMessage = "A";
-			int xDist = event.getX() - SCREEN_WIDTH/2;
-			int yDist = event.getY() - SCREEN_HEIGHT/2;
-
-			double angle = Math.atan2(yDist, xDist);
-
-			currentMessage += " " + angle;
+			currentMessage = "A " + event.getX() + " " + event.getY();
 
 			output.println(currentMessage);
 			output.flush();

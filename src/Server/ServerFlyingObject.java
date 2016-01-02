@@ -29,9 +29,9 @@ public class ServerFlyingObject extends ServerObject
 	 * @param speed
 	 * @param angle
 	 */
-	public ServerFlyingObject(double x, double y, int width, int height, double gravity, int ID, String image,double speed, double angle, String type)
+	public ServerFlyingObject(double x, double y, int width, int height, double gravity, String image,double speed, double angle, String type)
 	{
-		super (x,y,width,height,gravity,ID,image,type);
+		super (x,y,width,height,gravity,image,type);
 		setHSpeed((Math.round(speed*Math.cos(angle)*100))/100);
 		setVSpeed((Math.round(speed*Math.sin(angle)*100))/100);
 	}

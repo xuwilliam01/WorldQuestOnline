@@ -1,6 +1,8 @@
 package Imports;
 
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,8 +27,8 @@ public class Images
 	/**
 	 * The size the image will be in the inventory
 	 */
-	public static final int INVENTORY_IMAGE_SIDELENGTH = ClientInventory.INVENTORY_WIDTH/(ClientInventory.WIDTH+1)-20;
-
+	public static final int INVENTORY_IMAGE_SIDELENGTH = ClientInventory.INVENTORY_WIDTH
+			/ (ClientInventory.WIDTH + 1) - 20;
 
 	/**
 	 * Array list of the game images
@@ -43,24 +45,25 @@ public class Images
 		if (images == null)
 		{
 			images = new BinaryTree<GameImage>();
+			BufferedImage image;
 
 			// Import sprite sheets to create images with
 			try
 			{
-				BufferedImage sheet = ImageIO.read(new File(
+				image = ImageIO.read(new File(
 						"SLIME_SHEET.png"));
 				for (int no = 0; no < 9; no++)
 				{
 					images.add(new GameImage("SLIME_" + no + IMAGE_FORMAT,
-							sheet.getSubimage(no*19, 0, 19, 17),38,34));
+							image.getSubimage(no * 19, 0, 19, 17), 38, 34));
 				}
 
-				sheet = ImageIO.read(new File(
+				image = ImageIO.read(new File(
 						"EXPLOSION_SHEET.png"));
 				for (int no = 0; no < 7; no++)
 				{
 					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
-							sheet.getSubimage(no*32, 0, 32, 32)));
+							image.getSubimage(no * 32, 0, 32, 32)));
 				}
 			}
 			catch (IOException e)
@@ -68,6 +71,37 @@ public class Images
 				System.out.println("Error loading sprite sheets");
 				e.printStackTrace();
 			}
+
+			// Add images with rotations (the number in the name represents the angle rotated)
+			try
+			{
+				image = ImageIO.read(new File(
+						"SWORD_0.png"));
+
+				double locationX = image.getWidth() / 2;
+				double locationY = image.getHeight() / 2;
+
+				for (int angle = 180; angle > -180; angle -= 15)
+				{
+					double rotationRequired = Math.toRadians(angle);
+					AffineTransform tx = AffineTransform.getRotateInstance(
+							rotationRequired, locationX, locationY);
+					AffineTransformOp op = new AffineTransformOp(tx,
+							AffineTransformOp.TYPE_BILINEAR);
+					images.add(new GameImage("SWORD_" + angle + ".png", op
+							.filter(image, null)));
+				}
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			images.add(new GameImage("SWORD.png", 70, 30));
+
+			images.add(new GameImage("SWORD_ICON.png",
+					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 			// Add the rest of the images normally
 			images.add(new GameImage("KNIGHT_RIGHT.png"));
@@ -79,7 +113,6 @@ public class Images
 			images.add(new GameImage("GIRL_RIGHT.png"));
 			images.add(new GameImage("GIRL_LEFT.png"));
 
-
 			images.add(new GameImage("PLAYERGHOST_RIGHT.png"));
 			images.add(new GameImage("PLAYERGHOST_LEFT.png"));
 
@@ -87,16 +120,15 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("WATER.png",ServerWorld.TILE_SIZE,ServerWorld.TILE_SIZE));
-			
+			images.add(new GameImage("WATER.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
 
-			images.add(new GameImage("HP_POTION.png",15,15));
-			images.add(new GameImage("HP_POTION_ICON.png",INVENTORY_IMAGE_SIDELENGTH,INVENTORY_IMAGE_SIDELENGTH));
-			
-			images.add(new GameImage("SWORD.png",70,30));
-			images.add(new GameImage("SWORD_ICON.png",INVENTORY_IMAGE_SIDELENGTH,INVENTORY_IMAGE_SIDELENGTH));
+			images.add(new GameImage("HP_POTION.png", 15, 15));
+			images.add(new GameImage("HP_POTION_ICON.png",
+					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 		}
 	}
 
@@ -107,7 +139,16 @@ public class Images
 	 */
 	public static Image getImage(String name)
 	{
-		return images.get(new GameImage(name,true)).getImage();
+		try{
+			return images.get(new GameImage(name, true)).getImage();
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("Could not find image " + name);
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 	/**
@@ -117,6 +158,14 @@ public class Images
 	 */
 	public static GameImage getGameImage(String name)
 	{
-		return images.get(new GameImage(name,true));
+		try{
+			return images.get(new GameImage(name, true));
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("Could not find image " + name);
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

@@ -13,6 +13,7 @@ import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Animations.ServerItemSwing;
 import Server.Items.ServerItem;
 import Server.Projectile.ServerProjectile;
 
@@ -27,7 +28,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
-	
+
 	/**
 	 * The starting max hp of the player
 	 */
@@ -109,10 +110,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public ServerPlayer(double x, double y,
 			int width,
-			int height, double gravity, int ID, String image, Socket socket, ServerEngine engine, ServerWorld world)
+			int height, double gravity, String image, Socket socket,
+			ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, ID, image, ServerWorld.PLAYER_TYPE, PLAYER_START_HP, world);
-
+		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
+				PLAYER_START_HP, world);
 
 		// Import the socket, server, and world
 		this.socket = socket;
@@ -147,7 +149,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		sendMap();
 
 		// Send the player's information
-		sendMessage(ID + " " + (int) (x + 0.5) + " " + (int) (y + 0.5) + " "
+		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
+				+ " "
 				+ image);
 	}
 
@@ -187,10 +190,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			// Send the object's updated location if the player can see it
 			// within their screen
-			if (object.getX() < getX() + getWidth() + Client.Client.SCREEN_WIDTH
+			if (object.getX() < getX() + getWidth()
+					+ Client.Client.SCREEN_WIDTH
 					&& object.getX() + object.getWidth() > getX()
 							- Client.Client.SCREEN_WIDTH
-					&& object.getY() < getY() + getHeight() + Client.Client.SCREEN_HEIGHT
+					&& object.getY() < getY() + getHeight()
+							+ Client.Client.SCREEN_HEIGHT
 					&& object.getY() + object.getHeight() > getY()
 							- Client.Client.SCREEN_HEIGHT)
 			{
@@ -234,13 +239,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				if (command.charAt(0) == 'A')
 				{
-					performAction(Double.parseDouble((command.split(" "))[1]));
+					String[] tokens = command.split(" ");
+					performAction(Integer.parseInt(tokens[1]),
+							Integer.parseInt(tokens[2]));
 				}
 				else if (command.equals("R"))
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
-					
+
 				}
 				else if (command.equals("!R"))
 				{
@@ -325,33 +332,52 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
-	public void performAction(double angle)
+	public void performAction(int mouseX, int mouseY)
 	{
+		
+		
+		char weaponSelected = 'S';
 		if (alive)
 		{
-			// Get the width and height of the image
-			int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
-			int bulletHeight = Images.getGameImage("BULLET.png").getHeight();
+			
+			int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
+			int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
 
-			// Shoot the projectile for testing
-			double speed = 30;
-			double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
-			double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
-			double inaccuracy = 0;
-
-			if (getHSpeed() != 0)
+			double angle = Math.atan2(yDist, xDist);	
+			
+			if (weaponSelected == 'S')
 			{
-				inaccuracy += Math.PI / 6;
+				world.add(new ServerItemSwing(this,"SWORD_0.png",(int)(Math.toDegrees(angle)+0.5),8));
 			}
-
-			if (Math.abs(getVSpeed()) >= 3)
+			else
 			{
-				inaccuracy += Math.PI / 3;
-			}
+				// Get the width and height of the image
+				int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
+				int bulletHeight = Images.getGameImage("BULLET.png")
+						.getHeight();
 
-			world.add(new ServerProjectile(x, y, -1, -1, 0, ServerEngine.useNextID(),
-					getID(), "BULLET.png", speed, angle, inaccuracy,
-					ServerWorld.BULLET_TYPE));
+
+
+				// Shoot the projectile for testing
+				double speed = 30;
+				double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
+				double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
+				double inaccuracy = 0;
+
+				if (getHSpeed() != 0)
+				{
+					inaccuracy += Math.PI / 6;
+				}
+
+				if (Math.abs(getVSpeed()) >= 3)
+				{
+					inaccuracy += Math.PI / 3;
+				}
+
+				world.add(new ServerProjectile(x, y, -1, -1, 0,
+						getID(), "BULLET.png", speed, angle, inaccuracy,
+						ServerWorld.BULLET_TYPE));
+			}
 		}
 	}
 
@@ -361,7 +387,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void inflictDamage(int amount)
 	{
-		setHP(getHP()-amount);
+		setHP(getHP() - amount);
 		if (getHP() <= 0)
 		{
 			dropInventory();
@@ -473,14 +499,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			yUpdated = true;
 		}
 	}
-	
+
 	/**
 	 * Add an item to the player's inventory and also tell the client about it
 	 */
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
-		queueMessage("I "+item.getImage());
+		queueMessage("I " + item.getImage());
 	}
 
 	public boolean isxUpdated()

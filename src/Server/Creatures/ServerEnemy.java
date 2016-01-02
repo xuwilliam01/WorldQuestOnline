@@ -44,8 +44,8 @@ public abstract class ServerEnemy extends ServerCreature implements ActionListen
 	 * @param maxHP
 	 * @param world
 	 */
-	public ServerEnemy(double x, double y, int width, int height, double gravity, int ID, String image, int maxHP, String type, ServerWorld world) {
-		super(x, y, width, height, gravity,ID, image,type, maxHP, world);
+	public ServerEnemy(double x, double y, int width, int height, double gravity, String image, int maxHP, String type, ServerWorld world) {
+		super(x, y, width, height, gravity, image,type, maxHP, world);
 	}
 
 	//All this should be overridden by other AI classes

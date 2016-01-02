@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import Server.Animations.ServerItemSwing;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
@@ -36,6 +37,9 @@ public class ServerWorld
 
 	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
 	public final static String HP_TYPE = POTION_TYPE+"H";
+	
+	public final static char ANIMATION_TYPE = 'A';
+	public final static String ITEM_SWING_TYPE = ANIMATION_TYPE + "S";
 
 	//These are so we can find the right images
 	public final static String LONG_SWORD = SWORD_TYPE+"L";
@@ -125,7 +129,6 @@ public class ServerWorld
 		{
 			ServerEnemy newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
-					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
 			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
 			add(newEnemy);
@@ -143,7 +146,6 @@ public class ServerWorld
 
 			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
 					GRAVITY,
-					ServerEngine.useNextID(),
 					"SLIME_0.png",this);
 			add(newEnemy);
 			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
@@ -455,7 +457,7 @@ public class ServerWorld
 				}
 
 				// Update specific objects
-				if (object.getType() == SLIME_TYPE)
+				if (object.getType().equals(SLIME_TYPE))
 				{
 					((ServerSlime) object).update();
 				}
@@ -469,6 +471,13 @@ public class ServerWorld
 					else if (object.getType().equals(EXPLOSION_TYPE))
 					{
 						((ServerProjectile) object).updateExplosion();
+					}
+				}
+				else if (object.getType().charAt(0) == ANIMATION_TYPE)
+				{
+					if (object.getType().equals(ITEM_SWING_TYPE))
+					{
+						((ServerItemSwing)object).update();
 					}
 				}
 

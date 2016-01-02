@@ -172,7 +172,7 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-			.println("Tried to access the object list while it was being used");
+					.println("Tried to access the object list while it was being used");
 		}
 	}
 
@@ -182,7 +182,8 @@ public class ClientWorld
 	 */
 	public ClientObject get(int id)
 	{
-		try{
+		try
+		{
 			for (ClientObject object : objects)
 			{
 				if (object.getID() == id)

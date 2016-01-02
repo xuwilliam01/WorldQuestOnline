@@ -94,8 +94,7 @@ public class ServerObject
 	 * @param ID
 	 */
 	public ServerObject(double x, double y, int width, int height,
-			double gravity, int ID,
-			String image, String type)
+			double gravity, String image, String type)
 	{
 		solid = true;
 		mapVisible = true;
@@ -106,7 +105,7 @@ public class ServerObject
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-		this.id = ID;
+		this.id = ServerEngine.useNextID();
 		this.image = image;
 		if (width == -1)
 		{

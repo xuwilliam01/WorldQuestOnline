@@ -10,7 +10,7 @@ public abstract class ServerItem extends ServerObject {
 	private final static int NUM_ITEMS = 2;
 	
 	public ServerItem(double x, double y,String type) {
-		super(x, y, 0,0, ServerWorld.GRAVITY, ServerEngine.useNextID(), "", type);
+		super(x, y, 0,0, ServerWorld.GRAVITY, "", type);
 
 		switch (type) {
 		case ServerWorld.HP_25:

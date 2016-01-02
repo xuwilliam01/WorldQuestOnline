@@ -36,27 +36,27 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * The color of a player
 	 */
-	public static final Color PLAYER = Color.red;
+	public static final Color PLAYER = Color.black;
 
 	/**
 	 * The color of an NPC
 	 */
-	public static final Color NPC = Color.magenta;
+	public static final Color NPC = Color.darkGray;
 
 	/**
 	 * The color of a projectile
 	 */
-	public static final Color PROJECTILE = Color.yellow;
+	public static final Color PROJECTILE = Color.blue;
 
 	/**
 	 * The color of an item
 	 */
-	public static final Color ITEM = Color.orange;
+	public static final Color ITEM = Color.yellow;
 
 	/**
 	 * The color of other objects
 	 */
-	public static final Color OTHER = Color.darkGray;
+	public static final Color OTHER = Color.WHITE;
 
 	/**
 	 * The factor of the scale of the object on the map compared to its actual

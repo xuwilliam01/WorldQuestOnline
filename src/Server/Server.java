@@ -70,8 +70,7 @@ public class Server implements Runnable
 
 				int characterSelection = (int) (Math.random() * 3);
 				ServerPlayer newPlayer = new ServerPlayer(x, y, -1, -1,
-						ServerWorld.GRAVITY,
-						ServerEngine.useNextID(), playerImages[characterSelection], newClient, engine, engine.getWorld());
+						ServerWorld.GRAVITY, playerImages[characterSelection], newClient, engine, engine.getWorld());
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
