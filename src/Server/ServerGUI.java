@@ -298,10 +298,14 @@ public class ServerGUI extends JPanel implements KeyListener,
 		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR * 16)
 		{
 			objectFactor *= (1.1 * notches);
+			posX /= 1.1;
+			posY /= 1.1;
 		}
 		else if (notches < 0 && objectFactor > ServerFrame.FRAME_FACTOR)
 		{
 			objectFactor /= (1.1 * (-notches));
+			posX *= 1.1;
+			posY *= 1.1;
 		}
 	}
 

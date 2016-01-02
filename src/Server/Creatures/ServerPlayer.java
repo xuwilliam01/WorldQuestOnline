@@ -273,6 +273,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (command.equals("U") && (isOnSurface() || !alive))
 				{
 					setVSpeed(-verticalMovement);
+					//setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
 					setOnSurface(false);
 				}
 				else if (command.equals("!U") && !alive)
