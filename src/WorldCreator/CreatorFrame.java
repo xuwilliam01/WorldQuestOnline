@@ -13,7 +13,7 @@ public class CreatorFrame extends JFrame{
 	 */
 	public CreatorFrame()
 	{
-		setPreferredSize(new Dimension(CreatorWorld.WIDTH + CreatorItems.WIDTH, CreatorWorld.HEIGHT));
+		setPreferredSize(new Dimension(Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 		setResizable(false);
 		setTitle("WorldQuest Online");
 		setLocationRelativeTo(null);

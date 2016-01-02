@@ -9,6 +9,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,19 +24,16 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import Imports.Images;
+import Server.ServerFrame;
+import Server.ServerGUI;
+import Server.ServerWorld;
 
-public class CreatorWorld extends JPanel implements KeyListener, ActionListener, MouseListener{
+public class CreatorWorld extends JPanel implements KeyListener, ActionListener, MouseWheelListener,MouseListener, MouseMotionListener{
 
-	public static final int WIDTH = 1024;
-	public static final int HEIGHT = 768;
-	public static final int TILE_SIZE = 16; 
-
-	public static final int CENTRE_X = WIDTH/2;
-	public static final int CENTRE_Y = HEIGHT/2;
 
 	private final int SCROLL_SPEED = 16;
 
-	private char[][] grid = new char[HEIGHT/TILE_SIZE + 1][WIDTH/TILE_SIZE+1];	
+	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT/ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH/ServerWorld.TILE_SIZE+1];	
 	private int posY = 200;
 	private int posX = 200;
 
@@ -55,6 +55,22 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 	private boolean isNewWidth = false;
 	private int newHeight;
 	private int newWidth;
+	
+	/**
+	 * The factor of the scale of the object on the map compared to its actual
+	 * height and width (can be changed by scrolling mouse wheel)
+	 */
+	private double objectFactor;
+	
+	/**
+	 * The x-coordinate of where the mouse began to be dragged from
+	 */
+	private int dragSourceX;
+
+	/**
+	 * The y-coordinate of where the mouse began to be dragged from
+	 */
+	private int dragSourceY;
 
 	//File
 	String fileName;
@@ -67,13 +83,18 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 	{
 		addKeyListener(this);
 		addMouseListener(this);
+		addMouseWheelListener(this);
+		addMouseMotionListener(this);
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
 		setLayout(null);
 		setFocusable(true);
 		requestFocusInWindow();
-		setSize(WIDTH,HEIGHT);
+		setSize(Client.Client.SCREEN_WIDTH,Client.Client.SCREEN_HEIGHT);
+		
+		// Set the scale of objects
+		objectFactor = ServerFrame.FRAME_FACTOR * 4;
 
 		this.fileName = fileName;
 		
@@ -98,12 +119,17 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		String line = br.readLine();
 		String[] tokens = line.split(" ");
 		grid = new char[Integer.parseInt(tokens[0])][Integer.parseInt(tokens[1])];
-
+		
 		for(int row = 0; row < grid.length;row++)
 		{
 			line = br.readLine();
 			for(int col = 0; col < grid[0].length;col++)
+			{
 				grid[row][col] = line.charAt(col);
+				System.out.print(grid[row][col]);
+			}
+			System.out.println();
+			
 		}
 		br.close();
 	}
@@ -153,22 +179,22 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		}
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((posY - CENTRE_Y - 5) / TILE_SIZE);
+		int startRow = (int) ((posY - ServerGUI.CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int) ((CENTRE_Y + posY + 5) / TILE_SIZE);
+		int endRow = (int) ((ServerGUI.CENTRE_Y + posY + 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length - 1;
 		}
-		int startColumn = (int) ((posX - CENTRE_X - 5) / TILE_SIZE);
+		int startColumn = (int) ((posX - ServerGUI.CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int) ((CENTRE_X + posX + 5) / TILE_SIZE);
+		int endColumn = (int) ((ServerGUI.CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;
@@ -179,10 +205,10 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 			for (int column = startColumn; column <= endColumn; column++)
 			{		
 				graphics.drawImage(tiles[grid[row][column]].getImage(),
-						(int) (CENTRE_X + column
-								* TILE_SIZE - posX) + 1,
-						(int) (CENTRE_Y + row
-								* TILE_SIZE - posY) + 1,
+						(int) (ServerGUI.CENTRE_X + column
+								* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+						(int) (ServerGUI.CENTRE_Y + row
+								* (ServerWorld.TILE_SIZE / objectFactor) - posY),
 						null);
 			}
 		}
@@ -190,10 +216,10 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 		if(selectedTile != '-' && selectedBlock != null && selectedBlock[0] >= startRow && selectedBlock[0] <= endRow && selectedBlock[1] >= startColumn && selectedBlock[1] <= endColumn)
 		{
 			graphics.setColor(Color.white);
-			graphics.drawRect((int) (CENTRE_X + selectedBlock[1]
-					* TILE_SIZE - posX) + 1,
-					(int) (CENTRE_Y + selectedBlock[0]
-							* TILE_SIZE - posY) + 1,TILE_SIZE,TILE_SIZE);
+			graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
+					* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+					(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
+							* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 
 		}
 
@@ -221,8 +247,8 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 
 	public int[] getRowCol(int x, int y)
 	{
-		int col = (x - CENTRE_X + posX)/TILE_SIZE;
-		int row = (y - CENTRE_Y + posY)/TILE_SIZE;
+		int col = (int) ((x - ServerGUI.CENTRE_X + posX)/(ServerWorld.TILE_SIZE / objectFactor));
+		int row = (int) ((y - ServerGUI.CENTRE_Y + posY)/(ServerWorld.TILE_SIZE / objectFactor));
 		return new int[]{row,col};
 	}
 
@@ -361,9 +387,18 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 	@Override
 	public void mousePressed(MouseEvent event) {
 		if(event.getButton() == MouseEvent.BUTTON1 && selectedTile != '-')
+		{
 			addingTile = true;
+		}
+		else if (event.getButton() == MouseEvent.BUTTON1)
+		{
+			dragSourceX = event.getX();
+			dragSourceY = event.getY();
+		}
 		else if(event.getButton() == MouseEvent.BUTTON3)
+		{
 			removingTile = true;
+		}
 
 		repaint();
 	}
@@ -376,5 +411,52 @@ public class CreatorWorld extends JPanel implements KeyListener, ActionListener,
 			removingTile = false;
 
 	}
+	
+	@Override
+	public void mouseDragged(MouseEvent event)
+	{
+		posX -= event.getX() - dragSourceX;
+		posY -= event.getY() - dragSourceY;
+		dragSourceX = event.getX();
+		dragSourceY = event.getY();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent scroll)
+	{
+		int notches = scroll.getWheelRotation();
+
+		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR * 16)
+		{
+			objectFactor *= (1.1 * notches);
+			posX /= 1.1;
+			posY /= 1.1;
+		}
+		else if (notches < 0)
+		{
+			if (objectFactor / 1.1 >= 1)
+			{
+			objectFactor /= (1.1 * (-notches));
+			posX *= 1.1;
+			posY *= 1.1;
+			}
+			else
+			{
+				posX *= objectFactor;
+				posY *= objectFactor;
+				objectFactor = 1;
+			}
+			
+		}
+	}
+	
+	
 }
 
