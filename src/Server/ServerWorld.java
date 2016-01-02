@@ -75,7 +75,7 @@ public class ServerWorld
 	/**
 	 * Max speed (or game may glitch out)
 	 */
-	private static final int MAX_SPEED = TILE_SIZE * 2;
+	private static final int MAX_SPEED = TILE_SIZE*4;
 
 	/**
 	 * The amount of gravity per refresh
