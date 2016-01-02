@@ -24,8 +24,8 @@ public class ClientItem extends JButton implements MouseListener{
 		this.imageName = imageName;
 		image = Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png");
 		
-		setSize(Images.INVENTORY_IMAGE_SIZE,Images.INVENTORY_IMAGE_SIZE);
-		setLocation(col*Images.INVENTORY_IMAGE_SIZE+(col+1)*20,row*Images.INVENTORY_IMAGE_SIZE+row*20+50);
+		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
+		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
 		setFocusable(false);

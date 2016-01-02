@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -26,18 +25,13 @@ public class Images
 	/**
 	 * The size the image will be in the inventory
 	 */
-	public static final int INVENTORY_IMAGE_SIZE = ClientInventory.INVENTORY_WIDTH/(ClientInventory.WIDTH+1)-20;
+	public static final int INVENTORY_IMAGE_SIDELENGTH = ClientInventory.INVENTORY_WIDTH/(ClientInventory.WIDTH+1)-20;
 
 
 	/**
 	 * Array list of the game images
 	 */
-	public static ArrayList<GameImage> images;
-
-	/**
-	 * Array list of lists of images (USE LATER)
-	 */
-	public static ArrayList<ArrayList<GameImage>> imageSheets;
+	public static BinaryTree<GameImage> images = null;
 
 	/**
 	 * Import the images from the folder
@@ -48,7 +42,7 @@ public class Images
 		// Only import if the images haven't been imported already
 		if (images == null)
 		{
-			images = new ArrayList<GameImage>();
+			images = new BinaryTree<GameImage>();
 
 			// Import sprite sheets to create images with
 			try
@@ -99,10 +93,10 @@ public class Images
 			images.add(new GameImage("BULLET.png"));
 
 			images.add(new GameImage("HP_POTION.png",15,15));
-			images.add(new GameImage("HP_POTION_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
+			images.add(new GameImage("HP_POTION_ICON.png",INVENTORY_IMAGE_SIDELENGTH,INVENTORY_IMAGE_SIDELENGTH));
 			
 			images.add(new GameImage("SWORD.png",70,30));
-			images.add(new GameImage("SWORD_ICON.png",INVENTORY_IMAGE_SIZE,INVENTORY_IMAGE_SIZE));
+			images.add(new GameImage("SWORD_ICON.png",INVENTORY_IMAGE_SIDELENGTH,INVENTORY_IMAGE_SIDELENGTH));
 		}
 	}
 
@@ -113,16 +107,7 @@ public class Images
 	 */
 	public static Image getImage(String name)
 	{
-		for (GameImage image : images)
-		{
-			if (image.getName().equals(name))
-			{
-				return image.getImage();
-			}
-		}
-
-		System.out.println("Could not get image: " + name);
-		return null;
+		return images.get(new GameImage(name,true)).getImage();
 	}
 
 	/**
@@ -132,13 +117,6 @@ public class Images
 	 */
 	public static GameImage getGameImage(String name)
 	{
-		for (GameImage image : images)
-		{
-			if (image.getName().equals(name))
-			{
-				return image;
-			}
-		}
-		return null;
+		return images.get(new GameImage(name,true));
 	}
 }

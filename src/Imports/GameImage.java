@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
  * @author William Xu && Alex Raita
  *
  */
-public class GameImage
+public class GameImage implements Comparable <GameImage>
 {
 	private String name;
 	private Image image;
@@ -25,6 +25,16 @@ public class GameImage
 	 * The height of the image in pixels
 	 */
 	private int height;
+	
+	/**
+	 * Create a fake GameImage to compare in the binary tree
+	 * @param name
+	 * @param fake
+	 */
+	public GameImage(String name, boolean fake)
+	{
+		this.name = name;
+	}
 
 	/**
 	 * Constructor for a game image with just the name (to load from file)
@@ -109,5 +119,11 @@ public class GameImage
 	public int getHeight()
 	{
 		return height;
+	}
+
+	@Override
+	public int compareTo(GameImage other)
+	{
+		return name.compareTo(other.getName());
 	}
 }
