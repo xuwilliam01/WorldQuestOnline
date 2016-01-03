@@ -16,8 +16,8 @@ import javax.swing.JTextField;
 public class CreatorItems extends JPanel implements ActionListener{
 
 	public static final int WIDTH = 300;
-	public static final int NUM_ROWS = 1;
-	private static final int NUM_COLS = 3;
+	public static final int NUM_ROWS = 3;
+	private static final int NUM_COLS = 5;
 
 	private CreatorWorld world;
 	private CreatorObject[] buttons;
