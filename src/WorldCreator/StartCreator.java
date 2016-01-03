@@ -16,9 +16,11 @@ public class StartCreator {
 		String fileName = "";
 		while(true)
 		{
-			fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create");
-			if(fileName != null && fileName != "")
+			fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create (No blank names)");
+			if(fileName != null && !fileName.trim().isEmpty())
 				break;
+			if(fileName == null)
+				System.exit(0);
 		}
 
 		CreatorFrame frame = new CreatorFrame();
