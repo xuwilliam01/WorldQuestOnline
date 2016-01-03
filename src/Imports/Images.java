@@ -122,6 +122,14 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("WATER.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("DIRT.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("DIRTGRASS.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("COBBLESTONE.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("STONEBRICKS.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
 
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
