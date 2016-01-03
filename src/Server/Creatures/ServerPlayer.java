@@ -96,6 +96,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether or not the player is alive
 	 */
 	private boolean alive = true;
+	
+	/**
+	 * The current weapon selected (change later to actual inventory slot)
+	 */
+	char weaponSelected;
 
 	/**
 	 * Constructor for a player in the server
@@ -116,6 +121,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
 
+		weaponSelected = '1';
+		
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -306,6 +313,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
+				else if (command.charAt(0)=='W')
+				{
+					weaponSelected = command.charAt(1);
+				}
 			}
 			catch (IOException e)
 			{
@@ -335,9 +346,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void performAction(int mouseX, int mouseY)
 	{
-		
-		
-		char weaponSelected = 'S';
 		if (alive)
 		{
 			
@@ -346,11 +354,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			double angle = Math.atan2(yDist, xDist);	
 			
-			if (weaponSelected == 'S')
+			if (weaponSelected == '1')
 			{
 				world.add(new ServerItemSwing(this,"SWORD_0.png",(int)(Math.toDegrees(angle)+0.5),8));
 			}
-			else
+			else if (weaponSelected == '2')
 			{
 				// Get the width and height of the image
 				int bulletWidth = Images.getGameImage("BULLET.png").getWidth();

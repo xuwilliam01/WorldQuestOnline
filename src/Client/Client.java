@@ -373,6 +373,18 @@ public class Client extends JPanel implements KeyListener, MouseListener, MouseM
 			output.println("P");
 			output.flush();
 		}
+		else if (key.getKeyCode() == KeyEvent.VK_1 && !currentMessage.equals("W1"))
+		{
+			// P for ping
+			output.println("W1");
+			output.flush();
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_2 && !currentMessage.equals("W2"))
+		{
+			// P for ping
+			output.println("W2");
+			output.flush();
+		}
 	}
 
 	@Override
