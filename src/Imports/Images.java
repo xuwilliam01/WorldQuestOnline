@@ -65,16 +65,7 @@ public class Images
 					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
-			}
-			catch (IOException e)
-			{
-				System.out.println("Error loading sprite sheets");
-				e.printStackTrace();
-			}
-
-			// Add images with rotations (the number in the name represents the angle rotated)
-			try
-			{
+				
 				image = ImageIO.read(new File(
 						"SWORD_0.png"));
 
@@ -91,13 +82,17 @@ public class Images
 					images.add(new GameImage("SWORD_" + angle + ".png", op
 							.filter(image, null)));
 				}
+				
+				// Add images with rotations (the number in the name represents the angle rotated)
+				
 			}
 			catch (IOException e)
 			{
-				// TODO Auto-generated catch block
+				System.out.println("Error loading sprite sheets");
 				e.printStackTrace();
 			}
 
+			// Add images with rotations (the number in the name represents the angle rotated)
 			images.add(new GameImage("SWORD.png", 70, 30));
 
 			images.add(new GameImage("SWORD_ICON.png",
