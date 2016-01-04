@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import Client.ClientInventory;
 import Server.ServerWorld;
 import Tools.BinaryTree;
+import WorldCreator.CreatorObject;
 
 /**
  * Class that imports and stores all possible images in the game
@@ -35,6 +36,9 @@ public class Images
 	 * Array list of the game images
 	 */
 	public static BinaryTree<GameImage> images = null;
+
+	
+	
 
 	/**
 	 * Import the images from the folder

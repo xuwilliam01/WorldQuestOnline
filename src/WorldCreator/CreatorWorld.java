@@ -28,7 +28,6 @@ import Server.ServerFrame;
 import Server.ServerGUI;
 import Server.ServerWorld;
 
-@SuppressWarnings("serial")
 public class CreatorWorld extends JPanel implements KeyListener,
 		ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {
