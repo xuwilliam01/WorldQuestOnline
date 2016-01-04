@@ -50,7 +50,7 @@ public class ServerWorld
 	public final static String HP_75 = HP_POTION_TYPE + "75";
 	public final static String HP_100 = HP_POTION_TYPE + "100";
 
-	public final static String GRID_FILE = "NewWorld.txt";
+	public final static String GRID_FILE = "World.txt";
 
 	/**
 	 * Grid of tiles
@@ -60,7 +60,7 @@ public class ServerWorld
 	/**
 	 * The size of each tile
 	 */
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 24;
 
 	/**
 	 * Grid of objects
@@ -234,19 +234,39 @@ public class ServerWorld
 					object.setHSpeed(0);
 
 				// Make sure the object is within the world
-				if (object.getX() - Math.abs(object.getHSpeed()) < 0)
+				
+				// Make sure the object is within the world
+				if (object.getHSpeed() >= 0)
 				{
-					object.setX(0);
-					object.setHSpeed(0);
+					if (object.getX() < 0)
+					{
+						object.setX(0);
+						object.setHSpeed(0);
+					}
+					else if (object.getX() + object.getWidth() + object.getHSpeed() > tileGrid[0].length
+							* TILE_SIZE)
+					{
+						object.setX((tileGrid[0].length - 1) * TILE_SIZE
+								- object.getWidth());
+						object.setHSpeed(0);
+					}
 				}
-				else if (object.getX() + object.getWidth()
-						+ Math.abs(object.getHSpeed()) > tileGrid[0].length
-						* TILE_SIZE)
+				else
 				{
-					object.setX((tileGrid[0].length - 1) * TILE_SIZE
-							- object.getWidth());
-					object.setHSpeed(0);
+					if (object.getX() + object.getHSpeed() < 0)
+					{
+						object.setX(0);
+						object.setHSpeed(0);
+					}
+					else if (object.getX() + object.getWidth() > tileGrid[0].length
+							* TILE_SIZE)
+					{
+						object.setX((tileGrid[0].length - 1) * TILE_SIZE
+								- object.getWidth());
+						object.setHSpeed(0);
+					}
 				}
+				
 
 				// Make sure the object is within the world
 				if (object.getVSpeed() >= 0)
@@ -365,34 +385,34 @@ public class ServerWorld
 
 					if (vSpeed > 0)
 					{
-						startRow = (int) (y1 / TILE_SIZE);
-						endRow = (int) ((y2 + vSpeed) / TILE_SIZE);
+						startRow = (int) (y1 / TILE_SIZE - 1);
+						endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
 					}
 					else if (vSpeed < 0)
 					{
-						startRow = (int) ((y1 + vSpeed) / TILE_SIZE);
-						endRow = (int) (y2 / TILE_SIZE);
+						startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
+						endRow = (int) (y2 / TILE_SIZE + 1);
 					}
 					else
 					{
 						startRow = (int) (y1 / TILE_SIZE);
-						endRow = (int) (y2 / TILE_SIZE);
+						endRow = (int) (y2 / TILE_SIZE + 1);
 					}
 
 					if (hSpeed > 0)
 					{
-						startColumn = (int) (x1 / TILE_SIZE);
-						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE);
+						startColumn = (int) (x1 / TILE_SIZE- 1);
+						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
 					}
 					else if (hSpeed < 0)
 					{
-						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE);
-						endColumn = (int) (x2 / TILE_SIZE);
+						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE- 1);
+						endColumn = (int) (x2 / TILE_SIZE + 1);
 					}
 					else
 					{
-						startColumn = (int) (x1 / TILE_SIZE);
-						endColumn = (int) (x2 / TILE_SIZE);
+						startColumn = (int) (x1 / TILE_SIZE - 1);
+						endColumn = (int) (x2 / TILE_SIZE + 1);
 					}
 
 					if (startRow < 0)

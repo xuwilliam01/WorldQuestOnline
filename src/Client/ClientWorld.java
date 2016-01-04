@@ -120,21 +120,40 @@ public class ClientWorld
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
+
+				String image = "WATER.png";
+
 				if (grid[row][column] == ' ')
 				{
-					graphics.drawImage(Images.getImage("GRASS.png"), centreX
-							+ column * tileSize - playerX, centreY + row
-							* tileSize - playerY,
-							null);
+					image = "WATER.png";
 				}
 				else if (grid[row][column] == '1')
 				{
-					graphics.drawImage(Images.getImage("BRICK.png"), centreX
-							+ column * tileSize - playerX, centreY + row
-							* tileSize - playerY,
-							null);
+					image = "BRICK.png";
 				}
+				else if (grid[row][column] == '2')
+				{
+					image = "COBBLESTONE.png";
+				}
+				else if (grid[row][column] == '3')
+				{
+					image = "STONEBRICKS.png";
+				}
+				else if (grid[row][column] == '4')
+				{
+					image = "DIRT.png";
+				}
+				else if (grid[row][column] == '5')
+				{
+					image = "DIRTGRASS.png";
+				}
+
+				graphics.drawImage(Images.getImage(image), centreX
+						+ column * tileSize - playerX, centreY + row
+						* tileSize - playerY,
+						null);
 			}
+
 		}
 
 		// Create a list of objects to remove after leaving the screen

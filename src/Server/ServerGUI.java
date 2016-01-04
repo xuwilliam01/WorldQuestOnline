@@ -24,12 +24,12 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * A color that java doesn't provide
 	 */
-	public static final Color GRASS = new Color(0, 224, 0);
+	public static final Color SKY = new Color(51, 255, 255);
 
 	/**
 	 * A color that java doesn't provide
 	 */
-	public static final Color BRICK = new Color(214, 36, 0);
+	public static final Color BLOCK = new Color(112, 112, 112);
 
 	/**
 	 * The color of a player
@@ -144,11 +144,11 @@ public class ServerGUI extends JPanel implements KeyListener,
 			{
 				if (grid[row][column] == ' ')
 				{
-					graphics.setColor(GRASS);
+					graphics.setColor(SKY);
 				}
-				else if (grid[row][column] == '1')
+				else
 				{
-					graphics.setColor(BRICK);
+					graphics.setColor(BLOCK);
 				}
 
 				graphics.fillRect(
