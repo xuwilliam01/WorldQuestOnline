@@ -1,6 +1,8 @@
 package Imports;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,9 +13,11 @@ import javax.imageio.ImageIO;
  * @author William Xu && Alex Raita
  *
  */
-public class GameImage implements Comparable <GameImage>
+public class GameImage implements Comparable<GameImage>
 {
 	private String name;
+
+	private BufferedImage bufferedImage;
 	private Image image;
 
 	/**
@@ -25,7 +29,12 @@ public class GameImage implements Comparable <GameImage>
 	 * The height of the image in pixels
 	 */
 	private int height;
-	
+
+	/**
+	 * The color in the middle of the image
+	 */
+	private Color color;
+
 	/**
 	 * Create a fake GameImage to compare in the binary tree
 	 * @param name
@@ -45,15 +54,18 @@ public class GameImage implements Comparable <GameImage>
 		this.name = name;
 		try
 		{
-			image = ImageIO.read(new File(name));
+			bufferedImage = ImageIO.read(new File(name));
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error loading image: " + name);
 			e.printStackTrace();
 		}
+		
+		image = bufferedImage;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
+		color = new Color(bufferedImage.getRGB(bufferedImage.getWidth()/3, bufferedImage.getHeight()/3));
 	}
 
 	/**
@@ -65,42 +77,51 @@ public class GameImage implements Comparable <GameImage>
 		this.name = name;
 		try
 		{
-			image = ImageIO.read(new File(name)).getScaledInstance(width,
-					height, 0);
+			bufferedImage = ImageIO.read(new File(name));
 		}
 		catch (IOException e)
 		{
 			System.out.println("Error loading image: " + name);
 			e.printStackTrace();
 		}
+
+		image = bufferedImage.getScaledInstance(width,
+				height, 0);
 		this.width = width;
 		this.height = height;
+		color = new Color(bufferedImage.getRGB(width / 3, height / 3));
 	}
 
 	/**
 	 * Constructor for a game image with the image and a name
 	 * @param name
 	 */
-	public GameImage(String name, Image image)
+	public GameImage(String name, BufferedImage image)
 	{
 		this.name = name;
 		this.image = image;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
+		color = new Color(image.getRGB(width / 3, height / 3));
 	}
 
 	/**
 	 * Constructor for a game image with scaling with a predetermined image
 	 * @param name
 	 */
-	public GameImage(String name, Image image, int width, int height)
+	public GameImage(String name, BufferedImage image, int width, int height)
 	{
 		this.name = name;
-		this.image = image.getScaledInstance(width, height, 0);
+		this.image = image.getScaledInstance(width,
+				height, 0);
 		this.width = width;
 		this.height = height;
+		color = new Color(image.getRGB(image.getWidth() / 3,
+				image.getHeight() / 3));
 	}
 
+	
+	
 	public String getName()
 	{
 		return name;
@@ -126,4 +147,16 @@ public class GameImage implements Comparable <GameImage>
 	{
 		return name.compareTo(other.getName());
 	}
+
+	public Color getCentreColor()
+	{
+		return color;
+	}
+
+	public void setCentreColor(Color centreColor)
+	{
+		this.color = centreColor;
+	}
+	
+	
 }

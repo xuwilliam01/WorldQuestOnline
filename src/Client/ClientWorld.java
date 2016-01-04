@@ -91,6 +91,10 @@ public class ClientWorld
 	public void update(Graphics graphics, int playerX, int playerY,
 			int playerWidth, int playerHeight)
 	{
+
+		// Draw the background
+		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
+		
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
@@ -121,37 +125,36 @@ public class ClientWorld
 			for (int column = startColumn; column <= endColumn; column++)
 			{
 
-				String image = "WATER.png";
+				if (grid[row][column] != ' ')
+				{
+					String image = "NOTHING.png";
 
-				if (grid[row][column] == ' ')
-				{
-					image = "WATER.png";
-				}
-				else if (grid[row][column] == '1')
-				{
-					image = "BRICK.png";
-				}
-				else if (grid[row][column] == '2')
-				{
-					image = "COBBLESTONE.png";
-				}
-				else if (grid[row][column] == '3')
-				{
-					image = "STONEBRICKS.png";
-				}
-				else if (grid[row][column] == '4')
-				{
-					image = "DIRT.png";
-				}
-				else if (grid[row][column] == '5')
-				{
-					image = "DIRTGRASS.png";
-				}
+					if (grid[row][column] == '1')
+					{
+						image = "BRICK.png";
+					}
+					else if (grid[row][column] == '2')
+					{
+						image = "COBBLESTONE.png";
+					}
+					else if (grid[row][column] == '3')
+					{
+						image = "STONEBRICKS.png";
+					}
+					else if (grid[row][column] == '4')
+					{
+						image = "DIRT.png";
+					}
+					else if (grid[row][column] == '5')
+					{
+						image = "DIRTGRASS.png";
+					}
 
-				graphics.drawImage(Images.getImage(image), centreX
-						+ column * tileSize - playerX, centreY + row
-						* tileSize - playerY,
-						null);
+					graphics.drawImage(Images.getImage(image), centreX
+							+ column * tileSize - playerX, centreY + row
+							* tileSize - playerY,
+							null);
+				}
 			}
 
 		}

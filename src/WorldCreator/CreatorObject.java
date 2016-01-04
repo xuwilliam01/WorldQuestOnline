@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import Imports.GameImage;
 import Imports.Images;
 
 public class CreatorObject extends JButton implements MouseListener{
@@ -17,6 +18,7 @@ public class CreatorObject extends JButton implements MouseListener{
 	private String imageName;
 	private Image image;
 	private CreatorWorld world;
+	private Color color;
 
 	public CreatorObject(char ref, String name, CreatorWorld world)
 	{
@@ -24,7 +26,12 @@ public class CreatorObject extends JButton implements MouseListener{
 		
 		reference = ref;
 		imageName = name;
-		image = Images.getImage(name);
+		
+		GameImage gameImage = Images.getGameImage(name);
+		image = gameImage.getImage();
+		color = gameImage.getCentreColor();
+		
+		
 		this.world = world;
 		
 		setBorder(BorderFactory.createEmptyBorder());
@@ -90,4 +97,16 @@ public class CreatorObject extends JButton implements MouseListener{
 		// TODO Auto-generated method stub
 
 	}
+
+	public Color getColor()
+	{
+		return color;
+	}
+
+	public void setColor(Color color)
+	{
+		this.color = color;
+	}
+	
+	
 }

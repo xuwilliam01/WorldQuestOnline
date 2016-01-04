@@ -138,6 +138,8 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("STONEBRICKS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
 
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
@@ -145,6 +147,8 @@ public class Images
 			images.add(new GameImage("HP_POTION.png", 15, 15));
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+			
+			images.add(new GameImage("BACKGROUND.png"));
 		}
 	}
 
@@ -157,6 +161,25 @@ public class Images
 	{
 		try{
 			return images.get(new GameImage(name, true)).getImage();
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("Could not find image " + name);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Get a specific image from the list using the name of the image
+	 * @param name the name of the image
+	 * @return the image (inside a game image) from the list
+	 */
+	public static Image getImage(String name, int width, int height)
+	{
+		try{
+			return images.get(new GameImage(name, true)).getImage().getScaledInstance(width, height, 0);
 		}
 		catch(NullPointerException e)
 		{

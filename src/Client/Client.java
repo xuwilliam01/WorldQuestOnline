@@ -172,6 +172,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			try {
 				while (true) {
 						
+						
 						String message = input.readLine();
 
 						System.out.println(System.currentTimeMillis()-startTime);
@@ -332,7 +333,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			currentMessage = "L";
 			output.println(currentMessage);
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_W
+		} else if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_SPACE
 				&& !currentMessage.equals("U")) {
 			// U for up
 			currentMessage = "U";
@@ -370,7 +371,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		} else if (key.getKeyCode() == KeyEvent.VK_A
 				&& !currentMessage.equals("!L")) {
 			currentMessage = "!L";
-		} else if (key.getKeyCode() == KeyEvent.VK_W
+		} else if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_SPACE
 				&& !currentMessage.equals("!U")) {
 			currentMessage = "!U";
 		} else if (key.getKeyCode() == KeyEvent.VK_S
