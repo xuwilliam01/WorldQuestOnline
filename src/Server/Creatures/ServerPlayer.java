@@ -441,6 +441,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setHeight(64);
 
 			verticalMovement = movementSpeed;
+			horizontalMovement = movementSpeed;
 		}
 	}
 
