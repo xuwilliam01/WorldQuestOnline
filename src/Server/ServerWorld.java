@@ -60,7 +60,7 @@ public class ServerWorld
 	/**
 	 * The size of each tile
 	 */
-	public static final int TILE_SIZE = 24;
+	public static final int TILE_SIZE = 16;
 
 	/**
 	 * Grid of objects
