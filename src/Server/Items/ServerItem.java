@@ -1,7 +1,6 @@
 package Server.Items;
 
 import Imports.Images;
-import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 

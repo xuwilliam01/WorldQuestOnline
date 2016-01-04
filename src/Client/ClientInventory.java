@@ -2,8 +2,10 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class ClientInventory extends JPanel{
 
 	public final static int INVENTORY_WIDTH = 300;

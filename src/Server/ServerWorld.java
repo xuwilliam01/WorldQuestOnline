@@ -33,10 +33,11 @@ public class ServerWorld
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String POTION_TYPE = ITEM_TYPE +"P";
+	public final static String HP_POTION_TYPE = POTION_TYPE+"H";
+	
 	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
-
 	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
-	public final static String HP_TYPE = POTION_TYPE+"H";
+
 	
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String ITEM_SWING_TYPE = ANIMATION_TYPE + "S";
@@ -44,10 +45,10 @@ public class ServerWorld
 	//These are so we can find the right images
 	public final static String LONG_SWORD = SWORD_TYPE+"L";
 
-	public final static String HP_25 = HP_TYPE+"25";
-	public final static String HP_50 = HP_TYPE+"50";
-	public final static String HP_75 = HP_TYPE+"75";
-	public final static String HP_100 = HP_TYPE+"100";
+	public final static String HP_25 = HP_POTION_TYPE+"25";
+	public final static String HP_50 = HP_POTION_TYPE+"50";
+	public final static String HP_75 = HP_POTION_TYPE+"75";
+	public final static String HP_100 = HP_POTION_TYPE+"100";
 
 	public final static String GRID_FILE = "NewWorld.txt";
 
@@ -89,11 +90,6 @@ public class ServerWorld
 	private ArrayList<ServerObject> objects;
 
 	/**
-	 * References the engine that contains the world
-	 */
-	private ServerEngine engine;
-
-	/**
 	 * List of objects to add to the world next refresh (based on the user's
 	 * input)
 	 */
@@ -111,9 +107,8 @@ public class ServerWorld
 	 * Constructor for server
 	 * @throws IOException
 	 */
-	public ServerWorld(ServerEngine engine) throws IOException
+	public ServerWorld() throws IOException
 	{
-		this.engine = engine;
 		newWorld();
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new Queue<ServerObject>();

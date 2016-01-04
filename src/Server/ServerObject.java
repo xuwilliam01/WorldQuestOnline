@@ -31,11 +31,6 @@ public class ServerObject
 	private int width;
 
 	/**
-	 * Whether or not to scale the hitbox to the image
-	 */
-	private boolean useImageDimensions;
-
-	/**
 	 * Height of the object in pixels
 	 */
 	private int height;
@@ -101,7 +96,6 @@ public class ServerObject
 		this.type = type;
 		exists = true;
 		onSurface = false;
-		useImageDimensions = false;
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
@@ -111,13 +105,11 @@ public class ServerObject
 		{
 			this.width = Images.getGameImage(image).getWidth();
 			this.height = Images.getGameImage(image).getHeight();
-			useImageDimensions = true;
 		}
 		else
 		{
 			this.width = width;
 			this.height = height;
-			useImageDimensions = false;
 		}
 	}
 

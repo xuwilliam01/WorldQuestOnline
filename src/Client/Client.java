@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 
+@SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {
 	// Width and height of the screen

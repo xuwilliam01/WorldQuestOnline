@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import Client.ClientInventory;
 import Server.ServerWorld;
+import Tools.BinaryTree;
 
 /**
  * Class that imports and stores all possible images in the game

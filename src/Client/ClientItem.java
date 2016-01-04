@@ -1,16 +1,14 @@
 package Client;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
 import Imports.Images;
 
+@SuppressWarnings("serial")
 public class ClientItem extends JButton implements MouseListener{
 
 	private Image image;

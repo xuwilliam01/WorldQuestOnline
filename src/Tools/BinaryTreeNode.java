@@ -1,11 +1,11 @@
-package Imports;
+package Tools;
 /**
  * A node to be used in the BinaryTree class
  * @author Alex Raita && Willia Xu
  * @param <T> the type of Class that will be used to define objects in this class
  * @version November 22, 2015
  */
-class BinaryTreeNode<T>
+public class BinaryTreeNode<T>
 {
 	private T item;
 	private BinaryTreeNode<T> left;

@@ -1,11 +1,13 @@
-package Imports;
+package Tools;
+
+
 /**
  * A binary tree object with various methods
  * @author Alex Raita & William Xu
  * @param <E> The type of class objects in this Class will be defined as
  * @version November 22, 2015
  */
-class BinaryTree<E extends Comparable<E>>
+public class BinaryTree<E extends Comparable<E>>
 {
 	//Store the first elements of the tree
 	private BinaryTreeNode<E> head;

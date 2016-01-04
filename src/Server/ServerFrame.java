@@ -1,11 +1,9 @@
 package Server;
 import java.awt.Dimension;
-
 import javax.swing.JFrame;
 
-import Server.Creatures.ServerPlayer;
 
-
+@SuppressWarnings("serial")
 public class ServerFrame extends JFrame
 {
 

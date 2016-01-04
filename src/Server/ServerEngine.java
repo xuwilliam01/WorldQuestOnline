@@ -65,7 +65,7 @@ public class ServerEngine implements Runnable, ActionListener
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		objectIDs = new boolean[NUMBER_OF_IDS];
-		world = new ServerWorld(this);
+		world = new ServerWorld();
 
 	}
 

@@ -2,15 +2,8 @@ package Server.Creatures;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.swing.Timer;
-
 import Server.ServerEngine;
-import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Items.ServerItem;
 
 /**
  * Class to control enemy AIs
