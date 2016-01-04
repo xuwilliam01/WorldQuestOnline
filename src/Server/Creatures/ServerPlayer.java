@@ -258,15 +258,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Tell the user what hp he has
 		queueMessage("L " + getHP());
-		
-		if (message.length()<=4000)
-		{
-			int lengthDiff = 4000-message.length();
-			for (int no = 0; no < lengthDiff/6; no++)
-			{
-				queueMessage("L " + getHP());
-			}
-		}
 
 		// Signal a repaint
 		queueMessage("U");
