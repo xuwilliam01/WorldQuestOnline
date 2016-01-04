@@ -1,6 +1,9 @@
 package Server;
 
+import java.util.ArrayList;
+
 import Imports.Images;
+import Tools.RowCol;
 
 /**
  * A generic object existing somewhere in the world with a unique ID, x,y
@@ -81,6 +84,12 @@ public class ServerObject
 	private boolean solid;
 
 	/**
+	 * An arraylist of indexes (row and column) of the object tiles that this
+	 * object is inside
+	 */
+	private ArrayList<RowCol> objectTiles;
+
+	/**
 	 * Constructor for an object
 	 * @param x
 	 * @param y
@@ -91,6 +100,7 @@ public class ServerObject
 	public ServerObject(double x, double y, int width, int height,
 			double gravity, String image, String type)
 	{
+		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
 		this.type = type;
@@ -141,7 +151,21 @@ public class ServerObject
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Check for a collision between an object and a hitbox
+	 * @param other
+	 * @return whether or not the two objects are colliding
+	 */
+	public boolean collidesWith(int x1, int y1, int x2, int y2)
+	{
+		if (x <= x2 && (x + width) >= x1 && y <= y2 && (y + height) >= y1)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Checks whether or not the other object is in range of this object
 	 * @param other
@@ -151,18 +175,18 @@ public class ServerObject
 	public boolean inRange(ServerObject other, double distance)
 	{
 		double distanceBetween = distanceBetween(other);
-		
+
 		if (distanceBetween <= distance)
 		{
 			return true;
 		}
 		return false;
 	}
-	
 
 	/**
 	 * Quickly finds whether or not the other object is vertically or
-	 * horizontally within range without actually calculating the distance between
+	 * horizontally within range without actually calculating the distance
+	 * between
 	 * @param other
 	 * @param distance
 	 * @return
@@ -171,7 +195,10 @@ public class ServerObject
 	{
 		// Create a big hitbox and see if the other object touches it,
 		// essentially
-		if (other.getX()<=x+width+distance && other.getX()+other.getWidth() >= x - distance && other.getY() <= y + height + distance && other.getY() + other.getHeight() >= y - distance)
+		if (other.getX() <= x + width + distance
+				&& other.getX() + other.getWidth() >= x - distance
+				&& other.getY() <= y + height + distance
+				&& other.getY() + other.getHeight() >= y - distance)
 		{
 			return true;
 		}
@@ -222,6 +249,17 @@ public class ServerObject
 		return Math.sqrt((thisX - otherX)
 				* (thisX - otherX) + (thisY - otherY)
 				* (thisY - otherY));
+	}
+
+	
+	public ArrayList<RowCol> getObjectTiles()
+	{
+		return objectTiles;
+	}
+
+	public void setObjectTiles(ArrayList<RowCol> objectTiles)
+	{
+		this.objectTiles = objectTiles;
 	}
 
 	public boolean exists()

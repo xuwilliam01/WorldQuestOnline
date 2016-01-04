@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Animations.ServerWeaponSwing;
 import Server.Items.ServerItem;
+import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
+import Tools.RowCol;
 
 /**
  * The player (Type 'P')
@@ -39,10 +42,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private BufferedReader input;
 	private ServerEngine engine;
 	private ServerWorld world;
-
-	// ////////////////////////////////////////////////////////////////////
-	// X and Y coordinates will be changed once scrolling is implemented//
-	// ////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
@@ -96,7 +95,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
 	 */
-	char weaponSelected;
+	private char weaponSelected;
 
 	/**
 	 * Constructor for a player in the server
@@ -116,7 +115,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
-
+		
 		weaponSelected = '1';
 		
 		// Import the socket, server, and world

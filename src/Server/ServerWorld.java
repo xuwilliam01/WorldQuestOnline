@@ -4,12 +4,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import Server.Animations.ServerWeaponSwing;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Items.ServerItem;
+import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
+import Tools.RowCol;
 import sun.misc.Queue;
 
 /**
@@ -32,23 +33,22 @@ public class ServerWorld
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
 
 	public final static char ITEM_TYPE = 'I';
-	public final static String POTION_TYPE = ITEM_TYPE +"P";
-	public final static String HP_POTION_TYPE = POTION_TYPE+"H";
-	
-	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
-	public final static String SWORD_TYPE = WEAPON_TYPE+"S";
+	public final static String POTION_TYPE = ITEM_TYPE + "P";
+	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 
-	
+	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
+	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
+
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String ITEM_SWING_TYPE = ANIMATION_TYPE + "S";
 
-	//These are so we can find the right images
-	public final static String LONG_SWORD = SWORD_TYPE+"L";
+	// These are so we can find the right images
+	public final static String LONG_SWORD = SWORD_TYPE + "L";
 
-	public final static String HP_25 = HP_POTION_TYPE+"25";
-	public final static String HP_50 = HP_POTION_TYPE+"50";
-	public final static String HP_75 = HP_POTION_TYPE+"75";
-	public final static String HP_100 = HP_POTION_TYPE+"100";
+	public final static String HP_25 = HP_POTION_TYPE + "25";
+	public final static String HP_50 = HP_POTION_TYPE + "50";
+	public final static String HP_75 = HP_POTION_TYPE + "75";
+	public final static String HP_100 = HP_POTION_TYPE + "100";
 
 	public final static String GRID_FILE = "NewWorld.txt";
 
@@ -56,16 +56,21 @@ public class ServerWorld
 	 * Grid of tiles
 	 */
 	private char[][] tileGrid;
-	
-	/**
-	 * Grid of objects
-	 */
-	private ArrayList<ServerObject>[][]objectGrid;
 
 	/**
 	 * The size of each tile
 	 */
 	public static final int TILE_SIZE = 16;
+
+	/**
+	 * Grid of objects
+	 */
+	private ArrayList<ServerObject>[][] objectGrid;
+
+	/**
+	 * The size of each object tile
+	 */
+	public static final int OBJECT_TILE_SIZE = TILE_SIZE * 4;
 
 	/**
 	 * Number of pixels that the collision may be off by that we need to adjust
@@ -76,7 +81,7 @@ public class ServerWorld
 	/**
 	 * Max speed (or game may glitch out)
 	 */
-	private static final int MAX_SPEED = TILE_SIZE*4;
+	private static final int MAX_SPEED = TILE_SIZE * 4;
 
 	/**
 	 * The amount of gravity per refresh
@@ -95,7 +100,9 @@ public class ServerWorld
 	 */
 	private Queue<ServerObject> objectsToAdd;
 
-	// Create list of objects to remove if doesn't exist anymore
+	/**
+	 * List of objects to remove that doesn't exist anymore
+	 */
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
 
 	/**
@@ -124,27 +131,32 @@ public class ServerWorld
 		{
 			ServerEnemy newEnemy = new ServerSlime(400 * no + 50, 50, -1, -1,
 					GRAVITY,
-					"SLIME_0.png",this);
-			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
+					"SLIME_0.png", this);
+			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
+					newEnemy.getY()));
 			add(newEnemy);
 		}
 	}
 
 	/**
-	 * Spawn enemies if the current time passes the spawn timer, then reset the timer
+	 * Spawn enemies if the current time passes the spawn timer, then reset the
+	 * timer
 	 */
 	public void spawnEnemies()
 	{
-		if (System.currentTimeMillis()>= spawnTimer)
+		if (System.currentTimeMillis() >= spawnTimer)
 		{
-			int spawnLocation = (int)(Math.random() * 9);
+			int spawnLocation = (int) (Math.random() * 9 + 9);
 
-			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50, 50, -1, -1,
+			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50,
+					50, -1, -1,
 					GRAVITY,
-					"SLIME_0.png",this);
+					"SLIME_0.png", this);
 			add(newEnemy);
-			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(), newEnemy.getY()));
-			spawnTimer = System.currentTimeMillis() + (int)(Math.random() * 15000 + 5000);
+			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
+					newEnemy.getY()));
+			spawnTimer = System.currentTimeMillis()
+					+ (int) (Math.random() * 15000 + 5000);
 		}
 	}
 
@@ -160,10 +172,12 @@ public class ServerWorld
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
-		                                                         .parseInt(tokenizer.nextToken())];
-		
-		objectGrid = new ArrayList[tileGrid.length][tileGrid[0].length];
-		
+				.parseInt(tokenizer.nextToken())];
+
+		objectGrid = new ArrayList[tileGrid.length
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
 		{
@@ -172,7 +186,7 @@ public class ServerWorld
 				objectGrid[row][column] = new ArrayList<ServerObject>();
 			}
 		}
-		
+
 		String line;
 		for (int row = 0; row < tileGrid.length; row++)
 		{
@@ -216,40 +230,116 @@ public class ServerWorld
 			// This will remove the object a frame after it stops existing
 			if (object.exists())
 			{
-				if(object.getType().charAt(0) == 'I' && object.isOnSurface())
+				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
 					object.setHSpeed(0);
-				
-				// Check collisions with other objects
-				for (ServerObject otherObject : objects)
+
+				// Make sure the object is within the world
+				if (object.getX() - Math.abs(object.getHSpeed()) < 0)
 				{
-					if (otherObject.exists())
+					object.setX(0);
+					object.setHSpeed(0);
+				}
+				else if (object.getX() + object.getWidth()
+						+ Math.abs(object.getHSpeed()) > tileGrid[0].length
+						* TILE_SIZE)
+				{
+					object.setX((tileGrid[0].length - 1) * TILE_SIZE
+							- object.getWidth());
+					object.setHSpeed(0);
+				}
+
+				// Make sure the object is within the world
+				if (object.getVSpeed() >= 0)
+				{
+					if (object.getY() < 0)
 					{
-						if (object.getType().equals(BULLET_TYPE))
+						object.setY(0);
+						object.setVSpeed(0);
+					}
+					else if (object.getY() + object.getHeight()
+							+ object.getVSpeed() > tileGrid.length
+							* TILE_SIZE)
+					{
+						object.setY((tileGrid.length - 1) * TILE_SIZE
+								- object.getHeight());
+						object.setVSpeed(0);
+					}
+				}
+				else
+				{
+					if (object.getY() + object.getVSpeed() < 0)
+					{
+						object.setY(0);
+						object.setVSpeed(0);
+					}
+					else if (object.getY() + object.getHeight() > tileGrid.length
+							* TILE_SIZE)
+					{
+						object.setY((tileGrid.length - 1) * TILE_SIZE
+								- object.getHeight());
+						object.setVSpeed(0);
+					}
+				}
+				
+
+				// Add the object to all the object tiles that it collides with
+				// currently
+				int startRow = (int) (object.getY() / OBJECT_TILE_SIZE);
+				int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
+				int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
+				int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
+
+				// Update all locations of objects based on the object grid (for
+				// collisions)
+				updateObjectTiles(object, startRow, endRow, startColumn,
+						endColumn);
+
+				// Check collisions with other objects in tiles that they both
+				// touch
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						for (ServerObject otherObject : objectGrid[row][column])
 						{
-							if (otherObject.getType().equals(PLAYER_TYPE)
-									&& otherObject.getID() != ((ServerProjectile) object)
-									.getOwnerID()
-									&& object.collidesWith(otherObject))
+							if (otherObject.exists())
 							{
-								((ServerPlayer) otherObject)
-								.inflictDamage(((ServerProjectile) object)
-										.getDamage());
-								((ServerProjectile) object).destroy();
+								if (object.getType().equals(BULLET_TYPE))
+								{
+									if (otherObject.getType().equals(
+											PLAYER_TYPE)
+											&& otherObject.getID() != ((ServerProjectile) object)
+													.getOwnerID()
+											&& object.collidesWith(otherObject))
+									{
+										((ServerPlayer) otherObject)
+												.inflictDamage(((ServerProjectile) object)
+														.getDamage());
+										((ServerProjectile) object).destroy();
+									}
+									else if (otherObject.getType().charAt(0) == NPC_TYPE
+											&& object.collidesWith(otherObject))
+									{
+										((ServerEnemy) otherObject)
+												.inflictDamage(((ServerProjectile) object)
+														.getDamage());
+										((ServerProjectile) object).destroy();
+									}
+								}
+								// If a player collided with an item
+								else if (otherObject.getType().charAt(0) == 'I'
+										&& object.getType().equals(PLAYER_TYPE)
+										&& object.collidesWith(otherObject))
+								{
+									((ServerPlayer) object)
+											.addItem((ServerItem) otherObject);
+									otherObject.destroy();
+								}
 							}
-							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.collidesWith(otherObject))
-							{
-								((ServerEnemy) otherObject).inflictDamage(((ServerProjectile) object).getDamage());
-								((ServerProjectile) object).destroy();
-							}
-						}
-						//If a player collided with an item
-						else if(otherObject.getType().charAt(0) == 'I' && object.getType().equals(PLAYER_TYPE) && object.collidesWith(otherObject))
-						{
-							((ServerPlayer)object).addItem((ServerItem)otherObject);
-							otherObject.destroy();
 						}
 					}
 				}
+
 				boolean moveVertical = true;
 				boolean moveHorizontal = true;
 
@@ -261,6 +351,10 @@ public class ServerWorld
 						object.setVSpeed(object.getVSpeed()
 								+ object.getGravity());
 					}
+					else
+					{
+						object.setVSpeed(MAX_SPEED);
+					}
 
 					double vSpeed = object.getVSpeed();
 					double hSpeed = object.getHSpeed();
@@ -268,60 +362,53 @@ public class ServerWorld
 					double x2 = object.getX() + object.getWidth();
 					double y1 = object.getY();
 					double y2 = object.getY() + object.getHeight();
-					
-					int startRow = 0;
-					int endRow = 0;
-					int startColumn = 0;
-					int endColumn = 0;
-					
 
 					if (vSpeed > 0)
 					{
-						startRow = (int) (y1 / TILE_SIZE - 1);
-						endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
+						startRow = (int) (y1 / TILE_SIZE);
+						endRow = (int) ((y2 + vSpeed) / TILE_SIZE);
 					}
 					else if (vSpeed < 0)
 					{
-						startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
-						endRow = (int)(y2/TILE_SIZE + 1);
+						startRow = (int) ((y1 + vSpeed) / TILE_SIZE);
+						endRow = (int) (y2 / TILE_SIZE);
 					}
 					else
 					{
 						startRow = (int) (y1 / TILE_SIZE);
-						endRow = (int)(y2/TILE_SIZE + 1);
+						endRow = (int) (y2 / TILE_SIZE);
 					}
-					
+
 					if (hSpeed > 0)
 					{
-						startColumn = (int) (x1 / TILE_SIZE - 1);
-						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
+						startColumn = (int) (x1 / TILE_SIZE);
+						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE);
 					}
 					else if (hSpeed < 0)
 					{
-						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
-						endColumn = (int)(x2/TILE_SIZE + 1);
+						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE);
+						endColumn = (int) (x2 / TILE_SIZE);
 					}
 					else
 					{
-						startColumn = (int) (x1 / TILE_SIZE - 1);
-						endColumn = (int) (x2 / TILE_SIZE + 1);
+						startColumn = (int) (x1 / TILE_SIZE);
+						endColumn = (int) (x2 / TILE_SIZE);
 					}
-					
-					
-					
-					if (startColumn < 0)
-					{
-						startColumn = 0;
-					}
+
 					if (startRow < 0)
 					{
 						startRow = 0;
 					}
-					if (endRow >= tileGrid.length)
+					else if (endRow > tileGrid.length - 1)
 					{
 						endRow = tileGrid.length - 1;
 					}
-					if (endColumn >= tileGrid[0].length)
+
+					if (startColumn < 0)
+					{
+						startColumn = 0;
+					}
+					else if (endColumn > tileGrid[0].length - 1)
 					{
 						endColumn = tileGrid[0].length - 1;
 					}
@@ -381,7 +468,7 @@ public class ServerWorld
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-											+ TILE_SIZE)
+													+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -416,7 +503,7 @@ public class ServerWorld
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-											+ MARGIN_OF_ERROR)
+													+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -452,8 +539,8 @@ public class ServerWorld
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-											+ TILE_SIZE
-											- MARGIN_OF_ERROR)
+													+ TILE_SIZE
+													- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -504,7 +591,7 @@ public class ServerWorld
 				{
 					if (object.getType().equals(ITEM_SWING_TYPE))
 					{
-						((ServerWeaponSwing)object).update();
+						((ServerWeaponSwing) object).update();
 					}
 				}
 
@@ -532,6 +619,74 @@ public class ServerWorld
 	public void remove(ServerObject object)
 	{
 		objects.remove(object);
+	}
+
+	/**
+	 * Updates the object's location on the object grid
+	 * @param object
+	 * @param startRow
+	 * @param endRow
+	 * @param startColumn
+	 * @param endColumn
+	 */
+	public void updateObjectTiles(ServerObject object, int startRow,
+			int endRow, int startColumn, int endColumn)
+	{
+		ArrayList<RowCol> indexesToRemove = new ArrayList<RowCol>();
+		ArrayList<RowCol> objectTiles = object.getObjectTiles();
+
+		for (RowCol tile : objectTiles)
+		{
+			if (!(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
+					tile.getRow() * OBJECT_TILE_SIZE,
+					tile.getColumn() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE,
+					tile.getRow() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE)))
+				;
+			{
+				indexesToRemove.add(tile);
+			}
+		}
+
+		// Remove all the tiles that the object has left
+		for (RowCol tile : indexesToRemove)
+		{
+			objectTiles.remove(tile);
+			removeFromObjectTile(object, tile);
+		}
+
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
+			{
+				RowCol tile = new RowCol(row, column);
+
+				if (!objectTiles.contains(tile))
+				{
+					objectTiles.add(tile);
+					addToObjectTile(object, tile);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add an object to a certain object tile's arraylist
+	 * @param object
+	 * @param objectTile
+	 */
+	public void addToObjectTile(ServerObject object, RowCol objectTile)
+	{
+		objectGrid[objectTile.getRow()][objectTile.getColumn()].add(object);
+	}
+
+	/**
+	 * Remove an object from a certain object tile's arraylist
+	 * @param object
+	 * @param objectTile
+	 */
+	public void removeFromObjectTile(ServerObject object, RowCol objectTile)
+	{
+		objectGrid[objectTile.getRow()][objectTile.getColumn()].remove(object);
 	}
 
 	public char[][] getGrid()
