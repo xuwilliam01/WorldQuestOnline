@@ -74,12 +74,12 @@ public class ServerObject
 	 * The type of object this is (subclass)
 	 */
 	private String type;
-	
+
 	/**
 	 * Whether or not the MAP can see the object
 	 */
 	private boolean mapVisible;
-	
+
 	/**
 	 * Whether or not the object will collide with tiles
 	 */
@@ -139,11 +139,47 @@ public class ServerObject
 	 * @param other
 	 * @return whether or not the two objects are colliding
 	 */
-	public boolean checkCollision(ServerObject other)
+	public boolean collidesWith(ServerObject other)
 	{
 		if (x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
 				&& y <= other.getY() + other.getHeight()
 				&& (y + height) >= other.getY())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether or not the other object is in range of this object
+	 * @param other
+	 * @param distance
+	 * @return
+	 */
+	public boolean inRange(ServerObject other, double distance)
+	{
+		double distanceBetween = distanceBetween(other);
+		
+		if (distanceBetween <= distance)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+
+	/**
+	 * Quickly finds whether or not the other object is vertically or
+	 * horizontally within range without actually calculating the distance between
+	 * @param other
+	 * @param distance
+	 * @return
+	 */
+	public boolean quickInRange(ServerObject other, double distance)
+	{
+		// Create a big hitbox and see if the other object touches it,
+		// essentially
+		if (other.getX()<=x+width+distance && other.getX()+other.getWidth() >= x - distance && other.getY() <= y + height + distance && other.getY() + other.getHeight() >= y - distance)
 		{
 			return true;
 		}
@@ -166,15 +202,40 @@ public class ServerObject
 	}
 
 	/**
-	 * Find the distance between two objects
+	 * Find the minimum distance between two objects
 	 * @param other the other object
 	 * @return the distance between this and the other object
 	 */
-	public int findDistanceBetween(ServerObject other)
+	public double distanceBetween(ServerObject other)
 	{
-		return (int) (Math.sqrt((getX() - other.getX())
-				* (getX() - other.getX()) + (getY() - other.getY())
-				* (getY() - other.getY())) + 0.5);
+		// The specific sides of each object to calculate distance between (top,
+		// bottom, left, right)
+		double thisX = 0;
+		double otherX = 0;
+		double thisY = 0;
+		double otherY = 0;
+
+		if (x - (other.getX() + other.getWidth()) > 0)
+		{
+			otherX = other.getX() + other.getWidth();
+		}
+		else if (other.getX() - (x + width) > 0)
+		{
+			thisX = x + width;
+		}
+
+		if (y - (other.getY() + other.getHeight()) > 0)
+		{
+			otherY = other.getY() + other.getHeight();
+		}
+		else if (other.getY() - (y + height) > 0)
+		{
+			thisY = y + height;
+		}
+
+		return Math.sqrt((thisX - otherX)
+				* (thisX - otherX) + (thisY - otherY)
+				* (thisY - otherY));
 	}
 
 	public boolean exists()
@@ -191,7 +252,7 @@ public class ServerObject
 	{
 		return gravity;
 	}
-	
+
 	public void makeExist()
 	{
 		exists = true;
@@ -317,5 +378,4 @@ public class ServerObject
 		this.solid = solid;
 	}
 
-	
 }

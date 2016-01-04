@@ -61,7 +61,7 @@ public abstract class ServerEnemy extends ServerCreature implements ActionListen
 	{
 		for(ServerPlayer player : ServerEngine.getListOfPlayers())
 		{
-			if(player.isAlive() && findDistanceBetween(player) <= targetRange)
+			if(player.isAlive() && inRange(player,targetRange))
 			{
 				setTarget(player);
 				break;

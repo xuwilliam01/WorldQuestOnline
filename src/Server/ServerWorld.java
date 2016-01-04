@@ -234,21 +234,21 @@ public class ServerWorld
 							if (otherObject.getType().equals(PLAYER_TYPE)
 									&& otherObject.getID() != ((ServerProjectile) object)
 									.getOwnerID()
-									&& object.checkCollision(otherObject))
+									&& object.collidesWith(otherObject))
 							{
 								((ServerPlayer) otherObject)
 								.inflictDamage(((ServerProjectile) object)
 										.getDamage());
 								((ServerProjectile) object).destroy();
 							}
-							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.checkCollision(otherObject))
+							else if (otherObject.getType().charAt(0)==NPC_TYPE && object.collidesWith(otherObject))
 							{
 								((ServerEnemy) otherObject).inflictDamage(((ServerProjectile) object).getDamage());
 								((ServerProjectile) object).destroy();
 							}
 						}
 						//If a player collided with an item
-						else if(otherObject.getType().charAt(0) == 'I' && object.getType().equals(PLAYER_TYPE) && object.checkCollision(otherObject))
+						else if(otherObject.getType().charAt(0) == 'I' && object.getType().equals(PLAYER_TYPE) && object.collidesWith(otherObject))
 						{
 							((ServerPlayer)object).addItem((ServerItem)otherObject);
 							otherObject.destroy();

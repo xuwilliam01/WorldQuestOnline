@@ -74,7 +74,7 @@ public class ServerSlime extends ServerEnemy
 			}
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
-				|| findDistanceBetween(getTarget()) > getTargetRange())
+				|| !quickInRange(getTarget(),getTargetRange()))
 		{
 			setTarget(null);
 		}
