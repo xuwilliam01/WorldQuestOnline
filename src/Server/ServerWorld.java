@@ -269,31 +269,54 @@ public class ServerWorld
 
 					double vSpeed = object.getVSpeed();
 					double hSpeed = object.getHSpeed();
-
-					double absVSpeed = Math.abs(vSpeed);
-					double absHSpeed = Math.abs(hSpeed);
-
 					double x1 = object.getX();
 					double x2 = object.getX() + object.getWidth();
 					double y1 = object.getY();
 					double y2 = object.getY() + object.getHeight();
+					
+					int startRow = 0;
+					int endRow = 0;
+					int startColumn = 0;
+					int endColumn = 0;
+					
 
-					int startRow = (int) ((y1 - absVSpeed) / TILE_SIZE - 1);
-					if (startRow < 0)
+					if (vSpeed > 0)
 					{
-						startRow = 0;
+						startRow = (int) (y1 / TILE_SIZE - 1);
+						endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
 					}
-					int endRow = (int) ((y2 + absVSpeed) / TILE_SIZE + 1);
+					else if (vSpeed < 0)
+					{
+						startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
+						endRow = (int)(y2/TILE_SIZE + 1);
+					}
+					else
+					{
+						startRow = (int) (y1 / TILE_SIZE);
+						endRow = (int)(y2/TILE_SIZE + 1);
+					}
+					
+					if (hSpeed > 0)
+					{
+						startColumn = (int) (x1 / TILE_SIZE - 1);
+						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
+					}
+					else if (hSpeed < 0)
+					{
+						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
+						endColumn = (int)(x2/TILE_SIZE + 1);
+					}
+					else
+					{
+						startColumn = (int) (x1 / TILE_SIZE - 1);
+						endColumn = (int) (x2 / TILE_SIZE + 1);
+					}
+					
+					
 					if (endRow >= tileGrid.length)
 					{
 						endRow = tileGrid.length - 1;
 					}
-					int startColumn = (int) ((x1 - absHSpeed) / TILE_SIZE - 1);
-					if (startColumn < 0)
-					{
-						startColumn = 0;
-					}
-					int endColumn = (int) ((x2 + absHSpeed) / TILE_SIZE + 1);
 					if (endColumn >= tileGrid[0].length)
 					{
 						endColumn = tileGrid[0].length - 1;
