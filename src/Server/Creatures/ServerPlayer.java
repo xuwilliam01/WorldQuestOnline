@@ -91,11 +91,28 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether or not the player is alive
 	 */
 	private boolean alive = true;
-	
+
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
 	 */
 	private char weaponSelected;
+
+	/**
+	 * Whether or not the player can use the item/perform the current action
+	 * (used for delaying actions)
+	 */
+	private boolean canPerformAction;
+
+	/**
+	 * The number of frames before the player can perform another action
+	 */
+	private int actionDelay;
+
+	/**
+	 * The number of frames that has passed after the player's action is
+	 * disabled
+	 */
+	private int actionCounter;
 
 	/**
 	 * Constructor for a player in the server
@@ -115,9 +132,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
-		
+
 		weaponSelected = '1';
-		
+		actionDelay = 10;
+
+		canPerformAction = true;
+		actionCounter = 0;
+
 		// Import the socket, server, and world
 		this.socket = socket;
 		this.engine = engine;
@@ -187,6 +208,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void update()
 	{
+		// Update the counter for weapon delay
+		if (actionCounter < actionDelay)
+		{
+			if (!canPerformAction)
+			{
+				actionCounter++;
+			}
+		}
+		else
+		{
+			actionCounter = 0;
+			canPerformAction = true;
+		}
+
 		// Update object locations
 		for (ServerObject object : world.getObjects())
 		{
@@ -275,7 +310,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (command.equals("U") && (isOnSurface() || !alive))
 				{
 					setVSpeed(-verticalMovement);
-					//setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
+					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
 					setOnSurface(false);
 				}
 				else if (command.equals("!U") && !alive)
@@ -308,7 +343,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
-				else if (command.charAt(0)=='W')
+				else if (command.charAt(0) == 'W')
 				{
 					weaponSelected = command.charAt(1);
 				}
@@ -341,17 +376,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void performAction(int mouseX, int mouseY)
 	{
-		if (alive)
+		if (alive && canPerformAction)
 		{
-			
+
 			int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
 			int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
 
-			double angle = Math.atan2(yDist, xDist);	
-			
+			double angle = Math.atan2(yDist, xDist);
+
 			if (weaponSelected == '1')
 			{
-				world.add(new ServerWeaponSwing(this,"SWORD_0.png",(int)(Math.toDegrees(angle)+0.5),8));
+				world.add(new ServerWeaponSwing(this, "SWORD_0.png",
+						(int) (Math.toDegrees(angle) + 0.5), 8));
 			}
 			else if (weaponSelected == '2')
 			{
@@ -359,8 +395,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
 				int bulletHeight = Images.getGameImage("BULLET.png")
 						.getHeight();
-
-
 
 				// Shoot the projectile for testing
 				double speed = 30;
@@ -382,6 +416,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						getID(), "BULLET.png", speed, angle, inaccuracy,
 						ServerWorld.BULLET_TYPE));
 			}
+			
+			canPerformAction = false;
 		}
 	}
 

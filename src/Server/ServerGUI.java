@@ -18,8 +18,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 
 	private ServerWorld world;
 	private char[][] grid;
-	private int posX = 300;
-	private int posY = 200;
+	private int posX = 200;
+	private int posY = 300;
 
 	/**
 	 * A color that java doesn't provide
@@ -93,7 +93,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public ServerGUI(ServerWorld world)
 	{
 		// Set the scale of objects
-		objectFactor = ServerFrame.FRAME_FACTOR * 4;
+		objectFactor = ServerFrame.FRAME_FACTOR * 8;
 
 		// Create the screen
 		setDoubleBuffered(true);
