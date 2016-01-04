@@ -79,8 +79,11 @@ public class Images
 							rotationRequired, locationX, locationY);
 					AffineTransformOp op = new AffineTransformOp(tx,
 							AffineTransformOp.TYPE_BILINEAR);
-					images.add(new GameImage("SWORD_" + angle + ".png", op
-							.filter(image, null)));
+					
+					BufferedImage newImage = op
+							.filter(image, null).getSubimage(0, 0, image.getWidth(), image.getHeight());
+					
+					images.add(new GameImage("SWORD_" + angle + ".png", newImage));
 				}
 				
 				// Add images with rotations (the number in the name represents the angle rotated)

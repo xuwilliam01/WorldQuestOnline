@@ -313,6 +313,15 @@ public class ServerWorld
 					}
 					
 					
+					
+					if (startColumn < 0)
+					{
+						startColumn = 0;
+					}
+					if (startRow < 0)
+					{
+						startRow = 0;
+					}
 					if (endRow >= tileGrid.length)
 					{
 						endRow = tileGrid.length - 1;

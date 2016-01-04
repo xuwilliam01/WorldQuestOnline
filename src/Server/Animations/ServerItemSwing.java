@@ -32,7 +32,14 @@ public class ServerItemSwing extends ServerObject
 	 */
 	private ServerObject wielder;
 	
+	/**
+	 * The width of the initial image before rotation
+	 */
 	private int originalWidth;
+	
+	/**
+	 * The height of the initial image before rotation
+	 */
 	private int originalHeight;
 
 	/**
