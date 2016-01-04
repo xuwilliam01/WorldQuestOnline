@@ -430,6 +430,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		setHP(getHP() - amount);
 		if (getHP() <= 0)
 		{
+			movementSpeed = movementSpeed * 3;
 			dropInventory();
 			setSolid(false);
 			setGravity(0);
