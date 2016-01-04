@@ -368,6 +368,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		output.close();
 		disconnected = true;
+		destroy();
 		engine.removePlayer(this);
 	}
 
