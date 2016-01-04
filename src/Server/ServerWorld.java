@@ -208,6 +208,7 @@ public class ServerWorld
 		// Remove all the objects that no longer exist
 		for (ServerObject object : objectsToRemove)
 		{
+			removeFromObjectTiles(object);
 			objects.remove(object);
 
 		}
@@ -685,6 +686,28 @@ public class ServerWorld
 					objectTiles.add(tile);
 					addToObjectTile(object, tile);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Just remove
+	 * @param object
+	 */
+	public void removeFromObjectTiles(ServerObject object)
+	{
+		ArrayList<RowCol> indexesToRemove = new ArrayList<RowCol>();
+		ArrayList<RowCol> objectTiles = object.getObjectTiles();
+
+		for (RowCol tile : objectTiles)
+		{
+			if (!(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
+					tile.getRow() * OBJECT_TILE_SIZE,
+					tile.getColumn() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE,
+					tile.getRow() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE)))
+				;
+			{
+				indexesToRemove.add(tile);
 			}
 		}
 	}
