@@ -75,8 +75,17 @@ public class Images
 				for (int angle = 180; angle > -180; angle -= 15)
 				{
 					double rotationRequired = Math.toRadians(angle);
-					AffineTransform tx = AffineTransform.getRotateInstance(
+					AffineTransform tx;
+					
+					if (!(angle >= -90 && angle < 90))
+					{
+						tx = AffineTransform.getScaleInstance(-1, 1);
+						tx.translate(-image.getWidth(null), 0);
+					}
+					
+					tx = AffineTransform.getRotateInstance(
 							rotationRequired, locationX, locationY);
+					
 					AffineTransformOp op = new AffineTransformOp(tx,
 							AffineTransformOp.TYPE_BILINEAR);
 					

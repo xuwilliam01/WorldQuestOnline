@@ -187,18 +187,12 @@ public class ServerObject
 	}
 
 	/**
-	 * Set the image for the object, and update the height and width if using
-	 * image dimensions
+	 * Set the image for the object
 	 * @param image
 	 */
 	public void setImage(String image)
 	{
 		this.image = image;
-		if (useImageDimensions)
-		{
-			width = Images.getGameImage(image).getWidth();
-			height = Images.getGameImage(image).getHeight();
-		}
 	}
 
 	/**

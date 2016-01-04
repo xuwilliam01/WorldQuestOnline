@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import Server.Animations.ServerItemSwing;
+import Server.Animations.ServerWeaponSwing;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
@@ -509,7 +509,7 @@ public class ServerWorld
 				{
 					if (object.getType().equals(ITEM_SWING_TYPE))
 					{
-						((ServerItemSwing)object).update();
+						((ServerWeaponSwing)object).update();
 					}
 				}
 

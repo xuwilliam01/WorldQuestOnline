@@ -13,7 +13,7 @@ import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Animations.ServerItemSwing;
+import Server.Animations.ServerWeaponSwing;
 import Server.Items.ServerItem;
 import Server.Projectile.ServerProjectile;
 
@@ -356,7 +356,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			
 			if (weaponSelected == '1')
 			{
-				world.add(new ServerItemSwing(this,"SWORD_0.png",(int)(Math.toDegrees(angle)+0.5),8));
+				world.add(new ServerWeaponSwing(this,"SWORD_0.png",(int)(Math.toDegrees(angle)+0.5),8));
 			}
 			else if (weaponSelected == '2')
 			{

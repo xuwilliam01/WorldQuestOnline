@@ -4,7 +4,7 @@ import Imports.Images;
 import Server.ServerObject;
 import Server.ServerWorld;
 
-public class ServerItemSwing extends ServerObject
+public class ServerWeaponSwing extends ServerObject
 {
 
 	/**
@@ -48,7 +48,7 @@ public class ServerItemSwing extends ServerObject
 	 * @param image
 	 * @param timeInMilliseconds
 	 */
-	public ServerItemSwing(ServerObject wielder, String image, int angle,
+	public ServerWeaponSwing(ServerObject wielder, String image, int angle,
 			int timeInFrames)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
@@ -62,22 +62,22 @@ public class ServerItemSwing extends ServerObject
 		
 		if (angle > -90 && angle <= 15)
 		{
-			currentAngle = -90;
+			currentAngle = -75;
 			isClockwise = true;
 		}
 		else if(angle <= 165 && angle > 90)
 		{
-			currentAngle = 90;
-			isClockwise = true;
+			currentAngle = -165;
+			isClockwise = false;
 		}
 		else if(angle > 15 && angle <= 90)
 		{
-			currentAngle = 90;
-			isClockwise = false;
+			currentAngle = -15;
+			isClockwise = true;
 		}
 		else
 		{
-			currentAngle = -90;
+			currentAngle = -105;
 			isClockwise = false;
 		}
 		
@@ -93,11 +93,11 @@ public class ServerItemSwing extends ServerObject
 	 */
 	public void update()
 	{
-		if (counter >= (int)(timeInFrames / 8.0 + 1)*8)
+		if (counter >= (int)(timeInFrames / 7.0 + 1)*7)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 8.0 + 1) == 0 && counter!=0)
+		else if (counter % (int) (timeInFrames / 7.0 + 1) == 0 && counter!=0)
 		{
 			if (isClockwise)
 			{
