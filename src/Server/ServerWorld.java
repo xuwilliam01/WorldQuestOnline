@@ -50,7 +50,7 @@ public class ServerWorld
 	public final static String HP_75 = HP_POTION_TYPE + "75";
 	public final static String HP_100 = HP_POTION_TYPE + "100";
 
-	public final static String GRID_FILE = "World.txt";
+	public final static String GRID_FILE = "NewWorld.txt";
 
 	/**
 	 * Grid of tiles
