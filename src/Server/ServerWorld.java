@@ -234,7 +234,6 @@ public class ServerWorld
 				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
 					object.setHSpeed(0);
 
-				
 
 				// Add the object to all the object tiles that it collides with
 				// currently
@@ -242,7 +241,14 @@ public class ServerWorld
 				int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
 				int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
 				int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
-
+				
+				// Destroy the object if it is not in the world
+				if (startRow < 0 || endRow > objectGrid.length - 1 || startColumn < 0 || endColumn > objectGrid[0].length - 1)
+				{
+					object.destroy();
+					continue;
+				}
+				
 				// Update all locations of objects based on the object grid (for
 				// collisions)
 				updateObjectTiles(object, startRow, endRow, startColumn,
@@ -368,83 +374,6 @@ public class ServerWorld
 						endColumn = tileGrid[0].length - 1;
 					}
 					
-					// Make sure the object is within the world
-					if (object.getHSpeed() >= 0)
-					{
-						if (object.getX() < 0)
-						{
-							object.setX(0);
-							object.setHSpeed(0);
-							moveHorizontal = false;
-						}
-						else if (object.getX() + object.getWidth() + object.getHSpeed() > tileGrid[0].length
-								* TILE_SIZE)
-						{
-							object.setX((tileGrid[0].length - 1) * TILE_SIZE
-									- object.getWidth());
-							object.setHSpeed(0);
-							moveHorizontal = false;
-						}
-					}
-					else
-					{
-						if (object.getX() + object.getHSpeed() < 0)
-						{
-							object.setX(0);
-							object.setHSpeed(0);
-							moveHorizontal = false;
-						}
-						else if (object.getX() + object.getWidth() > tileGrid[0].length
-								* TILE_SIZE)
-						{
-							object.setX((tileGrid[0].length - 1) * TILE_SIZE
-									- object.getWidth());
-							object.setHSpeed(0);
-							moveHorizontal = false;
-						}
-					}
-					
-
-					// Make sure the object is within the world
-					if (object.getVSpeed() >= 0)
-					{
-						if (object.getY() < 0)
-						{
-							object.setY(0);
-							object.setVSpeed(0);
-							moveVertical = false;
-						}
-						else if (object.getY() + object.getHeight()
-								+ object.getVSpeed() > tileGrid.length
-								* TILE_SIZE)
-						{
-							object.setOnSurface(true);
-							object.setY((tileGrid.length - 1) * TILE_SIZE
-									- object.getHeight());
-							object.setVSpeed(0);
-							moveVertical = false;
-						}
-					}
-					else
-					{
-						if (object.getY() + object.getVSpeed() < 0)
-						{
-							object.setY(0);
-							object.setVSpeed(0);
-							moveVertical = false;
-						}
-						else if (object.getY() + object.getHeight() > tileGrid.length
-								* TILE_SIZE)
-						{
-							object.setOnSurface(true);
-							object.setY((tileGrid.length - 1) * TILE_SIZE
-									- object.getHeight());
-							object.setVSpeed(0);
-							moveVertical = false;
-						}
-					}
-					
-
 					if (vSpeed > 0)
 					{
 						// The row and column of the tile that was collided with

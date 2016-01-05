@@ -29,17 +29,17 @@ import Server.ServerGUI;
 import Server.ServerWorld;
 
 public class CreatorWorld extends JPanel implements KeyListener,
-		ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
+ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {
 
 	public final static int SCROLL_SPEED = 13;
 
 	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
-	
-	
+
+
 	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT
-			/ ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH
-			/ ServerWorld.TILE_SIZE + 1];
+	                                 / ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH
+	                                                              / ServerWorld.TILE_SIZE + 1];
 	private int posY = 200;
 	private int posX = 200;
 
@@ -92,7 +92,7 @@ public class CreatorWorld extends JPanel implements KeyListener,
 	private CreatorObject[] tiles = new CreatorObject[256];
 
 	public CreatorWorld(String fileName) throws NumberFormatException,
-			IOException
+	IOException
 	{
 		addKeyListener(this);
 		addMouseListener(this);
@@ -112,7 +112,7 @@ public class CreatorWorld extends JPanel implements KeyListener,
 		this.fileName = fileName;
 
 		// Check if the file already exists
-		File file = new File(fileName);
+		File file = new File("Resources",fileName);
 		if (file.exists() && !file.isDirectory())
 			importGrid();
 		else
@@ -132,7 +132,7 @@ public class CreatorWorld extends JPanel implements KeyListener,
 		String line = br.readLine();
 		String[] tokens = line.split(" ");
 		grid = new char[Integer.parseInt(tokens[0])][Integer
-				.parseInt(tokens[1])];
+		                                             .parseInt(tokens[1])];
 
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -231,11 +231,11 @@ public class CreatorWorld extends JPanel implements KeyListener,
 								(int) (ServerGUI.CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-								(int) (ServerGUI.CENTRE_Y
-										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+										(int) (ServerGUI.CENTRE_Y
+												+ row
+												* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+												(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+												(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					}
 					else
 					{
@@ -244,10 +244,10 @@ public class CreatorWorld extends JPanel implements KeyListener,
 								(int) (ServerGUI.CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-								(int) (ServerGUI.CENTRE_Y
-										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-								null);
+										(int) (ServerGUI.CENTRE_Y
+												+ row
+												* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+												null);
 					}
 				}
 			}
@@ -270,11 +270,11 @@ public class CreatorWorld extends JPanel implements KeyListener,
 							(int) (ServerGUI.CENTRE_X
 									+ column
 									* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-							(int) (ServerGUI.CENTRE_Y
-									+ row
-									* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-							(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-							(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+									(int) (ServerGUI.CENTRE_Y
+											+ row
+											* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+											(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+											(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					// graphics.setColor(Color.black);
 					// graphics.drawRect((int) (ServerGUI.CENTRE_X + column*
 					// (ServerWorld.TILE_SIZE / objectFactor) - posX),
@@ -358,8 +358,8 @@ public class CreatorWorld extends JPanel implements KeyListener,
 					* (ServerWorld.TILE_SIZE / objectFactor) - posX),
 					(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
 							* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 
 		}
 
@@ -408,6 +408,24 @@ public class CreatorWorld extends JPanel implements KeyListener,
 
 	public void save() throws FileNotFoundException
 	{
+		//Make a border around  the grid
+		for(int col = 0; col < grid[0].length;col++)
+		{
+			if(grid[0][col] == ' ')
+				grid[0][col] = '1';
+			if (grid[grid.length-1][col] == ' ')
+				grid[grid.length-1][col] = '1';
+		}
+
+		//Make a border around  the grid
+		for(int row = 0; row < grid.length;row++)
+		{
+			if(grid[row][0] == ' ')
+				grid[row][0] = '1';
+			if (grid[row][grid[0].length-1] == ' ')
+				grid[row][grid[0].length-1] = '1';
+		}
+
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)
@@ -529,8 +547,8 @@ public class CreatorWorld extends JPanel implements KeyListener,
 			selectedBlock = getRowCol(
 					(int) (MouseInfo.getPointerInfo().getLocation().getX() - this
 							.getLocationOnScreen().getX()),
-					(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
-							.getLocationOnScreen().getY()));
+							(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
+									.getLocationOnScreen().getY()));
 
 		if (selectedBlock != null && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
