@@ -151,18 +151,18 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(int col = 0; col < grid[0].length;col++)
 		{
 			if(grid[0][col] == ' ')
-				grid[0][col] = '1';
+				grid[0][col] = '_';
 			if (grid[grid.length-1][col] == ' ')
-				grid[grid.length-1][col] = '1';
+				grid[grid.length-1][col] = '_';
 		}
 
 		//Make a border around  the grid
 		for(int row = 0; row < grid.length;row++)
 		{
 			if(grid[row][0] == ' ')
-				grid[row][0] = '1';
+				grid[row][0] = '_';
 			if (grid[row][grid[0].length-1] == ' ')
-				grid[row][grid[0].length-1] = '1';
+				grid[row][grid[0].length-1] = '_';
 		}
 	}
 
