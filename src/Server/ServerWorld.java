@@ -234,73 +234,6 @@ public class ServerWorld
 				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
 					object.setHSpeed(0);
 
-				// Make sure the object is within the world
-				
-				// Make sure the object is within the world
-				if (object.getHSpeed() >= 0)
-				{
-					if (object.getX() < 0)
-					{
-						object.setX(0);
-						object.setHSpeed(0);
-					}
-					else if (object.getX() + object.getWidth() + object.getHSpeed() > tileGrid[0].length
-							* TILE_SIZE)
-					{
-						object.setX((tileGrid[0].length - 1) * TILE_SIZE
-								- object.getWidth());
-						object.setHSpeed(0);
-					}
-				}
-				else
-				{
-					if (object.getX() + object.getHSpeed() < 0)
-					{
-						object.setX(0);
-						object.setHSpeed(0);
-					}
-					else if (object.getX() + object.getWidth() > tileGrid[0].length
-							* TILE_SIZE)
-					{
-						object.setX((tileGrid[0].length - 1) * TILE_SIZE
-								- object.getWidth());
-						object.setHSpeed(0);
-					}
-				}
-				
-
-				// Make sure the object is within the world
-				if (object.getVSpeed() >= 0)
-				{
-					if (object.getY() < 0)
-					{
-						object.setY(0);
-						object.setVSpeed(0);
-					}
-					else if (object.getY() + object.getHeight()
-							+ object.getVSpeed() > tileGrid.length
-							* TILE_SIZE)
-					{
-						object.setY((tileGrid.length - 1) * TILE_SIZE
-								- object.getHeight());
-						object.setVSpeed(0);
-					}
-				}
-				else
-				{
-					if (object.getY() + object.getVSpeed() < 0)
-					{
-						object.setY(0);
-						object.setVSpeed(0);
-					}
-					else if (object.getY() + object.getHeight() > tileGrid.length
-							* TILE_SIZE)
-					{
-						object.setY((tileGrid.length - 1) * TILE_SIZE
-								- object.getHeight());
-						object.setVSpeed(0);
-					}
-				}
 				
 
 				// Add the object to all the object tiles that it collides with
@@ -366,6 +299,7 @@ public class ServerWorld
 
 				if (object.isSolid())
 				{
+					
 					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
 					if (object.getVSpeed() < MAX_SPEED)
 					{
@@ -433,6 +367,83 @@ public class ServerWorld
 					{
 						endColumn = tileGrid[0].length - 1;
 					}
+					
+					// Make sure the object is within the world
+					if (object.getHSpeed() >= 0)
+					{
+						if (object.getX() < 0)
+						{
+							object.setX(0);
+							object.setHSpeed(0);
+							moveHorizontal = false;
+						}
+						else if (object.getX() + object.getWidth() + object.getHSpeed() > tileGrid[0].length
+								* TILE_SIZE)
+						{
+							object.setX((tileGrid[0].length - 1) * TILE_SIZE
+									- object.getWidth());
+							object.setHSpeed(0);
+							moveHorizontal = false;
+						}
+					}
+					else
+					{
+						if (object.getX() + object.getHSpeed() < 0)
+						{
+							object.setX(0);
+							object.setHSpeed(0);
+							moveHorizontal = false;
+						}
+						else if (object.getX() + object.getWidth() > tileGrid[0].length
+								* TILE_SIZE)
+						{
+							object.setX((tileGrid[0].length - 1) * TILE_SIZE
+									- object.getWidth());
+							object.setHSpeed(0);
+							moveHorizontal = false;
+						}
+					}
+					
+
+					// Make sure the object is within the world
+					if (object.getVSpeed() >= 0)
+					{
+						if (object.getY() < 0)
+						{
+							object.setY(0);
+							object.setVSpeed(0);
+							moveVertical = false;
+						}
+						else if (object.getY() + object.getHeight()
+								+ object.getVSpeed() > tileGrid.length
+								* TILE_SIZE)
+						{
+							object.setOnSurface(true);
+							object.setY((tileGrid.length - 1) * TILE_SIZE
+									- object.getHeight());
+							object.setVSpeed(0);
+							moveVertical = false;
+						}
+					}
+					else
+					{
+						if (object.getY() + object.getVSpeed() < 0)
+						{
+							object.setY(0);
+							object.setVSpeed(0);
+							moveVertical = false;
+						}
+						else if (object.getY() + object.getHeight() > tileGrid.length
+								* TILE_SIZE)
+						{
+							object.setOnSurface(true);
+							object.setY((tileGrid.length - 1) * TILE_SIZE
+									- object.getHeight());
+							object.setVSpeed(0);
+							moveVertical = false;
+						}
+					}
+					
 
 					if (vSpeed > 0)
 					{
@@ -598,7 +609,7 @@ public class ServerWorld
 				}
 				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 				{
-					if (!moveHorizontal || !moveVertical
+					if ((!moveHorizontal || !moveVertical)
 							&& object.getType().equals(BULLET_TYPE))
 					{
 						((ServerProjectile) object).destroy();
