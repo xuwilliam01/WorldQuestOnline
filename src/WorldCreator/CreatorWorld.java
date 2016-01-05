@@ -146,6 +146,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		}
 		br.close();
+		
+		//Make a border around  the grid
+		for(int col = 0; col < grid[0].length;col++)
+		{
+			if(grid[0][col] == ' ')
+				grid[0][col] = '1';
+			if (grid[grid.length-1][col] == ' ')
+				grid[grid.length-1][col] = '1';
+		}
+
+		//Make a border around  the grid
+		for(int row = 0; row < grid.length;row++)
+		{
+			if(grid[row][0] == ' ')
+				grid[row][0] = '1';
+			if (grid[row][grid[0].length-1] == ' ')
+				grid[row][grid[0].length-1] = '1';
+		}
 	}
 
 	public void clearGrid()
@@ -408,24 +426,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public void save() throws FileNotFoundException
 	{
-		//Make a border around  the grid
-		for(int col = 0; col < grid[0].length;col++)
-		{
-			if(grid[0][col] == ' ')
-				grid[0][col] = '1';
-			if (grid[grid.length-1][col] == ' ')
-				grid[grid.length-1][col] = '1';
-		}
-
-		//Make a border around  the grid
-		for(int row = 0; row < grid.length;row++)
-		{
-			if(grid[row][0] == ' ')
-				grid[row][0] = '1';
-			if (grid[row][grid[0].length-1] == ' ')
-				grid[row][grid[0].length-1] = '1';
-		}
-
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)
@@ -658,15 +658,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		int notches = scroll.getWheelRotation();
 
-		if (notches > 0 && objectFactor < ServerFrame.FRAME_FACTOR * 6)
+		if (notches > 0 )
 		{
-			objectFactor *= (1.1 * notches);
-			posX /= 1.1;
-			posY /= 1.1;
+			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
+			{
+				objectFactor *= (1.1 * (notches));
+				posX /= 1.1;
+				posY /= 1.1;
+			}
+			else
+			{
+				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+				objectFactor = ServerFrame.FRAME_FACTOR * 16;
+			}
 		}
 		else if (notches < 0)
 		{
-			if (objectFactor / 1.1 >= 1)
+			if (objectFactor / (1.1 * (-notches)) >= 1)
 			{
 				objectFactor /= (1.1 * (-notches));
 				posX *= 1.1;
