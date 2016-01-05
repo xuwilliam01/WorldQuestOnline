@@ -34,7 +34,7 @@ public class CreatorWorld extends JPanel implements KeyListener,
 
 	public final static int SCROLL_SPEED = 13;
 
-	public final static Color LIGHT_GRAY = new Color(224,224,224);
+	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
 	
 	
 	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT
