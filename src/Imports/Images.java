@@ -144,6 +144,8 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
 
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));

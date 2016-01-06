@@ -296,7 +296,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 
 		if (notches > 0 )
 		{
-			if (objectFactor * 1.1 <= ServerFrame.FRAME_FACTOR * 16)
+			if (objectFactor * 1.1  <= ServerFrame.FRAME_FACTOR * 16)
 			{
 			objectFactor *= (1.1 * notches);
 			posX /= 1.1;
