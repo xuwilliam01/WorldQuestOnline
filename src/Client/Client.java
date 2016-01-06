@@ -174,11 +174,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						
 						
 						String message = input.readLine();
-
-//						while (message.length()<8000)
-//						{
-//							message+=" XXXXXXXXXX";
-//						}
 						
 						System.out.println(System.currentTimeMillis()-startTime);
 						System.out.println("Length: " + message.length() + " " + message);

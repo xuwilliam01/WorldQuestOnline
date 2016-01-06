@@ -131,7 +131,7 @@ public class ClientWorld
 			for (int column = startColumn; column <= endColumn; column++)
 			{
 
-				if (grid[row][column] != ' ')
+				if (grid[row][column] != '_' && grid[row][column] != ' ')
 				{
 					graphics.drawImage(ImageReferencePair.getImages()[(int)(grid[row][column])].getImage(), centreX
 							+ column * tileSize - playerX, centreY + row
