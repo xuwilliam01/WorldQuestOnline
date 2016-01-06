@@ -17,10 +17,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Imports.Images;
+import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener {
+		MouseMotionListener
+{
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
 	public final static int SCREEN_HEIGHT = 768;
@@ -73,14 +75,25 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private char direction;
 
 	/**
-	 * 
+	 * The startTime for checking FPS
 	 */
 	private long startTime = 0;
 
 	/**
+	 * The current FPS of the client
+	 */
+	private int currentFPS = 60;
+
+	/**
+	 * A counter updating every repaint and reseting at the expected FPS
+	 */
+	private int FPScounter = 0;
+
+	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory) {
+	public Client(Socket socket, ClientInventory inventory)
+	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
@@ -90,7 +103,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Call when the server closes (Add more later)
 	 */
-	private void serverClosed() {
+	private void serverClosed()
+	{
 		System.out.println("Server was closed");
 		JOptionPane.showMessageDialog(null, "The Server was Closed");
 	}
@@ -98,7 +112,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Start the client
 	 */
-	public void initialize() {
+	public void initialize()
+	{
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
@@ -109,18 +124,24 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		HP = 100;
 
 		// Set up the input
-		try {
+		try
+		{
 			input = new BufferedReader(new InputStreamReader(
 					mySocket.getInputStream()));
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			// System.out.println("Error creating buffered reader");
 			e.printStackTrace();
 		}
 
 		// Set up the output
-		try {
+		try
+		{
 			output = new PrintWriter(mySocket.getOutputStream());
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
@@ -129,7 +150,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		importMap();
 
 		// Get the user's player
-		try {
+		try
+		{
 			String message = input.readLine();
 			String[] tokens = message.split(" ");
 
@@ -141,7 +163,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			player = new ClientObject(id, x, y, image);
 
 			world.add(player);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			System.out.println("Error getting player from server");
 			e.printStackTrace();
 		}
@@ -166,97 +190,123 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class runGame implements Runnable {
+	class runGame implements Runnable
+	{
 		@Override
-		public void run() {
-			try {
-				while (true) {
-						
-						
-						String message = input.readLine();
-						
-						System.out.println(System.currentTimeMillis()-startTime);
-						System.out.println("Length: " + message.length() + " " + message);
+		public void run()
+		{
+			try
+			{
+				startTime = System.currentTimeMillis();
+				
+				while (true)
+				{
+
+					String message = input.readLine();
+					
+					// Update the FPS counter
+					if (FPScounter >= (1000.0/ServerEngine.UPDATE_RATE + 0.5))
+					{
+						FPScounter = 0;
+						currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/ServerEngine.UPDATE_RATE)+0.5)); 
 						startTime = System.currentTimeMillis();
-						
-						String[] tokens = message.split(" ");
+					}
+					
+					FPScounter ++;
 
-						for (int token = 0; token < tokens.length; token++) {
-							// If our player has moved
-							if (tokens[token].equals("L")) {
-								HP = Integer.parseInt(tokens[++token]);
-							} else if (tokens[token].equals("U")) {
-								repaint();
+
+					String[] tokens = message.split(" ");
+
+					for (int token = 0; token < tokens.length; token++)
+					{
+						// If our player has moved
+						if (tokens[token].equals("L"))
+						{
+							HP = Integer.parseInt(tokens[++token]);
+						}
+						else if (tokens[token].equals("U"))
+						{
+							repaint();
+						}
+						// If there is a player to be updated
+						else if (tokens[token].equals("O"))
+						{
+							int id = Integer.parseInt(tokens[++token]);
+							if (id == player.getID())
+							{
+								player.setX(Integer
+										.parseInt(tokens[++token]));
+								player.setY(Integer
+										.parseInt(tokens[++token]));
+								player.setImage(tokens[++token]);
 							}
-							// If there is a player to be updated
-							else if (tokens[token].equals("O")) {
-								int id = Integer.parseInt(tokens[++token]);
-								if (id == player.getID()) {
-									player.setX(Integer
+							else if (world.contains(id))
+							{
+								ClientObject otherObject = world.get(id);
+								if (otherObject != null)
+								{
+									otherObject.setX(Integer
 											.parseInt(tokens[++token]));
-									player.setY(Integer
+									otherObject.setY(Integer
 											.parseInt(tokens[++token]));
-									player.setImage(tokens[++token]);
-								} else if (world.contains(id)) {
-									ClientObject otherObject = world.get(id);
-									if (otherObject != null) {
-										otherObject.setX(Integer
-												.parseInt(tokens[++token]));
-										otherObject.setY(Integer
-												.parseInt(tokens[++token]));
-										otherObject.setImage(tokens[++token]);
-									} else {
-										world.removeID(id);
-									}
-								} else {
-									ClientObject otherObject = new ClientObject(
-											id,
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]),
-											tokens[++token]);
-									world.add(otherObject);
+									otherObject.setImage(tokens[++token]);
 								}
-							} else if (tokens[token].equals("P")) {
-								pingString = "LATENCY: "
-										+ (System.currentTimeMillis() - ping);
+								else
+								{
+									world.removeID(id);
+								}
 							}
-
-							// Remove an object after disconnection/destruction
-							else if (tokens[token].equals("R")) {
-								world.remove(Integer.parseInt(tokens[++token]));
-							} else if (tokens[token].equals("I")) {
-								System.out.println("Received an item");
-								inventory.addItem(tokens[++token]);
-								inventory.repaint();
+							else
+							{
+								ClientObject otherObject = new ClientObject(
+										id,
+										Integer.parseInt(tokens[++token]),
+										Integer.parseInt(tokens[++token]),
+										tokens[++token]);
+								world.add(otherObject);
 							}
 						}
+						else if (tokens[token].equals("P"))
+						{
+							pingString = "LATENCY: "
+									+ (System.currentTimeMillis() - ping);
+						}
 
-						
-						long delay = System.currentTimeMillis()
-								- startTime;
-
-						
-//						if (delay < 15)
-//						{
-//							try {
-//								Thread.sleep((15-delay)-2);
-//							} catch (InterruptedException e) {
-//								
-//								e.printStackTrace();
-//							}
-//						}
-
-						
-											
-						
-						
-						
+						// Remove an object after disconnection/destruction
+						else if (tokens[token].equals("R"))
+						{
+							world.remove(Integer.parseInt(tokens[++token]));
+						}
+						else if (tokens[token].equals("I"))
+						{
+							System.out.println("Received an item");
+							inventory.addItem(tokens[++token]);
+							inventory.repaint();
+						}
 					}
-				
-				
-			} catch (NumberFormatException e1) {
+
+					long delay = System.currentTimeMillis()
+							- startTime;
+
+					// if (delay < 15)
+					// {
+					// try {
+					// Thread.sleep((15-delay)-2);
+					// } catch (InterruptedException e) {
+					//
+					// e.printStackTrace();
+					// }
+					// }
+
+				}
+
+			}
+			catch (NumberFormatException e1)
+			{
 				e1.printStackTrace();
-			} catch (IOException e2) {
+			}
+			catch (IOException e2)
+			{
 				serverClosed();
 			}
 
@@ -266,13 +316,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Import the map
 	 */
-	private void importMap() {
+	private void importMap()
+	{
 		System.out.println("Importing the map from the server...");
 
 		// Get the 2D grid from the server
 		String gridSize;
 
-		try {
+		try
+		{
 			gridSize = input.readLine();
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
@@ -281,15 +333,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 			char grid[][] = new char[height][width];
 
-			for (int row = 0; row < height; row++) {
+			for (int row = 0; row < height; row++)
+			{
 				String gridRow = input.readLine();
-				for (int column = 0; column < width; column++) {
+				for (int column = 0; column < width; column++)
+				{
 					grid[row][column] = gridRow.charAt(column);
 				}
 			}
 
 			world = new ClientWorld(grid, tileSize);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			serverClosed();
 		}
 
@@ -299,64 +355,85 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Draw everything
 	 */
-	public void paintComponent(Graphics graphics) {
+	public void paintComponent(Graphics graphics)
+	{
 		super.paintComponent(graphics);
 		world.update(graphics, player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
 
 		graphics.setColor(Color.black);
 		graphics.drawString(pingString, 20, 20);
-		if (HP > 0) {
+		graphics.drawString("FPS: " + currentFPS, 20, 40);
+		if (HP > 0)
+		{
 			graphics.setColor(Color.red);
-			graphics.drawString("Health: " + HP, 20, 40);
-		} else {
-			if (justDied) {
+			graphics.drawString("Health: " + HP, 20, 60);
+		}
+		else
+		{
+			if (justDied)
+			{
 				inventory.clear();
 				justDied = false;
 			}
 			graphics.setColor(Color.black);
-			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 40);
+			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 60);
 		}
 	}
 
 	@Override
-	public void keyPressed(KeyEvent key) {
+	public void keyPressed(KeyEvent key)
+	{
 
-		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("R")) {
+		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("R"))
+		{
 			// R for right
 			currentMessage = "R";
 			output.println(currentMessage);
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_A
-				&& !currentMessage.equals("L")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_A
+				&& !currentMessage.equals("L"))
+		{
 			// L for left
 			currentMessage = "L";
 			output.println(currentMessage);
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_SPACE
-				&& !currentMessage.equals("U")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_W
+				|| key.getKeyCode() == KeyEvent.VK_SPACE
+				&& !currentMessage.equals("U"))
+		{
 			// U for up
 			currentMessage = "U";
 			output.println(currentMessage);
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_S
-				&& !currentMessage.equals("D")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_S
+				&& !currentMessage.equals("D"))
+		{
 			// D for down
 			currentMessage = "D";
 			output.println(currentMessage);
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_P) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_P)
+		{
 			// P for ping
 			ping = System.currentTimeMillis();
 			output.println("P");
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_1
-				&& !currentMessage.equals("W1")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_1
+				&& !currentMessage.equals("W1"))
+		{
 			// P for ping
 			output.println("W1");
 			output.flush();
-		} else if (key.getKeyCode() == KeyEvent.VK_2
-				&& !currentMessage.equals("W2")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_2
+				&& !currentMessage.equals("W2"))
+		{
 			// P for ping
 			output.println("W2");
 			output.flush();
@@ -364,20 +441,31 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	@Override
-	public void keyReleased(KeyEvent key) {
+	public void keyReleased(KeyEvent key)
+	{
 
-		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("!R")) {
+		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("!R"))
+		{
 			currentMessage = "!R";
-		} else if (key.getKeyCode() == KeyEvent.VK_A
-				&& !currentMessage.equals("!L")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_A
+				&& !currentMessage.equals("!L"))
+		{
 			currentMessage = "!L";
-		} else if (key.getKeyCode() == KeyEvent.VK_W || key.getKeyCode() == KeyEvent.VK_SPACE
-				&& !currentMessage.equals("!U")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_W
+				|| key.getKeyCode() == KeyEvent.VK_SPACE
+				&& !currentMessage.equals("!U"))
+		{
 			currentMessage = "!U";
-		} else if (key.getKeyCode() == KeyEvent.VK_S
-				&& !currentMessage.equals("!D")) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_S
+				&& !currentMessage.equals("!D"))
+		{
 			currentMessage = "!D";
-		} else if (key.getKeyCode() == KeyEvent.VK_P) {
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_P)
+		{
 			pingString = "LATENCY: (PRESS P)";
 		}
 		output.println(currentMessage);
@@ -386,9 +474,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	@Override
-	public void mousePressed(MouseEvent event) {
+	public void mousePressed(MouseEvent event)
+	{
 		if (event.getButton() == MouseEvent.BUTTON1
-				&& currentMessage.charAt(0) != 'A') {
+				&& currentMessage.charAt(0) != 'A')
+		{
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
@@ -398,9 +488,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent event) {
+	public void mouseReleased(MouseEvent event)
+	{
 		if (event.getButton() == MouseEvent.BUTTON1
-				&& !currentMessage.equals("!A")) {
+				&& !currentMessage.equals("!A"))
+		{
 			currentMessage = "!A";
 
 			output.println(currentMessage);
@@ -409,33 +501,41 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	@Override
-	public void keyTyped(KeyEvent key) {
+	public void keyTyped(KeyEvent key)
+	{
 
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent arg0)
+	{
 
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
+	public void mouseEntered(MouseEvent arg0)
+	{
 
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
+	public void mouseExited(MouseEvent arg0)
+	{
 
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent event) {
+	public void mouseDragged(MouseEvent event)
+	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R') {
+		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		{
 			output.println("DR");
 			output.flush();
 			direction = 'R';
-		} else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L') {
+		}
+		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		{
 			output.println("DL");
 			output.flush();
 			direction = 'L';
@@ -444,17 +544,33 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent event) {
+	public void mouseMoved(MouseEvent event)
+	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R') {
+		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		{
 			output.println("DR");
 			output.flush();
 			direction = 'R';
-		} else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L') {
+		}
+		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		{
 			output.println("DL");
 			output.flush();
 			direction = 'L';
 		}
 	}
+
+	public int getCurrentFPS()
+	{
+		return currentFPS;
+	}
+
+	public void setCurrentFPS(int currentFPS)
+	{
+		this.currentFPS = currentFPS;
+	}
+	
+	
 
 }

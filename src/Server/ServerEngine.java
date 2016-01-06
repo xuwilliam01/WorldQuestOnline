@@ -46,7 +46,25 @@ public class ServerEngine implements Runnable, ActionListener
 	 * The rate at which the game runs at, in milliseconds
 	 */
 	public final static int UPDATE_RATE = 15;
+	
+	/**
+	 * The startTime for checking FPS
+	 */
+	private long startTime = 0;
 
+	/**
+	 * The current FPS of the client
+	 */
+	private int currentFPS = 60;
+
+	/**
+	 * A counter updating every repaint and reseting at the expected FPS
+	 */
+	private int FPScounter = 0;
+
+	/**
+	 * The game loop timer
+	 */
 	private Timer updateTimer;
 
 	/**
@@ -85,6 +103,7 @@ public class ServerEngine implements Runnable, ActionListener
 	public void run()
 	{
 		updateTimer = new Timer(UPDATE_RATE, this);
+		startTime = System.currentTimeMillis();
 		updateTimer.start();
 	}
 
@@ -173,6 +192,17 @@ public class ServerEngine implements Runnable, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		// Update the FPS counter
+		if (FPScounter >= (1000.0/UPDATE_RATE + 0.5))
+		{
+			FPScounter = 0;
+			currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
+			startTime = System.currentTimeMillis();
+		}
+		
+		FPScounter ++;
+		
+		
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 
 		// Remove disconnected players
@@ -201,4 +231,18 @@ public class ServerEngine implements Runnable, ActionListener
 			gui.update();
 		}
 	}
+
+	public int getCurrentFPS()
+	{
+		return currentFPS;
+	}
+
+	public void setCurrentFPS(int currentFPS)
+	{
+		this.currentFPS = currentFPS;
+	}
+
+
+	
+	
 }

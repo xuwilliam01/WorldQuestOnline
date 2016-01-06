@@ -18,6 +18,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 {
 
 	private ServerWorld world;
+	private ServerEngine engine;
 	private char[][] grid;
 	private int posX = 200;
 	private int posY = 300;
@@ -91,7 +92,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	private boolean left = false;
 	private boolean right = false;
 
-	public ServerGUI(ServerWorld world)
+	public ServerGUI(ServerWorld world, ServerEngine engine)
 	{
 		// Set the scale of objects
 		objectFactor = ServerFrame.FRAME_FACTOR * 8;
@@ -104,8 +105,10 @@ public class ServerGUI extends JPanel implements KeyListener,
 		setFocusable(true);
 		requestFocusInWindow();
 
-		// Set world and grid
+		// Set world, engine and grid
 		this.world = world;
+		this.engine = engine;
+		
 		grid = world.getGrid();
 
 		// Add key, mouse wheel listener and repaint timer
@@ -207,6 +210,9 @@ public class ServerGUI extends JPanel implements KeyListener,
 		graphics.drawString(
 				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
 				10, 25);
+		graphics.drawString(
+				"FPS: " + engine.getCurrentFPS(),
+				10, 40);
 	}
 
 	public void keyPressed(KeyEvent key)

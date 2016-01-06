@@ -22,7 +22,7 @@ public class StartServer
 		if(dialogResult == JOptionPane.YES_OPTION){
 		
 			ServerFrame myFrame = new ServerFrame();
-			ServerGUI gui = new ServerGUI(server.getEngine().getWorld());
+			ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
 			gui.setLocation(0,0);
 			myFrame.add(gui);
 			gui.revalidate();
