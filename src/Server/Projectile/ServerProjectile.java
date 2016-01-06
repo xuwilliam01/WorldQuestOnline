@@ -60,6 +60,9 @@ public class ServerProjectile extends ServerFlyingObject
 		setMapVisible(false);
 		damage = 0;
 		counter = 0;
+		setX(getX()-5);
+		setY(getY()-5);
+		setImage("EXPLOSION_0.png");
 	}
 	
 	/**
@@ -67,11 +70,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void updateExplosion()
 	{
-		if (counter<=2)
-		{
-			setImage("EXPLOSION_0.png");
-		}
-		else if (counter<= 4)
+		if (counter<= 4)
 		{
 			setImage("EXPLOSION_1.png");
 		}

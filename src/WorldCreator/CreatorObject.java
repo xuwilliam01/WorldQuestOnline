@@ -10,26 +10,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import Imports.GameImage;
+import Imports.ImageReferencePair;
 import Imports.Images;
 
 public class CreatorObject extends JButton implements MouseListener{
 
-	private char reference;
-	private String imageName;
-	private Image image;
+
 	private CreatorWorld world;
-	private Color color;
+	private ImageReferencePair imageRef;
 
 	public CreatorObject(char ref, String name, CreatorWorld world)
 	{
 		super(new ImageIcon(Images.getImage(name)));
 		
-		reference = ref;
-		imageName = name;
-		
-		GameImage gameImage = Images.getGameImage(name);
-		image = gameImage.getImage();
-		color = gameImage.getCentreColor();
+		imageRef = new ImageReferencePair(ref,name);
 		
 		
 		this.world = world;
@@ -39,23 +33,23 @@ public class CreatorObject extends JButton implements MouseListener{
 		setFocusable(false);
 		addMouseListener(this);
 		
-		setSize(image.getWidth(null),image.getHeight(null));
+		setSize(imageRef.getImage().getWidth(null),imageRef.getImage().getHeight(null));
 	}
 
 	public char getReference() {
-		return reference;
+		return imageRef.getReference();
 	}
 
 	public void setReference(char reference) {
-		this.reference = reference;
+		imageRef.setReference(reference);
 	}
 
 	public Image getImage() {
-		return image;
+		return imageRef.getImage();
 	}
 
 	public void setImage(Image image) {
-		this.image = image;
+		imageRef.setImage(image);
 	}
 
 	public void deselect()
@@ -65,7 +59,7 @@ public class CreatorObject extends JButton implements MouseListener{
 	
 	public void setPosition(int row, int col)
 	{
-		setLocation(col*image.getWidth(null)+(col+1)*10,row*image.getHeight(null)+row*10+50);
+		setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+50);
 	}
 	
 	@Override
@@ -88,7 +82,7 @@ public class CreatorObject extends JButton implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		world.setSelectedTile(reference);
+		world.setSelectedTile(imageRef.getReference());
 		setBorder(BorderFactory.createLineBorder(Color.white));
 	}
 
@@ -100,12 +94,12 @@ public class CreatorObject extends JButton implements MouseListener{
 
 	public Color getColor()
 	{
-		return color;
+		return imageRef.getColor();
 	}
 
 	public void setColor(Color color)
 	{
-		this.color = color;
+		imageRef.setColor(color);
 	}
 	
 	
