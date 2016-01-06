@@ -36,6 +36,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
 
+	public final static double MIN_EDIT_ZOOM = ServerFrame.FRAME_FACTOR * 2;
 
 	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT
 	                                 / ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH
@@ -61,6 +62,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	private boolean removingTile = false;
 	private boolean highlightingArea = false;
 	private boolean highlight = false;
+	private boolean isEditable = true;
 
 	// Variables for changing grid size
 	private boolean isNewHeight = false;
@@ -240,7 +242,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			endColumn = grid[0].length - 1;
 		}
 
-		if (objectFactor == 1)
+		if (isEditable)
 		{
 			for (int row = startRow; row <= endRow; row++)
 			{
@@ -268,7 +270,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
 								(int) (ServerGUI.CENTRE_Y
 										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
 								null);
 					}
 				}
@@ -374,7 +377,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				&& selectedBlock[0] >= startRow && selectedBlock[0] <= endRow
 				&& selectedBlock[1] >= startColumn
 				&& selectedBlock[1] <= endColumn
-				&& objectFactor <= ServerFrame.FRAME_FACTOR * 1.1)
+				&& isEditable)
 		{
 			graphics.setColor(Color.white);
 			graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
@@ -387,14 +390,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 
 		graphics.setColor(Color.white);
-		
+
 		//Draw an outline
 		graphics.drawRect((int) (ServerGUI.CENTRE_X - posX), (int) (ServerGUI.CENTRE_Y  - posY),(int)((grid[0].length)
 				* (ServerWorld.TILE_SIZE / objectFactor)), (int)((grid.length)
 						* (ServerWorld.TILE_SIZE / objectFactor)));
-		
+
 		//Draw instructions
-		graphics.drawString("Map can only be edited when zoomed in fully", 10,
+		graphics.drawString(String.format("Map can only be edited when zoomed in %d%% or more (Current: %d%%)", (int)( 100/MIN_EDIT_ZOOM),(int)( 100/objectFactor)), 10,
 				20);
 		graphics.drawString("Select a tile using the mouse", 10, 35);
 		graphics.drawString("Place tiles using left click", 10, 50);
@@ -411,7 +414,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.drawString(
 				"Tip: Zoom out and use mouse drags to quickly access other parts of the map",
 				10, 125);
-		
+
 
 	}
 
@@ -605,22 +608,22 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			rightClick = true;
 
 		if (leftClick
-				&& (ctrlPressed || objectFactor >= ServerFrame.FRAME_FACTOR * 1.2))
+				&& (ctrlPressed || !isEditable))
 		{
 			dragSourceX = event.getX();
 			dragSourceY = event.getY();
 		}
 		else if (leftClick && selectedTile != '-' && !ctrlPressed
-				&& objectFactor <= ServerFrame.FRAME_FACTOR * 1.1)
+				&& isEditable)
 		{
 			addingTile = true;
 		}
-		else if (rightClick && objectFactor <= ServerFrame.FRAME_FACTOR * 1.1
+		else if (rightClick && isEditable
 				&& !ctrlPressed)
 		{
 			removingTile = true;
 		}
-		else if (rightClick && objectFactor <= ServerFrame.FRAME_FACTOR * 1.1
+		else if (rightClick && isEditable
 				&& ctrlPressed && selectedTile != '-' && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
@@ -648,7 +651,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	@Override
 	public void mouseDragged(MouseEvent event)
 	{
-		if ((ctrlPressed || objectFactor >= ServerFrame.FRAME_FACTOR * 1.2)
+		if ((ctrlPressed || !isEditable)
 				&& leftClick)
 		{
 			// System.out.println(event.+" "+MouseEvent.BUTTON3);
@@ -671,37 +674,46 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		int notches = scroll.getWheelRotation();
 
-		if (notches > 0 )
-		{
-			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
+		
+			if (notches > 0 )
 			{
-				objectFactor *= (1.1 * (notches));
-				posX /= 1.1;
-				posY /= 1.1;
+				if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
+				{
+					objectFactor *= (1.1 * (notches));
+					posX /= 1.1;
+					posY /= 1.1;
+				
+				}
+				else
+				{
+					posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+					posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+					objectFactor = ServerFrame.FRAME_FACTOR * 16;
+				}
 			}
-			else
+			else if (notches < 0)
 			{
-				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				objectFactor = ServerFrame.FRAME_FACTOR * 16;
-			}
-		}
-		else if (notches < 0)
-		{
-			if (objectFactor / (1.1 * (-notches)) >= 1)
-			{
-				objectFactor /= (1.1 * (-notches));
-				posX *= 1.1;
-				posY *= 1.1;
-			}
-			else
-			{
-				posX *= objectFactor;
-				posY *= objectFactor;
-				objectFactor = 1;
-			}
+				if (objectFactor / (1.1 * (-notches)) >= 1)
+				{
+					objectFactor /= (1.1 * (-notches));
+					posX *= 1.1;
+					posY *= 1.1;
+				
+				}
+				else
+				{
+					posX *= objectFactor;
+					posY *= objectFactor;
+					objectFactor = 1;
+				}
 
-		}
+			}
+			
+
+		if(objectFactor <= MIN_EDIT_ZOOM)
+			isEditable = true;
+		else
+			isEditable = false;
 	}
 
 }
