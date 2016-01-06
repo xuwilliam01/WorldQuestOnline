@@ -133,7 +133,7 @@ public class ClientWorld
 
 				if (grid[row][column] != ' ')
 				{
-					graphics.drawImage(ImageReferencePair.getImages()[grid[row][column]].getImage(), centreX
+					graphics.drawImage(ImageReferencePair.getImages()[(int)(grid[row][column])].getImage(), centreX
 							+ column * tileSize - playerX, centreY + row
 							* tileSize - playerY,
 							null);
