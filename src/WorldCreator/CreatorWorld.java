@@ -97,10 +97,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
 	{
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseWheelListener(this);
-		addMouseMotionListener(this);
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
@@ -126,6 +122,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		scrollTimer = new Timer(10, this);
 		scrollTimer.start();
+		
+		addKeyListener(this);
+		addMouseListener(this);
+		addMouseWheelListener(this);
+		addMouseMotionListener(this);
 	}
 
 	public void importGrid() throws IOException

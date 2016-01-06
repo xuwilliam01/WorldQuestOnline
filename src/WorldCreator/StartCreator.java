@@ -27,10 +27,7 @@ public class StartCreator {
 		frame.add(items);
 		world.revalidate();
 		items.revalidate();
-
-
-
 		frame.setVisible(true);
-
+		items.repaint();
 	}
 }

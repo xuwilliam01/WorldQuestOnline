@@ -64,7 +64,6 @@ public class CreatorItems extends JPanel implements ActionListener{
 		updateHeight.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-220);
 		updateHeight.addActionListener(this);
 		add(updateHeight);
-
 	}
 
 	public void addButtons()

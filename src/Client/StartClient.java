@@ -66,6 +66,7 @@ public class StartClient
 				client.revalidate();
 				inventory.revalidate();
 				myFrame.setVisible(true);
+				inventory.repaint();
 			}
 		});
 
