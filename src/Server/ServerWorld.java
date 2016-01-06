@@ -383,7 +383,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] <= 'Z'
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -422,7 +422,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] <= 'Z'
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -458,7 +458,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] <= 'Z'
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
@@ -493,7 +493,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] <= 'Z'
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
