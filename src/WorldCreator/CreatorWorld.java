@@ -86,6 +86,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	// File
 	String fileName;
+
 	/**
 	 * Table to reference objects by character
 	 */
@@ -146,7 +147,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		}
 		br.close();
-		
+
 		//Make a border around  the grid
 		for(int col = 0; col < grid[0].length;col++)
 		{
@@ -185,8 +186,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public void readImages() throws NumberFormatException, IOException
 	{
-		BufferedReader br = new BufferedReader(new FileReader(
-				"WorldCreator.cfg"));
+		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",
+				"WorldCreator.cfg")));
 		int numTiles = Integer.parseInt(br.readLine());
 		for (int tile = 0; tile < numTiles; tile++)
 		{
@@ -200,6 +201,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+
+		// Draw the background
+		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
 
 		// Create new height and width if necessary
 		if (isNewHeight)
@@ -242,30 +246,30 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					if (grid[row][column] == ' ')
-					{
-						graphics.setColor(LIGHT_GRAY);
-						graphics.fillRect(
-								(int) (ServerGUI.CENTRE_X
-										+ column
-										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-										(int) (ServerGUI.CENTRE_Y
-												+ row
-												* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-												(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-												(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
-					}
-					else
+					//					if (grid[row][column] == ' ')
+					//					{
+					//						graphics.setColor(LIGHT_GRAY);
+					//						graphics.fillRect(
+					//								(int) (ServerGUI.CENTRE_X
+					//										+ column
+					//										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+					//								(int) (ServerGUI.CENTRE_Y
+					//										+ row
+					//										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+					//								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+					//								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+					//					}
+					if (grid[row][column] != ' ')
 					{
 						graphics.drawImage(
 								tiles[grid[row][column]].getImage(),
 								(int) (ServerGUI.CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-										(int) (ServerGUI.CENTRE_Y
-												+ row
-												* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-												null);
+								(int) (ServerGUI.CENTRE_Y
+										+ row
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+								null);
 					}
 				}
 			}
@@ -276,23 +280,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					if (grid[row][column] == ' ')
-					{
-						graphics.setColor(LIGHT_GRAY);
-					}
-					else
+					//					if (grid[row][column] == ' ')
+					//					{
+					//						graphics.setColor(LIGHT_GRAY);
+					//					}
+					if (grid[row][column] != ' ')
 					{
 						graphics.setColor(tiles[grid[row][column]].getColor());
+
+						graphics.fillRect(
+								(int) (ServerGUI.CENTRE_X
+										+ column
+										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+								(int) (ServerGUI.CENTRE_Y
+										+ row
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					}
-					graphics.fillRect(
-							(int) (ServerGUI.CENTRE_X
-									+ column
-									* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-									(int) (ServerGUI.CENTRE_Y
-											+ row
-											* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-											(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-											(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					// graphics.setColor(Color.black);
 					// graphics.drawRect((int) (ServerGUI.CENTRE_X + column*
 					// (ServerWorld.TILE_SIZE / objectFactor) - posX),
@@ -376,12 +381,19 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					* (ServerWorld.TILE_SIZE / objectFactor) - posX),
 					(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
 							* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-							(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 
 		}
 
 		graphics.setColor(Color.white);
+		
+		//Draw an outline
+		graphics.drawRect((int) (ServerGUI.CENTRE_X - posX), (int) (ServerGUI.CENTRE_Y  - posY),(int)((grid[0].length)
+				* (ServerWorld.TILE_SIZE / objectFactor)), (int)((grid.length)
+						* (ServerWorld.TILE_SIZE / objectFactor)));
+		
+		//Draw instructions
 		graphics.drawString("Map can only be edited when zoomed in fully", 10,
 				20);
 		graphics.drawString("Select a tile using the mouse", 10, 35);
@@ -399,6 +411,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.drawString(
 				"Tip: Zoom out and use mouse drags to quickly access other parts of the map",
 				10, 125);
+		
 
 	}
 
@@ -547,8 +560,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			selectedBlock = getRowCol(
 					(int) (MouseInfo.getPointerInfo().getLocation().getX() - this
 							.getLocationOnScreen().getX()),
-							(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
-									.getLocationOnScreen().getY()));
+					(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
+							.getLocationOnScreen().getY()));
 
 		if (selectedBlock != null && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0

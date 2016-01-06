@@ -2,9 +2,11 @@ package Client;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Imports.ImageReferencePair;
 import Imports.Images;
 
 public class ClientWorld
@@ -38,13 +40,17 @@ public class ClientWorld
 	 * @param rows the number of rows in the tile grid
 	 * @param columns the number of columns in the tile grid
 	 * @param grid the tile grid
+	 * @throws IOException 
 	 */
-	public ClientWorld(char[][] grid, int tileSize)
+	public ClientWorld(char[][] grid, int tileSize) throws IOException
 	{
 		this.tileSize = tileSize;
 		this.grid = grid;
 		objects = new ArrayList<ClientObject>();
 		objectIDs = new boolean[100000];
+		
+		//Import tile drawing referenes
+		ImageReferencePair.importReferences();
 	}
 
 	/**
@@ -127,30 +133,7 @@ public class ClientWorld
 
 				if (grid[row][column] != ' ')
 				{
-					String image = "NOTHING.png";
-
-					if (grid[row][column] == '1')
-					{
-						image = "BRICK.png";
-					}
-					else if (grid[row][column] == '2')
-					{
-						image = "COBBLESTONE.png";
-					}
-					else if (grid[row][column] == '3')
-					{
-						image = "STONEBRICKS.png";
-					}
-					else if (grid[row][column] == '4')
-					{
-						image = "DIRT.png";
-					}
-					else if (grid[row][column] == '5')
-					{
-						image = "DIRTGRASS.png";
-					}
-
-					graphics.drawImage(Images.getImage(image), centreX
+					graphics.drawImage(ImageReferencePair.getImages()[grid[row][column]].getImage(), centreX
 							+ column * tileSize - playerX, centreY + row
 							* tileSize - playerY,
 							null);
