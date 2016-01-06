@@ -40,7 +40,7 @@ public class ClientWorld
 	 * @param rows the number of rows in the tile grid
 	 * @param columns the number of columns in the tile grid
 	 * @param grid the tile grid
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public ClientWorld(char[][] grid, int tileSize) throws IOException
 	{
@@ -48,8 +48,8 @@ public class ClientWorld
 		this.grid = grid;
 		objects = new ArrayList<ClientObject>();
 		objectIDs = new boolean[100000];
-		
-		//Import tile drawing referenes
+
+		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 	}
 
@@ -100,7 +100,7 @@ public class ClientWorld
 
 		// Draw the background
 		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
-		
+
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
@@ -130,14 +130,12 @@ public class ClientWorld
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
-
-				if (grid[row][column] != ' ')
-				{
-					graphics.drawImage(ImageReferencePair.getImages()[(int)(grid[row][column])].getImage(), centreX
-							+ column * tileSize - playerX, centreY + row
-							* tileSize - playerY,
-							null);
-				}
+				graphics.drawImage(
+						ImageReferencePair.getImages()[(int) (grid[row][column])]
+								.getImage(), centreX
+								+ column * tileSize - playerX, centreY + row
+								* tileSize - playerY,
+						null);
 			}
 
 		}
