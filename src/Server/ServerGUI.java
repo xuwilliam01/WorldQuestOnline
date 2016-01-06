@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -296,26 +297,26 @@ public class ServerGUI extends JPanel implements KeyListener,
 
 		if (notches > 0 )
 		{
-			if (objectFactor * 1.1  <= ServerFrame.FRAME_FACTOR * 16)
+			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
 			{
-			objectFactor *= (1.1 * notches);
-			posX /= 1.1;
-			posY /= 1.1;
+				objectFactor *= (1.1 * (notches));
+				posX /= 1.1;
+				posY /= 1.1;
 			}
 			else
 			{
-				posX /= ServerFrame.FRAME_FACTOR * 16/objectFactor;
-				posY /=ServerFrame.FRAME_FACTOR * 16/objectFactor;
+				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
 				objectFactor = ServerFrame.FRAME_FACTOR * 16;
 			}
 		}
 		else if (notches < 0)
 		{
-			if (objectFactor / 1.1 >= 1)
+			if (objectFactor / (1.1 * (-notches)) >= 1)
 			{
-			objectFactor /= (1.1 * (-notches));
-			posX *= 1.1;
-			posY *= 1.1;
+				objectFactor /= (1.1 * (-notches));
+				posX *= 1.1;
+				posY *= 1.1;
 			}
 			else
 			{
@@ -323,6 +324,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 				posY *= objectFactor;
 				objectFactor = 1;
 			}
+
 		}
 	}
 
