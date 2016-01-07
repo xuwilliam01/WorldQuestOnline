@@ -12,22 +12,22 @@ public abstract class ServerCreature extends ServerObject
 	 * Maximum possible HP of the creature
 	 */
 	private int maxHP;
-	
+
 	/**
 	 * Current HP of the creature
 	 */
 	private int HP;
-	
+
 	/**
 	 * Stores the inventory of the creature
 	 */
 	private ArrayList<ServerItem>  inventory = new ArrayList<ServerItem>();
-	
+
 	/**
 	 * World that the creature is in
 	 */
 	private ServerWorld world;
-	
+
 
 	/**
 	 * Constructor for a creature
@@ -55,12 +55,12 @@ public abstract class ServerCreature extends ServerObject
 	{
 		return maxHP;
 	}
-	
+
 	public int getHP()
 	{
 		return HP;
 	}
-	
+
 	/**
 	 * Set HP to a certain amount
 	 * @param HP
@@ -69,7 +69,7 @@ public abstract class ServerCreature extends ServerObject
 	{
 		this.HP = HP;
 	}
-	
+
 	/**
 	 * Inflict a certain amount of damage to the npc and destroy if less than 0 hp
 	 * @param amount
@@ -83,7 +83,7 @@ public abstract class ServerCreature extends ServerObject
 			dropInventory();
 		}
 	}
-	
+
 	/**
 	 * Drop every item in the creature's inventory
 	 */
@@ -93,20 +93,29 @@ public abstract class ServerCreature extends ServerObject
 		{
 			dropItem(item);
 		}
-		
+
 		inventory.clear();
 	}
-	
+
 	public ArrayList<ServerItem> getInventory()
 	{
 		return inventory;
 	}
-	
+
 	public void addItem(ServerItem item)
 	{
+		if(item.getType().charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+			for(ServerItem sItem : inventory)
+			{
+				if(item.getType().equals(sItem.getType()))
+				{
+					sItem.increaseAmount();
+					return;
+				}
+			}
 		inventory.add(item);
 	}
-	
+
 	public void dropItem(ServerItem item)
 	{
 		item.setX(getX() + getWidth()/2);
@@ -121,7 +130,7 @@ public abstract class ServerCreature extends ServerObject
 		int direction = Math.random() < 0.5 ? -1 : 1;
 		item.setHSpeed(direction*(Math.random()*5 + 3));
 	}
-	
+
 	public void drop(String item)
 	{
 		ServerItem toRemove = null;
@@ -130,7 +139,7 @@ public abstract class ServerCreature extends ServerObject
 			if(sItem.getType().equals(item))
 			{
 				toRemove = sItem;
-							
+
 				//If we have a potion
 				if(item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
 				{
@@ -138,7 +147,7 @@ public abstract class ServerCreature extends ServerObject
 					{
 						HP = Math.min(maxHP,HP+Integer.parseInt(item.substring(3)));
 					}
-					
+
 				}
 				//Do not drop potions
 				else
@@ -148,6 +157,9 @@ public abstract class ServerCreature extends ServerObject
 				break;
 			}
 		}
-		inventory.remove(toRemove);
+		if(toRemove.getAmount() > 1)
+			toRemove.decreaseAmount();
+		else
+			inventory.remove(toRemove);
 	}
 }

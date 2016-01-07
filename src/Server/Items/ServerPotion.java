@@ -5,6 +5,8 @@ public abstract class ServerPotion extends ServerItem {
 
 	private final static int NUM_POTIONS = 1;
 
+
+	
 	public ServerPotion(double x, double y, String type) {
 		super(x, y, type);
 	}
@@ -19,4 +21,6 @@ public abstract class ServerPotion extends ServerItem {
 		// This won't happen
 		return null;
 	}
+	
+	
 }

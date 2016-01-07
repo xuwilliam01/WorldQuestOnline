@@ -17,6 +17,9 @@ public abstract class ServerItem extends ServerObject{
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000,new CoolDownTimer());
 
+	//Amount of this item. Will only be used for potions
+	private int amount = 1;
+	
 	public ServerItem(double x, double y,String type) {
 		super(x, y, 0,0, ServerWorld.GRAVITY, "", type);
 
@@ -88,6 +91,21 @@ public abstract class ServerItem extends ServerObject{
 			coolDownTimer.stop();
 		}
 		
+	}
+	
+	public void increaseAmount()
+	{
+		amount++;
+	}
+	
+	public int getAmount()
+	{
+		return amount;
+	}
+	
+	public void decreaseAmount()
+	{
+		amount--;
 	}
 	
 }

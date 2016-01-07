@@ -16,6 +16,7 @@ public class ClientItem extends JButton implements MouseListener{
 	private boolean selected = false;
 	private ClientInventory inventory;
 	private String type;
+	private int amount = 1;
 
 	public ClientItem(String imageName, String type,int row, int col, ClientInventory inventory)
 	{
@@ -66,6 +67,20 @@ public class ClientItem extends JButton implements MouseListener{
 		this.type = type;
 	}
 
+	public void increaseAmount()
+	{
+		amount++;
+	}
+	
+	public int getAmount()
+	{
+		return amount;
+	}
+	
+	public void decreaseAmount()
+	{
+		amount--;
+	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
