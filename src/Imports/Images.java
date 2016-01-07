@@ -150,9 +150,7 @@ public class Images
 
 			for (int no = 0; no < 6; no++)
 			{
-				images.add(new GameImage("CLOUD_" + no + ".png",
-						ServerWorld.TILE_SIZE,
-						ServerWorld.TILE_SIZE));
+				images.add(new GameImage("CLOUD_" + no + ".png"));
 
 			}
 
