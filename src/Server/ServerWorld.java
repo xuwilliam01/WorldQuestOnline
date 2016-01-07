@@ -321,7 +321,6 @@ public class ServerWorld
 											.getSource().getID() == player
 											.getID()))
 									{
-										// System.out.println("PICKED UP ITEM");
 										player.addItem(item);
 										item.setSource(player);
 										item.destroy();

@@ -63,7 +63,6 @@ public abstract class ServerItem extends ServerObject{
 		hasCoolDown = true;
 
 		//Start a timer for when to set cooldown to false
-		System.out.println("start");
 		coolDownTimer.start();
 
 	}
@@ -85,7 +84,6 @@ public abstract class ServerItem extends ServerObject{
 	private class CoolDownTimer implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("working");
 			hasCoolDown = false;
 			coolDownTimer.stop();
 		}
