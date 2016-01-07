@@ -318,7 +318,7 @@ public class ServerWorld
 								{
 									ServerItem item = (ServerItem) otherObject;
 									ServerCreature player = (ServerCreature) object;
-									if(!(item.hasCoolDown() && item.getSource() == player))
+									if(!item.hasCoolDown())
 									{
 										//System.out.println("PICKED UP ITEM");
 										player.addItem(item);
