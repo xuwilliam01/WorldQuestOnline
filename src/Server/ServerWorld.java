@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
@@ -316,7 +317,7 @@ public class ServerWorld
 										&& object.collidesWith(otherObject))
 								{
 									ServerItem item = (ServerItem) otherObject;
-									ServerPlayer player = (ServerPlayer) object;
+									ServerCreature player = (ServerCreature) object;
 									if(!(item.hasCoolDown() && item.getSource() == player))
 									{
 										//System.out.println("PICKED UP ITEM");

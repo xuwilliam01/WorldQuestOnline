@@ -113,6 +113,7 @@ public abstract class ServerCreature extends ServerObject
 		item.setY(getY() + getHeight()/2);
 		item.makeExist();
 		item.startCoolDown();
+		item.setSource(this);
 		world.add(item);
 		item.setOnSurface(false);
 		item.setVSpeed(-Math.random()*15-5);
@@ -129,23 +130,21 @@ public abstract class ServerCreature extends ServerObject
 			if(sItem.getType().equals(item))
 			{
 				toRemove = sItem;
-				dropItem(sItem);
-				
-				
-//				//If we have a potion
-//				if(item.charAt(0) == 'I' && item.charAt(1) == 'P')
-//				{
-//					if(item.charAt(2) == 'H')
-//					{
-//						HP += Integer.parseInt(item.substring(3));
-//					}
-//					
-//				}
-//				//Do not drop potions
-//				else
-//				{
-//					dropItem(sItem);
-//				}
+							
+				//If we have a potion
+				if(item.charAt(0) == 'I' && item.charAt(1) == 'P')
+				{
+					if(item.charAt(2) == 'H')
+					{
+						HP += Integer.parseInt(item.substring(3));
+					}
+					
+				}
+				//Do not drop potions
+				else
+				{
+					dropItem(sItem);
+				}
 				break;
 			}
 		}
