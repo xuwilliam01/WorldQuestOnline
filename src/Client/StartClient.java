@@ -57,6 +57,8 @@ public class StartClient
 				
 				ClientInventory inventory = new ClientInventory();
 				Client client = new Client(mySocket,inventory);
+				inventory.setClient(client);
+				
 				client.setLocation(0,0);
 				inventory.setLocation(Client.SCREEN_WIDTH,0);
 				
@@ -66,6 +68,7 @@ public class StartClient
 				client.revalidate();
 				inventory.revalidate();
 				myFrame.setVisible(true);
+				inventory.repaint();
 			}
 		});
 

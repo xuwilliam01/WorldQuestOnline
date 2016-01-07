@@ -18,6 +18,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 {
 
 	private ServerWorld world;
+	private ServerEngine engine;
 	private char[][] grid;
 	private int posX = 200;
 	private int posY = 300;
@@ -91,7 +92,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	private boolean left = false;
 	private boolean right = false;
 
-	public ServerGUI(ServerWorld world)
+	public ServerGUI(ServerWorld world, ServerEngine engine)
 	{
 		// Set the scale of objects
 		objectFactor = ServerFrame.FRAME_FACTOR * 8;
@@ -99,13 +100,15 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
-		setSize(Client.Client.SCREEN_WIDTH,Client.Client.SCREEN_HEIGHT);
+		setSize(Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT);
 
 		setFocusable(true);
 		requestFocusInWindow();
 
-		// Set world and grid
+		// Set world, engine and grid
 		this.world = world;
+		this.engine = engine;
+
 		grid = world.getGrid();
 
 		// Add key, mouse wheel listener and repaint timer
@@ -166,10 +169,12 @@ public class ServerGUI extends JPanel implements KeyListener,
 		for (ServerObject object : world.getObjects())
 		{
 			if (object.isMapVisible()
-					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1
+					&& ((CENTRE_X + object.getX() / objectFactor - posX)
+							+ 1
 							+ (object.getWidth() / objectFactor) + 1) > 0
 					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
-					&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1
+					&& ((CENTRE_Y + object.getY() / objectFactor - posY)
+							+ 1
 							+ (object.getHeight() / objectFactor) + 1) > 0
 					&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 			{
@@ -207,6 +212,9 @@ public class ServerGUI extends JPanel implements KeyListener,
 		graphics.drawString(
 				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
 				10, 25);
+		graphics.drawString(
+				"FPS: " + engine.getCurrentFPS(),
+				10, 40);
 	}
 
 	public void keyPressed(KeyEvent key)
@@ -295,9 +303,9 @@ public class ServerGUI extends JPanel implements KeyListener,
 	{
 		int notches = scroll.getWheelRotation();
 
-		if (notches > 0 )
+		if (notches > 0)
 		{
-			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
+			if (objectFactor * (1.1 * (notches)) < ServerFrame.FRAME_FACTOR * 16)
 			{
 				objectFactor *= (1.1 * (notches));
 				posX /= 1.1;
@@ -381,4 +389,16 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// TODO Auto-generated method stub
 
 	}
+
+	public double getObjectFactor()
+	{
+		return objectFactor;
+	}
+
+	public void setObjectFactor(double objectFactor)
+	{
+		this.objectFactor = objectFactor;
+	}
+	
+	
 }

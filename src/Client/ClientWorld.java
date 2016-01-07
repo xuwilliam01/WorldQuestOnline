@@ -30,6 +30,18 @@ public class ClientWorld
 	 */
 	private ArrayList<ClientObject> objects;
 
+	private ArrayList<ClientBackground> clouds;
+
+	/**
+	 * The distance a cloud travels before teleporting back
+	 */
+	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 5;
+
+	/**
+	 * The direction the clouds move in
+	 */
+	private int cloudDirection = 0;
+
 	/**
 	 * The side length of one square tile in pixels
 	 */
@@ -40,7 +52,7 @@ public class ClientWorld
 	 * @param rows the number of rows in the tile grid
 	 * @param columns the number of columns in the tile grid
 	 * @param grid the tile grid
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public ClientWorld(char[][] grid, int tileSize) throws IOException
 	{
@@ -48,9 +60,42 @@ public class ClientWorld
 		this.grid = grid;
 		objects = new ArrayList<ClientObject>();
 		objectIDs = new boolean[100000];
-		
-		//Import tile drawing referenes
+
+		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
+		
+		// Generate clouds
+		if ((int)(Math.random()*2) == 0)
+		{
+			cloudDirection = 1;
+		}
+		else
+		{
+			cloudDirection = -1;
+		}
+			
+		clouds = new ArrayList<ClientBackground>();
+		for (int no = 0; no < 12; no++)
+		{
+			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
+					- (CLOUD_DISTANCE / 2);
+			double y = Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3);
+
+			double hSpeed = 0;
+
+			hSpeed = (Math.random()*0.8 + 0.2) * cloudDirection;
+
+			int imageNo = no;
+			
+			while (imageNo >= 6)
+			{
+				imageNo -= 6;
+			}
+			
+			String image = "CLOUD_" + imageNo + ".png";
+
+			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
+		}
 	}
 
 	/**
@@ -100,7 +145,40 @@ public class ClientWorld
 
 		// Draw the background
 		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
-		
+
+		// Draw and move the clouds
+		for (ClientBackground cloud : clouds)
+		{
+			if (cloud.getX() <= Client.SCREEN_WIDTH
+					&& cloud.getX() + cloud.getWidth() >= 0)
+			{
+				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
+						(int) cloud.getY(), null);
+			}
+
+			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2)
+			{
+				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
+//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+//				cloud.setImage(Images.getImage(image));
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
+				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
+
+			}
+			else if (cloud.getX() > Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE
+					/ 2)
+			{
+				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
+//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+//				cloud.setImage(Images.getImage(image));
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
+				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
+			}
+			cloud.setX(cloud.getX() + cloud.gethSpeed());
+			
+			//System.out.println(cloud.getX());
+		}
+
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
@@ -131,11 +209,14 @@ public class ClientWorld
 			for (int column = startColumn; column <= endColumn; column++)
 			{
 
-				if (grid[row][column] != ' ')
+				if (grid[row][column] != '_' && grid[row][column] != ' ')
 				{
-					graphics.drawImage(ImageReferencePair.getImages()[(int)(grid[row][column])].getImage(), centreX
-							+ column * tileSize - playerX, centreY + row
-							* tileSize - playerY,
+					graphics.drawImage(
+							ImageReferencePair.getImages()[(int) (grid[row][column])]
+									.getImage(), centreX
+									+ column * tileSize - playerX, centreY
+									+ row
+									* tileSize - playerY,
 							null);
 				}
 			}
@@ -156,9 +237,9 @@ public class ClientWorld
 				int y = centreY + object.getY() - playerY;
 				Image image = object.getImage();
 
-				if (x > Client.SCREEN_WIDTH || x + image.getWidth(null) < 0
+				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
-						|| y + image.getHeight(null) < 0)
+						|| y + object.getHeight() < 0)
 				{
 					objectsToRemove.add(object.getID());
 				}

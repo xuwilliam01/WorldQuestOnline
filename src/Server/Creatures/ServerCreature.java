@@ -91,15 +91,7 @@ public abstract class ServerCreature extends ServerObject
 	{
 		for(ServerItem item : inventory)
 		{
-			item.setX(getX() + getWidth()/2);
-			item.setY(getY() + getHeight()/2);
-			item.makeExist();
-			world.add(item);
-			item.setOnSurface(false);
-			item.setVSpeed(-Math.random()*15-5);
-
-			int direction = Math.random() < 0.5 ? -1 : 1;
-			item.setHSpeed(direction*(Math.random()*5 + 3));
+			dropItem(item);
 		}
 		
 		inventory.clear();
@@ -113,5 +105,49 @@ public abstract class ServerCreature extends ServerObject
 	public void addItem(ServerItem item)
 	{
 		inventory.add(item);
+	}
+	
+	public void dropItem(ServerItem item)
+	{
+		item.setX(getX() + getWidth()/2);
+		item.setY(getY() + getHeight()/2);
+		item.makeExist();
+		item.startCoolDown();
+		item.setSource(this);
+		world.add(item);
+		item.setOnSurface(false);
+		item.setVSpeed(-Math.random()*15-5);
+
+		int direction = Math.random() < 0.5 ? -1 : 1;
+		item.setHSpeed(direction*(Math.random()*5 + 3));
+	}
+	
+	public void drop(String item)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem sItem : inventory)
+		{
+			if(sItem.getType().equals(item))
+			{
+				toRemove = sItem;
+							
+				//If we have a potion
+				if(item.charAt(0) == 'I' && item.charAt(1) == 'P')
+				{
+					if(item.charAt(2) == 'H')
+					{
+						HP += Integer.parseInt(item.substring(3));
+					}
+					
+				}
+				//Do not drop potions
+				else
+				{
+					dropItem(sItem);
+				}
+				break;
+			}
+		}
+		inventory.remove(toRemove);
 	}
 }

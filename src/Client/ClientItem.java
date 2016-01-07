@@ -14,11 +14,14 @@ public class ClientItem extends JButton implements MouseListener{
 	private Image image;
 	private String imageName;
 	private boolean selected = false;
+	private ClientInventory inventory;
+	private String type;
 
-	public ClientItem(String imageName, int row, int col)
+	public ClientItem(String imageName, String type,int row, int col, ClientInventory inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png")));
-		
+		this.type = type;
+		this.inventory = inventory;
 		this.imageName = imageName;
 		image = Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png");
 		
@@ -54,6 +57,15 @@ public class ClientItem extends JButton implements MouseListener{
 		this.selected = selected;
 	}
 
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -77,12 +89,15 @@ public class ClientItem extends JButton implements MouseListener{
 		if(e.getButton()== MouseEvent.BUTTON1)
 		{
 			selected = true;
+			
+			//Do something if selected
 			System.out.println("Selected this item");
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			System.out.println("Dropped this item");
-			//Drop item
+			
+			inventory.removeItem(this);
 		}
 		
 	}

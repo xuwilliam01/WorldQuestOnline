@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
@@ -171,12 +172,13 @@ public class ServerWorld
 				"Resources", GRID_FILE)));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
-		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
-				.parseInt(tokenizer.nextToken())];
+		// Add to both sides to make room for the invisible walls
+		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())+6][Integer
+		                                                               .parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -188,14 +190,36 @@ public class ServerWorld
 		}
 
 		String line;
-		for (int row = 0; row < tileGrid.length; row++)
+		for (int row = 3; row < tileGrid.length - 3; row++)
 		{
 			line = worldInput.readLine();
-			for (int col = 0; col < tileGrid[row].length; col++)
-				tileGrid[row][col] = line.charAt(col);
+			for (int col = 3; col < tileGrid[row].length - 3; col++)
+				tileGrid[row][col] = line.charAt(col-3);
 		}
 
 		worldInput.close();
+
+		// Make a border around the grid
+		for (int col = 0; col < tileGrid[0].length; col++)
+		{
+			tileGrid[0][col] = '_';
+			tileGrid[1][col] = '_';
+			tileGrid[2][col] = '_';
+			tileGrid[tileGrid.length - 1][col] = '_';
+			tileGrid[tileGrid.length - 2][col] = '_';
+			tileGrid[tileGrid.length - 3][col] = '_';
+		}
+
+		// Make a border around the grid
+		for (int row = 0; row < tileGrid.length; row++)
+		{
+			tileGrid[row][0] = '_';
+			tileGrid[row][1] = '_';
+			tileGrid[row][2] = '_';
+			tileGrid[row][tileGrid[0].length - 1] = '_';
+			tileGrid[row][tileGrid[0].length - 2] = '_';
+			tileGrid[row][tileGrid[0].length - 3] = '_';
+		}
 	}
 
 	/**
@@ -234,21 +258,22 @@ public class ServerWorld
 				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
 					object.setHSpeed(0);
 
-
 				// Add the object to all the object tiles that it collides with
 				// currently
 				int startRow = (int) (object.getY() / OBJECT_TILE_SIZE);
 				int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
 				int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
 				int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
-				
+
 				// Destroy the object if it is not in the world
-				if (startRow < 0 || endRow > objectGrid.length - 1 || startColumn < 0 || endColumn > objectGrid[0].length - 1)
+				if (startRow < 0 || endRow > objectGrid.length - 1
+						|| startColumn < 0
+						|| endColumn > objectGrid[0].length - 1)
 				{
 					object.destroy();
 					continue;
 				}
-				
+
 				// Update all locations of objects based on the object grid (for
 				// collisions)
 				updateObjectTiles(object, startRow, endRow, startColumn,
@@ -269,20 +294,20 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
-													.getOwnerID()
+											.getOwnerID()
 											&& object.collidesWith(otherObject))
 									{
 										((ServerPlayer) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+										.inflictDamage(((ServerProjectile) object)
+												.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 									else if (otherObject.getType().charAt(0) == NPC_TYPE
 											&& object.collidesWith(otherObject))
 									{
 										((ServerEnemy) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+										.inflictDamage(((ServerProjectile) object)
+												.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 								}
@@ -291,9 +316,15 @@ public class ServerWorld
 										&& object.getType().equals(PLAYER_TYPE)
 										&& object.collidesWith(otherObject))
 								{
-									((ServerPlayer) object)
-											.addItem((ServerItem) otherObject);
-									otherObject.destroy();
+									ServerItem item = (ServerItem) otherObject;
+									ServerCreature player = (ServerCreature) object;
+									if(!(item.hasCoolDown() && item.getSource() == player))
+									{
+										//System.out.println("PICKED UP ITEM");
+										player.addItem(item);
+										item.setSource(player);
+									}
+									item.destroy();
 								}
 							}
 						}
@@ -305,7 +336,7 @@ public class ServerWorld
 
 				if (object.isSolid())
 				{
-					
+
 					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
 					if (object.getVSpeed() < MAX_SPEED)
 					{
@@ -342,12 +373,12 @@ public class ServerWorld
 
 					if (hSpeed > 0)
 					{
-						startColumn = (int) (x1 / TILE_SIZE- 1);
+						startColumn = (int) (x1 / TILE_SIZE - 1);
 						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
 					}
 					else if (hSpeed < 0)
 					{
-						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE- 1);
+						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
 						endColumn = (int) (x2 / TILE_SIZE + 1);
 					}
 					else
@@ -373,7 +404,7 @@ public class ServerWorld
 					{
 						endColumn = tileGrid[0].length - 1;
 					}
-					
+
 					if (vSpeed > 0)
 					{
 						// The row and column of the tile that was collided with
@@ -383,7 +414,7 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] >= 'A'
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
@@ -422,14 +453,14 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] >= 'A'
 										&& column * TILE_SIZE < x2
 										&& column * TILE_SIZE + TILE_SIZE > x1)
 								{
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-													+ TILE_SIZE)
+											+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -458,13 +489,13 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] >= 'A'
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-													+ MARGIN_OF_ERROR)
+											+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -493,15 +524,15 @@ public class ServerWorld
 						{
 							for (int column = startColumn; column <= endColumn; column++)
 							{
-								if (tileGrid[row][column] != ' '
+								if (tileGrid[row][column] >= 'A'
 										&& row * TILE_SIZE < y2
 										&& row * TILE_SIZE + TILE_SIZE > y1)
 								{
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-													+ TILE_SIZE
-													- MARGIN_OF_ERROR)
+											+ TILE_SIZE
+											- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -629,7 +660,7 @@ public class ServerWorld
 			}
 		}
 	}
-	
+
 	/**
 	 * Just remove
 	 * @param object

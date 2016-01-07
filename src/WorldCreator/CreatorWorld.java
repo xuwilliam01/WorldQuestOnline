@@ -97,10 +97,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
 	{
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseWheelListener(this);
-		addMouseMotionListener(this);
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
@@ -126,6 +122,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		scrollTimer = new Timer(10, this);
 		scrollTimer.start();
+		
+		addKeyListener(this);
+		addMouseListener(this);
+		addMouseWheelListener(this);
+		addMouseMotionListener(this);
 	}
 
 	public void importGrid() throws IOException
@@ -149,24 +150,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		}
 		br.close();
-
-		//Make a border around  the grid
-		for(int col = 0; col < grid[0].length;col++)
-		{
-			if(grid[0][col] == ' ')
-				grid[0][col] = '_';
-			if (grid[grid.length-1][col] == ' ')
-				grid[grid.length-1][col] = '_';
-		}
-
-		//Make a border around  the grid
-		for(int row = 0; row < grid.length;row++)
-		{
-			if(grid[row][0] == ' ')
-				grid[row][0] = '_';
-			if (grid[row][grid[0].length-1] == ' ')
-				grid[row][grid[0].length-1] = '_';
-		}
 	}
 
 	public void clearGrid()
@@ -441,7 +424,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	}
 
 	public void save() throws FileNotFoundException
-	{
+	{	
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)

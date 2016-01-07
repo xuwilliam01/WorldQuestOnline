@@ -348,6 +348,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
+				else if(command.length() >= 2 && command.substring(0,2).equals("Dr"))
+				{
+					super.drop(command.substring(3));
+				}
+				//This is temporary for selecting a gun or a sword
 				else if (command.charAt(0) == 'W')
 				{
 					weaponSelected = command.charAt(1);
@@ -554,7 +559,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
-		queueMessage("I " + item.getImage());
+		queueMessage("I " + item.getImage()+" "+item.getType());
 	}
 
 	public boolean isxUpdated()
