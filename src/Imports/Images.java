@@ -70,7 +70,24 @@ public class Images
 
 				image = ImageIO.read(new File(
 						"SWORD_0.png"));
+				
+				
+				image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
+				BufferedImage[][]imageTiles = new BufferedImage[image.getHeight()/32][image.getWidth()/32];
+				for (int row = 0; row < imageTiles.length; row++)
+				{
+					for (int column = 0; column < imageTiles[0].length; column++)
+					{
+						imageTiles[row][column]=image.getSubimage(column * 32, row * 32, 32, 32);
+					}
+				}
+				
+				
 
+				images.add(new GameImage("SWORD.png",
+						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+				image = ImageIO.read(new File(
+						"SWORD_0.png"));
 				double locationX = image.getWidth() / 2;
 				double locationY = image.getHeight() / 2;
 
@@ -79,7 +96,15 @@ public class Images
 					double rotationRequired = Math.toRadians(angle);
 					AffineTransform tx;
 
-					if (!(angle >= -90 && angle < 90))
+					int actualAngle = angle;
+					// Change it to the actual angle not angle delta
+					actualAngle -= 45;
+					if (actualAngle <= -180)
+					{
+						actualAngle = 180 + (actualAngle + 180);
+					}
+					
+					if (!(actualAngle >= -90 && actualAngle < 90))
 					{
 						tx = AffineTransform.getScaleInstance(-1, 1);
 						tx.translate(-image.getWidth(null), 0);
@@ -92,10 +117,10 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					BufferedImage newImage = op
-							.filter(image, null).getSubimage(0, 0,
-									image.getWidth(), image.getHeight());
-
-					images.add(new GameImage("SWORD_" + angle + ".png",
+							.filter(image, null);//.getSubimage(0, 0,
+									//image.getWidth(), image.getHeight());
+					
+					images.add(new GameImage("SWORD_" + (actualAngle) + ".png",
 							newImage));
 				}
 
@@ -108,13 +133,6 @@ public class Images
 				System.out.println("Error loading sprite sheets");
 				e.printStackTrace();
 			}
-
-			// Add images with rotations (the number in the name represents the
-			// angle rotated)
-			images.add(new GameImage("SWORD.png", 70, 30));
-
-			images.add(new GameImage("SWORD_ICON.png",
-					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 			// Add the rest of the images normally
 			images.add(new GameImage("KNIGHT_RIGHT.png"));
