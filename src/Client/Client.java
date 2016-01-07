@@ -185,6 +185,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	}
 
 	/**
+	 * Print to the server
+	 */
+	public void print(String message)
+	{
+		output.println(message);
+		output.flush();
+	}
+	/**
 	 * Thread for running the actual game
 	 * 
 	 * @author William Xu && Alex Raita
@@ -279,13 +287,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						else if (tokens[token].equals("I"))
 						{
 							System.out.println("Received an item");
-							inventory.addItem(tokens[++token]);
+							inventory.addItem(tokens[++token],tokens[++token]);
 							inventory.repaint();
 						}
 					}
 
-					long delay = System.currentTimeMillis()
-							- startTime;
+					//long delay = System.currentTimeMillis()
+							//- startTime;
 
 					// if (delay < 15)
 					// {

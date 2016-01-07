@@ -11,7 +11,9 @@ public class ClientInventory extends JPanel{
 	public final static int INVENTORY_WIDTH = 300;
 	public final static int WIDTH = 5;
 	public final static int HEIGHT = 10;
-	ClientItem[][] items = new ClientItem[HEIGHT][WIDTH];
+	
+	private ClientItem[][] items = new ClientItem[HEIGHT][WIDTH];
+	private Client client;
 
 	public ClientInventory()
 	{
@@ -27,14 +29,14 @@ public class ClientInventory extends JPanel{
 	 * Adds an item to the array given its image
 	 * @param image
 	 */
-	public void addItem(String image)
+	public void addItem(String image, String type)
 	{
 		//Find first empty space
 		for(int row = 0; row < items.length;row++)
 			for(int col = 0;col < items[row].length;col++)
 				if(items[row][col] == null)
 				{
-					items[row][col] = new ClientItem(image,row,col);
+					items[row][col] = new ClientItem(image,type,row,col,this);
 					add(items[row][col]);
 					repaint();
 					return;
@@ -46,7 +48,24 @@ public class ClientInventory extends JPanel{
 
 	public void removeItem(int row, int col)
 	{
+		remove(items[row][col]);
 		items[row][col] = null;
+	}
+
+	public void removeItem(ClientItem item)
+	{
+		client.print("Dr "+item.getType());
+		item.setVisible(false);
+		remove(item);
+		invalidate();
+		for(int row = 0; row < items.length;row++)
+			for(int col = 0; col < items[row].length;col++)
+				if(items[row][col] == item)
+				{
+					items[row][col] = null;
+					return;
+				}
+		repaint();
 	}
 
 	public void clear()
@@ -58,6 +77,11 @@ public class ClientInventory extends JPanel{
 		invalidate();
 		items = new ClientItem[HEIGHT][WIDTH];
 		repaint();
+	}
+
+	public void setClient(Client client)
+	{
+		this.client = client;
 	}
 	
 	public void paintComponent(Graphics graphics)

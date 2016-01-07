@@ -173,11 +173,11 @@ public class ServerWorld
 
 		// Add to both sides to make room for the invisible walls
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())+6][Integer
-				.parseInt(tokenizer.nextToken()) + 6];
+		                                                               .parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -293,20 +293,20 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
-													.getOwnerID()
+											.getOwnerID()
 											&& object.collidesWith(otherObject))
 									{
 										((ServerPlayer) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+										.inflictDamage(((ServerProjectile) object)
+												.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 									else if (otherObject.getType().charAt(0) == NPC_TYPE
 											&& object.collidesWith(otherObject))
 									{
 										((ServerEnemy) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+										.inflictDamage(((ServerProjectile) object)
+												.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 								}
@@ -315,9 +315,15 @@ public class ServerWorld
 										&& object.getType().equals(PLAYER_TYPE)
 										&& object.collidesWith(otherObject))
 								{
-									((ServerPlayer) object)
-											.addItem((ServerItem) otherObject);
-									otherObject.destroy();
+									ServerItem item = (ServerItem) otherObject;
+									ServerPlayer player = (ServerPlayer) object;
+									if(!(item.hasCoolDown() && item.getSource() == player))
+									{
+										//System.out.println("PICKED UP ITEM");
+										player.addItem(item);
+										item.setSource(player);
+									}
+									item.destroy();
 								}
 							}
 						}
@@ -453,7 +459,7 @@ public class ServerWorld
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-													+ TILE_SIZE)
+											+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -488,7 +494,7 @@ public class ServerWorld
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-													+ MARGIN_OF_ERROR)
+											+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -524,8 +530,8 @@ public class ServerWorld
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-													+ TILE_SIZE
-													- MARGIN_OF_ERROR)
+											+ TILE_SIZE
+											- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
