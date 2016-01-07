@@ -37,14 +37,13 @@ public class ServerWorld
 	public final static String POTION_TYPE = ITEM_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 
-	public final static String WEAPON_TYPE = ITEM_TYPE + "W";
+	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
+	public final static String WEAPON_TYPE = EQUIP_TYPE + ITEM_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
+	public final static String LONG_SWORD = SWORD_TYPE + "L";
 
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String ITEM_SWING_TYPE = ANIMATION_TYPE + "S";
-
-	// These are so we can find the right images
-	public final static String LONG_SWORD = SWORD_TYPE + "L";
 
 	public final static String HP_25 = HP_POTION_TYPE + "25";
 	public final static String HP_50 = HP_POTION_TYPE + "50";
@@ -173,12 +172,12 @@ public class ServerWorld
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		// Add to both sides to make room for the invisible walls
-		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())+6][Integer
-		                                                               .parseInt(tokenizer.nextToken()) + 6];
+		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
+				.parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -194,7 +193,7 @@ public class ServerWorld
 		{
 			line = worldInput.readLine();
 			for (int col = 3; col < tileGrid[row].length - 3; col++)
-				tileGrid[row][col] = line.charAt(col-3);
+				tileGrid[row][col] = line.charAt(col - 3);
 		}
 
 		worldInput.close();
@@ -294,20 +293,20 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
-											.getOwnerID()
+													.getOwnerID()
 											&& object.collidesWith(otherObject))
 									{
 										((ServerPlayer) otherObject)
-										.inflictDamage(((ServerProjectile) object)
-												.getDamage());
+												.inflictDamage(((ServerProjectile) object)
+														.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 									else if (otherObject.getType().charAt(0) == NPC_TYPE
 											&& object.collidesWith(otherObject))
 									{
 										((ServerEnemy) otherObject)
-										.inflictDamage(((ServerProjectile) object)
-												.getDamage());
+												.inflictDamage(((ServerProjectile) object)
+														.getDamage());
 										((ServerProjectile) object).destroy();
 									}
 								}
@@ -318,14 +317,16 @@ public class ServerWorld
 								{
 									ServerItem item = (ServerItem) otherObject;
 									ServerCreature player = (ServerCreature) object;
-									if(!(item.hasCoolDown() && item.getSource().getID() == player.getID()))
+									if (!(item.hasCoolDown() && item
+											.getSource().getID() == player
+											.getID()))
 									{
-										//System.out.println("PICKED UP ITEM");
+										// System.out.println("PICKED UP ITEM");
 										player.addItem(item);
 										item.setSource(player);
 										item.destroy();
 									}
-									
+
 								}
 							}
 						}
@@ -461,7 +462,7 @@ public class ServerWorld
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-											+ TILE_SIZE)
+													+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -496,7 +497,7 @@ public class ServerWorld
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-											+ MARGIN_OF_ERROR)
+													+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -532,8 +533,8 @@ public class ServerWorld
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-											+ TILE_SIZE
-											- MARGIN_OF_ERROR)
+													+ TILE_SIZE
+													- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
