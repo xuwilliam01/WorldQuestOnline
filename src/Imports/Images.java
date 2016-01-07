@@ -86,6 +86,9 @@ public class Images
 
 				images.add(new GameImage("SWORD.png",
 						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+				images.add(new GameImage("SWORD_ICON.png",
+						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+				
 				image = ImageIO.read(new File(
 						"SWORD_0.png"));
 				double locationX = image.getWidth() / 2;
