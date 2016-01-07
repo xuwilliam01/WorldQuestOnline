@@ -98,12 +98,12 @@ public class Images
 
 					int actualAngle = angle;
 					// Change it to the actual angle not angle delta
-					actualAngle -= 45;
-					if (actualAngle <= -180)
-					{
-						actualAngle = 180 + (actualAngle + 180);
-					}
-					
+//					actualAngle -= 45;
+//					if (actualAngle <= -180)
+//					{
+//						actualAngle = 180 + (actualAngle + 180);
+//					}
+//					
 					if (!(actualAngle >= -90 && actualAngle < 90))
 					{
 						tx = AffineTransform.getScaleInstance(-1, 1);
@@ -117,8 +117,7 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					BufferedImage newImage = op
-							.filter(image, null);//.getSubimage(0, 0,
-									//image.getWidth(), image.getHeight());
+							.filter(image, null).getSubimage(0, 0,image.getWidth(), image.getHeight());
 					
 					images.add(new GameImage("SWORD_" + (actualAngle) + ".png",
 							newImage));
