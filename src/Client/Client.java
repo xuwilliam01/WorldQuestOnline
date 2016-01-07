@@ -204,17 +204,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 					String message = input.readLine();
 					
-					// Update the FPS counter
-					if (FPScounter >= (1000.0/ServerEngine.UPDATE_RATE + 0.5))
-					{
-						FPScounter = 0;
-						currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/ServerEngine.UPDATE_RATE)+0.5)); 
-						startTime = System.currentTimeMillis();
-					}
-					
-					FPScounter ++;
-
-
 					String[] tokens = message.split(" ");
 
 					for (int token = 0; token < tokens.length; token++)
@@ -227,6 +216,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						else if (tokens[token].equals("U"))
 						{
 							repaint();
+							
+							// Update the FPS counter
+							if (FPScounter >= (1000.0/ServerEngine.UPDATE_RATE + 0.5))
+							{
+								FPScounter = 0;
+								currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/ServerEngine.UPDATE_RATE)+0.5)); 
+								startTime = System.currentTimeMillis();
+							}
+							
+							FPScounter ++;
 						}
 						// If there is a player to be updated
 						else if (tokens[token].equals("O"))
