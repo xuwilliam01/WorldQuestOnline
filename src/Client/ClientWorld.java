@@ -75,7 +75,7 @@ public class ClientWorld
 		}
 			
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 12; no++)
+		for (int no = 0; no < 6; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -150,7 +150,7 @@ public class ClientWorld
 		for (ClientBackground cloud : clouds)
 		{
 			if (cloud.getX() <= Client.SCREEN_WIDTH
-					&& cloud.getX() + cloud.getWidth() >= 0)
+					&& cloud.getX() + cloud.getWidth() >= 0 && cloud.getY() <= Client.SCREEN_HEIGHT && cloud.getY() + cloud.getHeight() >= 0)
 			{
 				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
 						(int) cloud.getY(), null);
