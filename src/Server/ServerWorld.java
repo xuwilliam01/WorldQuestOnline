@@ -254,7 +254,7 @@ public class ServerWorld
 			// This will remove the object a frame after it stops existing
 			if (object.exists())
 			{
-				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
+				if (object.getType().charAt(0) == ITEM_TYPE && object.isOnSurface())
 					object.setHSpeed(0);
 
 				// Add the object to all the object tiles that it collides with
@@ -311,7 +311,7 @@ public class ServerWorld
 									}
 								}
 								// If a player collided with an item
-								else if (otherObject.getType().charAt(0) == 'I'
+								else if (otherObject.getType().charAt(0) == ITEM_TYPE
 										&& object.getType().equals(PLAYER_TYPE)
 										&& object.collidesWith(otherObject))
 								{
@@ -321,7 +321,6 @@ public class ServerWorld
 											.getSource().getID() == player
 											.getID()))
 									{
-										// System.out.println("PICKED UP ITEM");
 										player.addItem(item);
 										item.setSource(player);
 										item.destroy();
