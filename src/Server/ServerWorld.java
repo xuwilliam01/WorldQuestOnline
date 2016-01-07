@@ -171,8 +171,9 @@ public class ServerWorld
 				"Resources", GRID_FILE)));
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
-		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())][Integer
-				.parseInt(tokenizer.nextToken())];
+		// Add to both sides to make room for the invisible walls
+		tileGrid = new char[Integer.parseInt(tokenizer.nextToken())+6][Integer
+				.parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
 				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
@@ -188,14 +189,36 @@ public class ServerWorld
 		}
 
 		String line;
-		for (int row = 0; row < tileGrid.length; row++)
+		for (int row = 3; row < tileGrid.length - 3; row++)
 		{
 			line = worldInput.readLine();
-			for (int col = 0; col < tileGrid[row].length; col++)
-				tileGrid[row][col] = line.charAt(col);
+			for (int col = 3; col < tileGrid[row].length - 3; col++)
+				tileGrid[row][col] = line.charAt(col-3);
 		}
 
 		worldInput.close();
+
+		// Make a border around the grid
+		for (int col = 0; col < tileGrid[0].length; col++)
+		{
+			tileGrid[0][col] = '_';
+			tileGrid[1][col] = '_';
+			tileGrid[2][col] = '_';
+			tileGrid[tileGrid.length - 1][col] = '_';
+			tileGrid[tileGrid.length - 2][col] = '_';
+			tileGrid[tileGrid.length - 3][col] = '_';
+		}
+
+		// Make a border around the grid
+		for (int row = 0; row < tileGrid.length; row++)
+		{
+			tileGrid[row][0] = '_';
+			tileGrid[row][1] = '_';
+			tileGrid[row][2] = '_';
+			tileGrid[row][tileGrid[0].length - 1] = '_';
+			tileGrid[row][tileGrid[0].length - 2] = '_';
+			tileGrid[row][tileGrid[0].length - 3] = '_';
+		}
 	}
 
 	/**
@@ -234,21 +257,22 @@ public class ServerWorld
 				if (object.getType().charAt(0) == 'I' && object.isOnSurface())
 					object.setHSpeed(0);
 
-
 				// Add the object to all the object tiles that it collides with
 				// currently
 				int startRow = (int) (object.getY() / OBJECT_TILE_SIZE);
 				int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
 				int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
 				int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
-				
+
 				// Destroy the object if it is not in the world
-				if (startRow < 0 || endRow > objectGrid.length - 1 || startColumn < 0 || endColumn > objectGrid[0].length - 1)
+				if (startRow < 0 || endRow > objectGrid.length - 1
+						|| startColumn < 0
+						|| endColumn > objectGrid[0].length - 1)
 				{
 					object.destroy();
 					continue;
 				}
-				
+
 				// Update all locations of objects based on the object grid (for
 				// collisions)
 				updateObjectTiles(object, startRow, endRow, startColumn,
@@ -305,7 +329,7 @@ public class ServerWorld
 
 				if (object.isSolid())
 				{
-					
+
 					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
 					if (object.getVSpeed() < MAX_SPEED)
 					{
@@ -342,12 +366,12 @@ public class ServerWorld
 
 					if (hSpeed > 0)
 					{
-						startColumn = (int) (x1 / TILE_SIZE- 1);
+						startColumn = (int) (x1 / TILE_SIZE - 1);
 						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
 					}
 					else if (hSpeed < 0)
 					{
-						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE- 1);
+						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
 						endColumn = (int) (x2 / TILE_SIZE + 1);
 					}
 					else
@@ -373,7 +397,7 @@ public class ServerWorld
 					{
 						endColumn = tileGrid[0].length - 1;
 					}
-					
+
 					if (vSpeed > 0)
 					{
 						// The row and column of the tile that was collided with
@@ -629,7 +653,7 @@ public class ServerWorld
 			}
 		}
 	}
-	
+
 	/**
 	 * Just remove
 	 * @param object

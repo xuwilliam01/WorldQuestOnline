@@ -37,9 +37,6 @@ public class Images
 	 */
 	public static BinaryTree<GameImage> images = null;
 
-	
-	
-
 	/**
 	 * Import the images from the folder
 	 * @throws IOException
@@ -70,7 +67,7 @@ public class Images
 					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
-				
+
 				image = ImageIO.read(new File(
 						"SWORD_0.png"));
 
@@ -81,27 +78,30 @@ public class Images
 				{
 					double rotationRequired = Math.toRadians(angle);
 					AffineTransform tx;
-					
+
 					if (!(angle >= -90 && angle < 90))
 					{
 						tx = AffineTransform.getScaleInstance(-1, 1);
 						tx.translate(-image.getWidth(null), 0);
 					}
-					
+
 					tx = AffineTransform.getRotateInstance(
 							rotationRequired, locationX, locationY);
-					
+
 					AffineTransformOp op = new AffineTransformOp(tx,
 							AffineTransformOp.TYPE_BILINEAR);
-					
+
 					BufferedImage newImage = op
-							.filter(image, null).getSubimage(0, 0, image.getWidth(), image.getHeight());
-					
-					images.add(new GameImage("SWORD_" + angle + ".png", newImage));
+							.filter(image, null).getSubimage(0, 0,
+									image.getWidth(), image.getHeight());
+
+					images.add(new GameImage("SWORD_" + angle + ".png",
+							newImage));
 				}
-				
-				// Add images with rotations (the number in the name represents the angle rotated)
-				
+
+				// Add images with rotations (the number in the name represents
+				// the angle rotated)
+
 			}
 			catch (IOException e)
 			{
@@ -109,7 +109,8 @@ public class Images
 				e.printStackTrace();
 			}
 
-			// Add images with rotations (the number in the name represents the angle rotated)
+			// Add images with rotations (the number in the name represents the
+			// angle rotated)
 			images.add(new GameImage("SWORD.png", 70, 30));
 
 			images.add(new GameImage("SWORD_ICON.png",
@@ -147,13 +148,21 @@ public class Images
 			images.add(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 
+			for (int no = 0; no < 6; no++)
+			{
+				images.add(new GameImage("CLOUD_" + no + ".png",
+						ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE));
+
+			}
+
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("BULLET.png"));
 
 			images.add(new GameImage("HP_POTION.png", 15, 15));
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-			
+
 			images.add(new GameImage("BACKGROUND.png"));
 		}
 	}
@@ -165,18 +174,19 @@ public class Images
 	 */
 	public static Image getImage(String name)
 	{
-		try{
+		try
+		{
 			return images.get(new GameImage(name, true)).getImage();
 		}
-		catch(NullPointerException e)
+		catch (NullPointerException e)
 		{
 			System.out.println("Could not find image " + name);
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Get a specific image from the list using the name of the image
 	 * @param name the name of the image
@@ -184,16 +194,18 @@ public class Images
 	 */
 	public static Image getImage(String name, int width, int height)
 	{
-		try{
-			return images.get(new GameImage(name, true)).getImage().getScaledInstance(width, height, 0);
+		try
+		{
+			return images.get(new GameImage(name, true)).getImage()
+					.getScaledInstance(width, height, 0);
 		}
-		catch(NullPointerException e)
+		catch (NullPointerException e)
 		{
 			System.out.println("Could not find image " + name);
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
 
 	/**
@@ -203,10 +215,11 @@ public class Images
 	 */
 	public static GameImage getGameImage(String name)
 	{
-		try{
+		try
+		{
 			return images.get(new GameImage(name, true));
 		}
-		catch(NullPointerException e)
+		catch (NullPointerException e)
 		{
 			System.out.println("Could not find image " + name);
 			e.printStackTrace();

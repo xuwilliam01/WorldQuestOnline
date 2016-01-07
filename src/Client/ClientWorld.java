@@ -29,6 +29,8 @@ public class ClientWorld
 	 * the objectIDs boolean array
 	 */
 	private ArrayList<ClientObject> objects;
+	
+	private ArrayList<ClientObject> backgroundObjects;
 
 	/**
 	 * The side length of one square tile in pixels
@@ -156,9 +158,9 @@ public class ClientWorld
 				int y = centreY + object.getY() - playerY;
 				Image image = object.getImage();
 
-				if (x > Client.SCREEN_WIDTH || x + image.getWidth(null) < 0
+				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
-						|| y + image.getHeight(null) < 0)
+						|| y + object.getHeight() < 0)
 				{
 					objectsToRemove.add(object.getID());
 				}
