@@ -103,7 +103,10 @@ public class ClientInventory extends JPanel{
 				{
 					for(int spot = 0; spot < equippedWeapons.length;spot++)
 						if(equippedWeapons[spot] != null)
+						{
+							equippedWeapons[spot].setBorder(BorderFactory.createLineBorder(Color.white));
 							client.setWeaponSelected(spot);
+						}
 				}
 				
 			}

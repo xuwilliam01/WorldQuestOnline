@@ -89,12 +89,12 @@ MouseMotionListener
 	 * A counter updating every repaint and reseting at the expected FPS
 	 */
 	private int FPScounter = 0;
-	
+
 	/**
 	 * Store the selected weapon
 	 */
-	private int weaponSelected;
-	
+	private int weaponSelected= 0;
+
 	/**
 	 * Constructor for the client
 	 */
@@ -365,13 +365,15 @@ MouseMotionListener
 		System.out.println("Map import has finished");
 	}
 
-	
+
 	public int getWeaponSelected() {
 		return weaponSelected;
 	}
 
 	public void setWeaponSelected(int weaponSelected) {
-		inventory.getEquippedWeapons()[this.weaponSelected].setBorder(BorderFactory.createEmptyBorder());
+		if(inventory.getEquippedWeapons()[this.weaponSelected] != null)
+			inventory.getEquippedWeapons()[this.weaponSelected].setBorder(BorderFactory.createEmptyBorder());
+		
 		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory.createLineBorder(Color.white));
 		output.println("W"+weaponSelected);
 		output.flush();
