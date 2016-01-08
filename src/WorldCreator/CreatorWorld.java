@@ -523,13 +523,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public void keyReleased(KeyEvent event)
 	{
-		if (event.getKeyCode() == KeyEvent.VK_UP)
+		if (event.getKeyCode() == KeyEvent.VK_W)
 			up = false;
-		else if (event.getKeyCode() == KeyEvent.VK_DOWN)
+		else if (event.getKeyCode() == KeyEvent.VK_S)
 			down = false;
-		else if (event.getKeyCode() == KeyEvent.VK_RIGHT)
+		else if (event.getKeyCode() == KeyEvent.VK_D)
 			right = false;
-		else if (event.getKeyCode() == KeyEvent.VK_LEFT)
+		else if (event.getKeyCode() == KeyEvent.VK_A)
 			left = false;
 		else if (event.getKeyCode() == KeyEvent.VK_CONTROL)
 		{

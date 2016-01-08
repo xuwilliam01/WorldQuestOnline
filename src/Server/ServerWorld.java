@@ -1,7 +1,10 @@
 package Server;
 
-import java.io.*;
+import java.io.*
+;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 import Server.Creatures.ServerCreature;
@@ -12,7 +15,6 @@ import Server.Items.ServerItem;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
 import Tools.RowCol;
-import sun.misc.Queue;
 
 /**
  * Stores all the data about the world
@@ -97,7 +99,7 @@ public class ServerWorld
 	 * List of objects to add to the world next refresh (based on the user's
 	 * input)
 	 */
-	private Queue<ServerObject> objectsToAdd;
+	private ArrayDeque<ServerObject> objectsToAdd;
 
 	/**
 	 * List of objects to remove that doesn't exist anymore
@@ -122,7 +124,7 @@ public class ServerWorld
 	{
 		newWorld();
 		objects = new ArrayList<ServerObject>();
-		objectsToAdd = new Queue<ServerObject>();
+		objectsToAdd = new ArrayDeque<ServerObject>();
 		addEnemies();
 	}
 
@@ -242,15 +244,8 @@ public class ServerWorld
 		objectsToRemove.clear();
 
 		while (!objectsToAdd.isEmpty())
-		{
-			try
-			{
-				objects.add(objectsToAdd.dequeue());
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
+		{		
+			objects.add(objectsToAdd.poll());
 		}
 
 		for (ServerObject object : objects)
@@ -310,10 +305,10 @@ public class ServerWorld
 											knockBack *= -1;
 										}
 										((ServerPlayer) otherObject)
-												.inflictDamage(
-														((ServerProjectile) object)
-																.getDamage(),
-														knockBack);
+										.inflictDamage(
+												((ServerProjectile) object)
+												.getDamage(),
+												knockBack);
 										((ServerProjectile) object).destroy();
 									}
 									else if (otherObject.getType().contains(
@@ -329,10 +324,10 @@ public class ServerWorld
 										}
 
 										((ServerEnemy) otherObject)
-												.inflictDamage(
-														((ServerProjectile) object)
-																.getDamage(),
-														knockBack);
+										.inflictDamage(
+												((ServerProjectile) object)
+												.getDamage(),
+												knockBack);
 										((ServerProjectile) object).destroy();
 									}
 								}
@@ -376,11 +371,11 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerWeaponSwing) object)
-													.getOwnerID()
+											.getOwnerID()
 											&& ((ServerWeaponSwing) object)
-													.collidesWith(otherObject)
+											.collidesWith(otherObject)
 											&& !((ServerWeaponSwing) object)
-													.hasCollided(otherObject))
+											.hasCollided(otherObject))
 									{
 										double knockBack = ((ServerWeaponSwing) object)
 												.getKnockBack();
@@ -391,21 +386,21 @@ public class ServerWorld
 											knockBack *= -1;
 										}
 										((ServerPlayer) otherObject)
-												.inflictDamage(
-														((ServerWeaponSwing) object)
-																.getDamage(),
-														knockBack);
+										.inflictDamage(
+												((ServerWeaponSwing) object)
+												.getDamage(),
+												knockBack);
 										((ServerWeaponSwing) object)
-												.addCollided(otherObject);
+										.addCollided(otherObject);
 										System.out.println(((ServerWeaponSwing) object)
 												.getDamage());
 									}
 									else if (otherObject.getType().contains(
 											NPC_TYPE)
 											&& ((ServerWeaponSwing) object)
-													.collidesWith(otherObject)
+											.collidesWith(otherObject)
 											&& !((ServerWeaponSwing) object)
-													.hasCollided(otherObject))
+											.hasCollided(otherObject))
 									{
 										double knockBack = ((ServerWeaponSwing) object)
 												.getKnockBack();
@@ -417,13 +412,13 @@ public class ServerWorld
 										}
 
 										((ServerEnemy) otherObject)
-												.inflictDamage(
-														((ServerWeaponSwing) object)
-																.getDamage(),
-														knockBack);
+										.inflictDamage(
+												((ServerWeaponSwing) object)
+												.getDamage(),
+												knockBack);
 										((ServerWeaponSwing) object)
-												.addCollided(otherObject);
-										
+										.addCollided(otherObject);
+
 										System.out.println(((ServerWeaponSwing) object)
 												.getDamage());
 									}
@@ -705,7 +700,7 @@ public class ServerWorld
 	 */
 	public synchronized void add(ServerObject object)
 	{
-		objectsToAdd.enqueue(object);
+		objectsToAdd.add(object);
 	}
 
 	/**
