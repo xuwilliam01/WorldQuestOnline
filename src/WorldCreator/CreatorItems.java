@@ -107,10 +107,13 @@ public class CreatorItems extends JPanel implements ActionListener{
 		{
 			while(true)
 				try {
-					String newWidth = (String)JOptionPane.showInputDialog("Please input the new width: ");
+					String newWidth = (String)JOptionPane.showInputDialog("Please input the new width (larger than 20 and less than 1,000,000): ");
 					if(newWidth == null)
 						break;
-					world.setNewWidth(Integer.parseInt(newWidth));
+					int newWidthNum = Integer.parseInt(newWidth);
+					if(newWidthNum < 20 || newWidthNum > 1000000)
+						continue;
+					world.setNewWidth(newWidthNum);
 					updateWidth.setText("Change Width "+"(Current: "+Integer.parseInt(newWidth)+")");
 					break;
 
@@ -124,9 +127,13 @@ public class CreatorItems extends JPanel implements ActionListener{
 		{
 			while(true)
 				try {
-					String newHeight = (String)JOptionPane.showInputDialog("Please input the new height: ");
+					String newHeight = (String)JOptionPane.showInputDialog("Please input the new height (larger than 20 and less than 1,000,000): ");
 					if(newHeight== null)
 						break;
+					int newHeightNum = Integer.parseInt(newHeight);
+					if(newHeightNum < 20 || newHeightNum > 1000000)
+						continue;
+					world.setNewWidth(newHeightNum);
 					world.setNewHeight(Integer.parseInt(newHeight));
 					updateHeight.setText("Change Height "+"(Current: "+Integer.parseInt(newHeight)+")");
 					break;
