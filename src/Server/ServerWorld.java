@@ -46,10 +46,7 @@ public class ServerWorld
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 
-	public final static String HP_25 = HP_POTION_TYPE + "25";
 	public final static String HP_50 = HP_POTION_TYPE + "50";
-	public final static String HP_75 = HP_POTION_TYPE + "75";
-	public final static String HP_100 = HP_POTION_TYPE + "100";
 
 	public final static String GRID_FILE = "NewWorld.txt";
 
@@ -369,6 +366,15 @@ public class ServerWorld
 													break;
 												}
 										}
+									}
+								}
+								//If stackable items collide
+								else if(object.collidesWith(otherObject) && object.getType().charAt(0) == ITEM_TYPE && otherObject.getType().charAt(0) == ITEM_TYPE && object.getType().charAt(1) == POTION_TYPE.charAt(1) && otherObject.getType().charAt(1) == POTION_TYPE.charAt(1))
+								{
+									if(object.getType().equals(otherObject.getType()) && object.getID() != otherObject.getID())
+									{
+										((ServerItem)object).increaseAmount();
+										otherObject.destroy();
 									}
 								}
 								// Collision of weapons and creatures

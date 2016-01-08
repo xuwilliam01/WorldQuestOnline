@@ -24,16 +24,7 @@ public abstract class ServerItem extends ServerObject{
 		super(x, y, 0,0, ServerWorld.GRAVITY, "", type);
 
 		switch (type) {
-		case ServerWorld.HP_25:
-			setImage("HP_POTION.png");
-			break;
 		case ServerWorld.HP_50:
-			setImage("HP_POTION.png");
-			break;
-		case ServerWorld.HP_75:
-			setImage("HP_POTION.png");
-			break;
-		case ServerWorld.HP_100:
 			setImage("HP_POTION.png");
 			break;
 		case ServerWorld.LONG_SWORD:
@@ -63,15 +54,9 @@ public abstract class ServerItem extends ServerObject{
 
 	public static ServerItem newItem(double x, double y, String type)
 	{
-		switch (type) {
-		case ServerWorld.HP_25:
-			return new ServerHPPotion(x,y,25);		
+		switch (type) {		
 		case ServerWorld.HP_50:
-			return new ServerHPPotion(x,y,50);			
-		case ServerWorld.HP_75:
-			return new ServerHPPotion(x,y,75);		
-		case ServerWorld.HP_100:
-			return new ServerHPPotion(x,y,100);		
+			return new ServerHPPotion(x,y);					
 		case ServerWorld.LONG_SWORD:
 			return new ServerSword(x,y,'L',20);
 		}
