@@ -27,8 +27,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
-	public final static int MAX_INVENTORY = 3;
-	public static final int MAX_WEAPONS = 2;
+	public final static int MAX_INVENTORY = 25;
+	public static final int MAX_WEAPONS = 4;
 	/**
 	 * The starting max hp of the player
 	 */

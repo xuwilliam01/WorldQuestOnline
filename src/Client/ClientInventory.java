@@ -12,8 +12,8 @@ import Server.Creatures.ServerPlayer;
 public class ClientInventory extends JPanel{
 
 	public final static int INVENTORY_WIDTH = 300;
-	public final static int WIDTH = 3;
-	public final static int HEIGHT = 1;
+	public final static int WIDTH = 5;
+	public final static int HEIGHT = 5;
 
 	private ClientItem[][] inventory = new ClientItem[HEIGHT][WIDTH];
 	private ClientItem[] equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
