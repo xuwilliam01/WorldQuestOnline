@@ -177,11 +177,11 @@ public class ServerWorld
 
 		// Add to both sides to make room for the invisible walls
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
-				.parseInt(tokenizer.nextToken()) + 6];
+		                                                                 .parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -299,7 +299,7 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
-													.getOwnerID()
+											.getOwnerID()
 											&& object.collidesWith(otherObject))
 									{
 										double knockBack = ((ServerProjectile) object)
@@ -348,9 +348,24 @@ public class ServerWorld
 											.getID())
 											&& player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
 									{
-										player.addItem(item);
-										item.setSource(player);
-										item.destroy();
+										if(player.getInventory().size() < ServerPlayer.MAX_INVENTORY )
+										{
+											player.addItem(item);
+											item.setSource(player);
+											item.destroy();
+										}
+										else if(player.getInventory().size() == ServerPlayer.MAX_INVENTORY &&item.getType().charAt(1) == POTION_TYPE.charAt(1))
+										{
+											//Only if the potion already exists, add it
+											for(ServerItem sItem : player.getInventory())
+												if(sItem.getType().equals(item.getType()))
+												{
+													player.addItem(item);
+													item.setSource(player);
+													item.destroy();
+													break;
+												}
+										}
 									}
 								}
 								// Collision of weapons and creatures
@@ -542,7 +557,7 @@ public class ServerWorld
 									if (y1 + vSpeed <= row * TILE_SIZE
 											+ TILE_SIZE
 											&& y1 >= row * TILE_SIZE
-													+ TILE_SIZE)
+											+ TILE_SIZE)
 									{
 										moveVertical = false;
 										collideRow = row;
@@ -577,7 +592,7 @@ public class ServerWorld
 								{
 									if (x2 + hSpeed >= column * TILE_SIZE
 											&& x2 <= column * TILE_SIZE
-													+ MARGIN_OF_ERROR)
+											+ MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
@@ -613,8 +628,8 @@ public class ServerWorld
 									if (x1 + hSpeed <= column * TILE_SIZE
 											+ TILE_SIZE
 											&& x1 >= column * TILE_SIZE
-													+ TILE_SIZE
-													- MARGIN_OF_ERROR)
+											+ TILE_SIZE
+											- MARGIN_OF_ERROR)
 									{
 										moveHorizontal = false;
 										collideColumn = column;
