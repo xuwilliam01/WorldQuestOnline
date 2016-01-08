@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
 
 public abstract class ServerCreature extends ServerObject
@@ -169,7 +170,7 @@ public abstract class ServerCreature extends ServerObject
 				{
 					if(item.charAt(2) == ServerWorld.HP_POTION_TYPE.charAt(2))
 					{
-						HP = Math.min(maxHP,HP+Integer.parseInt(item.substring(3)));
+						HP = Math.min(maxHP,HP+((ServerHPPotion)sItem).getHealAmount());
 					}
 
 				}
