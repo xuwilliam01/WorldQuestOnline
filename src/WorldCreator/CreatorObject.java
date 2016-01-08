@@ -19,7 +19,7 @@ public class CreatorObject extends JButton implements MouseListener{
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
 
-	public CreatorObject(char ref, String name, CreatorWorld world)
+	public CreatorObject(char ref, String name, String description,CreatorWorld world)
 	{
 		super(new ImageIcon(Images.getImage(name)));
 		
@@ -32,6 +32,7 @@ public class CreatorObject extends JButton implements MouseListener{
 		setContentAreaFilled(false);
 		setFocusable(false);
 		addMouseListener(this);
+		setToolTipText(description);
 		
 		setSize(imageRef.getImage().getWidth(null),imageRef.getImage().getHeight(null));
 	}

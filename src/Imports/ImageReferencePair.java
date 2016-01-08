@@ -46,7 +46,8 @@ public class ImageReferencePair {
 		for (int tile = 0; tile < numTiles; tile++)
 		{
 			String line = br.readLine();
-			images[line.charAt(0)] = new ImageReferencePair(line.charAt(0),line.substring(2));
+			String[] name = line.substring(2).split(" ");
+			images[line.charAt(0)] = new ImageReferencePair(line.charAt(0),name[0]);
 		}
 		br.close();
 	}

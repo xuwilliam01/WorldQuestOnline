@@ -176,9 +176,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		int numTiles = Integer.parseInt(br.readLine());
 		for (int tile = 0; tile < numTiles; tile++)
 		{
-			String line = br.readLine();
-			tiles[line.charAt(0)] = new CreatorObject(line.charAt(0),
-					line.substring(2), this);
+			String fullLine = br.readLine();
+			String[] line = fullLine.substring(2).split(" ");
+			String toolTip = line[1];
+			for(int word = 2; word < line.length;word++)
+				toolTip+= " "+line[word];
+			tiles[fullLine.charAt(0)] = new CreatorObject(fullLine.charAt(0),
+					line[0],toolTip, this);
 		}
 		br.close();
 	}

@@ -467,6 +467,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 	/**
+	 * Drop inventory and equipment
+	 */
+	public void dropInventory()
+	{
+		super.dropInventory();
+		for(int item = 0; item < equippedWeapons.length;item++)
+			if(equippedWeapons[item] != null)
+				dropItem(equippedWeapons[item]);
+		equippedWeapons = new ServerItem[MAX_WEAPONS];
+	}
+	/**
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
 	 */
@@ -611,7 +622,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
-		queueMessage("I " + item.getImage() + " " + item.getType());
+		queueMessage("I " + item.getImage() + " " + item.getType()+" "+item.getAmount());
 	}
 
 	public void equip(String itemType)

@@ -35,7 +35,7 @@ public class ClientInventory extends JPanel{
 	 * Adds an item to the array given its image
 	 * @param image
 	 */
-	public void addItem(String image, String type)
+	public void addItem(String image, String type, int amount)
 	{
 		//If the item is a potion, check if it already exists and if it does, increase the amount
 		if(type.charAt(1)==ServerWorld.POTION_TYPE.charAt(1))
@@ -52,7 +52,7 @@ public class ClientInventory extends JPanel{
 			for(int col = 0;col < inventory[row].length;col++)
 				if(inventory[row][col] == null)
 				{
-					inventory[row][col] = new ClientItem(image,type,row,col,this);
+					inventory[row][col] = new ClientItem(image,type,amount,row,col,this);
 					add(inventory[row][col]);
 					repaint();
 					return;

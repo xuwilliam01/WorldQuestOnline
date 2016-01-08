@@ -25,9 +25,10 @@ public class ClientItem extends JButton implements MouseListener{
 	private String type;
 	private int amount = 1;
 
-	public ClientItem(String imageName, String type,int row, int col, ClientInventory inventory)
+	public ClientItem(String imageName, String type,int amount,int row, int col, ClientInventory inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png")));
+		this.amount = amount;
 		this.row = row;
 		this.col = col;
 		this.type = type;

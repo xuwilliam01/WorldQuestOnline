@@ -293,7 +293,7 @@ MouseMotionListener
 						else if (tokens[token].equals("I"))
 						{
 							System.out.println("Received an item");
-							inventory.addItem(tokens[++token],tokens[++token]);
+							inventory.addItem(tokens[++token],tokens[++token],Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
 					}
