@@ -372,8 +372,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					//Move to equipped weapons
 					else if(command.charAt(1) == 'W')
-					{
+					{		
 						equip(command.substring(3));
+						System.out.println(getInventory().size());
 					}
 				}
 				//This is temporary for selecting a gun or a sword
@@ -485,7 +486,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 	}
 
-	
+
 	/**
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
@@ -623,9 +624,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void unequip(int slot)
 	{
-
-		getInventory().add(equippedWeapons[slot]);
-		equippedWeapons[slot] = null;
+		if(getInventory().size() <= MAX_INVENTORY)
+		{
+			getInventory().add(equippedWeapons[slot]);
+			equippedWeapons[slot] = null;
+		}
 
 	}
 	public boolean isxUpdated()
