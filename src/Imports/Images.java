@@ -83,6 +83,7 @@ public class Images
 				}
 				
 				
+				ImageIO.write(imageTiles[0][14],"PNG", new File("DIAMOND_SWORD.png"));
 
 				images.add(new GameImage("SWORD.png",
 						70, 30));

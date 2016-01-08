@@ -214,5 +214,15 @@ public abstract class ServerCreature extends ServerObject
 		this.knockBackResistance = knockBackResistance;
 	}
 
+	public ServerWorld getWorld()
+	{
+		return world;
+	}
+
+	public void setWorld(ServerWorld world)
+	{
+		this.world = world;
+	}
+
 
 }
