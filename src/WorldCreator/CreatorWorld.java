@@ -26,7 +26,9 @@ import javax.swing.Timer;
 import Imports.Images;
 import Server.ServerFrame;
 import Server.ServerGUI;
+import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerSlime;
 
 public class CreatorWorld extends JPanel implements KeyListener,
 ActionListener, MouseWheelListener, MouseListener, MouseMotionListener

@@ -67,6 +67,13 @@ public class ServerWorld
 	 * Grid of objects
 	 */
 	private ArrayList<ServerObject>[][] objectGrid;
+	
+	/**
+	 * Array of different types of creatures, buildings, background objects, and spawners possible in the world (for the purpose of the creator world)
+	 * 
+	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
+	 */
+	private final ServerObject[] objectTypes = {new ServerSlime(0, 0, -1, -1, ServerWorld.GRAVITY,"SLIME_0.png", null)};
 
 	/**
 	 * The size of each object tile
@@ -105,6 +112,7 @@ public class ServerWorld
 	 * List of objects to remove that doesn't exist anymore
 	 */
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
+	
 
 	/**
 	 * The next time (in milliseconds) to spawn another enemy
