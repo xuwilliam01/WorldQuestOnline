@@ -27,6 +27,11 @@ public abstract class ServerCreature extends ServerObject
 	 * World that the creature is in
 	 */
 	private ServerWorld world;
+	
+	/**
+	 * The amount of resistance to a knockback by a weapon (normally based on size of the creature)
+	 */
+	private double knockBackResistance;
 
 
 	/**
@@ -49,6 +54,9 @@ public abstract class ServerCreature extends ServerObject
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
+		
+		// Calculate the resistance to knockback based on weight
+		knockBackResistance = Math.sqrt((getWidth() * getHeight()))/16;
 	}
 
 	public int getMaxHP()
@@ -74,13 +82,29 @@ public abstract class ServerCreature extends ServerObject
 	 * Inflict a certain amount of damage to the npc and destroy if less than 0 hp
 	 * @param amount
 	 */
-	public void inflictDamage(int amount)
+	public void inflictDamage(int amount, double knockBack)
 	{
 		HP -= amount;
 		if (HP <= 0)
 		{
 			destroy();
 			dropInventory();
+		}
+		else
+		{
+			// Knock back the creature based on the knockback force
+//			if (Math.abs(knockBack) - knockBackResistance > 0)
+//			{
+//				setVSpeed(-(Math.abs(knockBack) - knockBackResistance));
+//				if (knockBack > 0)
+//				{
+//					setHSpeed(getHSpeed()+(knockBack-knockBackResistance)/2);
+//				}
+//				else
+//				{
+//					setHSpeed(getHSpeed()-(knockBack+knockBackResistance)/2);
+//				}
+//			}
 		}
 	}
 
@@ -163,7 +187,17 @@ public abstract class ServerCreature extends ServerObject
 			toRemove.decreaseAmount();
 		else
 			inventory.remove(toRemove);
-
-
 	}
+
+	public double getKnockBackResistance()
+	{
+		return knockBackResistance;
+	}
+
+	public void setKnockBackResistance(double knockBackResistance)
+	{
+		this.knockBackResistance = knockBackResistance;
+	}
+	
+	
 }

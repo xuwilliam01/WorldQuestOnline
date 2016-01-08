@@ -26,25 +26,23 @@ public class ServerWorld
 	public final static String BULLET_TYPE = PROJECTILE_TYPE + "B";
 	public final static String EXPLOSION_TYPE = PROJECTILE_TYPE + "E";
 
-	public final static String PLAYER_TYPE = "C";
-	public final static String PLAYER_GHOST_TYPE = "CG";
-
-	public final static char NPC_TYPE = 'N';
+	public final static char CREATURE_TYPE = 'C';
+	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";
+	public final static String PLAYER_GHOST_TYPE = PLAYER_TYPE + "G";
+	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
-	
 	public final static String POTION_TYPE = ITEM_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
-
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
 	public final static String LONG_SWORD = SWORD_TYPE + "L";
 
 	public final static char ANIMATION_TYPE = 'A';
-	public final static String ITEM_SWING_TYPE = ANIMATION_TYPE + "S";
+	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 
 	public final static String HP_25 = HP_POTION_TYPE + "25";
 	public final static String HP_50 = HP_POTION_TYPE + "50";
@@ -110,6 +108,11 @@ public class ServerWorld
 	 * The next time (in milliseconds) to spawn another enemy
 	 */
 	private long spawnTimer = 0;
+
+	/**
+	 * The counter showing how many frames the server has run
+	 */
+	private long worldCounter = 0;
 
 	/**
 	 * Constructor for server
@@ -225,7 +228,7 @@ public class ServerWorld
 	/**
 	 * Update all the objects, doing whatever needs to be done
 	 */
-	public synchronized void updateObjects()
+	public synchronized void update()
 	{
 		spawnEnemies();
 
@@ -255,7 +258,8 @@ public class ServerWorld
 			// This will remove the object a frame after it stops existing
 			if (object.exists())
 			{
-				if (object.getType().charAt(0) == ITEM_TYPE && object.isOnSurface())
+				if (object.getType().charAt(0) == ITEM_TYPE
+						&& object.isOnSurface())
 					object.setHSpeed(0);
 
 				// Add the object to all the object tiles that it collides with
@@ -291,23 +295,44 @@ public class ServerWorld
 							{
 								if (object.getType().equals(BULLET_TYPE))
 								{
+									// CHANGE LATER TO JUST USE CREATURE TYPE
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
 													.getOwnerID()
 											&& object.collidesWith(otherObject))
 									{
+										double knockBack = ((ServerProjectile) object)
+												.getKnockBack();
+
+										if (object.getHSpeed() < 0)
+										{
+											knockBack *= -1;
+										}
 										((ServerPlayer) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+												.inflictDamage(
+														((ServerProjectile) object)
+																.getDamage(),
+														knockBack);
 										((ServerProjectile) object).destroy();
 									}
-									else if (otherObject.getType().charAt(0) == NPC_TYPE
+									else if (otherObject.getType().contains(
+											NPC_TYPE)
 											&& object.collidesWith(otherObject))
 									{
+										double knockBack = ((ServerProjectile) object)
+												.getKnockBack();
+
+										if (object.getHSpeed() < 0)
+										{
+											knockBack *= -1;
+										}
+
 										((ServerEnemy) otherObject)
-												.inflictDamage(((ServerProjectile) object)
-														.getDamage());
+												.inflictDamage(
+														((ServerProjectile) object)
+																.getDamage(),
+														knockBack);
 										((ServerProjectile) object).destroy();
 									}
 								}
@@ -320,13 +345,68 @@ public class ServerWorld
 									ServerCreature player = (ServerCreature) object;
 									if (!(item.hasCoolDown() && item
 											.getSource().getID() == player
-											.getID()) && player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
+											.getID())
+											&& player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
 									{
 										player.addItem(item);
 										item.setSource(player);
 										item.destroy();
 									}
+								}
+								// Collision of weapons and creatures
+								else if (object.getType().contains(
+										WEAPON_SWING_TYPE))
+								{
+									// CHANGE LATER TO JUST USE CREATURE TYPE
+									if (otherObject.getType().equals(
+											PLAYER_TYPE)
+											&& otherObject.getID() != ((ServerWeaponSwing) object)
+													.getOwnerID()
+											&& ((ServerWeaponSwing) object)
+													.collidesWith(otherObject)
+											&& !((ServerWeaponSwing) object)
+													.hasCollided(otherObject))
+									{
+										double knockBack = ((ServerWeaponSwing) object)
+												.getKnockBack();
 
+										if (!((ServerWeaponSwing) object)
+												.isClockwise())
+										{
+											knockBack *= -1;
+										}
+										((ServerPlayer) otherObject)
+												.inflictDamage(
+														((ServerWeaponSwing) object)
+																.getDamage(),
+														knockBack);
+										((ServerWeaponSwing) object)
+												.addCollided(otherObject);
+									}
+									else if (otherObject.getType().contains(
+											NPC_TYPE)
+											&& ((ServerWeaponSwing) object)
+													.collidesWith(otherObject)
+											&& !((ServerWeaponSwing) object)
+													.hasCollided(otherObject))
+									{
+										double knockBack = ((ServerWeaponSwing) object)
+												.getKnockBack();
+
+										if (!((ServerWeaponSwing) object)
+												.isClockwise())
+										{
+											knockBack *= -1;
+										}
+
+										((ServerEnemy) otherObject)
+												.inflictDamage(
+														((ServerWeaponSwing) object)
+																.getDamage(),
+														knockBack);
+										((ServerWeaponSwing) object)
+												.addCollided(otherObject);
+									}
 								}
 							}
 						}
@@ -583,7 +663,7 @@ public class ServerWorld
 				}
 				else if (object.getType().charAt(0) == ANIMATION_TYPE)
 				{
-					if (object.getType().equals(ITEM_SWING_TYPE))
+					if (object.getType().equals(WEAPON_SWING_TYPE))
 					{
 						((ServerWeaponSwing) object).update();
 					}
@@ -595,6 +675,8 @@ public class ServerWorld
 				objectsToRemove.add(object);
 			}
 		}
+
+		worldCounter++;
 	}
 
 	/**
@@ -719,4 +801,10 @@ public class ServerWorld
 	{
 		return objects;
 	}
+
+	public long getWorldCounter()
+	{
+		return worldCounter;
+	}
+
 }

@@ -1,5 +1,7 @@
 package Server;
 
+import Server.Items.ServerWeaponSwing;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -9,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
@@ -168,6 +171,14 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Draw each object on the gui if it's inside the screen
 		for (ServerObject object : world.getObjects())
 		{
+			if (object.getType().contains(ServerWorld.WEAPON_SWING_TYPE))
+			{
+				Line2D.Double hitbox = ((ServerWeaponSwing) object).getHitbox();
+				graphics.setColor(Color.black);
+				graphics.drawLine((int) hitbox.getX1(), (int) hitbox.getY1(),
+						(int) hitbox.getX2(), (int) hitbox.getY2());
+			}
+
 			if (object.isMapVisible()
 					&& ((CENTRE_X + object.getX() / objectFactor - posX)
 							+ 1
@@ -186,12 +197,11 @@ public class ServerGUI extends JPanel implements KeyListener,
 				{
 					graphics.setColor(ITEM);
 				}
-				else if (object.getType().charAt(0) == ServerWorld.NPC_TYPE)
+				else if (object.getType().contains(ServerWorld.NPC_TYPE))
 				{
 					graphics.setColor(NPC);
 				}
-				else if (object.getType().charAt(0) == ServerWorld.PLAYER_TYPE
-						.charAt(0))
+				else if (object.getType().contains(ServerWorld.PLAYER_TYPE))
 				{
 					graphics.setColor(PLAYER);
 				}
@@ -399,6 +409,5 @@ public class ServerGUI extends JPanel implements KeyListener,
 	{
 		this.objectFactor = objectFactor;
 	}
-	
-	
+
 }

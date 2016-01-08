@@ -234,13 +234,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// Send the object's updated location if the player can see it
 			// within their screen
 			if (object.getX() < getX() + getWidth()
-			+ Client.Client.SCREEN_WIDTH
-			&& object.getX() + object.getWidth() > getX()
-			- Client.Client.SCREEN_WIDTH
-			&& object.getY() < getY() + getHeight()
-			+ Client.Client.SCREEN_HEIGHT
-			&& object.getY() + object.getHeight() > getY()
-			- Client.Client.SCREEN_HEIGHT)
+					+ Client.Client.SCREEN_WIDTH
+					&& object.getX() + object.getWidth() > getX()
+							- Client.Client.SCREEN_WIDTH
+					&& object.getY() < getY() + getHeight()
+							+ Client.Client.SCREEN_HEIGHT
+					&& object.getY() + object.getHeight() > getY()
+							- Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.exists())
 				{
@@ -265,7 +265,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Tell the user what hp he has
 		queueMessage("L " + getHP());
 
-		while (message.length()<4000)
+		while (message.length() < 4000)
 		{
 			queueMessage("L " + getHP());
 		}
@@ -354,29 +354,30 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
-				else if(command.length() >= 2 && command.substring(0,2).equals("Dr"))
+				else if (command.length() >= 2
+						&& command.substring(0, 2).equals("Dr"))
 				{
-					//If dropping from inventory
-					if(command.charAt(2) == 'I')
+					// If dropping from inventory
+					if (command.charAt(2) == 'I')
 						super.drop(command.substring(4));
-					//If dropping from equipped
+					// If dropping from equipped
 					else
 						drop(Integer.parseInt(command.substring(4)));
 				}
-				else if(command.charAt(0) == 'M')
+				else if (command.charAt(0) == 'M')
 				{
-					//Move to inventory
-					if(command.charAt(1) == 'I')
+					// Move to inventory
+					if (command.charAt(1) == 'I')
 					{
 						unequip(Integer.parseInt(command.substring(3)));
 					}
-					//Move to equipped weapons
-					else if(command.charAt(1) == 'W')
+					// Move to equipped weapons
+					else if (command.charAt(1) == 'W')
 					{
 						equip(command.substring(3));
 					}
 				}
-				//This is temporary for selecting a gun or a sword
+				// This is temporary for selecting a gun or a sword
 				else if (command.charAt(0) == 'W')
 				{
 					weaponSelected = command.charAt(1);
@@ -411,6 +412,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		dropItem(equippedWeapons[slot]);
 		equippedWeapons[slot] = null;
 	}
+
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
@@ -427,7 +429,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (weaponSelected == '1')
 			{
 				world.add(new ServerWeaponSwing(this, "SWORD_0.png",
-						(int) (Math.toDegrees(angle) + 0.5), 8));
+						(int) (Math.toDegrees(angle) + 0.5), 8, 10, 10));
 			}
 			else if (weaponSelected == '2')
 			{
@@ -465,7 +467,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
 	 */
-	public void inflictDamage(int amount)
+	public void inflictDamage(int amount, double knockBack)
 	{
 		setHP(getHP() - amount);
 		if (getHP() <= 0)
@@ -483,9 +485,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			verticalMovement = movementSpeed;
 			horizontalMovement = movementSpeed;
 		}
+		else
+		{
+			// Knock back the creature based on the knockback force
+//			if (Math.abs(knockBack) - getKnockBackResistance() > 0)
+//			{
+//				setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
+//				if (knockBack > 0)
+//				{
+//					setHSpeed(getHSpeed()
+//							+ (knockBack - getKnockBackResistance()) / 2);
+//				}
+//				else
+//				{
+//					setHSpeed(getHSpeed()
+//							- (knockBack + getKnockBackResistance()) / 2);
+//				}
+//			}
+		}
 	}
 
-	
 	/**
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
@@ -589,28 +608,28 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
-		queueMessage("I " + item.getImage()+" "+item.getType());
+		queueMessage("I " + item.getImage() + " " + item.getType());
 	}
 
 	public void equip(String itemType)
 	{
-		//Find next open spot in equipped
+		// Find next open spot in equipped
 		int pos = 0;
-		for(;pos < MAX_WEAPONS;pos++)
+		for (; pos < MAX_WEAPONS; pos++)
 		{
-			if(equippedWeapons[pos] == null)
+			if (equippedWeapons[pos] == null)
 				break;
 		}
 
-		//If there are no equip slots left
-		if(pos == MAX_WEAPONS)
+		// If there are no equip slots left
+		if (pos == MAX_WEAPONS)
 			return;
 
-		//Find the item in the inventory
+		// Find the item in the inventory
 		ServerItem toRemove = null;
-		for(ServerItem item : getInventory())
+		for (ServerItem item : getInventory())
 		{
-			if(item.getType().equals(itemType))
+			if (item.getType().equals(itemType))
 			{
 				toRemove = item;
 				break;
@@ -628,6 +647,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		equippedWeapons[slot] = null;
 
 	}
+
 	public boolean isxUpdated()
 	{
 		return xUpdated;

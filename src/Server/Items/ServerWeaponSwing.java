@@ -1,5 +1,8 @@
 package Server.Items;
 
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+
 import Imports.Images;
 import Server.ServerObject;
 import Server.ServerWorld;
@@ -31,16 +34,43 @@ public class ServerWeaponSwing extends ServerObject
 	 * The object that this animation will centre on
 	 */
 	private ServerObject wielder;
-	
+
 	/**
 	 * The width of the initial image before rotation
 	 */
-	private int originalWidth;
-	
+	private int width;
+
 	/**
 	 * The height of the initial image before rotation
 	 */
-	private int originalHeight;
+	private int height;
+
+	/**
+	 * The hitbox line for the weapon
+	 */
+	private Line2D.Double hitbox;
+
+	/**
+	 * The id of the wielder
+	 */
+	private int ownerID;
+
+	/**
+	 * The amount of damage the weapon does
+	 */
+	private int damage;
+	
+	/**
+	 * The change in vSpeed and hSpeed of the other object when it collides with this
+	 */
+	private double knockBack;
+
+	/**
+	 * The ID's of the objects that have already collided with this weapon swing
+	 */
+	private ArrayList<Integer> objectsCollided;
+	
+	
 
 	/**
 	 * Constructor for the item swing animation
@@ -49,28 +79,34 @@ public class ServerWeaponSwing extends ServerObject
 	 * @param timeInMilliseconds
 	 */
 	public ServerWeaponSwing(ServerObject wielder, String image, int angle,
-			int timeInFrames)
+			int timeInFrames, int damage, double knockBack)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
-				ServerWorld.ITEM_SWING_TYPE);
+				ServerWorld.WEAPON_SWING_TYPE);
 		this.wielder = wielder;
 		counter = 0;
 		this.timeInFrames = timeInFrames;
-		
+		ownerID = wielder.getID();
+		this.knockBack=knockBack;
+
+		objectsCollided = new ArrayList<Integer>();
+
 		setMapVisible(false);
 		setSolid(false);
-		
+
+		this.damage = damage;
+
 		if (angle > -90 && angle <= 15)
 		{
 			currentAngle = -75;
 			isClockwise = true;
 		}
-		else if(angle <= 165 && angle > 90)
+		else if (angle <= 165 && angle > 90)
 		{
 			currentAngle = -165;
 			isClockwise = false;
 		}
-		else if(angle > 15 && angle <= 90)
+		else if (angle > 15 && angle <= 90)
 		{
 			currentAngle = -15;
 			isClockwise = true;
@@ -80,12 +116,29 @@ public class ServerWeaponSwing extends ServerObject
 			currentAngle = -105;
 			isClockwise = false;
 		}
-		
-		originalWidth = Images.getGameImage(image).getWidth();
-		originalHeight = Images.getGameImage(image).getHeight();
-		
+
+		width = Images.getGameImage(image).getWidth();
+		height = Images.getGameImage(image).getHeight();
+
+		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
+
+		hitbox = new Line2D.Double(
+				(getX() + width)
+						/ 2
+						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
+				(getY() + height)
+						/ 2
+						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
+				(getX() + width)
+						/ 2
+						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
+				(getY() + height)
+						/ 2
+						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
+
 		setImage(getBaseImage() + "_" + currentAngle + ".png");
-		
+
 	}
 
 	/**
@@ -93,11 +146,11 @@ public class ServerWeaponSwing extends ServerObject
 	 */
 	public void update()
 	{
-		if (counter >= (int)(timeInFrames / 7.0 + 1)*7)
+		if (counter >= (int) (timeInFrames / 7.0 + 1) * 7)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 7.0 + 1) == 0 && counter!=0)
+		else if (counter % (int) (timeInFrames / 7.0 + 1) == 0 && counter != 0)
 		{
 			if (isClockwise)
 			{
@@ -118,9 +171,104 @@ public class ServerWeaponSwing extends ServerObject
 			setImage(getBaseImage() + "_" + currentAngle + ".png");
 		}
 
-		setX(wielder.getX() + wielder.getWidth() / 2 - originalWidth / 2);
-		setY(wielder.getY() + wielder.getHeight() / 2 - originalHeight / 2);
+		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
+		hitbox.setLine(
+				(getX() + width)
+						/ 2
+						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
+				(getY() + height)
+						/ 2
+						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
+				(getX() + width)
+						/ 2
+						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
+				(getY() + height)
+						/ 2
+						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
+		
+		System.out.println(hitbox.getX1() + " " + hitbox.getX2() + " " + hitbox.getY1() + " " + hitbox.getY2());
+
 		counter++;
 	}
+
+	/**
+	 * Check for a collision between the weapon and a rectangular object
+	 * @param other
+	 * @return whether or not the two objects are colliding
+	 */
+	public boolean collidesWith(ServerObject other)
+	{
+		return hitbox.intersects(other.getX(), other.getY(), other.getWidth(),
+				other.getHeight());
+	}
+
+	/**
+	 * Checks whether the other object has already collided with this weapon
+	 * @param other
+	 * @return
+	 */
+	public boolean hasCollided(ServerObject other)
+	{
+		return objectsCollided.contains(other.getID());
+	}
+
+	/**
+	 * Adds the other object to the list of objects that have already collided
+	 * with this weapon swing
+	 * @param other
+	 * @return
+	 */
+	public void addCollided(ServerObject other)
+	{
+		objectsCollided.add(other.getID());
+	}
+
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+
+	public boolean isClockwise()
+	{
+		return isClockwise;
+	}
+
+	public int getOwnerID()
+	{
+		return ownerID;
+	}
+
+	public void setOwnerID(int ownerID)
+	{
+		this.ownerID = ownerID;
+	}
+
+	public double getKnockBack()
+	{
+		return knockBack;
+	}
+
+	public void setKnockBack(double knockBack)
+	{
+		this.knockBack = knockBack;
+	}
+
+	public Line2D.Double getHitbox()
+	{
+		return hitbox;
+	}
+
+	public void setHitbox(Line2D.Double hitbox)
+	{
+		this.hitbox = hitbox;
+	}
+	
+	
 
 }

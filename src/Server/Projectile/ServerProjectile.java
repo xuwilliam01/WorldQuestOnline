@@ -26,6 +26,11 @@ public class ServerProjectile extends ServerFlyingObject
 	private int ownerID;
 	
 	/**
+	 * The knockback force of the projectile (change later)
+	 */
+	private double knockBack = 10;
+	
+	/**
 	 * Constructor for a projectile
 	 * @param x
 	 * @param y
@@ -121,5 +126,17 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		this.ownerID = ownerID;
 	}
+
+	public double getKnockBack()
+	{
+		return knockBack;
+	}
+
+	public void setKnockBack(double knockBack)
+	{
+		this.knockBack = knockBack;
+	}
+	
+	
 	
 }

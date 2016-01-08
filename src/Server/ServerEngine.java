@@ -220,7 +220,7 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 
 		// Move all the objects around
-		world.updateObjects();
+		world.update();
 
 		// Update all the clients with the new player data
 		updateClients();
