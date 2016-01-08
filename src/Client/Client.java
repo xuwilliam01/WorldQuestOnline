@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -21,7 +22,7 @@ import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener
+MouseMotionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -88,7 +89,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * A counter updating every repaint and reseting at the expected FPS
 	 */
 	private int FPScounter = 0;
-
+	
+	/**
+	 * Store the selected weapon
+	 */
+	private int weaponSelected;
+	
 	/**
 	 * Constructor for the client
 	 */
@@ -206,12 +212,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			try
 			{
 				startTime = System.currentTimeMillis();
-				
+
 				while (true)
 				{
 
 					String message = input.readLine();
-					
+
 					String[] tokens = message.split(" ");
 
 					for (int token = 0; token < tokens.length; token++)
@@ -224,7 +230,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						else if (tokens[token].equals("U"))
 						{
 							repaint();
-							
+
 							// Update the FPS counter
 							if (FPScounter >= (1000.0/ServerEngine.UPDATE_RATE + 0.5))
 							{
@@ -232,7 +238,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/ServerEngine.UPDATE_RATE)+0.5)); 
 								startTime = System.currentTimeMillis();
 							}
-							
+
 							FPScounter ++;
 						}
 						// If there is a player to be updated
@@ -293,7 +299,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					}
 
 					//long delay = System.currentTimeMillis()
-							//- startTime;
+					//- startTime;
 
 					// if (delay < 15)
 					// {
@@ -357,6 +363,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 
 		System.out.println("Map import has finished");
+	}
+
+	
+	public int getWeaponSelected() {
+		return weaponSelected;
+	}
+
+	public void setWeaponSelected(int weaponSelected) {
+		inventory.getEquippedWeapons()[this.weaponSelected].setBorder(BorderFactory.createEmptyBorder());
+		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory.createLineBorder(Color.white));
+		output.println("W"+weaponSelected);
+		output.flush();
+		this.weaponSelected = weaponSelected;
 	}
 
 	/**
@@ -432,18 +451,25 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_1
-				&& !currentMessage.equals("W1"))
+				&& !currentMessage.equals("W0") && inventory.getEquippedWeapons()[0] != null)
 		{
-			// P for ping
-			output.println("W1");
-			output.flush();
+			setWeaponSelected(0);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_2
-				&& !currentMessage.equals("W2"))
+				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[1] != null)
 		{
-			// P for ping
-			output.println("W2");
-			output.flush();
+			setWeaponSelected(1);
+		}
+		//Use these later
+		else if (key.getKeyCode() == KeyEvent.VK_3
+				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[2] != null)
+		{
+			setWeaponSelected(2);
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_4
+				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[3] != null)
+		{
+			setWeaponSelected(3);
 		}
 	}
 
@@ -577,7 +603,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		this.currentFPS = currentFPS;
 	}
-	
-	
+
+
 
 }

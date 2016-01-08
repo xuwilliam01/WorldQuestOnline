@@ -132,6 +132,7 @@ public class ClientItem extends JButton implements MouseListener{
 				{
 					//Move back to inventory
 					inventory.getClient().print("MI "+equipSlot);
+					setBorder(BorderFactory.createEmptyBorder());
 					selected = false;
 
 					ClientItem[][] invGrid = inventory.getInventory();

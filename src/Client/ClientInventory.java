@@ -3,6 +3,7 @@ package Client;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import Server.ServerWorld;
@@ -96,6 +97,15 @@ public class ClientInventory extends JPanel{
 			{
 				equippedWeapons[pos] = null;
 				client.print("DrW "+item.getEquipSlot());
+				
+				//If we dropped the weapon we selected, select a new weapon
+				if(client.getWeaponSelected() == pos)
+				{
+					for(int spot = 0; spot < equippedWeapons.length;spot++)
+						if(equippedWeapons[spot] != null)
+							client.setWeaponSelected(spot);
+				}
+				
 			}
 		}
 		repaint();

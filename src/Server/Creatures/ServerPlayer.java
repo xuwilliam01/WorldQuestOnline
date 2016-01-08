@@ -139,7 +139,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
 
-		weaponSelected = '1';
+		weaponSelected = '0';
 		actionDelay = 10;
 
 		canPerformAction = true;
@@ -429,12 +429,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			double angle = Math.atan2(yDist, xDist);
 
-			if (weaponSelected == '1')
+			if (weaponSelected == '0')
 			{
 				world.add(new ServerWeaponSwing(this, "SWORD_0.png",
 						(int) (Math.toDegrees(angle) + 0.5), 8, 10, 10));
 			}
-			else if (weaponSelected == '2')
+			else if (weaponSelected == '1')
 			{
 				// Get the width and height of the image
 				int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
