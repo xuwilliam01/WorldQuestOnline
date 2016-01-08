@@ -27,7 +27,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
-
+	public final static int MAX_INVENTORY = 25;
+	public static final int MAX_WEAPONS = 4;
 	/**
 	 * The starting max hp of the player
 	 */
@@ -113,6 +114,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * disabled
 	 */
 	private int actionCounter;
+
+	/**
+	 * Stores the equipped items
+	 */
+	private ServerItem[] equippedWeapons = new ServerItem[MAX_WEAPONS];
 
 	/**
 	 * Constructor for a player in the server
@@ -228,13 +234,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// Send the object's updated location if the player can see it
 			// within their screen
 			if (object.getX() < getX() + getWidth()
-					+ Client.Client.SCREEN_WIDTH
-					&& object.getX() + object.getWidth() > getX()
-							- Client.Client.SCREEN_WIDTH
-					&& object.getY() < getY() + getHeight()
-							+ Client.Client.SCREEN_HEIGHT
-					&& object.getY() + object.getHeight() > getY()
-							- Client.Client.SCREEN_HEIGHT)
+			+ Client.Client.SCREEN_WIDTH
+			&& object.getX() + object.getWidth() > getX()
+			- Client.Client.SCREEN_WIDTH
+			&& object.getY() < getY() + getHeight()
+			+ Client.Client.SCREEN_HEIGHT
+			&& object.getY() + object.getHeight() > getY()
+			- Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.exists())
 				{
@@ -263,7 +269,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			queueMessage("L " + getHP());
 		}
-		
+
 		// Signal a repaint
 		queueMessage("U");
 		flushWriter();
@@ -350,7 +356,25 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else if(command.length() >= 2 && command.substring(0,2).equals("Dr"))
 				{
-					super.drop(command.substring(3));
+					//If dropping from inventory
+					if(command.charAt(2) == 'I')
+						super.drop(command.substring(4));
+					//If dropping from equipped
+					else
+						drop(Integer.parseInt(command.substring(4)));
+				}
+				else if(command.charAt(0) == 'M')
+				{
+					//Move to inventory
+					if(command.charAt(1) == 'I')
+					{
+						unequip(Integer.parseInt(command.substring(3)));
+					}
+					//Move to equipped weapons
+					else if(command.charAt(1) == 'W')
+					{
+						equip(command.substring(3));
+					}
 				}
 				//This is temporary for selecting a gun or a sword
 				else if (command.charAt(0) == 'W')
@@ -382,6 +406,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		engine.removePlayer(this);
 	}
 
+	public void drop(int slot)
+	{
+		dropItem(equippedWeapons[slot]);
+		equippedWeapons[slot] = null;
+	}
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
@@ -427,7 +456,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						getID(), "BULLET.png", speed, angle, inaccuracy,
 						ServerWorld.BULLET_TYPE));
 			}
-			
+
 			canPerformAction = false;
 		}
 	}
@@ -456,6 +485,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 	}
 
+	
 	/**
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
@@ -562,6 +592,42 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		queueMessage("I " + item.getImage()+" "+item.getType());
 	}
 
+	public void equip(String itemType)
+	{
+		//Find next open spot in equipped
+		int pos = 0;
+		for(;pos < MAX_WEAPONS;pos++)
+		{
+			if(equippedWeapons[pos] == null)
+				break;
+		}
+
+		//If there are no equip slots left
+		if(pos == MAX_WEAPONS)
+			return;
+
+		//Find the item in the inventory
+		ServerItem toRemove = null;
+		for(ServerItem item : getInventory())
+		{
+			if(item.getType().equals(itemType))
+			{
+				toRemove = item;
+				break;
+			}
+		}
+
+		equippedWeapons[pos] = toRemove;
+		getInventory().remove(toRemove);
+	}
+
+	public void unequip(int slot)
+	{
+
+		getInventory().add(equippedWeapons[slot]);
+		equippedWeapons[slot] = null;
+
+	}
 	public boolean isxUpdated()
 	{
 		return xUpdated;

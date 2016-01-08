@@ -157,9 +157,13 @@ public abstract class ServerCreature extends ServerObject
 				break;
 			}
 		}
+
+
 		if(toRemove.getAmount() > 1)
 			toRemove.decreaseAmount();
 		else
 			inventory.remove(toRemove);
+
+
 	}
 }

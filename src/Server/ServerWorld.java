@@ -34,11 +34,12 @@ public class ServerWorld
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
 
 	public final static char ITEM_TYPE = 'I';
+	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
+	
 	public final static String POTION_TYPE = ITEM_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 
-	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
-	public final static String WEAPON_TYPE = EQUIP_TYPE + ITEM_TYPE + "W";
+	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
 	public final static String LONG_SWORD = SWORD_TYPE + "L";
 
@@ -319,7 +320,7 @@ public class ServerWorld
 									ServerCreature player = (ServerCreature) object;
 									if (!(item.hasCoolDown() && item
 											.getSource().getID() == player
-											.getID()))
+											.getID()) && player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
 									{
 										player.addItem(item);
 										item.setSource(player);
