@@ -18,6 +18,8 @@ public class CreatorItems extends JPanel implements ActionListener{
 	public static final int WIDTH = 300;
 	public static final int NUM_ROWS = 3;
 	private static final int NUM_COLS = 5;
+	public static final int MIN_WORLD_SIZE = 20;
+	public static final int MAX_WORLD_SIZE = 100000;
 
 	private CreatorWorld world;
 	private CreatorObject[] buttons;
@@ -107,11 +109,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 		{
 			while(true)
 				try {
-					String newWidth = (String)JOptionPane.showInputDialog("Please input the new width (larger than 20 and less than 1,000,000): ");
+					String newWidth = (String)JOptionPane.showInputDialog(String.format("Please input the new width (larger than %d and less than %d): ",MIN_WORLD_SIZE,MAX_WORLD_SIZE));
 					if(newWidth == null)
 						break;
 					int newWidthNum = Integer.parseInt(newWidth);
-					if(newWidthNum < 20 || newWidthNum > 1000000)
+					if(newWidthNum < MIN_WORLD_SIZE|| newWidthNum > MAX_WORLD_SIZE)
 						continue;
 					world.setNewWidth(newWidthNum);
 					updateWidth.setText("Change Width "+"(Current: "+Integer.parseInt(newWidth)+")");
@@ -127,11 +129,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 		{
 			while(true)
 				try {
-					String newHeight = (String)JOptionPane.showInputDialog("Please input the new height (larger than 20 and less than 1,000,000): ");
+					String newHeight = (String)JOptionPane.showInputDialog(String.format("Please input the new height (larger than %d and less than %d): ",MIN_WORLD_SIZE,MAX_WORLD_SIZE));
 					if(newHeight== null)
 						break;
 					int newHeightNum = Integer.parseInt(newHeight);
-					if(newHeightNum < 20 || newHeightNum > 1000000)
+					if(newHeightNum < MIN_WORLD_SIZE || newHeightNum > MAX_WORLD_SIZE)
 						continue;
 					world.setNewWidth(newHeightNum);
 					world.setNewHeight(Integer.parseInt(newHeight));
