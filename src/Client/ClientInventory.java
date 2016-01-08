@@ -38,7 +38,7 @@ public class ClientInventory extends JPanel{
 	public void addItem(String image, String type, int amount)
 	{
 		//If the item is a potion, check if it already exists and if it does, increase the amount
-		if(type.charAt(1)==ServerWorld.POTION_TYPE.charAt(1))
+		if(type.charAt(1)==ServerWorld.STACK_TYPE.charAt(1))
 			for(int row = 0; row < inventory.length;row++)
 				for(int col = 0;col < inventory[row].length;col++)
 					if(inventory[row][col] != null && inventory[row][col].getType().equals(type))
