@@ -12,8 +12,8 @@ import Server.Creatures.ServerPlayer;
 public class ClientInventory extends JPanel{
 
 	public final static int INVENTORY_WIDTH = 300;
-	public final static int WIDTH = 5;
-	public final static int HEIGHT = 5;
+	public final static int WIDTH = 3;
+	public final static int HEIGHT = 1;
 
 	private ClientItem[][] inventory = new ClientItem[HEIGHT][WIDTH];
 	private ClientItem[] equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
@@ -71,7 +71,10 @@ public class ClientInventory extends JPanel{
 	public void removeItem(ClientItem item, int pos)
 	{
 		if(item.getAmount()  > 1)
+		{
 			item.decreaseAmount();
+			client.print("DrI "+item.getType());
+		}
 		else
 		{
 			item.setVisible(false);

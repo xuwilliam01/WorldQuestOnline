@@ -27,8 +27,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
-	public final static int MAX_INVENTORY = 25;
-	public static final int MAX_WEAPONS = 4;
+	public final static int MAX_INVENTORY = 3;
+	public static final int MAX_WEAPONS = 2;
 	/**
 	 * The starting max hp of the player
 	 */
@@ -234,13 +234,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// Send the object's updated location if the player can see it
 			// within their screen
 			if (object.getX() < getX() + getWidth()
-					+ Client.Client.SCREEN_WIDTH
-					&& object.getX() + object.getWidth() > getX()
-							- Client.Client.SCREEN_WIDTH
-					&& object.getY() < getY() + getHeight()
-							+ Client.Client.SCREEN_HEIGHT
-					&& object.getY() + object.getHeight() > getY()
-							- Client.Client.SCREEN_HEIGHT)
+			+ Client.Client.SCREEN_WIDTH
+			&& object.getX() + object.getWidth() > getX()
+			- Client.Client.SCREEN_WIDTH
+			&& object.getY() < getY() + getHeight()
+			+ Client.Client.SCREEN_HEIGHT
+			&& object.getY() + object.getHeight() > getY()
+			- Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.exists())
 				{
@@ -375,7 +375,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					else if (command.charAt(1) == 'W')
 					{		
 						equip(command.substring(3));
-						System.out.println(getInventory().size());
 					}
 				}
 				// This is temporary for selecting a gun or a sword
@@ -489,20 +488,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		else
 		{
 			// Knock back the creature based on the knockback force
-//			if (Math.abs(knockBack) - getKnockBackResistance() > 0)
-//			{
-//				setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
-//				if (knockBack > 0)
-//				{
-//					setHSpeed(getHSpeed()
-//							+ (knockBack - getKnockBackResistance()) / 2);
-//				}
-//				else
-//				{
-//					setHSpeed(getHSpeed()
-//							- (knockBack + getKnockBackResistance()) / 2);
-//				}
-//			}
+			//			if (Math.abs(knockBack) - getKnockBackResistance() > 0)
+			//			{
+			//				setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
+			//				if (knockBack > 0)
+			//				{
+			//					setHSpeed(getHSpeed()
+			//							+ (knockBack - getKnockBackResistance()) / 2);
+			//				}
+			//				else
+			//				{
+			//					setHSpeed(getHSpeed()
+			//							- (knockBack + getKnockBackResistance()) / 2);
+			//				}
+			//			}
 		}
 	}
 

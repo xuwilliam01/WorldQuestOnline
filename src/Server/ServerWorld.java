@@ -346,7 +346,7 @@ public class ServerWorld
 									if (!(item.hasCoolDown() && item
 											.getSource().getID() == player
 											.getID())
-											&& player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
+											&& player.getInventory().size() <= ServerPlayer.MAX_INVENTORY)
 									{
 										if(player.getInventory().size() < ServerPlayer.MAX_INVENTORY )
 										{

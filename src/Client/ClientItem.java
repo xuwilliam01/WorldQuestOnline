@@ -157,10 +157,10 @@ public class ClientItem extends JButton implements MouseListener{
 						if(inventory.getEquippedWeapons()[pos] == null)
 							break;
 					}
-					
+
 					if(pos == ServerPlayer.MAX_WEAPONS)
 						return;
-					
+
 					inventory.getClient().print("MW "+type);
 					selected = true;
 					inventory.getInventory()[row][col] = null;
@@ -170,8 +170,8 @@ public class ClientItem extends JButton implements MouseListener{
 					col = -1;
 					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*20+80,500);
 					repaint();
-					
-				
+
+
 				}
 			}
 			//System.out.println("Selected this item");
