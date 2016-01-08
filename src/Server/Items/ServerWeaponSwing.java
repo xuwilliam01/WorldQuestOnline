@@ -59,9 +59,10 @@ public class ServerWeaponSwing extends ServerObject
 	 * The amount of damage the weapon does
 	 */
 	private int damage;
-	
+
 	/**
-	 * The change in vSpeed and hSpeed of the other object when it collides with this
+	 * The change in vSpeed and hSpeed of the other object when it collides with
+	 * this
 	 */
 	private double knockBack;
 
@@ -69,8 +70,6 @@ public class ServerWeaponSwing extends ServerObject
 	 * The ID's of the objects that have already collided with this weapon swing
 	 */
 	private ArrayList<Integer> objectsCollided;
-	
-	
 
 	/**
 	 * Constructor for the item swing animation
@@ -87,7 +86,7 @@ public class ServerWeaponSwing extends ServerObject
 		counter = 0;
 		this.timeInFrames = timeInFrames;
 		ownerID = wielder.getID();
-		this.knockBack=knockBack;
+		this.knockBack = knockBack;
 
 		objectsCollided = new ArrayList<Integer>();
 
@@ -124,16 +123,16 @@ public class ServerWeaponSwing extends ServerObject
 		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
 
 		hitbox = new Line2D.Double(
-				(getX() + width)
+				getX() + width
 						/ 2
 						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
-				(getY() + height)
+				getY() + height
 						/ 2
 						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
-				(getX() + width)
+				getX() + width
 						/ 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
-				(getY() + height)
+				getY() + height
 						/ 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
@@ -174,20 +173,25 @@ public class ServerWeaponSwing extends ServerObject
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
 		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
 		hitbox.setLine(
-				(getX() + width)
+				getX()
+						+ width
 						/ 2
 						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
-				(getY() + height)
+				getY()
+						+ height
 						/ 2
 						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
-				(getX() + width)
+				getX()
+						+ width
 						/ 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
-				(getY() + height)
+				getY()
+						+ height
 						/ 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
-		
-		System.out.println(hitbox.getX1() + " " + hitbox.getX2() + " " + hitbox.getY1() + " " + hitbox.getY2());
+
+		// System.out.println(hitbox.getX1() + " " + hitbox.getX2() + " " +
+		// hitbox.getY1() + " " + hitbox.getY2());
 
 		counter++;
 	}
@@ -268,7 +272,5 @@ public class ServerWeaponSwing extends ServerObject
 	{
 		this.hitbox = hitbox;
 	}
-	
-	
 
 }

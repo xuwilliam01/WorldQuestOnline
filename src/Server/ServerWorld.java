@@ -397,6 +397,8 @@ public class ServerWorld
 														knockBack);
 										((ServerWeaponSwing) object)
 												.addCollided(otherObject);
+										System.out.println(((ServerWeaponSwing) object)
+												.getDamage());
 									}
 									else if (otherObject.getType().contains(
 											NPC_TYPE)
@@ -421,6 +423,9 @@ public class ServerWorld
 														knockBack);
 										((ServerWeaponSwing) object)
 												.addCollided(otherObject);
+										
+										System.out.println(((ServerWeaponSwing) object)
+												.getDamage());
 									}
 								}
 							}

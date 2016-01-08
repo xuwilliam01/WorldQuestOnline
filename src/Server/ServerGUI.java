@@ -171,16 +171,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 		// Draw each object on the gui if it's inside the screen
 		for (ServerObject object : world.getObjects())
 		{
-			if (object.getType().contains(ServerWorld.WEAPON_SWING_TYPE))
-			{
-				Line2D.Double hitbox = ((ServerWeaponSwing) object).getHitbox();
-				graphics.setColor(Color.black);
-				graphics.drawLine((int) hitbox.getX1(), (int) hitbox.getY1(),
-						(int) hitbox.getX2(), (int) hitbox.getY2());
-			}
-
-			if (object.isMapVisible()
-					&& ((CENTRE_X + object.getX() / objectFactor - posX)
+			if (object.isMapVisible() &&
+					((CENTRE_X + object.getX() / objectFactor - posX)
 							+ 1
 							+ (object.getWidth() / objectFactor) + 1) > 0
 					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH

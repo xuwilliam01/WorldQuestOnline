@@ -85,7 +85,7 @@ public class Images
 				
 
 				images.add(new GameImage("SWORD.png",
-						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+						70, 30));
 				images.add(new GameImage("SWORD_ICON.png",
 						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 				
