@@ -19,7 +19,7 @@ public abstract class ServerItem extends ServerObject{
 
 	//Amount of this item. Will only be used for potions
 	private int amount = 1;
-	
+
 	public ServerItem(double x, double y,String type) {
 		super(x, y, 0,0, ServerWorld.GRAVITY, "", type);
 
@@ -61,6 +61,23 @@ public abstract class ServerItem extends ServerObject{
 
 	}
 
+	public static ServerItem newItem(double x, double y, String type)
+	{
+		switch (type) {
+		case ServerWorld.HP_25:
+			return new ServerHPPotion(x,y,25);		
+		case ServerWorld.HP_50:
+			return new ServerHPPotion(x,y,50);			
+		case ServerWorld.HP_75:
+			return new ServerHPPotion(x,y,75);		
+		case ServerWorld.HP_100:
+			return new ServerHPPotion(x,y,100);		
+		case ServerWorld.LONG_SWORD:
+			return new ServerSword(x,y,'L',20);
+		}
+		return null;
+
+	}
 	public void startCoolDown ()
 	{
 		hasCoolDown = true;
@@ -69,12 +86,12 @@ public abstract class ServerItem extends ServerObject{
 		coolDownTimer.start();
 
 	}
-	
+
 	public void setSource(ServerCreature source)
 	{
 		this.source = source;
 	}
-	
+
 	public boolean hasCoolDown()
 	{
 		return hasCoolDown;
@@ -83,29 +100,29 @@ public abstract class ServerItem extends ServerObject{
 	public ServerCreature getSource() {
 		return source;
 	}
-	
+
 	private class CoolDownTimer implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
 			hasCoolDown = false;
 			coolDownTimer.stop();
 		}
-		
+
 	}
-	
+
 	public void increaseAmount()
 	{
 		amount++;
 	}
-	
+
 	public int getAmount()
 	{
 		return amount;
 	}
-	
+
 	public void decreaseAmount()
 	{
 		amount--;
 	}
-	
+
 }

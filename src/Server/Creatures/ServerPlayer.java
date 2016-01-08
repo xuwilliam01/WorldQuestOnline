@@ -361,8 +361,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					if (command.charAt(2) == 'I')
 						super.drop(command.substring(4));
 					// If dropping from equipped
-					else
+					else if (command.charAt(2) == 'W')
 						drop(Integer.parseInt(command.substring(4)));
+					//If using a potion
+					else if (command.charAt(2) == 'U')
+						super.use(command.substring(4));
 				}
 				else if (command.charAt(0) == 'M')
 				{

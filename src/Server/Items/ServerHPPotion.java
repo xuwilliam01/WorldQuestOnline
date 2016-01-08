@@ -8,7 +8,7 @@ public class ServerHPPotion extends ServerPotion{
 	
 	public ServerHPPotion(double x, double y,int healAmount)
 	{
-		super(x,y,ServerWorld.HP_POTION_TYPE);
+		super(x,y,ServerWorld.HP_POTION_TYPE+Integer.toString(healAmount));
 	//	this.healAmount = healAmount;
 	}
 

@@ -95,10 +95,37 @@ public class ClientInventory extends JPanel{
 			else
 			{
 				equippedWeapons[pos] = null;
-				client.print("DrE "+item.getEquipSlot());
+				client.print("DrW "+item.getEquipSlot());
 			}
 		}
 		repaint();
+	}
+
+	public void use(ClientItem item)
+	{
+		if(item.getAmount()  > 1)
+		{
+			item.decreaseAmount();
+			client.print("DrU "+item.getType());
+		}
+		else
+		{
+			item.setVisible(false);
+			remove(item);
+			invalidate();
+
+			for(int row = 0; row < inventory.length;row++)
+				for(int col = 0; col < inventory[row].length;col++)
+				{
+					if(inventory[row][col] == item)
+					{
+						inventory[row][col] = null;
+						client.print("DrU "+item.getType());
+						repaint();
+						return;
+					}
+				}
+		}
 	}
 
 	public void clear()

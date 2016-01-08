@@ -174,7 +174,12 @@ public class ClientItem extends JButton implements MouseListener{
 
 				}
 			}
-			//System.out.println("Selected this item");
+			//If it's a potion use it
+			else if(type.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+			{
+				inventory.use(this);
+			}
+			
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{

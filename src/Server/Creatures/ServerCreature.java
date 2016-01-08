@@ -27,7 +27,7 @@ public abstract class ServerCreature extends ServerObject
 	 * World that the creature is in
 	 */
 	private ServerWorld world;
-	
+
 	/**
 	 * The amount of resistance to a knockback by a weapon (normally based on size of the creature)
 	 */
@@ -54,7 +54,7 @@ public abstract class ServerCreature extends ServerObject
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
-		
+
 		// Calculate the resistance to knockback based on weight
 		knockBackResistance = Math.sqrt((getWidth() * getHeight()))/16;
 	}
@@ -93,18 +93,18 @@ public abstract class ServerCreature extends ServerObject
 		else
 		{
 			// Knock back the creature based on the knockback force
-//			if (Math.abs(knockBack) - knockBackResistance > 0)
-//			{
-//				setVSpeed(-(Math.abs(knockBack) - knockBackResistance));
-//				if (knockBack > 0)
-//				{
-//					setHSpeed(getHSpeed()+(knockBack-knockBackResistance)/2);
-//				}
-//				else
-//				{
-//					setHSpeed(getHSpeed()-(knockBack+knockBackResistance)/2);
-//				}
-//			}
+			//			if (Math.abs(knockBack) - knockBackResistance > 0)
+			//			{
+			//				setVSpeed(-(Math.abs(knockBack) - knockBackResistance));
+			//				if (knockBack > 0)
+			//				{
+			//					setHSpeed(getHSpeed()+(knockBack-knockBackResistance)/2);
+			//				}
+			//				else
+			//				{
+			//					setHSpeed(getHSpeed()-(knockBack+knockBackResistance)/2);
+			//				}
+			//			}
 		}
 	}
 
@@ -155,7 +155,7 @@ public abstract class ServerCreature extends ServerObject
 		item.setHSpeed(direction*(Math.random()*5 + 3));
 	}
 
-	public void drop(String item)
+	public void use(String item)
 	{
 		ServerItem toRemove = null;
 		for(ServerItem sItem : inventory)
@@ -173,11 +173,26 @@ public abstract class ServerCreature extends ServerObject
 					}
 
 				}
-				//Do not drop potions
+			}
+		}
+
+		if(toRemove.getAmount() > 1)
+			toRemove.decreaseAmount();
+		else
+			inventory.remove(toRemove);
+	}
+	public void drop(String item)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem sItem : inventory)
+		{
+			if(sItem.getType().equals(item))
+			{
+				toRemove = sItem;
+				if(toRemove.getAmount() > 1)
+					dropItem(ServerItem.newItem(sItem.getX(), sItem.getY(), sItem.getType()));
 				else
-				{
 					dropItem(sItem);
-				}
 				break;
 			}
 		}
@@ -198,6 +213,6 @@ public abstract class ServerCreature extends ServerObject
 	{
 		this.knockBackResistance = knockBackResistance;
 	}
-	
-	
+
+
 }
