@@ -81,7 +81,24 @@ public class ClientItem extends JButton implements MouseListener{
 		this.selected = selected;
 	}
 
-
+	public void setRow(int row)
+	{
+		this.row = row;
+	}
+	
+	public int getRow()
+	{
+		return row;
+	}
+	
+	public int getCol()
+	{
+		return col;
+	}
+	public void setCol(int col)
+	{
+		this.col = col;
+	}
 	public String getType() {
 		return type;
 	}

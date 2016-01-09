@@ -152,7 +152,6 @@ public class ClientInventory extends JPanel{
 					if(inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
 					{
 						money = inventory[row][col];
-						inventory[row][col].setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 					}
 					else
 						remove(inventory[row][col]);
@@ -160,7 +159,12 @@ public class ClientInventory extends JPanel{
 		invalidate();
 		inventory = new ClientItem[HEIGHT][WIDTH];
 		if(money != null)
+		{
 			inventory[0][0] = money;
+			inventory[0][0].setLocation(20,50);
+			inventory[0][0].setRow(0);
+			inventory[0][0].setCol(0);
+		}
 		repaint();
 	}
 
