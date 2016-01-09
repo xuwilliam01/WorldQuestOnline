@@ -110,7 +110,7 @@ public class ServerWeaponSwing extends ServerObject
 		height = Images.getGameImage(image).getHeight();
 
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
-		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10);
 
 		hitbox = new Line2D.Double(
 				getX() + width
@@ -161,7 +161,7 @@ public class ServerWeaponSwing extends ServerObject
 		}
 
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
-		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10);
 		hitbox.setLine(
 				getX()
 						+ width
