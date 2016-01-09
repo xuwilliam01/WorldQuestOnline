@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
@@ -97,7 +98,7 @@ public class ClientInventory extends JPanel{
 			{
 				equippedWeapons[pos] = null;
 				client.print("DrW "+item.getEquipSlot());
-				
+
 				//If we dropped the weapon we selected, select a new weapon
 				if(client.getWeaponSelected() == pos)
 				{
@@ -108,7 +109,7 @@ public class ClientInventory extends JPanel{
 							client.setWeaponSelected(spot);
 						}
 				}
-				
+
 			}
 		}
 		repaint();
@@ -143,12 +144,23 @@ public class ClientInventory extends JPanel{
 
 	public void clear()
 	{
+		ClientItem money = null;
 		for(int row = 0; row < inventory.length;row++)
 			for(int col = 0;col < inventory[row].length;col++)
 				if(inventory[row][col] != null)
-					remove(inventory[row][col]);
+				{
+					if(inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
+					{
+						money = inventory[row][col];
+						inventory[row][col].setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+					}
+					else
+						remove(inventory[row][col]);
+				}
 		invalidate();
 		inventory = new ClientItem[HEIGHT][WIDTH];
+		if(money != null)
+			inventory[0][0] = money;
 		repaint();
 	}
 

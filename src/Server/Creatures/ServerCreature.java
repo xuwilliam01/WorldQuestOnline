@@ -15,7 +15,7 @@ public abstract class ServerCreature extends ServerObject
 	public final static int NEUTRAL = 0;
 	public final static int RED = 1;
 	public final static int BLUE = 2;
-	
+
 	/**
 	 * Maximum possible HP of the creature
 	 */
@@ -30,7 +30,7 @@ public abstract class ServerCreature extends ServerObject
 	 * Team of the player
 	 */
 	private int team;
-	
+
 	/**
 	 * Stores the inventory of the creature
 	 */
@@ -91,12 +91,12 @@ public abstract class ServerCreature extends ServerObject
 	{
 		this.team = team;
 	}
-	
+
 	public int getTeam()
 	{
 		return team;
 	}
-	
+
 	public int getMaxHP()
 	{
 		return maxHP;
@@ -151,12 +151,18 @@ public abstract class ServerCreature extends ServerObject
 	 */
 	public void dropInventory()
 	{
+		ServerItem money = null;
 		for(ServerItem item : inventory)
 		{
-			dropItem(item);
+			if(!item.getType().equals(ServerWorld.MONEY_TYPE) || getType().substring(0,2).equals(ServerWorld.NPC_TYPE))
+				dropItem(item);
+			else
+				money = item;
 		}
 
 		inventory.clear();
+		if(money != null)
+			inventory.add(money);
 	}
 
 	public ArrayList<ServerItem> getInventory()

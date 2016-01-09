@@ -249,6 +249,7 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			
 
 			for (int no = 0; no < 6; no++)
 			{
@@ -263,6 +264,9 @@ public class Images
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
+			images.add(new GameImage("MONEY.png",30,40));
+			images.add(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+			
 			images.add(new GameImage("BACKGROUND.png"));
 		}
 	}

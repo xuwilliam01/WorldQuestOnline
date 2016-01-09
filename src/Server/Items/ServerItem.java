@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject{
 
-	private final static int NUM_ITEMS = 2;
+	private final static int NUM_ITEMS = 3;
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000,new CoolDownTimer());
@@ -30,6 +30,9 @@ public abstract class ServerItem extends ServerObject{
 		case ServerWorld.LONG_SWORD:
 			setImage("SWORD.png");
 			break;
+		case ServerWorld.MONEY_TYPE:
+			setImage("MONEY.png");
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -46,6 +49,8 @@ public abstract class ServerItem extends ServerObject{
 			return new ServerHPPotion(x, y);
 		case 2:
 			return new ServerSword(x, y,'L',20);
+		case 3:
+			return new ServerMoney(x,y);
 		}
 		// This won't happen
 		return null;
@@ -59,6 +64,8 @@ public abstract class ServerItem extends ServerObject{
 			return new ServerHPPotion(x,y);					
 		case ServerWorld.LONG_SWORD:
 			return new ServerSword(x,y,'L',20);
+		case ServerWorld.MONEY_TYPE:
+			return new ServerMoney(x,y);
 		}
 		return null;
 
@@ -110,6 +117,11 @@ public abstract class ServerItem extends ServerObject{
 		return amount;
 	}
 
+	public void setAmount(int amount)
+	{
+		this.amount = amount;
+	}
+	
 	public void decreaseAmount()
 	{
 		amount--;

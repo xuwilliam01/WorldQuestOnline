@@ -43,6 +43,7 @@ public class ServerWorld
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
 	public final static String LONG_SWORD = SWORD_TYPE + "L";
+	public final static String MONEY_TYPE = STACK_TYPE + "M";
 	
 	public final static String ACCESSORY_TYPE = EQUIP_TYPE + "A";
 
