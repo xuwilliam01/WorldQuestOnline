@@ -33,10 +33,10 @@ public class ServerSlime extends ServerEnemy
 	private boolean landed;
 
 	public ServerSlime(double x, double y, int width, int height,
-			double gravity, String image, ServerWorld world)
+			double gravity, String image, ServerWorld world, int team)
 	{
 		super(x, y, width, height, gravity, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE,world);
+				ServerWorld.SLIME_TYPE,world, team);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing
@@ -53,6 +53,27 @@ public class ServerSlime extends ServerEnemy
 		landed = true;
 	}
 
+	public ServerSlime(double x, double y, int width, int height,
+			double gravity, String image, ServerWorld world)
+	{
+		super(x, y, width, height, gravity, image, SLIME_HP,
+				ServerWorld.SLIME_TYPE,world, 0);
+
+		// Set a random counter to start so not every slime does the exact same
+		// thing
+		setCounter((int) (Math.random() * 200));
+
+		// Set a random direction
+		if ((int) (Math.random() * 2) == 0)
+		{
+			direction *= -1;
+		}
+
+		landCounter = 0;
+		setImage("SLIME_6.png");
+		landed = true;
+	}
+	
 	/**
 	 * Move the slime according to its A.I.
 	 */

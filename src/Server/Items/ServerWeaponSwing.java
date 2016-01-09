@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import Imports.Images;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 
 public class ServerWeaponSwing extends ServerObject
 {
@@ -33,7 +34,7 @@ public class ServerWeaponSwing extends ServerObject
 	/**
 	 * The object that this animation will centre on
 	 */
-	private ServerObject wielder;
+	private ServerCreature wielder;
 
 	/**
 	 * The width of the initial image before rotation
@@ -49,7 +50,7 @@ public class ServerWeaponSwing extends ServerObject
 	 * The hitbox line for the weapon
 	 */
 	private Line2D.Double hitbox;
-
+	
 	/**
 	 * The id of the wielder
 	 */
@@ -77,7 +78,7 @@ public class ServerWeaponSwing extends ServerObject
 	 * @param image
 	 * @param timeInMilliseconds
 	 */
-	public ServerWeaponSwing(ServerObject wielder, String image, int angle,
+	public ServerWeaponSwing(ServerCreature wielder, String image, int angle,
 			int timeInFrames, int damage, double knockBack)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
@@ -130,6 +131,11 @@ public class ServerWeaponSwing extends ServerObject
 
 	}
 
+	public ServerCreature getWielder()
+	{
+		return wielder;
+	}
+	
 	/**
 	 * Update counter for the object
 	 */

@@ -10,6 +10,13 @@ import Server.Items.ServerItem;
 public abstract class ServerCreature extends ServerObject
 {
 	/**
+	 * Teams
+	 */
+	public final static int NEUTRAL = 0;
+	public final static int RED = 1;
+	public final static int BLUE = 1;
+	
+	/**
 	 * Maximum possible HP of the creature
 	 */
 	private int maxHP;
@@ -19,6 +26,11 @@ public abstract class ServerCreature extends ServerObject
 	 */
 	private int HP;
 
+	/**
+	 * Team of the player
+	 */
+	private int team;
+	
 	/**
 	 * Stores the inventory of the creature
 	 */
@@ -33,17 +45,17 @@ public abstract class ServerCreature extends ServerObject
 	 * The amount of resistance to a knockback by a weapon (normally based on size of the creature)
 	 */
 	private double knockBackResistance;
-	
+
 	/**
 	 * The accessory worn on the head
 	 */
 	private ServerAccessory head;
-	
+
 	/**
 	 * The accessory worn on the body
 	 */
 	private ServerAccessory body;
-	
+
 	/**
 	 * The horizontal direction the creature is facing
 	 */
@@ -75,6 +87,16 @@ public abstract class ServerCreature extends ServerObject
 		knockBackResistance = Math.sqrt((getWidth() * getHeight()))/16;
 	}
 
+	public void setTeam(int team)
+	{
+		this.team = team;
+	}
+	
+	public int getTeam()
+	{
+		return team;
+	}
+	
 	public int getMaxHP()
 	{
 		return maxHP;
@@ -158,7 +180,8 @@ public abstract class ServerCreature extends ServerObject
 
 	public void dropItem(ServerItem item)
 	{
-		item.setX(getX() + getWidth()/2);
+
+		item.setX(getX() + getWidth()/2);		
 		item.setY(getY() + getHeight()/2);
 		item.makeExist();
 		item.startCoolDown();
@@ -167,8 +190,14 @@ public abstract class ServerCreature extends ServerObject
 		item.setOnSurface(false);
 		item.setVSpeed(-Math.random()*15-5);
 
-		int direction = Math.random() < 0.5 ? -1 : 1;
-		item.setHSpeed(direction*(Math.random()*5 + 3));
+		if(HP <= 0)
+		{
+			int direction = Math.random() < 0.5 ? -1 : 1;
+			item.setHSpeed(direction*(Math.random()*5 + 3));
+		}
+		else
+			item.setHSpeed(Math.random()*5 + 3);
+
 	}
 
 	public void use(String item)
@@ -270,5 +299,5 @@ public abstract class ServerCreature extends ServerObject
 		this.direction = direction;
 	}
 
-	
+
 }

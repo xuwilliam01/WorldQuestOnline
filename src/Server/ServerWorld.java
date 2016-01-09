@@ -302,7 +302,7 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerProjectile) object)
-											.getOwnerID()
+											.getOwnerID() && ((ServerCreature)otherObject).getTeam() != ((ServerProjectile) object).getOwner().getTeam()
 											&& object.collidesWith(otherObject))
 									{
 										double knockBack = ((ServerProjectile) object)
@@ -321,7 +321,7 @@ public class ServerWorld
 									}
 									else if (otherObject.getType().contains(
 											NPC_TYPE)
-											&& object.collidesWith(otherObject))
+											&& object.collidesWith(otherObject) && ((ServerCreature)otherObject).getTeam() != ((ServerProjectile) object).getOwner().getTeam())
 									{
 										double knockBack = ((ServerProjectile) object)
 												.getKnockBack();
@@ -388,7 +388,7 @@ public class ServerWorld
 									if (otherObject.getType().equals(
 											PLAYER_TYPE)
 											&& otherObject.getID() != ((ServerWeaponSwing) object)
-											.getOwnerID()
+											.getOwnerID() && ((ServerPlayer)otherObject).getTeam() != ((ServerWeaponSwing) object).getWielder().getTeam()
 											&& ((ServerWeaponSwing) object)
 											.collidesWith(otherObject)
 											&& !((ServerWeaponSwing) object)
@@ -413,7 +413,7 @@ public class ServerWorld
 												.getDamage());
 									}
 									else if (otherObject.getType().contains(
-											NPC_TYPE)
+											NPC_TYPE) && ((ServerCreature)otherObject).getTeam() != ((ServerWeaponSwing) object).getWielder().getTeam()
 											&& ((ServerWeaponSwing) object)
 											.collidesWith(otherObject)
 											&& !((ServerWeaponSwing) object)

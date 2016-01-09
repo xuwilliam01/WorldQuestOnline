@@ -568,7 +568,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 
 				world.add(new ServerProjectile(x, y, -1, -1, 0,
-						getID(), "BULLET.png", speed, angle, inaccuracy,
+						this, "BULLET.png", speed, angle, inaccuracy,
 						ServerWorld.BULLET_TYPE));
 			}
 

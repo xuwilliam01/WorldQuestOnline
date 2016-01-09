@@ -58,6 +58,11 @@ public class ServerEngine implements Runnable, ActionListener
 	private int currentFPS = 60;
 
 	/**
+	 * The team of the last player added
+	 */
+	private int lastTeam = 1;
+	
+	/**
 	 * A counter updating every repaint and reseting at the expected FPS
 	 */
 	private int FPScounter = 0;
@@ -153,10 +158,16 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public void addPlayer(ServerPlayer newPlayer)
 	{
+		newPlayer.setTeam(nextTeam()%2 + 1);
 		listOfPlayers.add(newPlayer);
 		world.add(newPlayer);
 	}
 
+	public int nextTeam()
+	{
+		return ++lastTeam;
+	}
+	
 	public ServerWorld getWorld()
 	{
 		return world;

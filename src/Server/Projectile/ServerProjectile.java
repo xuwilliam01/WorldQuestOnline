@@ -2,6 +2,7 @@ package Server.Projectile;
 
 import Server.ServerFlyingObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 
 public class ServerProjectile extends ServerFlyingObject
 {
@@ -19,6 +20,11 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The damage this projectile does
 	 */
 	private int damage;
+	
+	/**
+	 * A reference to the owner
+	 */
+	private ServerCreature owner;
 	
 	/**
 	 * The object that shot the projectile
@@ -42,10 +48,11 @@ public class ServerProjectile extends ServerFlyingObject
 	 * @param speed
 	 * @param angle
 	 */
-	public ServerProjectile(double x, double y, int width, int height, double gravity, int ownerID, String image,double speed, double angle, double inaccuracy, String type)
+	public ServerProjectile(double x, double y, int width, int height, double gravity, ServerCreature owner, String image,double speed, double angle, double inaccuracy, String type)
 	{
 		super (x,y,width,height,gravity,image, speed, angle+ Math.random()*(inaccuracy) - inaccuracy/2,type);
-		this.ownerID = ownerID;
+		this.owner = owner;
+		ownerID = owner.getID();
 		
 		if (type.equals(ServerWorld.BULLET_TYPE))
 		{
@@ -117,6 +124,15 @@ public class ServerProjectile extends ServerFlyingObject
 		this.damage = damage;
 	}
 
+	public ServerCreature getOwner()
+	{
+		return owner;
+	}
+	
+	public void setOwner(ServerCreature owner)
+	{
+		this.owner = owner;
+	}
 	public int getOwnerID()
 	{
 		return ownerID;
