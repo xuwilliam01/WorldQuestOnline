@@ -114,17 +114,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Stores the equipped items
 	 */
 	private ServerItem[] equippedWeapons = new ServerItem[MAX_WEAPONS];
-	
+
 	/**
 	 * The skin colour for the base image of the player
 	 */
 	private String skinColour;
-	
+
 	/**
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
-
 
 	/**
 	 * Constructor for a player in the server
@@ -142,16 +141,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			int height, double gravity, String skinColour, Socket socket,
 			ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, "BASE_" + skinColour + "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+		super(x, y, width, height, gravity, "BASE_" + skinColour
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
 
 		this.skinColour = skinColour;
-		
+
 		weaponSelected = '0';
 		actionDelay = 15;
 
 		canPerformAction = true;
-		
+
 		// Set to -1 when not used
 		actionCounter = -1;
 
@@ -191,7 +191,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
 				+ "BASE_" + skinColour + "_RIGHT_0_0.png");
-		
+
 		baseImage = "BASE_" + skinColour + "_RIGHT";
 	}
 
@@ -225,7 +225,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * closest integer)
 	 */
 	public void update()
-	{	
+	{
+		if (actionCounter < 0)
+		{
+			baseImage = "BASE_" + skinColour + "_" + getDirection();
+		}
+
 		// Update the counter for weapon delay
 		if (actionCounter < actionDelay)
 		{
@@ -239,84 +244,84 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			actionCounter = -1;
 			canPerformAction = true;
 		}
-		
+
 		// Update the animation of the player and its accessories
 		// The row and column of the frame in the sprite sheet for the image
-		RowCol rowCol = new RowCol(0,0);
-		
+		RowCol rowCol = new RowCol(0, 0);
+
 		if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
 		{
-			rowCol = new RowCol(1,8);
+			rowCol = new RowCol(1, 8);
 		}
-		else if (getVSpeed()<0)
+		else if (getVSpeed() < 0)
 		{
-			rowCol = new RowCol(1,7);
+			rowCol = new RowCol(1, 7);
 		}
-		else if (getVSpeed()>0)
+		else if (getVSpeed() > 0)
 		{
-			rowCol = new RowCol(1,9);
+			rowCol = new RowCol(1, 9);
 		}
-		else if (actionCounter>=0)
+		else if (actionCounter >= 0)
 		{
 			if (actionCounter < 3)
 			{
-				rowCol = new RowCol(2,0);
+				rowCol = new RowCol(2, 0);
 			}
 			else if (actionCounter < 6)
 			{
-				rowCol = new RowCol(2,1);
+				rowCol = new RowCol(2, 1);
 			}
 			else if (actionCounter < 9)
 			{
-				rowCol = new RowCol(2,2);
+				rowCol = new RowCol(2, 2);
 			}
 			else if (actionCounter < 12)
 			{
-				rowCol = new RowCol(2,3);
+				rowCol = new RowCol(2, 3);
 			}
 		}
-		else if (getHSpeed()!=0 && isOnSurface())
+		else if (getHSpeed() != 0 && isOnSurface())
 		{
-			int checkFrame = (int)(world.getWorldCounter()%30);
+			int checkFrame = (int) (world.getWorldCounter() % 30);
 			if (checkFrame < 5)
 			{
-				rowCol = new RowCol(0,1);
+				rowCol = new RowCol(0, 1);
 			}
 			else if (checkFrame < 10)
 			{
-				rowCol = new RowCol(0,2);
+				rowCol = new RowCol(0, 2);
 			}
 			else if (checkFrame < 15)
 			{
-				rowCol = new RowCol(0,3);
+				rowCol = new RowCol(0, 3);
 			}
 			else if (checkFrame < 20)
 			{
-				rowCol = new RowCol(0,4);
+				rowCol = new RowCol(0, 4);
 			}
 			else if (checkFrame < 25)
 			{
-				rowCol = new RowCol(0,5);
+				rowCol = new RowCol(0, 5);
 			}
 			else
 			{
-				rowCol = new RowCol(0,6);
+				rowCol = new RowCol(0, 6);
 			}
 		}
-		
+
 		// Update the player's image
-		setImage(baseImage + "_" + rowCol.getRow() + "_" + rowCol.getColumn()+".png");
-		
-		
+		setImage(baseImage + "_" + rowCol.getRow() + "_" + rowCol.getColumn()
+				+ ".png");
+
 		// Update the accessories on the player
 		if (getHead() != null)
 		{
-			getHead().update(getDirection(),rowCol);
+			getHead().update(getDirection(), rowCol);
 		}
-		
+
 		if (getBody() != null)
 		{
-			getHead().update(getDirection(),rowCol);
+			getHead().update(getDirection(), rowCol);
 		}
 
 		// Update object locations
@@ -325,13 +330,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// Send the object's updated location if the player can see it
 			// within their screen
 			if (object.getX() < getX() + getWidth()
-			+ Client.Client.SCREEN_WIDTH
-			&& object.getX() + object.getWidth() > getX()
-			- Client.Client.SCREEN_WIDTH
-			&& object.getY() < getY() + getHeight()
-			+ Client.Client.SCREEN_HEIGHT
-			&& object.getY() + object.getHeight() > getY()
-			- Client.Client.SCREEN_HEIGHT)
+					+ Client.Client.SCREEN_WIDTH
+					&& object.getX() + object.getWidth() > getX()
+							- Client.Client.SCREEN_WIDTH
+					&& object.getY() < getY() + getHeight()
+							+ Client.Client.SCREEN_HEIGHT
+					&& object.getY() + object.getHeight() > getY()
+							- Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.exists())
 				{
@@ -443,7 +448,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					// If dropping from equipped
 					else if (command.charAt(2) == 'W')
 						drop(Integer.parseInt(command.substring(4)));
-					//If using a potion
+					// If using a potion
 					else if (command.charAt(2) == 'U')
 						super.use(command.substring(4));
 				}
@@ -456,7 +461,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					// Move to equipped weapons
 					else if (command.charAt(1) == 'W')
-					{		
+					{
 						equip(command.substring(3));
 					}
 				}
@@ -552,11 +557,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void dropInventory()
 	{
 		super.dropInventory();
-		for(int item = 0; item < equippedWeapons.length;item++)
-			if(equippedWeapons[item] != null)
+		for (int item = 0; item < equippedWeapons.length; item++)
+			if (equippedWeapons[item] != null)
 				dropItem(equippedWeapons[item]);
 		equippedWeapons = new ServerItem[MAX_WEAPONS];
 	}
+
 	/**
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
@@ -582,20 +588,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		else
 		{
 			// Knock back the creature based on the knockback force
-			//			if (Math.abs(knockBack) - getKnockBackResistance() > 0)
-			//			{
-			//				setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
-			//				if (knockBack > 0)
-			//				{
-			//					setHSpeed(getHSpeed()
-			//							+ (knockBack - getKnockBackResistance()) / 2);
-			//				}
-			//				else
-			//				{
-			//					setHSpeed(getHSpeed()
-			//							- (knockBack + getKnockBackResistance()) / 2);
-			//				}
-			//			}
+			// if (Math.abs(knockBack) - getKnockBackResistance() > 0)
+			// {
+			// setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
+			// if (knockBack > 0)
+			// {
+			// setHSpeed(getHSpeed()
+			// + (knockBack - getKnockBackResistance()) / 2);
+			// }
+			// else
+			// {
+			// setHSpeed(getHSpeed()
+			// - (knockBack + getKnockBackResistance()) / 2);
+			// }
+			// }
 		}
 	}
 
@@ -606,7 +612,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setDirection(String newDirection)
 	{
 		super.setDirection(newDirection);
-		baseImage = "BASE_" + skinColour + "_" + newDirection;
 	}
 
 	public boolean isDisconnected()
@@ -695,7 +700,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
-		queueMessage("I " + item.getImage() + " " + item.getType()+" "+item.getAmount());
+		queueMessage("I " + item.getImage() + " " + item.getType() + " "
+				+ item.getAmount());
 	}
 
 	public void equip(String itemType)
@@ -729,7 +735,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void unequip(int slot)
 	{
-		if(getInventory().size() <= MAX_INVENTORY)
+		if (getInventory().size() <= MAX_INVENTORY)
 		{
 			getInventory().add(equippedWeapons[slot]);
 			equippedWeapons[slot] = null;
@@ -756,13 +762,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.alive = alive;
 	}
-	
+
 	/**
 	 * Whether or not the player is currently performing an action
 	 * @return
 	 */
 	public boolean inAction()
 	{
-		return actionCounter >=0;
+		return actionCounter >= 0;
 	}
 }
