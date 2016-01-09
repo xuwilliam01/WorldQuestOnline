@@ -62,6 +62,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * right, -1 is left)
 	 */
 	private int movingDirection = 0;
+	
+	/**
+	 * Whether or not the player is crouching
+	 */
+	private boolean isCrouching = true;
 
 	/**
 	 * The speed at which the player moves
@@ -143,10 +148,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public ServerPlayer(double x, double y,
 			int width,
-			int height, double gravity, String skinColour, Socket socket,
+			int height, double relativeDrawX, double relativeDrawY,double gravity, String skinColour, Socket socket,
 			ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, "BASE_" + skinColour
+		super(x, y, width, height, relativeDrawX, relativeDrawY,gravity, "BASE_" + skinColour
 				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
 
@@ -365,16 +370,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (object.exists())
 				{
+					
+					
 					if(object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
+					{
 					queueMessage("O " + object.getID() + " "
-							+ ((int) (object.getX() + 0.5))
-							+ " " + ((int) (object.getY() + 0.5)) + " "
+							+ ((ServerCreature)object).getDrawX()
+							+ " " + ((ServerCreature)object).getDrawY() + " "
 							+ object.getImage()+" "+((ServerCreature)object).getTeam());
+					}
 					else
+					{
 						queueMessage("O " + object.getID() + " "
 								+ ((int) (object.getX() + 0.5))
 								+ " " + ((int) (object.getY() + 0.5)) + " "
 								+ object.getImage()+" "+ServerCreature.NEUTRAL);
+					}
 				}
 				else
 				{
@@ -445,18 +456,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && (isOnSurface() || !alive))
+				else if (command.equals("U") && isOnSurface() && alive)
 				{
 					setVSpeed(-verticalMovement);
 					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
 					setOnSurface(false);
-				}
-				else if (command.equals("!U") && !alive)
-				{
-					if (getVSpeed() < 0)
-					{
-						setVSpeed(0);
-					}
 				}
 				else if (command.equals("DR"))
 				{

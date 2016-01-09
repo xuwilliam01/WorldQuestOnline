@@ -9,7 +9,7 @@ public class ServerSlime extends ServerEnemy
 	 * The default HP of a slime
 	 */
 	public final static int SLIME_HP = 30;
-	
+
 	private int speed = 5;
 
 	/**
@@ -35,8 +35,8 @@ public class ServerSlime extends ServerEnemy
 	public ServerSlime(double x, double y, int width, int height,
 			double gravity, String image, ServerWorld world, int team)
 	{
-		super(x, y, width, height, gravity, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE,world, team);
+		super(x, y, width, height, 0, 0, gravity, image, SLIME_HP,
+				ServerWorld.SLIME_TYPE, world, team);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing
@@ -56,8 +56,8 @@ public class ServerSlime extends ServerEnemy
 	public ServerSlime(double x, double y, int width, int height,
 			double gravity, String image, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE,world, ServerCreature.NEUTRAL);
+		super(x, y, width, height,0,0, gravity, image, SLIME_HP,
+				ServerWorld.SLIME_TYPE, world, ServerCreature.NEUTRAL);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing
@@ -73,7 +73,7 @@ public class ServerSlime extends ServerEnemy
 		setImage("SLIME_6.png");
 		landed = true;
 	}
-	
+
 	/**
 	 * Move the slime according to its A.I.
 	 */
@@ -95,16 +95,17 @@ public class ServerSlime extends ServerEnemy
 			}
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
-				|| !quickInRange(getTarget(),getTargetRange()))
+				|| !quickInRange(getTarget(), getTargetRange()))
 		{
 			setTarget(null);
 		}
 		else
 		{
-			if ((getX()+getWidth()) - (getTarget().getX() + getTarget().getWidth()/2) < 0
+			if ((getX() + getWidth())
+					- (getTarget().getX() + getTarget().getWidth() / 2) < 0
 					&& !isOnSurface())
 				setHSpeed(speed);
-			else if (getX() - (getTarget().getX() + getTarget().getWidth()/2) > 0
+			else if (getX() - (getTarget().getX() + getTarget().getWidth() / 2) > 0
 					&& !isOnSurface())
 				setHSpeed(-speed);
 			else

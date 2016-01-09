@@ -60,24 +60,39 @@ public abstract class ServerCreature extends ServerObject
 	 * The horizontal direction the creature is facing
 	 */
 	private String direction;
-
+	
+	/**
+	 * The number of pixels relative to the hitbox to draw the creature (sent to the client)
+	 */
+	private double relativeDrawX;
+	
+	/**
+	 * The number of pixels relative to the hitbox to draw the creature (sent to the client)
+	 */
+	private double relativeDrawY;
+	
 	/**
 	 * Constructor for a creature
 	 * @param x
 	 * @param y
 	 * @param width
 	 * @param height
+	 * @param relativeDrawX
+	 * @param relativeDrawY
 	 * @param gravity
-	 * @param ID
 	 * @param image
 	 * @param type
 	 * @param maxHP
 	 * @param world
 	 */
-	public ServerCreature(double x, double y, int width, int height,
+	public ServerCreature(double x, double y, int width, int height, double relativeDrawX, double relativeDrawY,
 			double gravity, String image, String type, int maxHP, ServerWorld world)
 	{
 		super(x, y, width, height, gravity, image, type);
+		
+		this.relativeDrawX = relativeDrawX;
+		this.relativeDrawY = relativeDrawY;
+		
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
@@ -308,5 +323,21 @@ public abstract class ServerCreature extends ServerObject
 		this.direction = direction;
 	}
 
-
+	/**
+	 * Get the location to draw the image of the creature
+	 * @return
+	 */
+	public int getDrawX()
+	{
+		return (int)(getX()+relativeDrawX + 0.5);
+	}
+	
+	/**
+	 * Get the location to draw the image of the creature
+	 * @return
+	 */
+	public int getDrawY()
+	{
+		return (int)(getY()+relativeDrawY + 0.5);
+	}
 }

@@ -22,7 +22,7 @@ import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-MouseMotionListener
+		MouseMotionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1024;
@@ -93,7 +93,7 @@ MouseMotionListener
 	/**
 	 * Store the selected weapon
 	 */
-	private int weaponSelected= 0;
+	private int weaponSelected = 0;
 
 	/**
 	 * Constructor for the client
@@ -167,7 +167,7 @@ MouseMotionListener
 			String image = tokens[3];
 			int team = Integer.parseInt(tokens[4]);
 
-			player = new ClientObject(id, x, y, image,team);
+			player = new ClientObject(id, x, y, image, team);
 
 			world.add(player);
 		}
@@ -199,6 +199,7 @@ MouseMotionListener
 		output.println(message);
 		output.flush();
 	}
+
 	/**
 	 * Thread for running the actual game
 	 * 
@@ -233,14 +234,16 @@ MouseMotionListener
 							repaint();
 
 							// Update the FPS counter
-							if (FPScounter >= (1000.0/ServerEngine.UPDATE_RATE + 0.5))
+							if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
 							{
 								FPScounter = 0;
-								currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/ServerEngine.UPDATE_RATE)+0.5)); 
+								currentFPS = (int) ((1000.0
+										/ (System.currentTimeMillis() - startTime)
+										* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
 								startTime = System.currentTimeMillis();
 							}
 
-							FPScounter ++;
+							FPScounter++;
 						}
 						// If there is a player to be updated
 						else if (tokens[token].equals("O"))
@@ -253,7 +256,8 @@ MouseMotionListener
 								player.setY(Integer
 										.parseInt(tokens[++token]));
 								player.setImage(tokens[++token]);
-								player.setTeam(Integer.parseInt(tokens[++token]));
+								player.setTeam(Integer
+										.parseInt(tokens[++token]));
 							}
 							else if (world.contains(id))
 							{
@@ -265,7 +269,8 @@ MouseMotionListener
 									otherObject.setY(Integer
 											.parseInt(tokens[++token]));
 									otherObject.setImage(tokens[++token]);
-									otherObject.setTeam(Integer.parseInt(tokens[++token]));
+									otherObject.setTeam(Integer
+											.parseInt(tokens[++token]));
 								}
 								else
 								{
@@ -278,7 +283,8 @@ MouseMotionListener
 										id,
 										Integer.parseInt(tokens[++token]),
 										Integer.parseInt(tokens[++token]),
-										tokens[++token],Integer.parseInt(tokens[++token]));
+										tokens[++token],
+										Integer.parseInt(tokens[++token]));
 								world.add(otherObject);
 							}
 						}
@@ -296,13 +302,14 @@ MouseMotionListener
 						else if (tokens[token].equals("I"))
 						{
 							System.out.println("Received an item");
-							inventory.addItem(tokens[++token],tokens[++token],Integer.parseInt(tokens[++token]));
+							inventory.addItem(tokens[++token], tokens[++token],
+									Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
 					}
 
-					//long delay = System.currentTimeMillis()
-					//- startTime;
+					// long delay = System.currentTimeMillis()
+					// - startTime;
 
 					// if (delay < 15)
 					// {
@@ -368,17 +375,20 @@ MouseMotionListener
 		System.out.println("Map import has finished");
 	}
 
-
-	public int getWeaponSelected() {
+	public int getWeaponSelected()
+	{
 		return weaponSelected;
 	}
 
-	public void setWeaponSelected(int weaponSelected) {
-		if(inventory.getEquippedWeapons()[this.weaponSelected] != null)
-			inventory.getEquippedWeapons()[this.weaponSelected].setBorder(BorderFactory.createEmptyBorder());
-		
-		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory.createLineBorder(Color.white));
-		output.println("W"+weaponSelected);
+	public void setWeaponSelected(int weaponSelected)
+	{
+		if (inventory.getEquippedWeapons()[this.weaponSelected] != null)
+			inventory.getEquippedWeapons()[this.weaponSelected]
+					.setBorder(BorderFactory.createEmptyBorder());
+
+		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
+				.createLineBorder(Color.white));
+		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
@@ -416,14 +426,15 @@ MouseMotionListener
 	public void keyPressed(KeyEvent key)
 	{
 
-		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("R"))
+		if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
+				&& !currentMessage.equals("R"))
 		{
 			// R for right
 			currentMessage = "R";
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_A
+		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("L"))
 		{
 			// L for left
@@ -431,8 +442,9 @@ MouseMotionListener
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_W
-				|| key.getKeyCode() == KeyEvent.VK_SPACE
+		else if ((key.getKeyCode() == KeyEvent.VK_W
+				|| key.getKeyCode() == KeyEvent.VK_UP
+				|| key.getKeyCode() == KeyEvent.VK_SPACE)
 				&& !currentMessage.equals("U"))
 		{
 			// U for up
@@ -440,7 +452,7 @@ MouseMotionListener
 			output.println(currentMessage);
 			output.flush();
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_S
+		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
 				&& !currentMessage.equals("D"))
 		{
 			// D for down
@@ -456,23 +468,27 @@ MouseMotionListener
 			output.flush();
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_1
-				&& !currentMessage.equals("W0") && inventory.getEquippedWeapons()[0] != null)
+				&& !currentMessage.equals("W0")
+				&& inventory.getEquippedWeapons()[0] != null)
 		{
 			setWeaponSelected(0);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_2
-				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[1] != null)
+				&& !currentMessage.equals("W1")
+				&& inventory.getEquippedWeapons()[1] != null)
 		{
 			setWeaponSelected(1);
 		}
-		//Use these later
+		// Use these later
 		else if (key.getKeyCode() == KeyEvent.VK_3
-				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[2] != null)
+				&& !currentMessage.equals("W1")
+				&& inventory.getEquippedWeapons()[2] != null)
 		{
 			setWeaponSelected(2);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_4
-				&& !currentMessage.equals("W1") && inventory.getEquippedWeapons()[3] != null)
+				&& !currentMessage.equals("W1")
+				&& inventory.getEquippedWeapons()[3] != null)
 		{
 			setWeaponSelected(3);
 		}
@@ -482,22 +498,24 @@ MouseMotionListener
 	public void keyReleased(KeyEvent key)
 	{
 
-		if (key.getKeyCode() == KeyEvent.VK_D && !currentMessage.equals("!R"))
+		if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
+				&& !currentMessage.equals("!R"))
 		{
 			currentMessage = "!R";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_A
+		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("!L"))
 		{
 			currentMessage = "!L";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_W
-				|| key.getKeyCode() == KeyEvent.VK_SPACE
+		else if ((key.getKeyCode() == KeyEvent.VK_W
+				|| key.getKeyCode() == KeyEvent.VK_UP
+				|| key.getKeyCode() == KeyEvent.VK_SPACE)
 				&& !currentMessage.equals("!U"))
 		{
 			currentMessage = "!U";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_S
+		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
 				&& !currentMessage.equals("!D"))
 		{
 			currentMessage = "!D";
@@ -608,7 +626,5 @@ MouseMotionListener
 	{
 		this.currentFPS = currentFPS;
 	}
-
-
 
 }
