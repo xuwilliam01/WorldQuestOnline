@@ -33,7 +33,21 @@ public abstract class ServerCreature extends ServerObject
 	 * The amount of resistance to a knockback by a weapon (normally based on size of the creature)
 	 */
 	private double knockBackResistance;
-
+	
+	/**
+	 * The accessory worn on the head
+	 */
+	private ServerAccessory head;
+	
+	/**
+	 * The accessory worn on the body
+	 */
+	private ServerAccessory body;
+	
+	/**
+	 * The horizontal direction the creature is facing
+	 */
+	private String direction;
 
 	/**
 	 * Constructor for a creature
@@ -55,6 +69,7 @@ public abstract class ServerCreature extends ServerObject
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
+		direction = "RIGHT";
 
 		// Calculate the resistance to knockback based on weight
 		knockBackResistance = Math.sqrt((getWidth() * getHeight()))/16;
@@ -225,5 +240,35 @@ public abstract class ServerCreature extends ServerObject
 		this.world = world;
 	}
 
+	public ServerAccessory getHead()
+	{
+		return head;
+	}
 
+	public void setHead(ServerAccessory head)
+	{
+		this.head = head;
+	}
+
+	public ServerAccessory getBody()
+	{
+		return body;
+	}
+
+	public void setBody(ServerAccessory body)
+	{
+		this.body = body;
+	}
+
+	public String getDirection()
+	{
+		return direction;
+	}
+
+	public void setDirection(String direction)
+	{
+		this.direction = direction;
+	}
+
+	
 }

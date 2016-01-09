@@ -57,11 +57,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private boolean yUpdated;
 
 	/**
-	 * The horizontal direction the player is facing ('R' is right, 'L' is left)
-	 */
-	private char direction;
-
-	/**
 	 * The direction the player is trying to move (so player continues to move
 	 * in that direction even after collision, until release of the key) (1 is
 	 * right, -1 is left)
@@ -119,6 +114,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Stores the equipped items
 	 */
 	private ServerItem[] equippedWeapons = new ServerItem[MAX_WEAPONS];
+	
+	/**
+	 * The skin colour for the base image of the player
+	 */
+	private String skinColour;
+	
+	/**
+	 * The string for the base image not including the specific animation frame
+	 */
+	private String baseImage;
+
 
 	/**
 	 * Constructor for a player in the server
@@ -133,17 +139,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public ServerPlayer(double x, double y,
 			int width,
-			int height, double gravity, String image, Socket socket,
+			int height, double gravity, String skinColour, Socket socket,
 			ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, gravity, image, ServerWorld.PLAYER_TYPE,
+		super(x, y, width, height, gravity, "BASE_" + skinColour + "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world);
 
+		this.skinColour = skinColour;
+		
 		weaponSelected = '0';
-		actionDelay = 10;
+		actionDelay = 15;
 
 		canPerformAction = true;
-		actionCounter = 0;
+		
+		// Set to -1 when not used
+		actionCounter = -1;
 
 		// Import the socket, server, and world
 		this.socket = socket;
@@ -180,7 +190,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send the player's information
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
-				+ image);
+				+ "BASE_" + skinColour + "_RIGHT_0_0.png");
+		
+		baseImage = "BASE_" + skinColour + "_RIGHT";
 	}
 
 	/**
@@ -213,7 +225,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * closest integer)
 	 */
 	public void update()
-	{
+	{	
 		// Update the counter for weapon delay
 		if (actionCounter < actionDelay)
 		{
@@ -224,8 +236,87 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 		else
 		{
-			actionCounter = 0;
+			actionCounter = -1;
 			canPerformAction = true;
+		}
+		
+		// Update the animation of the player and its accessories
+		// The row and column of the frame in the sprite sheet for the image
+		RowCol rowCol = new RowCol(0,0);
+		
+		if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
+		{
+			rowCol = new RowCol(1,8);
+		}
+		else if (getVSpeed()<0)
+		{
+			rowCol = new RowCol(1,7);
+		}
+		else if (getVSpeed()>0)
+		{
+			rowCol = new RowCol(1,9);
+		}
+		else if (actionCounter>=0)
+		{
+			if (actionCounter < 3)
+			{
+				rowCol = new RowCol(2,0);
+			}
+			else if (actionCounter < 6)
+			{
+				rowCol = new RowCol(2,1);
+			}
+			else if (actionCounter < 9)
+			{
+				rowCol = new RowCol(2,2);
+			}
+			else if (actionCounter < 12)
+			{
+				rowCol = new RowCol(2,3);
+			}
+		}
+		else if (getHSpeed()!=0 && isOnSurface())
+		{
+			int checkFrame = (int)(world.getWorldCounter()%30);
+			if (checkFrame < 5)
+			{
+				rowCol = new RowCol(0,1);
+			}
+			else if (checkFrame < 10)
+			{
+				rowCol = new RowCol(0,2);
+			}
+			else if (checkFrame < 15)
+			{
+				rowCol = new RowCol(0,3);
+			}
+			else if (checkFrame < 20)
+			{
+				rowCol = new RowCol(0,4);
+			}
+			else if (checkFrame < 25)
+			{
+				rowCol = new RowCol(0,5);
+			}
+			else
+			{
+				rowCol = new RowCol(0,6);
+			}
+		}
+		
+		// Update the player's image
+		setImage(baseImage + "_" + rowCol.getRow() + "_" + rowCol.getColumn()+".png");
+		
+		
+		// Update the accessories on the player
+		if (getHead() != null)
+		{
+			getHead().update(getDirection(),rowCol);
+		}
+		
+		if (getBody() != null)
+		{
+			getHead().update(getDirection(),rowCol);
 		}
 
 		// Update object locations
@@ -285,7 +376,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				String command = input.readLine();
 
-				if (command.charAt(0) == 'A')
+				if (command.charAt(0) == 'A' && isOnSurface())
 				{
 					String[] tokens = command.split(" ");
 					performAction(Integer.parseInt(tokens[1]),
@@ -331,24 +422,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setVSpeed(0);
 					}
 				}
-				else if (command.equals("D") && !alive)
-				{
-					setVSpeed(verticalMovement);
-				}
-				else if (command.equals("!D") && !alive)
-				{
-					if (getVSpeed() > 0)
-					{
-						setVSpeed(0);
-					}
-				}
 				else if (command.equals("DR"))
 				{
-					setDirection('R');
+					setDirection("RIGHT");
 				}
 				else if (command.equals("DL"))
 				{
-					setDirection('L');
+					setDirection("LEFT");
 				}
 				else if (command.equals("P"))
 				{
@@ -523,17 +603,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
 	 */
-	public void setDirection(char newDirection)
+	public void setDirection(String newDirection)
 	{
-		direction = newDirection;
-		if (direction == 'R')
-		{
-			setImage(getBaseImage() + "_RIGHT" + Images.IMAGE_FORMAT);
-		}
-		else if (direction == 'L')
-		{
-			setImage(getBaseImage() + "_LEFT" + Images.IMAGE_FORMAT);
-		}
+		super.setDirection(newDirection);
+		baseImage = "BASE_" + skinColour + "_" + newDirection;
 	}
 
 	public boolean isDisconnected()
@@ -682,5 +755,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setAlive(boolean alive)
 	{
 		this.alive = alive;
+	}
+	
+	/**
+	 * Whether or not the player is currently performing an action
+	 * @return
+	 */
+	public boolean inAction()
+	{
+		return actionCounter >=0;
 	}
 }

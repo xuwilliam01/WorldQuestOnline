@@ -17,8 +17,7 @@ public class Server implements Runnable
 	private ServerEngine engine;
 	private int port;
 
-	private String[] playerImages = { "GIRL_RIGHT.png", "CYCLOPS_RIGHT.png",
-			"KNIGHT_RIGHT.png" };
+	private String[] playerColours = { "DARK", "LIGHT","TAN"};
 
 	int noOfPlayers = 0;
 
@@ -66,9 +65,9 @@ public class Server implements Runnable
 				int x = (int) (Math.random() * 1000 + 50);
 				int y = ServerPlayer.PLAYER_Y;
 
-				int characterSelection = (int) (Math.random() * 3);
+				int characterSelection = (int) (Math.random() * playerColours.length);
 				ServerPlayer newPlayer = new ServerPlayer(x, y, -1, -1,
-						ServerWorld.GRAVITY, playerImages[characterSelection], newClient, engine, engine.getWorld());
+						ServerWorld.GRAVITY, playerColours[characterSelection], newClient, engine, engine.getWorld());
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
