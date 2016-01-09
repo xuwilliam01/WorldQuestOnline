@@ -11,5 +11,15 @@ public class ServerCastle extends ServerCreature{
 		super(x, y,-1,-1, ServerWorld.GRAVITY, "CASTLE.png",ServerWorld.CASTLE_TYPE,CASTLE_HP, world);
 		setTeam(team);
 	}
+	
+	public void inflictDamage(int amount, double knockBack)
+	{
+		setHP(getHP()-amount);
+		if (getHP() <= 0)
+		{
+			destroy();
+			//End the game
+		}
+	}
 
 }

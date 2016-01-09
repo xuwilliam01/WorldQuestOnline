@@ -57,15 +57,15 @@ public abstract class ServerItem extends ServerObject{
 
 	}
 
-	public static ServerItem newItem(double x, double y, String type)
+	public static ServerItem copy(ServerItem item)
 	{
-		switch (type) {		
+		switch (item.getType()) {		
 		case ServerWorld.HP_50:
-			return new ServerHPPotion(x,y);					
+			return new ServerHPPotion(item.getX(),item.getY());					
 		case ServerWorld.LONG_SWORD:
-			return new ServerSword(x,y,'L',20);
+			return new ServerSword(item.getX(),item.getY(),'L',20);
 		case ServerWorld.MONEY_TYPE:
-			return new ServerMoney(x,y);
+			return new ServerMoney(item.getX(),item.getY());
 		}
 		return null;
 

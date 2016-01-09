@@ -130,6 +130,7 @@ public abstract class ServerCreature extends ServerObject
 		}
 		else
 		{
+			//Override inflict damage in each subclass (except for npc and player because those have knockback) and change what happens when they get hit
 			//Only for NPC and PLAYER
 			// Knock back the creature based on the knockback force
 			//			if (Math.abs(knockBack) - knockBackResistance > 0)
@@ -145,7 +146,6 @@ public abstract class ServerCreature extends ServerObject
 			//				}
 			//			}
 			
-			//If a castle dies, end the game
 		}
 	}
 
@@ -244,7 +244,7 @@ public abstract class ServerCreature extends ServerObject
 			{
 				toRemove = sItem;
 				if(toRemove.getAmount() > 1)
-					dropItem(ServerItem.newItem(sItem.getX(), sItem.getY(), sItem.getType()));
+					dropItem(ServerItem.copy(sItem));
 				else
 					dropItem(sItem);
 				break;
