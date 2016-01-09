@@ -100,6 +100,11 @@ public abstract class ServerItem extends ServerObject{
 		amount++;
 	}
 
+	public void increaseAmount(int value)
+	{
+		amount+=value;
+	}
+	
 	public int getAmount()
 	{
 		return amount;

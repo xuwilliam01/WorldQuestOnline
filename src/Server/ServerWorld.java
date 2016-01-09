@@ -376,7 +376,7 @@ public class ServerWorld
 								{
 									if(object.getType().equals(otherObject.getType()) && object.getID() != otherObject.getID())
 									{
-										((ServerItem)object).increaseAmount();
+										((ServerItem)object).increaseAmount(((ServerItem)otherObject).getAmount());
 										otherObject.destroy();
 									}
 								}
