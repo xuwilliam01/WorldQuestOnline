@@ -130,6 +130,7 @@ public abstract class ServerCreature extends ServerObject
 		}
 		else
 		{
+			//Only for NPC and PLAYER
 			// Knock back the creature based on the knockback force
 			//			if (Math.abs(knockBack) - knockBackResistance > 0)
 			//			{
@@ -143,6 +144,8 @@ public abstract class ServerCreature extends ServerObject
 			//					setHSpeed(getHSpeed()-(knockBack+knockBackResistance)/2);
 			//				}
 			//			}
+			
+			//If a castle dies, end the game
 		}
 	}
 

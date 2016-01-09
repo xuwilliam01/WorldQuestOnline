@@ -259,6 +259,7 @@ public class Images
 
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("CHEST.png", 60, 60));
+			images.add(new GameImage("CASTLE.png", 200, 400));
 			images.add(new GameImage("BULLET.png"));
 
 			images.add(new GameImage("HP_POTION.png", 15, 15));
