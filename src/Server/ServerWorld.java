@@ -43,6 +43,8 @@ public class ServerWorld
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
 	public final static String LONG_SWORD = SWORD_TYPE + "L";
+	
+	public final static String ACCESSORY_TYPE = EQUIP_TYPE + "A";
 
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
@@ -667,7 +669,11 @@ public class ServerWorld
 
 				if (moveHorizontal)
 				{
+					// Don't let the player move when trying to swing a sword
+					if (!(object.getType().contains(PLAYER_TYPE)) || !((ServerPlayer)object).inAction())
+					{
 					object.setX(object.getX() + object.getHSpeed());
+					}
 				}
 				if (moveVertical)
 				{

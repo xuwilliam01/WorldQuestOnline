@@ -68,27 +68,61 @@ public class Images
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
 
-				image = ImageIO.read(new File(
-						"SWORD_0.png"));
-				
-				
+				// Add all the pics from the player sprite sheets
+				String[] playerSheets = {"BASE_DARK", "BASE_LIGHT",
+						"BASE_TAN", "HAIR_0_BEIGE", "HAIR_1_BEIGE",
+						"HAIR_0_BLACK", "HAIR_1_BLACK", "HAIR_0_BLOND",
+						"HAIR_0_BLOND","HAIR_0_GREY","HAIR_1_GREY", "OUTFIT_ARMOR", "OUTFIT_NINJA_BLUE",
+						"OUTFIT_NINJA_GREY", "OUTFIT_NINJA_RED" };
+				for (int no = 0; no < playerSheets.length; no++)
+				{
+					image = ImageIO.read(new File(playerSheets[no] + ".png"));
+					BufferedImage[][] imageTiles = new BufferedImage[6][image.getWidth() / 32];
+					for (int row = 0; row < imageTiles.length; row++)
+					{
+						for (int column = 0; column < imageTiles[0].length; column++)
+						{
+							BufferedImage currentImage = image.getSubimage(column * 32, row * 64, 32, 64);
+							
+							// Add a right version of this image
+							images.add(new GameImage(playerSheets[no] + "_RIGHT_" + row + "_" + column + ".png",currentImage,64,128));
+							
+							AffineTransform tx;
+							tx = AffineTransform.getScaleInstance(-1, 1);
+							tx.translate(-currentImage.getWidth(null), 0);
+							AffineTransformOp op = new AffineTransformOp(tx,
+									AffineTransformOp.TYPE_BILINEAR);
+							
+							// Add a left version of this image
+							images.add(new GameImage(playerSheets[no] + "_LEFT_" + row + "_" + column + ".png",op.filter(currentImage, null).getSubimage(0, 0,
+											currentImage.getWidth(), currentImage.getHeight()),64,128));
+						}
+					}
+				}
+
 				image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
-				BufferedImage[][]imageTiles = new BufferedImage[image.getHeight()/32][image.getWidth()/32];
+				BufferedImage[][] imageTiles = new BufferedImage[image
+						.getHeight() / 32][image.getWidth() / 32];
 				for (int row = 0; row < imageTiles.length; row++)
 				{
 					for (int column = 0; column < imageTiles[0].length; column++)
 					{
-						imageTiles[row][column]=image.getSubimage(column * 32, row * 32, 32, 32);
+						imageTiles[row][column] = image.getSubimage(
+								column * 32, row * 32, 32, 32);
 					}
 				}
-				
-				
+
+				image = ImageIO.read(new File(
+						"SWORD_0.png"));
+
+				ImageIO.write(imageTiles[0][14], "PNG", new File(
+						"DIAMOND_SWORD.png"));
 
 				images.add(new GameImage("SWORD.png",
 						70, 30));
 				images.add(new GameImage("SWORD_ICON.png",
 						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-				
+
 				image = ImageIO.read(new File(
 						"SWORD_0.png"));
 				double locationX = image.getWidth() / 2;
@@ -101,12 +135,12 @@ public class Images
 
 					int actualAngle = angle;
 					// Change it to the actual angle not angle delta
-//					actualAngle -= 45;
-//					if (actualAngle <= -180)
-//					{
-//						actualAngle = 180 + (actualAngle + 180);
-//					}
-//					
+					// actualAngle -= 45;
+					// if (actualAngle <= -180)
+					// {
+					// actualAngle = 180 + (actualAngle + 180);
+					// }
+					//
 					if (!(actualAngle >= -90 && actualAngle < 90))
 					{
 						tx = AffineTransform.getScaleInstance(-1, 1);
@@ -120,8 +154,9 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					BufferedImage newImage = op
-							.filter(image, null).getSubimage(0, 0,image.getWidth(), image.getHeight());
-					
+							.filter(image, null).getSubimage(0, 0,
+									image.getWidth(), image.getHeight());
+
 					images.add(new GameImage("SWORD_" + (actualAngle) + ".png",
 							newImage));
 				}
