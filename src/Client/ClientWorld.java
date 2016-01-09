@@ -1,6 +1,7 @@
 package Client;
 
-import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics; 
 import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.ConcurrentModificationException;
 
 import Imports.ImageReferencePair;
 import Imports.Images;
+import Server.Creatures.ServerCreature;
 
 public class ClientWorld
 {
@@ -245,6 +247,16 @@ public class ClientWorld
 				}
 				else
 				{
+					if(object.getTeam() == ServerCreature.RED)
+					{
+						graphics.setColor(Color.red);
+						graphics.fillRect(x+image.getWidth(null)/2 - 5, y-15,  10, 10);
+					}
+					else if(object.getTeam() == ServerCreature.BLUE)
+					{
+						graphics.setColor(Color.blue);
+						graphics.fillRect(x+image.getWidth(null)/2 - 5, y-15,  10, 10);
+					}
 					graphics.drawImage(image, x, y,
 							null);
 				}

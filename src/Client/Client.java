@@ -165,8 +165,9 @@ MouseMotionListener
 			int x = Integer.parseInt(tokens[1]);
 			int y = Integer.parseInt(tokens[2]);
 			String image = tokens[3];
+			int team = Integer.parseInt(tokens[4]);
 
-			player = new ClientObject(id, x, y, image);
+			player = new ClientObject(id, x, y, image,team);
 
 			world.add(player);
 		}
@@ -252,6 +253,7 @@ MouseMotionListener
 								player.setY(Integer
 										.parseInt(tokens[++token]));
 								player.setImage(tokens[++token]);
+								player.setTeam(Integer.parseInt(tokens[++token]));
 							}
 							else if (world.contains(id))
 							{
@@ -263,6 +265,7 @@ MouseMotionListener
 									otherObject.setY(Integer
 											.parseInt(tokens[++token]));
 									otherObject.setImage(tokens[++token]);
+									otherObject.setTeam(Integer.parseInt(tokens[++token]));
 								}
 								else
 								{
@@ -275,7 +278,7 @@ MouseMotionListener
 										id,
 										Integer.parseInt(tokens[++token]),
 										Integer.parseInt(tokens[++token]),
-										tokens[++token]);
+										tokens[++token],Integer.parseInt(tokens[++token]));
 								world.add(otherObject);
 							}
 						}

@@ -57,7 +57,7 @@ public class ServerSlime extends ServerEnemy
 			double gravity, String image, ServerWorld world)
 	{
 		super(x, y, width, height, gravity, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE,world, 0);
+				ServerWorld.SLIME_TYPE,world, ServerCreature.NEUTRAL);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing

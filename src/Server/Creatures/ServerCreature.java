@@ -14,7 +14,7 @@ public abstract class ServerCreature extends ServerObject
 	 */
 	public final static int NEUTRAL = 0;
 	public final static int RED = 1;
-	public final static int BLUE = 1;
+	public final static int BLUE = 2;
 	
 	/**
 	 * Maximum possible HP of the creature

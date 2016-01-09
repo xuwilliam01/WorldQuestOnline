@@ -195,7 +195,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send the player's information
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
-				+ "BASE_" + skinColour + "_RIGHT_0_0.png");
+				+ "BASE_" + skinColour + "_RIGHT_0_0.png "+getTeam());
 
 		baseImage = "BASE_" + skinColour + "_RIGHT";
 	}
@@ -365,10 +365,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (object.exists())
 				{
+					if(object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 					queueMessage("O " + object.getID() + " "
 							+ ((int) (object.getX() + 0.5))
 							+ " " + ((int) (object.getY() + 0.5)) + " "
-							+ object.getImage());
+							+ object.getImage()+" "+((ServerCreature)object).getTeam());
+					else
+						queueMessage("O " + object.getID() + " "
+								+ ((int) (object.getX() + 0.5))
+								+ " " + ((int) (object.getY() + 0.5)) + " "
+								+ object.getImage()+" "+ServerCreature.NEUTRAL);
 				}
 				else
 				{

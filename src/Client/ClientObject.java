@@ -12,6 +12,12 @@ public class ClientObject implements Comparable<ClientObject>
 {
 
 	/**
+	 * The team of the object
+	 * Objects with neutral teams won't have number displayed above them
+	 */
+	private int team;
+	
+	/**
 	 * The x coordinate of the object (left)
 	 */
 	private int x;
@@ -49,8 +55,9 @@ public class ClientObject implements Comparable<ClientObject>
 	/**
 	 * Constructor
 	 */
-	public ClientObject(int id, int x, int y, String image)
+	public ClientObject(int id, int x, int y, String image, int team)
 	{
+		this.team = team;
 		this.x = x;
 		this.y = y;
 		this.id = id;
@@ -60,6 +67,15 @@ public class ClientObject implements Comparable<ClientObject>
 		width = this.image.getWidth(null);
 	}
 
+	public int getTeam()
+	{
+		return team;
+	}
+	
+	public void setTeam(int team)
+	{
+		this.team = team;
+	}
 	public Image getImage()
 	{
 		return image;
