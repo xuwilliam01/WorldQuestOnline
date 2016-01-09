@@ -71,6 +71,17 @@ public class ServerWeaponSwing extends ServerObject
 	 * The ID's of the objects that have already collided with this weapon swing
 	 */
 	private ArrayList<Integer> objectsCollided;
+	
+	/**
+	 * Number of pixels difference from the original x position
+	 */
+	private double relativeX;
+	
+	
+	/**
+	 * Number of pixels difference from the original y position
+	 */
+	private double relativeY;
 
 	/**
 	 * Constructor for the item swing animation
@@ -78,11 +89,15 @@ public class ServerWeaponSwing extends ServerObject
 	 * @param image
 	 * @param timeInMilliseconds
 	 */
-	public ServerWeaponSwing(ServerCreature wielder, String image, int angle,
+	public ServerWeaponSwing(ServerCreature wielder, double relativeX, double relativeY, String image, int angle,
 			int timeInFrames, int damage, double knockBack)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
 				ServerWorld.WEAPON_SWING_TYPE);
+		
+		this.relativeX = relativeX;
+		this.relativeY = relativeY;
+		
 		this.wielder = wielder;
 		counter = 0;
 		this.timeInFrames = timeInFrames;
@@ -98,20 +113,20 @@ public class ServerWeaponSwing extends ServerObject
 
 		if (angle > -90 && angle <= 90)
 		{
-			currentAngle = -120;
+			currentAngle = -135;
 			isClockwise = true;
 		}
 		else
 		{
-			currentAngle = -60;
+			currentAngle = -45;
 			isClockwise = false;
 		}
 
 		width = Images.getGameImage(image).getWidth();
 		height = Images.getGameImage(image).getHeight();
 
-		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
-		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10);
+		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10 + relativeY);
 
 		hitbox = new Line2D.Double(
 				getX() + width
@@ -141,11 +156,11 @@ public class ServerWeaponSwing extends ServerObject
 	 */
 	public void update()
 	{
-		if (counter >= (int) (timeInFrames / 11.0 + 1) * 11)
+		if (counter >= (int) (timeInFrames / 13.0 + 1) * 13)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 11.0 + 1) == 0 && counter != 0)
+		else if (counter % (int) (timeInFrames / 13.0 + 1) == 0 && counter != 0)
 		{
 			if (isClockwise)
 			{
@@ -166,8 +181,8 @@ public class ServerWeaponSwing extends ServerObject
 			setImage(getBaseImage() + "_" + currentAngle + ".png");
 		}
 
-		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2);
-		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10);
+		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
+		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + relativeY);
 		hitbox.setLine(
 				getX()
 						+ width

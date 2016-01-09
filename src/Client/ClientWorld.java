@@ -185,45 +185,6 @@ public class ClientWorld
 		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
 
-		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - playerHeight) / tileSize);
-		if (startRow < 0)
-		{
-			startRow = 0;
-		}
-		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + playerHeight) / tileSize);
-		if (endRow >= grid.length)
-		{
-			endRow = grid.length - 1;
-		}
-		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - playerWidth) / tileSize);
-		if (startColumn < 0)
-		{
-			startColumn = 0;
-		}
-		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + playerWidth) / tileSize);
-		if (endColumn >= grid[0].length)
-		{
-			endColumn = grid[0].length - 1;
-		}
-		for (int row = startRow; row <= endRow; row++)
-		{
-			for (int column = startColumn; column <= endColumn; column++)
-			{
-
-				if (grid[row][column] != '_' && grid[row][column] != ' ')
-				{
-					graphics.drawImage(
-							ImageReferencePair.getImages()[(int) (grid[row][column])]
-									.getImage(), centreX
-									+ column * tileSize - playerX, centreY
-									+ row
-									* tileSize - playerY,
-							null);
-				}
-			}
-
-		}
 
 		// Create a list of objects to remove after leaving the screen
 		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
@@ -271,6 +232,46 @@ public class ClientWorld
 		{
 			System.out
 					.println("Tried to access the object list while it was being used");
+		}
+		
+		// Draw tiles (draw based on player's position later)
+		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - playerHeight) / tileSize);
+		if (startRow < 0)
+		{
+			startRow = 0;
+		}
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + playerHeight) / tileSize);
+		if (endRow >= grid.length)
+		{
+			endRow = grid.length - 1;
+		}
+		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - playerWidth) / tileSize);
+		if (startColumn < 0)
+		{
+			startColumn = 0;
+		}
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + playerWidth) / tileSize);
+		if (endColumn >= grid[0].length)
+		{
+			endColumn = grid[0].length - 1;
+		}
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
+			{
+
+				if (grid[row][column] != '_' && grid[row][column] != ' ')
+				{
+					graphics.drawImage(
+							ImageReferencePair.getImages()[(int) (grid[row][column])]
+									.getImage(), centreX
+									+ column * tileSize - playerX, centreY
+									+ row
+									* tileSize - playerY,
+							null);
+				}
+			}
+
 		}
 	}
 

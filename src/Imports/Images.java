@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,6 +38,48 @@ public class Images
 	 */
 	public static BinaryTree<GameImage> images = null;
 
+	/**
+	 * Modify images using java and write them to the file
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[]args) throws IOException
+	{
+		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_4.png"));
+		BufferedImage[][] imageTiles = new BufferedImage[image
+				.getHeight() / 32][image.getWidth() / 32];
+		for (int row = 0; row < imageTiles.length; row++)
+		{
+			for (int column = 0; column < imageTiles[0].length; column++)
+			{
+				imageTiles[row][column] = image.getSubimage(
+						column * 32, row * 32, 32, 32);
+			}
+		}
+
+		// Rotate the images needed and write to file
+		image = imageTiles[3][15];
+		ImageIO.write(image, "PNG", new File(
+				"HAGOLD_ICON.png"));
+		int locationX = image.getWidth();
+		int locationY = image.getHeight();
+		double rotationRequired = Math.toRadians(45);
+		AffineTransform tx;
+		tx = AffineTransform.getRotateInstance(
+				rotationRequired, locationX, locationY);
+		tx.translate(0, 16);
+		
+		AffineTransformOp op = new AffineTransformOp(tx,
+				AffineTransformOp.TYPE_BILINEAR);
+		ImageIO.write(op.filter(image,null), "PNG", new File(
+				"HAGOLD.png"));
+		
+		
+		
+	}
+	
+	
+	
 	/**
 	 * Import the images from the folder
 	 * @throws IOException
@@ -146,32 +189,14 @@ public class Images
 									currentImage.getWidth(), currentImage.getHeight()),104,128));
 					
 				}
-
-				image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
-				BufferedImage[][] imageTiles = new BufferedImage[image
-						.getHeight() / 32][image.getWidth() / 32];
-				for (int row = 0; row < imageTiles.length; row++)
-				{
-					for (int column = 0; column < imageTiles[0].length; column++)
-					{
-						imageTiles[row][column] = image.getSubimage(
-								column * 32, row * 32, 32, 32);
-					}
-				}
-
-				image = ImageIO.read(new File(
-						"SWORD_0.png"));
-
-				ImageIO.write(imageTiles[0][14], "PNG", new File(
-						"DIAMOND_SWORD.png"));
-
+				
 				images.add(new GameImage("SWORD.png",
 						70, 30));
 				images.add(new GameImage("SWORD_ICON.png",
 						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 				image = ImageIO.read(new File(
-						"SWORD_0.png"));
+						"HAGOLD.png"));
 				double locationX = image.getWidth() / 2;
 				double locationY = image.getHeight() / 2;
 
@@ -181,18 +206,18 @@ public class Images
 					AffineTransform tx;
 
 					int actualAngle = angle;
-					// Change it to the actual angle not angle delta
-					// actualAngle -= 45;
-					// if (actualAngle <= -180)
-					// {
-					// actualAngle = 180 + (actualAngle + 180);
-					// }
-					//
-					if (!(actualAngle >= -90 && actualAngle < 90))
-					{
-						tx = AffineTransform.getScaleInstance(-1, 1);
-						tx.translate(-image.getWidth(null), 0);
-					}
+					 
+//					 actualAngle -= 45;
+//					 if (actualAngle <= -180)
+//					 {
+//					 actualAngle = 180 + (actualAngle + 180);
+//					 }
+//					
+//					if (!(actualAngle >= -90 && actualAngle < 90))
+//					{
+//						tx = AffineTransform.getScaleInstance(-1, 1);
+//						tx.translate(-image.getWidth(null), 0);
+//					}
 
 					tx = AffineTransform.getRotateInstance(
 							rotationRequired, locationX, locationY);
@@ -204,7 +229,7 @@ public class Images
 							.filter(image, null).getSubimage(0, 0,
 									image.getWidth(), image.getHeight());
 
-					images.add(new GameImage("SWORD_" + (actualAngle) + ".png",
+					images.add(new GameImage("HAGOLD_" + (actualAngle) + ".png",
 							newImage));
 				}
 
@@ -269,7 +294,7 @@ public class Images
 			images.add(new GameImage("MONEY.png",30,40));
 			images.add(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 			
-			images.add(new GameImage("BACKGROUND.png"));
+			images.add(new GameImage("BACKGROUND.png",Client.Client.SCREEN_WIDTH,Client.Client.SCREEN_HEIGHT));
 		}
 	}
 

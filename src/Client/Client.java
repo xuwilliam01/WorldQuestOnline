@@ -25,8 +25,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		MouseMotionListener
 {
 	// Width and height of the screen
-	public final static int SCREEN_WIDTH = 1024;
-	public final static int SCREEN_HEIGHT = 768;
+	public final static int SCREEN_WIDTH = 1600;
+	public final static int SCREEN_HEIGHT = 900;
 
 	private Socket mySocket;
 	private PrintWriter output;

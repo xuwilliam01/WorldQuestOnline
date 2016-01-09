@@ -551,7 +551,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			if (weaponSelected == '0')
 			{
-				world.add(new ServerWeaponSwing(this, "SWORD_0.png",
+				world.add(new ServerWeaponSwing(this, 0,-25, "HAGOLD_0.png",
 						(int) (Math.toDegrees(angle) + 0.5), 7, 10, 10));
 			}
 			else if (weaponSelected == '1')
