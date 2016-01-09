@@ -37,7 +37,8 @@ public class ServerWorld
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
-	public final static String POTION_TYPE = ITEM_TYPE + "P";
+	public final static String STACK_TYPE = ITEM_TYPE + "S";
+	public final static String POTION_TYPE = STACK_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
@@ -356,7 +357,7 @@ public class ServerWorld
 											item.setSource(player);
 											item.destroy();
 										}
-										else if(player.getInventory().size() == ServerPlayer.MAX_INVENTORY &&item.getType().charAt(1) == POTION_TYPE.charAt(1))
+										else if(player.getInventory().size() == ServerPlayer.MAX_INVENTORY &&item.getType().charAt(1) == STACK_TYPE.charAt(1))
 										{
 											//Only if the potion already exists, add it
 											for(ServerItem sItem : player.getInventory())
@@ -371,11 +372,11 @@ public class ServerWorld
 									}
 								}
 								//If stackable items collide
-								else if(object.collidesWith(otherObject) && object.getType().charAt(0) == ITEM_TYPE && otherObject.getType().charAt(0) == ITEM_TYPE && object.getType().charAt(1) == POTION_TYPE.charAt(1) && otherObject.getType().charAt(1) == POTION_TYPE.charAt(1))
+								else if(object.collidesWith(otherObject) && object.getType().charAt(0) == ITEM_TYPE && otherObject.getType().charAt(0) == ITEM_TYPE && object.getType().charAt(1) == STACK_TYPE.charAt(1) && otherObject.getType().charAt(1) == STACK_TYPE.charAt(1))
 								{
 									if(object.getType().equals(otherObject.getType()) && object.getID() != otherObject.getID())
 									{
-										((ServerItem)object).increaseAmount();
+										((ServerItem)object).increaseAmount(((ServerItem)otherObject).getAmount());
 										otherObject.destroy();
 									}
 								}

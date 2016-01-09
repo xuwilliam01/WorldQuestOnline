@@ -144,7 +144,7 @@ public abstract class ServerCreature extends ServerObject
 
 	public void addItem(ServerItem item)
 	{
-		if(item.getType().charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+		if(item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
 			for(ServerItem sItem : inventory)
 			{
 				if(item.getType().equals(sItem.getType()))
