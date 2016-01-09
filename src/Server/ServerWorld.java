@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
@@ -34,6 +35,7 @@ public class ServerWorld
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
+	public final static String CHEST_TYPE = CREATURE_TYPE+"M";
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
@@ -134,7 +136,11 @@ public class ServerWorld
 		newWorld();
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
+		
+		//These methods should reference a list to figure out where everything goes
+		//The list will be created using the map file
 		addEnemies();
+		addChests();
 	}
 
 	/**
@@ -175,6 +181,15 @@ public class ServerWorld
 		}
 	}
 
+	/**
+	 * Add chests
+	 */
+	public void addChests()
+	{
+		ServerChest newChest = new ServerChest(1000,100, this);
+		add(newChest);
+	}
+	
 	/**
 	 * Create a new world
 	 * @throws IOException

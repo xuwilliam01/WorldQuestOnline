@@ -27,9 +27,9 @@ public abstract class ServerCreature extends ServerObject
 	private int HP;
 
 	/**
-	 * Team of the player
+	 * Team of the creature
 	 */
-	private int team;
+	private int team = NEUTRAL;
 
 	/**
 	 * Stores the inventory of the creature
@@ -154,10 +154,10 @@ public abstract class ServerCreature extends ServerObject
 		ServerItem money = null;
 		for(ServerItem item : inventory)
 		{
-			if(!item.getType().equals(ServerWorld.MONEY_TYPE) || getType().substring(0,2).equals(ServerWorld.NPC_TYPE))
-				dropItem(item);
-			else
+			if(item.getType().equals(ServerWorld.MONEY_TYPE) && getType().substring(0,2).equals(ServerWorld.PLAYER_TYPE))
 				money = item;
+			else
+				dropItem(item);
 		}
 
 		inventory.clear();

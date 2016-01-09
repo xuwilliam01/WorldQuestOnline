@@ -1,0 +1,32 @@
+package Server.Creatures;
+
+import Server.ServerWorld;
+import Server.Items.ServerItem;
+import Server.Items.ServerPotion;
+
+public class ServerChest extends ServerCreature{
+
+	public final static int CHEST_HP = 100;
+
+	private int numItems = 5;
+	
+	public ServerChest(double x, double y, int numItems,
+			ServerWorld world) {
+		super(x, y,-1,-1, ServerWorld.GRAVITY, "CHEST.png",ServerWorld.CHEST_TYPE,CHEST_HP, world);
+		this.numItems = numItems;
+		addItems();
+	}
+
+	public ServerChest(double x, double y,
+			ServerWorld world) {
+		super(x, y,-1,-1, ServerWorld.GRAVITY, "CHEST.png",ServerWorld.CHEST_TYPE,CHEST_HP, world);
+		addItems();
+	}
+	
+	public void addItems()
+	{
+		for(int item = 0; item < numItems; item++)
+			addItem(ServerItem.randomItem(getX(),getY()));
+	}
+
+}

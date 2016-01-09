@@ -18,7 +18,7 @@ public class ServerFrame extends JFrame
 		setTitle("WorldQuest Online - Server Map");
 		setLocationRelativeTo(null);
 		setLayout(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
 		
