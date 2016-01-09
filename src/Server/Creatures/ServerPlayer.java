@@ -109,6 +109,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * disabled
 	 */
 	private int actionCounter;
+	
+	/**
+	 * The counter that plays the death animation
+	 */
+	private long deathCounter = -1;
 
 	/**
 	 * Stores the equipped items
@@ -148,7 +153,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.skinColour = skinColour;
 
 		weaponSelected = '0';
-		actionDelay = 15;
+		actionDelay = 20;
 
 		canPerformAction = true;
 
@@ -263,19 +268,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 		else if (actionCounter >= 0)
 		{
-			if (actionCounter < 3)
+			if (actionCounter < 4)
 			{
 				rowCol = new RowCol(2, 0);
 			}
-			else if (actionCounter < 6)
+			else if (actionCounter < 8)
 			{
 				rowCol = new RowCol(2, 1);
 			}
-			else if (actionCounter < 9)
+			else if (actionCounter < 12)
 			{
 				rowCol = new RowCol(2, 2);
 			}
-			else if (actionCounter < 12)
+			else if (actionCounter < 16)
 			{
 				rowCol = new RowCol(2, 3);
 			}
@@ -306,6 +311,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			else
 			{
 				rowCol = new RowCol(0, 6);
+			}
+		}
+		else if (!isAlive())
+		{
+			if (deathCounter < 0)
+			{
+				deathCounter = world.getWorldCounter();
+				rowCol = new RowCol(5,1);
+			}
+			else if (world.getWorldCounter() - deathCounter < 10)
+			{
+				rowCol = new RowCol(5,1);
+			}
+			else if (world.getWorldCounter() - deathCounter < 20)
+			{
+				rowCol = new RowCol(5,2);
+			}
+			else
+			{
+				rowCol = new RowCol(5,4);
 			}
 		}
 
@@ -517,7 +542,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (weaponSelected == '0')
 			{
 				world.add(new ServerWeaponSwing(this, "SWORD_0.png",
-						(int) (Math.toDegrees(angle) + 0.5), 8, 10, 10));
+						(int) (Math.toDegrees(angle) + 0.5), 7, 10, 10));
 			}
 			else if (weaponSelected == '1')
 			{
@@ -577,8 +602,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setSolid(false);
 			setGravity(0);
 			alive = false;
-			setType(ServerWorld.PLAYER_GHOST_TYPE);
-			setImage("PLAYERGHOST_RIGHT.png");
 			setWidth(59);
 			setHeight(64);
 

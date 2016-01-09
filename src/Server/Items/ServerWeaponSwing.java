@@ -95,24 +95,14 @@ public class ServerWeaponSwing extends ServerObject
 
 		this.damage = damage;
 
-		if (angle > -90 && angle <= 15)
+		if (angle > -90 && angle <= 90)
 		{
-			currentAngle = -75;
-			isClockwise = true;
-		}
-		else if (angle <= 165 && angle > 90)
-		{
-			currentAngle = -165;
-			isClockwise = false;
-		}
-		else if (angle > 15 && angle <= 90)
-		{
-			currentAngle = -15;
+			currentAngle = -120;
 			isClockwise = true;
 		}
 		else
 		{
-			currentAngle = -105;
+			currentAngle = -60;
 			isClockwise = false;
 		}
 
@@ -145,11 +135,11 @@ public class ServerWeaponSwing extends ServerObject
 	 */
 	public void update()
 	{
-		if (counter >= (int) (timeInFrames / 7.0 + 1) * 7)
+		if (counter >= (int) (timeInFrames / 11.0 + 1) * 11)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 7.0 + 1) == 0 && counter != 0)
+		else if (counter % (int) (timeInFrames / 11.0 + 1) == 0 && counter != 0)
 		{
 			if (isClockwise)
 			{

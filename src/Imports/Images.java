@@ -77,7 +77,7 @@ public class Images
 				for (int no = 0; no < playerSheets.length; no++)
 				{
 					image = ImageIO.read(new File(playerSheets[no] + ".png"));
-					BufferedImage[][] imageTiles = new BufferedImage[6][image.getWidth() / 32];
+					BufferedImage[][] imageTiles = new BufferedImage[5][image.getWidth() / 32];
 					for (int row = 0; row < imageTiles.length; row++)
 					{
 						for (int column = 0; column < imageTiles[0].length; column++)
@@ -98,6 +98,53 @@ public class Images
 											currentImage.getWidth(), currentImage.getHeight()),64,128));
 						}
 					}
+					
+					// Load death images (they are different sizes)
+					
+					BufferedImage currentImage = image.getSubimage(32, 5 * 64, 32, 64);
+					
+					// Add a right version of this image
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 1 + ".png",currentImage,64,128));
+					
+					AffineTransform tx;
+					tx = AffineTransform.getScaleInstance(-1, 1);
+					tx.translate(-currentImage.getWidth(null), 0);
+					AffineTransformOp op = new AffineTransformOp(tx,
+							AffineTransformOp.TYPE_BILINEAR);
+					
+					// Add a left version of this image
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 1 + ".png",op.filter(currentImage, null).getSubimage(0, 0,
+									currentImage.getWidth(), currentImage.getHeight()),64,128));
+					
+					
+					currentImage = image.getSubimage(2 * 32, 5 * 64, 40, 64);
+					// Add a right version of this image
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 2 + ".png",currentImage,80,128));
+					
+					AffineTransform tx2;
+					tx2 = AffineTransform.getScaleInstance(-1, 1);
+					tx2.translate(-currentImage.getWidth(null), 0);
+					AffineTransformOp op2 = new AffineTransformOp(tx2,
+							AffineTransformOp.TYPE_BILINEAR);
+					
+					// Add a left version of this image
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 2 + ".png",op2.filter(currentImage, null).getSubimage(0, 0,
+									currentImage.getWidth(), currentImage.getHeight()),80,128));
+					
+					currentImage = image.getSubimage(4 * 32, 5 * 64, 52, 64);
+					// Add a right version of this image
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 4 + ".png",currentImage,104,128));
+					
+					AffineTransform tx3;
+					tx3 = AffineTransform.getScaleInstance(-1, 1);
+					tx3.translate(-currentImage.getWidth(null), 0);
+					AffineTransformOp op3 = new AffineTransformOp(tx3,
+							AffineTransformOp.TYPE_BILINEAR);
+					
+					// Add a left version of this image
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 4 + ".png",op3.filter(currentImage, null).getSubimage(0, 0,
+									currentImage.getWidth(), currentImage.getHeight()),104,128));
+					
 				}
 
 				image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
