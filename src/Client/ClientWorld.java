@@ -35,7 +35,7 @@ public class ClientWorld
 	/**
 	 * The distance a cloud travels before teleporting back
 	 */
-	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 8;
+	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 5;
 
 	/**
 	 * The direction the clouds move in
