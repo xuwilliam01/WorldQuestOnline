@@ -45,8 +45,18 @@ public class ServerWorld
 	public final static String POTION_TYPE = STACK_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
+	
+	public final static String DAGGER_TYPE = WEAPON_TYPE + "D";
+	public final static String AX_TYPE = WEAPON_TYPE + "A";
 	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
-	public final static String LONG_SWORD = SWORD_TYPE + "L";
+	public final static String HALBERD_TYPE = WEAPON_TYPE + "H";
+	
+	public final static char WOOD_TIER = 'W';
+	public final static char STONE_TIER = 'S';
+	public final static char IRON_TIER = 'I';
+	public final static char GOLD_TIER = 'G';
+	public final static char DIAMOND_TIER = 'D';
+	
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 	
 	public final static String ACCESSORY_TYPE = EQUIP_TYPE + "A";
