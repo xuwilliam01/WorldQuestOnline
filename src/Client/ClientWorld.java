@@ -152,7 +152,7 @@ public class ClientWorld
 
 		// Draw the background
 		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
-
+		
 		// Draw and move the clouds
 		for (ClientBackground cloud : clouds)
 		{
