@@ -201,6 +201,10 @@ public class ClientWorld
 		{
 			for (ClientObject object : objects)
 			{
+				if (object == null)
+				{
+					continue;
+				}
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
 				Image image = object.getImage();
@@ -290,6 +294,10 @@ public class ClientWorld
 		{
 			for (ClientObject object : objects)
 			{
+				if (object == null)
+				{
+					continue;
+				}
 				if (object.getID() == id)
 				{
 					return object;
