@@ -20,6 +20,8 @@ public class ClientFrame extends JFrame
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		setAlwaysOnTop(true);
 		setVisible(true);
 		
 	}

@@ -812,6 +812,14 @@ public class ServerWorld
 							((ServerWeaponSwing) object).update();
 						}
 					}
+					else if (object.getType().equals(PLAYER_TYPE))
+					{
+						if (((ServerPlayer)object).isPerformingAction())
+						{
+							((ServerPlayer)object).performAction(((ServerPlayer)object).getNewMouseX(), ((ServerPlayer)object).getNewMouseY());
+							((ServerPlayer)object).setPerformingAction(false);
+						}
+					}
 
 				}
 				else
