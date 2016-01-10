@@ -207,11 +207,6 @@ public class Images
 
 				}
 
-				images.add(new GameImage("SWORD.png",
-						70, 30));
-				images.add(new GameImage("SWORD_ICON.png",
-						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-
 				String[] weaponSheets = { "DAWOOD", "DASTONE", "DAIRON",
 						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",
 						"AXGOLD", "AXDIAMOND", "SWWOOD", "SWSTONE", "SWIRON",

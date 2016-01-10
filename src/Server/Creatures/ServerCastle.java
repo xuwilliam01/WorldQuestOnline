@@ -14,10 +14,9 @@ public class ServerCastle extends ServerCreature{
 	
 	public void inflictDamage(int amount, double knockBack)
 	{
-		setHP(getHP()-amount);
+		super.inflictDamage(amount, knockBack);
 		if (getHP() <= 0)
 		{
-			destroy();
 			//End the game
 		}
 	}

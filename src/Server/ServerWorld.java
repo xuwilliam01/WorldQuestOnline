@@ -1,9 +1,9 @@
 package Server;
 
-import java.io.* 
-;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.StringTokenizer;
 
 import Server.Creatures.ServerCastle;
@@ -37,9 +37,9 @@ public class ServerWorld
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
-	public final static String CHEST_TYPE = CREATURE_TYPE+"M";
-	public final static String CASTLE_TYPE = CREATURE_TYPE+"T";
-	public final static String VENDOR_TYPE = CREATURE_TYPE+"V";
+	public final static String CHEST_TYPE = CREATURE_TYPE + "M";
+	public final static String CASTLE_TYPE = CREATURE_TYPE + "T";
+	public final static String VENDOR_TYPE = CREATURE_TYPE + "V";
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
@@ -47,20 +47,22 @@ public class ServerWorld
 	public final static String POTION_TYPE = STACK_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
-	
-	public final static String DAGGER_TYPE = WEAPON_TYPE + "D";
-	public final static String AX_TYPE = WEAPON_TYPE + "A";
-	public final static String SWORD_TYPE = WEAPON_TYPE + "S";
-	public final static String HALBERD_TYPE = WEAPON_TYPE + "H";
-	
+	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
+	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
+
+	public final static String DAGGER_TYPE = MELEE_TYPE + "D";
+	public final static String AX_TYPE = MELEE_TYPE + "A";
+	public final static String SWORD_TYPE = MELEE_TYPE + "S";
+	public final static String HALBERD_TYPE = MELEE_TYPE + "H";
+
 	public final static char WOOD_TIER = 'W';
 	public final static char STONE_TIER = 'S';
 	public final static char IRON_TIER = 'I';
 	public final static char GOLD_TIER = 'G';
 	public final static char DIAMOND_TIER = 'D';
-	
+
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
-	
+
 	public final static String ACCESSORY_TYPE = EQUIP_TYPE + "A";
 
 	public final static char ANIMATION_TYPE = 'A';
@@ -84,13 +86,15 @@ public class ServerWorld
 	 * Grid of objects
 	 */
 	private ArrayList<ServerObject>[][] objectGrid;
-	
+
 	/**
-	 * Array of different types of creatures, buildings, background objects, and spawners possible in the world (for the purpose of the creator world)
+	 * Array of different types of creatures, buildings, background objects, and
+	 * spawners possible in the world (for the purpose of the creator world)
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	private final ServerObject[] objectTypes = {new ServerSlime(0, 0, -1, -1, ServerWorld.GRAVITY,"SLIME_0.png", null)};
+	private final ServerObject[] objectTypes = { new ServerSlime(0, 0, -1, -1,
+			ServerWorld.GRAVITY, "SLIME_0.png", null) };
 
 	/**
 	 * The size of each object tile
@@ -129,7 +133,6 @@ public class ServerWorld
 	 * List of objects to remove that doesn't exist anymore
 	 */
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
-	
 
 	/**
 	 * The next time (in milliseconds) to spawn another enemy
@@ -150,9 +153,10 @@ public class ServerWorld
 		newWorld();
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
-		
-		//These methods should reference a list to figure out where everything goes
-		//The list will be created using the map file
+
+		// These methods should reference a list to figure out where everything
+		// goes
+		// The list will be created using the map file
 		addEnemies();
 		addChests();
 		addCastles();
@@ -202,24 +206,25 @@ public class ServerWorld
 	 */
 	public void addChests()
 	{
-		ServerChest newChest = new ServerChest(1000,100, this);
+		ServerChest newChest = new ServerChest(1000, 100, this);
 		add(newChest);
 	}
-	
+
 	public void addCastles()
 	{
-		ServerCastle newCastle = new ServerCastle(400,100,ServerCreature.RED,this);
+		ServerCastle newCastle = new ServerCastle(400, 100, ServerCreature.RED,
+				this);
 		add(newCastle);
-		newCastle = new ServerCastle(5000,100,ServerCreature.BLUE,this);
+		newCastle = new ServerCastle(5000, 100, ServerCreature.BLUE, this);
 		add(newCastle);
 	}
-	
+
 	public void addVendors()
 	{
-		ServerVendor newVendor = new ServerVendor(1500,100,this,3);
+		ServerVendor newVendor = new ServerVendor(1500, 100, this, 3);
 		add(newVendor);
 	}
-	
+
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -233,11 +238,11 @@ public class ServerWorld
 
 		// Add to both sides to make room for the invisible walls
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
-		                                                                 .parseInt(tokenizer.nextToken()) + 6];
+				.parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -298,460 +303,521 @@ public class ServerWorld
 		objectsToRemove.clear();
 
 		while (!objectsToAdd.isEmpty())
-		{		
+		{
 			objects.add(objectsToAdd.poll());
 		}
 
 		for (ServerObject object : objects)
 		{
-			// This will remove the object a frame after it stops existing
-			if (object.exists())
+			try
 			{
-				if (object.getType().charAt(0) == ITEM_TYPE
-						&& object.isOnSurface())
-					object.setHSpeed(0);
-
-				// Add the object to all the object tiles that it collides with
-				// currently
-				int startRow = (int) (object.getY() / OBJECT_TILE_SIZE);
-				int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
-				int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
-				int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
-
-				// Destroy the object if it is not in the world
-				if (startRow < 0 || endRow > objectGrid.length - 1
-						|| startColumn < 0
-						|| endColumn > objectGrid[0].length - 1)
+				// This will remove the object a frame after it stops existing
+				if (object.exists())
 				{
-					object.destroy();
-					continue;
-				}
+					if (object.getType().charAt(0) == ITEM_TYPE
+							&& object.isOnSurface())
+						object.setHSpeed(0);
 
-				// Update all locations of objects based on the object grid (for
-				// collisions)
-				updateObjectTiles(object, startRow, endRow, startColumn,
-						endColumn);
+					// Add the object to all the object tiles that it collides
+					// with
+					// currently
+					int startRow = (int) (object.getY() / OBJECT_TILE_SIZE);
+					int endRow = (int) ((object.getY() + object.getHeight()) / OBJECT_TILE_SIZE);
+					int startColumn = (int) (object.getX() / OBJECT_TILE_SIZE);
+					int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
 
-				// Check collisions with other objects in tiles that they both
-				// touch
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
+					// Destroy the object if it is not in the world
+					if (startRow < 0 || endRow > objectGrid.length - 1
+							|| startColumn < 0
+							|| endColumn > objectGrid[0].length - 1)
 					{
-						for (ServerObject otherObject : objectGrid[row][column])
+						object.destroy();
+						continue;
+					}
+
+					// Update all locations of objects based on the object grid
+					// (for
+					// collisions)
+					updateObjectTiles(object, startRow, endRow, startColumn,
+							endColumn);
+
+					// Check collisions with other objects in tiles that they
+					// both
+					// touch
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
 						{
-							if (otherObject.exists())
+							for (ServerObject otherObject : objectGrid[row][column])
 							{
-								if (object.getType().equals(BULLET_TYPE))
+								if (otherObject.exists())
 								{
-									if (otherObject.getType().charAt(0) == CREATURE_TYPE && ((ServerCreature)otherObject).isAttackable()
-											&& otherObject.getID() != ((ServerProjectile) object)
-											.getOwnerID() && ((ServerCreature)otherObject).getTeam() != ((ServerProjectile) object).getOwner().getTeam()
+									if (object.getType().equals(BULLET_TYPE))
+									{
+										if (otherObject.getType().charAt(0) == CREATURE_TYPE
+												&& ((ServerCreature) otherObject)
+														.isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object)
+														.getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
+												&& object
+														.collidesWith(otherObject))
+										{
+											double knockBack = ((ServerProjectile) object)
+													.getKnockBack();
+
+											if (object.getHSpeed() < 0)
+											{
+												knockBack *= -1;
+											}
+											((ServerCreature) otherObject)
+													.inflictDamage(
+															((ServerProjectile) object)
+																	.getDamage(),
+															knockBack);
+											((ServerProjectile) object)
+													.destroy();
+										}
+										// Don't need this
+										// else if
+										// (otherObject.getType().contains(
+										// NPC_TYPE)
+										// && object.collidesWith(otherObject)
+										// &&
+										// ((ServerCreature)otherObject).getTeam()
+										// != ((ServerProjectile)
+										// object).getOwner().getTeam())
+										// {
+										// double knockBack =
+										// ((ServerProjectile) object)
+										// .getKnockBack();
+										//
+										// if (object.getHSpeed() < 0)
+										// {
+										// knockBack *= -1;
+										// }
+										//
+										// ((ServerEnemy) otherObject)
+										// .inflictDamage(
+										// ((ServerProjectile) object)
+										// .getDamage(),
+										// knockBack);
+										// ((ServerProjectile)
+										// object).destroy();
+										// }
+									}
+									// If a player collided with an item
+									else if (otherObject.getType().charAt(0) == ITEM_TYPE
+											&& object.getType().equals(
+													PLAYER_TYPE)
 											&& object.collidesWith(otherObject))
 									{
-										double knockBack = ((ServerProjectile) object)
-												.getKnockBack();
+										ServerItem item = (ServerItem) otherObject;
+										ServerCreature player = (ServerCreature) object;
+										if (!(item.hasCoolDown() && item
+												.getSource().getID() == player
+												.getID())
+												&& player.getInventory().size() <= ServerPlayer.MAX_INVENTORY)
+										{
+											if (player.getInventory().size() < ServerPlayer.MAX_INVENTORY)
+											{
+												player.addItem(item);
+												item.setSource(player);
+												item.destroy();
+											}
+											else if (player.getInventory()
+													.size() == ServerPlayer.MAX_INVENTORY
+													&& item.getType().charAt(1) == STACK_TYPE
+															.charAt(1))
+											{
+												// Only if the potion already
+												// exists, add it
+												for (ServerItem sItem : player
+														.getInventory())
+													if (sItem.getType().equals(
+															item.getType()))
+													{
+														player.addItem(item);
+														item.setSource(player);
+														item.destroy();
+														break;
+													}
+											}
+										}
+									}
+									// If stackable items collide
+									else if (object.collidesWith(otherObject)
+											&& object.getType().charAt(0) == ITEM_TYPE
+											&& otherObject.getType().charAt(0) == ITEM_TYPE
+											&& object.getType().charAt(1) == STACK_TYPE
+													.charAt(1)
+											&& otherObject.getType().charAt(1) == STACK_TYPE
+													.charAt(1))
+									{
+										if (object.getType().equals(
+												otherObject.getType())
+												&& object.getID() != otherObject
+														.getID())
+										{
+											((ServerItem) object)
+													.increaseAmount(((ServerItem) otherObject)
+															.getAmount());
+											otherObject.destroy();
+										}
+									}
+									// Collision of weapons and creatures
+									else if (object.getType().charAt(0) == ANIMATION_TYPE
+											&& object.getType().charAt(1) == WEAPON_SWING_TYPE
+													.charAt(1))
+									{
+										if (otherObject.getType().charAt(0) == CREATURE_TYPE
+												&& ((ServerCreature) otherObject)
+														.isAttackable()
+												&& otherObject.getID() != ((ServerWeaponSwing) object)
+														.getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerWeaponSwing) object)
+														.getWielder().getTeam()
+												&& ((ServerWeaponSwing) object)
+														.collidesWith(otherObject)
+												&& !((ServerWeaponSwing) object)
+														.hasCollided(otherObject))
+										{
+											double knockBack = ((ServerWeaponSwing) object)
+													.getKnockBack();
 
-										if (object.getHSpeed() < 0)
-										{
-											knockBack *= -1;
+											if (!((ServerWeaponSwing) object)
+													.isClockwise())
+											{
+												knockBack *= -1;
+											}
+											((ServerCreature) otherObject)
+													.inflictDamage(
+															((ServerWeaponSwing) object)
+																	.getDamage(),
+															knockBack);
+											((ServerWeaponSwing) object)
+													.addCollided(otherObject);
 										}
-										((ServerCreature) otherObject)
-										.inflictDamage(
-												((ServerProjectile) object)
-												.getDamage(),
-												knockBack);
-										((ServerProjectile) object).destroy();
+										// Don't need this
+										// else if
+										// (otherObject.getType().contains(
+										// NPC_TYPE) &&
+										// ((ServerCreature)otherObject).getTeam()
+										// != ((ServerWeaponSwing)
+										// object).getWielder().getTeam()
+										// && ((ServerWeaponSwing) object)
+										// .collidesWith(otherObject)
+										// && !((ServerWeaponSwing) object)
+										// .hasCollided(otherObject))
+										// {
+										// double knockBack =
+										// ((ServerWeaponSwing) object)
+										// .getKnockBack();
+										//
+										// if (!((ServerWeaponSwing) object)
+										// .isClockwise())
+										// {
+										// knockBack *= -1;
+										// }
+										//
+										// ((ServerEnemy) otherObject)
+										// .inflictDamage(
+										// ((ServerWeaponSwing) object)
+										// .getDamage(),
+										// knockBack);
+										// ((ServerWeaponSwing) object)
+										// .addCollided(otherObject);
+										//
+										// System.out.println(((ServerWeaponSwing)
+										// object)
+										// .getDamage());
+										// }
 									}
-									//Don't need this
-//									else if (otherObject.getType().contains(
-//											NPC_TYPE)
-//											&& object.collidesWith(otherObject) && ((ServerCreature)otherObject).getTeam() != ((ServerProjectile) object).getOwner().getTeam())
-//									{
-//										double knockBack = ((ServerProjectile) object)
-//												.getKnockBack();
-//
-//										if (object.getHSpeed() < 0)
-//										{
-//											knockBack *= -1;
-//										}
-//
-//										((ServerEnemy) otherObject)
-//										.inflictDamage(
-//												((ServerProjectile) object)
-//												.getDamage(),
-//												knockBack);
-//										((ServerProjectile) object).destroy();
-//									}
-								}
-								// If a player collided with an item
-								else if (otherObject.getType().charAt(0) == ITEM_TYPE
-										&& object.getType().equals(PLAYER_TYPE)
-										&& object.collidesWith(otherObject))
-								{
-									ServerItem item = (ServerItem) otherObject;
-									ServerCreature player = (ServerCreature) object;
-									if (!(item.hasCoolDown() && item
-											.getSource().getID() == player
-											.getID())
-											&& player.getInventory().size() <= ServerPlayer.MAX_INVENTORY)
-									{
-										if(player.getInventory().size() < ServerPlayer.MAX_INVENTORY )
-										{
-											player.addItem(item);
-											item.setSource(player);
-											item.destroy();
-										}
-										else if(player.getInventory().size() == ServerPlayer.MAX_INVENTORY &&item.getType().charAt(1) == STACK_TYPE.charAt(1))
-										{
-											//Only if the potion already exists, add it
-											for(ServerItem sItem : player.getInventory())
-												if(sItem.getType().equals(item.getType()))
-												{
-													player.addItem(item);
-													item.setSource(player);
-													item.destroy();
-													break;
-												}
-										}
-									}
-								}
-								//If stackable items collide
-								else if(object.collidesWith(otherObject) && object.getType().charAt(0) == ITEM_TYPE && otherObject.getType().charAt(0) == ITEM_TYPE && object.getType().charAt(1) == STACK_TYPE.charAt(1) && otherObject.getType().charAt(1) == STACK_TYPE.charAt(1))
-								{
-									if(object.getType().equals(otherObject.getType()) && object.getID() != otherObject.getID())
-									{
-										((ServerItem)object).increaseAmount(((ServerItem)otherObject).getAmount());
-										otherObject.destroy();
-									}
-								}
-								// Collision of weapons and creatures
-								else if (object.getType().charAt(0) == ANIMATION_TYPE && object.getType().charAt(1) == WEAPON_SWING_TYPE.charAt(1))
-								{
-									if (otherObject.getType().charAt(0) == CREATURE_TYPE && ((ServerCreature)otherObject).isAttackable()
-											&& otherObject.getID() != ((ServerWeaponSwing) object)
-											.getOwnerID() && ((ServerCreature)otherObject).getTeam() != ((ServerWeaponSwing) object).getWielder().getTeam()
-											&& ((ServerWeaponSwing) object)
-											.collidesWith(otherObject)
-											&& !((ServerWeaponSwing) object)
-											.hasCollided(otherObject))
-									{
-										double knockBack = ((ServerWeaponSwing) object)
-												.getKnockBack();
-
-										if (!((ServerWeaponSwing) object)
-												.isClockwise())
-										{
-											knockBack *= -1;
-										}
-										((ServerCreature) otherObject)
-										.inflictDamage(
-												((ServerWeaponSwing) object)
-												.getDamage(),
-												knockBack);
-										((ServerWeaponSwing) object)
-										.addCollided(otherObject);
-										System.out.println(((ServerWeaponSwing) object)
-												.getDamage());
-									}
-									//Don't need this
-//									else if (otherObject.getType().contains(
-//											NPC_TYPE) && ((ServerCreature)otherObject).getTeam() != ((ServerWeaponSwing) object).getWielder().getTeam()
-//											&& ((ServerWeaponSwing) object)
-//											.collidesWith(otherObject)
-//											&& !((ServerWeaponSwing) object)
-//											.hasCollided(otherObject))
-//									{
-//										double knockBack = ((ServerWeaponSwing) object)
-//												.getKnockBack();
-//
-//										if (!((ServerWeaponSwing) object)
-//												.isClockwise())
-//										{
-//											knockBack *= -1;
-//										}
-//
-//										((ServerEnemy) otherObject)
-//										.inflictDamage(
-//												((ServerWeaponSwing) object)
-//												.getDamage(),
-//												knockBack);
-//										((ServerWeaponSwing) object)
-//										.addCollided(otherObject);
-//
-//										System.out.println(((ServerWeaponSwing) object)
-//												.getDamage());
-//									}
 								}
 							}
 						}
 					}
-				}
 
-				boolean moveVertical = true;
-				boolean moveHorizontal = true;
+					boolean moveVertical = true;
+					boolean moveHorizontal = true;
 
-				if (object.isSolid())
-				{
+					if (object.isSolid())
+					{
 
-					// Apply gravity first (DEFINITELY BEFORE CHECKING VSPEED)
-					if (object.getVSpeed() < MAX_SPEED)
-					{
-						object.setVSpeed(object.getVSpeed()
-								+ object.getGravity());
-					}
-					else
-					{
-						object.setVSpeed(MAX_SPEED);
-					}
-
-					double vSpeed = object.getVSpeed();
-					double hSpeed = object.getHSpeed();
-					double x1 = object.getX();
-					double x2 = object.getX() + object.getWidth();
-					double y1 = object.getY();
-					double y2 = object.getY() + object.getHeight();
-
-					if (vSpeed > 0)
-					{
-						startRow = (int) (y1 / TILE_SIZE - 1);
-						endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
-					}
-					else if (vSpeed < 0)
-					{
-						startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
-						endRow = (int) (y2 / TILE_SIZE + 1);
-					}
-					else
-					{
-						startRow = (int) (y1 / TILE_SIZE);
-						endRow = (int) (y2 / TILE_SIZE + 1);
-					}
-
-					if (hSpeed > 0)
-					{
-						startColumn = (int) (x1 / TILE_SIZE - 1);
-						endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
-					}
-					else if (hSpeed < 0)
-					{
-						startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
-						endColumn = (int) (x2 / TILE_SIZE + 1);
-					}
-					else
-					{
-						startColumn = (int) (x1 / TILE_SIZE - 1);
-						endColumn = (int) (x2 / TILE_SIZE + 1);
-					}
-
-					if (startRow < 0)
-					{
-						startRow = 0;
-					}
-					else if (endRow > tileGrid.length - 1)
-					{
-						endRow = tileGrid.length - 1;
-					}
-
-					if (startColumn < 0)
-					{
-						startColumn = 0;
-					}
-					else if (endColumn > tileGrid[0].length - 1)
-					{
-						endColumn = tileGrid[0].length - 1;
-					}
-
-					if (vSpeed > 0)
-					{
-						// The row and column of the tile that was collided with
-						int collideRow = 0;
-
-						for (int row = startRow; row <= endRow; row++)
+						// Apply gravity first (DEFINITELY BEFORE CHECKING
+						// VSPEED)
+						if (object.getVSpeed() < MAX_SPEED)
 						{
-							for (int column = startColumn; column <= endColumn; column++)
-							{
-								if (tileGrid[row][column] >= 'A'
-										&& column * TILE_SIZE < x2
-										&& column * TILE_SIZE + TILE_SIZE > x1)
-								{
-									if (y2 + vSpeed >= row * TILE_SIZE
-											&& y2 <= row * TILE_SIZE)
-									{
-										moveVertical = false;
-										collideRow = row;
-										break;
-									}
-								}
-								if (!moveVertical)
-								{
-									break;
-								}
-							}
-						}
-						if (!moveVertical)
-						{
-							object.setY(collideRow * TILE_SIZE
-									- object.getHeight());
-							object.setOnSurface(true);
-							object.setVSpeed(0);
+							object.setVSpeed(object.getVSpeed()
+									+ object.getGravity());
 						}
 						else
 						{
-							object.setOnSurface(false);
+							object.setVSpeed(MAX_SPEED);
 						}
-					}
-					else if (vSpeed < 0)
-					{
-						// The row and column of the tile that was collided with
-						int collideRow = 0;
 
-						for (int row = startRow; row <= endRow; row++)
+						double vSpeed = object.getVSpeed();
+						double hSpeed = object.getHSpeed();
+						double x1 = object.getX();
+						double x2 = object.getX() + object.getWidth();
+						double y1 = object.getY();
+						double y2 = object.getY() + object.getHeight();
+
+						if (vSpeed > 0)
 						{
-							for (int column = startColumn; column <= endColumn; column++)
+							startRow = (int) (y1 / TILE_SIZE - 1);
+							endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
+						}
+						else if (vSpeed < 0)
+						{
+							startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
+							endRow = (int) (y2 / TILE_SIZE + 1);
+						}
+						else
+						{
+							startRow = (int) (y1 / TILE_SIZE);
+							endRow = (int) (y2 / TILE_SIZE + 1);
+						}
+
+						if (hSpeed > 0)
+						{
+							startColumn = (int) (x1 / TILE_SIZE - 1);
+							endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
+						}
+						else if (hSpeed < 0)
+						{
+							startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
+							endColumn = (int) (x2 / TILE_SIZE + 1);
+						}
+						else
+						{
+							startColumn = (int) (x1 / TILE_SIZE - 1);
+							endColumn = (int) (x2 / TILE_SIZE + 1);
+						}
+
+						if (startRow < 0)
+						{
+							startRow = 0;
+						}
+						else if (endRow > tileGrid.length - 1)
+						{
+							endRow = tileGrid.length - 1;
+						}
+
+						if (startColumn < 0)
+						{
+							startColumn = 0;
+						}
+						else if (endColumn > tileGrid[0].length - 1)
+						{
+							endColumn = tileGrid[0].length - 1;
+						}
+
+						if (vSpeed > 0)
+						{
+							// The row and column of the tile that was collided
+							// with
+							int collideRow = 0;
+
+							for (int row = startRow; row <= endRow; row++)
 							{
-								if (tileGrid[row][column] >= 'A'
-										&& column * TILE_SIZE < x2
-										&& column * TILE_SIZE + TILE_SIZE > x1)
+								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if (y1 + vSpeed <= row * TILE_SIZE
-											+ TILE_SIZE
-											&& y1 >= row * TILE_SIZE
-											+ TILE_SIZE)
+									if (tileGrid[row][column] >= 'A'
+											&& column * TILE_SIZE < x2
+											&& column * TILE_SIZE + TILE_SIZE > x1)
 									{
-										moveVertical = false;
-										collideRow = row;
+										if (y2 + vSpeed >= row * TILE_SIZE
+												&& y2 <= row * TILE_SIZE)
+										{
+											moveVertical = false;
+											collideRow = row;
+											break;
+										}
+									}
+									if (!moveVertical)
+									{
 										break;
 									}
 								}
-								if (!moveVertical)
-								{
-									break;
-								}
+							}
+							if (!moveVertical)
+							{
+								object.setY(collideRow * TILE_SIZE
+										- object.getHeight());
+								object.setOnSurface(true);
+								object.setVSpeed(0);
+							}
+							else
+							{
+								object.setOnSurface(false);
 							}
 						}
-						if (!moveVertical)
+						else if (vSpeed < 0)
 						{
-							object.setY(collideRow * TILE_SIZE + TILE_SIZE);
-							object.setVSpeed(0);
-						}
-					}
+							// The row and column of the tile that was collided
+							// with
+							int collideRow = 0;
 
-					if (hSpeed >= 0)
-					{
-						// The row and column of the tile that was collided with
-						int collideColumn = 0;
-
-						for (int row = startRow; row <= endRow; row++)
-						{
-							for (int column = startColumn; column <= endColumn; column++)
+							for (int row = startRow; row <= endRow; row++)
 							{
-								if (tileGrid[row][column] >= 'A'
-										&& row * TILE_SIZE < y2
-										&& row * TILE_SIZE + TILE_SIZE > y1)
+								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if (x2 + hSpeed >= column * TILE_SIZE
-											&& x2 <= column * TILE_SIZE
-											+ MARGIN_OF_ERROR)
+									if (tileGrid[row][column] >= 'A'
+											&& column * TILE_SIZE < x2
+											&& column * TILE_SIZE + TILE_SIZE > x1)
 									{
-										moveHorizontal = false;
-										collideColumn = column;
+										if (y1 + vSpeed <= row * TILE_SIZE
+												+ TILE_SIZE
+												&& y1 >= row * TILE_SIZE
+														+ TILE_SIZE)
+										{
+											moveVertical = false;
+											collideRow = row;
+											break;
+										}
+									}
+									if (!moveVertical)
+									{
 										break;
 									}
 								}
-								if (!moveHorizontal)
-								{
-									break;
-								}
+							}
+							if (!moveVertical)
+							{
+								object.setY(collideRow * TILE_SIZE + TILE_SIZE);
+								object.setVSpeed(0);
 							}
 						}
-						if (!moveHorizontal)
-						{
-							object.setX(collideColumn * TILE_SIZE
-									- object.getWidth());
-							object.setHSpeed(0);
-						}
-					}
-					else if (hSpeed <= 0)
-					{
-						// The row and column of the tile that was collided with
-						int collideColumn = 0;
 
-						for (int row = startRow; row <= endRow; row++)
+						if (hSpeed >= 0)
 						{
-							for (int column = startColumn; column <= endColumn; column++)
+							// The row and column of the tile that was collided
+							// with
+							int collideColumn = 0;
+
+							for (int row = startRow; row <= endRow; row++)
 							{
-								if (tileGrid[row][column] >= 'A'
-										&& row * TILE_SIZE < y2
-										&& row * TILE_SIZE + TILE_SIZE > y1)
+								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if (x1 + hSpeed <= column * TILE_SIZE
-											+ TILE_SIZE
-											&& x1 >= column * TILE_SIZE
-											+ TILE_SIZE
-											- MARGIN_OF_ERROR)
+									if (tileGrid[row][column] >= 'A'
+											&& row * TILE_SIZE < y2
+											&& row * TILE_SIZE + TILE_SIZE > y1)
 									{
-										moveHorizontal = false;
-										collideColumn = column;
+										if (x2 + hSpeed >= column * TILE_SIZE
+												&& x2 <= column * TILE_SIZE
+														+ MARGIN_OF_ERROR)
+										{
+											moveHorizontal = false;
+											collideColumn = column;
+											break;
+										}
+									}
+									if (!moveHorizontal)
+									{
 										break;
 									}
 								}
-								if (!moveHorizontal)
-								{
-									break;
-								}
+							}
+							if (!moveHorizontal)
+							{
+								object.setX(collideColumn * TILE_SIZE
+										- object.getWidth());
+								object.setHSpeed(0);
 							}
 						}
-						if (!moveHorizontal)
+						else if (hSpeed <= 0)
 						{
-							object.setX(collideColumn * TILE_SIZE + TILE_SIZE);
-							object.setHSpeed(0);
+							// The row and column of the tile that was collided
+							// with
+							int collideColumn = 0;
+
+							for (int row = startRow; row <= endRow; row++)
+							{
+								for (int column = startColumn; column <= endColumn; column++)
+								{
+									if (tileGrid[row][column] >= 'A'
+											&& row * TILE_SIZE < y2
+											&& row * TILE_SIZE + TILE_SIZE > y1)
+									{
+										if (x1 + hSpeed <= column * TILE_SIZE
+												+ TILE_SIZE
+												&& x1 >= column * TILE_SIZE
+														+ TILE_SIZE
+														- MARGIN_OF_ERROR)
+										{
+											moveHorizontal = false;
+											collideColumn = column;
+											break;
+										}
+									}
+									if (!moveHorizontal)
+									{
+										break;
+									}
+								}
+							}
+							if (!moveHorizontal)
+							{
+								object.setX(collideColumn * TILE_SIZE
+										+ TILE_SIZE);
+								object.setHSpeed(0);
+							}
 						}
 					}
-				}
 
-				if (moveHorizontal)
-				{
-					// Don't let the player move when trying to swing a sword
-					if (!(object.getType().contains(PLAYER_TYPE)) || !((ServerPlayer)object).inAction())
+					if (moveHorizontal)
 					{
-					object.setX(object.getX() + object.getHSpeed());
+						// Don't let the player move when trying to swing a
+						// sword
+						if (!(object.getType().contains(PLAYER_TYPE))
+								|| !((ServerPlayer) object).inAction())
+						{
+							object.setX(object.getX() + object.getHSpeed());
+						}
 					}
-				}
-				if (moveVertical)
-				{
-					object.setY(object.getY() + object.getVSpeed());
-				}
+					if (moveVertical)
+					{
+						object.setY(object.getY() + object.getVSpeed());
+					}
 
-				// Update specific objects
-				if (object.getType().equals(SLIME_TYPE))
-				{
-					((ServerSlime) object).update();
-				}
-				else if (object.getType().charAt(0) == PROJECTILE_TYPE)
-				{
-					if ((!moveHorizontal || !moveVertical)
-							&& object.getType().equals(BULLET_TYPE))
+					// Update specific objects
+					if (object.getType().equals(SLIME_TYPE))
 					{
-						((ServerProjectile) object).destroy();
+						((ServerSlime) object).update();
 					}
-					else if (object.getType().equals(EXPLOSION_TYPE))
+					else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 					{
-						((ServerProjectile) object).updateExplosion();
+						if ((!moveHorizontal || !moveVertical)
+								&& object.getType().equals(BULLET_TYPE))
+						{
+							((ServerProjectile) object).destroy();
+						}
+						else if (object.getType().equals(EXPLOSION_TYPE))
+						{
+							((ServerProjectile) object).updateExplosion();
+						}
 					}
-				}
-				else if (object.getType().charAt(0) == ANIMATION_TYPE)
-				{
-					if (object.getType().equals(WEAPON_SWING_TYPE))
+					else if (object.getType().charAt(0) == ANIMATION_TYPE)
 					{
-						((ServerWeaponSwing) object).update();
+						if (object.getType().equals(WEAPON_SWING_TYPE))
+						{
+							((ServerWeaponSwing) object).update();
+						}
 					}
-				}
 
+				}
+				else
+				{
+					objectsToRemove.add(object);
+				}
 			}
-			else
+			catch (ConcurrentModificationException e)
 			{
-				objectsToRemove.add(object);
+				System.out.println("Concurrent Modification Exception");
 			}
 		}
 
@@ -885,5 +951,17 @@ public class ServerWorld
 	{
 		return worldCounter;
 	}
+
+	public ArrayList<ServerObject>[][] getObjectGrid()
+	{
+		return objectGrid;
+	}
+
+	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid)
+	{
+		this.objectGrid = objectGrid;
+	}
+	
+	
 
 }

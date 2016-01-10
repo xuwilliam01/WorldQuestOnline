@@ -12,6 +12,7 @@ import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerItem;
+import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
 import Tools.RowCol;
@@ -62,11 +63,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * right, -1 is left)
 	 */
 	private int movingDirection = 0;
-	
-	/**
-	 * Whether or not the player is crouching
-	 */
-	private boolean isCrouching = true;
 
 	/**
 	 * The speed at which the player moves
@@ -114,7 +110,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * disabled
 	 */
 	private int actionCounter;
-	
+
+	/**
+	 * The specific action being performed alongside the action counter
+	 */
+	private String action;
+
 	/**
 	 * The counter that plays the death animation
 	 */
@@ -123,7 +124,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * Stores the equipped items
 	 */
-	private ServerItem[] equippedWeapons = new ServerItem[MAX_WEAPONS];
+	private ServerWeapon[] equippedWeapons = new ServerWeapon[MAX_WEAPONS];
+	
+	/**
+	 * The damage the player inflicts from just punching
+	 */
+	private int punchingDamage = 5;
 
 	/**
 	 * The skin colour for the base image of the player
@@ -148,12 +154,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public ServerPlayer(double x, double y,
 			int width,
-			int height, double relativeDrawX, double relativeDrawY,double gravity, String skinColour, Socket socket,
+			int height, double relativeDrawX, double relativeDrawY,
+			double gravity, String skinColour, Socket socket,
 			ServerEngine engine, ServerWorld world)
 	{
-		super(x, y, width, height, relativeDrawX, relativeDrawY,gravity, "BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
-				PLAYER_START_HP, world,true);
+		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
+				"BASE_" + skinColour
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
 
@@ -161,6 +169,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		actionDelay = 20;
 
 		canPerformAction = true;
+
+		action = "NOTHING";
 
 		// Set to -1 when not used
 		actionCounter = -1;
@@ -200,9 +210,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send the player's information
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
-				+ "BASE_" + skinColour + "_RIGHT_0_0.png "+getTeam());
+				+ "BASE_" + skinColour + "_RIGHT_0_0.png " + getTeam());
 
 		baseImage = "BASE_" + skinColour + "_RIGHT";
+
+		// Start the player off with some weapons
+		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+				+ ServerWorld.WOOD_TIER));
+		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+				+ ServerWorld.WOOD_TIER));
+		addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
+				+ ServerWorld.WOOD_TIER));
+		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
+				+ ServerWorld.WOOD_TIER));
+
 	}
 
 	/**
@@ -273,21 +294,35 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 		else if (actionCounter >= 0)
 		{
-			if (actionCounter < 4)
+			if (action.equals("SWING"))
 			{
-				rowCol = new RowCol(2, 0);
+				if (actionCounter < 4)
+				{
+					rowCol = new RowCol(2, 0);
+				}
+				else if (actionCounter < 8)
+				{
+					rowCol = new RowCol(2, 1);
+				}
+				else if (actionCounter < 12)
+				{
+					rowCol = new RowCol(2, 2);
+				}
+				else if (actionCounter < 16)
+				{
+					rowCol = new RowCol(2, 3);
+				}
 			}
-			else if (actionCounter < 8)
+			else if (action.equals("PUNCH"))
 			{
-				rowCol = new RowCol(2, 1);
-			}
-			else if (actionCounter < 12)
-			{
-				rowCol = new RowCol(2, 2);
-			}
-			else if (actionCounter < 16)
-			{
-				rowCol = new RowCol(2, 3);
+				if (actionCounter < 5)
+				{
+					rowCol = new RowCol(2, 7);
+				}
+				else if (actionCounter < 16)
+				{
+					rowCol = new RowCol(2, 8);
+				}
 			}
 		}
 		else if (getHSpeed() != 0 && isOnSurface())
@@ -323,19 +358,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (deathCounter < 0)
 			{
 				deathCounter = world.getWorldCounter();
-				rowCol = new RowCol(5,1);
+				rowCol = new RowCol(5, 1);
 			}
 			else if (world.getWorldCounter() - deathCounter < 10)
 			{
-				rowCol = new RowCol(5,1);
+				rowCol = new RowCol(5, 1);
 			}
 			else if (world.getWorldCounter() - deathCounter < 20)
 			{
-				rowCol = new RowCol(5,2);
+				rowCol = new RowCol(5, 2);
 			}
 			else
 			{
-				rowCol = new RowCol(5,4);
+				rowCol = new RowCol(5, 4);
 			}
 		}
 
@@ -354,42 +389,64 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			getHead().update(getDirection(), rowCol);
 		}
 
-		// Update object locations
-		for (ServerObject object : world.getObjects())
+		// Send all the objects within all the object tiles in the player's
+		// screen
+		int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
+		int endRow = (int) ((getY() + getHeight() / 2 + Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
+		int startColumn = (int) ((getX() + getWidth() / 2 - Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
+		int endColumn = (int) ((getX() + getWidth() / 2 + Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
+
+		if (startRow < 0)
 		{
-			// Send the object's updated location if the player can see it
-			// within their screen
-			if (object.getX() < getX() + getWidth()
-					+ Client.Client.SCREEN_WIDTH
-					&& object.getX() + object.getWidth() > getX()
-							- Client.Client.SCREEN_WIDTH
-					&& object.getY() < getY() + getHeight()
-							+ Client.Client.SCREEN_HEIGHT
-					&& object.getY() + object.getHeight() > getY()
-							- Client.Client.SCREEN_HEIGHT)
+			startRow = 0;
+		}
+		else if (endRow > world.getObjectGrid().length - 1)
+		{
+			endRow = world.getObjectGrid().length - 1;
+		}
+
+		if (startColumn < 0)
+		{
+			startColumn = 0;
+		}
+		else if (endColumn > world.getObjectGrid()[0].length - 1)
+		{
+			endColumn = world.getObjectGrid()[0].length - 1;
+		}
+
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
 			{
-				if (object.exists())
+				for (ServerObject object : world.getObjectGrid()[row][column])
 				{
-					
-					
-					if(object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
+					if (object.exists())
 					{
-					queueMessage("O " + object.getID() + " "
-							+ ((ServerCreature)object).getDrawX()
-							+ " " + ((ServerCreature)object).getDrawY() + " "
-							+ object.getImage()+" "+((ServerCreature)object).getTeam());
+
+						if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
+						{
+							queueMessage("O " + object.getID() + " "
+									+ ((ServerCreature) object).getDrawX()
+									+ " "
+									+ ((ServerCreature) object).getDrawY()
+									+ " "
+									+ object.getImage() + " "
+									+ ((ServerCreature) object).getTeam());
+						}
+						else
+						{
+							queueMessage("O " + object.getID() + " "
+									+ ((int) (object.getX() + 0.5))
+									+ " " + ((int) (object.getY() + 0.5))
+									+ " "
+									+ object.getImage() + " "
+									+ ServerCreature.NEUTRAL);
+						}
 					}
 					else
 					{
-						queueMessage("O " + object.getID() + " "
-								+ ((int) (object.getX() + 0.5))
-								+ " " + ((int) (object.getY() + 0.5)) + " "
-								+ object.getImage()+" "+ServerCreature.NEUTRAL);
+						queueMessage("R " + object.getID());
 					}
-				}
-				else
-				{
-					queueMessage("R " + object.getID());
 				}
 			}
 		}
@@ -541,49 +598,96 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void performAction(int mouseX, int mouseY)
 	{
+
+		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
+		int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
+
+		double angle = Math.atan2(yDist, xDist);
+
+		int weaponNo = weaponSelected - '0';
+
 		if (alive && canPerformAction)
 		{
-
-			int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
-			int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
-
-			double angle = Math.atan2(yDist, xDist);
-
-			if (weaponSelected == '0')
+			if (equippedWeapons[weaponNo] == null)
 			{
-				world.add(new ServerWeaponSwing(this, 0,-25, "DAIRON_0.png",
-						(int) (Math.toDegrees(angle) + 0.5), 7, 10, 10));
+				action = "PUNCH";
+				
+				// List of creatures we've already punched so we dont hit them twice
+				ArrayList<ServerCreature> alreadyPunched = new ArrayList<ServerCreature>();
+				
+				int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+				int endRow = (int) ((getY() + getHeight()) / ServerWorld.OBJECT_TILE_SIZE);
+				int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
+				int endColumn = (int) ((getX() + getWidth()) / ServerWorld.OBJECT_TILE_SIZE);
+				
+				
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						for (ServerObject otherObject : world.getObjectGrid()[row][column])
+						{
+							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE && ((ServerCreature) otherObject).isAttackable() && ((ServerCreature) otherObject)
+									.getTeam() != getTeam() && collidesWith(otherObject) && !alreadyPunched.contains(otherObject))
+							{
+								((ServerCreature) otherObject).inflictDamage(punchingDamage, 5);
+								alreadyPunched.add((ServerCreature) otherObject);
+							}
+						}
+					}
+				}
 			}
-			else if (weaponSelected == '1')
+			else if (equippedWeapons[weaponNo].getType().contains(
+					ServerWorld.MELEE_TYPE))
 			{
-				// Get the width and height of the image
-				int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
-				int bulletHeight = Images.getGameImage("BULLET.png")
-						.getHeight();
-
-				// Shoot the projectile for testing
-				double speed = 30;
-				double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
-				double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
-				double inaccuracy = 0;
-
-				if (getHSpeed() != 0)
-				{
-					inaccuracy += Math.PI / 6;
-				}
-
-				if (Math.abs(getVSpeed()) >= 3)
-				{
-					inaccuracy += Math.PI / 3;
-				}
-
-				world.add(new ServerProjectile(x, y, -1, -1, 0,
-						this, "BULLET.png", speed, angle, inaccuracy,
-						ServerWorld.BULLET_TYPE));
+				world.add(new ServerWeaponSwing(this, 0, -25,
+						equippedWeapons[weaponNo].getActionImage(),
+						(int) (Math.toDegrees(angle) + 0.5), 7,
+						equippedWeapons[weaponNo].getDamage()));
+				action = "SWING";
+			}
+			else if (equippedWeapons[weaponNo].getType().contains(
+					ServerWorld.RANGED_TYPE))
+			{
+				action = "FIRE";
 			}
 
-			canPerformAction = false;
 		}
+
+		// if (weaponSelected == '0')
+		// {
+		// world.add(new ServerWeaponSwing(this, 0,-25, "DAIRON_0.png",
+		// (int) (Math.toDegrees(angle) + 0.5), 7, 10, 10));
+		// }
+		// else if (weaponSelected == '1')
+		// {
+		// // Get the width and height of the image
+		// int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
+		// int bulletHeight = Images.getGameImage("BULLET.png")
+		// .getHeight();
+		//
+		// // Shoot the projectile for testing
+		// double speed = 30;
+		// double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
+		// double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
+		// double inaccuracy = 0;
+		//
+		// if (getHSpeed() != 0)
+		// {
+		// inaccuracy += Math.PI / 6;
+		// }
+		//
+		// if (Math.abs(getVSpeed()) >= 3)
+		// {
+		// inaccuracy += Math.PI / 3;
+		// }
+		//
+		// world.add(new ServerProjectile(x, y, -1, -1, 0,
+		// this, "BULLET.png", speed, angle, inaccuracy,
+		// ServerWorld.BULLET_TYPE));
+		// }
+
+		canPerformAction = false;
 	}
 
 	/**
@@ -595,7 +699,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		for (int item = 0; item < equippedWeapons.length; item++)
 			if (equippedWeapons[item] != null)
 				dropItem(equippedWeapons[item]);
-		equippedWeapons = new ServerItem[MAX_WEAPONS];
+		equippedWeapons = new ServerWeapon[MAX_WEAPONS];
 	}
 
 	/**
@@ -604,19 +708,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void inflictDamage(int amount, double knockBack)
 	{
-		setHP(getHP() - amount);
+		super.inflictDamage(amount, knockBack);
 		if (getHP() <= 0)
 		{
-			movementSpeed = movementSpeed * 3;
-			dropInventory();
 			setSolid(false);
-			setGravity(0);
 			alive = false;
-			setWidth(59);
-			setHeight(64);
+			setWidth(0);
+			setHeight(0);
 
-			verticalMovement = movementSpeed;
-			horizontalMovement = movementSpeed;
+			verticalMovement = 0;
+			horizontalMovement = 0;
 		}
 		else
 		{
@@ -761,7 +862,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 		}
 
-		equippedWeapons[pos] = toRemove;
+		equippedWeapons[pos] = (ServerWeapon) toRemove;
 		getInventory().remove(toRemove);
 	}
 

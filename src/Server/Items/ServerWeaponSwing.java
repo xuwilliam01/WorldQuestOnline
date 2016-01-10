@@ -90,7 +90,7 @@ public class ServerWeaponSwing extends ServerObject
 	 * @param timeInMilliseconds
 	 */
 	public ServerWeaponSwing(ServerCreature wielder, double relativeX, double relativeY, String image, int angle,
-			int timeInFrames, int damage, double knockBack)
+			int timeInFrames, int damage)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
 				ServerWorld.WEAPON_SWING_TYPE);
@@ -102,7 +102,6 @@ public class ServerWeaponSwing extends ServerObject
 		counter = 0;
 		this.timeInFrames = timeInFrames;
 		ownerID = wielder.getID();
-		this.knockBack = knockBack;
 
 		objectsCollided = new ArrayList<Integer>();
 

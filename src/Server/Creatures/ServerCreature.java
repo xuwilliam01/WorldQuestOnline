@@ -6,6 +6,7 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
+import Server.Items.ServerWeaponSwing;
 
 public abstract class ServerCreature extends ServerObject
 {
@@ -177,6 +178,9 @@ public abstract class ServerCreature extends ServerObject
 			//			}
 			
 		}
+		
+		System.out
+		.println("Damage taken: " + amount);
 	}
 
 	/**

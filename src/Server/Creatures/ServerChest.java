@@ -28,14 +28,4 @@ public class ServerChest extends ServerCreature{
 		for(int item = 0; item < numItems; item++)
 			addItem(ServerItem.randomItem(getX(),getY()));
 	}
-
-	public void inflictDamage(int amount, double knockBack)
-	{
-		setHP(getHP()-amount);
-		if (getHP() <= 0)
-		{
-			destroy();
-			dropInventory();
-		}
-	}
 }

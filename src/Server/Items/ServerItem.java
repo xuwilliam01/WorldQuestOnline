@@ -44,6 +44,7 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setImage("DAWOOD_ICON.png");
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("AXDIAMOND_ICON.png");
 			break;

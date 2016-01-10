@@ -193,6 +193,12 @@ public class ClientInventory extends JPanel{
 
 	public void setEquippedWeapons(ClientItem[] equippedWeapons) {
 		this.equippedWeapons = equippedWeapons;
+		
+		// Make the border show up around the first weapon
+		if (equippedWeapons[0]!=null)
+		{
+			client.setWeaponSelected(0);
+		}
 	}
 	public ClientItem[][] getInventory() {
 		return inventory;
