@@ -229,7 +229,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ ServerWorld.WOOD_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.WOOD_TIER));
-
+		
+		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 	}
 
 	/**
@@ -702,6 +707,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				action = "PUNCH";
 
+				
+				// FIXED CONCURRENT MODIFICATION EXCEPTION BY HAVING PERFORM ACTION IN WORLD CLOCK NOT HERE
+				
+				
+				
 				// List of creatures we've already punched so we dont hit them twice
 				ArrayList<ServerCreature> alreadyPunched = new ArrayList<ServerCreature>();
 
