@@ -26,6 +26,11 @@ public abstract class ServerCreature extends ServerObject
 	private int HP;
 
 	/**
+	 * Whether this creature is attackable or not
+	 */
+	private boolean attackable;
+	
+	/**
 	 * Team of the creature
 	 */
 	private int team = NEUTRAL;
@@ -85,10 +90,11 @@ public abstract class ServerCreature extends ServerObject
 	 * @param world
 	 */
 	public ServerCreature(double x, double y, int width, int height, double relativeDrawX, double relativeDrawY,
-			double gravity, String image, String type, int maxHP, ServerWorld world)
+			double gravity, String image, String type, int maxHP, ServerWorld world, boolean attackable)
 	{
 		super(x, y, width, height, gravity, image, type);
 		
+		this.attackable = attackable;
 		this.relativeDrawX = relativeDrawX;
 		this.relativeDrawY = relativeDrawY;
 		
@@ -101,6 +107,16 @@ public abstract class ServerCreature extends ServerObject
 		knockBackResistance = Math.sqrt((getWidth() * getHeight()))/16;
 	}
 
+	public boolean isAttackable()
+	{
+		return attackable;
+	}
+	
+	public void setAttackable(boolean attackable)
+	{
+		this.attackable = attackable;
+	}
+	
 	public void setTeam(int team)
 	{
 		this.team = team;

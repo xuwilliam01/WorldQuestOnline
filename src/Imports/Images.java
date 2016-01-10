@@ -295,6 +295,7 @@ public class Images
 
 			}
 
+			images.add(new GameImage("VENDOR.png", 120, 120));
 			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("CHEST.png", 60, 60));
 			images.add(new GameImage("CASTLE.png", 200, 400));

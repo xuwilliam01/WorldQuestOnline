@@ -12,6 +12,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
+import Server.Creatures.ServerVendor;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerWeaponSwing;
@@ -38,6 +39,7 @@ public class ServerWorld
 	public final static String GHOUL_TYPE = NPC_TYPE + "G";
 	public final static String CHEST_TYPE = CREATURE_TYPE+"M";
 	public final static String CASTLE_TYPE = CREATURE_TYPE+"T";
+	public final static String VENDOR_TYPE = CREATURE_TYPE+"V";
 
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
@@ -154,6 +156,7 @@ public class ServerWorld
 		addEnemies();
 		addChests();
 		addCastles();
+		addVendors();
 	}
 
 	/**
@@ -210,6 +213,13 @@ public class ServerWorld
 		newCastle = new ServerCastle(5000,100,ServerCreature.BLUE,this);
 		add(newCastle);
 	}
+	
+	public void addVendors()
+	{
+		ServerVendor newVendor = new ServerVendor(1500,100,this,3);
+		add(newVendor);
+	}
+	
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -334,7 +344,7 @@ public class ServerWorld
 							{
 								if (object.getType().equals(BULLET_TYPE))
 								{
-									if (otherObject.getType().charAt(0) == CREATURE_TYPE
+									if (otherObject.getType().charAt(0) == CREATURE_TYPE && ((ServerCreature)otherObject).isAttackable()
 											&& otherObject.getID() != ((ServerProjectile) object)
 											.getOwnerID() && ((ServerCreature)otherObject).getTeam() != ((ServerProjectile) object).getOwner().getTeam()
 											&& object.collidesWith(otherObject))
@@ -418,7 +428,7 @@ public class ServerWorld
 								// Collision of weapons and creatures
 								else if (object.getType().charAt(0) == ANIMATION_TYPE && object.getType().charAt(1) == WEAPON_SWING_TYPE.charAt(1))
 								{
-									if (otherObject.getType().charAt(0) == CREATURE_TYPE
+									if (otherObject.getType().charAt(0) == CREATURE_TYPE && ((ServerCreature)otherObject).isAttackable()
 											&& otherObject.getID() != ((ServerWeaponSwing) object)
 											.getOwnerID() && ((ServerCreature)otherObject).getTeam() != ((ServerWeaponSwing) object).getWielder().getTeam()
 											&& ((ServerWeaponSwing) object)

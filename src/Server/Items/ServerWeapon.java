@@ -5,6 +5,7 @@ import Server.ServerWorld;
 public class ServerWeapon extends ServerItem {
 
 	public final static int NUM_WEAPONS = 20;
+	public final static int NUM_TIERS = 5;
 	
 	private int damage;
 

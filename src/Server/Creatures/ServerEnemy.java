@@ -38,7 +38,7 @@ public abstract class ServerEnemy extends ServerCreature implements ActionListen
 	 * @param world
 	 */
 	public ServerEnemy(double x, double y, int width, int height, double relativeDrawX, double relativeDrawY,double gravity, String image, int maxHP, String type, ServerWorld world, int team) {
-		super(x, y, width, height, relativeDrawX, relativeDrawY,gravity, image,type, maxHP, world);
+		super(x, y, width, height, relativeDrawX, relativeDrawY,gravity, image,type, maxHP, world,true);
 		setTeam(team);
 	}
 	

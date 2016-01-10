@@ -153,7 +153,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY,gravity, "BASE_" + skinColour
 				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
-				PLAYER_START_HP, world);
+				PLAYER_START_HP, world,true);
 
 		this.skinColour = skinColour;
 
