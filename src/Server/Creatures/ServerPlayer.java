@@ -708,13 +708,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void inflictDamage(int amount, double knockBack)
 	{
-		super.inflictDamage(amount, knockBack);
+		setHP(getHP()-amount);
 		if (getHP() <= 0)
 		{
 			setSolid(false);
 			alive = false;
 			setWidth(0);
 			setHeight(0);
+			dropInventory();
 
 			verticalMovement = 0;
 			horizontalMovement = 0;
