@@ -120,6 +120,11 @@ public class ClientWorld
 		int currentIndex = 0;
 		for (ClientObject object : objects)
 		{
+			if (object == null)
+			{
+				continue;
+			}
+			
 			if (object.getID() == id)
 			{
 				removeIndex = currentIndex;
