@@ -41,9 +41,9 @@ public class Images
 	/**
 	 * Modify images using java and write them to the file
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public static void main(String[]args) throws IOException
+	public static void main(String[] args) throws IOException
 	{
 		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_4.png"));
 		BufferedImage[][] imageTiles = new BufferedImage[image
@@ -58,28 +58,24 @@ public class Images
 		}
 
 		// Rotate the images needed and write to file
-		image = imageTiles[3][15];
+		image = imageTiles[7][9];
 		ImageIO.write(image, "PNG", new File(
-				"HAGOLD_ICON.png"));
+				"DADIAMOND_ICON.png"));
 		int locationX = image.getWidth();
 		int locationY = image.getHeight();
-		double rotationRequired = Math.toRadians(45);
+		double rotationRequired = Math.toRadians(135);
 		AffineTransform tx;
 		tx = AffineTransform.getRotateInstance(
 				rotationRequired, locationX, locationY);
 		tx.translate(0, 16);
-		
+
 		AffineTransformOp op = new AffineTransformOp(tx,
 				AffineTransformOp.TYPE_BILINEAR);
-		ImageIO.write(op.filter(image,null), "PNG", new File(
-				"HAGOLD.png"));
-		
-		
-		
+		ImageIO.write(op.filter(image, null), "PNG", new File(
+				"DADIAMOND.png"));
+
 	}
-	
-	
-	
+
 	/**
 	 * Import the images from the folder
 	 * @throws IOException
@@ -112,130 +108,145 @@ public class Images
 				}
 
 				// Add all the pics from the player sprite sheets
-				String[] playerSheets = {"BASE_DARK", "BASE_LIGHT",
+				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",
 						"BASE_TAN", "HAIR_0_BEIGE", "HAIR_1_BEIGE",
 						"HAIR_0_BLACK", "HAIR_1_BLACK", "HAIR_0_BLOND",
-						"HAIR_0_BLOND","HAIR_0_GREY","HAIR_1_GREY", "OUTFIT_ARMOR", "OUTFIT_NINJA_BLUE",
+						"HAIR_0_BLOND", "HAIR_0_GREY", "HAIR_1_GREY",
+						"OUTFIT_ARMOR", "OUTFIT_NINJA_BLUE",
 						"OUTFIT_NINJA_GREY", "OUTFIT_NINJA_RED" };
 				for (int no = 0; no < playerSheets.length; no++)
 				{
 					image = ImageIO.read(new File(playerSheets[no] + ".png"));
-					BufferedImage[][] imageTiles = new BufferedImage[5][image.getWidth() / 32];
+					BufferedImage[][] imageTiles = new BufferedImage[5][image
+							.getWidth() / 32];
 					for (int row = 0; row < imageTiles.length; row++)
 					{
 						for (int column = 0; column < imageTiles[0].length; column++)
 						{
-							BufferedImage currentImage = image.getSubimage(column * 32, row * 64, 32, 64);
-							
+							BufferedImage currentImage = image.getSubimage(
+									column * 32, row * 64, 32, 64);
+
 							// Add a right version of this image
-							images.add(new GameImage(playerSheets[no] + "_RIGHT_" + row + "_" + column + ".png",currentImage,64,128));
-							
+							images.add(new GameImage(playerSheets[no]
+									+ "_RIGHT_" + row + "_" + column + ".png",
+									currentImage, 64, 128));
+
 							AffineTransform tx;
 							tx = AffineTransform.getScaleInstance(-1, 1);
 							tx.translate(-currentImage.getWidth(null), 0);
 							AffineTransformOp op = new AffineTransformOp(tx,
 									AffineTransformOp.TYPE_BILINEAR);
-							
+
 							// Add a left version of this image
-							images.add(new GameImage(playerSheets[no] + "_LEFT_" + row + "_" + column + ".png",op.filter(currentImage, null).getSubimage(0, 0,
-											currentImage.getWidth(), currentImage.getHeight()),64,128));
+							images.add(new GameImage(playerSheets[no]
+									+ "_LEFT_" + row + "_" + column + ".png",
+									op.filter(currentImage, null).getSubimage(
+											0, 0,
+											currentImage.getWidth(),
+											currentImage.getHeight()), 64, 128));
 						}
 					}
-					
+
 					// Load death images (they are different sizes)
-					
-					BufferedImage currentImage = image.getSubimage(32, 5 * 64, 32, 64);
-					
+
+					BufferedImage currentImage = image.getSubimage(32, 5 * 64,
+							32, 64);
+
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 1 + ".png",currentImage,64,128));
-					
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+							+ "_" + 1 + ".png", currentImage, 64, 128));
+
 					AffineTransform tx;
 					tx = AffineTransform.getScaleInstance(-1, 1);
 					tx.translate(-currentImage.getWidth(null), 0);
 					AffineTransformOp op = new AffineTransformOp(tx,
 							AffineTransformOp.TYPE_BILINEAR);
-					
+
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 1 + ".png",op.filter(currentImage, null).getSubimage(0, 0,
-									currentImage.getWidth(), currentImage.getHeight()),64,128));
-					
-					
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+							+ "_" + 1 + ".png", op.filter(currentImage, null)
+							.getSubimage(0, 0,
+									currentImage.getWidth(),
+									currentImage.getHeight()), 64, 128));
+
 					currentImage = image.getSubimage(2 * 32, 5 * 64, 40, 64);
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 2 + ".png",currentImage,80,128));
-					
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+							+ "_" + 2 + ".png", currentImage, 80, 128));
+
 					AffineTransform tx2;
 					tx2 = AffineTransform.getScaleInstance(-1, 1);
 					tx2.translate(-currentImage.getWidth(null), 0);
 					AffineTransformOp op2 = new AffineTransformOp(tx2,
 							AffineTransformOp.TYPE_BILINEAR);
-					
+
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 2 + ".png",op2.filter(currentImage, null).getSubimage(0, 0,
-									currentImage.getWidth(), currentImage.getHeight()),80,128));
-					
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+							+ "_" + 2 + ".png", op2.filter(currentImage, null)
+							.getSubimage(0, 0,
+									currentImage.getWidth(),
+									currentImage.getHeight()), 80, 128));
+
 					currentImage = image.getSubimage(4 * 32, 5 * 64, 52, 64);
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5 + "_" + 4 + ".png",currentImage,104,128));
-					
+					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+							+ "_" + 4 + ".png", currentImage, 104, 128));
+
 					AffineTransform tx3;
 					tx3 = AffineTransform.getScaleInstance(-1, 1);
 					tx3.translate(-currentImage.getWidth(null), 0);
 					AffineTransformOp op3 = new AffineTransformOp(tx3,
 							AffineTransformOp.TYPE_BILINEAR);
-					
+
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5 + "_" + 4 + ".png",op3.filter(currentImage, null).getSubimage(0, 0,
-									currentImage.getWidth(), currentImage.getHeight()),104,128));
-					
+					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+							+ "_" + 4 + ".png", op3.filter(currentImage, null)
+							.getSubimage(0, 0,
+									currentImage.getWidth(),
+									currentImage.getHeight()), 104, 128));
+
 				}
-				
+
 				images.add(new GameImage("SWORD.png",
 						70, 30));
 				images.add(new GameImage("SWORD_ICON.png",
 						INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
-				image = ImageIO.read(new File(
-						"HAGOLD.png"));
-				double locationX = image.getWidth() / 2;
-				double locationY = image.getHeight() / 2;
+				String[] weaponSheets = { "DAWOOD", "DASTONE", "DAIRON",
+						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",
+						"AXGOLD", "AXDIAMOND", "SWWOOD", "SWSTONE", "SWIRON",
+						"SWGOLD", "SWDIAMOND", "HAWOOD", "HASTONE", "HAIRON",
+						"HAGOLD", "HADIAMOND" };
 
-				for (int angle = 180; angle > -180; angle -= 15)
+				for (int no = 0; no < weaponSheets.length; no++)
 				{
-					double rotationRequired = Math.toRadians(angle);
-					AffineTransform tx;
+					image = ImageIO.read(new File(
+							weaponSheets[no] + ".png"));
+					double locationX = image.getWidth() / 2;
+					double locationY = image.getHeight() / 2;
 
-					int actualAngle = angle;
-					 
-//					 actualAngle -= 45;
-//					 if (actualAngle <= -180)
-//					 {
-//					 actualAngle = 180 + (actualAngle + 180);
-//					 }
-//					
-//					if (!(actualAngle >= -90 && actualAngle < 90))
-//					{
-//						tx = AffineTransform.getScaleInstance(-1, 1);
-//						tx.translate(-image.getWidth(null), 0);
-//					}
+					for (int angle = 180; angle > -180; angle -= 15)
+					{
+						double rotationRequired = Math.toRadians(angle);
+						AffineTransform tx;
 
-					tx = AffineTransform.getRotateInstance(
-							rotationRequired, locationX, locationY);
+						int actualAngle = angle;
 
-					AffineTransformOp op = new AffineTransformOp(tx,
-							AffineTransformOp.TYPE_BILINEAR);
+						tx = AffineTransform.getRotateInstance(
+								rotationRequired, locationX, locationY);
 
-					BufferedImage newImage = op
-							.filter(image, null).getSubimage(0, 0,
-									image.getWidth(), image.getHeight());
+						AffineTransformOp op = new AffineTransformOp(tx,
+								AffineTransformOp.TYPE_BILINEAR);
 
-					images.add(new GameImage("HAGOLD_" + (actualAngle) + ".png",
-							newImage));
+						BufferedImage newImage = op
+								.filter(image, null).getSubimage(0, 0,
+										image.getWidth(), image.getHeight());
+
+						images.add(new GameImage(
+								weaponSheets[no] + "_" + (actualAngle) + ".png",
+								newImage));
+					}
 				}
-
-				// Add images with rotations (the number in the name represents
-				// the angle rotated)
-
 			}
 			catch (IOException e)
 			{
@@ -274,7 +285,6 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			
 
 			for (int no = 0; no < 6; no++)
 			{
@@ -291,10 +301,12 @@ public class Images
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
-			images.add(new GameImage("MONEY.png",30,40));
-			images.add(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-			
-			images.add(new GameImage("BACKGROUND.png",Client.Client.SCREEN_WIDTH,Client.Client.SCREEN_HEIGHT));
+			images.add(new GameImage("MONEY.png", 30, 40));
+			images.add(new GameImage("MONEY_ICON.png",
+					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+
+			images.add(new GameImage("BACKGROUND.png",
+					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 		}
 	}
 
