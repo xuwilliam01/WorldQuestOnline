@@ -18,11 +18,12 @@ public class ClientShopItem extends JButton implements ActionListener{
 	private String type;
 	private int amount;
 	private int cost;
-	private int pos;
+	private int row;
+	private int col;
 	private ClientShop inventory;
 	private Image image;
 
-	public ClientShopItem(String imageName, String type,int amount,int cost,int pos, ClientShop inventory)
+	public ClientShopItem(String imageName, String type,int amount,int cost,int row, int col, ClientShop inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName)));
 		this.imageName = imageName;
@@ -30,11 +31,12 @@ public class ClientShopItem extends JButton implements ActionListener{
 		this.type = type;
 		this.amount = amount;
 		this.cost = cost;
-		this.pos = pos;
+		this.row = row;
+		this.col = col;
 		this.inventory = inventory;
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
-		setLocation(pos*Images.INVENTORY_IMAGE_SIDELENGTH+(pos+1)*20,60);
+		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20));
 		setVisible(true);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
@@ -70,8 +72,18 @@ public class ClientShopItem extends JButton implements ActionListener{
 			graphics.drawString(amount+"", getWidth()-8, 10);
 	}
 
-	public int getPos()
+	public int getRow()
 	{
-		return pos;
+		return row;
+	}
+	
+	public int getCol()
+	{
+		return col;
+	}
+	
+	public int getCost()
+	{
+		return cost;
 	}
 }

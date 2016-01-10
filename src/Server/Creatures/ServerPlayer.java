@@ -627,11 +627,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				if(item.getAmount() <= 0)
 					toRemove = item;
 			}
-		
+
 		if(toRemove != null)
 			getInventory().remove(toRemove);
 	}
-	
+
 	public void drop(int slot)
 	{
 		dropItem(equippedWeapons[slot]);
@@ -813,11 +813,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			endColumn = world.getObjectGrid()[0].length - 1;
 		}
 
-		synchronized(this)
+
+		for (int row = startRow; row <= endRow; row++)
 		{
-			for (int row = startRow; row <= endRow; row++)
+			for (int column = startColumn; column <= endColumn; column++)
 			{
-				for (int column = startColumn; column <= endColumn; column++)
+				synchronized(this)
 				{
 					for (ServerObject object : world.getObjectGrid()[row][column])
 					{
@@ -826,11 +827,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							//If vendor send shop to client
 							if(object.getType().equals(ServerWorld.VENDOR_TYPE))
 							{
-								vendor = (ServerVendor)object;
-								String newMessage = "V "+ vendor.getInventory().size();
-								for(ServerItem item : vendor.getInventory())
-									newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
-								queueMessage(newMessage);
+								if(vendor == null)
+								{
+									vendor = (ServerVendor)object;
+									String newMessage = "V "+ vendor.getInventory().size();
+									for(ServerItem item : vendor.getInventory())
+										newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
+									queueMessage(newMessage);
+								}
+								else 
+									vendor = null;
 							}
 						}
 

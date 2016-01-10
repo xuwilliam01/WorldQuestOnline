@@ -529,8 +529,15 @@ MouseMotionListener
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_E)
 		{
-			if(shop == null)
-				print("E");
+			print("E");
+			if(shop != null)
+			{
+				shop.setVisible(false);
+				frame.remove(shop);
+				frame.invalidate();
+				shop = null;
+				//close the window
+			}
 		}
 	}
 
