@@ -13,6 +13,7 @@ import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Items.ServerItem;
+import Server.Items.ServerMoney;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
 import Tools.RowCol;

@@ -20,7 +20,6 @@ public abstract class ServerCreature extends ServerObject
 	 * Maximum possible HP of the creature
 	 */
 	private int maxHP;
-
 	/**
 	 * Current HP of the creature
 	 */
@@ -195,7 +194,7 @@ public abstract class ServerCreature extends ServerObject
 			{
 				if(item.getType().equals(sItem.getType()))
 				{
-					sItem.increaseAmount();
+					sItem.increaseAmount(item.getAmount());
 					return;
 				}
 			}

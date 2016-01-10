@@ -44,7 +44,7 @@ public class ClientInventory extends JPanel{
 				for(int col = 0;col < inventory[row].length;col++)
 					if(inventory[row][col] != null && inventory[row][col].getType().equals(type))
 					{
-						inventory[row][col].increaseAmount();
+						inventory[row][col].increaseAmount(amount);
 						return;
 					}
 

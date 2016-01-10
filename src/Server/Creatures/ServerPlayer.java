@@ -622,7 +622,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			// Knock back the creature based on the knockback force
 			// if (Math.abs(knockBack) - getKnockBackResistance() > 0)
-			// {
 			// setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
 			// if (knockBack > 0)
 			// {

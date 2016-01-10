@@ -112,6 +112,10 @@ public class ClientItem extends JButton implements MouseListener{
 		amount++;
 	}
 
+	public void increaseAmount(int amount)
+	{
+		this.amount += amount;
+	}
 	public int getAmount()
 	{
 		return amount;
