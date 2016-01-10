@@ -352,11 +352,14 @@ MouseMotionListener
 								frame.add(shop,JLayeredPane.PALETTE_LAYER);
 								shop.revalidate();
 								frame.setVisible(true);
-								System.out.println("Added shop");
 							}
 							else if(shop != null)
 								shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 
+						}
+						else if (tokens[token].equals("C"))
+						{
+							closeShop();
 						}
 					}
 
@@ -388,6 +391,17 @@ MouseMotionListener
 		}
 	}
 
+	/**
+	 * Close the shop
+	 */
+	public void closeShop()
+	{
+		shop.setVisible(false);
+		frame.remove(shop);
+		frame.invalidate();
+		shop = null;
+	}
+	
 	/**
 	 * Import the map
 	 */
@@ -551,11 +565,7 @@ MouseMotionListener
 			print("E");
 			if(shop != null)
 			{
-				shop.setVisible(false);
-				frame.remove(shop);
-				frame.invalidate();
-				shop = null;
-				//close the window
+				closeShop();
 			}
 		}
 	}

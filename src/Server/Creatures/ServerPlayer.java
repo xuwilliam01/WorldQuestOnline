@@ -493,6 +493,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				setHSpeed(movingDirection * horizontalMovement);
 			}
 
+			//Check if the vendor is out of range
+			if(vendor != null && !collidesWith(vendor))
+			{
+				vendor.setIsBusy(false);
+				vendor = null;
+				queueMessage("C");
+			}
+			
 			// Tell the user what hp he has
 			queueMessage("L " + getHP());
 
@@ -923,9 +931,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								// If vendor send shop to client
 								if (object.getType().equals(
 										ServerWorld.VENDOR_TYPE)
-										&& !((ServerVendor) object).isBusy())
+										)
 								{
-									if (vendor == null)
+									if (vendor == null && !((ServerVendor) object).isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -941,7 +949,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 													item.getCost());
 										queueMessage(newMessage);
 									}
-									else
+									else if(vendor != null)
 									{
 										vendor.setIsBusy(false);
 										vendor = null;

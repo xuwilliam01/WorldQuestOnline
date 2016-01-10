@@ -226,6 +226,7 @@ public class ClientItem extends JButton implements MouseListener{
 			//Drop item
 			else
 				inventory.removeItem(this,equipSlot);
+			repaint();
 		}
 
 	}
