@@ -43,8 +43,6 @@ public class ServerDamageIndicator extends ServerText
 		setVSpeed(-0.5);
 		this.world = world;
 		startCounter = world.getWorldCounter();
-		
-		System.out.println("NEW");
 	}
 	
 	/**
@@ -52,7 +50,6 @@ public class ServerDamageIndicator extends ServerText
 	 */
 	public void update()
 	{
-		System.out.println(getImage());
 		if (world.getWorldCounter()-startCounter >= FRAMES_ALIVE)
 		{
 			destroy();

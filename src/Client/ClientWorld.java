@@ -302,8 +302,6 @@ public class ClientWorld
 						x = centreX + object.getX() - playerX;
 
 						graphics.drawString(text, x, y - 10);
-						
-						System.out.println(text);
 					}
 				}
 			}

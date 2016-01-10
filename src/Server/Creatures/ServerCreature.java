@@ -176,7 +176,6 @@ public abstract class ServerCreature extends ServerObject
 
 			world.add(new ServerDamageIndicator(damageX, damageY, Integer
 					.toString(amount), colour, world));
-			System.out.println("Text added");
 		}
 
 		if (HP <= 0)

@@ -346,11 +346,6 @@ public class ServerWorld
 						continue;
 					}
 
-					if (object.getType().charAt(0) == 't')
-					{
-						System.out.println("Text is in list");
-					}
-
 					// Update all locations of objects based on the object grid
 					// (for
 					// collisions)
@@ -886,11 +881,6 @@ public class ServerWorld
 	{
 		ArrayList<RowCol> indexesToRemove = new ArrayList<RowCol>();
 		ArrayList<RowCol> objectTiles = object.getObjectTiles();
-
-		if (object.getType().charAt(0) == 't')
-		{
-			System.out.println("ADDED TO OBJECT TILE");
-		}
 
 		for (RowCol tile : objectTiles)
 		{

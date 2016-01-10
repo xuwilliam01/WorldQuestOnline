@@ -457,11 +457,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						if (object.exists())
 						{
-							if (object.getImage().charAt(0) == 't')
-							{
-								System.out.println("TEXT");
-							}
-
 							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 							{
 								queueMessage("O " + object.getID() + " "
