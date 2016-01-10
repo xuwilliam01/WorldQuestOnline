@@ -22,7 +22,7 @@ import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener
+MouseMotionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1600;
@@ -93,7 +93,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Store the selected weapon
 	 */
-	private int weaponSelected = 0;
+	private int weaponSelected = 9;
 
 	/**
 	 * Constructor for the client
@@ -382,12 +382,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 	public void setWeaponSelected(int weaponSelected)
 	{
-		if (inventory.getEquippedWeapons()[this.weaponSelected] != null)
+		if (this.weaponSelected != 9 && inventory.getEquippedWeapons()[this.weaponSelected] != null)
 			inventory.getEquippedWeapons()[this.weaponSelected]
 					.setBorder(BorderFactory.createEmptyBorder());
 
-		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
-				.createLineBorder(Color.white));
+		if(weaponSelected != 9)
+			inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
+					.createLineBorder(Color.white));
 		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
@@ -431,16 +432,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			// R for right
 			currentMessage = "R";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("L"))
 		{
 			// L for left
 			currentMessage = "L";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_W
 				|| key.getKeyCode() == KeyEvent.VK_UP
@@ -449,23 +448,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			// U for up
 			currentMessage = "U";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
 				&& !currentMessage.equals("D"))
 		{
 			// D for down
 			currentMessage = "D";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
 			// P for ping
 			ping = System.currentTimeMillis();
-			output.println("P");
-			output.flush();
+			print("P");
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_1
 				&& !currentMessage.equals("W0")
@@ -491,6 +487,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				&& inventory.getEquippedWeapons()[3] != null)
 		{
 			setWeaponSelected(3);
+		}
+		else if(key.getKeyCode() == KeyEvent.VK_E)
+		{
+			print("E");
 		}
 	}
 
@@ -524,8 +524,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			pingString = "LATENCY: (PRESS P)";
 		}
-		output.println(currentMessage);
-		output.flush();
+		print(currentMessage);
 
 	}
 
@@ -538,8 +537,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 	}
 
@@ -551,8 +549,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			currentMessage = "!A";
 
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 	}
 
@@ -586,14 +583,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
 		{
-			output.println("DR");
-			output.flush();
+			print("DR");
 			direction = 'R';
 		}
 		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
 		{
-			output.println("DL");
-			output.flush();
+			print("DL");
 			direction = 'L';
 		}
 
@@ -605,14 +600,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
 		{
-			output.println("DR");
-			output.flush();
+			print("DR");
 			direction = 'R';
 		}
 		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
 		{
-			output.println("DL");
-			output.flush();
+			print("DL");
 			direction = 'L';
 		}
 	}

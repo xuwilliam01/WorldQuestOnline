@@ -18,7 +18,7 @@ public class ClientItem extends JButton implements MouseListener{
 	private Image image;
 	private String imageName;
 	private boolean selected = false;
-	private int equipSlot = -1;
+	private int equipSlot = 9;
 	private int row;
 	private int col;
 	private ClientInventory inventory;
@@ -166,7 +166,7 @@ public class ClientItem extends JButton implements MouseListener{
 								this.row = row;
 								this.col = col;
 								inventory.getEquippedWeapons()[equipSlot] = null;
-								equipSlot = -1;
+								equipSlot = 9;
 								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 								return;
 							}
@@ -198,7 +198,7 @@ public class ClientItem extends JButton implements MouseListener{
 				}
 			}
 			//If it's a potion use it
-			else if(type.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+			else if(type.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
 			{
 				inventory.use(this);
 			}

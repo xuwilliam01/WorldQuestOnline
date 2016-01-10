@@ -107,12 +107,15 @@ public class ClientInventory extends JPanel{
 						{
 							equippedWeapons[spot].setBorder(BorderFactory.createLineBorder(Color.white));
 							client.setWeaponSelected(spot);
+							repaint();
+							return;
 						}
+					client.setWeaponSelected(9);
 				}
 
 			}
 		}
-		repaint();
+		
 	}
 
 	public void use(ClientItem item)
