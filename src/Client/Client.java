@@ -296,7 +296,7 @@ MouseMotionListener
 									otherObject.setY(Integer
 											.parseInt(tokens[++token]));
 									otherObject.setImage(tokens[++token]);
-									
+
 									otherObject.setTeam(Integer
 											.parseInt(tokens[++token]));
 								}
@@ -359,7 +359,8 @@ MouseMotionListener
 						}
 						else if (tokens[token].equals("C"))
 						{
-							closeShop();
+							if(shop != null)
+								closeShop();
 						}
 					}
 
@@ -401,7 +402,7 @@ MouseMotionListener
 		frame.invalidate();
 		shop = null;
 	}
-	
+
 	/**
 	 * Import the map
 	 */

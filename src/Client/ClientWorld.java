@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
 
 import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
@@ -163,6 +164,11 @@ public class ClientWorld
 		catch (ConcurrentModificationException e)
 		{
 			System.out.println("ConcurrentModification Exception");
+			e.printStackTrace();
+		}
+		catch(NoSuchElementException e)
+		{
+			System.out.println("No such element exception, probably caused by concurrent modification exception");
 			e.printStackTrace();
 		}
 

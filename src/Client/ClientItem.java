@@ -79,7 +79,7 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		return cost;
 	}
-	
+
 	public boolean isSelected() {
 		return selected;
 	}
@@ -204,6 +204,15 @@ public class ClientItem extends JButton implements MouseListener{
 					row = -1;
 					col = -1;
 					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*20+80,500);
+					
+					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
+					//If this is the first item to be equipped, auto select it
+					if(inventory.getClient().getWeaponSelected() == 9 ||inventory.getEquippedWeapons()[inventory.getClient().getWeaponSelected()] == null )
+					{
+						inventory.getClient().setWeaponSelected(equipSlot);
+						setBorder(BorderFactory.createLineBorder(Color.white));
+					}
+					
 					repaint();
 
 
