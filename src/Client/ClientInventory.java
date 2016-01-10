@@ -70,6 +70,37 @@ public class ClientInventory extends JPanel{
 	//		items[row][col] = null;
 	//	}
 
+	/**
+	 * Gets the amount of money in the inventory
+	 */
+	public int getMoney()
+	{
+		for(int row = 0; row < inventory.length;row++)
+			for(int col = 0; col < inventory.length;col++)
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
+					return inventory[row][col].getAmount();
+		return 0;
+	}
+	
+	public void decreaseMoney(int amount)
+	{
+		for(int row = 0; row < inventory.length;row++)
+			for(int col = 0; col < inventory.length;col++)
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
+				{
+					inventory[row][col].decreaseAmount(amount);
+					if(inventory[row][col].getAmount() <= 0)
+					{
+						inventory[row][col].setVisible(false);
+						remove(inventory[row][col]);
+						invalidate();
+						inventory[row][col] = null;	
+					}
+					else
+						inventory[row][col].repaint();
+				}
+	}
+	
 	public void removeItem(ClientItem item, int pos)
 	{
 		if(item.getAmount()  > 1)

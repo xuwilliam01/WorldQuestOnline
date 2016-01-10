@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -96,14 +98,25 @@ MouseMotionListener
 	private int weaponSelected = 9;
 
 	/**
+	 * Frame this panel is located in
+	 */
+	private JLayeredPane frame;
+
+	/**
+	 * The shop
+	 */
+	private ClientShop shop = null;
+
+	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory)
+	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame)
 	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
 		this.inventory = inventory;
+		this.frame = frame;
 	}
 
 	/**
@@ -189,6 +202,19 @@ MouseMotionListener
 		addMouseMotionListener(this);
 
 		direction = 'R';
+	}
+
+	/**
+	 * Gets the amount of money the client has
+	 */
+	public int getMoney()
+	{
+		return inventory.getMoney();
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		inventory.decreaseMoney(amount);
 	}
 
 	/**
@@ -305,6 +331,19 @@ MouseMotionListener
 							inventory.addItem(tokens[++token], tokens[++token],
 									Integer.parseInt(tokens[++token]));
 							inventory.repaint();
+						}
+						else if(tokens[token].equals("V"))
+						{
+							shop = new ClientShop(Client.this);
+							int numItems = Integer.parseInt(tokens[++token]);
+							for(int item = 0; item < numItems;item++)
+								shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+							frame.add(shop,JLayeredPane.PALETTE_LAYER);
+							shop.revalidate();
+							frame.setVisible(true);
+							System.out.println("Added shop");
+
+
 						}
 					}
 
@@ -490,7 +529,8 @@ MouseMotionListener
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_E)
 		{
-			print("E");
+			if(shop == null)
+				print("E");
 		}
 	}
 

@@ -122,6 +122,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private long deathCounter = -1;
 
 	/**
+	 * The vendor that player is currently interacting with
+	 */
+	private ServerVendor vendor = null;
+
+	/**
 	 * Stores the equipped items
 	 */
 	private ServerWeapon[] equippedWeapons = new ServerWeapon[MAX_WEAPONS];
@@ -561,6 +566,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					weaponSelected = command.charAt(1);
 				}
+				else if(command.charAt(0) == 'B' && vendor != null)
+				{
+					ServerItem vendorItem = null;
+					for(ServerItem item : vendor.getInventory())
+						if(item.getType().equals(command.substring(2)))
+							vendorItem = item;
+
+					if(vendorItem != null && getMoney() >= vendorItem.getCost())
+					{
+						decreaseMoney(vendorItem.getCost());
+						vendor.drop(vendorItem.getType());		
+					}
+				}
 				else if(command.charAt(0) == 'E')
 				{
 					interact();
@@ -590,6 +608,30 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		engine.removePlayer(this);
 	}
 
+	public int getMoney()
+	{
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(ServerWorld.MONEY_TYPE))
+				return item.getAmount();
+		return 0;
+
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(ServerWorld.MONEY_TYPE))
+			{
+				item.decreaseAmount(amount);
+				if(item.getAmount() <= 0)
+					toRemove = item;
+			}
+		
+		if(toRemove != null)
+			getInventory().remove(toRemove);
+	}
+	
 	public void drop(int slot)
 	{
 		dropItem(equippedWeapons[slot]);
@@ -744,7 +786,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * Player interacts with the environment
 	 */
-	public void interact()
+	public synchronized void interact()
 	{
 		// Send all the objects within all the object tiles in the player's
 		// screen
@@ -771,25 +813,28 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			endColumn = world.getObjectGrid()[0].length - 1;
 		}
 
-		for (int row = startRow; row <= endRow; row++)
+		synchronized(this)
 		{
-			for (int column = startColumn; column <= endColumn; column++)
+			for (int row = startRow; row <= endRow; row++)
 			{
-				for (ServerObject object : world.getObjectGrid()[row][column])
+				for (int column = startColumn; column <= endColumn; column++)
 				{
-					if (object.exists() && object.collidesWith(this))
+					for (ServerObject object : world.getObjectGrid()[row][column])
 					{
-						//If vendor send shop to client
-						if(object.getType().equals(ServerWorld.VENDOR_TYPE))
+						if (object.exists() && object.collidesWith(this))
 						{
-							String newMessage = "V";
-							ServerVendor vendor = (ServerVendor)object;
-							for(ServerItem item : vendor.getInventory())
-								newMessage+= String.format(" %s %d", item.getType(), item.getAmount());
-							queueMessage(newMessage);
+							//If vendor send shop to client
+							if(object.getType().equals(ServerWorld.VENDOR_TYPE))
+							{
+								vendor = (ServerVendor)object;
+								String newMessage = "V "+ vendor.getInventory().size();
+								for(ServerItem item : vendor.getInventory())
+									newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
+								queueMessage(newMessage);
+							}
 						}
-					}
 
+					}
 				}
 			}
 		}

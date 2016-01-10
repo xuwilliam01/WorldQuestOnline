@@ -48,7 +48,7 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
-		if(amount > 10)
+		if(amount >= 10)
 			graphics.drawString(amount+"", getWidth()-16, 10);
 		else if(amount > 1)
 			graphics.drawString(amount+"", getWidth()-8, 10);
@@ -124,6 +124,11 @@ public class ClientItem extends JButton implements MouseListener{
 	public void decreaseAmount()
 	{
 		amount--;
+	}
+	
+	public void decreaseAmount(int amount)
+	{
+		this.amount -= amount;		
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
