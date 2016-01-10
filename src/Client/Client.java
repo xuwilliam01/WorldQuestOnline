@@ -329,20 +329,31 @@ MouseMotionListener
 						{
 							System.out.println("Received an item");
 							inventory.addItem(tokens[++token], tokens[++token],
-									Integer.parseInt(tokens[++token]));
+									Integer.parseInt(tokens[++token]),Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
 						else if(tokens[token].equals("V"))
 						{
-							shop = new ClientShop(Client.this);
-							int numItems = Integer.parseInt(tokens[++token]);
-							for(int item = 0; item < numItems;item++)
+							if(Character.isDigit(tokens[token+1].charAt(0)))
+							{
+								if(shop != null)
+								{
+									shop.setVisible(false);
+									frame.remove(shop);
+									frame.invalidate();
+									shop = null;
+								}
+								shop = new ClientShop(Client.this);
+								int numItems = Integer.parseInt(tokens[++token]);
+								for(int item = 0; item < numItems;item++)
+									shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+								frame.add(shop,JLayeredPane.PALETTE_LAYER);
+								shop.revalidate();
+								frame.setVisible(true);
+								System.out.println("Added shop");
+							}
+							else if(shop != null)
 								shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
-							frame.add(shop,JLayeredPane.PALETTE_LAYER);
-							shop.revalidate();
-							frame.setVisible(true);
-							System.out.println("Added shop");
-
 
 						}
 					}
@@ -417,6 +428,11 @@ MouseMotionListener
 	public int getWeaponSelected()
 	{
 		return weaponSelected;
+	}
+
+	public boolean isShopOpen()
+	{
+		return shop != null;
 	}
 
 	public void setWeaponSelected(int weaponSelected)

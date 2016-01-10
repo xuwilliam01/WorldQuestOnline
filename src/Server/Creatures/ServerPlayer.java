@@ -6,12 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerItem;
+import Server.Items.ServerMoney;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
@@ -583,6 +585,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					interact();
 				}
+				else if(command.charAt(0) == 'S' && vendor != null)
+				{
+					String type = command.substring(2);
+					if(!type.equals(ServerWorld.MONEY_TYPE))
+						sell(type);
+				}
 			}
 			catch (IOException e)
 			{
@@ -606,6 +614,43 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		disconnected = true;
 		destroy();
 		engine.removePlayer(this);
+	}
+
+	public void sell(String type)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(type))
+			{
+
+				if(item.getAmount() > 1)
+				{
+					item.decreaseAmount();
+					vendor.addItem(ServerItem.copy(item));
+				}
+				else	
+				{
+					toRemove = item;
+					vendor.addItem(item);
+				}
+
+				String newMessage = String.format("V %s %s %d %d", item.getImage(), item.getType(), 1,item.getCost());
+				queueMessage(newMessage);
+
+				increaseMoney((item.getCost()+1)/2);
+				break;
+			}
+		if(toRemove != null)
+			getInventory().remove(toRemove);
+
+	}
+
+	public void increaseMoney(int amount)
+	{
+		ServerMoney newMoney = new ServerMoney(getX(),getY(),amount);
+		newMoney.makeExist();
+		newMoney.setSource(this);
+		world.add(newMoney);
 	}
 
 	public int getMoney()
@@ -814,34 +859,46 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 
-		for (int row = startRow; row <= endRow; row++)
+		while(true)
 		{
-			for (int column = startColumn; column <= endColumn; column++)
+			try
 			{
-				synchronized(this)
+				for (int row = startRow; row <= endRow; row++)
 				{
-					for (ServerObject object : world.getObjectGrid()[row][column])
+					for (int column = startColumn; column <= endColumn; column++)
 					{
-						if (object.exists() && object.collidesWith(this))
+						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-							//If vendor send shop to client
-							if(object.getType().equals(ServerWorld.VENDOR_TYPE))
+							if (object.exists() && object.collidesWith(this))
 							{
-								if(vendor == null)
+								//If vendor send shop to client
+								if(object.getType().equals(ServerWorld.VENDOR_TYPE))
 								{
-									vendor = (ServerVendor)object;
-									String newMessage = "V "+ vendor.getInventory().size();
-									for(ServerItem item : vendor.getInventory())
-										newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
-									queueMessage(newMessage);
+									if(vendor == null)
+									{
+										vendor = (ServerVendor)object;
+										String newMessage = "V "+ vendor.getInventory().size();
+										for(ServerItem item : vendor.getInventory())
+											newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
+										queueMessage(newMessage);
+									}
+									else 
+										vendor = null;
+									return;
 								}
-								else 
-									vendor = null;
+
 							}
+
 						}
 
 					}
 				}
+				break;
+			}
+			catch(ConcurrentModificationException e)
+			{
+				System.out.println("ConcurrentModificationException");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -942,7 +999,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super.addItem(item);
 		queueMessage("I " + item.getImage() + " " + item.getType() + " "
-				+ item.getAmount());
+				+ item.getAmount()+" "+item.getCost());
 	}
 
 	public void equip(String itemType)

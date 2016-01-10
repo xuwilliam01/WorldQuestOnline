@@ -36,7 +36,7 @@ public class ClientInventory extends JPanel{
 	 * Adds an item to the array given its image
 	 * @param image
 	 */
-	public void addItem(String image, String type, int amount)
+	public void addItem(String image, String type, int amount, int cost)
 	{
 		//If the item is a potion, check if it already exists and if it does, increase the amount
 		if(type.charAt(1)==ServerWorld.STACK_TYPE.charAt(1))
@@ -53,7 +53,7 @@ public class ClientInventory extends JPanel{
 			for(int col = 0;col < inventory[row].length;col++)
 				if(inventory[row][col] == null)
 				{
-					inventory[row][col] = new ClientItem(image,type,amount,row,col,this);
+					inventory[row][col] = new ClientItem(image,type,amount,cost,row,col,this);
 					add(inventory[row][col]);
 					repaint();
 					return;
@@ -81,7 +81,7 @@ public class ClientInventory extends JPanel{
 					return inventory[row][col].getAmount();
 		return 0;
 	}
-	
+
 	public void decreaseMoney(int amount)
 	{
 		for(int row = 0; row < inventory.length;row++)
@@ -100,7 +100,35 @@ public class ClientInventory extends JPanel{
 						inventory[row][col].repaint();
 				}
 	}
-	
+
+	public void sellItem(ClientItem item, int pos)
+	{
+		if(item.getAmount() > 1)
+		{
+			item.decreaseAmount();	
+			client.print("S "+item.getType());
+		}
+		else
+		{
+			item.setVisible(false);
+			remove(item);
+			invalidate();
+			if(pos == 9)
+				for(int row = 0; row < inventory.length;row++)
+					for(int col = 0; col < inventory[row].length;col++)
+					{
+						if(inventory[row][col] == item)
+						{
+							inventory[row][col] = null;
+							client.print("S "+item.getType());
+							repaint();
+							return;
+						}
+					}
+		}
+
+
+	}
 	public void removeItem(ClientItem item, int pos)
 	{
 		if(item.getAmount()  > 1)
@@ -113,7 +141,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == -1)
+			if(pos == 9)
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{
@@ -146,7 +174,7 @@ public class ClientInventory extends JPanel{
 
 			}
 		}
-		
+
 	}
 
 	public void use(ClientItem item)
@@ -227,7 +255,7 @@ public class ClientInventory extends JPanel{
 
 	public void setEquippedWeapons(ClientItem[] equippedWeapons) {
 		this.equippedWeapons = equippedWeapons;
-		
+
 		// Make the border show up around the first weapon
 		if (equippedWeapons[0]!=null)
 		{

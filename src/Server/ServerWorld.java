@@ -15,6 +15,7 @@ import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
+import Server.Items.ServerPotion;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
 import Tools.RowCol;
@@ -175,7 +176,7 @@ public class ServerWorld
 					"SLIME_0.png", this);
 			//newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
 			//		newEnemy.getY()));
-			newEnemy.addItem(new ServerMoney(newEnemy.getX(),
+			newEnemy.addItem(ServerPotion.randomPotion(newEnemy.getX(),
 					newEnemy.getY()));
 			add(newEnemy);
 		}

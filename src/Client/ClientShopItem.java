@@ -86,4 +86,14 @@ public class ClientShopItem extends JButton implements ActionListener{
 	{
 		return cost;
 	}
+	
+	public void increaseAmount(int amount)
+	{
+		this.amount += amount;
+	}
+	
+	public String getType()
+	{
+		return type;
+	}
 }

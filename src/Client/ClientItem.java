@@ -24,14 +24,16 @@ public class ClientItem extends JButton implements MouseListener{
 	private ClientInventory inventory;
 	private String type;
 	private int amount = 1;
+	private int cost;
 
-	public ClientItem(String imageName, String type,int amount,int row, int col, ClientInventory inventory)
+	public ClientItem(String imageName, String type,int amount,int cost,int row, int col, ClientInventory inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName)));
 		this.amount = amount;
 		this.row = row;
 		this.col = col;
 		this.type = type;
+		this.cost = cost;
 		this.inventory = inventory;
 		this.imageName = imageName;
 		image = Images.getImage(imageName);
@@ -73,6 +75,11 @@ public class ClientItem extends JButton implements MouseListener{
 		this.imageName = imageName;
 	}
 
+	public int getCost()
+	{
+		return cost;
+	}
+	
 	public boolean isSelected() {
 		return selected;
 	}
@@ -125,7 +132,7 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		amount--;
 	}
-	
+
 	public void decreaseAmount(int amount)
 	{
 		this.amount -= amount;		
@@ -211,8 +218,14 @@ public class ClientItem extends JButton implements MouseListener{
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
-			//Remove from equipment
-			inventory.removeItem(this,equipSlot);
+			//Sell item
+			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE))
+			{
+				inventory.sellItem(this,equipSlot);
+			}
+			//Drop item
+			else
+				inventory.removeItem(this,equipSlot);
 		}
 
 	}

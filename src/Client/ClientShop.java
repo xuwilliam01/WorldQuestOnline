@@ -7,6 +7,7 @@ import java.awt.Image;
 import javax.swing.JPanel;
 
 import Imports.Images;
+import Server.ServerWorld;
 import Server.Creatures.ServerVendor;
 
 public class ClientShop extends JPanel{
@@ -35,6 +36,15 @@ public class ClientShop extends JPanel{
 
 	public void addItem(String imageName, String type, int amount, int cost)
 	{
+		if(type.charAt(1)==ServerWorld.STACK_TYPE.charAt(1))
+			for(int row = 0; row < shopItems.length;row++)
+				for(int col = 0;col < shopItems[row].length;col++)
+					if(shopItems[row][col] != null && shopItems[row][col].getType().equals(type))
+					{
+						shopItems[row][col].increaseAmount(amount);
+						return;
+					}
+		
 		for(int row = 0; row < shopItems.length;row++)
 			for(int col = 0; col < shopItems[0].length;col++)
 			if(shopItems[row][col] == null)
