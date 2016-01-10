@@ -253,9 +253,9 @@ public abstract class ServerCreature extends ServerObject
 				toRemove = sItem;
 
 				//If we have a potion
-				if(item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+				if(item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
 				{
-					if(item.charAt(2) == ServerWorld.HP_POTION_TYPE.charAt(2))
+					if(item.charAt(3) == ServerWorld.HP_POTION_TYPE.charAt(3))
 					{
 						HP = Math.min(maxHP,HP+((ServerHPPotion)sItem).getHealAmount());
 					}

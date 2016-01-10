@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -22,7 +24,7 @@ import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener
+MouseMotionListener
 {
 	// Width and height of the screen
 	public final static int SCREEN_WIDTH = 1600;
@@ -93,17 +95,28 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Store the selected weapon
 	 */
-	private int weaponSelected = 0;
+	private int weaponSelected = 9;
+
+	/**
+	 * Frame this panel is located in
+	 */
+	private JLayeredPane frame;
+
+	/**
+	 * The shop
+	 */
+	private ClientShop shop = null;
 
 	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory)
+	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame)
 	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
 		this.inventory = inventory;
+		this.frame = frame;
 	}
 
 	/**
@@ -189,6 +202,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addMouseMotionListener(this);
 
 		direction = 'R';
+	}
+
+	/**
+	 * Gets the amount of money the client has
+	 */
+	public int getMoney()
+	{
+		return inventory.getMoney();
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		inventory.decreaseMoney(amount);
 	}
 
 	/**
@@ -303,8 +329,32 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							System.out.println("Received an item");
 							inventory.addItem(tokens[++token], tokens[++token],
-									Integer.parseInt(tokens[++token]));
+									Integer.parseInt(tokens[++token]),Integer.parseInt(tokens[++token]));
 							inventory.repaint();
+						}
+						else if(tokens[token].equals("V"))
+						{
+							if(Character.isDigit(tokens[token+1].charAt(0)))
+							{
+								if(shop != null)
+								{
+									shop.setVisible(false);
+									frame.remove(shop);
+									frame.invalidate();
+									shop = null;
+								}
+								shop = new ClientShop(Client.this);
+								int numItems = Integer.parseInt(tokens[++token]);
+								for(int item = 0; item < numItems;item++)
+									shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+								frame.add(shop,JLayeredPane.PALETTE_LAYER);
+								shop.revalidate();
+								frame.setVisible(true);
+								System.out.println("Added shop");
+							}
+							else if(shop != null)
+								shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+
 						}
 					}
 
@@ -380,14 +430,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		return weaponSelected;
 	}
 
+	public boolean isShopOpen()
+	{
+		return shop != null;
+	}
+
 	public void setWeaponSelected(int weaponSelected)
 	{
-		if (inventory.getEquippedWeapons()[this.weaponSelected] != null)
+		if (this.weaponSelected != 9 && inventory.getEquippedWeapons()[this.weaponSelected] != null)
 			inventory.getEquippedWeapons()[this.weaponSelected]
 					.setBorder(BorderFactory.createEmptyBorder());
 
-		inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
-				.createLineBorder(Color.white));
+		if(weaponSelected != 9)
+			inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
+					.createLineBorder(Color.white));
 		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
@@ -431,16 +487,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			// R for right
 			currentMessage = "R";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("L"))
 		{
 			// L for left
 			currentMessage = "L";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_W
 				|| key.getKeyCode() == KeyEvent.VK_UP
@@ -449,23 +503,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			// U for up
 			currentMessage = "U";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
 				&& !currentMessage.equals("D"))
 		{
 			// D for down
 			currentMessage = "D";
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_P)
 		{
 			// P for ping
 			ping = System.currentTimeMillis();
-			output.println("P");
-			output.flush();
+			print("P");
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_1
 				&& !currentMessage.equals("W0")
@@ -491,6 +542,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				&& inventory.getEquippedWeapons()[3] != null)
 		{
 			setWeaponSelected(3);
+		}
+		else if(key.getKeyCode() == KeyEvent.VK_E)
+		{
+			print("E");
+			if(shop != null)
+			{
+				shop.setVisible(false);
+				frame.remove(shop);
+				frame.invalidate();
+				shop = null;
+				//close the window
+			}
 		}
 	}
 
@@ -524,8 +587,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			pingString = "LATENCY: (PRESS P)";
 		}
-		output.println(currentMessage);
-		output.flush();
+		print(currentMessage);
 
 	}
 
@@ -538,8 +600,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 	}
 
@@ -551,8 +612,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			currentMessage = "!A";
 
-			output.println(currentMessage);
-			output.flush();
+			print(currentMessage);
 		}
 	}
 
@@ -586,14 +646,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
 		{
-			output.println("DR");
-			output.flush();
+			print("DR");
 			direction = 'R';
 		}
 		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
 		{
-			output.println("DL");
-			output.flush();
+			print("DL");
 			direction = 'L';
 		}
 
@@ -605,14 +663,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
 		{
-			output.println("DR");
-			output.flush();
+			print("DR");
 			direction = 'R';
 		}
 		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
 		{
-			output.println("DL");
-			output.flush();
+			print("DL");
 			direction = 'L';
 		}
 	}

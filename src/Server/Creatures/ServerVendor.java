@@ -6,7 +6,7 @@ import Server.Items.ServerWeapon;
 
 public class ServerVendor extends ServerCreature {
 
-	public final static int MAX_INVENTORY = 20;
+	public final static int MAX_INVENTORY = 30;
 
 	private int quality;
 
@@ -22,7 +22,7 @@ public class ServerVendor extends ServerCreature {
 	{
 		for(int potion = 0; potion < 4; potion++)
 			addItem(ServerPotion.randomPotion(getX(),getY()));
-		for(int weapon = 0; weapon < 5; weapon++)
+		for(int weapon = 0; weapon < 21; weapon++)
 			addItem(ServerWeapon.randomWeapon(getX(), getY(), (quality-1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS,(quality+1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS));
 	}
 

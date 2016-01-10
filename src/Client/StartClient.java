@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
 /**
@@ -54,19 +55,27 @@ public class StartClient
 					}
 				}
 				ClientFrame myFrame = new ClientFrame();
+				JLayeredPane pane = new JLayeredPane();
+				pane.setLocation(0,0);
+				pane.setLayout(null);
+				pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+				myFrame.add(pane);
+				pane.setVisible(true);
 				
 				ClientInventory inventory = new ClientInventory();
-				Client client = new Client(mySocket,inventory);
+				Client client = new Client(mySocket,inventory,pane);
 				inventory.setClient(client);
 				
 				client.setLocation(0,0);
 				inventory.setLocation(Client.SCREEN_WIDTH,0);
 				
-				myFrame.add(client);
+				pane.add(client);
 				myFrame.add(inventory);
 				client.initialize();
 				client.revalidate();
 				inventory.revalidate();
+				pane.revalidate();
+				pane.setVisible(true);
 				myFrame.setVisible(true);
 				inventory.repaint();
 			}

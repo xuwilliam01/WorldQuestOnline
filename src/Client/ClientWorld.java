@@ -65,7 +65,7 @@ public class ClientWorld
 
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
-		
+
 		// Generate clouds
 		if ((int)(Math.random()*2) == 0)
 		{
@@ -75,7 +75,7 @@ public class ClientWorld
 		{
 			cloudDirection = -1;
 		}
-			
+
 		clouds = new ArrayList<ClientBackground>();
 		for (int no = 0; no < 6; no++)
 		{
@@ -88,12 +88,12 @@ public class ClientWorld
 			hSpeed = (Math.random()*0.8 + 0.2) * cloudDirection;
 
 			int imageNo = no;
-			
+
 			while (imageNo >= 6)
 			{
 				imageNo -= 6;
 			}
-			
+
 			String image = "CLOUD_" + imageNo + ".png";
 
 			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
@@ -118,19 +118,28 @@ public class ClientWorld
 	{
 		int removeIndex = -1;
 		int currentIndex = 0;
-		for (ClientObject object : objects)
+
+		try
 		{
-			if (object == null)
+			for (ClientObject object : objects)
 			{
-				continue;
+				if (object == null)
+				{
+					continue;
+				}
+
+				if (object.getID() == id)
+				{
+					removeIndex = currentIndex;
+					break;
+				}
+				currentIndex++;
 			}
-			
-			if (object.getID() == id)
-			{
-				removeIndex = currentIndex;
-				break;
-			}
-			currentIndex++;
+		}
+		catch(ConcurrentModificationException e)
+		{
+			System.out.println("ConcurrentModification Exception");
+			e.printStackTrace();
 		}
 
 		if (removeIndex != -1)
@@ -152,7 +161,7 @@ public class ClientWorld
 
 		// Draw the background
 		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
-		
+
 		// Draw and move the clouds
 		for (ClientBackground cloud : clouds)
 		{
@@ -166,8 +175,8 @@ public class ClientWorld
 			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
-//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-//				cloud.setImage(Images.getImage(image));
+				//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+				//				cloud.setImage(Images.getImage(image));
 				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
 				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
 
@@ -176,13 +185,13 @@ public class ClientWorld
 					/ 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
-//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-//				cloud.setImage(Images.getImage(image));
+				//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+				//				cloud.setImage(Images.getImage(image));
 				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
 				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
 			}
 			cloud.setX(cloud.getX() + cloud.gethSpeed());
-			
+
 			//System.out.println(cloud.getX());
 		}
 
@@ -240,9 +249,9 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-					.println("Tried to access the object list while it was being used");
+			.println("Tried to access the object list while it was being used");
 		}
-		
+
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - playerHeight) / tileSize);
 		if (startRow < 0)
@@ -277,7 +286,7 @@ public class ClientWorld
 									+ column * tileSize - playerX, centreY
 									+ row
 									* tileSize - playerY,
-							null);
+									null);
 				}
 			}
 

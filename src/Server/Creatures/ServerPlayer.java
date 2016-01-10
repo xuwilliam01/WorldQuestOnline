@@ -6,12 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerItem;
+import Server.Items.ServerMoney;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Server.Projectile.ServerProjectile;
@@ -92,7 +94,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
 	 */
-	private char weaponSelected;
+	private char weaponSelected = '9';
 
 	/**
 	 * Whether or not the player can use the item/perform the current action
@@ -122,10 +124,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private long deathCounter = -1;
 
 	/**
+	 * The vendor that player is currently interacting with
+	 */
+	private ServerVendor vendor = null;
+
+	/**
 	 * Stores the equipped items
 	 */
 	private ServerWeapon[] equippedWeapons = new ServerWeapon[MAX_WEAPONS];
-	
+
 	/**
 	 * The damage the player inflicts from just punching
 	 */
@@ -160,12 +167,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
 
-		weaponSelected = '0';
 		actionDelay = 20;
 
 		canPerformAction = true;
@@ -376,7 +382,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Update the player's image
 		setImage(baseImage + "_" + rowCol.getRow() + "_" + rowCol.getColumn()
-				+ ".png");
+		+ ".png");
 
 		// Update the accessories on the player
 		if (getHead() != null)
@@ -562,6 +568,29 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					weaponSelected = command.charAt(1);
 				}
+				else if(command.charAt(0) == 'B' && vendor != null)
+				{
+					ServerItem vendorItem = null;
+					for(ServerItem item : vendor.getInventory())
+						if(item.getType().equals(command.substring(2)))
+							vendorItem = item;
+
+					if(vendorItem != null && getMoney() >= vendorItem.getCost())
+					{
+						decreaseMoney(vendorItem.getCost());
+						vendor.drop(vendorItem.getType());		
+					}
+				}
+				else if(command.charAt(0) == 'E')
+				{
+					interact();
+				}
+				else if(command.charAt(0) == 'S' && vendor != null)
+				{
+					String type = command.substring(2);
+					if(!type.equals(ServerWorld.MONEY_TYPE))
+						sell(type);
+				}
 			}
 			catch (IOException e)
 			{
@@ -587,6 +616,67 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		engine.removePlayer(this);
 	}
 
+	public void sell(String type)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(type))
+			{
+
+				if(item.getAmount() > 1)
+				{
+					item.decreaseAmount();
+					vendor.addItem(ServerItem.copy(item));
+				}
+				else	
+				{
+					toRemove = item;
+					vendor.addItem(item);
+				}
+
+				String newMessage = String.format("V %s %s %d %d", item.getImage(), item.getType(), 1,item.getCost());
+				queueMessage(newMessage);
+
+				increaseMoney((item.getCost()+1)/2);
+				break;
+			}
+		if(toRemove != null)
+			getInventory().remove(toRemove);
+
+	}
+
+	public void increaseMoney(int amount)
+	{
+		ServerMoney newMoney = new ServerMoney(getX(),getY(),amount);
+		newMoney.makeExist();
+		newMoney.setSource(this);
+		world.add(newMoney);
+	}
+
+	public int getMoney()
+	{
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(ServerWorld.MONEY_TYPE))
+				return item.getAmount();
+		return 0;
+
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		ServerItem toRemove = null;
+		for(ServerItem item : getInventory())
+			if(item.getType().equals(ServerWorld.MONEY_TYPE))
+			{
+				item.decreaseAmount(amount);
+				if(item.getAmount() <= 0)
+					toRemove = item;
+			}
+
+		if(toRemove != null)
+			getInventory().remove(toRemove);
+	}
+
 	public void drop(int slot)
 	{
 		dropItem(equippedWeapons[slot]);
@@ -608,19 +698,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		if (alive && canPerformAction)
 		{
-			if (equippedWeapons[weaponNo] == null)
+			if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
 			{
 				action = "PUNCH";
-				
+
 				// List of creatures we've already punched so we dont hit them twice
 				ArrayList<ServerCreature> alreadyPunched = new ArrayList<ServerCreature>();
-				
+
 				int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
 				int endRow = (int) ((getY() + getHeight()) / ServerWorld.OBJECT_TILE_SIZE);
 				int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
 				int endColumn = (int) ((getX() + getWidth()) / ServerWorld.OBJECT_TILE_SIZE);
-				
-				
+
+
 				for (int row = startRow; row <= endRow; row++)
 				{
 					for (int column = startColumn; column <= endColumn; column++)
@@ -740,6 +830,81 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 	/**
+	 * Player interacts with the environment
+	 */
+	public synchronized void interact()
+	{
+		// Send all the objects within all the object tiles in the player's
+		// screen
+		int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+		int endRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+		int startColumn = (int) (getX()/ ServerWorld.OBJECT_TILE_SIZE);
+		int endColumn = (int) (getX()/ ServerWorld.OBJECT_TILE_SIZE);
+
+		if (startRow < 0)
+		{
+			startRow = 0;
+		}
+		else if (endRow > world.getObjectGrid().length - 1)
+		{
+			endRow = world.getObjectGrid().length - 1;
+		}
+
+		if (startColumn < 0)
+		{
+			startColumn = 0;
+		}
+		else if (endColumn > world.getObjectGrid()[0].length - 1)
+		{
+			endColumn = world.getObjectGrid()[0].length - 1;
+		}
+
+
+		while(true)
+		{
+			try
+			{
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
+					{
+						for (ServerObject object : world.getObjectGrid()[row][column])
+						{
+							if (object.exists() && object.collidesWith(this))
+							{
+								//If vendor send shop to client
+								if(object.getType().equals(ServerWorld.VENDOR_TYPE))
+								{
+									if(vendor == null)
+									{
+										vendor = (ServerVendor)object;
+										String newMessage = "V "+ vendor.getInventory().size();
+										for(ServerItem item : vendor.getInventory())
+											newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
+										queueMessage(newMessage);
+									}
+									else 
+										vendor = null;
+									return;
+								}
+
+							}
+
+						}
+
+					}
+				}
+				break;
+			}
+			catch(ConcurrentModificationException e)
+			{
+				System.out.println("ConcurrentModificationException");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
 	 * Set the direction while also changing the player's image
 	 * @param newDirection
 	 */
@@ -835,7 +1000,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super.addItem(item);
 		queueMessage("I " + item.getImage() + " " + item.getType() + " "
-				+ item.getAmount());
+				+ item.getAmount()+" "+item.getCost());
 	}
 
 	public void equip(String itemType)

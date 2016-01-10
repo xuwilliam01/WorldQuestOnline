@@ -18,20 +18,22 @@ public class ClientItem extends JButton implements MouseListener{
 	private Image image;
 	private String imageName;
 	private boolean selected = false;
-	private int equipSlot = -1;
+	private int equipSlot = 9;
 	private int row;
 	private int col;
 	private ClientInventory inventory;
 	private String type;
 	private int amount = 1;
+	private int cost;
 
-	public ClientItem(String imageName, String type,int amount,int row, int col, ClientInventory inventory)
+	public ClientItem(String imageName, String type,int amount,int cost,int row, int col, ClientInventory inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName)));
 		this.amount = amount;
 		this.row = row;
 		this.col = col;
 		this.type = type;
+		this.cost = cost;
 		this.inventory = inventory;
 		this.imageName = imageName;
 		image = Images.getImage(imageName);
@@ -48,7 +50,7 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
-		if(amount > 10)
+		if(amount >= 10)
 			graphics.drawString(amount+"", getWidth()-16, 10);
 		else if(amount > 1)
 			graphics.drawString(amount+"", getWidth()-8, 10);
@@ -73,6 +75,11 @@ public class ClientItem extends JButton implements MouseListener{
 		this.imageName = imageName;
 	}
 
+	public int getCost()
+	{
+		return cost;
+	}
+	
 	public boolean isSelected() {
 		return selected;
 	}
@@ -125,6 +132,11 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		amount--;
 	}
+
+	public void decreaseAmount(int amount)
+	{
+		this.amount -= amount;		
+	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -166,7 +178,7 @@ public class ClientItem extends JButton implements MouseListener{
 								this.row = row;
 								this.col = col;
 								inventory.getEquippedWeapons()[equipSlot] = null;
-								equipSlot = -1;
+								equipSlot = 9;
 								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 								return;
 							}
@@ -198,7 +210,7 @@ public class ClientItem extends JButton implements MouseListener{
 				}
 			}
 			//If it's a potion use it
-			else if(type.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+			else if(type.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
 			{
 				inventory.use(this);
 			}
@@ -206,8 +218,14 @@ public class ClientItem extends JButton implements MouseListener{
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
-			//Remove from equipment
-			inventory.removeItem(this,equipSlot);
+			//Sell item
+			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE))
+			{
+				inventory.sellItem(this,equipSlot);
+			}
+			//Drop item
+			else
+				inventory.removeItem(this,equipSlot);
 		}
 
 	}
