@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Effects.ServerDamageIndicator;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
@@ -456,6 +457,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						if (object.exists())
 						{
+							if (object.getImage().charAt(0) == 't')
+							{
+								System.out.println("TEXT");
+							}
 
 							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 							{
@@ -469,6 +474,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							}
 							else
 							{
+								
+								
 								queueMessage("O " + object.getID() + " "
 										+ ((int) (object.getX() + 0.5))
 										+ " " + ((int) (object.getY() + 0.5))
@@ -841,6 +848,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void inflictDamage(int amount, double knockBack)
 	{
 		setHP(getHP() - amount);
+		
+		double damageX = Math.random()*getWidth() + getX();
+		double damageY = Math.random()*getHeight()/2 + getY() - getHeight()/3;
+		world.add(new ServerDamageIndicator(damageX, damageY,Integer.toString(amount),ServerDamageIndicator.RED_TEXT,world));
+		
 		if (getHP() <= 0)
 		{
 			setSolid(false);

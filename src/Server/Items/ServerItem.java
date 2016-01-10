@@ -26,7 +26,7 @@ public abstract class ServerItem extends ServerObject {
 	private int amount = 1;
 
 	public ServerItem(double x, double y, String type) {
-		super(x, y, 0, 0, ServerWorld.GRAVITY, "", type);
+		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
 
 		switch (type) {
 		case ServerWorld.HP_50:

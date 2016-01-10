@@ -1,6 +1,7 @@
 package Client;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -295,6 +296,7 @@ MouseMotionListener
 									otherObject.setY(Integer
 											.parseInt(tokens[++token]));
 									otherObject.setImage(tokens[++token]);
+									
 									otherObject.setTeam(Integer
 											.parseInt(tokens[++token]));
 								}
@@ -458,6 +460,7 @@ MouseMotionListener
 		world.update(graphics, player.getX(), player.getY(), player.getWidth(),
 				player.getHeight());
 
+		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.black);
 		graphics.drawString(pingString, 20, 20);
 		graphics.drawString("FPS: " + currentFPS, 20, 40);

@@ -111,6 +111,7 @@ public class ServerObject
 		this.y = y;
 		this.id = ServerEngine.useNextID();
 		this.image = image;
+		
 		if (width == -1)
 		{
 			this.width = Images.getGameImage(image).getWidth();

@@ -2,6 +2,8 @@ package Client;
 
 import java.awt.Image;
 
+import com.sun.javafx.tk.FontMetrics;
+
 import Imports.Images;
 
 /**
@@ -12,11 +14,11 @@ public class ClientObject implements Comparable<ClientObject>
 {
 
 	/**
-	 * The team of the object
-	 * Objects with neutral teams won't have number displayed above them
+	 * The team of the object Objects with neutral teams won't have number
+	 * displayed above them
 	 */
 	private int team;
-	
+
 	/**
 	 * The x coordinate of the object (left)
 	 */
@@ -47,6 +49,16 @@ public class ClientObject implements Comparable<ClientObject>
 	 */
 	private int width;
 
+	public String getImageName()
+	{
+		return imageName;
+	}
+
+	public void setImageName(String imageName)
+	{
+		this.imageName = imageName;
+	}
+
 	/**
 	 * The unique ID of the object
 	 */
@@ -62,20 +74,33 @@ public class ClientObject implements Comparable<ClientObject>
 		this.y = y;
 		this.id = id;
 		this.imageName = image;
-		this.image = Images.getImage(image);
-		height = this.image.getHeight(null);
-		width = this.image.getWidth(null);
+
+		// All objects that are just text have lower case names
+		// Don't import an actual image if it is just text
+		if (image.charAt(0) != 't')
+		{
+			this.image = Images.getImage(image);
+			height = this.image.getHeight(null);
+			width = this.image.getWidth(null);
+		}
+		else
+		{
+			System.out.println("This is a damage indicator");
+			height = 0;
+			width = 0;
+		}
 	}
 
 	public int getTeam()
 	{
 		return team;
 	}
-	
+
 	public void setTeam(int team)
 	{
 		this.team = team;
 	}
+
 	public Image getImage()
 	{
 		return image;
@@ -90,12 +115,16 @@ public class ClientObject implements Comparable<ClientObject>
 		if (!image.equals(imageName))
 		{
 			imageName = image;
-			this.image = Images.getImage(image);
-			height = this.image.getHeight(null);
-			width = this.image.getWidth(null);
+
+			// If the image of the object is text, don't import an image
+			if (image.charAt(0) != 't')
+			{
+				this.image = Images.getImage(image);
+				height = this.image.getHeight(null);
+				width = this.image.getWidth(null);
+			}
 		}
 	}
-
 
 	public int getID()
 	{
@@ -138,4 +167,10 @@ public class ClientObject implements Comparable<ClientObject>
 		return id - other.getID();
 	}
 
+	public void setWidth(int width)
+	{
+		this.width = width;
+	}
+
+	
 }

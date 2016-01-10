@@ -1,18 +1,24 @@
 package Client;
 
 import java.awt.Color;
-import java.awt.Graphics; 
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.Creatures.ServerCreature;
 
 public class ClientWorld
 {
+
+	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
+	public final static Color RED_TEXT = new Color(153, 0, 38);
 
 	/**
 	 * The grid of tiles
@@ -50,6 +56,23 @@ public class ClientWorld
 	private int tileSize;
 
 	/**
+	 * The font for damage indicators
+	 */
+	public final static Font DAMAGE_FONT = new Font("Courier", Font.BOLD, 18);
+	
+	/**
+	 * The normal font for text
+	 */
+	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
+
+	private FontMetrics damageFontMetrics;
+	
+	/**
+	 * The width in pixels of one character for the damage font
+	 */
+	public static double DAMAGE_FONT_WIDTH = 0;
+
+	/**
 	 * Constructor for the client's side of the world
 	 * @param rows the number of rows in the tile grid
 	 * @param columns the number of columns in the tile grid
@@ -67,7 +90,7 @@ public class ClientWorld
 		ImageReferencePair.importReferences();
 
 		// Generate clouds
-		if ((int)(Math.random()*2) == 0)
+		if ((int) (Math.random() * 2) == 0)
 		{
 			cloudDirection = 1;
 		}
@@ -81,11 +104,12 @@ public class ClientWorld
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
-			double y = Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3);
+			double y = Math.random() * (Client.SCREEN_HEIGHT)
+					- (2 * Client.SCREEN_HEIGHT / 3);
 
 			double hSpeed = 0;
 
-			hSpeed = (Math.random()*0.8 + 0.2) * cloudDirection;
+			hSpeed = (Math.random() * 0.8 + 0.2) * cloudDirection;
 
 			int imageNo = no;
 
@@ -136,7 +160,7 @@ public class ClientWorld
 				currentIndex++;
 			}
 		}
-		catch(ConcurrentModificationException e)
+		catch (ConcurrentModificationException e)
 		{
 			System.out.println("ConcurrentModification Exception");
 			e.printStackTrace();
@@ -158,6 +182,12 @@ public class ClientWorld
 	public void update(Graphics graphics, int playerX, int playerY,
 			int playerWidth, int playerHeight)
 	{
+		// Get font metrics
+		if (damageFontMetrics == null)
+		{
+			damageFontMetrics = graphics.getFontMetrics(DAMAGE_FONT);
+			DAMAGE_FONT_WIDTH = damageFontMetrics.stringWidth("0");
+		}
 
 		// Draw the background
 		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
@@ -166,7 +196,9 @@ public class ClientWorld
 		for (ClientBackground cloud : clouds)
 		{
 			if (cloud.getX() <= Client.SCREEN_WIDTH
-					&& cloud.getX() + cloud.getWidth() >= 0 && cloud.getY() <= Client.SCREEN_HEIGHT && cloud.getY() + cloud.getHeight() >= 0)
+					&& cloud.getX() + cloud.getWidth() >= 0
+					&& cloud.getY() <= Client.SCREEN_HEIGHT
+					&& cloud.getY() + cloud.getHeight() >= 0)
 			{
 				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
 						(int) cloud.getY(), null);
@@ -175,30 +207,31 @@ public class ClientWorld
 			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
-				//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-				//				cloud.setImage(Images.getImage(image));
-				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
-				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
+				// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+				// cloud.setImage(Images.getImage(image));
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (2 * Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 
 			}
 			else if (cloud.getX() > Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE
 					/ 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
-				//				String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-				//				cloud.setImage(Images.getImage(image));
-				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2*Client.SCREEN_HEIGHT/3));
-				cloud.sethSpeed((Math.random()*0.8 + 0.2) * cloudDirection);
+				// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+				// cloud.setImage(Images.getImage(image));
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (2 * Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 			}
 			cloud.setX(cloud.getX() + cloud.gethSpeed());
 
-			//System.out.println(cloud.getX());
+			// System.out.println(cloud.getX());
 		}
 
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
 		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
-
 
 		// Create a list of objects to remove after leaving the screen
 		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
@@ -226,18 +259,52 @@ public class ClientWorld
 				}
 				else
 				{
-					if(object.getTeam() == ServerCreature.RED)
+					if (image != null)
 					{
-						graphics.setColor(Color.red);
-						graphics.fillRect(x+image.getWidth(null)/2 - 5, y-15,  10, 10);
+						if (object.getTeam() == ServerCreature.RED_TEAM)
+						{
+							graphics.setColor(Color.red);
+							graphics.fillRect(x + image.getWidth(null) / 2 - 5,
+									y - 15, 10, 10);
+						}
+						else if (object.getTeam() == ServerCreature.BLUE_TEAM)
+						{
+							graphics.setColor(Color.blue);
+							graphics.fillRect(x + image.getWidth(null) / 2 - 5,
+									y - 15, 10, 10);
+						}
+						graphics.drawImage(image, x, y,
+								null);
 					}
-					else if(object.getTeam() == ServerCreature.BLUE)
+					// If there is no image, then the object is text/numbers
+					else
 					{
-						graphics.setColor(Color.blue);
-						graphics.fillRect(x+image.getWidth(null)/2 - 5, y-15,  10, 10);
+						String imageName = object.getImageName();
+						char colour = imageName.charAt(1);
+						if (colour == ServerDamageIndicator.RED_TEXT)
+						{
+							graphics.setColor(RED_TEXT);
+						}
+						else if (colour == ServerDamageIndicator.YELLOW_TEXT)
+						{
+							graphics.setColor(YELLOW_TEXT);
+						}
+
+						graphics.setFont(DAMAGE_FONT);
+						String text = imageName
+								.substring(2, imageName.length());
+
+						if (object.getWidth() == 0)
+						{
+							object.setWidth((int)(text.length()*DAMAGE_FONT_WIDTH + 0.5));
+							object.setX(object.getX() - object.getWidth() / 2);
+						}
+						x = centreX + object.getX() - playerX;
+
+						graphics.drawString(text, x, y - 10);
+						
+						System.out.println(text);
 					}
-					graphics.drawImage(image, x, y,
-							null);
 				}
 			}
 
@@ -249,7 +316,7 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-			.println("Tried to access the object list while it was being used");
+					.println("Tried to access the object list while it was being used");
 		}
 
 		// Draw tiles (draw based on player's position later)
@@ -286,7 +353,7 @@ public class ClientWorld
 									+ column * tileSize - playerX, centreY
 									+ row
 									* tileSize - playerY,
-									null);
+							null);
 				}
 			}
 
