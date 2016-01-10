@@ -220,6 +220,9 @@ public class Images
 
 				for (int no = 0; no < weaponSheets.length; no++)
 				{
+					//Add the icon image to the game also
+					images.add(new GameImage(weaponSheets[no]+"_ICON.png"));
+					
 					image = ImageIO.read(new File(
 							weaponSheets[no] + ".png"));
 					double locationX = image.getWidth() / 2;
@@ -297,11 +300,11 @@ public class Images
 			images.add(new GameImage("CASTLE.png", 200, 400));
 			images.add(new GameImage("BULLET.png"));
 
-			images.add(new GameImage("HP_POTION.png", 15, 15));
+			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
-			images.add(new GameImage("MONEY.png", 30, 40));
+			images.add(new GameImage("MONEY.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("MONEY_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 

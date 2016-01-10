@@ -27,14 +27,14 @@ public class ClientItem extends JButton implements MouseListener{
 
 	public ClientItem(String imageName, String type,int amount,int row, int col, ClientInventory inventory)
 	{
-		super(new ImageIcon(Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png")));
+		super(new ImageIcon(Images.getImage(imageName)));
 		this.amount = amount;
 		this.row = row;
 		this.col = col;
 		this.type = type;
 		this.inventory = inventory;
 		this.imageName = imageName;
-		image = Images.getImage(imageName.substring(0,imageName.length()-4)+"_ICON.png");
+		image = Images.getImage(imageName);
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
 		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
@@ -85,12 +85,12 @@ public class ClientItem extends JButton implements MouseListener{
 	{
 		this.row = row;
 	}
-	
+
 	public int getRow()
 	{
 		return row;
 	}
-	
+
 	public int getCol()
 	{
 		return col;
@@ -198,7 +198,7 @@ public class ClientItem extends JButton implements MouseListener{
 			{
 				inventory.use(this);
 			}
-			
+
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{

@@ -1,10 +1,9 @@
 package Server;
 
-import java.io.*
+import java.io.* 
 ;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 import Server.Creatures.ServerCastle;
@@ -416,8 +415,7 @@ public class ServerWorld
 									}
 								}
 								// Collision of weapons and creatures
-								else if (object.getType().contains(
-										WEAPON_SWING_TYPE))
+								else if (object.getType().charAt(0) == ANIMATION_TYPE && object.getType().charAt(1) == WEAPON_SWING_TYPE.charAt(1))
 								{
 									if (otherObject.getType().charAt(0) == CREATURE_TYPE
 											&& otherObject.getID() != ((ServerWeaponSwing) object)
