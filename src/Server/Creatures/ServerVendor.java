@@ -9,6 +9,7 @@ public class ServerVendor extends ServerCreature {
 	public final static int MAX_INVENTORY = 30;
 
 	private int quality;
+	private boolean isBusy = false;
 
 	public ServerVendor(double x, double y, ServerWorld world, int quality) {
 		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, "VENDOR.png", ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
@@ -25,6 +26,15 @@ public class ServerVendor extends ServerCreature {
 		for(int weapon = 0; weapon < 21; weapon++)
 			addItem(ServerWeapon.randomWeapon(getX(), getY(), (quality-1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS,(quality+1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS));
 	}
+	
+	public boolean isBusy()
+	{
+		return isBusy;
+	}
 
+	public void setIsBusy(boolean isBusy)
+	{
+		this.isBusy = isBusy;
+	}
 
 }

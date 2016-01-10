@@ -883,18 +883,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							if (object.exists() && object.collidesWith(this))
 							{
 								//If vendor send shop to client
-								if(object.getType().equals(ServerWorld.VENDOR_TYPE))
+								if(object.getType().equals(ServerWorld.VENDOR_TYPE) && !((ServerVendor)object).isBusy())
 								{
 									if(vendor == null)
 									{
 										vendor = (ServerVendor)object;
+										vendor.setIsBusy(true);
 										String newMessage = "V "+ vendor.getInventory().size();
 										for(ServerItem item : vendor.getInventory())
 											newMessage+= String.format(" %s %s %d %d", item.getImage(), item.getType(), item.getAmount(),item.getCost());
 										queueMessage(newMessage);
 									}
-									else 
+									else
+									{
+										vendor.setIsBusy(false);
 										vendor = null;
+									}
 									return;
 								}
 
