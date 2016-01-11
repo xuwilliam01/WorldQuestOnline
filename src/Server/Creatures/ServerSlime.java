@@ -32,10 +32,9 @@ public class ServerSlime extends ServerEnemy
 	 */
 	private boolean landed;
 
-	public ServerSlime(double x, double y, int width, int height,
-			double gravity, String image, ServerWorld world, int team)
+	public ServerSlime(double x, double y, ServerWorld world, int team)
 	{
-		super(x, y, width, height, 0, 0, gravity, image, SLIME_HP,
+		super(x, y, -1,-1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, team);
 
 		// Set a random counter to start so not every slime does the exact same
@@ -53,11 +52,10 @@ public class ServerSlime extends ServerEnemy
 		landed = true;
 	}
 
-	public ServerSlime(double x, double y, int width, int height,
-			double gravity, String image, ServerWorld world)
+	public ServerSlime(double x, double y,ServerWorld world)
 	{
-		super(x, y, width, height,0,0, gravity, image, SLIME_HP,
-				ServerWorld.SLIME_TYPE, world, ServerCreature.NEUTRAL);
+		super(x, y, -1,-1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
+				ServerWorld.SLIME_TYPE, world, ServerPlayer.NEUTRAL);
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing

@@ -104,8 +104,7 @@ public class ServerWorld
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	private final ServerObject[] objectTypes = { new ServerSlime(0, 0, -1, -1,
-			ServerWorld.GRAVITY, "SLIME_0.png", null) };
+	public final ServerObject[] objectTypes = { new ServerSlime(0, 0,this), new ServerCastle(0,0,1,this), new ServerCastle(0,0,2,this), new ServerChest(0,0,this), new ServerVendor(0,0,this,3)};
 
 	/**
 	 * The size of each object tile
@@ -181,9 +180,7 @@ public class ServerWorld
 	{
 		for (int no = 0; no < 10; no++)
 		{
-			ServerEnemy newEnemy = new ServerSlime(50 * no + 50, 50, -1, -1,
-					GRAVITY,
-					"SLIME_0.png", this);
+			ServerEnemy newEnemy = new ServerSlime(50 * no + 50, 50,this);
 			// newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
 			// newEnemy.getY()));
 			newEnemy.addItem(ServerPotion.randomPotion(newEnemy.getX(),
@@ -203,9 +200,7 @@ public class ServerWorld
 			int spawnLocation = (int) (Math.random() * 9 + 9);
 
 			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50,
-					50, -1, -1,
-					GRAVITY,
-					"SLIME_0.png", this);
+					50, this);
 			add(newEnemy);
 			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
 					newEnemy.getY()));

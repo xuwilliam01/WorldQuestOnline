@@ -73,6 +73,17 @@ public class ClientShop extends JPanel{
 		return client;
 	}
 
+	public boolean isFull(String type)
+	{
+		for(int row = 0; row < shopItems.length;row++)
+			for(int col = 0; col < shopItems[0].length;col++)
+				if(shopItems[row][col] == null)
+					return false;
+				else if(shopItems[row][col].getType().equals(type) && type.charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
+					return false;
+		return true;
+	}
+	
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);

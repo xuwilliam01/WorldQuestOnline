@@ -404,6 +404,14 @@ MouseMotionListener
 	}
 
 	/**
+	 * Get the shop
+	 */
+	public ClientShop getShop()
+	{
+		return shop;
+	}
+	
+	/**
 	 * Import the map
 	 */
 	private void importMap()
