@@ -28,7 +28,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * Player to remove
 	 */
 	private ArrayList<ServerPlayer> toRemove = new ArrayList<ServerPlayer>();
-	
+
 	/**
 	 * A list of IDs currently used in the game (index is the ID, true means
 	 * used, false means unused). Note that IDs can be freed when the object is
@@ -51,7 +51,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * The rate at which the game runs at, in milliseconds
 	 */
 	public final static int UPDATE_RATE = 15;
-	
+
 	/**
 	 * The startTime for checking FPS
 	 */
@@ -66,7 +66,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * The team of the last player added
 	 */
 	private int lastTeam = 1;
-	
+
 	/**
 	 * A counter updating every repaint and reseting at the expected FPS
 	 */
@@ -125,7 +125,7 @@ public class ServerEngine implements Runnable, ActionListener
 		if(!toRemove.isEmpty())
 		{
 			for(ServerPlayer player : toRemove)
-			listOfPlayers.remove(player);
+				listOfPlayers.remove(player);
 			toRemove.clear();
 		}
 		try{
@@ -179,7 +179,7 @@ public class ServerEngine implements Runnable, ActionListener
 	{
 		return ++lastTeam;
 	}
-	
+
 	public ServerWorld getWorld()
 	{
 		return world;
@@ -222,10 +222,10 @@ public class ServerEngine implements Runnable, ActionListener
 			currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
 			startTime = System.currentTimeMillis();
 		}
-		
+
 		FPScounter ++;
-		
-		
+
+
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 
 		// Remove disconnected players
@@ -266,6 +266,6 @@ public class ServerEngine implements Runnable, ActionListener
 	}
 
 
-	
-	
+
+
 }
