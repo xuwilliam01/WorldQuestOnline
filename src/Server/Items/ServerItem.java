@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 22;
+	private final static int NUM_ITEMS = 26;
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
@@ -36,7 +36,16 @@ public abstract class ServerItem extends ServerObject {
 			setImage("MONEY.png");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
-			setImage("MONEY.png");
+			setImage("OUTFITARMOR_ICON.png");
+			break;
+		case ServerWorld.BLUE_NINJA_ARMOUR:
+			setImage("OUTFITNINJABLUE_ICON.png");
+			break;
+		case ServerWorld.RED_NINJA_ARMOUR:
+			setImage("OUTFITNINJARED_ICON.png");
+			break;
+		case ServerWorld.GREY_NINJA_ARMOUR:
+			setImage("OUTFITNINJAGREY_ICON.png");
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
@@ -173,6 +182,14 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER);
 		case 22:
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER);
+		case 23:
+			return new ServerArmour(x, y, ServerWorld.STEEL_ARMOUR);
+		case 24:
+			return new ServerArmour(x, y, ServerWorld.BLUE_NINJA_ARMOUR);
+		case 25:
+			return new ServerArmour(x, y, ServerWorld.RED_NINJA_ARMOUR);
+		case 26:
+			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
 		}
 		// This won't happen
 		return null;
@@ -185,6 +202,14 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerHPPotion(item.getX(), item.getY());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());
+		case ServerWorld.STEEL_ARMOUR:
+			return new ServerArmour(item.getX(), item.getY(), ServerWorld.STEEL_ARMOUR);
+		case ServerWorld.BLUE_NINJA_ARMOUR:
+			return new ServerArmour(item.getX(), item.getY(), ServerWorld.BLUE_NINJA_ARMOUR);
+		case ServerWorld.RED_NINJA_ARMOUR:
+			return new ServerArmour(item.getX(), item.getY(), ServerWorld.RED_NINJA_ARMOUR);
+		case ServerWorld.GREY_NINJA_ARMOUR:
+			return new ServerArmour(item.getX(), item.getY(), ServerWorld.GREY_NINJA_ARMOUR);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:

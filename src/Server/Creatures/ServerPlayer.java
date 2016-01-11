@@ -272,6 +272,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.STEEL_ARMOUR));
 	}
 
 	/**
@@ -542,14 +543,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				String command = input.readLine();
 
 				if (command.charAt(0) == 'A' && isOnSurface()
-						&& !performingAction)
+						&& !performingAction && alive)
 				{
 					String[] tokens = command.split(" ");
 					performingAction = true;
 					newMouseX = Integer.parseInt(tokens[1]);
 					newMouseY = Integer.parseInt(tokens[2]);
 				}
-				else if (command.equals("R"))
+				else if (command.equals("R")&& alive)
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
@@ -563,7 +564,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("L"))
+				else if (command.equals("L")&& alive)
 				{
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
@@ -576,7 +577,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && isOnSurface() && alive)
+				else if (command.equals("U") && isOnSurface() && alive && !inAction())
 				{
 					setVSpeed(-verticalMovement);
 					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);

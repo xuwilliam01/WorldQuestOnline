@@ -1,7 +1,8 @@
-package Server.Creatures;
+package Server.Items;
 
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 import Tools.RowCol;
 
 public class ServerAccessory extends ServerObject
@@ -22,7 +23,7 @@ public class ServerAccessory extends ServerObject
 	 * @param wielder
 	 * @param image
 	 */
-	public ServerAccessory(ServerCreature wielder, String baseImage)
+	public ServerAccessory(ServerCreature wielder, String baseImage, int armourValue)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0,
 				baseImage + "_0_0.png", ServerWorld.ACCESSORY_TYPE);

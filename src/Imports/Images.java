@@ -207,10 +207,10 @@ public class Images
 
 				}
 				
-				images.add(new GameImage("OUTFITARMOR_ICON.png"));
-				images.add(new GameImage("OUTFITNINJABLUE_ICON.png"));
-				images.add(new GameImage("OUTFITNINJARED_ICON.png"));
-				images.add(new GameImage("OUTFITNINJAGREY_ICON.png"));
+				images.add(new GameImage("OUTFITARMOR_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
 				String[] weaponSheets = { "DAWOOD", "DASTONE", "DAIRON",
 						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",

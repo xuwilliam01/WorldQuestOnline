@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Effects.ServerDamageIndicator;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Items.ServerAccessory;
 import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
 import Server.Items.ServerWeaponSwing;
@@ -253,7 +254,7 @@ public abstract class ServerCreature extends ServerObject
 	{
 
 		item.setX(getX() + getWidth() / 2);
-		item.setY(getY() + getHeight() / 2);
+		item.setY(getY() + getHeight() / 2 - item.getHeight());
 		item.makeExist();
 		item.startCoolDown();
 		item.setSource(this);
