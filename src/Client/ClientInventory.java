@@ -115,7 +115,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT)
+			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || item.isSelected())
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{
@@ -143,7 +143,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT)
+			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected())
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{
@@ -236,7 +236,7 @@ public class ClientInventory extends JPanel{
 		if(money != null)
 		{
 			inventory[0][0] = money;
-			inventory[0][0].setLocation(20,50);
+			inventory[0][0].setLocation(25,50);
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
@@ -260,6 +260,7 @@ public class ClientInventory extends JPanel{
 		graphics.drawString("Inventory", 120, 20);
 		graphics.drawString("Equipped Items", 115, 480);
 		graphics.drawString("Weapons",10,520);
+		graphics.drawString("Armour",10,600);
 	}
 
 	public ClientItem[] getEquippedWeapons() {

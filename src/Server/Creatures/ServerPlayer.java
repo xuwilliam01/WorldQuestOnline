@@ -1200,7 +1200,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		if (toRemove != null)
 			getInventory().remove(toRemove);
 		// UNCOMMENT
-		// equippedArmour = (ServerArmour)toRemove;
+		equippedArmour = (ServerArmour)toRemove;
 	}
 
 	public void unequip(int slot)

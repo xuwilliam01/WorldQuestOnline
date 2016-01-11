@@ -43,8 +43,8 @@ public class ClientItem extends JButton implements MouseListener{
 		if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
 			equipSlot = ServerPlayer.DEFAULT_SHIELD_SLOT;
 
-		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
-		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+		setSize(Images.INVENTORY_IMAGE_SIDELENGTH+10,Images.INVENTORY_IMAGE_SIDELENGTH+10);
+		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
 		setFocusable(false);
@@ -196,7 +196,7 @@ public class ClientItem extends JButton implements MouseListener{
 								{
 									inventory.setEquippedShield(null);
 								}
-								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
 
 								return;
 							}
@@ -221,7 +221,7 @@ public class ClientItem extends JButton implements MouseListener{
 					equipSlot = pos;
 					row = -1;
 					col = -1;
-					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*20+80,500);
+					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+80,500);
 
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
 					//If this is the first item to be equipped, auto select it
@@ -235,51 +235,73 @@ public class ClientItem extends JButton implements MouseListener{
 				}
 				else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
 				{
+					inventory.getInventory()[row][col] = null;
 					if(inventory.getEquippedArmour() != null)
 					{
 						inventory.getEquippedArmour().setBorder(BorderFactory.createEmptyBorder());
 						inventory.getEquippedArmour().setSelected(false);
-						
+
 						ClientItem[][] invGrid = inventory.getInventory();
+						boolean shouldBreak = false;
 						for(int row = 0; row < invGrid.length;row++)
+						{
 							for(int col = 0;col < invGrid[row].length;col++)
 								if(invGrid[row][col] == null)
 								{
+									System.out.printf("row %d col %d%n", row,col);
 									invGrid[row][col] = inventory.getEquippedArmour();
 									inventory.getEquippedArmour().setRow(row);
 									inventory.getEquippedArmour().setCol(col);
-									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									shouldBreak = true;
+									break;
+
 								}
-					}
+							if(shouldBreak)
+								break;
+						}
+					}		
 					inventory.getClient().print("MA "+type);
 					selected = true;
 					inventory.setEquippedArmour(this);
+					setBorder(BorderFactory.createLineBorder(Color.white));
 					setLocation(80,580);
+					repaint();
 
 
 				}
 				else if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
 				{
+					inventory.getInventory()[row][col] = null;
 					if(inventory.getEquippedShield() != null)
 					{
 						inventory.getEquippedShield().setBorder(BorderFactory.createEmptyBorder());
 						inventory.getEquippedShield().setSelected(false);
 
 						ClientItem[][] invGrid = inventory.getInventory();
+						boolean shouldBreak = false;
 						for(int row = 0; row < invGrid.length;row++)
+						{
 							for(int col = 0;col < invGrid[row].length;col++)
 								if(invGrid[row][col] == null)
 								{
 									invGrid[row][col] = inventory.getEquippedShield();
 									inventory.getEquippedShield().setRow(row);
 									inventory.getEquippedShield().setCol(col);
-									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									shouldBreak = true;
+									break;
 								}
+							if(shouldBreak)
+								break;
+						}
 					}
 					inventory.getClient().print("MS "+type);
 					selected = true;
 					inventory.setEquippedShield(this);
+					setBorder(BorderFactory.createLineBorder(Color.white));
 					setLocation(80,660);
+					repaint();
 				}
 			}
 			//If it's a potion use it
