@@ -25,6 +25,11 @@ public class ServerEngine implements Runnable, ActionListener
 	private static ArrayList<ServerPlayer> listOfPlayers;
 
 	/**
+	 * Player to remove
+	 */
+	private ArrayList<ServerPlayer> toRemove = new ArrayList<ServerPlayer>();
+	
+	/**
 	 * A list of IDs currently used in the game (index is the ID, true means
 	 * used, false means unused). Note that IDs can be freed when the object is
 	 * deleted and re-assigned to another object
@@ -117,6 +122,12 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public synchronized void updateClients()
 	{
+		if(!toRemove.isEmpty())
+		{
+			for(ServerPlayer player : toRemove)
+			listOfPlayers.remove(player);
+			toRemove.clear();
+		}
 		try{
 			for (ServerPlayer player : listOfPlayers)
 			{
@@ -147,6 +158,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public synchronized void removePlayer(ServerPlayer remove)
 	{
+		toRemove.add(remove);
 		listOfPlayers.remove(remove);
 		world.remove(remove);
 		broadcast("R " + remove.getID());
