@@ -155,6 +155,17 @@ public class ClientInventory extends JPanel{
 							return;
 						}
 					}
+			else if(pos == ServerPlayer.DEFAULT_ARMOUR_SLOT)
+			{
+				equippedArmour = null;
+				client.print("DrW "+item.getEquipSlot());
+				
+			}
+			else if(pos == ServerPlayer.DEFAULT_SHIELD_SLOT)
+			{
+				equippedShield = null;
+				client.print("DrW "+item.getEquipSlot());
+			}
 			else
 			{
 				equippedWeapons[pos] = null;

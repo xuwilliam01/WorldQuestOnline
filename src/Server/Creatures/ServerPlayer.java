@@ -143,14 +143,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The equipped armor
 	 */
-	// UNCOMMENT
-	// private ServerArmour equippedArmour = null;
+	private ServerArmour equippedArmour = null;
 
 	/**
 	 * The equipped shield
 	 */
 	// UNCOMMENT
-	// private ServerShield equippedShield = null;
+	//private ServerShield equippedShield = null;
 
 	/**
 	 * The damage the player inflicts from just punching
@@ -181,7 +180,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
-	
+
 
 	/**
 	 * Constructor for a player in the server
@@ -202,7 +201,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
@@ -329,7 +328,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				super.setDirection(getNextDirection());
 			}
-			
+
 			// Update the counter for weapon delay
 			if (actionCounter < actionDelay)
 			{
@@ -444,9 +443,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			// Update the player's image
 			setImage(baseImage + "_" + getDirection() + "_" + rowCol.getRow()
-					+ "_"
-					+ rowCol.getColumn()
-					+ ".png");
+			+ "_"
+			+ rowCol.getColumn()
+			+ ".png");
 
 			// Update the accessories on the player
 			if (getHead() != null)
@@ -765,8 +764,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void drop(int slot)
 	{
-		dropItem(equippedWeapons[slot]);
-		equippedWeapons[slot] = null;
+		if(slot == DEFAULT_ARMOUR_SLOT)
+		{
+			dropItem(equippedArmour);
+			equippedArmour = null;
+		}
+		else if(slot == DEFAULT_SHIELD_SLOT)
+		{
+			//dropItem(equippedShield);
+			//equippedShield = null;
+		}
+		else
+		{
+			dropItem(equippedWeapons[slot]);
+			equippedWeapons[slot] = null;
+		}
 	}
 
 	/**
@@ -808,16 +820,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-											.isAttackable()
+									.isAttackable()
 									&& ((ServerCreature) otherObject)
-											.getTeam() != getTeam()
+									.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject).inflictDamage(
 										PUNCHING_DAMAGE, 5);
 								alreadyPunched
-										.add((ServerCreature) otherObject);
+								.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -979,7 +991,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1153,9 +1165,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// it exists
 		// UNCOMMENT
 		// if(equippedShield != null)
-		// {
-		// getInventory().add(equippedShield)
-		// }
+		{
+			// getInventory().add(equippedShield)
+		}
 
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
@@ -1174,10 +1186,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// First replace the shield in the inventory with the current shield, if
 		// it exists
 		// UNCOMMENT
-		// if(equippedArmour != null)
-		// {
-		// getInventory().add(equippedArmour)
-		// }
+		if(equippedArmour != null)
+		{
+			getInventory().add(equippedArmour);
+		}
 
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
