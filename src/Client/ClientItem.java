@@ -18,7 +18,7 @@ public class ClientItem extends JButton implements MouseListener{
 	private Image image;
 	private String imageName;
 	private boolean selected = false;
-	private int equipSlot = 9;
+	private int equipSlot = ServerPlayer.DEFAULT_WEAPON_SLOT;
 	private int row;
 	private int col;
 	private ClientInventory inventory;
@@ -37,6 +37,11 @@ public class ClientItem extends JButton implements MouseListener{
 		this.inventory = inventory;
 		this.imageName = imageName;
 		image = Images.getImage(imageName);
+
+		if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
+			equipSlot = ServerPlayer.DEFAULT_ARMOUR_SLOT;
+		if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
+			equipSlot = ServerPlayer.DEFAULT_SHIELD_SLOT;
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
 		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
@@ -174,16 +179,29 @@ public class ClientItem extends JButton implements MouseListener{
 						for(int col = 0;col < invGrid[row].length;col++)
 							if(invGrid[row][col] == null)
 							{
+
 								invGrid[row][col] = this;
 								this.row = row;
 								this.col = col;
-								inventory.getEquippedWeapons()[equipSlot] = null;
-								equipSlot = 9;
+								if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2))
+								{
+									inventory.getEquippedWeapons()[equipSlot] = null;
+									equipSlot = ServerPlayer.DEFAULT_WEAPON_SLOT;
+								}
+								else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
+								{
+									inventory.setEquippedArmour(null);
+								}
+								else if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
+								{
+									inventory.setEquippedShield(null);
+								}
 								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+
 								return;
 							}
 				}
-				else
+				else if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2))
 				{
 					//Only move to weapons if there is room
 					int pos = 0;
@@ -204,18 +222,64 @@ public class ClientItem extends JButton implements MouseListener{
 					row = -1;
 					col = -1;
 					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*20+80,500);
-					
+
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
 					//If this is the first item to be equipped, auto select it
-					if(inventory.getClient().getWeaponSelected() == 9 ||inventory.getEquippedWeapons()[inventory.getClient().getWeaponSelected()] == null )
+					if(inventory.getClient().getWeaponSelected() == ServerPlayer.DEFAULT_WEAPON_SLOT ||inventory.getEquippedWeapons()[inventory.getClient().getWeaponSelected()] == null )
 					{
 						inventory.getClient().setWeaponSelected(equipSlot);
 						setBorder(BorderFactory.createLineBorder(Color.white));
 					}
-					
+
 					repaint();
+				}
+				else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
+				{
+					if(inventory.getEquippedArmour() != null)
+					{
+						inventory.getEquippedArmour().setBorder(BorderFactory.createEmptyBorder());
+						inventory.getEquippedArmour().setSelected(false);
+						
+						ClientItem[][] invGrid = inventory.getInventory();
+						for(int row = 0; row < invGrid.length;row++)
+							for(int col = 0;col < invGrid[row].length;col++)
+								if(invGrid[row][col] == null)
+								{
+									invGrid[row][col] = inventory.getEquippedArmour();
+									inventory.getEquippedArmour().setRow(row);
+									inventory.getEquippedArmour().setCol(col);
+									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+								}
+					}
+					inventory.getClient().print("MA "+type);
+					selected = true;
+					inventory.setEquippedArmour(this);
+					setLocation(80,580);
 
 
+				}
+				else if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
+				{
+					if(inventory.getEquippedShield() != null)
+					{
+						inventory.getEquippedShield().setBorder(BorderFactory.createEmptyBorder());
+						inventory.getEquippedShield().setSelected(false);
+
+						ClientItem[][] invGrid = inventory.getInventory();
+						for(int row = 0; row < invGrid.length;row++)
+							for(int col = 0;col < invGrid[row].length;col++)
+								if(invGrid[row][col] == null)
+								{
+									invGrid[row][col] = inventory.getEquippedShield();
+									inventory.getEquippedShield().setRow(row);
+									inventory.getEquippedShield().setCol(col);
+									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+								}
+					}
+					inventory.getClient().print("MS "+type);
+					selected = true;
+					inventory.setEquippedShield(this);
+					setLocation(80,660);
 				}
 			}
 			//If it's a potion use it

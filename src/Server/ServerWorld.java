@@ -51,6 +51,8 @@ public class ServerWorld
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
 	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
+	public final static String ARMOUR_TYPE = EQUIP_TYPE + "A";
+	public final static String SHIELD_TYPE = EQUIP_TYPE + "S";
 
 	public final static String DAGGER_TYPE = MELEE_TYPE + "D";
 	public final static String AX_TYPE = MELEE_TYPE + "A";

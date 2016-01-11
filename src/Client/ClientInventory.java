@@ -19,6 +19,8 @@ public class ClientInventory extends JPanel{
 
 	private ClientItem[][] inventory = new ClientItem[HEIGHT][WIDTH];
 	private ClientItem[] equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
+	private ClientItem equippedArmour = null;
+	private ClientItem equippedShield = null;
 
 	private Client client;
 
@@ -113,7 +115,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == 9)
+			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT)
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{
@@ -141,7 +143,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == 9)
+			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT)
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{
@@ -169,7 +171,7 @@ public class ClientInventory extends JPanel{
 							repaint();
 							return;
 						}
-					client.setWeaponSelected(9);
+					client.setWeaponSelected(ServerPlayer.DEFAULT_WEAPON_SLOT);
 				}
 
 			}
@@ -268,6 +270,20 @@ public class ClientInventory extends JPanel{
 	public void setInventory(ClientItem[][] inventory) {
 		this.inventory = inventory;
 	}
+	public ClientItem getEquippedArmour() {
+		return equippedArmour;
+	}
+	public void setEquippedArmour(ClientItem equippedArmour) {
+		this.equippedArmour = equippedArmour;
+	}
+	public ClientItem getEquippedShield() {
+		return equippedShield;
+	}
+	public void setEquippedShield(ClientItem equippedShield) {
+		this.equippedShield = equippedShield;
+	}
+	
+	
 
 
 }
