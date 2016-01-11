@@ -37,15 +37,19 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON.png");
+			value = 4;
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 			setImage("OUTFITNINJABLUE_ICON.png");
+			value = 3;
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
 			setImage("OUTFITNINJARED_ICON.png");
+			value = 2;
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
 			setImage("OUTFITNINJAGREY_ICON.png");
+			value = 1;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");

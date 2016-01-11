@@ -4,11 +4,13 @@ import Server.ServerWorld;
 
 /**
  * The actual item for an armour set
+ * 
  * @author William
  *
  */
-public class ServerArmour extends ServerItem
-{
+public class ServerArmour extends ServerItem {
+
+	public static int NUM_ARMOURS = 4;
 
 	/**
 	 * The percentage of damage this armour absorbs
@@ -20,12 +22,10 @@ public class ServerArmour extends ServerItem
 	 */
 	private String armourImage;
 
-	public ServerArmour(double x, double y, String type)
-	{
+	public ServerArmour(double x, double y, String type) {
 		super(x, y, type);
 
-		switch (type)
-		{
+		switch (type) {
 		case ServerWorld.STEEL_ARMOUR:
 			armour = 0.5;
 			armourImage = "OUTFITARMOR";
@@ -45,27 +45,35 @@ public class ServerArmour extends ServerItem
 		}
 	}
 
-	public double getArmour()
-	{
+	public static ServerArmour randomArmour(double x, double y) {
+		int randType = (int) (Math.random() * NUM_ARMOURS) + 1;
+		switch (randType) {
+		case 1:
+			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
+		case 2:
+			return new ServerArmour(x, y, ServerWorld.BLUE_NINJA_ARMOUR);
+		case 3:
+			return new ServerArmour(x, y, ServerWorld.RED_NINJA_ARMOUR);
+		case 4:
+			return new ServerArmour(x, y, ServerWorld.STEEL_ARMOUR);
+		}
+		return null;
+	}
+
+	public double getArmour() {
 		return armour;
 	}
 
-	public void setArmour(double armour)
-	{
+	public void setArmour(double armour) {
 		this.armour = armour;
 	}
 
-	public String getArmourImage()
-	{
+	public String getArmourImage() {
 		return armourImage;
 	}
 
-	public void setArmourImage(String armourImage)
-	{
+	public void setArmourImage(String armourImage) {
 		this.armourImage = armourImage;
 	}
 
-	
-
-	
 }

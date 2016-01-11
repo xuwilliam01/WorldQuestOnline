@@ -115,7 +115,7 @@ public class ClientInventory extends JPanel{
 			item.setVisible(false);
 			remove(item);
 			invalidate();
-			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || item.isSelected())
+			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected())
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
 					{

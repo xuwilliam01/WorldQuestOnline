@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import Server.ServerWorld;
+import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
@@ -25,6 +26,8 @@ public class ServerVendor extends ServerCreature {
 			addItem(ServerPotion.randomPotion(getX(),getY()));
 		for(int weapon = 0; weapon < 21; weapon++)
 			addItem(ServerWeapon.randomWeapon(getX(), getY(), (quality-1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS,(quality+1)*ServerWeapon.NUM_WEAPONS/ServerWeapon.NUM_TIERS));
+		for(int armour = 0; armour < 5; armour++)
+			addItem(ServerArmour.randomArmour(getX(), getY()));
 	}
 	
 	public boolean isBusy()
