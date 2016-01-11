@@ -53,6 +53,11 @@ public class ServerWorld
 	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
 	public final static String ARMOUR_TYPE = EQUIP_TYPE + "A";
 	public final static String SHIELD_TYPE = EQUIP_TYPE + "S";
+	
+	public final static String STEEL_ARMOUR = ARMOUR_TYPE +"I";
+	public final static String RED_NINJA_ARMOUR = ARMOUR_TYPE +"R";
+	public final static String BLUE_NINJA_ARMOUR = ARMOUR_TYPE +"B";
+	public final static String GREY_NINJA_ARMOUR = ARMOUR_TYPE +"G";
 
 	public final static String DAGGER_TYPE = MELEE_TYPE + "D";
 	public final static String AX_TYPE = MELEE_TYPE + "A";

@@ -35,6 +35,9 @@ public abstract class ServerItem extends ServerObject {
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
 			break;
+		case ServerWorld.STEEL_ARMOUR:
+			setImage("MONEY.png");
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
 			value = 5;

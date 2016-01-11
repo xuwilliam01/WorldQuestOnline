@@ -112,8 +112,8 @@ public class Images
 						"BASE_TAN", "HAIR_0_BEIGE", "HAIR_1_BEIGE",
 						"HAIR_0_BLACK", "HAIR_1_BLACK", "HAIR_0_BLOND",
 						"HAIR_0_BLOND", "HAIR_0_GREY", "HAIR_1_GREY",
-						"OUTFIT_ARMOR", "OUTFIT_NINJA_BLUE",
-						"OUTFIT_NINJA_GREY", "OUTFIT_NINJA_RED" };
+						"OUTFITARMOR", "OUTFITNINJABLUE",
+						"OUTFITNINJAGREY", "OUTFITNINJARED" };
 				for (int no = 0; no < playerSheets.length; no++)
 				{
 					image = ImageIO.read(new File(playerSheets[no] + ".png"));
@@ -206,6 +206,11 @@ public class Images
 									currentImage.getHeight()), 104, 128));
 
 				}
+				
+				images.add(new GameImage("OUTFITARMOR_ICON.png"));
+				images.add(new GameImage("OUTFITNINJABLUE_ICON.png"));
+				images.add(new GameImage("OUTFITNINJARED_ICON.png"));
+				images.add(new GameImage("OUTFITNINJAGREY_ICON.png"));
 
 				String[] weaponSheets = { "DAWOOD", "DASTONE", "DAIRON",
 						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",
@@ -245,6 +250,7 @@ public class Images
 								newImage));
 					}
 				}
+				
 			}
 			catch (IOException e)
 			{
@@ -253,18 +259,6 @@ public class Images
 			}
 
 			// Add the rest of the images normally
-			images.add(new GameImage("KNIGHT_RIGHT.png"));
-			images.add(new GameImage("KNIGHT_LEFT.png"));
-
-			images.add(new GameImage("CYCLOPS_RIGHT.png", 120, 122));
-			images.add(new GameImage("CYCLOPS_LEFT.png", 120, 122));
-
-			images.add(new GameImage("GIRL_RIGHT.png"));
-			images.add(new GameImage("GIRL_LEFT.png"));
-
-			images.add(new GameImage("PLAYERGHOST_RIGHT.png"));
-			images.add(new GameImage("PLAYERGHOST_LEFT.png"));
-
 			images.add(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
@@ -291,7 +285,6 @@ public class Images
 			}
 
 			images.add(new GameImage("VENDOR.png", 120, 120));
-			images.add(new GameImage("ENEMY.png", 60, 90));
 			images.add(new GameImage("CHEST.png", 60, 60));
 			images.add(new GameImage("CASTLE.png", 200, 400));
 			images.add(new GameImage("BULLET.png"));
