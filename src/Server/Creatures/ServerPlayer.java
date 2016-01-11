@@ -149,7 +149,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The equipped shield
 	 */
 	// UNCOMMENT
-	//private ServerShield equippedShield = null;
+	// private ServerShield equippedShield = null;
 
 	/**
 	 * The damage the player inflicts from just punching
@@ -181,7 +181,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private String baseImage;
 
-
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -201,7 +200,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
@@ -269,10 +268,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.WOOD_TIER));
 
-		ServerArmour steelArmour = new ServerArmour(0, 0,
-				ServerWorld.STEEL_ARMOUR);
-		addItem(steelArmour);
-
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
@@ -281,13 +276,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
-
-		ServerAccessory armour = new ServerAccessory(this,
-				steelArmour.getArmourImage(), steelArmour.getArmour());
-
-		setBody(armour);
-
-		world.add(armour);
+		addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
 	}
 
 	/**
@@ -443,9 +432,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			// Update the player's image
 			setImage(baseImage + "_" + getDirection() + "_" + rowCol.getRow()
-			+ "_"
-			+ rowCol.getColumn()
-			+ ".png");
+					+ "_"
+					+ rowCol.getColumn()
+					+ ".png");
 
 			// Update the accessories on the player
 			if (getHead() != null)
@@ -764,15 +753,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void drop(int slot)
 	{
-		if(slot == DEFAULT_ARMOUR_SLOT)
+		if (slot == DEFAULT_ARMOUR_SLOT)
 		{
 			dropItem(equippedArmour);
 			equippedArmour = null;
+			getBody().destroy();
+			setBody(null);
 		}
-		else if(slot == DEFAULT_SHIELD_SLOT)
+		else if (slot == DEFAULT_SHIELD_SLOT)
 		{
-			//dropItem(equippedShield);
-			//equippedShield = null;
+			// dropItem(equippedShield);
+			// equippedShield = null;
 		}
 		else
 		{
@@ -820,16 +811,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-									.isAttackable()
+											.isAttackable()
 									&& ((ServerCreature) otherObject)
-									.getTeam() != getTeam()
+											.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject).inflictDamage(
 										PUNCHING_DAMAGE, 5);
 								alreadyPunched
-								.add((ServerCreature) otherObject);
+										.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -991,7 +982,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-											.isBusy())
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1186,7 +1177,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// First replace the shield in the inventory with the current shield, if
 		// it exists
 		// UNCOMMENT
-		if(equippedArmour != null)
+		if (equippedArmour != null)
 		{
 			getInventory().add(equippedArmour);
 		}
@@ -1200,7 +1191,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		if (toRemove != null)
 			getInventory().remove(toRemove);
 		// UNCOMMENT
-		equippedArmour = (ServerArmour)toRemove;
+		equippedArmour = (ServerArmour) toRemove;
+
+		ServerAccessory newArmour = new ServerAccessory(this,
+				equippedArmour.getArmourImage(), equippedArmour.getArmour());
+		if (getBody() != null)
+		{
+			getBody().destroy();
+		}
+		setBody(newArmour);
+		world.add(newArmour);
+
 	}
 
 	public void unequip(int slot)
@@ -1209,9 +1210,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			if (slot == DEFAULT_ARMOUR_SLOT)
 			{
-				// UNCOMMENT
-				// getInventory().add(equippedArmour);
-				// equippedArmour = null;
+				getInventory().add(equippedArmour);
+				getBody().destroy();
+				setBody(null);
+				equippedArmour = null;
 			}
 			else if (slot == DEFAULT_SHIELD_SLOT)
 			{
