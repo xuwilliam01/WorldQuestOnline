@@ -28,19 +28,19 @@ public class ServerArmour extends ServerItem
 		{
 		case ServerWorld.STEEL_ARMOUR:
 			armour = 0.5;
-			armourImage = "OUTFITARMOR_0_0.png";
+			armourImage = "OUTFITARMOR";
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
 			armour = 0.1;
-			armourImage = "OUTFITNINJAGREY_0_0.png";
+			armourImage = "OUTFITNINJAGREY";
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 			armour = 0.2;
-			armourImage = "OUTFITNINJABLUE_0_0.png";
+			armourImage = "OUTFITNINJABLUE";
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
 			armour = 0.3;
-			armourImage = "OUTFITNINJARED_0_0.png";
+			armourImage = "OUTFITNINJARED";
 			break;
 		}
 	}

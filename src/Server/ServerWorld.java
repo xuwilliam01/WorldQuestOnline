@@ -72,10 +72,9 @@ public class ServerWorld
 
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 
-	public final static String ACCESSORY_TYPE = EQUIP_TYPE + "A";
-
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
+	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
 
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";

@@ -68,6 +68,11 @@ public abstract class ServerCreature extends ServerObject
 	 * The horizontal direction the creature is facing
 	 */
 	private String direction;
+	
+	/**
+	 * The direction to change the character to right after an action
+	 */
+	private String nextDirection;
 
 	/**
 	 * The number of pixels relative to the hitbox to draw the creature (sent to
@@ -110,6 +115,7 @@ public abstract class ServerCreature extends ServerObject
 		HP = maxHP;
 		this.world = world;
 		direction = "RIGHT";
+		nextDirection = "RIGHT";
 
 		// Calculate the resistance to knockback based on weight
 		knockBackResistance = Math.sqrt((getWidth() * getHeight())) / 16;
@@ -390,4 +396,16 @@ public abstract class ServerCreature extends ServerObject
 	{
 		return (int) (getY() + relativeDrawY + 0.5);
 	}
+
+	public String getNextDirection()
+	{
+		return nextDirection;
+	}
+
+	public void setNextDirection(String nextDirection)
+	{
+		this.nextDirection = nextDirection;
+	}
+	
+	
 }

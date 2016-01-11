@@ -23,10 +23,10 @@ public class ServerAccessory extends ServerObject
 	 * @param wielder
 	 * @param image
 	 */
-	public ServerAccessory(ServerCreature wielder, String baseImage, int armourValue)
+	public ServerAccessory(ServerCreature wielder, String baseImage, double armourPercentage)
 	{
 		super(wielder.getX(), wielder.getY(), -1, -1, 0,
-				baseImage + "_0_0.png", ServerWorld.ACCESSORY_TYPE);
+				baseImage + "_RIGHT_0_0.png", ServerWorld.ACCESSORY_TYPE);
 		this.baseImage = baseImage;
 		this.wielder = wielder;
 	}
@@ -39,8 +39,8 @@ public class ServerAccessory extends ServerObject
 	 */
 	public void update(String direction, RowCol rowCol)
 	{
-		setX(wielder.getX());
-		setY(wielder.getY());
+		setX(wielder.getDrawX());
+		setY(wielder.getDrawY());
 		setImage(baseImage + "_" + direction + "_" + rowCol.getRow() + "_"
 				+ rowCol.getColumn()
 				+ ".png");

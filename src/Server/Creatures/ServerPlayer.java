@@ -13,6 +13,8 @@ import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Items.ServerAccessory;
+import Server.Items.ServerArmour;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerWeapon;
@@ -141,14 +143,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The equipped armor
 	 */
-	//UNCOMMENT
-	//private ServerArmour equippedArmour = null;
+	// UNCOMMENT
+	// private ServerArmour equippedArmour = null;
 
 	/**
 	 * The equipped shield
 	 */
-	//UNCOMMENT
-	//private ServerShield equippedShield = null;
+	// UNCOMMENT
+	// private ServerShield equippedShield = null;
 
 	/**
 	 * The damage the player inflicts from just punching
@@ -179,6 +181,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
+	
 
 	/**
 	 * Constructor for a player in the server
@@ -199,7 +202,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
@@ -255,7 +258,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ " "
 				+ "BASE_" + skinColour + "_RIGHT_0_0.png " + getTeam());
 
-		baseImage = "BASE_" + skinColour + "_RIGHT";
+		baseImage = "BASE_" + skinColour;
 
 		// Start the player off with some weapons
 		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
@@ -267,12 +270,25 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.WOOD_TIER));
 
+		ServerArmour steelArmour = new ServerArmour(0, 0,
+				ServerWorld.STEEL_ARMOUR);
+		addItem(steelArmour);
+
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.STEEL_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
+
+		ServerAccessory armour = new ServerAccessory(this,
+				steelArmour.getArmourImage(), steelArmour.getArmour());
+
+		setBody(armour);
+
+		world.add(armour);
 	}
 
 	/**
@@ -308,11 +324,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		if (exists())
 		{
+
 			if (actionCounter < 0)
 			{
-				baseImage = "BASE_" + skinColour + "_" + getDirection();
+				super.setDirection(getNextDirection());
 			}
-
+			
 			// Update the counter for weapon delay
 			if (actionCounter < actionDelay)
 			{
@@ -426,7 +443,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 
 			// Update the player's image
-			setImage(baseImage + "_" + rowCol.getRow() + "_"
+			setImage(baseImage + "_" + getDirection() + "_" + rowCol.getRow()
+					+ "_"
 					+ rowCol.getColumn()
 					+ ".png");
 
@@ -438,7 +456,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			if (getBody() != null)
 			{
-				getHead().update(getDirection(), rowCol);
+				getBody().update(getDirection(), rowCol);
 			}
 
 			// Send all the objects within all the object tiles in the player's
@@ -487,7 +505,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							else
 							{
 
-
 								queueMessage("O " + object.getID() + " "
 										+ ((int) (object.getX() + 0.5))
 										+ " " + ((int) (object.getY() + 0.5))
@@ -510,8 +527,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				setHSpeed(movingDirection * horizontalMovement);
 			}
 
-			//Check if the vendor is out of range
-			if(vendor != null && !collidesWith(vendor))
+			// Check if the vendor is out of range
+			if (vendor != null && !collidesWith(vendor))
 			{
 				vendor.setIsBusy(false);
 				vendor = null;
@@ -550,7 +567,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					newMouseX = Integer.parseInt(tokens[1]);
 					newMouseY = Integer.parseInt(tokens[2]);
 				}
-				else if (command.equals("R")&& alive)
+				else if (command.equals("R") && alive)
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
@@ -564,7 +581,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("L")&& alive)
+				else if (command.equals("L") && alive)
 				{
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
@@ -577,7 +594,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && isOnSurface() && alive && !inAction())
+				else if (command.equals("U") && isOnSurface() && alive
+						&& !inAction())
 				{
 					setVSpeed(-verticalMovement);
 					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
@@ -790,16 +808,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-									.isAttackable()
+											.isAttackable()
 									&& ((ServerCreature) otherObject)
-									.getTeam() != getTeam()
+											.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject).inflictDamage(
 										PUNCHING_DAMAGE, 5);
 								alreadyPunched
-								.add((ServerCreature) otherObject);
+										.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -877,9 +895,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		setHP(getHP() - amount);
 
-		double damageX = Math.random()*getWidth() + getX();
-		double damageY = Math.random()*getHeight()/2 + getY() - getHeight()/3;
-		world.add(new ServerDamageIndicator(damageX, damageY,Integer.toString(amount),ServerDamageIndicator.RED_TEXT,world));
+		double damageX = Math.random() * getWidth() + getX();
+		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
+				/ 3;
+		world.add(new ServerDamageIndicator(damageX, damageY, Integer
+				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
 
 		if (getHP() <= 0)
 		{
@@ -955,10 +975,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							{
 								// If vendor send shop to client
 								if (object.getType().equals(
-										ServerWorld.VENDOR_TYPE)
-										)
+										ServerWorld.VENDOR_TYPE))
 								{
-									if (vendor == null && !((ServerVendor) object).isBusy())
+									if (vendor == null
+											&& !((ServerVendor) object)
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -974,7 +995,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 													item.getCost());
 										queueMessage(newMessage);
 									}
-									else if(vendor != null)
+									else if (vendor != null)
 									{
 										vendor.setIsBusy(false);
 										vendor = null;
@@ -1004,7 +1025,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void setDirection(String newDirection)
 	{
-		super.setDirection(newDirection);
+		setNextDirection(newDirection);
 	}
 
 	public boolean isDisconnected()
@@ -1126,64 +1147,65 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		getInventory().remove(toRemove);
 	}
 
-
 	public void equipShield(String itemType)
 	{
-		//First replace the shield in the inventory with the current shield, if it exists
-		//UNCOMMENT
-//		if(equippedShield != null)
-//		{		
-//			getInventory().add(equippedShield)
-//		}
-		
+		// First replace the shield in the inventory with the current shield, if
+		// it exists
+		// UNCOMMENT
+		// if(equippedShield != null)
+		// {
+		// getInventory().add(equippedShield)
+		// }
+
 		ServerItem toRemove = null;
-		for(ServerItem item : getInventory())
-			if(item.getType().equals(itemType))
+		for (ServerItem item : getInventory())
+			if (item.getType().equals(itemType))
 			{
 				toRemove = item;
 			}
-		if(toRemove != null)
+		if (toRemove != null)
 			getInventory().remove(toRemove);
-		//UNCOMMENT
-//		equippedShield = (ServerShield)toRemove;
+		// UNCOMMENT
+		// equippedShield = (ServerShield)toRemove;
 	}
 
 	public void equipArmour(String itemType)
 	{
-		//First replace the shield in the inventory with the current shield, if it exists
-		//UNCOMMENT
-//		if(equippedArmour != null)
-//		{		
-//			getInventory().add(equippedArmour)
-//		}
-		
+		// First replace the shield in the inventory with the current shield, if
+		// it exists
+		// UNCOMMENT
+		// if(equippedArmour != null)
+		// {
+		// getInventory().add(equippedArmour)
+		// }
+
 		ServerItem toRemove = null;
-		for(ServerItem item : getInventory())
-			if(item.getType().equals(itemType))
+		for (ServerItem item : getInventory())
+			if (item.getType().equals(itemType))
 			{
 				toRemove = item;
 			}
-		if(toRemove != null)
+		if (toRemove != null)
 			getInventory().remove(toRemove);
-		//UNCOMMENT
-//		equippedArmour = (ServerArmour)toRemove;
+		// UNCOMMENT
+		// equippedArmour = (ServerArmour)toRemove;
 	}
-	
+
 	public void unequip(int slot)
 	{
 		if (getInventory().size() <= MAX_INVENTORY)
 		{
-			if(slot == DEFAULT_ARMOUR_SLOT)
+			if (slot == DEFAULT_ARMOUR_SLOT)
 			{
-				//UNCOMMENT
-				//	getInventory().add(equippedArmour);
-				//	equippedArmour = null;
+				// UNCOMMENT
+				// getInventory().add(equippedArmour);
+				// equippedArmour = null;
 			}
-			else if(slot == DEFAULT_SHIELD_SLOT)
+			else if (slot == DEFAULT_SHIELD_SLOT)
 			{
-				//UNCOMMENT
-				//	getInventory().add(equippedShield);
-				//	equippedShield = null;
+				// UNCOMMENT
+				// getInventory().add(equippedShield);
+				// equippedShield = null;
 			}
 			else
 			{
@@ -1252,6 +1274,5 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.newMouseY = newMouseY;
 	}
-
 
 }
