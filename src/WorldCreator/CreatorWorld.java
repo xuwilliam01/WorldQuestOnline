@@ -261,11 +261,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 								tiles[grid[row][column]].getImage(),
 								(int) (ServerGUI.CENTRE_X
 										+ column
-										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+										* (ServerWorld.TILE_SIZE / objectFactor) - posX + 0.5),
 								(int) (ServerGUI.CENTRE_Y
 										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int) (ServerWorld.TILE_SIZE / objectFactor ),
-								(int) (ServerWorld.TILE_SIZE / objectFactor ),
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),(int) (ServerWorld.TILE_SIZE / objectFactor +1),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
 								null);
 					}
 				}
@@ -288,12 +288,12 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 						graphics.fillRect(
 								(int) (ServerGUI.CENTRE_X
 										+ column
-										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+										* (ServerWorld.TILE_SIZE / objectFactor) - posX + 0.5),
 								(int) (ServerGUI.CENTRE_Y
 										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-								(int) (ServerWorld.TILE_SIZE / objectFactor ),
-								(int) (ServerWorld.TILE_SIZE / objectFactor ));
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					}
 					// graphics.setColor(Color.black);
 					// graphics.drawRect((int) (ServerGUI.CENTRE_X + column*
