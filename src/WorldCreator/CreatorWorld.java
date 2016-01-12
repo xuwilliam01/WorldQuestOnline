@@ -180,11 +180,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		{
 			String fullLine = br.readLine();
 			String[] line = fullLine.substring(2).split(" ");
-			String toolTip = line[1];
-			for(int word = 2; word < line.length;word++)
+			String toolTip = line[2];
+			for(int word = 3; word < line.length;word++)
 				toolTip+= " "+line[word];
 			tiles[fullLine.charAt(0)] = new CreatorObject(fullLine.charAt(0),
-					line[0],toolTip, this);
+					line[0],Boolean.parseBoolean(line[1]),toolTip, this);
 		}
 		br.close();
 	}
@@ -560,7 +560,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				&& selectedBlock[1] < grid[0].length)
 			if (addingTile && !ctrlPressed)
 				grid[selectedBlock[0]][selectedBlock[1]] = selectedTile;
-			else if (removingTile && !ctrlPressed)
+			else if (removingTile && ctrlPressed)
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
 
 		update();
@@ -608,12 +608,12 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			addingTile = true;
 		}
 		else if (rightClick && isEditable
-				&& !ctrlPressed)
+				&& ctrlPressed)
 		{
 			removingTile = true;
 		}
 		else if (rightClick && isEditable
-				&& ctrlPressed && selectedTile != '-' && selectedBlock[0] >= 0
+				&& !ctrlPressed && selectedTile != '-' && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
 		{

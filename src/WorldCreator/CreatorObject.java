@@ -18,15 +18,19 @@ public class CreatorObject extends JButton implements MouseListener{
 
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
+	private boolean isTile;
 
-	public CreatorObject(char ref, String name, String description,CreatorWorld world)
+	public CreatorObject(char ref, String name, boolean isTile, String description,CreatorWorld world)
 	{
-		super(new ImageIcon(Images.getImage(name)));
+		if(isTile)
+			setIcon(new ImageIcon(Images.getImage(name)));
+		else
+			setIcon(new ImageIcon(Images.getImage(name.substring(0,name.length()-4)+"_ICON.png")));
 		
 		imageRef = new ImageReferencePair(ref,name);
-		
-		
+			
 		this.world = world;
+		this.isTile = isTile;
 		
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
@@ -53,6 +57,11 @@ public class CreatorObject extends JButton implements MouseListener{
 		imageRef.setImage(image);
 	}
 
+	public boolean isTile()
+	{
+		return isTile;
+	}
+	
 	public void deselect()
 	{
 		setBorder(BorderFactory.createEmptyBorder());
@@ -60,7 +69,9 @@ public class CreatorObject extends JButton implements MouseListener{
 	
 	public void setPosition(int row, int col)
 	{
-		setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+50);
+		if(isTile)
+			setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+50);
+		else setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+300);
 	}
 	
 	@Override
