@@ -38,7 +38,7 @@ public class CreatorObject extends JButton implements MouseListener{
 		addMouseListener(this);
 		setToolTipText(description);
 		
-		setSize(imageRef.getImage().getWidth(null),imageRef.getImage().getHeight(null));
+		setSize(getIcon().getIconWidth(),getIcon().getIconHeight());
 	}
 
 	public char getReference() {
@@ -71,7 +71,7 @@ public class CreatorObject extends JButton implements MouseListener{
 	{
 		if(isTile)
 			setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+50);
-		else setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+300);
+		else setLocation(col*getIcon().getIconWidth()+(col+1)*10,row*getIcon().getIconHeight()+row*10+300);
 	}
 	
 	@Override

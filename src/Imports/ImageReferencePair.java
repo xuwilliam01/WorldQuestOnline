@@ -32,7 +32,7 @@ public class ImageReferencePair {
 		imageName = name;
 		
 		GameImage gameImage = Images.getGameImage(name);
-		image = gameImage.getImage();
+		image = Images.getImage(name);
 		color = gameImage.getCentreColor();
 		
 		//Import all reference pairs

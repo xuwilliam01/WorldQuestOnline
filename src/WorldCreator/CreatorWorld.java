@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -46,6 +47,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	private int posY = 200;
 	private int posX = 200;
 
+	//Objects in world
+	ArrayList<CreatorWorldObject> objects = new ArrayList<CreatorWorldObject>();
+
 	// Scrolling variables
 	private boolean up = false;
 	private boolean down = false;
@@ -65,6 +69,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	private boolean highlightingArea = false;
 	private boolean highlight = false;
 	private boolean isEditable = true;
+	private boolean canDrawObject = false;
 
 	// Variables for changing grid size
 	private boolean isNewHeight = false;
@@ -124,7 +129,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		scrollTimer = new Timer(10, this);
 		scrollTimer.start();
-		
+
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseWheelListener(this);
@@ -247,8 +252,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					//								(int) (ServerGUI.CENTRE_Y
 					//										+ row
 					//										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-					//								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-					//								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+					//								(int) (ServerWorld.TILE_SIZE / objectFactor ),
+					//								(int) (ServerWorld.TILE_SIZE / objectFactor ));
 					//					}
 					if (grid[row][column] != ' ')
 					{
@@ -259,8 +264,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
 								(int) (ServerGUI.CENTRE_Y
 										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int) (ServerWorld.TILE_SIZE / objectFactor ),
+								(int) (ServerWorld.TILE_SIZE / objectFactor ),
 								null);
 					}
 				}
@@ -287,8 +292,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 								(int) (ServerGUI.CENTRE_Y
 										+ row
 										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+								(int) (ServerWorld.TILE_SIZE / objectFactor ),
+								(int) (ServerWorld.TILE_SIZE / objectFactor ));
 					}
 					// graphics.setColor(Color.black);
 					// graphics.drawRect((int) (ServerGUI.CENTRE_X + column*
@@ -305,6 +310,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		if (highlightingArea)
 		{
+			canDrawObject = false;
 			graphics.setColor(Color.white);
 
 			// If we are trying to selected an area that exceeds the grid, draw
@@ -369,15 +375,47 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				&& isEditable)
 		{
 			graphics.setColor(Color.white);
-			graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
-					* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-					(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
-							* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-					(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 
+			//if we are highlighting  single tile
+			if(tiles[selectedTile].isTile())
+			{			
+				graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
+						* (ServerWorld.TILE_SIZE / objectFactor) - posX),
+						(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
+								* (ServerWorld.TILE_SIZE / objectFactor) - posY),
+						(int) (ServerWorld.TILE_SIZE / objectFactor) ,
+						(int) (ServerWorld.TILE_SIZE / objectFactor) );
+				canDrawObject = false;
+			}
+			//Draw a box for the object if it can be added to the screen
+			else 
+			{
+				int x = (int) (ServerGUI.CENTRE_X + selectedBlock[1]
+						* (ServerWorld.TILE_SIZE / objectFactor) - posX);
+				int y = (int) (ServerGUI.CENTRE_Y + selectedBlock[0]
+						* (ServerWorld.TILE_SIZE / objectFactor) - posY);
+				int width = (int) (tiles[selectedTile].getImage().getWidth(null)/ objectFactor) ;
+				width = (int)(((int)(width/(ServerWorld.TILE_SIZE/objectFactor)))*ServerWorld.TILE_SIZE/objectFactor);
+				int height = (int) (tiles[selectedTile].getImage().getHeight(null)/ objectFactor) ;
+				height = (int)(((int)(height/(ServerWorld.TILE_SIZE/objectFactor)))*ServerWorld.TILE_SIZE/objectFactor);
+				if(canFit(selectedBlock[0],selectedBlock[1],(int)(width/ServerWorld.TILE_SIZE),(int)(height/ServerWorld.TILE_SIZE)))
+				{
+					canDrawObject = true;
+					graphics.drawRect(x,y,width,height);
+				}
+				else
+					canDrawObject = false;
+			}
 		}
+		else canDrawObject = false;
 
+		for(CreatorWorldObject object : objects)
+		{
+			graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
+					* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+							* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+		}
+		
 		graphics.setColor(Color.white);
 
 		//Draw an outline
@@ -390,12 +428,12 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				20);
 		graphics.drawString("Select a tile using the mouse", 10, 35);
 		graphics.drawString("Place tiles using left click", 10, 50);
-		graphics.drawString("Delete tiles using right click", 10, 65);
+		graphics.drawString("Delete tiles using ctrl+right click", 10, 65);
 		graphics.drawString(
 				"Use arrow keys to scroll or ctrl + left click to drag the map (left click only when map is not editable)",
 				10, 80);
 		graphics.drawString(
-				"Highlight and fill areas of the map with tiles using ctrl + right click",
+				"Highlight and fill areas of the map with tiles using right click",
 				10, 95);
 		graphics.drawString(
 				"Tip: Scroll in one direction and hold mouse down to create long straight lines and boxes",
@@ -405,6 +443,28 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				10, 125);
 
 
+	}
+
+	public boolean canFit(int startRow, int startCol, int width, int height)
+	{
+		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
+			return false;
+		
+		System.out.printf("%d %d %d %d%n",startRow,startCol,width,height);
+		for(CreatorWorldObject object : objects)
+		{
+			if(object.collidesWith(startRow, startCol, startRow+width, startCol+height))
+				return false;
+		}
+		
+		for(int row = startRow; row < startRow + height;row++)
+			for(int col = startCol; col < startCol+width;col++)
+			{
+				if(grid[row][col] >= 'A')
+					return false;
+			}
+		
+		return true;
 	}
 
 	public void update()
@@ -558,7 +618,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		if (selectedBlock != null && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
-			if (addingTile && !ctrlPressed)
+			if (addingTile && !ctrlPressed && canFit(selectedBlock[0],selectedBlock[1],1,1))
 				grid[selectedBlock[0]][selectedBlock[1]] = selectedTile;
 			else if (removingTile && ctrlPressed)
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
@@ -605,7 +665,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		else if (leftClick && selectedTile != '-' && !ctrlPressed
 				&& isEditable)
 		{
-			addingTile = true;
+			if(tiles[selectedTile].isTile())
+			{
+				addingTile = true;
+			}
+			else if(canDrawObject)
+			{
+				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getImage()));
+			}
 		}
 		else if (rightClick && isEditable
 				&& ctrlPressed)
@@ -663,41 +730,41 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		int notches = scroll.getWheelRotation();
 
-		
-			if (notches > 0 )
+
+		if (notches > 0 )
+		{
+			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
 			{
-				if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
-				{
-					objectFactor *= (1.1 * (notches));
-					posX /= 1.1;
-					posY /= 1.1;
-				
-				}
-				else
-				{
-					posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-					posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-					objectFactor = ServerFrame.FRAME_FACTOR * 16;
-				}
-			}
-			else if (notches < 0)
-			{
-				if (objectFactor / (1.1 * (-notches)) >= 1)
-				{
-					objectFactor /= (1.1 * (-notches));
-					posX *= 1.1;
-					posY *= 1.1;
-				
-				}
-				else
-				{
-					posX *= objectFactor;
-					posY *= objectFactor;
-					objectFactor = 1;
-				}
+				objectFactor *= (1.1 * (notches));
+				posX /= 1.1;
+				posY /= 1.1;
 
 			}
-			
+			else
+			{
+				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+				objectFactor = ServerFrame.FRAME_FACTOR * 16;
+			}
+		}
+		else if (notches < 0)
+		{
+			if (objectFactor / (1.1 * (-notches)) >= 1)
+			{
+				objectFactor /= (1.1 * (-notches));
+				posX *= 1.1;
+				posY *= 1.1;
+
+			}
+			else
+			{
+				posX *= objectFactor;
+				posY *= objectFactor;
+				objectFactor = 1;
+			}
+
+		}
+
 
 		if(objectFactor <= MIN_EDIT_ZOOM)
 			isEditable = true;

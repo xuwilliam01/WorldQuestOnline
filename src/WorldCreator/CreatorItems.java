@@ -18,6 +18,8 @@ public class CreatorItems extends JPanel implements ActionListener{
 	public static final int WIDTH = 300;
 	public static final int NUM_ROWS = 3;
 	private static final int NUM_COLS = 5;
+	public static final int NUM_ROWS_OBJ = 3;
+	public static final int NUM_COLS_OBJ = 4;
 	public static final int MIN_WORLD_SIZE = 20;
 	public static final int MAX_WORLD_SIZE = 100000;
 
@@ -70,14 +72,25 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 	public void addButtons()
 	{
-		int row = 0;
-		int col = 0;
+		int tileRow = 0;
+		int tileCol = 0;
 
+		int objRow = 0;
+		int objCol = 0;
+		
 		for(int button = 0; button < buttons.length;button++)
 			if(buttons[button] != null)
 			{
-				buttons[button].setPosition(row, col++ % NUM_COLS);
-				row = col/NUM_COLS;
+				if(buttons[button].isTile())
+				{
+					buttons[button].setPosition(tileRow, tileCol++ % NUM_COLS);
+					tileRow = tileCol/NUM_COLS;
+				}
+				else
+				{
+					buttons[button].setPosition(objRow, objCol++ % NUM_COLS_OBJ);
+					objRow = objCol/NUM_COLS_OBJ;
+				}
 
 				add(buttons[button]);
 			}
