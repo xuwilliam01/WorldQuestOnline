@@ -401,10 +401,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				if(canFit(selectedBlock[0],selectedBlock[1],(int)(width/ServerWorld.TILE_SIZE),(int)(height/ServerWorld.TILE_SIZE)))
 				{
 					canDrawObject = true;
-					graphics.drawRect(x,y,width,height);
+
 				}
 				else
+				{
 					canDrawObject = false;
+					graphics.setColor(Color.red);
+				}
+				graphics.drawRect(x,y,width,height);
 			}
 		}
 		else canDrawObject = false;
@@ -412,10 +416,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(CreatorWorldObject object : objects)
 		{
 			graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
-					* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-							* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+			* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
 		}
-		
+
 		graphics.setColor(Color.white);
 
 		//Draw an outline
@@ -449,21 +453,21 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
 			return false;
-		
+
 		System.out.printf("%d %d %d %d%n",startRow,startCol,width,height);
 		for(CreatorWorldObject object : objects)
 		{
 			if(object.collidesWith(startRow, startCol, startRow+width, startCol+height))
 				return false;
 		}
-		
+
 		for(int row = startRow; row < startRow + height;row++)
 			for(int col = startCol; col < startCol+width;col++)
 			{
 				if(grid[row][col] >= 'A')
 					return false;
 			}
-		
+
 		return true;
 	}
 
@@ -621,7 +625,26 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			if (addingTile && !ctrlPressed && canFit(selectedBlock[0],selectedBlock[1],1,1))
 				grid[selectedBlock[0]][selectedBlock[1]] = selectedTile;
 			else if (removingTile && ctrlPressed)
+			{
+				CreatorWorldObject toRemove = null;
+				for(CreatorWorldObject object : objects)
+				{
+					if(object.collidesWith(selectedBlock[0], selectedBlock[1], selectedBlock[0]+1, selectedBlock[1]+1))
+					{
+						toRemove = object;
+					}
+				}
+				if(toRemove != null)
+				{
+					objects.remove(toRemove);
+					update();
+					requestFocusInWindow();
+					return;
+				}
+
+				
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
+			}
 
 		update();
 		requestFocusInWindow();
@@ -676,11 +699,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 		else if (rightClick && isEditable
 				&& ctrlPressed)
-		{
+		{		
 			removingTile = true;
 		}
 		else if (rightClick && isEditable
-				&& !ctrlPressed && selectedTile != '-' && selectedBlock[0] >= 0
+				&& !ctrlPressed && selectedTile != '-' && tiles[selectedTile].isTile() && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
 		{
