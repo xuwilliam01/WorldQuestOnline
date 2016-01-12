@@ -624,6 +624,14 @@ MouseMotionListener
 
 			print(currentMessage);
 		}
+		else if (event.getButton() == MouseEvent.BUTTON3
+				&& currentMessage.charAt(0) != 'a')
+		{
+			// A for action
+			currentMessage = "a " + event.getX() + " " + event.getY();
+
+			print(currentMessage);
+		}
 	}
 
 	@Override
@@ -633,6 +641,13 @@ MouseMotionListener
 				&& !currentMessage.equals("!A"))
 		{
 			currentMessage = "!A";
+
+			print(currentMessage);
+		}
+		else if (event.getButton() == MouseEvent.BUTTON3
+				&& !currentMessage.equals("!a"))
+		{
+			currentMessage = "!a";
 
 			print(currentMessage);
 		}
