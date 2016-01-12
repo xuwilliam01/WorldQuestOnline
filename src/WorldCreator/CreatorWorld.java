@@ -395,10 +395,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				int y = (int) (ServerGUI.CENTRE_Y + selectedBlock[0]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posY);
 				int width = (int) (tiles[selectedTile].getImage().getWidth(null)/ objectFactor) ;
-				width = (int)(((int)(width/(ServerWorld.TILE_SIZE/objectFactor)))*ServerWorld.TILE_SIZE/objectFactor);
+				width = (int)((int)(width/(ServerWorld.TILE_SIZE/objectFactor))*ServerWorld.TILE_SIZE/objectFactor);
 				int height = (int) (tiles[selectedTile].getImage().getHeight(null)/ objectFactor) ;
-				height = (int)(((int)(height/(ServerWorld.TILE_SIZE/objectFactor)))*ServerWorld.TILE_SIZE/objectFactor);
-				if(canFit(selectedBlock[0],selectedBlock[1],(int)(width/ServerWorld.TILE_SIZE),(int)(height/ServerWorld.TILE_SIZE)))
+				height = (int)((int)(height/(ServerWorld.TILE_SIZE/objectFactor))*ServerWorld.TILE_SIZE/objectFactor);
+				if(canFit(selectedBlock[0],selectedBlock[1],(int)(width/ServerWorld.TILE_SIZE*objectFactor),(int)(height/ServerWorld.TILE_SIZE*objectFactor)))
 				{
 					canDrawObject = true;
 
@@ -415,9 +415,17 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		for(CreatorWorldObject object : objects)
 		{
-			graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
-			* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-			* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			if(isEditable)
+				graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			else
+			{
+				graphics.setColor(tiles[object.getRef()].getColor());
+				graphics.fillRect((int) (ServerGUI.CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor));
+			}
 		}
 
 		graphics.setColor(Color.white);
@@ -430,9 +438,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		//Draw instructions
 		graphics.drawString(String.format("Map can only be edited when zoomed in %d%% or more (Current: %d%%)", (int)( 100/MIN_EDIT_ZOOM),(int)( 100/objectFactor)), 10,
 				20);
-		graphics.drawString("Select a tile using the mouse", 10, 35);
-		graphics.drawString("Place tiles using left click", 10, 50);
-		graphics.drawString("Delete tiles using ctrl+right click", 10, 65);
+		graphics.drawString("Select an object using the mouse", 10, 35);
+		graphics.drawString("Place objects using left click", 10, 50);
+		graphics.drawString("Delete objects using ctrl+right click", 10, 65);
 		graphics.drawString(
 				"Use arrow keys to scroll or ctrl + left click to drag the map (left click only when map is not editable)",
 				10, 80);
@@ -642,7 +650,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					return;
 				}
 
-				
+
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
 			}
 
@@ -694,7 +702,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 			else if(canDrawObject)
 			{
-				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getImage()));
+				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getImage(),tiles[selectedTile].getReference()));
 			}
 		}
 		else if (rightClick && isEditable

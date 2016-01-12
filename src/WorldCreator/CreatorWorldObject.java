@@ -11,11 +11,13 @@ public class CreatorWorldObject {
 	private int width;
 	private int height;
 	private Image image;
+	private char ref;
 	
-	public CreatorWorldObject(int row, int col, Image image)
+	public CreatorWorldObject(int row, int col, Image image, char ref)
 	{
 		this.col = col;
 		this.row = row;
+		this.ref = ref;
 		this.width = image.getWidth(null)/ServerWorld.TILE_SIZE;
 		this.height = image.getHeight(null)/ServerWorld.TILE_SIZE;
 		this.image = image;
@@ -28,6 +30,11 @@ public class CreatorWorldObject {
 			return true;
 		}
 		return false;
+	}
+	
+	public char getRef()
+	{
+		return ref;
 	}
 	
 	public int getCol() {
