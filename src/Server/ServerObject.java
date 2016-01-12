@@ -355,7 +355,14 @@ public class ServerObject
 
 	public void setHeight(int height)
 	{
-		this.height = height;
+		if (height == -1)
+		{
+			this.height = Images.getGameImage(image).getHeight();
+		}
+		else
+		{
+			this.height = height;
+		}
 	}
 
 	public int getWidth()
@@ -365,7 +372,14 @@ public class ServerObject
 
 	public void setWidth(int width)
 	{
-		this.width = width;
+		if (width == -1)
+		{
+			this.width = Images.getGameImage(image).getWidth();
+		}
+		else
+		{
+			this.width = width;
+		}
 	}
 
 	public String getImage()

@@ -500,7 +500,7 @@ MouseMotionListener
 				justDied = false;
 			}
 			graphics.setColor(Color.black);
-			graphics.drawString("YOU ARE DEAD. You may now fly around", 20, 60);
+			graphics.drawString("YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
 	}
 

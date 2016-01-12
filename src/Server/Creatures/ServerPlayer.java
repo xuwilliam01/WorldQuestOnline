@@ -304,11 +304,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		flush();
 	}
 
-	/**
-	 * Send to the client all the updated values (x and y must be rounded to
-	 * closest integer)
-	 */
-	public void update()
+	public void updatePlayer()
 	{
 		if (exists())
 		{
@@ -334,19 +330,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			// Update the animation of the player and its accessories
 			// The row and column of the frame in the sprite sheet for the image
-			RowCol rowCol = new RowCol(0, 0);
-
+			setRowCol(new RowCol(0,0));
 			if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
 			{
-				rowCol = new RowCol(1, 8);
+				setRowCol(new RowCol(1, 8));
 			}
 			else if (getVSpeed() < 0)
 			{
-				rowCol = new RowCol(1, 7);
+				setRowCol(new RowCol(1, 7));
 			}
 			else if (getVSpeed() > 0)
 			{
-				rowCol = new RowCol(1, 9);
+				setRowCol(new RowCol(1, 9));
 			}
 			else if (actionCounter >= 0)
 			{
@@ -354,30 +349,30 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					if (actionCounter < 4)
 					{
-						rowCol = new RowCol(2, 0);
+						setRowCol(new RowCol(2, 0));
 					}
 					else if (actionCounter < 8)
 					{
-						rowCol = new RowCol(2, 1);
+						setRowCol(new RowCol(2, 1));
 					}
 					else if (actionCounter < 12)
 					{
-						rowCol = new RowCol(2, 2);
+						setRowCol(new RowCol(2, 2));
 					}
 					else if (actionCounter < 16)
 					{
-						rowCol = new RowCol(2, 3);
+						setRowCol(new RowCol(2, 3));
 					}
 				}
 				else if (action.equals("PUNCH"))
 				{
 					if (actionCounter < 5)
 					{
-						rowCol = new RowCol(2, 7);
+						setRowCol(new RowCol(2, 7));
 					}
 					else if (actionCounter < 16)
 					{
-						rowCol = new RowCol(2, 8);
+						setRowCol(new RowCol(2, 8));
 					}
 				}
 			}
@@ -386,27 +381,27 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				int checkFrame = (int) (world.getWorldCounter() % 30);
 				if (checkFrame < 5)
 				{
-					rowCol = new RowCol(0, 1);
+					setRowCol(new RowCol(0, 1));
 				}
 				else if (checkFrame < 10)
 				{
-					rowCol = new RowCol(0, 2);
+					setRowCol(new RowCol(0, 2));
 				}
 				else if (checkFrame < 15)
 				{
-					rowCol = new RowCol(0, 3);
+					setRowCol(new RowCol(0, 3));
 				}
 				else if (checkFrame < 20)
 				{
-					rowCol = new RowCol(0, 4);
+					setRowCol(new RowCol(0, 4));
 				}
 				else if (checkFrame < 25)
 				{
-					rowCol = new RowCol(0, 5);
+					setRowCol(new RowCol(0, 5));
 				}
 				else
 				{
-					rowCol = new RowCol(0, 6);
+					setRowCol(new RowCol(0, 6));
 				}
 			}
 			else if (!isAlive())
@@ -414,39 +409,78 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				if (deathCounter < 0)
 				{
 					deathCounter = world.getWorldCounter();
-					rowCol = new RowCol(5, 1);
+					setRowCol(new RowCol(5, 1));
 				}
 				else if (world.getWorldCounter() - deathCounter < 10)
 				{
-					rowCol = new RowCol(5, 1);
+					setRowCol(new RowCol(5, 1));
 				}
 				else if (world.getWorldCounter() - deathCounter < 20)
 				{
-					rowCol = new RowCol(5, 2);
+					setRowCol(new RowCol(5, 2));
+				}
+				else if (world.getWorldCounter() - deathCounter < 300)
+				{
+					setRowCol(new RowCol(5, 4));
 				}
 				else
 				{
-					rowCol = new RowCol(5, 4);
+					// Respawn the player
+					addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+							+ ServerWorld.WOOD_TIER));
+					addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+							+ ServerWorld.WOOD_TIER));
+					addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
+							+ ServerWorld.WOOD_TIER));
+					addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
+							+ ServerWorld.WOOD_TIER));
+
+					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerArmour(0, 0,
+							ServerWorld.BLUE_NINJA_ARMOUR));
+					addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
+					addItem(new ServerArmour(0, 0,
+							ServerWorld.GREY_NINJA_ARMOUR));
+					addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
+
+					setAlive(true);
+					setSolid(true);
+
+					verticalMovement = jumpSpeed;
+					horizontalMovement = movementSpeed;
+
+					int width = getWidth();
+					setWidth(getHeight());
+					setHeight(width);
+
+					setX(Math.random() * 1500 + 500);
+					setY(300);
+
+					setHP(100);
 				}
 			}
 
 			// Update the player's image
-			setImage(baseImage + "_" + getDirection() + "_" + rowCol.getRow()
+			setImage(baseImage + "_" + getDirection() + "_"
+					+ getRowCol().getRow()
 					+ "_"
-					+ rowCol.getColumn()
+					+ getRowCol().getColumn()
 					+ ".png");
+		}
+	}
 
-			// Update the accessories on the player
-			if (getHead() != null)
-			{
-				getHead().update(getDirection(), rowCol);
-			}
-
-			if (getBody() != null)
-			{
-				getBody().update(getDirection(), rowCol);
-			}
-
+	/**
+	 * Send to the client all the updated values (x and y must be rounded to
+	 * closest integer)
+	 */
+	public void updateClient()
+	{
+		if (exists())
+		{
 			// Send all the objects within all the object tiles in the player's
 			// screen
 			int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
@@ -685,6 +719,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		output.close();
 		disconnected = true;
+		if (getHead() != null)
+		{
+			getHead().destroy();
+			setHead(null);
+		}
+
+		if (getBody() != null)
+		{
+			getBody().destroy();
+			setBody(null);
+		}
 		destroy();
 		engine.removePlayer(this);
 	}
@@ -904,16 +949,31 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		world.add(new ServerDamageIndicator(damageX, damageY, Integer
 				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
 
-		if (getHP() <= 0)
+		if (getHP() <= 0 && alive)
 		{
-			setSolid(false);
 			alive = false;
-			setWidth(0);
-			setHeight(0);
+			int width = getWidth();
+			setWidth(getHeight());
+			setHeight(width);
 			dropInventory();
+
+			setSolid(false);
 
 			verticalMovement = 0;
 			horizontalMovement = 0;
+
+			if (getHead() != null)
+			{
+				getHead().destroy();
+				setHead(null);
+			}
+
+			if (getBody() != null)
+			{
+				getBody().destroy();
+				setBody(null);
+			}
+
 		}
 		else
 		{
@@ -1028,7 +1088,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void setDirection(String newDirection)
 	{
-		setNextDirection(newDirection);
+		if (isAlive())
+		{
+			setNextDirection(newDirection);
+		}
 	}
 
 	public boolean isDisconnected()
@@ -1184,12 +1247,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
+		{
 			if (item.getType().equals(itemType))
 			{
 				toRemove = item;
 			}
+		}
 		if (toRemove != null)
+		{
 			getInventory().remove(toRemove);
+		}
 		// UNCOMMENT
 		equippedArmour = (ServerArmour) toRemove;
 

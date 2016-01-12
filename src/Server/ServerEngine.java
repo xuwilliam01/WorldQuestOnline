@@ -131,7 +131,7 @@ public class ServerEngine implements Runnable, ActionListener
 		try{
 			for (ServerPlayer player : listOfPlayers)
 			{
-				player.update();
+				player.updateClient();
 			}
 		}
 		catch(ConcurrentModificationException e)

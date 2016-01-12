@@ -9,6 +9,7 @@ import Server.Items.ServerAccessory;
 import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
 import Server.Items.ServerWeaponSwing;
+import Tools.RowCol;
 
 public abstract class ServerCreature extends ServerObject
 {
@@ -85,6 +86,11 @@ public abstract class ServerCreature extends ServerObject
 	 * the client)
 	 */
 	private double relativeDrawY;
+	
+	/**
+	 * The current frame of the creature's animation
+	 */
+	private RowCol rowCol = new RowCol(0,0);
 
 	/**
 	 * Constructor for a creature
@@ -420,6 +426,16 @@ public abstract class ServerCreature extends ServerObject
 	public void setNextDirection(String nextDirection)
 	{
 		this.nextDirection = nextDirection;
+	}
+
+	public RowCol getRowCol()
+	{
+		return rowCol;
+	}
+
+	public void setRowCol(RowCol rowCol)
+	{
+		this.rowCol = rowCol;
 	}
 	
 	

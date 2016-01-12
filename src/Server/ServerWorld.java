@@ -53,11 +53,11 @@ public class ServerWorld
 	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
 	public final static String ARMOUR_TYPE = EQUIP_TYPE + "A";
 	public final static String SHIELD_TYPE = EQUIP_TYPE + "S";
-	
-	public final static String STEEL_ARMOUR = ARMOUR_TYPE +"I";
-	public final static String RED_NINJA_ARMOUR = ARMOUR_TYPE +"R";
-	public final static String BLUE_NINJA_ARMOUR = ARMOUR_TYPE +"B";
-	public final static String GREY_NINJA_ARMOUR = ARMOUR_TYPE +"G";
+
+	public final static String STEEL_ARMOUR = ARMOUR_TYPE + "I";
+	public final static String RED_NINJA_ARMOUR = ARMOUR_TYPE + "R";
+	public final static String BLUE_NINJA_ARMOUR = ARMOUR_TYPE + "B";
+	public final static String GREY_NINJA_ARMOUR = ARMOUR_TYPE + "G";
 
 	public final static String DAGGER_TYPE = MELEE_TYPE + "D";
 	public final static String AX_TYPE = MELEE_TYPE + "A";
@@ -104,7 +104,9 @@ public class ServerWorld
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	public final ServerObject[] objectTypes = { new ServerSlime(0, 0,this), new ServerCastle(0,0,1,this), new ServerCastle(0,0,2,this), new ServerChest(0,0,this), new ServerVendor(0,0,this,3)};
+	public final ServerObject[] objectTypes = { new ServerSlime(0, 0, this),
+			new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 3) };
 
 	/**
 	 * The size of each object tile
@@ -180,7 +182,7 @@ public class ServerWorld
 	{
 		for (int no = 0; no < 10; no++)
 		{
-			ServerEnemy newEnemy = new ServerSlime(50 * no + 50, 50,this);
+			ServerEnemy newEnemy = new ServerSlime(50 * no + 50, 50, this);
 			// newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
 			// newEnemy.getY()));
 			newEnemy.addItem(ServerPotion.randomPotion(newEnemy.getX(),
@@ -796,12 +798,7 @@ public class ServerWorld
 						object.setY(object.getY() + object.getVSpeed());
 					}
 
-					// Update specific objects
-					if (object.getType().equals(SLIME_TYPE))
-					{
-						((ServerSlime) object).update();
-					}
-					else if (object.getType().equals(DAMAGE_INDICATOR_TYPE))
+					if (object.getType().equals(DAMAGE_INDICATOR_TYPE))
 					{
 						((ServerDamageIndicator) object).update();
 					}
@@ -824,14 +821,38 @@ public class ServerWorld
 							((ServerWeaponSwing) object).update();
 						}
 					}
-					else if (object.getType().equals(PLAYER_TYPE))
+					else if (object.getType().charAt(0) == CREATURE_TYPE)
 					{
-						if (((ServerPlayer) object).isPerformingAction())
+
+						if (object.getType().equals(PLAYER_TYPE))
 						{
-							((ServerPlayer) object).performAction(
-									((ServerPlayer) object).getNewMouseX(),
-									((ServerPlayer) object).getNewMouseY());
-							((ServerPlayer) object).setPerformingAction(false);
+							if (((ServerPlayer) object).isPerformingAction())
+							{
+								((ServerPlayer) object).performAction(
+										((ServerPlayer) object).getNewMouseX(),
+										((ServerPlayer) object).getNewMouseY());
+								((ServerPlayer) object)
+										.setPerformingAction(false);
+							}
+							((ServerPlayer) object).updatePlayer();
+						}
+						else if (object.getType().equals(SLIME_TYPE))
+						{
+							((ServerSlime) object).update();
+						}
+
+						if (((ServerCreature) object).getHead() != null)
+						{
+							((ServerCreature) object).getHead().update(
+									((ServerCreature) object).getDirection(),
+									((ServerCreature) object).getRowCol());
+						}
+
+						if (((ServerCreature) object).getBody() != null)
+						{
+							((ServerCreature) object).getBody().update(
+									((ServerCreature) object).getDirection(),
+									((ServerCreature) object).getRowCol());
 						}
 					}
 
