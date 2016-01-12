@@ -155,11 +155,11 @@ public class ServerWeaponSwing extends ServerObject
 	 */
 	public void update()
 	{
-		if (counter >= (int) (timeInFrames / 13.0 + 1) * 13)
+		if (counter >= (int) (timeInFrames / 13.0 + 0.5) * 13)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 13.0 + 1) == 0 && counter != 0)
+		else if (counter % (int) (timeInFrames / 13.0 + 0.5) == 0 && counter != 0)
 		{
 			if (isClockwise)
 			{

@@ -58,9 +58,9 @@ public class Images
 		}
 
 		// Rotate the images needed and write to file
-		image = imageTiles[7][9];
+		image = imageTiles[15][4];
 		ImageIO.write(image, "PNG", new File(
-				"DADIAMOND_ICON.png"));
+				"SHGOLD_ICON.png"));
 		int locationX = image.getWidth();
 		int locationY = image.getHeight();
 		double rotationRequired = Math.toRadians(135);

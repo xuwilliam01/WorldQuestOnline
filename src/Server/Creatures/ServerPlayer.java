@@ -180,6 +180,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
+	
+	/**
+	 * Whether or not the action was a right click
+	 */
+	private boolean rightClick = false;
+	
+	/**
+	 * An accessory exclusive to the player
+	 */
+	private ServerAccessory shield;
 
 	/**
 	 * Constructor for a player in the server
@@ -325,6 +335,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			else
 			{
 				actionCounter = -1;
+				action = "NOTHING";
 				canPerformAction = true;
 			}
 
@@ -347,19 +358,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (action.equals("SWING"))
 				{
-					if (actionCounter < 4)
+					if (actionCounter < 1.0 * actionDelay/4.0)
 					{
 						setRowCol(new RowCol(2, 0));
 					}
-					else if (actionCounter < 8)
+					else if (actionCounter < 1.0 * actionDelay/2.0)
 					{
 						setRowCol(new RowCol(2, 1));
 					}
-					else if (actionCounter < 12)
+					else if (actionCounter < 1.0 * actionDelay/4.0*3)
 					{
 						setRowCol(new RowCol(2, 2));
 					}
-					else if (actionCounter < 16)
+					else if (actionCounter < actionDelay)
 					{
 						setRowCol(new RowCol(2, 3));
 					}
@@ -374,6 +385,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						setRowCol(new RowCol(2, 8));
 					}
+				}
+				else if (action.equals("FIRE"))
+				{
+					setRowCol(new RowCol(0, 1));
+				}
+				else if (action.equals("BLOCK"))
+				{
+					setRowCol(new RowCol(2, 9));
 				}
 			}
 			else if (getHSpeed() != 0 && isOnSurface())
@@ -581,13 +600,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				String command = input.readLine();
 
-				if (command.charAt(0) == 'A' && isOnSurface()
+				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')&& isOnSurface()
 						&& !performingAction && alive)
 				{
 					String[] tokens = command.split(" ");
 					performingAction = true;
 					newMouseX = Integer.parseInt(tokens[1]);
 					newMouseY = Integer.parseInt(tokens[2]);
+					if (command.charAt(0) == 'a')
+					{
+						rightClick = true;
+					}
+				}
+				else if (command.equals("!a") && alive)
+				{
+					actionCounter = actionDelay;
 				}
 				else if (command.equals("R") && alive)
 				{
@@ -832,12 +859,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		if (alive && canPerformAction)
 		{
-			if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
+			if (rightClick)
+			{
+				action = "BLOCK";
+				actionDelay = 30;
+				rightClick = false;
+			}
+			else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
 			{
 				action = "PUNCH";
-
-				// FIXED CONCURRENT MODIFICATION EXCEPTION BY HAVING PERFORM
-				// ACTION IN WORLD CLOCK NOT HERE
+				actionDelay = 16;
 
 				// List of creatures we've already punched so we dont hit them
 				// twice
@@ -874,9 +905,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.MELEE_TYPE))
 			{
+				actionDelay = equippedWeapons[weaponNo].getSwingSpeed() + (int)(equippedWeapons[weaponNo].getSwingSpeed()/4.0);
 				world.add(new ServerWeaponSwing(this, 0, -25,
 						equippedWeapons[weaponNo].getActionImage(),
-						(int) (Math.toDegrees(angle) + 0.5), 7,
+						(int) (Math.toDegrees(angle) + 0.5), equippedWeapons[weaponNo].getSwingSpeed(),
 						equippedWeapons[weaponNo].getDamage()));
 				action = "SWING";
 			}
@@ -941,8 +973,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void inflictDamage(int amount, double knockBack)
 	{
+		if (action.equals("BLOCK"))
+		{
+			amount /= 2;
+		}
+		
+		if (equippedArmour!=null)
+		{
+		amount -= amount * equippedArmour.getArmour();
+		}
+		
 		setHP(getHP() - amount);
-
+		
 		double damageX = Math.random() * getWidth() + getX();
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
 				/ 3;
@@ -1356,4 +1398,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.newMouseY = newMouseY;
 	}
 
+	public ServerAccessory getShield()
+	{
+		return shield;
+	}
+
+	public void setShield(ServerAccessory shield)
+	{
+		this.shield = shield;
+	}
+
+	
 }
