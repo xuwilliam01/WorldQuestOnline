@@ -55,15 +55,7 @@ public abstract class ServerCreature extends ServerObject
 	 */
 	private double knockBackResistance;
 
-	/**
-	 * The accessory worn on the head
-	 */
-	private ServerAccessory head;
 
-	/**
-	 * The accessory worn on the body
-	 */
-	private ServerAccessory body;
 
 	/**
 	 * The horizontal direction the creature is facing
@@ -368,26 +360,6 @@ public abstract class ServerCreature extends ServerObject
 	public void setWorld(ServerWorld world)
 	{
 		this.world = world;
-	}
-
-	public ServerAccessory getHead()
-	{
-		return head;
-	}
-
-	public void setHead(ServerAccessory head)
-	{
-		this.head = head;
-	}
-
-	public ServerAccessory getBody()
-	{
-		return body;
-	}
-
-	public void setBody(ServerAccessory body)
-	{
-		this.body = body;
 	}
 
 	public String getDirection()

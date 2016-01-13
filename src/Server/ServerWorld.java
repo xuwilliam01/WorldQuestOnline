@@ -840,20 +840,6 @@ public class ServerWorld
 						{
 							((ServerSlime) object).update();
 						}
-
-						if (((ServerCreature) object).getHead() != null)
-						{
-							((ServerCreature) object).getHead().update(
-									((ServerCreature) object).getDirection(),
-									((ServerCreature) object).getRowCol());
-						}
-
-						if (((ServerCreature) object).getBody() != null)
-						{
-							((ServerCreature) object).getBody().update(
-									((ServerCreature) object).getDirection(),
-									((ServerCreature) object).getRowCol());
-						}
 					}
 
 				}

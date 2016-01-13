@@ -207,6 +207,45 @@ public class Images
 
 				}
 				
+				
+				// Add all the pics from the player sprite sheets
+				String[] goblinSheets = { "GOB","GOBGENERAL","GOBGUARD","GOBKING","GOBKNIGHT","GOBLORD","GOBNINJA","GOBPEASANT","GOBSOLDIER","GOBWIZARD","GOBWORKER",};
+				
+				for (int no = 0; no < goblinSheets.length; no++)
+				{
+					image = ImageIO.read(new File(goblinSheets[no] + ".png"));
+					BufferedImage[][] imageTiles = new BufferedImage[image.getHeight()/64][image
+							.getWidth() / 32];
+					for (int row = 0; row < imageTiles.length; row++)
+					{
+						for (int column = 0; column < imageTiles[0].length; column++)
+						{
+							BufferedImage currentImage = image.getSubimage(
+									column * 32, row * 64, 32, 64);
+
+							// Add a right version of this image
+							images.add(new GameImage(goblinSheets[no]
+									+ "_RIGHT_" + row + "_" + column + ".png",
+									currentImage, 64, 128));
+
+							AffineTransform tx;
+							tx = AffineTransform.getScaleInstance(-1, 1);
+							tx.translate(-currentImage.getWidth(null), 0);
+							AffineTransformOp op = new AffineTransformOp(tx,
+									AffineTransformOp.TYPE_BILINEAR);
+
+							// Add a left version of this image
+							images.add(new GameImage(goblinSheets[no]
+									+ "_LEFT_" + row + "_" + column + ".png",
+									op.filter(currentImage, null).getSubimage(
+											0, 0,
+											currentImage.getWidth(),
+											currentImage.getHeight()), 64, 128));
+						}
+					}
+				}
+				
+				
 				images.add(new GameImage("OUTFITARMOR_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
@@ -294,7 +333,7 @@ public class Images
 			}
 
 			images.add(new GameImage("VENDOR.png", 120, 120));
-			images.add(new GameImage("CHEST.png", 60, 60));
+			images.add(new GameImage("CHEST.png",60,40));
 			images.add(new GameImage("CASTLE.png", 200, 400));
 			images.add(new GameImage("BULLET.png"));
 			images.add(new GameImage("COIN.png",10,10));

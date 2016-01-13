@@ -69,11 +69,6 @@ public class ClientWorld
 	 * The width in pixels of one character for the damage font
 	 */
 	public static double DAMAGE_FONT_WIDTH = 0;
-	
-	/**
-	 * The highest id of any object sent to this client
-	 */
-	private int highestID = 0;
 
 	/**
 	 * Constructor for the client's side of the world
@@ -136,10 +131,6 @@ public class ClientWorld
 		if (objects[id] == null)
 		{
 			objects[id] = new ClientObject(id, x, y, image, team);
-			if (id > highestID)
-			{
-				highestID = id;
-			}
 		}
 		else
 		{
@@ -157,10 +148,6 @@ public class ClientWorld
 	public void setObject(ClientObject object)
 	{
 		objects[object.getID()] = object;
-		if (object.getID()> highestID)
-		{
-			highestID = object.getID();
-		}
 	}
 
 	/**
@@ -170,19 +157,6 @@ public class ClientWorld
 	public void remove(int id)
 	{
 		objects[id] = null;
-		
-		// Search for a new highest ID
-		if (id == highestID)
-		{
-			for (int no = highestID - 1; no >= 0; no--)
-			{
-				if (objects[no]!=null)
-				{
-					highestID = no;
-					break;
-				}
-			}
-		}
 	}
 
 	/**
@@ -317,12 +291,6 @@ public class ClientWorld
 						graphics.drawString(text, x, y - 10);
 					}
 				}
-				
-				// If this is the last object, don't search through the rest of the array
-				if (object.getID() == highestID)
-				{
-					break;
-				}
 			}
 
 			for (Integer object : objectsToRemove)
@@ -375,6 +343,34 @@ public class ClientWorld
 			}
 
 		}
+	}
+
+	/**
+	 * Get a specific object from the list
+	 * @return the desired object
+	 */
+	public ClientObject get(int id)
+	{
+		try
+		{
+			for (ClientObject object : objects)
+			{
+				if (object == null)
+				{
+					continue;
+				}
+				if (object.getID() == id)
+				{
+					return object;
+				}
+			}
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println("Concurrent modification occured");
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void clear()

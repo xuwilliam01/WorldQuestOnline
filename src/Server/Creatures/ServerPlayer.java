@@ -146,10 +146,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private ServerArmour equippedArmour = null;
 
 	/**
-	 * The equipped shield
+	 * The accessory worn on the head
 	 */
-	// UNCOMMENT
-	// private ServerShield equippedShield = null;
+	private ServerAccessory head;
+
+	/**
+	 * The accessory worn on the body
+	 */
+	private ServerAccessory body;
 
 	/**
 	 * The damage the player inflicts from just punching
@@ -180,12 +184,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
-	
+
 	/**
 	 * Whether or not the action was a right click
 	 */
 	private boolean rightClick = false;
-	
+
 	/**
 	 * An accessory exclusive to the player
 	 */
@@ -341,7 +345,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			// Update the animation of the player and its accessories
 			// The row and column of the frame in the sprite sheet for the image
-			setRowCol(new RowCol(0,0));
+			setRowCol(new RowCol(0, 0));
 			if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
 			{
 				setRowCol(new RowCol(1, 8));
@@ -358,15 +362,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (action.equals("SWING"))
 				{
-					if (actionCounter < 1.0 * actionDelay/4.0)
+					if (actionCounter < 1.0 * actionDelay / 4.0)
 					{
 						setRowCol(new RowCol(2, 0));
 					}
-					else if (actionCounter < 1.0 * actionDelay/2.0)
+					else if (actionCounter < 1.0 * actionDelay / 2.0)
 					{
 						setRowCol(new RowCol(2, 1));
 					}
-					else if (actionCounter < 1.0 * actionDelay/4.0*3)
+					else if (actionCounter < 1.0 * actionDelay / 4.0 * 3)
 					{
 						setRowCol(new RowCol(2, 2));
 					}
@@ -489,6 +493,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					+ "_"
 					+ getRowCol().getColumn()
 					+ ".png");
+
+			if (getHead() != null)
+			{
+				getHead().update(
+						getDirection(),
+						getRowCol());
+			}
+
+			if (getBody() != null)
+			{
+				getBody().update(
+						getDirection(),
+						getRowCol());
+			}
 		}
 	}
 
@@ -600,7 +618,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				String command = input.readLine();
 
-				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')&& isOnSurface()
+				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')
+						&& isOnSurface()
 						&& !performingAction && alive)
 				{
 					String[] tokens = command.split(" ");
@@ -905,10 +924,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.MELEE_TYPE))
 			{
-				actionDelay = equippedWeapons[weaponNo].getSwingSpeed() + (int)(equippedWeapons[weaponNo].getSwingSpeed()/4.0);
+				actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
+						+ (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
 				world.add(new ServerWeaponSwing(this, 0, -25,
 						equippedWeapons[weaponNo].getActionImage(),
-						(int) (Math.toDegrees(angle) + 0.5), equippedWeapons[weaponNo].getSwingSpeed(),
+						(int) (Math.toDegrees(angle) + 0.5),
+						equippedWeapons[weaponNo].getSwingSpeed(),
 						equippedWeapons[weaponNo].getDamage()));
 				action = "SWING";
 			}
@@ -977,14 +998,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			amount /= 2;
 		}
-		
-		if (equippedArmour!=null)
+
+		if (equippedArmour != null)
 		{
-		amount -= amount * equippedArmour.getArmour();
+			amount -= amount * equippedArmour.getArmour();
 		}
-		
+
 		setHP(getHP() - amount);
-		
+
 		double damageX = Math.random() * getWidth() + getX();
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
 				/ 3;
@@ -1408,5 +1429,24 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.shield = shield;
 	}
 
-	
+	public ServerAccessory getHead()
+	{
+		return head;
+	}
+
+	public void setHead(ServerAccessory head)
+	{
+		this.head = head;
+	}
+
+	public ServerAccessory getBody()
+	{
+		return body;
+	}
+
+	public void setBody(ServerAccessory body)
+	{
+		this.body = body;
+	}
+
 }
