@@ -233,6 +233,7 @@ public abstract class ServerCreature extends ServerObject
 		inventory.clear();
 		if (money != null)
 			inventory.add(money);
+		
 	}
 
 	public ArrayList<ServerItem> getInventory()

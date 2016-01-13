@@ -984,6 +984,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (equippedWeapons[item] != null)
 				dropItem(equippedWeapons[item]);
 		equippedWeapons = new ServerWeapon[MAX_WEAPONS];
+		
+		if(equippedArmour != null)
+			dropItem(equippedArmour);
+		equippedArmour = null;
 	}
 
 	/**

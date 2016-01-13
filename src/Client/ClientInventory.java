@@ -231,7 +231,7 @@ public class ClientInventory extends JPanel{
 					else
 						remove(inventory[row][col]);
 				}
-		invalidate();
+		
 		inventory = new ClientItem[HEIGHT][WIDTH];
 		if(money != null)
 		{
@@ -240,6 +240,18 @@ public class ClientInventory extends JPanel{
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
+		
+		for(int weapon = 0; weapon < equippedWeapons.length;weapon++)
+			if(equippedWeapons[weapon] != null)
+				remove(equippedWeapons[weapon]);
+		equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
+		
+		if(equippedArmour != null)
+			remove(equippedArmour);
+		equippedArmour= null;
+		
+		
+		invalidate();
 		repaint();
 	}
 
