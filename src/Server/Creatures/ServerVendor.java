@@ -39,5 +39,10 @@ public class ServerVendor extends ServerCreature {
 	{
 		this.isBusy = isBusy;
 	}
+	
+	public int getQuality()
+	{
+		return quality;
+	}
 
 }

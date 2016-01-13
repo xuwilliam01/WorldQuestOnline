@@ -40,7 +40,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
 
-	public final static double MIN_EDIT_ZOOM = ServerFrame.FRAME_FACTOR * 2;
+	public final static double MIN_EDIT_ZOOM = ServerFrame.FRAME_FACTOR * 2.5;
 
 	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT
 	                                 / ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH
@@ -169,7 +169,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			int row = Integer.parseInt(tokens[0]);
 			int col = Integer.parseInt(tokens[1]);
 			
-			System.out.println(tokens[2]+" token");
 			objects.add(new CreatorWorldObject(row,col,tokens[2].charAt(0)));
 		}
 		br.close();

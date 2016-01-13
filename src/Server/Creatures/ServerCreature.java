@@ -336,7 +336,7 @@ public abstract class ServerCreature extends ServerObject
 		case ServerWorld.CHEST_TYPE:
 			return new ServerChest(original.getX(), original.getY(), original.getWorld());
 		case ServerWorld.VENDOR_TYPE:
-			return new ServerVendor(original.getX(),original.getY(),original.getWorld(),3);
+			return new ServerVendor(original.getX(),original.getY(),original.getWorld(),((ServerVendor)original).getQuality());
 		}
 		return null;
 	}

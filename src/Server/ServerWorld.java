@@ -106,7 +106,7 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerCreature[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 3) };
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4) };
 
 	/**
 	 * The size of each object tile
