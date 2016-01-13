@@ -510,12 +510,21 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void save() throws FileNotFoundException
 	{	
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
+		
+		//print the grid
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)
 		{
 			for (int col = 0; col < grid[0].length; col++)
 				output.print(grid[row][col]);
 			output.println();
+		}
+		
+		//print the objects
+		output.println(objects.size());
+		for(CreatorWorldObject object : objects)
+		{
+			output.printf("%d %d %s%n", object.getCol(),object.getRow(),tiles[object.getRef()].getImageName());
 		}
 		output.close();
 	}
@@ -643,7 +652,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				CreatorWorldObject toRemove = null;
 				for(CreatorWorldObject object : objects)
 				{
-					if(object.collidesWith(selectedBlock[0], selectedBlock[1], selectedBlock[0]+1, selectedBlock[1]+1))
+					if(object.collidesWith(selectedBlock[1], selectedBlock[0], selectedBlock[1]+1, selectedBlock[0]+1))
 					{
 						toRemove = object;
 					}

@@ -68,6 +68,11 @@ public class ImageReferencePair {
 		this.reference = reference;
 	}
 
+	public String getImageName()
+	{
+		return imageName;
+	}
+	
 	public Image getImage() {
 		return image;
 	}

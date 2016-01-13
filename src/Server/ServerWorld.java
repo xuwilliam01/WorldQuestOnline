@@ -104,8 +104,7 @@ public class ServerWorld
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	public final ServerObject[] objectTypes = { new ServerSlime(0, 0, this),
-			new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
+	public final ServerCreature[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
 			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 3) };
 
 	/**
@@ -162,17 +161,15 @@ public class ServerWorld
 	 */
 	public ServerWorld() throws IOException
 	{
-		newWorld();
+		
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
-
+		newWorld();
+		
 		// These methods should reference a list to figure out where everything
 		// goes
 		// The list will be created using the map file
 		addEnemies();
-		addChests();
-		addCastles();
-		addVendors();
 	}
 
 	/**
@@ -211,31 +208,7 @@ public class ServerWorld
 		}
 	}
 
-	/**
-	 * Add chests
-	 */
-	public void addChests()
-	{
-		ServerChest newChest = new ServerChest(1000, 100, this);
-		add(newChest);
-	}
-
-	public void addCastles()
-	{
-		ServerCastle newCastle = new ServerCastle(400, 100,
-				ServerCreature.RED_TEAM,
-				this);
-		add(newCastle);
-		newCastle = new ServerCastle(5000, 100, ServerCreature.BLUE_TEAM, this);
-		add(newCastle);
-	}
-
-	public void addVendors()
-	{
-		ServerVendor newVendor = new ServerVendor(1500, 100, this, 3);
-		add(newVendor);
-	}
-
+	
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -245,6 +218,7 @@ public class ServerWorld
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
 				"Resources", GRID_FILE)));
+		
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
 		// Add to both sides to make room for the invisible walls
@@ -272,8 +246,6 @@ public class ServerWorld
 				tileGrid[row][col] = line.charAt(col - 3);
 		}
 
-		worldInput.close();
-
 		// Make a border around the grid
 		for (int col = 0; col < tileGrid[0].length; col++)
 		{
@@ -295,6 +267,25 @@ public class ServerWorld
 			tileGrid[row][tileGrid[0].length - 2] = '_';
 			tileGrid[row][tileGrid[0].length - 3] = '_';
 		}
+		
+		//Add objects to the grid
+		int numObjects = Integer.parseInt(worldInput.readLine());
+		for(int object = 0; object < numObjects;object++)
+		{
+			tokenizer = new StringTokenizer(worldInput.readLine());
+			int x  = Integer.parseInt(tokenizer.nextToken());
+			int y = Integer.parseInt(tokenizer.nextToken());
+			String image = tokenizer.nextToken();
+			for(ServerCreature obj : objectTypes)
+				if(obj.getImage().equals(image))
+				{
+					ServerCreature newCreature = ServerCreature.copy(obj);
+					newCreature.setX(x*ServerWorld.TILE_SIZE);
+					newCreature.setY(y*ServerWorld.TILE_SIZE);
+					add(newCreature);
+				}
+		}
+		worldInput.close();
 	}
 
 	/**
