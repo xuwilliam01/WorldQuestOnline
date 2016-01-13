@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
 import Imports.Images;
+import Server.ServerEngine;
 import Server.Creatures.ServerCreature;
 
 public class ClientWorld
@@ -27,18 +28,14 @@ public class ClientWorld
 	private char[][] grid;
 
 	/**
-	 * Long boolean array where the index of an object is its ID, while true or
-	 * false represents whether it already exists in the array list of objects
+	 * Array of client objects, where the index of the object in the array is
+	 * its ID
 	 */
-	private boolean[] objectIDs;
+	private ClientObject[] objects;
 
 	/**
-	 * List of objects stored in the client. Instead of calling a .contains when
-	 * checking whether an object exists in the list, just check the index in
-	 * the objectIDs boolean array
+	 * Arraylist of clouds on the client side
 	 */
-	private ArrayList<ClientObject> objects;
-
 	private ArrayList<ClientBackground> clouds;
 
 	/**
@@ -60,14 +57,14 @@ public class ClientWorld
 	 * The font for damage indicators
 	 */
 	public final static Font DAMAGE_FONT = new Font("Courier", Font.BOLD, 18);
-	
+
 	/**
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
 
 	private FontMetrics damageFontMetrics;
-	
+
 	/**
 	 * The width in pixels of one character for the damage font
 	 */
@@ -84,8 +81,7 @@ public class ClientWorld
 	{
 		this.tileSize = tileSize;
 		this.grid = grid;
-		objects = new ArrayList<ClientObject>();
-		objectIDs = new boolean[100000];
+		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
@@ -126,13 +122,32 @@ public class ClientWorld
 	}
 
 	/**
-	 * Add an object (not a tile) to the client
+	 * Add an object (not a tile) to the client, or update it if it already
+	 * exists
 	 * @param object the object to add
 	 */
-	public void add(ClientObject object)
+	public void setObject(int id, int x, int y, String image, int team)
 	{
-		objects.add(object);
-		addID(object.getID());
+		if (objects[id] == null)
+		{
+			objects[id] = new ClientObject(id, x, y, image, team);
+		}
+		else
+		{
+			objects[id].setX(x);
+			objects[id].setY(y);
+			objects[id].setImage(image);
+		}
+	}
+	
+	/**
+	 * Add an object (not a tile) to the client, or update it if it already
+	 * exists
+	 * @param object the object to add
+	 */
+	public void setObject(ClientObject object)
+	{
+		objects[object.getID()] = object;
 	}
 
 	/**
@@ -141,42 +156,7 @@ public class ClientWorld
 	 */
 	public void remove(int id)
 	{
-		int removeIndex = -1;
-		int currentIndex = 0;
-
-		try
-		{
-			for (ClientObject object : objects)
-			{
-				if (object == null)
-				{
-					continue;
-				}
-
-				if (object.getID() == id)
-				{
-					removeIndex = currentIndex;
-					break;
-				}
-				currentIndex++;
-			}
-		}
-		catch (ConcurrentModificationException e)
-		{
-			System.out.println("ConcurrentModification Exception");
-			e.printStackTrace();
-		}
-		catch(NoSuchElementException e)
-		{
-			System.out.println("No such element exception, probably caused by concurrent modification exception");
-			e.printStackTrace();
-		}
-
-		if (removeIndex != -1)
-		{
-			objects.remove(removeIndex);
-			removeID(id);
-		}
+		objects[id] = null;
 	}
 
 	/**
@@ -302,7 +282,8 @@ public class ClientWorld
 
 						if (object.getWidth() == 0)
 						{
-							object.setWidth((int)(text.length()*DAMAGE_FONT_WIDTH + 0.5));
+							object.setWidth((int) (text.length()
+									* DAMAGE_FONT_WIDTH + 0.5));
 							object.setX(object.getX() - object.getWidth() / 2);
 						}
 						x = centreX + object.getX() - playerX;
@@ -394,39 +375,7 @@ public class ClientWorld
 
 	public void clear()
 	{
-		objects.clear();
-	}
-
-	/**
-	 * Checks if the world contains a given object (id)
-	 * @param object the object to be checked
-	 * @return true if the object is found in the world, false if not
-	 */
-	public boolean contains(int id)
-	{
-		if (objectIDs[id])
-		{
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Set an ID's usage to true
-	 * @param id
-	 */
-	public void addID(int id)
-	{
-		objectIDs[id] = true;
-	}
-
-	/**
-	 * Set an ID's usage to false
-	 * @param id
-	 */
-	public void removeID(int id)
-	{
-		objectIDs[id] = false;
+		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 	}
 
 	public char[][] getGrid()
@@ -439,16 +388,6 @@ public class ClientWorld
 		this.grid = grid;
 	}
 
-	public boolean[] getObjectIDs()
-	{
-		return objectIDs;
-	}
-
-	public void setObjectIDs(boolean[] objectIDs)
-	{
-		this.objectIDs = objectIDs;
-	}
-
 	public int getTileSize()
 	{
 		return tileSize;
@@ -457,11 +396,6 @@ public class ClientWorld
 	public void setTileSize(int tileSize)
 	{
 		this.tileSize = tileSize;
-	}
-
-	public void setObjects(ArrayList<ClientObject> objects)
-	{
-		this.objects = objects;
 	}
 
 }

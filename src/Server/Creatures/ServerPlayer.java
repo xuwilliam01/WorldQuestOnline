@@ -861,8 +861,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			if (rightClick)
 			{
+				actionDelay = 3600;
 				action = "BLOCK";
-				actionDelay = 30;
 				rightClick = false;
 			}
 			else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)

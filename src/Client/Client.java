@@ -25,7 +25,7 @@ import Server.ServerEngine;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-MouseMotionListener
+		MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -183,7 +183,7 @@ MouseMotionListener
 
 			player = new ClientObject(id, x, y, image, team);
 
-			world.add(player);
+			world.setObject(player);
 		}
 		catch (IOException e)
 		{
@@ -286,34 +286,13 @@ MouseMotionListener
 								player.setTeam(Integer
 										.parseInt(tokens[++token]));
 							}
-							else if (world.contains(id))
-							{
-								ClientObject otherObject = world.get(id);
-								if (otherObject != null)
-								{
-									otherObject.setX(Integer
-											.parseInt(tokens[++token]));
-									otherObject.setY(Integer
-											.parseInt(tokens[++token]));
-									otherObject.setImage(tokens[++token]);
-
-									otherObject.setTeam(Integer
-											.parseInt(tokens[++token]));
-								}
-								else
-								{
-									world.removeID(id);
-								}
-							}
 							else
 							{
-								ClientObject otherObject = new ClientObject(
-										id,
-										Integer.parseInt(tokens[++token]),
-										Integer.parseInt(tokens[++token]),
-										tokens[++token],
-										Integer.parseInt(tokens[++token]));
-								world.add(otherObject);
+								world.setObject(id, Integer
+										.parseInt(tokens[++token]), Integer
+										.parseInt(tokens[++token]),
+										tokens[++token], Integer
+												.parseInt(tokens[++token]));
 							}
 						}
 						else if (tokens[token].equals("P"))
@@ -331,14 +310,15 @@ MouseMotionListener
 						{
 							System.out.println("Received an item");
 							inventory.addItem(tokens[++token], tokens[++token],
-									Integer.parseInt(tokens[++token]),Integer.parseInt(tokens[++token]));
+									Integer.parseInt(tokens[++token]),
+									Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
-						else if(tokens[token].equals("V"))
+						else if (tokens[token].equals("V"))
 						{
-							if(Character.isDigit(tokens[token+1].charAt(0)))
+							if (Character.isDigit(tokens[token + 1].charAt(0)))
 							{
-								if(shop != null)
+								if (shop != null)
 								{
 									shop.setVisible(false);
 									frame.remove(shop);
@@ -346,20 +326,26 @@ MouseMotionListener
 									shop = null;
 								}
 								shop = new ClientShop(Client.this);
-								int numItems = Integer.parseInt(tokens[++token]);
-								for(int item = 0; item < numItems;item++)
-									shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
-								frame.add(shop,JLayeredPane.PALETTE_LAYER);
+								int numItems = Integer
+										.parseInt(tokens[++token]);
+								for (int item = 0; item < numItems; item++)
+									shop.addItem(tokens[++token],
+											tokens[++token],
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]));
+								frame.add(shop, JLayeredPane.PALETTE_LAYER);
 								shop.revalidate();
 								frame.setVisible(true);
 							}
-							else if(shop != null)
-								shop.addItem(tokens[++token], tokens[++token], Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+							else if (shop != null)
+								shop.addItem(tokens[++token], tokens[++token],
+										Integer.parseInt(tokens[++token]),
+										Integer.parseInt(tokens[++token]));
 
 						}
 						else if (tokens[token].equals("C"))
 						{
-							if(shop != null)
+							if (shop != null)
 								closeShop();
 						}
 					}
@@ -410,7 +396,7 @@ MouseMotionListener
 	{
 		return shop;
 	}
-	
+
 	/**
 	 * Import the map
 	 */
@@ -462,13 +448,15 @@ MouseMotionListener
 
 	public void setWeaponSelected(int weaponSelected)
 	{
-		if (this.weaponSelected != 9 && inventory.getEquippedWeapons()[this.weaponSelected] != null)
+		if (this.weaponSelected != 9
+				&& inventory.getEquippedWeapons()[this.weaponSelected] != null)
 			inventory.getEquippedWeapons()[this.weaponSelected]
 					.setBorder(BorderFactory.createEmptyBorder());
 
-		if(weaponSelected != 9)
-			inventory.getEquippedWeapons()[weaponSelected].setBorder(BorderFactory
-					.createLineBorder(Color.white));
+		if (weaponSelected != 9)
+			inventory.getEquippedWeapons()[weaponSelected]
+					.setBorder(BorderFactory
+							.createLineBorder(Color.white));
 		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
@@ -500,7 +488,8 @@ MouseMotionListener
 				justDied = false;
 			}
 			graphics.setColor(Color.black);
-			graphics.drawString("YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
+			graphics.drawString(
+					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
 	}
 
@@ -569,10 +558,10 @@ MouseMotionListener
 		{
 			setWeaponSelected(3);
 		}
-		else if(key.getKeyCode() == KeyEvent.VK_E)
+		else if (key.getKeyCode() == KeyEvent.VK_E)
 		{
 			print("E");
-			if(shop != null)
+			if (shop != null)
 			{
 				closeShop();
 			}

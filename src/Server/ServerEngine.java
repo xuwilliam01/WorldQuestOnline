@@ -40,7 +40,7 @@ public class ServerEngine implements Runnable, ActionListener
 	 * The number of possible ID's for any objects. The number of objects
 	 * existing the game (aside from tiles) cannot exceed this limit
 	 */
-	public final int NUMBER_OF_IDS = 100000;
+	public static final int NUMBER_OF_IDS = 100000;
 
 	/**
 	 * The world the engine works with
