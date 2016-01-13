@@ -106,8 +106,8 @@ public class ServerWorld
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	public final ServerCreature[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4) };
+	public final ServerObject[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 5000, this) };
 
 	/**
 	 * The size of each object tile
@@ -277,13 +277,13 @@ public class ServerWorld
 			int row  = Integer.parseInt(tokenizer.nextToken())+3;
 			int col = Integer.parseInt(tokenizer.nextToken())+3;
 			char ref = tokenizer.nextToken().charAt(0);
-			for(ServerCreature obj : objectTypes)
+			for(ServerObject obj : objectTypes)
 				if(obj.getImage().equals(ImageReferencePair.getImages()[ref].getImageName()))
 				{
-					ServerCreature newCreature = ServerCreature.copy(obj);
-					newCreature.setX(col*ServerWorld.TILE_SIZE);
-					newCreature.setY(row*ServerWorld.TILE_SIZE);
-					add(newCreature);
+					ServerObject newObject = ServerObject.copy(obj);
+					newObject.setX(col*ServerWorld.TILE_SIZE);
+					newObject.setY(row*ServerWorld.TILE_SIZE);
+					add(newObject);
 				}
 		}
 		worldInput.close();
@@ -320,7 +320,7 @@ public class ServerWorld
 				{
 					if(object.getType().equals(SPAWN_TYPE))
 					{
-						((ServerSpawn)object).update(worldCounter);
+						((ServerSpawner)object).update(worldCounter);
 					}
 					if (object.getType().charAt(0) == ITEM_TYPE
 							&& object.isOnSurface())

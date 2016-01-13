@@ -328,19 +328,7 @@ public abstract class ServerCreature extends ServerObject
 			inventory.remove(toRemove);
 	}
 
-	public static ServerCreature copy(ServerCreature original)
-	{
-		switch(original.getType())
-		{
-		case ServerWorld.CASTLE_TYPE:
-			return new ServerCastle(original.getX(), original.getY(), original.getTeam(), original.getWorld());
-		case ServerWorld.CHEST_TYPE:
-			return new ServerChest(original.getX(), original.getY(), original.getWorld());
-		case ServerWorld.VENDOR_TYPE:
-			return new ServerVendor(original.getX(),original.getY(),original.getWorld(),((ServerVendor)original).getQuality());
-		}
-		return null;
-	}
+	
 	public double getKnockBackResistance()
 	{
 		return knockBackResistance;

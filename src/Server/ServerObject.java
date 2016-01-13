@@ -3,6 +3,10 @@ package Server;
 import java.util.ArrayList;
 
 import Imports.Images;
+import Server.Creatures.ServerCastle;
+import Server.Creatures.ServerChest;
+import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerVendor;
 import Tools.RowCol;
 
 /**
@@ -252,6 +256,25 @@ public class ServerObject
 				* (thisY - otherY));
 	}
 
+	public static ServerObject copy(ServerObject original)
+	{
+		switch(original.getType())
+		{
+		case ServerWorld.CASTLE_TYPE:
+			ServerCastle newCastle = (ServerCastle)original;
+			return new ServerCastle(newCastle.getX(), newCastle.getY(), newCastle.getTeam(), newCastle.getWorld());
+		case ServerWorld.CHEST_TYPE:
+			ServerChest newChest = (ServerChest)original;
+			return new ServerChest(newChest.getX(), newChest.getY(), newChest.getWorld());
+		case ServerWorld.VENDOR_TYPE:
+			ServerVendor newVendor = (ServerVendor)original;
+			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld(),newVendor.getQuality());
+		case ServerWorld.SPAWN_TYPE+"":
+			ServerSpawner newSpawner = (ServerSpawner)original;
+			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getDelay(),newSpawner.getWorld());
+		}
+		return null;
+	}
 	
 	public ArrayList<RowCol> getObjectTiles()
 	{

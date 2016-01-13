@@ -327,6 +327,8 @@ public class Images
 					2*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("VENDOR_ICON.png", 2*ServerWorld.TILE_SIZE,
 					2*ServerWorld.TILE_SIZE));
+			//images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
+				//	ServerWorld.TILE_SIZE));
 
 			for (int no = 0; no < 6; no++)
 			{
