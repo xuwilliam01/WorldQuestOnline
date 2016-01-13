@@ -433,6 +433,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 						* (ServerWorld.TILE_SIZE / objectFactor) - posY);
 				int width = (int) (tiles[selectedTile].getImage().getWidth(null)/ objectFactor) ;
 				int height = (int) (tiles[selectedTile].getImage().getHeight(null)/ objectFactor) ;
+		
 				if(canFit(selectedBlock[0],selectedBlock[1],(int)(tiles[selectedTile].getImage().getWidth(null)/ ServerWorld.TILE_SIZE),(int) (tiles[selectedTile].getImage().getHeight(null)/ ServerWorld.TILE_SIZE),false))
 				{
 					canDrawObject = true;

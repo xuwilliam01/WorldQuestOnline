@@ -280,11 +280,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.WOOD_TIER));
 
-		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+		addItem(new ServerMoney(0, 0, 5));
 		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));

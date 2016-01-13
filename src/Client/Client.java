@@ -479,6 +479,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			graphics.setColor(Color.red);
 			graphics.drawString("Health: " + HP, 20, 60);
+			justDied = true;
 		}
 		else
 		{

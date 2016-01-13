@@ -73,6 +73,7 @@ public class ServerWorld
 
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 
+	public final static char SPAWN_TYPE = 'S';
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
@@ -317,6 +318,10 @@ public class ServerWorld
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
 				{
+					if(object.getType().equals(SPAWN_TYPE))
+					{
+						((ServerSpawn)object).update(worldCounter);
+					}
 					if (object.getType().charAt(0) == ITEM_TYPE
 							&& object.isOnSurface())
 					{
