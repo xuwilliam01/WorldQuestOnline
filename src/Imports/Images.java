@@ -334,9 +334,9 @@ public class Images
 
 			}
 
-			images.add(new GameImage("VENDOR.png", 120, 120));
-			images.add(new GameImage("CHEST.png",60,40));
-			images.add(new GameImage("CASTLE.png", 200, 400));
+			images.add(new GameImage("VENDOR.png", 7*ServerWorld.TILE_SIZE, 7*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("CASTLE.png", 13*ServerWorld.TILE_SIZE, 26*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BULLET.png"));
 			images.add(new GameImage("COIN.png",10,10));
 			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));

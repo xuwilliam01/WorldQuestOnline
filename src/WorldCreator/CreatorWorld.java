@@ -164,6 +164,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for (int row = 0; row < grid.length; row++)
 			for (int col = 0; col < grid[row].length; col++)
 				grid[row][col] = ' ';
+		objects.clear();
 	}
 
 	public char[][] getGrid()
@@ -308,6 +309,23 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 		}
 
+		//Draw all the objects
+		for(CreatorWorldObject object : objects)
+		{
+			if(isEditable)
+				graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			else
+			{
+				graphics.setColor(tiles[object.getRef()].getColor());
+				graphics.fillRect((int) (ServerGUI.CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor));
+			}
+		}
+
+		
 		if (highlightingArea)
 		{
 			canDrawObject = false;
@@ -361,7 +379,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				highlightingArea = false;
 				for (int row = startRowInt; row < startRowInt + numRows; row++)
 					for (int col = startColInt; col < startColInt + numCols; col++)
-						grid[row][col] = selectedTile;
+						if(canFit(row,col,1,1,true) || selectedTile < 'A')
+							grid[row][col] = selectedTile;
 			}
 			else
 			{
@@ -379,6 +398,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			//if we are highlighting  single tile
 			if(tiles[selectedTile].isTile())
 			{			
+				if(!canFit(selectedBlock[0],selectedBlock[1],1,1,true) && selectedTile >= 'A')
+					graphics.setColor(Color.red);
+
 				graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posX),
 						(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
@@ -395,10 +417,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				int y = (int) (ServerGUI.CENTRE_Y + selectedBlock[0]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posY);
 				int width = (int) (tiles[selectedTile].getImage().getWidth(null)/ objectFactor) ;
-				width = (int)((int)(width/(ServerWorld.TILE_SIZE/objectFactor))*ServerWorld.TILE_SIZE/objectFactor);
 				int height = (int) (tiles[selectedTile].getImage().getHeight(null)/ objectFactor) ;
-				height = (int)((int)(height/(ServerWorld.TILE_SIZE/objectFactor))*ServerWorld.TILE_SIZE/objectFactor);
-				if(canFit(selectedBlock[0],selectedBlock[1],(int)(width/ServerWorld.TILE_SIZE*objectFactor),(int)(height/ServerWorld.TILE_SIZE*objectFactor)))
+				if(canFit(selectedBlock[0],selectedBlock[1],(int)(tiles[selectedTile].getImage().getWidth(null)/ ServerWorld.TILE_SIZE),(int) (tiles[selectedTile].getImage().getHeight(null)/ ServerWorld.TILE_SIZE),false))
 				{
 					canDrawObject = true;
 
@@ -412,21 +432,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 		}
 		else canDrawObject = false;
-
-		for(CreatorWorldObject object : objects)
-		{
-			if(isEditable)
-				graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
-			else
-			{
-				graphics.setColor(tiles[object.getRef()].getColor());
-				graphics.fillRect((int) (ServerGUI.CENTRE_X + object.getCol()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor));
-			}
-		}
 
 		graphics.setColor(Color.white);
 
@@ -457,24 +462,25 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	}
 
-	public boolean canFit(int startRow, int startCol, int width, int height)
+	public boolean canFit(int startRow, int startCol, int width, int height, boolean isTile)
 	{
 		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
 			return false;
 
-		System.out.printf("%d %d %d %d%n",startRow,startCol,width,height);
+		//System.out.printf("%d %d %d %d%n",startRow,startCol,width,height);
 		for(CreatorWorldObject object : objects)
 		{
-			if(object.collidesWith(startRow, startCol, startRow+width, startCol+height))
+			if(object.collidesWith(startCol, startRow, startCol+width, startRow+height))
 				return false;
 		}
 
-		for(int row = startRow; row < startRow + height;row++)
-			for(int col = startCol; col < startCol+width;col++)
-			{
-				if(grid[row][col] >= 'A')
-					return false;
-			}
+		if(!isTile)
+			for(int row = startRow; row < startRow + height;row++)
+				for(int col = startCol; col < startCol+width;col++)
+				{
+					if(grid[row][col] >= 'A')
+						return false;
+				}
 
 		return true;
 	}
@@ -630,7 +636,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		if (selectedBlock != null && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
-			if (addingTile && !ctrlPressed && canFit(selectedBlock[0],selectedBlock[1],1,1))
+			if (addingTile && !ctrlPressed && (canFit(selectedBlock[0],selectedBlock[1],1,1,true) || selectedTile < 'A'))
 				grid[selectedBlock[0]][selectedBlock[1]] = selectedTile;
 			else if (removingTile && ctrlPressed)
 			{
