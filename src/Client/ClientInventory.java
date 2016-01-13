@@ -66,11 +66,6 @@ public class ClientInventory extends JPanel{
 		System.out.println("Full Inventory");
 	}
 
-	//	public void removeItem(int row, int col)
-	//	{
-	//		remove(items[row][col]);
-	//		items[row][col] = null;
-	//	}
 
 	/**
 	 * Gets the amount of money in the inventory

@@ -1338,7 +1338,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void unequip(int slot)
 	{
-		if (getInventory().size() <= MAX_INVENTORY)
+		if (getInventory().size() < MAX_INVENTORY)
 		{
 			if (slot == DEFAULT_ARMOUR_SLOT)
 			{
