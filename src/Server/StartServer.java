@@ -1,5 +1,8 @@
 package Server;
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
+
 
 /**
  * Run the Server here
@@ -9,9 +12,8 @@ import javax.swing.JOptionPane;
 public class StartServer
 {
 
-	public static void main(String[] args)
-	{
-
+	public static void main(String[] args) throws IOException
+	{	
 		Server server = new Server();
 
 		Thread serverThread = new Thread(server);

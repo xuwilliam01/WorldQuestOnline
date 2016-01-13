@@ -7,6 +7,7 @@ import java.util.ConcurrentModificationException;
 import java.util.StringTokenizer;
 
 import Effects.ServerDamageIndicator;
+import Imports.ImageReferencePair;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
@@ -161,7 +162,6 @@ public class ServerWorld
 	 */
 	public ServerWorld() throws IOException
 	{
-		
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		newWorld();
@@ -273,15 +273,15 @@ public class ServerWorld
 		for(int object = 0; object < numObjects;object++)
 		{
 			tokenizer = new StringTokenizer(worldInput.readLine());
-			int x  = Integer.parseInt(tokenizer.nextToken());
-			int y = Integer.parseInt(tokenizer.nextToken());
-			String image = tokenizer.nextToken();
+			int row  = Integer.parseInt(tokenizer.nextToken())+3;
+			int col = Integer.parseInt(tokenizer.nextToken())+3;
+			char ref = tokenizer.nextToken().charAt(0);
 			for(ServerCreature obj : objectTypes)
-				if(obj.getImage().equals(image))
+				if(obj.getImage().equals(ImageReferencePair.getImages()[ref].getImageName()))
 				{
 					ServerCreature newCreature = ServerCreature.copy(obj);
-					newCreature.setX(x*ServerWorld.TILE_SIZE);
-					newCreature.setY(y*ServerWorld.TILE_SIZE);
+					newCreature.setX(col*ServerWorld.TILE_SIZE);
+					newCreature.setY(row*ServerWorld.TILE_SIZE);
 					add(newCreature);
 				}
 		}

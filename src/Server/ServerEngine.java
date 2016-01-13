@@ -8,6 +8,7 @@ import java.util.ConcurrentModificationException;
 
 import javax.swing.Timer;
 
+import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.Creatures.ServerPlayer;
 
@@ -90,6 +91,7 @@ public class ServerEngine implements Runnable, ActionListener
 		// Start importing the images from the file (place in a loading screen
 		// or something later)
 		Images.importImages();
+		ImageReferencePair.importReferences();
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		objectIDs = new boolean[NUMBER_OF_IDS];

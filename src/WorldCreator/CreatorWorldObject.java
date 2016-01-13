@@ -2,6 +2,7 @@ package WorldCreator;
 
 import java.awt.Image;
 
+import Imports.ImageReferencePair;
 import Server.ServerWorld;
 
 public class CreatorWorldObject {
@@ -13,14 +14,14 @@ public class CreatorWorldObject {
 	private Image image;
 	private char ref;
 	
-	public CreatorWorldObject(int row, int col, Image image, char ref)
+	public CreatorWorldObject(int row, int col, char ref)
 	{
 		this.col = col;
 		this.row = row;
-		this.ref = ref;
+		this.ref = ref;	
+		this.image = ImageReferencePair.getImages()[ref].getImage();
 		this.width = image.getWidth(null)/ServerWorld.TILE_SIZE;
 		this.height = image.getHeight(null)/ServerWorld.TILE_SIZE;
-		this.image = image;
 	}
 
 	public boolean collidesWith(int x1, int y1, int x2, int y2)

@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerFrame;
 import Server.ServerGUI;
@@ -103,7 +104,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
-	{
+	{	
+		Images.importImages();
+		ImageReferencePair.importReferences();
+		
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
@@ -124,7 +128,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		else
 			clearGrid();
 
-		Images.importImages();
 		readImages();
 
 		scrollTimer = new Timer(10, this);
@@ -145,6 +148,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		grid = new char[Integer.parseInt(tokens[0])][Integer
 		                                             .parseInt(tokens[1])];
 
+		//Add tiles
 		for (int row = 0; row < grid.length; row++)
 		{
 			line = br.readLine();
@@ -155,6 +159,18 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 			System.out.println();
 
+		}
+		
+		//Add objects
+		int numObjects = Integer.parseInt(br.readLine());
+		for(int obj = 0; obj < numObjects;obj++)
+		{
+			tokens = br.readLine().split(" ");
+			int row = Integer.parseInt(tokens[0]);
+			int col = Integer.parseInt(tokens[1]);
+			
+			System.out.println(tokens[2]+" token");
+			objects.add(new CreatorWorldObject(row,col,tokens[2].charAt(0)));
 		}
 		br.close();
 	}
@@ -524,7 +540,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		output.println(objects.size());
 		for(CreatorWorldObject object : objects)
 		{
-			output.printf("%d %d %s%n", object.getCol(),object.getRow(),tiles[object.getRef()].getImageName());
+			output.printf("%d %d %s%n", object.getRow(),object.getCol(),object.getRef());
 		}
 		output.close();
 	}
@@ -703,7 +719,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			rightClick = true;
 
 		if (leftClick
-				&& (ctrlPressed || !isEditable))
+				&& (ctrlPressed || !isEditable || selectedTile == '-'))
 		{
 			dragSourceX = event.getX();
 			dragSourceY = event.getY();
@@ -717,7 +733,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 			else if(canDrawObject)
 			{
-				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getImage(),tiles[selectedTile].getReference()));
+				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getReference()));
 			}
 		}
 		else if (rightClick && isEditable
@@ -753,7 +769,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	@Override
 	public void mouseDragged(MouseEvent event)
 	{
-		if ((ctrlPressed || !isEditable)
+		if ((ctrlPressed || !isEditable || selectedTile =='-')
 				&& leftClick)
 		{
 			// System.out.println(event.+" "+MouseEvent.BUTTON3);
