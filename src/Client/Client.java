@@ -708,5 +708,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		this.currentFPS = currentFPS;
 	}
+	
 
 }
