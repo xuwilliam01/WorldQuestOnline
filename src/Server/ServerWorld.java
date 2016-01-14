@@ -49,6 +49,8 @@ public class ServerWorld
 	public final static String STACK_TYPE = ITEM_TYPE + "S";
 	public final static String POTION_TYPE = STACK_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
+	public final static String MAX_HP_TYPE = POTION_TYPE+"M";
+	
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
 	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
@@ -81,7 +83,6 @@ public class ServerWorld
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
 
-	public final static String HP_50 = HP_POTION_TYPE + "50";
 
 	public final static String GRID_FILE = "NewWorld.txt";
 
@@ -107,7 +108,7 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerObject[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 1000, this) };
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), this) };
 
 	/**
 	 * The size of each object tile

@@ -4,16 +4,13 @@ import Server.ServerWorld;
 
 public class ServerHPPotion extends ServerPotion{
 
-	private int healAmount = 50;
+	public final static int HEAL_AMOUNT = 50;
 
 	public ServerHPPotion(double x, double y)
 	{
-		super(x,y,ServerWorld.HP_50);
+		super(x,y,ServerWorld.HP_POTION_TYPE);
 	//	this.healAmount = Integer.parseInt(getType().substring(3));
 	}
 	
-	public int getHealAmount()
-	{
-		return healAmount;
-	}
+	
 }

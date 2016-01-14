@@ -543,7 +543,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					for (ServerObject object : world.getObjectGrid()[row][column])
 					{
-						if (object.exists())
+						if (object.exists() && !object.getType().equals(ServerWorld.SPAWN_TYPE))
 						{
 							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 							{

@@ -272,7 +272,7 @@ public class ServerObject
 			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld(),newVendor.getQuality());
 		case ServerWorld.SPAWN_TYPE:
 			ServerSpawner newSpawner = (ServerSpawner)original;
-			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getDelay(),newSpawner.getWorld());
+			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getWorld());
 		case ServerWorld.SLIME_TYPE:
 			ServerSlime newSlime = (ServerSlime)original;
 			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld(),newSlime.getTeam());

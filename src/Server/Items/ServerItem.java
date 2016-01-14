@@ -29,8 +29,11 @@ public abstract class ServerItem extends ServerObject {
 		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
 
 		switch (type) {
-		case ServerWorld.HP_50:
+		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");
+			break;
+		case ServerWorld.MAX_HP_TYPE:
+			setImage("MAX_HP_POTION.png");
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
@@ -202,7 +205,7 @@ public abstract class ServerItem extends ServerObject {
 
 	public static ServerItem copy(ServerItem item) {
 		switch (item.getType()) {
-		case ServerWorld.HP_50:
+		case ServerWorld.HP_POTION_TYPE:
 			return new ServerHPPotion(item.getX(), item.getY());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());

@@ -7,11 +7,11 @@ public class ServerSpawner extends ServerObject{
 	private ServerCreature creature;
 	private int delay;
 	private ServerWorld world;
+	private int maxSpawn;
 	
-	public ServerSpawner(double x, double y, ServerCreature creatureType, int delay, ServerWorld world) {
+	public ServerSpawner(double x, double y, ServerCreature creatureType, ServerWorld world) {
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE);
 		this.creature = creatureType;
-		this.delay = delay;
 		this.world = world;
 		
 		makeExist();
@@ -20,13 +20,15 @@ public class ServerSpawner extends ServerObject{
 		{
 		case ServerWorld.SLIME_TYPE:
 			setImage("SLIME_SPAWN.png");
+			maxSpawn = 20;
+			delay = 10000;
 			break;
 		}
 	}
 	
 	public void update(long worldCounter)
 	{
-		if(worldCounter % (delay/ServerEngine.UPDATE_RATE) == 0)
+		if(worldCounter % (delay/ServerEngine.UPDATE_RATE) == 0 && maxSpawn > 0)
 		{
 			ServerObject newCreature = ServerObject.copy(creature);
 			newCreature.setX(getX());
@@ -34,6 +36,9 @@ public class ServerSpawner extends ServerObject{
 			world.add(newCreature);
 			ServerWorld.noOfEnemies++;
 			System.out.println(ServerWorld.noOfEnemies);
+			maxSpawn--;
+			if(maxSpawn <= 0)
+				destroy();
 		}
 	}
 	
