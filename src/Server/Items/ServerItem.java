@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 26;
+	private final static int NUM_ITEMS = 27;
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
@@ -197,6 +197,8 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerArmour(x, y, ServerWorld.RED_NINJA_ARMOUR);
 		case 26:
 			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
+		case 27:
+			return new ServerMaxHPPotion(x,y);
 		}
 		// This won't happen
 		return null;
@@ -207,6 +209,8 @@ public abstract class ServerItem extends ServerObject {
 		switch (item.getType()) {
 		case ServerWorld.HP_POTION_TYPE:
 			return new ServerHPPotion(item.getX(), item.getY());
+		case ServerWorld.MAX_HP_TYPE:
+			return new ServerMaxHPPotion(item.getX(),item.getY());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());
 		case ServerWorld.STEEL_ARMOUR:
