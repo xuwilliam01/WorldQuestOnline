@@ -31,10 +31,10 @@ public abstract class ServerItem extends ServerObject {
 		switch (type) {
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");
-			value = 3;
 			break;
 		case ServerWorld.MAX_HP_TYPE:
 			setImage("MAX_HP_POTION.png");
+			value = 3;
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");

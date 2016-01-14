@@ -560,7 +560,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							}
 							else
 							{
-
 								queueMessage("O " + object.getID() + " "
 										+ ((int) (object.getX() + 0.5))
 										+ " " + ((int) (object.getY() + 0.5))

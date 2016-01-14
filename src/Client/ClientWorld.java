@@ -370,34 +370,6 @@ public class ClientWorld
 		}
 	}
 
-	/**
-	 * Get a specific object from the list
-	 * @return the desired object
-	 */
-	public ClientObject get(int id)
-	{
-		try
-		{
-			for (ClientObject object : objects)
-			{
-				if (object == null)
-				{
-					continue;
-				}
-				if (object.getID() == id)
-				{
-					return object;
-				}
-			}
-		}
-		catch (ConcurrentModificationException e)
-		{
-			System.out.println("Concurrent modification occured");
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public void clear()
 	{
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
