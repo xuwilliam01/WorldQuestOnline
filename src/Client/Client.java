@@ -730,4 +730,38 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.currentFPS = currentFPS;
 	}
 
+	public int getHP() {
+		return HP;
+	}
+
+	public void setHP(int hP) {
+		HP = hP;
+	}
+
+	public int getMaxHP() {
+		return maxHP;
+	}
+
+	public void setMaxHP(int maxHP) {
+		this.maxHP = maxHP;
+	}
+
+	public int getMana() {
+		return mana;
+	}
+
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
+	public int getMaxMana() {
+		return maxMana;
+	}
+
+	public void setMaxMana(int maxMana) {
+		this.maxMana = maxMana;
+	}
+	
+	
+
 }

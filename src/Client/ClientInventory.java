@@ -187,6 +187,9 @@ public class ClientInventory extends JPanel{
 
 	public void use(ClientItem item)
 	{
+		if(item.getType().equals(ServerWorld.HP_POTION_TYPE) && client.getHP() == client.getMaxHP())
+			return;
+		
 		if(item.getAmount()  > 1)
 		{
 			item.decreaseAmount();
