@@ -42,7 +42,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public final static int PLAYER_START_HP = 100;
 
-	private String message = "";
+	private StringBuilder message = new StringBuilder();
 
 	private boolean disconnected = false;
 
@@ -1186,9 +1186,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void queueMessage(String message)
 	{
 		if (message.length() != 0)
-			this.message += " " + message;
+			this.message.append(" " + message);
 		else
-			this.message += message;
+			this.message.append(message);
 	}
 
 	/**
@@ -1207,7 +1207,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		output.println(message);
 		output.flush();
-		message = "";
+		message = new StringBuilder();
 	}
 
 	/**
