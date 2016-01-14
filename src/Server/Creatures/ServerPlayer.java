@@ -595,6 +595,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				queueMessage("L " + getHP());
 			}
+			
+			System.out.println(message.length());
 
 			// Signal a repaint
 			queueMessage("U");

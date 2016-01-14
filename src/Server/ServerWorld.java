@@ -107,7 +107,7 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerObject[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 10000, this) };
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 1000, this) };
 
 	/**
 	 * The size of each object tile
@@ -156,6 +156,9 @@ public class ServerWorld
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
+	
+	
+	public static int noOfEnemies = 0;
 
 	/**
 	 * Constructor for server
