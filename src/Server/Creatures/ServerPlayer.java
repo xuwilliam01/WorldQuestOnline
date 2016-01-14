@@ -602,8 +602,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				queueMessage("L " + getHP());
 			}
-			
-			System.out.println(message.length());
 
 			// Signal a repaint
 			queueMessage("U");
@@ -875,7 +873,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
 		int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
 
+		System.out.println("X/Y " + xDist + " " + yDist);
+		
 		double angle = Math.atan2(yDist, xDist);
+		
+		System.out.println("Angle: " + angle);
 
 		int weaponNo = weaponSelected - '0';
 

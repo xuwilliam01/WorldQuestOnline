@@ -110,6 +110,8 @@ public class ServerWeaponSwing extends ServerObject
 
 		this.damage = damage;
 
+		System.out.println("Current angle: " + angle);
+		
 		if (angle > -90 && angle <= 90)
 		{
 			currentAngle = -135;

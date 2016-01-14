@@ -120,6 +120,34 @@ public class ClientWorld
 			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
 		}
 	}
+	
+	/**
+	 * Get a specific object from the list
+	 * @return the desired object
+	 */
+	public ClientObject get(int id)
+	{
+		try
+		{
+			for (ClientObject object : objects)
+			{
+				if (object == null)
+				{
+					continue;
+				}
+				if (object.getID() == id)
+				{
+					return object;
+				}
+			}
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println("Concurrent modification occured");
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * Add an object (not a tile) to the client, or update it if it already
