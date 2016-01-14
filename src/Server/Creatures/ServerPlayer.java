@@ -37,10 +37,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
 	public static final int DEFAULT_SHIELD_SLOT = -2;
-	/**
-	 * The starting max hp of the player
-	 */
+	
+	//The starting mana and hp for the player
 	public final static int PLAYER_START_HP = 100;
+	public final static int PLAYER_START_MANA = 100;
 
 	private StringBuilder message = new StringBuilder();
 
@@ -193,6 +193,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private ServerAccessory shield;
 
+	private int mana = PLAYER_START_MANA;
+	private int maxMana = PLAYER_START_MANA;
+	
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -589,7 +592,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 
 			// Tell the user what hp he has
+			queueMessage("Q " + mana);
+			queueMessage("K " + maxMana);
 			queueMessage("L " + getHP());
+			queueMessage("M " + getMaxHP());
 
 			while (message.length() < 4000)
 			{
@@ -1448,5 +1454,23 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.body = body;
 	}
+
+	public int getMana() {
+		return mana;
+	}
+
+	public void setMana(int mana) {
+		this.mana = mana;
+	}
+
+	public int getMaxMana() {
+		return maxMana;
+	}
+
+	public void setMaxMana(int maxMana) {
+		this.maxMana = maxMana;
+	}
+	
+	
 
 }

@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.ServerEngine;
+import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
@@ -58,10 +59,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public final static int FRAME_DELAY = 0;
 
-	/**
-	 * The player's current HP
-	 */
+	//Stores the HP and Mana of the player
 	private int HP;
+	private int maxHP;
+	private int mana;
+	private int maxMana;
 
 	/**
 	 * The player's inventory
@@ -141,7 +143,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setFocusable(true);
 		requestFocusInWindow();
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-		HP = 100;
+		HP = ServerPlayer.PLAYER_START_HP;
+		maxHP = HP;
+		mana = ServerPlayer.PLAYER_START_MANA;
+		maxMana = mana;
 
 		// Set up the input
 		try
@@ -255,6 +260,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						if (tokens[token].equals("L"))
 						{
 							HP = Integer.parseInt(tokens[++token]);
+						}
+						else if(tokens[token].equals("M"))
+						{
+							maxHP = Integer.parseInt(tokens[++token]);
+						}
+						else if(tokens[token].equals("Q"))
+						{
+							mana = Integer.parseInt(tokens[++token]);
+						}
+						else if(tokens[token].equals("K"))
+						{
+							maxMana = Integer.parseInt(tokens[++token]);
 						}
 						else if (tokens[token].equals("U"))
 						{
@@ -478,7 +495,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		if (HP > 0)
 		{
 			graphics.setColor(Color.red);
-			graphics.drawString("Health: " + HP, 20, 60);
+			graphics.drawString(String.format("Health: %d/%d", HP,maxHP), 20, 60);
 			justDied = true;
 		}
 		else
@@ -492,6 +509,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			graphics.drawString(
 					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
+		
+		graphics.setColor(Color.blue);
+		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana),20,80);
 	}
 
 	@Override
