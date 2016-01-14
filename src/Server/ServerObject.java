@@ -6,6 +6,7 @@ import Imports.Images;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
 import Tools.RowCol;
 
@@ -269,9 +270,12 @@ public class ServerObject
 		case ServerWorld.VENDOR_TYPE:
 			ServerVendor newVendor = (ServerVendor)original;
 			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld(),newVendor.getQuality());
-		case ServerWorld.SPAWN_TYPE+"":
+		case ServerWorld.SPAWN_TYPE:
 			ServerSpawner newSpawner = (ServerSpawner)original;
 			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getDelay(),newSpawner.getWorld());
+		case ServerWorld.SLIME_TYPE:
+			ServerSlime newSlime = (ServerSlime)original;
+			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld(),newSlime.getTeam());
 		}
 		return null;
 	}

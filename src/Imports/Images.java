@@ -45,34 +45,34 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_4.png"));
-		BufferedImage[][] imageTiles = new BufferedImage[image
-				.getHeight() / 32][image.getWidth() / 32];
-		for (int row = 0; row < imageTiles.length; row++)
-		{
-			for (int column = 0; column < imageTiles[0].length; column++)
-			{
-				imageTiles[row][column] = image.getSubimage(
-						column * 32, row * 32, 32, 32);
-			}
-		}
-
-		// Rotate the images needed and write to file
-		image = imageTiles[15][4];
-		ImageIO.write(image, "PNG", new File(
-				"SHGOLD_ICON.png"));
-		int locationX = image.getWidth();
-		int locationY = image.getHeight();
-		double rotationRequired = Math.toRadians(135);
-		AffineTransform tx;
-		tx = AffineTransform.getRotateInstance(
-				rotationRequired, locationX, locationY);
-		tx.translate(0, 16);
-
-		AffineTransformOp op = new AffineTransformOp(tx,
-				AffineTransformOp.TYPE_BILINEAR);
-		ImageIO.write(op.filter(image, null), "PNG", new File(
-				"DADIAMOND.png"));
+//		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_4.png"));
+//		BufferedImage[][] imageTiles = new BufferedImage[image
+//				.getHeight() / 32][image.getWidth() / 32];
+//		for (int row = 0; row < imageTiles.length; row++)
+//		{
+//			for (int column = 0; column < imageTiles[0].length; column++)
+//			{
+//				imageTiles[row][column] = image.getSubimage(
+//						column * 32, row * 32, 32, 32);
+//			}
+//		}
+//
+//		// Rotate the images needed and write to file
+//		image = imageTiles[15][4];
+//		ImageIO.write(image, "PNG", new File(
+//				"SHGOLD_ICON.png"));
+//		int locationX = image.getWidth();
+//		int locationY = image.getHeight();
+//		double rotationRequired = Math.toRadians(135);
+//		AffineTransform tx;
+//		tx = AffineTransform.getRotateInstance(
+//				rotationRequired, locationX, locationY);
+//		tx.translate(0, 16);
+//
+//		AffineTransformOp op = new AffineTransformOp(tx,
+//				AffineTransformOp.TYPE_BILINEAR);
+//		ImageIO.write(op.filter(image, null), "PNG", new File(
+//				"DADIAMOND.png"));
 
 	}
 
@@ -327,8 +327,10 @@ public class Images
 					2*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("VENDOR_ICON.png", 2*ServerWorld.TILE_SIZE,
 					2*ServerWorld.TILE_SIZE));
-			//images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
-				//	ServerWorld.TILE_SIZE));
+			images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));	
+			images.add(new GameImage("SLIME_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
+							2*ServerWorld.TILE_SIZE));
 
 			for (int no = 0; no < 6; no++)
 			{

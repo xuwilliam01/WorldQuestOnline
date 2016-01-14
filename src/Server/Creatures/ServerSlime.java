@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import Server.ServerWorld;
+import Server.Items.ServerItem;
 
 public class ServerSlime extends ServerEnemy
 {
@@ -50,6 +51,8 @@ public class ServerSlime extends ServerEnemy
 		landCounter = 0;
 		setImage("SLIME_6.png");
 		landed = true;
+		
+		addItem(ServerItem.randomItem(getX(), getY()));
 	}
 
 	public ServerSlime(double x, double y,ServerWorld world)
@@ -70,6 +73,8 @@ public class ServerSlime extends ServerEnemy
 		landCounter = 0;
 		setImage("SLIME_6.png");
 		landed = true;
+		
+		addItem(ServerItem.randomItem(getX(), getY()));
 	}
 
 	/**

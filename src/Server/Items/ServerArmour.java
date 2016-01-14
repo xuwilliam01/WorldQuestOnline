@@ -12,6 +12,11 @@ public class ServerArmour extends ServerItem {
 
 	public static int NUM_ARMOURS = 4;
 
+	public static double STEEL_DEF = 0.5;
+	public static double RED_DEF = 0.3;
+	public static double BLUE_DEF = 0.2;
+	public static double GREY_DEF = 0.1;
+	
 	/**
 	 * The percentage of damage this armour absorbs
 	 */
@@ -27,19 +32,19 @@ public class ServerArmour extends ServerItem {
 
 		switch (type) {
 		case ServerWorld.STEEL_ARMOUR:
-			armour = 0.5;
+			armour = STEEL_DEF;
 			armourImage = "OUTFITARMOR";
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
-			armour = 0.1;
+			armour = GREY_DEF;
 			armourImage = "OUTFITNINJAGREY";
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
-			armour = 0.2;
+			armour = BLUE_DEF;
 			armourImage = "OUTFITNINJABLUE";
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
-			armour = 0.3;
+			armour = RED_DEF;
 			armourImage = "OUTFITNINJARED";
 			break;
 		}

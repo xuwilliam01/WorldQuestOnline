@@ -73,7 +73,7 @@ public class ServerWorld
 
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 
-	public final static char SPAWN_TYPE = 'S';
+	public final static String SPAWN_TYPE = "S";
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
@@ -107,7 +107,7 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerObject[] objectTypes = { new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 5000, this) };
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4), new ServerSpawner(0,0,new ServerSlime(0,0,this), 10000, this) };
 
 	/**
 	 * The size of each object tile
@@ -166,50 +166,9 @@ public class ServerWorld
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		newWorld();
-		
-		// These methods should reference a list to figure out where everything
-		// goes
-		// The list will be created using the map file
-		addEnemies();
+
 	}
 
-	/**
-	 * Spawn enemies in the world
-	 */
-	public void addEnemies()
-	{
-		for (int no = 0; no < 10; no++)
-		{
-			ServerEnemy newEnemy = new ServerSlime(50 * no + 50, 50, this);
-			// newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
-			// newEnemy.getY()));
-			newEnemy.addItem(ServerPotion.randomPotion(newEnemy.getX(),
-					newEnemy.getY()));
-			add(newEnemy);
-		}
-	}
-
-	/**
-	 * Spawn enemies if the current time passes the spawn timer, then reset the
-	 * timer
-	 */
-	public void spawnEnemies()
-	{
-		if (System.currentTimeMillis() >= spawnTimer)
-		{
-			int spawnLocation = (int) (Math.random() * 9 + 9);
-
-			ServerEnemy newEnemy = new ServerSlime(400 * spawnLocation + 50,
-					50, this);
-			add(newEnemy);
-			newEnemy.addItem(ServerItem.randomItem(newEnemy.getX(),
-					newEnemy.getY()));
-			spawnTimer = System.currentTimeMillis()
-					+ (int) (Math.random() * 15000 + 5000);
-		}
-	}
-
-	
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -279,7 +238,7 @@ public class ServerWorld
 			char ref = tokenizer.nextToken().charAt(0);
 			for(ServerObject obj : objectTypes)
 				if(obj.getImage().equals(ImageReferencePair.getImages()[ref].getImageName()))
-				{
+				{			
 					ServerObject newObject = ServerObject.copy(obj);
 					newObject.setX(col*ServerWorld.TILE_SIZE);
 					newObject.setY(row*ServerWorld.TILE_SIZE);
@@ -294,8 +253,6 @@ public class ServerWorld
 	 */
 	public synchronized void update()
 	{
-		spawnEnemies();
-
 		// Remove all the objects that no longer exist
 		for (ServerObject object : objectsToRemove)
 		{
@@ -322,6 +279,7 @@ public class ServerWorld
 					{
 						((ServerSpawner)object).update(worldCounter);
 					}
+					
 					if (object.getType().charAt(0) == ITEM_TYPE
 							&& object.isOnSurface())
 					{

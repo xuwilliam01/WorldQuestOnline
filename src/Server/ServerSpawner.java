@@ -9,11 +9,12 @@ public class ServerSpawner extends ServerObject{
 	private ServerWorld world;
 	
 	public ServerSpawner(double x, double y, ServerCreature creatureType, int delay, ServerWorld world) {
-		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE+"");
+		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE);
 		this.creature = creatureType;
 		this.delay = delay;
 		this.world = world;
 		
+		makeExist();
 		setSolid(false);
 		switch(creature.getType())
 		{
@@ -29,7 +30,7 @@ public class ServerSpawner extends ServerObject{
 		{
 			ServerObject newCreature = ServerObject.copy(creature);
 			newCreature.setX(getX());
-			newCreature.setY(getY());
+			newCreature.setY(getY()-getHeight()-ServerWorld.TILE_SIZE);
 			world.add(newCreature);
 		}
 	}

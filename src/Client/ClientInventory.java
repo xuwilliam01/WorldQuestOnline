@@ -280,6 +280,7 @@ public class ClientInventory extends JPanel{
 		// Make the border show up around the first weapon
 		if (equippedWeapons[0]!=null)
 		{
+			equippedWeapons[0].setBorder(BorderFactory.createLineBorder(Color.white));
 			client.setWeaponSelected(0);
 		}
 	}

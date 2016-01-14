@@ -680,8 +680,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					requestFocusInWindow();
 					return;
 				}
-
-
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
 			}
 

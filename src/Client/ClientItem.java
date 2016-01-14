@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
+import Server.Items.ServerArmour;
+import Server.Items.ServerWeapon;
 
 @SuppressWarnings("serial")
 public class ClientItem extends JButton implements MouseListener{
@@ -49,6 +51,90 @@ public class ClientItem extends JButton implements MouseListener{
 		setContentAreaFilled(false);
 		setFocusable(false);
 		addMouseListener(this);
+		
+		//Add tooltips
+		switch(type)
+		{
+		case ServerWorld.HP_50:
+			setToolTipText("+50 HP");
+			break;
+		case ServerWorld.MONEY_TYPE:
+			setToolTipText("Money");
+			break;
+	
+		case ServerWorld.STEEL_ARMOUR:
+			setToolTipText(String.format("Steel Armour (%.0f%% Damage Reduction)",ServerArmour.STEEL_DEF*100));
+			break;
+		case ServerWorld.BLUE_NINJA_ARMOUR:
+			setToolTipText(String.format("Blue Ninja Armour (%.0f%% Damage Reduction)",ServerArmour.BLUE_DEF*100));
+			break;
+		case ServerWorld.RED_NINJA_ARMOUR:
+			setToolTipText(String.format("Red Ninja Armour (%.0f%% Damage Reduction)",ServerArmour.RED_DEF*100));
+			break;
+		case ServerWorld.GREY_NINJA_ARMOUR:
+			setToolTipText(String.format("Grey Ninja Armour (%.0f%% Damage Reduction)",ServerArmour.GREY_DEF*100));
+			break;
+		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
+			setToolTipText(String.format("Diamond Dagger (+%d Damage)",ServerWeapon.DADIAMOND_DMG));
+			break;
+		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
+			setToolTipText(String.format("Gold Dagger (+%d Damage)",ServerWeapon.DAGOLD_DMG));
+			break;
+		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
+			setToolTipText(String.format("Iron Dagger (+%d Damage)",ServerWeapon.DAIRON_DMG));
+			break;
+		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
+			setToolTipText(String.format("Stone Dagger (+%d Damage)",ServerWeapon.DASTONE_DMG));
+			break;
+		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
+			setToolTipText(String.format("Wood Dagger (+%d Damage)",ServerWeapon.DAWOOD_DMG));
+			break;
+		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
+			setToolTipText(String.format("Diamond Ax (+%d Damage)",ServerWeapon.AXDIAMOND_DMG));
+			break;
+		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
+			setToolTipText(String.format("Gold Ax (+%d Damage)",ServerWeapon.AXGOLD_DMG));
+			break;
+		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
+			setToolTipText(String.format("Iron Ax (+%d Damage)",ServerWeapon.AXIRON_DMG));
+			break;
+		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
+			setToolTipText(String.format("Stone Ax (+%d Damage)",ServerWeapon.AXSTONE_DMG));
+			break;
+		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
+			setToolTipText(String.format("Wood Ax (+%d Damage)",ServerWeapon.AXWOOD_DMG));
+			break;
+		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
+			setToolTipText(String.format("Diamond Sword (+%d Damage)",ServerWeapon.SWDIAMOND_DMG));
+			break;
+		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
+			setToolTipText(String.format("Gold Sword (+%d Damage)",ServerWeapon.SWGOLD_DMG));
+			break;
+		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
+			setToolTipText(String.format("Iron Sword (+%d Damage)",ServerWeapon.SWIRON_DMG));
+			break;
+		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
+			setToolTipText(String.format("Stone Sword (+%d Damage)",ServerWeapon.SWSTONE_DMG));
+			break;
+		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
+			setToolTipText(String.format("Wood Sword (+%d Damage)",ServerWeapon.SWWOOD_DMG));
+			break;
+		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
+			setToolTipText(String.format("Diamond Halberd (+%d Damage)",ServerWeapon.HADIAMOND_DMG));
+			break;
+		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
+			setToolTipText(String.format("Gold Halberd (+%d Damage)",ServerWeapon.HAGOLD_DMG));
+			break;
+		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
+			setToolTipText(String.format("Iron Halberd (+%d Damage)",ServerWeapon.HAIRON_DMG));
+			break;
+		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
+			setToolTipText(String.format("Stone Halberd (+%d Damage)",ServerWeapon.HASTONE_DMG));
+			break;
+		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
+			setToolTipText(String.format("Wood Halberd (+%d Damage)",ServerWeapon.HAWOOD_DMG));
+			break;
+		}
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -187,6 +273,14 @@ public class ClientItem extends JButton implements MouseListener{
 								{
 									inventory.getEquippedWeapons()[equipSlot] = null;
 									equipSlot = ServerPlayer.DEFAULT_WEAPON_SLOT;
+									for(int weapon = 0; weapon < inventory.getEquippedWeapons().length;weapon++)
+									{
+										if(inventory.getEquippedWeapons()[weapon] != null)
+										{
+											inventory.getClient().setWeaponSelected(weapon);
+											inventory.getEquippedWeapons()[weapon].setBorder(BorderFactory.createLineBorder(Color.white));
+										}
+									}
 								}
 								else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
 								{
@@ -248,7 +342,6 @@ public class ClientItem extends JButton implements MouseListener{
 							for(int col = 0;col < invGrid[row].length;col++)
 								if(invGrid[row][col] == null)
 								{
-									System.out.printf("row %d col %d%n", row,col);
 									invGrid[row][col] = inventory.getEquippedArmour();
 									inventory.getEquippedArmour().setRow(row);
 									inventory.getEquippedArmour().setCol(col);
