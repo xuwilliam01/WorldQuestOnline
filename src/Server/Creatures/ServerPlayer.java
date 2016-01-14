@@ -481,6 +481,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					setY(300);
 
 					setHP(100);
+					
+					deathCounter = -1;
 				}
 			}
 
@@ -1025,8 +1027,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setHeight(width);
 			dropInventory();
 
-			setSolid(false);
-
 			verticalMovement = 0;
 			horizontalMovement = 0;
 
@@ -1041,6 +1041,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				getBody().destroy();
 				setBody(null);
 			}
+			
+			setHSpeed(0);
+			setVSpeed(0);
 
 		}
 		else
