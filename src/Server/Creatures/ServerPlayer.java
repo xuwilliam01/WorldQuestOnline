@@ -37,8 +37,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
 	public static final int DEFAULT_SHIELD_SLOT = -2;
-	
-	//The starting mana and hp for the player
+
+	// The starting mana and hp for the player
 	public final static int PLAYER_START_HP = 100;
 	public final static int PLAYER_START_MANA = 100;
 
@@ -90,11 +90,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The speed the player moves vertically
 	 */
 	private int verticalMovement = jumpSpeed;
-
-	/**
-	 * Whether or not the player is alive
-	 */
-	private boolean alive = true;
 
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
@@ -195,7 +190,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int mana = PLAYER_START_MANA;
 	private int maxMana = PLAYER_START_MANA;
-	
+
 	/**
 	 * Constructor for a player in the server
 	 * @param socket
@@ -343,19 +338,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// Update the animation of the player and its accessories
 			// The row and column of the frame in the sprite sheet for the image
 			setRowCol(new RowCol(0, 0));
-			if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
-			{
-				setRowCol(new RowCol(1, 8));
-			}
-			else if (getVSpeed() < 0)
-			{
-				setRowCol(new RowCol(1, 7));
-			}
-			else if (getVSpeed() > 0)
-			{
-				setRowCol(new RowCol(1, 9));
-			}
-			else if (actionCounter >= 0)
+			if (actionCounter >= 0)
 			{
 				if (action.equals("SWING"))
 				{
@@ -468,22 +451,30 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
 
 					setAlive(true);
-					setSolid(true);
 
 					verticalMovement = jumpSpeed;
 					horizontalMovement = movementSpeed;
-
-					int width = getWidth();
-					setWidth(getHeight());
-					setHeight(width);
 
 					setX(Math.random() * 1500 + 500);
 					setY(300);
 
 					setHP(100);
-					
+
+					setAttackable(true);
 					deathCounter = -1;
 				}
+			}
+			else if (Math.abs(getVSpeed()) < 5 && !isOnSurface())
+			{
+				setRowCol(new RowCol(1, 8));
+			}
+			else if (getVSpeed() < 0)
+			{
+				setRowCol(new RowCol(1, 7));
+			}
+			else if (getVSpeed() > 0)
+			{
+				setRowCol(new RowCol(1, 9));
 			}
 
 			// Update the player's image
@@ -548,7 +539,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					for (ServerObject object : world.getObjectGrid()[row][column])
 					{
-						if (object.exists() && !object.getType().equals(ServerWorld.SPAWN_TYPE))
+						if (object.exists()
+								&& !object.getType().equals(
+										ServerWorld.SPAWN_TYPE))
 						{
 							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 							{
@@ -621,7 +614,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')
 						&& isOnSurface()
-						&& !performingAction && alive)
+						&& !performingAction &&isAlive())
 				{
 					String[] tokens = command.split(" ");
 					performingAction = true;
@@ -632,11 +625,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						rightClick = true;
 					}
 				}
-				else if (command.equals("!a") && alive)
+				else if (command.equals("!a") &&isAlive())
 				{
 					actionCounter = actionDelay;
 				}
-				else if (command.equals("R") && alive)
+				else if (command.equals("R") &&isAlive())
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
@@ -650,7 +643,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("L") && alive)
+				else if (command.equals("L") &&isAlive())
 				{
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
@@ -663,7 +656,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && isOnSurface() && alive
+				else if (command.equals("U") && isOnSurface() &&isAlive()
 						&& !inAction())
 				{
 					setVSpeed(-verticalMovement);
@@ -874,14 +867,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
 
 		System.out.println("X/Y " + xDist + " " + yDist);
-		
+
 		double angle = Math.atan2(yDist, xDist);
-		
+
 		System.out.println("Angle: " + angle);
 
 		int weaponNo = weaponSelected - '0';
 
-		if (alive && canPerformAction)
+		if (isAlive() && canPerformAction)
 		{
 			if (rightClick)
 			{
@@ -991,8 +984,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (equippedWeapons[item] != null)
 				dropItem(equippedWeapons[item]);
 		equippedWeapons = new ServerWeapon[MAX_WEAPONS];
-		
-		if(equippedArmour != null)
+
+		if (equippedArmour != null)
 			dropItem(equippedArmour);
 		equippedArmour = null;
 	}
@@ -1021,12 +1014,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		world.add(new ServerDamageIndicator(damageX, damageY, Integer
 				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
 
-		if (getHP() <= 0 && alive)
+		if (getHP() <= 0 &&isAlive())
 		{
-			alive = false;
-			int width = getWidth();
-			setWidth(getHeight());
-			setHeight(width);
+			setAlive(false);
+			//setHeight(getWidth());
 			dropInventory();
 
 			verticalMovement = 0;
@@ -1043,9 +1034,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				getBody().destroy();
 				setBody(null);
 			}
-			
+
 			setHSpeed(0);
 			setVSpeed(0);
+			
+			setAttackable(false);
 
 		}
 		else
@@ -1380,16 +1373,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		return yUpdated;
 	}
 
-	public boolean isAlive()
-	{
-		return alive;
-	}
-
-	public void setAlive(boolean alive)
-	{
-		this.alive = alive;
-	}
-
 	/**
 	 * Whether or not the player is currently performing an action
 	 * @return
@@ -1459,22 +1442,24 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.body = body;
 	}
 
-	public int getMana() {
+	public int getMana()
+	{
 		return mana;
 	}
 
-	public void setMana(int mana) {
+	public void setMana(int mana)
+	{
 		this.mana = mana;
 	}
 
-	public int getMaxMana() {
+	public int getMaxMana()
+	{
 		return maxMana;
 	}
 
-	public void setMaxMana(int maxMana) {
+	public void setMaxMana(int maxMana)
+	{
 		this.maxMana = maxMana;
 	}
-	
-	
 
 }

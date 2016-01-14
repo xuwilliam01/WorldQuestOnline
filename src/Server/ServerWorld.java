@@ -386,7 +386,7 @@ public class ServerWorld
 									// If a player collided with an item
 									else if (otherObject.getType().charAt(0) == ITEM_TYPE
 											&& object.getType().equals(
-													PLAYER_TYPE)
+													PLAYER_TYPE) && ((ServerCreature)otherObject).isAlive()
 											&& object.collidesWith(otherObject))
 									{
 										ServerItem item = (ServerItem) otherObject;

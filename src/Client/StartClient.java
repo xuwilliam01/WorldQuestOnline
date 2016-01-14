@@ -28,7 +28,7 @@ public class StartClient
 						.showInputDialog("Please enter the IP address of the server");
 				if (serverIP.equals(""))
 				{
-					serverIP = "192.168.0.10";
+					serverIP = "192.168.0.16";
 					port = 5000;
 				}
 				else

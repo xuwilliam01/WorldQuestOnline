@@ -81,6 +81,11 @@ public abstract class ServerCreature extends ServerObject {
 	 * The current frame of the creature's animation
 	 */
 	private RowCol rowCol = new RowCol(0, 0);
+	
+	/**
+	 * Whether or not the creature is alive
+	 */
+	private boolean alive;
 
 	/**
 	 * Constructor for a creature
@@ -105,6 +110,7 @@ public abstract class ServerCreature extends ServerObject {
 		this.relativeDrawX = relativeDrawX;
 		this.relativeDrawY = relativeDrawY;
 
+		this.alive = true;
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
@@ -354,4 +360,15 @@ public abstract class ServerCreature extends ServerObject {
 		this.rowCol = rowCol;
 	}
 
+	public boolean isAlive()
+	{
+		return alive;
+	}
+
+	public void setAlive(boolean alive)
+	{
+		this.alive = alive;
+	}
+
+	
 }
