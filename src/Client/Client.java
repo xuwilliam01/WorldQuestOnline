@@ -65,6 +65,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int mana;
 	private int maxMana;
 
+	//Variables for damage
+	int damage = 0;
+	int baseDamage = 0;
+	
 	/**
 	 * The player's inventory
 	 */
@@ -322,6 +326,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
+						else if(tokens[token].equals("D"))
+						{
+							damage = Integer.parseInt(tokens[++token]);
+							baseDamage =Integer.parseInt(tokens[++token]);
+						}
 						else if (tokens[token].equals("V"))
 						{
 							if (Character.isDigit(tokens[token + 1].charAt(0)))
@@ -504,6 +513,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		graphics.setColor(Color.blue);
 		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
+		graphics.setColor(Color.green);
+		graphics.drawString(String.format("Damage: %d(+%d)",damage+baseDamage, baseDamage),20,100);
 	}
 
 	@Override

@@ -587,6 +587,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			queueMessage("L " + getHP());
 			queueMessage("M " + getMaxHP());
 
+			int currentDamage = PUNCHING_DAMAGE;
+			int weaponNo = weaponSelected -'0';
+			if(weaponNo != DEFAULT_WEAPON_SLOT && equippedWeapons[weaponNo] != null)
+				currentDamage = equippedWeapons[weaponNo].getDamage();
+			queueMessage("D "+currentDamage+" "+getBaseDamage());
+			
 			while (message.length() < 4000)
 			{
 				queueMessage("L " + getHP());
