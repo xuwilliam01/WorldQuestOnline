@@ -59,7 +59,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public final static int FRAME_DELAY = 0;
 
-	//Stores the HP and Mana of the player
+	// Stores the HP and Mana of the player
 	private int HP;
 	private int maxHP;
 	private int mana;
@@ -260,15 +260,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							HP = Integer.parseInt(tokens[++token]);
 						}
-						else if(tokens[token].equals("M"))
+						else if (tokens[token].equals("M"))
 						{
 							maxHP = Integer.parseInt(tokens[++token]);
 						}
-						else if(tokens[token].equals("Q"))
+						else if (tokens[token].equals("Q"))
 						{
 							mana = Integer.parseInt(tokens[++token]);
 						}
-						else if(tokens[token].equals("K"))
+						else if (tokens[token].equals("K"))
 						{
 							maxMana = Integer.parseInt(tokens[++token]);
 						}
@@ -299,6 +299,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								player.setY(Integer
 										.parseInt(tokens[++token]));
 								player.setImage(tokens[++token]);
+
+								System.out.println(player.getImageName());
+
 								player.setTeam(Integer
 										.parseInt(tokens[++token]));
 							}
@@ -494,7 +497,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		if (HP > 0)
 		{
 			graphics.setColor(Color.red);
-			graphics.drawString(String.format("Health: %d/%d", HP,maxHP), 20, 60);
+			graphics.drawString(String.format("Health: %d/%d", HP, maxHP), 20,
+					60);
 			justDied = true;
 		}
 		else
@@ -508,9 +512,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			graphics.drawString(
 					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
-		
+
 		graphics.setColor(Color.blue);
-		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana),20,80);
+		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
 	}
 
 	@Override
@@ -729,38 +733,44 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.currentFPS = currentFPS;
 	}
 
-	public int getHP() {
+	public int getHP()
+	{
 		return HP;
 	}
 
-	public void setHP(int hP) {
+	public void setHP(int hP)
+	{
 		HP = hP;
 	}
 
-	public int getMaxHP() {
+	public int getMaxHP()
+	{
 		return maxHP;
 	}
 
-	public void setMaxHP(int maxHP) {
+	public void setMaxHP(int maxHP)
+	{
 		this.maxHP = maxHP;
 	}
 
-	public int getMana() {
+	public int getMana()
+	{
 		return mana;
 	}
 
-	public void setMana(int mana) {
+	public void setMana(int mana)
+	{
 		this.mana = mana;
 	}
 
-	public int getMaxMana() {
+	public int getMaxMana()
+	{
 		return maxMana;
 	}
 
-	public void setMaxMana(int maxMana) {
+	public void setMaxMana(int maxMana)
+	{
 		this.maxMana = maxMana;
 	}
-	
-	
 
 }
