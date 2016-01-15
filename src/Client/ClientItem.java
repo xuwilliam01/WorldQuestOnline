@@ -1,6 +1,6 @@
 package Client;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -12,7 +12,7 @@ import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
-import Server.Items.ServerHPPotion;
+import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
 @SuppressWarnings("serial")
@@ -57,10 +57,19 @@ public class ClientItem extends JButton implements MouseListener{
 		switch(type)
 		{
 		case ServerWorld.HP_POTION_TYPE:
-			setToolTipText(String.format("+%d HP",ServerHPPotion.HEAL_AMOUNT));
+			setToolTipText(String.format("+%d HP",ServerPotion.HEAL_AMOUNT));
 			break;
 		case ServerWorld.MAX_HP_TYPE:
-			setToolTipText(String.format("Max HP +%d",ServerHPPotion.HEAL_AMOUNT));
+			setToolTipText(String.format("Max HP +%d",ServerPotion.MAX_HP_INCREASE));
+			break;
+		case ServerWorld.MANA_POTION_TYPE:
+			setToolTipText(String.format("+%d Mana",ServerPotion.MANA_AMOUNT));
+			break;
+		case ServerWorld.MAX_MANA_TYPE:
+			setToolTipText(String.format("Max Mana +%d",ServerPotion.MAX_MANA_INCREASE));
+			break;
+		case ServerWorld.DMG_POTION_TYPE:
+			setToolTipText(String.format("+%d Base Damage",ServerPotion.DMG_AMOUNT));
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setToolTipText("Money");

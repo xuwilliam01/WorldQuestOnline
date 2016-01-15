@@ -1,14 +1,13 @@
 package Server.Creatures;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 
 import Effects.ServerDamageIndicator;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerAccessory;
-import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
-import Server.Items.ServerMaxHPPotion;
+import Server.Items.ServerPotion;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
@@ -81,7 +80,17 @@ public abstract class ServerCreature extends ServerObject {
 	 * The current frame of the creature's animation
 	 */
 	private RowCol rowCol = new RowCol(0, 0);
+	
+	/**
+	 * Whether or not the creature is alive
+	 */
+	private boolean alive;
 
+	/**
+	 * The base damage the creature does
+	 */
+	private int baseDamage = 0;
+	
 	/**
 	 * Constructor for a creature
 	 * 
@@ -105,6 +114,7 @@ public abstract class ServerCreature extends ServerObject {
 		this.relativeDrawX = relativeDrawX;
 		this.relativeDrawY = relativeDrawY;
 
+		this.alive = true;
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
@@ -260,10 +270,21 @@ public abstract class ServerCreature extends ServerObject {
 				if (item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(2) == ServerWorld.POTION_TYPE.charAt(2)) {
 					switch (item) {
 					case ServerWorld.HP_POTION_TYPE:
-						HP = Math.min(maxHP, HP + ServerHPPotion.HEAL_AMOUNT);
+						HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
 						break;
 					case ServerWorld.MAX_HP_TYPE:
-						maxHP += ServerMaxHPPotion.MAX_HP_INCREASE;
+						maxHP += ServerPotion.MAX_HP_INCREASE;
+						break;
+					case ServerWorld.MANA_POTION_TYPE:
+						ServerPlayer thisPlayer = (ServerPlayer)this;
+						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerPotion.MANA_AMOUNT));
+						break;
+					case ServerWorld.MAX_MANA_TYPE:
+						thisPlayer = (ServerPlayer)this;
+						thisPlayer.setMaxMana( thisPlayer.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
+						break;
+					case ServerWorld.DMG_POTION_TYPE:
+						baseDamage += ServerPotion.DMG_AMOUNT;
 						break;
 					}
 
@@ -354,4 +375,25 @@ public abstract class ServerCreature extends ServerObject {
 		this.rowCol = rowCol;
 	}
 
+	public boolean isAlive()
+	{
+		return alive;
+	}
+
+	public void setAlive(boolean alive)
+	{
+		this.alive = alive;
+	}
+	
+	public int getBaseDamage()
+	{
+		return baseDamage;
+	}
+	
+	public void setBaseDamage(int baseDamage)
+	{
+		this.baseDamage = baseDamage;
+	}
+
+	
 }

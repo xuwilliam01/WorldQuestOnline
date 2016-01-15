@@ -49,7 +49,10 @@ public class ServerWorld
 	public final static String STACK_TYPE = ITEM_TYPE + "S";
 	public final static String POTION_TYPE = STACK_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
-	public final static String MAX_HP_TYPE = POTION_TYPE+"M";
+	public final static String MAX_HP_TYPE = POTION_TYPE+"h";
+	public final static String MANA_POTION_TYPE = POTION_TYPE+"M";
+	public final static String MAX_MANA_TYPE = POTION_TYPE +"m";
+	public final static String DMG_POTION_TYPE = POTION_TYPE +"D";
 	
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
@@ -386,7 +389,7 @@ public class ServerWorld
 									// If a player collided with an item
 									else if (otherObject.getType().charAt(0) == ITEM_TYPE
 											&& object.getType().equals(
-													PLAYER_TYPE)
+													PLAYER_TYPE) && ((ServerCreature)object).isAlive()
 											&& object.collidesWith(otherObject))
 									{
 										ServerItem item = (ServerItem) otherObject;

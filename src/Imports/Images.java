@@ -39,6 +39,11 @@ public class Images
 	public static BinaryTree<GameImage> images = null;
 
 	/**
+	 * Determines whether images were already imported or not
+	 */
+	private static boolean imported = false;
+	
+	/**
 	 * Modify images using java and write them to the file
 	 * @param args
 	 * @throws IOException
@@ -82,6 +87,10 @@ public class Images
 	 */
 	public static void importImages()
 	{
+		if(imported)
+			return;
+		
+		imported = true;
 		// Only import if the images haven't been imported already
 		if (images == null)
 		{
@@ -344,9 +353,12 @@ public class Images
 			images.add(new GameImage("BULLET.png"));
 			images.add(new GameImage("COIN.png",10,10));
 			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			images.add(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("MAX_HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			images.add(new GameImage("MAX_MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			images.add(new GameImage("DMG_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 
 			images.add(new GameImage("MONEY.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("MONEY_ICON.png",
