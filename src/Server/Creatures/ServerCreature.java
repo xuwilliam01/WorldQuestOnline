@@ -87,6 +87,11 @@ public abstract class ServerCreature extends ServerObject {
 	private boolean alive;
 
 	/**
+	 * The base damage the creature does
+	 */
+	private int baseDamage = 0;
+	
+	/**
 	 * Constructor for a creature
 	 * 
 	 * @param x
@@ -271,13 +276,15 @@ public abstract class ServerCreature extends ServerObject {
 						maxHP += ServerPotion.MAX_HP_INCREASE;
 						break;
 					case ServerWorld.MANA_POTION_TYPE:
-						System.out.println("here");
 						ServerPlayer thisPlayer = (ServerPlayer)this;
 						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerPotion.MANA_AMOUNT));
 						break;
 					case ServerWorld.MAX_MANA_TYPE:
 						thisPlayer = (ServerPlayer)this;
 						thisPlayer.setMaxMana( thisPlayer.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
+						break;
+					case ServerWorld.DMG_POTION_TYPE:
+						baseDamage += ServerPotion.DMG_AMOUNT;
 						break;
 					}
 
@@ -376,6 +383,16 @@ public abstract class ServerCreature extends ServerObject {
 	public void setAlive(boolean alive)
 	{
 		this.alive = alive;
+	}
+	
+	public int getBaseDamage()
+	{
+		return baseDamage;
+	}
+	
+	public void setBaseDamage(int baseDamage)
+	{
+		this.baseDamage = baseDamage;
 	}
 
 	

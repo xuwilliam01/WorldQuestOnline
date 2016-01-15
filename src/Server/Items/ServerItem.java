@@ -12,7 +12,8 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 29;
+	private final static int NUM_ITEMS = 30;
+	
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
@@ -43,6 +44,10 @@ public abstract class ServerItem extends ServerObject {
 		case ServerWorld.MAX_MANA_TYPE:
 			setImage("MAX_MANA_POTION.png");
 			value = 3;
+			break;
+		case ServerWorld.DMG_POTION_TYPE:
+			setImage("DMG_POTION.png");
+			value = 5;
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
@@ -212,6 +217,8 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE);
 		case 29:
 			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE);
+		case 30:
+			return new ServerPotion(x,y,ServerWorld.DMG_POTION_TYPE);
 		}
 		// This won't happen
 		return null;
@@ -224,6 +231,7 @@ public abstract class ServerItem extends ServerObject {
 		case ServerWorld.MAX_HP_TYPE:
 		case ServerWorld.MANA_POTION_TYPE:
 		case ServerWorld.MAX_MANA_TYPE:
+		case ServerWorld.DMG_POTION_TYPE:
 			return new ServerPotion(item.getX(), item.getY(), item.getType());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());

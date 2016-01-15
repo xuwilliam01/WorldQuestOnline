@@ -438,11 +438,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 							+ ServerWorld.WOOD_TIER));
 
-					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
-					addItem(new ServerWeapon(0, 0, ServerWorld.MONEY_TYPE));
+					addItem(new ServerMoney(0, 0, 5));
 					addItem(new ServerArmour(0, 0,
 							ServerWorld.BLUE_NINJA_ARMOUR));
 					addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
@@ -911,7 +907,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject).inflictDamage(
-										PUNCHING_DAMAGE, 5);
+										PUNCHING_DAMAGE + getBaseDamage(), 5);
 								alreadyPunched
 										.add((ServerCreature) otherObject);
 							}
@@ -928,7 +924,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						equippedWeapons[weaponNo].getActionImage(),
 						(int) (Math.toDegrees(angle) + 0.5),
 						equippedWeapons[weaponNo].getSwingSpeed(),
-						equippedWeapons[weaponNo].getDamage()));
+						equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
 				action = "SWING";
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(

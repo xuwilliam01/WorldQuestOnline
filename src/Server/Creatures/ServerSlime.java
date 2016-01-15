@@ -54,7 +54,7 @@ public class ServerSlime extends ServerEnemy
 		landed = true;
 		
 		addItem(ServerItem.randomItem(getX(), getY()));
-		//addItem(new ServerPotion(getX(),getY(),ServerWorld.MAX_MANA_TYPE));
+		//addItem(new ServerPotion(getX(),getY(),ServerWorld.DMG_POTION_TYPE));
 		//addItem(new ServerPotion(getX(),getY(),ServerWorld.HP_POTION_TYPE));
 	}
 

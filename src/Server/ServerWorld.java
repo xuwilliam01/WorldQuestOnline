@@ -52,6 +52,7 @@ public class ServerWorld
 	public final static String MAX_HP_TYPE = POTION_TYPE+"h";
 	public final static String MANA_POTION_TYPE = POTION_TYPE+"M";
 	public final static String MAX_MANA_TYPE = POTION_TYPE +"m";
+	public final static String DMG_POTION_TYPE = POTION_TYPE +"D";
 	
 	public final static String WEAPON_TYPE = EQUIP_TYPE + "W";
 	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
