@@ -1,15 +1,13 @@
 package Server.Creatures;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 
 import Effects.ServerDamageIndicator;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerAccessory;
-import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
-import Server.Items.ServerManaPotion;
-import Server.Items.ServerMaxHPPotion;
+import Server.Items.ServerPotion;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
@@ -267,14 +265,20 @@ public abstract class ServerCreature extends ServerObject {
 				if (item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(2) == ServerWorld.POTION_TYPE.charAt(2)) {
 					switch (item) {
 					case ServerWorld.HP_POTION_TYPE:
-						HP = Math.min(maxHP, HP + ServerHPPotion.HEAL_AMOUNT);
+						HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
 						break;
 					case ServerWorld.MAX_HP_TYPE:
-						maxHP += ServerMaxHPPotion.MAX_HP_INCREASE;
+						maxHP += ServerPotion.MAX_HP_INCREASE;
 						break;
 					case ServerWorld.MANA_POTION_TYPE:
+						System.out.println("here");
 						ServerPlayer thisPlayer = (ServerPlayer)this;
-						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerManaPotion.MANA_AMOUNT));
+						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerPotion.MANA_AMOUNT));
+						break;
+					case ServerWorld.MAX_MANA_TYPE:
+						thisPlayer = (ServerPlayer)this;
+						thisPlayer.setMaxMana( thisPlayer.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
+						break;
 					}
 
 				}

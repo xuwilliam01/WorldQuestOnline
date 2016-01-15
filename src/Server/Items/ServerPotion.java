@@ -1,9 +1,14 @@
 package Server.Items;
 
+import Server.ServerWorld;
 
-public abstract class ServerPotion extends ServerItem {
+public class ServerPotion extends ServerItem {
 
-	private final static int NUM_POTIONS = 3;
+	private final static int NUM_POTIONS = 4;
+	public final static int HEAL_AMOUNT = 50;
+	public final static int MAX_HP_INCREASE = 50;
+	public final static int MANA_AMOUNT = 50;
+	public final static int MAX_MANA_INCREASE = 50;
 
 	public ServerPotion(double x, double y, String type) {
 		super(x, y, type);
@@ -14,11 +19,13 @@ public abstract class ServerPotion extends ServerItem {
 
 		switch (randType) {
 		case 1:
-			return new ServerHPPotion(x, y);
+			return new ServerPotion(x, y,ServerWorld.HP_POTION_TYPE);
 		case 2:
-			return new ServerMaxHPPotion(x,y);
+			return new ServerPotion(x,y,ServerWorld.MAX_HP_TYPE);
 		case 3:
-			return new ServerManaPotion(x,y);
+			return new ServerPotion(x,y,ServerWorld.MANA_POTION_TYPE);
+		case 4:
+			return new ServerPotion(x,y,ServerWorld.MAX_MANA_TYPE);
 		}
 		// This won't happen
 		return null;

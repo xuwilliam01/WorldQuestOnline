@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 28;
+	private final static int NUM_ITEMS = 29;
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
@@ -40,6 +40,10 @@ public abstract class ServerItem extends ServerObject {
 			setImage("MANA_POTION.png");
 			value = 1;
 			break;
+		case ServerWorld.MAX_MANA_TYPE:
+			setImage("MAX_MANA_POTION.png");
+			value = 3;
+			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
 			break;
@@ -61,84 +65,84 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
-		value = 5;
-		break;
+			value = 5;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setImage("DAGOLD_ICON.png");
-		value = 4;
-		break;
+			value = 4;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setImage("DAIRON_ICON.png");
-		value = 3;
-		break;
+			value = 3;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			setImage("DASTONE_ICON.png");
-		value = 2;
-		break;
+			value = 2;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setImage("DAWOOD_ICON.png");
-		value = 1;
-		break;
+			value = 1;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("AXDIAMOND_ICON.png");
-		value = 5;
-		break;
+			value = 5;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			setImage("AXGOLD_ICON.png");
-		value = 4;
-		break;
+			value = 4;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			setImage("AXIRON_ICON.png");
-		value = 3;
-		break;
+			value = 3;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			setImage("AXSTONE_ICON.png");
-		value = 2;
-		break;
+			value = 2;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			setImage("AXWOOD_ICON.png");
-		value = 1;
-		break;
+			value = 1;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("SWDIAMOND_ICON.png");
-		value = 5;
-		break;
+			value = 5;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("SWGOLD_ICON.png");
-		value = 4;
-		break;
+			value = 4;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			setImage("SWIRON_ICON.png");
-		value = 3;
-		break;
+			value = 3;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			setImage("SWSTONE_ICON.png");
-		value = 2;
-		break;
+			value = 2;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("SWWOOD_ICON.png");
-		value = 1;
-		break;
+			value = 1;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("HADIAMOND_ICON.png");
-		value = 5;
-		break;
+			value = 5;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("HAGOLD_ICON.png");
-		value = 4;
-		break;
+			value = 4;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			setImage("HAIRON_ICON.png");
-		value = 3;
-		break;
+			value = 3;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			setImage("HASTONE_ICON.png");
-		value = 2;
-		break;
+			value = 2;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("HAWOOD_ICON.png");
-		value = 1;
-		break;
+			value = 1;
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -151,7 +155,7 @@ public abstract class ServerItem extends ServerObject {
 
 		switch (randType) {
 		case 1:
-			return new ServerHPPotion(x, y);
+			return new ServerPotion(x, y, ServerWorld.HP_POTION_TYPE);
 		case 2:
 			return new ServerMoney(x, y);
 		case 3:
@@ -203,9 +207,11 @@ public abstract class ServerItem extends ServerObject {
 		case 26:
 			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
 		case 27:
-			return new ServerMaxHPPotion(x,y);
+			return new ServerPotion(x, y, ServerWorld.MAX_HP_TYPE);
 		case 28:
-			return new ServerManaPotion(x,y);
+			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE);
+		case 29:
+			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE);
 		}
 		// This won't happen
 		return null;
@@ -215,61 +221,38 @@ public abstract class ServerItem extends ServerObject {
 	public static ServerItem copy(ServerItem item) {
 		switch (item.getType()) {
 		case ServerWorld.HP_POTION_TYPE:
-			return new ServerHPPotion(item.getX(), item.getY());
 		case ServerWorld.MAX_HP_TYPE:
-			return new ServerMaxHPPotion(item.getX(),item.getY());
 		case ServerWorld.MANA_POTION_TYPE:
-			return new ServerManaPotion(item.getX(),item.getY());
+		case ServerWorld.MAX_MANA_TYPE:
+			return new ServerPotion(item.getX(), item.getY(), item.getType());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());
 		case ServerWorld.STEEL_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), ServerWorld.STEEL_ARMOUR);
 		case ServerWorld.BLUE_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), ServerWorld.BLUE_NINJA_ARMOUR);
 		case ServerWorld.RED_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), ServerWorld.RED_NINJA_ARMOUR);
 		case ServerWorld.GREY_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), ServerWorld.GREY_NINJA_ARMOUR);
+			return new ServerArmour(item.getX(), item.getY(), item.getType());
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER);
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER);
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER);
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER);
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER);
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER);
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER);
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER);
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.AX_TYPE + ServerWorld.IRON_TIER);
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.AX_TYPE + ServerWorld.STONE_TIER);
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER);
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER);
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER);
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER);
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER);
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
-			return new ServerWeapon(item.getX(), item.getY(), ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER);
+			return new ServerWeapon(item.getX(), item.getY(), item.getType());
 
 		}
 		return null;
@@ -324,13 +307,11 @@ public abstract class ServerItem extends ServerObject {
 		amount--;
 	}
 
-	public void decreaseAmount(int amount)
-	{
+	public void decreaseAmount(int amount) {
 		this.amount -= amount;
 	}
 
-	public int getCost()
-	{
+	public int getCost() {
 		return value;
 	}
 
