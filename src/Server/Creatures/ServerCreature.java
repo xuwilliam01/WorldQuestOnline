@@ -80,7 +80,7 @@ public abstract class ServerCreature extends ServerObject {
 	 * The current frame of the creature's animation
 	 */
 	private RowCol rowCol = new RowCol(0, 0);
-	
+
 	/**
 	 * Whether or not the creature is alive
 	 */
@@ -90,7 +90,7 @@ public abstract class ServerCreature extends ServerObject {
 	 * The base damage the creature does
 	 */
 	private int baseDamage = 0;
-	
+
 	/**
 	 * Constructor for a creature
 	 * 
@@ -264,10 +264,7 @@ public abstract class ServerCreature extends ServerObject {
 		ServerItem toRemove = null;
 		for (ServerItem sItem : inventory) {
 			if (sItem.getType().equals(item)) {
-				toRemove = sItem;
-
-				// If we have a potion
-				if (item.charAt(0) == ServerWorld.ITEM_TYPE && item.charAt(2) == ServerWorld.POTION_TYPE.charAt(2)) {
+				toRemove = sItem;			
 					switch (item) {
 					case ServerWorld.HP_POTION_TYPE:
 						HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
@@ -286,16 +283,15 @@ public abstract class ServerCreature extends ServerObject {
 					case ServerWorld.DMG_POTION_TYPE:
 						baseDamage += ServerPotion.DMG_AMOUNT;
 						break;
-					}
-
-				}
+					}				
 			}
 		}
 
-		if (toRemove.getAmount() > 1)
-			toRemove.decreaseAmount();
-		else
-			inventory.remove(toRemove);
+		if(toRemove != null)
+			if (toRemove.getAmount() > 1)
+				toRemove.decreaseAmount();
+			else
+				inventory.remove(toRemove);
 	}
 
 	public void drop(String item) {
@@ -384,16 +380,16 @@ public abstract class ServerCreature extends ServerObject {
 	{
 		this.alive = alive;
 	}
-	
+
 	public int getBaseDamage()
 	{
 		return baseDamage;
 	}
-	
+
 	public void setBaseDamage(int baseDamage)
 	{
 		this.baseDamage = baseDamage;
 	}
 
-	
+
 }

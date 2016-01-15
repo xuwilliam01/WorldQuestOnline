@@ -574,7 +574,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 
 			// Check if the vendor is out of range
-			if (vendor != null && !collidesWith(vendor))
+			if (vendor != null && (!collidesWith(vendor) || getHP() <= 0 || isDisconnected()))
 			{
 				vendor.setIsBusy(false);
 				vendor = null;
@@ -748,6 +748,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// If the buffered reader breaks, the player has disconnected
+		if(vendor != null)
+		{
+			vendor.setIsBusy(false);
+			vendor = null;
+		}
 		System.out.println("A client has disconnected");
 		try
 		{
