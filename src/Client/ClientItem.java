@@ -13,6 +13,8 @@ import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerHPPotion;
+import Server.Items.ServerManaPotion;
+import Server.Items.ServerMaxHPPotion;
 import Server.Items.ServerWeapon;
 
 @SuppressWarnings("serial")
@@ -60,7 +62,10 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("+%d HP",ServerHPPotion.HEAL_AMOUNT));
 			break;
 		case ServerWorld.MAX_HP_TYPE:
-			setToolTipText(String.format("Max HP +%d",ServerHPPotion.HEAL_AMOUNT));
+			setToolTipText(String.format("Max HP +%d",ServerMaxHPPotion.MAX_HP_INCREASE));
+			break;
+		case ServerWorld.MANA_POTION_TYPE:
+			setToolTipText(String.format("Mana +%d",ServerManaPotion.MANA_AMOUNT));
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setToolTipText("Money");

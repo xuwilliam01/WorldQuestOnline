@@ -8,6 +8,7 @@ import Server.ServerWorld;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
+import Server.Items.ServerManaPotion;
 import Server.Items.ServerMaxHPPotion;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
@@ -271,6 +272,9 @@ public abstract class ServerCreature extends ServerObject {
 					case ServerWorld.MAX_HP_TYPE:
 						maxHP += ServerMaxHPPotion.MAX_HP_INCREASE;
 						break;
+					case ServerWorld.MANA_POTION_TYPE:
+						ServerPlayer thisPlayer = (ServerPlayer)this;
+						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerManaPotion.MANA_AMOUNT));
 					}
 
 				}

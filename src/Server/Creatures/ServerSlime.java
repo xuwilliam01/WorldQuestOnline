@@ -3,6 +3,7 @@ package Server.Creatures;
 import Server.ServerWorld;
 import Server.Items.ServerHPPotion;
 import Server.Items.ServerItem;
+import Server.Items.ServerManaPotion;
 import Server.Items.ServerMaxHPPotion;
 
 public class ServerSlime extends ServerEnemy
@@ -55,7 +56,7 @@ public class ServerSlime extends ServerEnemy
 		landed = true;
 		
 		addItem(ServerItem.randomItem(getX(), getY()));
-		//addItem(new ServerMaxHPPotion(getX(),getY()));
+		addItem(new ServerManaPotion(getX(),getY()));
 		//addItem(new ServerHPPotion(getX(),getY()));
 	}
 

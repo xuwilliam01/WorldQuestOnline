@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 27;
+	private final static int NUM_ITEMS = 28;
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
@@ -36,6 +36,10 @@ public abstract class ServerItem extends ServerObject {
 			setImage("MAX_HP_POTION.png");
 			value = 3;
 			break;
+		case ServerWorld.MANA_POTION_TYPE:
+			setImage("MANA_POTION.png");
+			value = 1;
+			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
 			break;
@@ -57,84 +61,84 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
-			value = 5;
-			break;
+		value = 5;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setImage("DAGOLD_ICON.png");
-			value = 4;
-			break;
+		value = 4;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setImage("DAIRON_ICON.png");
-			value = 3;
-			break;
+		value = 3;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			setImage("DASTONE_ICON.png");
-			value = 2;
-			break;
+		value = 2;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setImage("DAWOOD_ICON.png");
-			value = 1;
-			break;
+		value = 1;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("AXDIAMOND_ICON.png");
-			value = 5;
-			break;
+		value = 5;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			setImage("AXGOLD_ICON.png");
-			value = 4;
-			break;
+		value = 4;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			setImage("AXIRON_ICON.png");
-			value = 3;
-			break;
+		value = 3;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			setImage("AXSTONE_ICON.png");
-			value = 2;
-			break;
+		value = 2;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			setImage("AXWOOD_ICON.png");
-			value = 1;
-			break;
+		value = 1;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("SWDIAMOND_ICON.png");
-			value = 5;
-			break;
+		value = 5;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("SWGOLD_ICON.png");
-			value = 4;
-			break;
+		value = 4;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			setImage("SWIRON_ICON.png");
-			value = 3;
-			break;
+		value = 3;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			setImage("SWSTONE_ICON.png");
-			value = 2;
-			break;
+		value = 2;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("SWWOOD_ICON.png");
-			value = 1;
-			break;
+		value = 1;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("HADIAMOND_ICON.png");
-			value = 5;
-			break;
+		value = 5;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("HAGOLD_ICON.png");
-			value = 4;
-			break;
+		value = 4;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			setImage("HAIRON_ICON.png");
-			value = 3;
-			break;
+		value = 3;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			setImage("HASTONE_ICON.png");
-			value = 2;
-			break;
+		value = 2;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("HAWOOD_ICON.png");
-			value = 1;
-			break;
+		value = 1;
+		break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -200,6 +204,8 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
 		case 27:
 			return new ServerMaxHPPotion(x,y);
+		case 28:
+			return new ServerManaPotion(x,y);
 		}
 		// This won't happen
 		return null;
@@ -212,6 +218,8 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerHPPotion(item.getX(), item.getY());
 		case ServerWorld.MAX_HP_TYPE:
 			return new ServerMaxHPPotion(item.getX(),item.getY());
+		case ServerWorld.MANA_POTION_TYPE:
+			return new ServerManaPotion(item.getX(),item.getY());
 		case ServerWorld.MONEY_TYPE:
 			return new ServerMoney(item.getX(), item.getY());
 		case ServerWorld.STEEL_ARMOUR:
@@ -315,12 +323,12 @@ public abstract class ServerItem extends ServerObject {
 	public void decreaseAmount() {
 		amount--;
 	}
-	
+
 	public void decreaseAmount(int amount)
 	{
 		this.amount -= amount;
 	}
-	
+
 	public int getCost()
 	{
 		return value;

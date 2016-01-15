@@ -3,7 +3,7 @@ package Server.Items;
 
 public abstract class ServerPotion extends ServerItem {
 
-	private final static int NUM_POTIONS = 2;
+	private final static int NUM_POTIONS = 3;
 
 	public ServerPotion(double x, double y, String type) {
 		super(x, y, type);
@@ -17,6 +17,8 @@ public abstract class ServerPotion extends ServerItem {
 			return new ServerHPPotion(x, y);
 		case 2:
 			return new ServerMaxHPPotion(x,y);
+		case 3:
+			return new ServerManaPotion(x,y);
 		}
 		// This won't happen
 		return null;
