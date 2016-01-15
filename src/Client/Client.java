@@ -186,8 +186,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			int team = Integer.parseInt(tokens[4]);
 
 			player = new ClientObject(id, x, y, image, team);
-
-			world.setObject(player);
 		}
 		catch (IOException e)
 		{
@@ -292,27 +290,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						else if (tokens[token].equals("O"))
 						{
 							int id = Integer.parseInt(tokens[++token]);
+							int x = Integer
+									.parseInt(tokens[++token]);
+							int y = Integer
+									.parseInt(tokens[++token]);
 							if (id == player.getID())
 							{
-								player.setX(Integer
-										.parseInt(tokens[++token]));
-								player.setY(Integer
-										.parseInt(tokens[++token]));
-								player.setImage(tokens[++token]);
-
-								System.out.println(player.getImageName());
-
-								player.setTeam(Integer
-										.parseInt(tokens[++token]));
+								player.setX(x);
+								player.setY(y);
 							}
-							else
-							{
-								world.setObject(id, Integer
-										.parseInt(tokens[++token]), Integer
-										.parseInt(tokens[++token]),
+								world.setObject(id,x, y,
 										tokens[++token], Integer
 												.parseInt(tokens[++token]));
-							}
 						}
 						else if (tokens[token].equals("P"))
 						{
