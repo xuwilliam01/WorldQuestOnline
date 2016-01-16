@@ -98,7 +98,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 8; no++)
+		for (int no = 0; no < 20; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -121,7 +121,7 @@ public class ClientWorld
 			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
 		}
 	}
-	
+
 	/**
 	 * Get a specific object from the list
 	 * @return the desired object
@@ -191,10 +191,10 @@ public class ClientWorld
 	/**
 	 * Draws the world
 	 * @param graphics the graphics component to be drawn on
-	 * @param playerX the position of the player
-	 * @param playerY the position of the player
+	 * @param player.getX() the position of the player
+	 * @param player.getY() the position of the player
 	 */
-	public void update(Graphics graphics, int playerX, int playerY)
+	public void update(Graphics graphics, ClientObject player)
 	{
 
 		// Get font metrics
@@ -243,30 +243,28 @@ public class ClientWorld
 
 			// System.out.println(cloud.getX());
 		}
-		
-		
 
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT/ 2;
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
+		int startRow = (int) ((player.getY() - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + ServerPlayer.DEFAULT_HEIGHT) / tileSize);
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + player.getY() + ServerPlayer.DEFAULT_HEIGHT) / tileSize);
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length - 1;
 		}
-		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH) / tileSize);
+		int startColumn = (int) ((player.getX() - Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH) / tileSize);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + ServerPlayer.DEFAULT_WIDTH) / tileSize);
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + player.getX() + ServerPlayer.DEFAULT_WIDTH) / tileSize);
 		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;
@@ -283,9 +281,10 @@ public class ClientWorld
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
-									+ column * tileSize - playerX, centreY
+									+ column * tileSize - player.getX(),
+							centreY
 									+ row
-									* tileSize - playerY,
+									* tileSize - player.getY(),
 							null);
 				}
 			}
@@ -306,8 +305,15 @@ public class ClientWorld
 				{
 					continue;
 				}
-				int x = centreX + object.getX() - playerX;
-				int y = centreY + object.getY() - playerY;
+				int x = centreX + object.getX() - player.getX();
+				int y = centreY + object.getY() - player.getY();
+
+				if (object.getID() == player.getID())
+				{
+					x = centreX;
+					y = centreY;
+				}
+
 				Image image = object.getImage();
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
@@ -359,7 +365,7 @@ public class ClientWorld
 									* DAMAGE_FONT_WIDTH + 0.5));
 							object.setX(object.getX() - object.getWidth() / 2);
 						}
-						x = centreX + object.getX() - playerX;
+						x = centreX + object.getX() - player.getX();
 
 						graphics.drawString(text, x, y - 10);
 					}
@@ -388,9 +394,10 @@ public class ClientWorld
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
-									+ column * tileSize - playerX, centreY
+									+ column * tileSize - player.getX(),
+							centreY
 									+ row
-									* tileSize - playerY,
+									* tileSize - player.getY(),
 							null);
 				}
 			}

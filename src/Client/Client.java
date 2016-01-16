@@ -495,7 +495,7 @@ MouseMotionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.update(graphics, player.getX(), player.getY());
+		world.update(graphics, player);
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.black);

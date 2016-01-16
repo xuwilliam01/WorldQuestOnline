@@ -19,7 +19,7 @@ public class ServerProjectile extends ServerFlyingObject
 	/**
 	 * Counter
 	 */
-	private int counter;
+	private int counter = 0;
 
 	/**
 	 * The damage this projectile does
@@ -160,6 +160,12 @@ public class ServerProjectile extends ServerFlyingObject
 			setImage(getBaseImage() + "_" + imageAngle + ".png");
 		}
 
+		counter++;
+		
+		if (counter >= 180)
+		{
+			destroy();
+		}
 	}
 
 	/**
