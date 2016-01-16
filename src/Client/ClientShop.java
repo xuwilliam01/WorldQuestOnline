@@ -15,7 +15,7 @@ public class ClientShop extends JPanel{
 	public final static int SHOP_WIDTH = 520;
 	public final static int SHOP_HEIGHT = 400;
 	public final static int WIDTH = 10;
-	public final static int HEIGHT = 3;
+	public final static int HEIGHT = 6;
 
 	private ClientShopItem[][] shopItems = new ClientShopItem[HEIGHT][WIDTH];
 	private Client client;

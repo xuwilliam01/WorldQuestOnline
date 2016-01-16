@@ -283,6 +283,14 @@ public abstract class ServerCreature extends ServerObject {
 					case ServerWorld.DMG_POTION_TYPE:
 						baseDamage += ServerPotion.DMG_AMOUNT;
 						break;
+					case ServerWorld.SPEED_POTION_TYPE:
+						thisPlayer = (ServerPlayer)this;
+						thisPlayer.setHorizontalMovement(thisPlayer.getHorizontalMovement()+ServerPotion.SPEED_AMOUNT);
+						break;
+					case ServerWorld.JUMP_POTION_TYPE:
+						thisPlayer = (ServerPlayer)this;
+						thisPlayer.setVerticalMovement(thisPlayer.getVerticalMovement()+ServerPotion.JUMP_AMOUNT);
+					
 					}				
 			}
 		}

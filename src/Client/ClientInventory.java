@@ -187,7 +187,7 @@ public class ClientInventory extends JPanel{
 
 	public void use(ClientItem item)
 	{
-		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && client.getHP() == client.getMaxHP())||(item.getType().equals(ServerWorld.MANA_POTION_TYPE) && client.getMana() == client.getMaxMana()))
+		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && client.getHP() == client.getMaxHP())||(item.getType().equals(ServerWorld.MANA_POTION_TYPE) && client.getMana() == client.getMaxMana())||(item.getType().equals(ServerWorld.SPEED_POTION_TYPE)&& client.getSpeed() == ServerPlayer.MAX_HSPEED) || item.getType().equals(ServerWorld.JUMP_POTION_TYPE)&&(client.getJump() == ServerPlayer.MAX_VSPEED))
 			return;
 		
 		if(item.getAmount()  > 1)

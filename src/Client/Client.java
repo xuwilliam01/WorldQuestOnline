@@ -26,7 +26,7 @@ import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener
+MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -59,16 +59,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public final static int FRAME_DELAY = 0;
 
-	// Stores the HP and Mana of the player
+	// Stores the HP, mana, jump,and speed of the player
 	private int HP;
 	private int maxHP;
 	private int mana;
 	private int maxMana;
+	private int speed;
+	private int jump;
 
 	//Variables for damage
 	int damage = 0;
 	int baseDamage = 0;
-	
+
 	/**
 	 * The player's inventory
 	 */
@@ -303,9 +305,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								player.setX(x);
 								player.setY(y);
 							}
-								world.setObject(id,x, y,
-										tokens[++token], Integer
-												.parseInt(tokens[++token]));
+							world.setObject(id,x, y,
+									tokens[++token], Integer
+									.parseInt(tokens[++token]));
 						}
 						else if (tokens[token].equals("P"))
 						{
@@ -330,6 +332,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							damage = Integer.parseInt(tokens[++token]);
 							baseDamage =Integer.parseInt(tokens[++token]);
+						}
+						else if(tokens[token].equals("S"))
+						{
+							speed = Integer.parseInt(tokens[++token]);
+						}
+						else if(tokens[token].equals("J"))
+						{
+							jump = Integer.parseInt(tokens[++token]);
 						}
 						else if (tokens[token].equals("V"))
 						{
@@ -515,6 +525,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
 		graphics.setColor(Color.green);
 		graphics.drawString(String.format("Damage: %d(+%d)",damage+baseDamage, baseDamage),20,100);
+
+		graphics.setColor(Color.gray);
+		if(speed == ServerPlayer.MAX_HSPEED)
+			graphics.drawString(String.format("Speed: %d (Max)",speed-ServerPlayer.MOVE_SPEED+1),20,120);
+		else
+			graphics.drawString(String.format("Speed: %d",speed-ServerPlayer.MOVE_SPEED+1),20,120);
+
+		graphics.setColor(Color.ORANGE);
+		if(jump == ServerPlayer.MAX_VSPEED)
+			graphics.drawString(String.format("Jump: %d (Max)",jump-ServerPlayer.JUMP_SPEED+1),20,140);
+		else
+			graphics.drawString(String.format("Jump: %d",jump-ServerPlayer.JUMP_SPEED+1),20,140);
 	}
 
 	@Override
@@ -773,4 +795,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.maxMana = maxMana;
 	}
 
+	public int getSpeed()
+	{
+		return speed;
+	}
+
+	public int getJump()
+	{
+		return jump;
+	}
 }

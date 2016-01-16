@@ -41,7 +41,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting mana and hp for the player
 	public final static int PLAYER_START_HP = 100;
 	public final static int PLAYER_START_MANA = 100;
-
+	
+	//Initial jump and move speeds of the player
+	public final static int MOVE_SPEED = 5;
+	public final static int JUMP_SPEED = 20;
+	
+	public final static int MAX_HSPEED = 10;
+	public final static int MAX_VSPEED = 28;
+	
 	private StringBuilder message = new StringBuilder();
 
 	private boolean disconnected = false;
@@ -71,25 +78,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private int movingDirection = 0;
 
-	/**
-	 * The speed at which the player moves
-	 */
-	private int movementSpeed = 5;
-
-	/**
-	 * The initial speed the player jumps at
-	 */
-	private int jumpSpeed = 20;
 
 	/**
 	 * The speed the player moves horizontally
 	 */
-	private int horizontalMovement = movementSpeed;
+	private int horizontalMovement = MOVE_SPEED;
 
 	/**
 	 * The speed the player moves vertically
 	 */
-	private int verticalMovement = jumpSpeed;
+	private int verticalMovement = JUMP_SPEED;
 
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
@@ -448,8 +446,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					setAlive(true);
 
-					verticalMovement = jumpSpeed;
-					horizontalMovement = movementSpeed;
+					verticalMovement = JUMP_SPEED;
+					horizontalMovement = MOVE_SPEED;
 
 					setX(Math.random() * 1500 + 500);
 					setY(300);
@@ -581,18 +579,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("C");
 			}
 
-			// Tell the user what hp he has
+			// Send the player's HP, Mana, and speed
 			queueMessage("Q " + mana);
 			queueMessage("K " + maxMana);
 			queueMessage("L " + getHP());
 			queueMessage("M " + getMaxHP());
-
+			queueMessage("S " + horizontalMovement);
+			queueMessage("J " + verticalMovement);
+			
+			//Send the player's current damage
 			int currentDamage = PUNCHING_DAMAGE;
 			int weaponNo = weaponSelected -'0';
 			if(weaponNo != DEFAULT_WEAPON_SLOT && equippedWeapons[weaponNo] != null)
 				currentDamage = equippedWeapons[weaponNo].getDamage();
 			queueMessage("D "+currentDamage+" "+getBaseDamage());
 			
+
 			while (message.length() < 4000)
 			{
 				queueMessage("L " + getHP());
@@ -777,6 +779,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			getBody().destroy();
 			setBody(null);
 		}
+		setX(0);
+		setY(0);
 		destroy();
 		engine.removePlayer(this);
 	}
@@ -1468,5 +1472,25 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.maxMana = maxMana;
 	}
+
+	public int getHorizontalMovement() {
+		return horizontalMovement;
+	}
+
+	public void setHorizontalMovement(int horizontalMovement) {
+		
+		this.horizontalMovement = Math.min(horizontalMovement,MAX_HSPEED);
+	}
+
+	public int getVerticalMovement() {
+		return verticalMovement;
+	}
+
+	public void setVerticalMovement(int verticalMovement) {
+		this.verticalMovement = Math.min(verticalMovement,MAX_VSPEED);
+	}
+	
+	
+	
 
 }
