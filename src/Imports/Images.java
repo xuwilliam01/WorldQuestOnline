@@ -111,6 +111,8 @@ public class Images
 							image.getSubimage(no * 19, 0, 19, 17), 38, 34));
 				}
 
+				
+				
 				image = ImageIO.read(new File(
 						"EXPLOSION_SHEET.png"));
 				for (int no = 0; no < 7; no++)
@@ -118,6 +120,15 @@ public class Images
 					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
+				
+				image = ImageIO.read(new File(
+						"EXPLOSION2_SHEET.png"));
+				for (int no = 0; no < image.getWidth()/64; no++)
+				{
+					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 64, 0, 64, 64)));
+				}
+				
 
 				// Add all the pics from the player sprite sheets
 				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",
@@ -307,7 +318,7 @@ public class Images
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				String[] projectiles = { "ARROW"};
+				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1"};
 
 				for (int no = 0; no < projectiles.length; no++)
 				{

@@ -80,6 +80,12 @@ public class ServerProjectile extends ServerFlyingObject
 			setDamage(5);
 			setSpeed(20);
 			break;
+		case ServerWorld.FIREBALL_TYPE:
+			setImage("FIREBALL_0.png");
+			setGravity(0);
+			setDamage(10);
+			setSpeed(15);
+			break;
 		}
 
 		length = Images.getGameImage(getImage()).getWidth();
@@ -132,16 +138,20 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void destroy()
 	{
+		if (getType() == ServerWorld.FIREBALL_TYPE)
+		{
+			setType(ServerWorld.EXPLOSION_TYPE);
+			setSpeed(0);
+			setSolid(false);
+			setMapVisible(false);
+			damage = 0;
+			counter = 0;
+			setX(getX() - 5);
+			setY(getY() - 5);
+			setImage("EXPLOSION2_0.png");
+		}
 		super.destroy();
-//		setType(ServerWorld.EXPLOSION_TYPE);
-//		setSpeed(0);
-//		setSolid(false);
-//		setMapVisible(false);
-//		damage = 0;
-//		counter = 0;
-//		setX(getX() - 5);
-//		setY(getY() - 5);
-//		setImage("EXPLOSION_0.png");
+
 	}
 
 	/**
@@ -151,32 +161,38 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		if (counter <= 4)
 		{
-			setImage("EXPLOSION_1.png");
+			setImage(getBaseImage() + "_1.png");
 		}
 		else if (counter <= 6)
 		{
-			setImage("EXPLOSION_2.png");
+			setImage(getBaseImage() + "_2.png");
 		}
 		else if (counter <= 8)
 		{
-			setImage("EXPLOSION_3.png");
+			setImage(getBaseImage() + "_3.png");
 		}
 		else if (counter <= 10)
 		{
-			setImage("EXPLOSION_4.png");
+			setImage(getBaseImage() + "_4.png");
 		}
 		else if (counter <= 12)
 		{
-			setImage("EXPLOSION_5.png");
+			setImage(getBaseImage() + "_5.png");
 		}
 		else if (counter <= 14)
 		{
-			setImage("EXPLOSION_6.png");
+			setImage(getBaseImage() + "_6.png");
+		}
+		else if (counter <= 16)
+		{
+			setImage(getBaseImage() + "_7.png");
 		}
 		else
 		{
 			super.destroy();
 		}
+		
+		
 		counter++;
 
 	}

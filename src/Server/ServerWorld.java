@@ -34,6 +34,7 @@ public class ServerWorld
 	public final static String BULLET_TYPE = PROJECTILE_TYPE + "B";
 	
 	public final static String ARROW_TYPE = PROJECTILE_TYPE +"A";
+	public final static String FIREBALL_TYPE = PROJECTILE_TYPE +"F";
 	
 	
 	public final static String EXPLOSION_TYPE = "E";
