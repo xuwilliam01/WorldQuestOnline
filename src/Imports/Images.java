@@ -148,6 +148,14 @@ public class Images
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
+				image = ImageIO.read(new File(
+						"EXPLOSION4_SHEET.png"));
+				for (int no = 0; no < image.getWidth()/82; no++)
+				{
+					images.add(new GameImage("EXPLOSION4_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 82, 0, 82, 82)));
+				}
+				
 
 				// Add all the pics from the player sprite sheets
 				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",
@@ -393,7 +401,7 @@ public class Images
 						int height = 42;
 						int width = 42;
 						
-						if (no == 5 || no == 6)
+						if (no >=7)
 						{
 							width = 58;
 							height = 58;
@@ -511,9 +519,8 @@ public class Images
 			images.add(new GameImage("DMG_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("SPEED_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("JUMP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MONEY.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MONEY_ICON.png",
-					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+			images.add(new GameImage("MONEY.png"));
+			images.add(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 			images.add(new GameImage("BACKGROUND.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));

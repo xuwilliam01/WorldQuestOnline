@@ -55,6 +55,7 @@ public class StartClient
 		pane.setLocation(0,0);
 		pane.setLayout(null);
 		pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+		pane.setDoubleBuffered(true);
 		myFrame.add(pane);
 		pane.setVisible(true);
 		

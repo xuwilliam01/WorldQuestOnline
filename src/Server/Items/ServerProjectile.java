@@ -103,7 +103,7 @@ public class ServerProjectile extends ServerFlyingObject
 		{
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0.png");
-			setGravity(0.2);
+			setGravity(0.25);
 			setDamage(5);
 			setSpeed(20);
 			animated = false;
@@ -111,7 +111,7 @@ public class ServerProjectile extends ServerFlyingObject
 			break;
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0.png");
-			setGravity(0.2);
+			setGravity(0.25);
 			setDamage(10);
 			setSpeed(20);
 			animated = false;
@@ -312,6 +312,19 @@ public class ServerProjectile extends ServerFlyingObject
 			setX(getX() - 41);
 			setY(getY() - 41);
 			setImage("EXPLOSION3_0.png");
+			noOfExplosionFrames = 4;
+		}
+		else if (getType() == ServerWorld.MEGAARROW_TYPE)
+		{
+			setType(ServerWorld.EXPLOSION_TYPE);
+			setSpeed(0);
+			setSolid(false);
+			setMapVisible(false);
+			damage = 0;
+			counter = 0;
+			setX(getX() - 41);
+			setY(getY() - 41);
+			setImage("EXPLOSION4_0.png");
 			noOfExplosionFrames = 4;
 		}
 		else if (getType() == ServerWorld.DARKBALL_TYPE)
