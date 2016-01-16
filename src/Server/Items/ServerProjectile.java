@@ -275,6 +275,19 @@ public class ServerProjectile extends ServerFlyingObject
 			setImage("EXPLOSION3_0.png");
 			noOfExplosionFrames = 4;
 		}
+		else if (getType() == ServerWorld.DARKBALL_TYPE)
+		{
+			setType(ServerWorld.EXPLOSION_TYPE);
+			setSpeed(0);
+			setSolid(false);
+			setMapVisible(false);
+			damage = 0;
+			counter = 0;
+			setX(getX() - 40);
+			setY(getY() - 40);
+			setImage("EXPLOSION1_0.png");
+			noOfExplosionFrames = 10;
+		}
 		else
 		{
 			super.destroy();
@@ -314,6 +327,14 @@ public class ServerProjectile extends ServerFlyingObject
 		else if (counter <= 16 && noOfExplosionFrames >= 8)
 		{
 			setImage(getBaseImage() + "_7.png");
+		}
+		else if (counter <= 18 && noOfExplosionFrames >= 9)
+		{
+			setImage(getBaseImage() + "_8.png");
+		}
+		else if (counter <= 20 && noOfExplosionFrames >= 10)
+		{
+			setImage(getBaseImage() + "_9.png");
 		}
 		else
 		{

@@ -99,11 +99,24 @@ public class Images
 				
 				
 				image = ImageIO.read(new File(
-						"EXPLOSION_SHEET.png"));
+						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < 7; no++)
 				{
-					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
+					images.add(new GameImage("EXPLOSION0_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
+				}
+				
+				image = ImageIO.read(new File(
+						"EXPLOSION1_SHEET.png"));
+				for (int no = 0; no < image.getWidth()/160; no++)
+				{
+					images.add(new GameImage("EXPLOSION1_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 160, 0, 160, 160),80,80));
+				}
+				for (int no = 0; no < image.getWidth()/160; no++)
+				{
+					images.add(new GameImage("EXPLOSION1_" + (no+5) + IMAGE_FORMAT,
+							image.getSubimage(no * 160, 160, 160, 160),80,80));
 				}
 				
 				image = ImageIO.read(new File(
