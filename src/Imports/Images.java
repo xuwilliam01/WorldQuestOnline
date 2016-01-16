@@ -50,34 +50,37 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-//		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_4.png"));
-//		BufferedImage[][] imageTiles = new BufferedImage[image
-//				.getHeight() / 32][image.getWidth() / 32];
-//		for (int row = 0; row < imageTiles.length; row++)
+//		String[] projectiles = { "ARROW"};
+//
+//		for (int no = 0; no < projectiles.length; no++)
 //		{
-//			for (int column = 0; column < imageTiles[0].length; column++)
-//			{
-//				imageTiles[row][column] = image.getSubimage(
-//						column * 32, row * 32, 32, 32);
-//			}
+//			
+//			BufferedImage image = ImageIO.read(new File(
+//					projectiles[no] + ".png"));
+//			double locationX = image.getWidth() / 2;
+//			double locationY = image.getHeight() / 2;
+//
+//				double rotationRequired = Math.toRadians(angle);
+//				AffineTransform tx;
+//
+//				int actualAngle = angle;
+//
+//				tx = AffineTransform.getRotateInstance(
+//						rotationRequired, locationX, locationY);
+//
+//				AffineTransformOp op = new AffineTransformOp(tx,
+//						AffineTransformOp.TYPE_BILINEAR);
+//
+//				BufferedImage newImage = op
+//						.filter(image, null).getSubimage(0, 0,image.getWidth()-1, image.getHeight()-1);
+//
+//				
+//				images.add(new GameImage(
+//						projectiles[no] + "_" + (actualAngle) + ".png",
+//						newImage,34,34));
+//				ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
+//			
 //		}
-//
-//		// Rotate the images needed and write to file
-//		image = imageTiles[15][4];
-//		ImageIO.write(image, "PNG", new File(
-//				"SHGOLD_ICON.png"));
-//		int locationX = image.getWidth();
-//		int locationY = image.getHeight();
-//		double rotationRequired = Math.toRadians(135);
-//		AffineTransform tx;
-//		tx = AffineTransform.getRotateInstance(
-//				rotationRequired, locationX, locationY);
-//		tx.translate(0, 16);
-//
-//		AffineTransformOp op = new AffineTransformOp(tx,
-//				AffineTransformOp.TYPE_BILINEAR);
-//		ImageIO.write(op.filter(image, null), "PNG", new File(
-//				"DADIAMOND.png"));
 
 	}
 
@@ -260,19 +263,19 @@ public class Images
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				String[] weaponSheets = { "DAWOOD", "DASTONE", "DAIRON",
+				String[] weapons = { "DAWOOD", "DASTONE", "DAIRON",
 						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",
 						"AXGOLD", "AXDIAMOND", "SWWOOD", "SWSTONE", "SWIRON",
 						"SWGOLD", "SWDIAMOND", "HAWOOD", "HASTONE", "HAIRON",
 						"HAGOLD", "HADIAMOND" };
 
-				for (int no = 0; no < weaponSheets.length; no++)
+				for (int no = 0; no < weapons.length; no++)
 				{
 					//Add the icon image to the game also
-					images.add(new GameImage(weaponSheets[no]+"_ICON.png"));
+					images.add(new GameImage(weapons[no]+"_ICON.png"));
 					
 					image = ImageIO.read(new File(
-							weaponSheets[no] + ".png"));
+							weapons[no] + ".png"));
 					double locationX = image.getWidth() / 2;
 					double locationY = image.getHeight() / 2;
 
@@ -294,8 +297,47 @@ public class Images
 										image.getWidth(), image.getHeight());
 
 						images.add(new GameImage(
-								weaponSheets[no] + "_" + (actualAngle) + ".png",
+								weapons[no] + "_" + (actualAngle) + ".png",
 								newImage));
+					}
+				}
+				
+				images.add(new GameImage("OUTFITARMOR_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
+				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
+
+				String[] projectiles = { "ARROW"};
+
+				for (int no = 0; no < projectiles.length; no++)
+				{
+					
+					image = ImageIO.read(new File(
+							projectiles[no] + ".png"));
+					double locationX = image.getWidth() / 2;
+					double locationY = image.getHeight() / 2;
+
+					for (int angle = 180; angle > -180; angle -= 15)
+					{
+						double rotationRequired = Math.toRadians(angle);
+						AffineTransform tx;
+
+						int actualAngle = angle;
+
+						tx = AffineTransform.getRotateInstance(
+								rotationRequired, locationX, locationY);
+
+						AffineTransformOp op = new AffineTransformOp(tx,
+								AffineTransformOp.TYPE_BILINEAR);
+
+						BufferedImage newImage = op
+								.filter(image, null).getSubimage(0, 0,image.getWidth()-1, image.getHeight()-1);
+
+						
+						images.add(new GameImage(
+								projectiles[no] + "_" + (actualAngle) + ".png",
+								newImage,34,34));
+						ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
 					}
 				}
 				

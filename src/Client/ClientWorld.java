@@ -15,6 +15,7 @@ import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 
 public class ClientWorld
 {
@@ -193,8 +194,7 @@ public class ClientWorld
 	 * @param playerX the position of the player
 	 * @param playerY the position of the player
 	 */
-	public void update(Graphics graphics, int playerX, int playerY,
-			int playerWidth, int playerHeight)
+	public void update(Graphics graphics, int playerX, int playerY)
 	{
 
 		// Get font metrics
@@ -247,26 +247,26 @@ public class ClientWorld
 		
 
 		// Center of the screen
-		int centreX = Client.SCREEN_WIDTH / 2 - playerWidth / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - playerHeight / 2;
+		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - playerHeight) / tileSize);
+		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + playerHeight) / tileSize);
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + ServerPlayer.DEFAULT_HEIGHT) / tileSize);
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length - 1;
 		}
-		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - playerWidth) / tileSize);
+		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH) / tileSize);
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + playerWidth) / tileSize);
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + ServerPlayer.DEFAULT_WIDTH) / tileSize);
 		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;

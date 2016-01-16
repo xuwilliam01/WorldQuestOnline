@@ -172,5 +172,10 @@ public class ClientObject implements Comparable<ClientObject>
 		this.width = width;
 	}
 
+	public void setHeight(int height)
+	{
+		this.height = height;
+	}
+
 	
 }

@@ -18,6 +18,7 @@ import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
+import Server.Projectile.ServerProjectile;
 import Tools.RowCol;
 
 /**
@@ -33,6 +34,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public final static int PLAYER_Y = 50;
 	public final static int MAX_INVENTORY = 25;
 	public static final int MAX_WEAPONS = 4;
+	
+	public final static int DEFAULT_WIDTH = 34;
+	public final static int DEFAULT_HEIGHT = 90;
 
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
@@ -41,14 +45,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	// The starting mana and hp for the player
 	public final static int PLAYER_START_HP = 100;
 	public final static int PLAYER_START_MANA = 100;
-	
-	//Initial jump and move speeds of the player
+
+	// Initial jump and move speeds of the player
 	public final static int MOVE_SPEED = 5;
 	public final static int JUMP_SPEED = 20;
-	
+
 	public final static int MAX_HSPEED = 10;
 	public final static int MAX_VSPEED = 28;
-	
+
 	private StringBuilder message = new StringBuilder();
 
 	private boolean disconnected = false;
@@ -77,7 +81,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * right, -1 is left)
 	 */
 	private int movingDirection = 0;
-
 
 	/**
 	 * The speed the player moves horizontally
@@ -370,7 +373,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else if (action.equals("FIRE"))
 				{
-					setRowCol(new RowCol(0, 1));
+					setRowCol(new RowCol(2, 7));
 				}
 				else if (action.equals("BLOCK"))
 				{
@@ -537,25 +540,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								&& !object.getType().equals(
 										ServerWorld.SPAWN_TYPE))
 						{
+							int x = (int) (object.getX() + 0.5);
+							int y = (int) (object.getY() + 0.5);
+							int team = ServerCreature.NEUTRAL;
+
 							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
 							{
-								queueMessage("O " + object.getID() + " "
-										+ ((ServerCreature) object).getDrawX()
-										+ " "
-										+ ((ServerCreature) object).getDrawY()
-										+ " "
-										+ object.getImage() + " "
-										+ ((ServerCreature) object).getTeam());
+								x = ((ServerCreature) object).getDrawX();
+								y = ((ServerCreature) object).getDrawY();
+								team = ((ServerCreature) object).getTeam();
 							}
-							else
+							else if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
+
 							{
-								queueMessage("O " + object.getID() + " "
-										+ ((int) (object.getX() + 0.5))
-										+ " " + ((int) (object.getY() + 0.5))
-										+ " "
-										+ object.getImage() + " "
-										+ ServerCreature.NEUTRAL);
+								x = ((ServerProjectile) object).getDrawX();
+								y = ((ServerProjectile) object).getDrawY();
 							}
+
+							queueMessage("O " + object.getID() + " " + x
+									+ " " + y + " " + object.getImage()
+									+ " " + team);
 						}
 						else
 						{
@@ -572,7 +576,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 
 			// Check if the vendor is out of range
-			if (vendor != null && (!collidesWith(vendor) || getHP() <= 0 || isDisconnected()))
+			if (vendor != null
+					&& (!collidesWith(vendor) || getHP() <= 0 || isDisconnected()))
 			{
 				vendor.setIsBusy(false);
 				vendor = null;
@@ -586,14 +591,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			queueMessage("M " + getMaxHP());
 			queueMessage("S " + horizontalMovement);
 			queueMessage("J " + verticalMovement);
-			
-			//Send the player's current damage
+
+			// Send the player's current damage
 			int currentDamage = PUNCHING_DAMAGE;
-			int weaponNo = weaponSelected -'0';
-			if(weaponNo != DEFAULT_WEAPON_SLOT && equippedWeapons[weaponNo] != null)
+			int weaponNo = weaponSelected - '0';
+			if (weaponNo != DEFAULT_WEAPON_SLOT
+					&& equippedWeapons[weaponNo] != null)
 				currentDamage = equippedWeapons[weaponNo].getDamage();
-			queueMessage("D "+currentDamage+" "+getBaseDamage());
-			
+			queueMessage("D " + currentDamage + " " + getBaseDamage());
 
 			while (message.length() < 4000)
 			{
@@ -618,7 +623,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')
 						&& isOnSurface()
-						&& !performingAction &&isAlive())
+						&& !performingAction && isAlive())
 				{
 					String[] tokens = command.split(" ");
 					performingAction = true;
@@ -629,11 +634,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						rightClick = true;
 					}
 				}
-				else if (command.equals("!a") &&isAlive())
+				else if (command.equals("!a") && isAlive())
 				{
 					actionCounter = actionDelay;
 				}
-				else if (command.equals("R") &&isAlive())
+				else if (command.equals("R") && isAlive())
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
@@ -647,7 +652,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("L") &&isAlive())
+				else if (command.equals("L") && isAlive())
 				{
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
@@ -660,7 +665,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setHSpeed(0);
 					}
 				}
-				else if (command.equals("U") && isOnSurface() &&isAlive()
+				else if (command.equals("U") && isOnSurface() && isAlive()
 						&& !inAction())
 				{
 					setVSpeed(-verticalMovement);
@@ -750,7 +755,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// If the buffered reader breaks, the player has disconnected
-		if(vendor != null)
+		if (vendor != null)
 		{
 			vendor.setIsBusy(false);
 			vendor = null;
@@ -875,7 +880,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
-		int yDist = mouseY - Client.Client.SCREEN_HEIGHT / 2;
+		int yDist = mouseY - (Client.Client.SCREEN_HEIGHT / 2 -getHeight()/4);
 
 		System.out.println("X/Y " + xDist + " " + yDist);
 
@@ -883,70 +888,78 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		System.out.println("Angle: " + angle);
 
-		int weaponNo = weaponSelected - '0';
-
 		if (isAlive() && canPerformAction)
 		{
-			if (rightClick)
-			{
-				actionDelay = 3600;
-				action = "BLOCK";
-				rightClick = false;
-			}
-			else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
-			{
-				action = "PUNCH";
-				actionDelay = 16;
 
-				// List of creatures we've already punched so we dont hit them
-				// twice
-				ArrayList<ServerCreature> alreadyPunched = new ArrayList<ServerCreature>();
+			world.add(new ServerProjectile(getX() + getWidth() / 2, getY()
+					+ getHeight() / 4, this, angle, ServerWorld.ARROW_TYPE));
+			actionDelay = 15;
+			action = "FIRE";
 
-				int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
-				int endRow = (int) ((getY() + getHeight()) / ServerWorld.OBJECT_TILE_SIZE);
-				int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
-				int endColumn = (int) ((getX() + getWidth()) / ServerWorld.OBJECT_TILE_SIZE);
-
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						for (ServerObject otherObject : world.getObjectGrid()[row][column])
-						{
-							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
-									&& ((ServerCreature) otherObject)
-											.isAttackable()
-									&& ((ServerCreature) otherObject)
-											.getTeam() != getTeam()
-									&& collidesWith(otherObject)
-									&& !alreadyPunched.contains(otherObject))
-							{
-								((ServerCreature) otherObject).inflictDamage(
-										PUNCHING_DAMAGE + getBaseDamage(), 5);
-								alreadyPunched
-										.add((ServerCreature) otherObject);
-							}
-						}
-					}
-				}
-			}
-			else if (equippedWeapons[weaponNo].getType().contains(
-					ServerWorld.MELEE_TYPE))
-			{
-				actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
-						+ (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
-				world.add(new ServerWeaponSwing(this, 0, -25,
-						equippedWeapons[weaponNo].getActionImage(),
-						(int) (Math.toDegrees(angle) + 0.5),
-						equippedWeapons[weaponNo].getSwingSpeed(),
-						equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
-				action = "SWING";
-			}
-			else if (equippedWeapons[weaponNo].getType().contains(
-					ServerWorld.RANGED_TYPE))
-			{
-				action = "FIRE";
-			}
+			// if (rightClick)
+			// {
+			// actionDelay = 3600;
+			// action = "BLOCK";
+			// rightClick = false;
+			// }
+			// else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
+			// {
+			// action = "PUNCH";
+			// actionDelay = 16;
+			//
+			// // List of creatures we've already punched so we dont hit them
+			// // twice
+			// ArrayList<ServerCreature> alreadyPunched = new
+			// ArrayList<ServerCreature>();
+			//
+			// int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+			// int endRow = (int) ((getY() + getHeight()) /
+			// ServerWorld.OBJECT_TILE_SIZE);
+			// int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
+			// int endColumn = (int) ((getX() + getWidth()) /
+			// ServerWorld.OBJECT_TILE_SIZE);
+			//
+			// for (int row = startRow; row <= endRow; row++)
+			// {
+			// for (int column = startColumn; column <= endColumn; column++)
+			// {
+			// for (ServerObject otherObject :
+			// world.getObjectGrid()[row][column])
+			// {
+			// if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
+			// && ((ServerCreature) otherObject)
+			// .isAttackable()
+			// && ((ServerCreature) otherObject)
+			// .getTeam() != getTeam()
+			// && collidesWith(otherObject)
+			// && !alreadyPunched.contains(otherObject))
+			// {
+			// ((ServerCreature) otherObject).inflictDamage(
+			// PUNCHING_DAMAGE + getBaseDamage(), 5);
+			// alreadyPunched
+			// .add((ServerCreature) otherObject);
+			// }
+			// }
+			// }
+			// }
+			// }
+			// else if (equippedWeapons[weaponNo].getType().contains(
+			// ServerWorld.MELEE_TYPE))
+			// {
+			// actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
+			// + (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
+			// world.add(new ServerWeaponSwing(this, 0, -25,
+			// equippedWeapons[weaponNo].getActionImage(),
+			// (int) (Math.toDegrees(angle) + 0.5),
+			// equippedWeapons[weaponNo].getSwingSpeed(),
+			// equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
+			// action = "SWING";
+			// }
+			// else if (equippedWeapons[weaponNo].getType().contains(
+			// ServerWorld.RANGED_TYPE))
+			// {
+			// action = "FIRE";
+			// }
 		}
 
 		// if (weaponSelected == '0')
@@ -1025,10 +1038,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		world.add(new ServerDamageIndicator(damageX, damageY, Integer
 				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
 
-		if (getHP() <= 0 &&isAlive())
+		if (getHP() <= 0 && isAlive())
 		{
 			setAlive(false);
-			//setHeight(getWidth());
+			// setHeight(getWidth());
 			dropInventory();
 
 			verticalMovement = 0;
@@ -1048,7 +1061,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			setHSpeed(0);
 			setVSpeed(0);
-			
+
 			setAttackable(false);
 
 		}
@@ -1473,24 +1486,25 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.maxMana = maxMana;
 	}
 
-	public int getHorizontalMovement() {
+	public int getHorizontalMovement()
+	{
 		return horizontalMovement;
 	}
 
-	public void setHorizontalMovement(int horizontalMovement) {
-		
-		this.horizontalMovement = Math.min(horizontalMovement,MAX_HSPEED);
+	public void setHorizontalMovement(int horizontalMovement)
+	{
+
+		this.horizontalMovement = Math.min(horizontalMovement, MAX_HSPEED);
 	}
 
-	public int getVerticalMovement() {
+	public int getVerticalMovement()
+	{
 		return verticalMovement;
 	}
 
-	public void setVerticalMovement(int verticalMovement) {
-		this.verticalMovement = Math.min(verticalMovement,MAX_VSPEED);
+	public void setVerticalMovement(int verticalMovement)
+	{
+		this.verticalMovement = Math.min(verticalMovement, MAX_VSPEED);
 	}
-	
-	
-	
 
 }

@@ -32,7 +32,11 @@ public class ServerWorld
 	// Character definitions for each type of object
 	public final static char PROJECTILE_TYPE = 'P';
 	public final static String BULLET_TYPE = PROJECTILE_TYPE + "B";
-	public final static String EXPLOSION_TYPE = PROJECTILE_TYPE + "E";
+	
+	public final static String ARROW_TYPE = PROJECTILE_TYPE +"A";
+	
+	
+	public final static String EXPLOSION_TYPE = "E";
 
 	public final static char CREATURE_TYPE = 'C';
 	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";
@@ -332,7 +336,7 @@ public class ServerWorld
 							{
 								if (otherObject.exists())
 								{
-									if (object.getType().equals(BULLET_TYPE))
+									if (object.getType().charAt(0)== PROJECTILE_TYPE)
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
 												&& ((ServerCreature) otherObject)
@@ -342,7 +346,7 @@ public class ServerWorld
 												&& ((ServerCreature) otherObject)
 												.getTeam() != ((ServerProjectile) object)
 												.getOwner().getTeam()
-												&& object
+												&& ((ServerProjectile) object)
 												.collidesWith(otherObject))
 										{
 											double knockBack = ((ServerProjectile) object)
@@ -360,33 +364,6 @@ public class ServerWorld
 											((ServerProjectile) object)
 											.destroy();
 										}
-										// Don't need this
-										// else if
-										// (otherObject.getType().contains(
-										// NPC_TYPE)
-										// && object.collidesWith(otherObject)
-										// &&
-										// ((ServerCreature)otherObject).getTeam()
-										// != ((ServerProjectile)
-										// object).getOwner().getTeam())
-										// {
-										// double knockBack =
-										// ((ServerProjectile) object)
-										// .getKnockBack();
-										//
-										// if (object.getHSpeed() < 0)
-										// {
-										// knockBack *= -1;
-										// }
-										//
-										// ((ServerEnemy) otherObject)
-										// .inflictDamage(
-										// ((ServerProjectile) object)
-										// .getDamage(),
-										// knockBack);
-										// ((ServerProjectile)
-										// object).destroy();
-										// }
 									}
 									// If a player collided with an item
 									else if (otherObject.getType().charAt(0) == ITEM_TYPE
@@ -770,15 +747,15 @@ public class ServerWorld
 					}
 					else if (object.getType().charAt(0) == PROJECTILE_TYPE)
 					{
-						if ((!moveHorizontal || !moveVertical)
-								&& object.getType().equals(BULLET_TYPE))
+						if ((!moveHorizontal || !moveVertical))
 						{
 							((ServerProjectile) object).destroy();
 						}
-						else if (object.getType().equals(EXPLOSION_TYPE))
+						else
 						{
-							((ServerProjectile) object).updateExplosion();
+							((ServerProjectile) object).update();
 						}
+						
 					}
 					else if (object.getType().charAt(0) == ANIMATION_TYPE)
 					{
