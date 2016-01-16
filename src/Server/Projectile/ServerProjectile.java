@@ -1,6 +1,7 @@
 package Server.Projectile;
 
 import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 import Imports.Images;
 import Server.ServerFlyingObject;
@@ -59,6 +60,11 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The frame of animation for the projectile
 	 */
 	private int animationCounter;
+	
+	/**
+	 * The ID's of the objects that have already collided with this projectile
+	 */
+	private ArrayList<Integer> objectsCollided;
 
 	/**
 	 * Constructor for a projectile
@@ -80,12 +86,14 @@ public class ServerProjectile extends ServerFlyingObject
 		ownerID = owner.getID();
 
 		setAngle(angle, true);
+		
+		objectsCollided = new ArrayList<Integer>();
 
 		switch (type)
 		{
 		case ServerWorld.ARROW_TYPE:
 			setImage("ARROW_0.png");
-			setGravity(0.3);
+			setGravity(0.2);
 			setDamage(5);
 			setSpeed(20);
 			animated = false;
@@ -163,6 +171,27 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		return hitbox.intersects(other.getX(), other.getY(), other.getWidth(),
 				other.getHeight());
+	}
+	
+	/**
+	 * Checks whether the other object has already collided with this weapon
+	 * @param other
+	 * @return
+	 */
+	public boolean hasCollided(ServerObject other)
+	{
+		return objectsCollided.contains(other.getID());
+	}
+	
+	/**
+	 * Adds the other object to the list of objects that have already collided
+	 * with this weapon swing
+	 * @param other
+	 * @return
+	 */
+	public void addCollided(ServerObject other)
+	{
+		objectsCollided.add(other.getID());
 	}
 
 	/**
