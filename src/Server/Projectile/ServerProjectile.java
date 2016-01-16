@@ -51,6 +51,16 @@ public class ServerProjectile extends ServerFlyingObject
 	private int length;
 
 	/**
+	 * Whether or not the projectile is animated
+	 */
+	private boolean animated;
+
+	/**
+	 * The frame of animation for the projectile
+	 */
+	private int animationCounter;
+
+	/**
 	 * Constructor for a projectile
 	 * @param x
 	 * @param y
@@ -62,15 +72,14 @@ public class ServerProjectile extends ServerFlyingObject
 	 * @param speed
 	 * @param angle
 	 */
-	public ServerProjectile(double x, double y, ServerCreature owner, double angle, String type)
+	public ServerProjectile(double x, double y, ServerCreature owner,
+			double angle, String type)
 	{
 		super(x, y, 0, 0, 0, "", 0, angle, type);
 		this.owner = owner;
 		ownerID = owner.getID();
-	
-		
-		
-		setAngle(angle,true);
+
+		setAngle(angle, true);
 
 		switch (type)
 		{
@@ -79,12 +88,14 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0.3);
 			setDamage(5);
 			setSpeed(20);
+			animated = false;
 			break;
 		case ServerWorld.FIREBALL_TYPE:
-			setImage("FIREBALL_0.png");
+			setImage("FIREBALL_0_0.png");
 			setGravity(0);
 			setDamage(10);
 			setSpeed(15);
+			animated = true;
 			break;
 		}
 
@@ -102,24 +113,45 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void update()
 	{
+
 		setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
-		
+
 		hitbox.setLine(getX()
 				- ((length / 2) * Math.cos(getAngle())), getY()
 				- ((length / 2) * Math.sin(getAngle())), getX()
 				+ ((length / 2) * Math.cos(getAngle())), getY()
 				+ ((length / 2) * Math.sin(getAngle())));
-		
 
 		int imageAngle = (int) (Math.round(Math.toDegrees(getAngle()) / 15.0) * 15);
-		
+
 		if (imageAngle <= -180)
 		{
-			imageAngle = 180 - (-180 - imageAngle); 
+			imageAngle = 180 - (-180 - imageAngle);
 		}
-		
-		setImage(getBaseImage() + "_" + imageAngle + ".png");
-		
+
+		if (animated)
+		{
+			animationCounter++;
+			if (animationCounter >= 20)
+			{
+				animationCounter = 0;
+			}
+			
+			int imageNo = 1;
+			
+			if (animationCounter < 10)
+			{
+				imageNo = 0;
+			}
+			
+			setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
+					+ ".png");
+		}
+		else
+		{
+			setImage(getBaseImage() + "_" + imageAngle + ".png");
+		}
+
 	}
 
 	/**
@@ -146,11 +178,14 @@ public class ServerProjectile extends ServerFlyingObject
 			setMapVisible(false);
 			damage = 0;
 			counter = 0;
-			setX(getX() - 5);
-			setY(getY() - 5);
+			setX(getX() - 32);
+			setY(getY() - 32);
 			setImage("EXPLOSION2_0.png");
 		}
-		super.destroy();
+		else
+		{
+			super.destroy();
+		}
 
 	}
 
@@ -191,8 +226,7 @@ public class ServerProjectile extends ServerFlyingObject
 		{
 			super.destroy();
 		}
-		
-		
+
 		counter++;
 
 	}

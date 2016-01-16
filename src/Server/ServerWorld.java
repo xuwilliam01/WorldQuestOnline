@@ -36,8 +36,7 @@ public class ServerWorld
 	public final static String ARROW_TYPE = PROJECTILE_TYPE +"A";
 	public final static String FIREBALL_TYPE = PROJECTILE_TYPE +"F";
 	
-	
-	public final static String EXPLOSION_TYPE = "E";
+
 
 	public final static char CREATURE_TYPE = 'C';
 	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";
@@ -89,6 +88,9 @@ public class ServerWorld
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
+	
+	
+	public final static String EXPLOSION_TYPE = ANIMATION_TYPE + "E";
 
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
@@ -763,6 +765,10 @@ public class ServerWorld
 						if (object.getType().equals(WEAPON_SWING_TYPE))
 						{
 							((ServerWeaponSwing) object).update();
+						}
+						else if (object.getType().equals(EXPLOSION_TYPE))
+						{
+							((ServerProjectile)object).updateExplosion();
 						}
 					}
 					else if (object.getType().charAt(0) == CREATURE_TYPE)

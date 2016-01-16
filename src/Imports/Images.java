@@ -125,7 +125,7 @@ public class Images
 						"EXPLOSION2_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/64; no++)
 				{
-					images.add(new GameImage("EXPLOSION_" + no + IMAGE_FORMAT,
+					images.add(new GameImage("EXPLOSION2_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 64, 0, 64, 64)));
 				}
 				
@@ -340,15 +340,19 @@ public class Images
 
 						AffineTransformOp op = new AffineTransformOp(tx,
 								AffineTransformOp.TYPE_BILINEAR);
-
-						BufferedImage newImage = op
-								.filter(image, null).getSubimage(0, 0,image.getWidth()-1, image.getHeight()-1);
+						
+						BufferedImage newImage = op.filter(image, null);
+			
+						int cropWidth = Math.min(image.getWidth(), newImage.getWidth());
+						int cropHeight = Math.min(image.getHeight(), newImage.getHeight());
+								
+						newImage = newImage.getSubimage(0, 0,cropWidth, cropHeight);
 
 						
 						images.add(new GameImage(
 								projectiles[no] + "_" + (actualAngle) + ".png",
 								newImage,34,34));
-						ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
+						//ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
 					}
 				}
 				
