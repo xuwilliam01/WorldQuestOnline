@@ -52,6 +52,11 @@ public class ServerProjectile extends ServerFlyingObject
 	private int length;
 
 	/**
+	 * Whether or not the image should rotate to face the angle
+	 */
+	private boolean faceAngle;
+
+	/**
 	 * Whether or not the projectile is animated
 	 */
 	private boolean animated;
@@ -60,7 +65,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The frame of animation for the projectile
 	 */
 	private int animationCounter;
-	
+
 	/**
 	 * The ID's of the objects that have already collided with this projectile
 	 */
@@ -86,7 +91,7 @@ public class ServerProjectile extends ServerFlyingObject
 		ownerID = owner.getID();
 
 		setAngle(angle, true);
-		
+
 		objectsCollided = new ArrayList<Integer>();
 
 		switch (type)
@@ -97,6 +102,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setDamage(5);
 			setSpeed(20);
 			animated = false;
+			faceAngle = true;
 			break;
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0.png");
@@ -104,6 +110,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setDamage(10);
 			setSpeed(15);
 			animated = true;
+			faceAngle = true;
 			break;
 		}
 
@@ -130,11 +137,17 @@ public class ServerProjectile extends ServerFlyingObject
 				+ ((length / 2) * Math.cos(getAngle())), getY()
 				+ ((length / 2) * Math.sin(getAngle())));
 
-		int imageAngle = (int) (Math.round(Math.toDegrees(getAngle()) / 15.0) * 15);
+		int imageAngle = 0;
 
-		if (imageAngle <= -180)
+		if (faceAngle)
 		{
-			imageAngle = 180 - (-180 - imageAngle);
+			imageAngle = (int) (Math
+					.round(Math.toDegrees(getAngle()) / 15.0) * 15);
+
+			if (imageAngle <= -180)
+			{
+				imageAngle = 180 - (-180 - imageAngle);
+			}
 		}
 
 		if (animated)
@@ -144,24 +157,38 @@ public class ServerProjectile extends ServerFlyingObject
 			{
 				animationCounter = 0;
 			}
-			
+
 			int imageNo = 1;
-			
+
 			if (animationCounter < 10)
 			{
 				imageNo = 0;
 			}
-			
-			setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
-					+ ".png");
+
+			if (faceAngle)
+			{
+				setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
+						+ ".png");
+			}
+			else
+			{
+				setImage(getBaseImage() + "_" + imageNo + ".png");
+			}
 		}
 		else
 		{
-			setImage(getBaseImage() + "_" + imageAngle + ".png");
+			if (faceAngle)
+			{
+				setImage(getBaseImage() + "_" + imageAngle + ".png");
+			}
+			else
+			{
+				setImage(getBaseImage() + ".png");
+			}
 		}
 
 		counter++;
-		
+
 		if (counter >= 180)
 		{
 			destroy();
@@ -178,7 +205,7 @@ public class ServerProjectile extends ServerFlyingObject
 		return hitbox.intersects(other.getX(), other.getY(), other.getWidth(),
 				other.getHeight());
 	}
-	
+
 	/**
 	 * Checks whether the other object has already collided with this weapon
 	 * @param other
@@ -188,7 +215,7 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		return objectsCollided.contains(other.getID());
 	}
-	
+
 	/**
 	 * Adds the other object to the list of objects that have already collided
 	 * with this weapon swing
@@ -214,7 +241,7 @@ public class ServerProjectile extends ServerFlyingObject
 			damage = 0;
 			counter = 0;
 			setX(getX() - 32);
-			setY(getY() - 32);
+			setY(getY() - 48);
 			setImage("EXPLOSION2_0.png");
 		}
 		else
