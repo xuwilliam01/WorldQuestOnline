@@ -892,7 +892,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 
 			world.add(new ServerProjectile(getX() + getWidth() / 2, getY()
+					+ getHeight() / 4, this, angle, ServerWorld.FIREBALL_TYPE));
+			
+			world.add(new ServerProjectile(getX() + getWidth() / 2, getY()
 					+ getHeight() / 4, this, angle, ServerWorld.ARROW_TYPE));
+			
 			actionDelay = 15;
 			action = "FIRE";
 
