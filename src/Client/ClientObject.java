@@ -5,13 +5,14 @@ import java.awt.Image;
 import com.sun.javafx.tk.FontMetrics;
 
 import Imports.Images;
+import Server.ServerWorld;
 
 /**
  * A class that acts as a blueprint for all objects in the game
+ * 
  * @author Alex Raita & William Xu
  */
-public class ClientObject implements Comparable<ClientObject>
-{
+public class ClientObject implements Comparable<ClientObject> {
 
 	/**
 	 * The team of the object Objects with neutral teams won't have number
@@ -49,76 +50,83 @@ public class ClientObject implements Comparable<ClientObject>
 	 */
 	private int width;
 
-	public String getImageName()
-	{
-		return imageName;
-	}
-
-	public void setImageName(String imageName)
-	{
-		this.imageName = imageName;
-	}
-
 	/**
 	 * The unique ID of the object
 	 */
 	private int id;
 
 	/**
+	 * The type of object, related directly to the ServerWorld
+	 */
+	private String type;
+
+	/**
+	 * The hint that will be displayed when a player is over this object
+	 */
+	private String hint = "";
+
+	/**
 	 * Constructor
 	 */
-	public ClientObject(int id, int x, int y, String image, int team)
-	{
+	public ClientObject(int id, int x, int y, String image, int team, String type) {
 		this.team = team;
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.imageName = image;
+		this.type = type;
 
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
-		if (image.charAt(0) != 't')
-		{
+		if (image.charAt(0) != 't') {
 			this.image = Images.getImage(image);
 			height = this.image.getHeight(null);
 			width = this.image.getWidth(null);
-		}
-		else
-		{
+		} else {
 			System.out.println("This is a damage indicator");
 			height = 0;
 			width = 0;
 		}
+
+		// Select a hint for this object, if it has one
+		switch (type) 
+		{
+		case ServerWorld.CASTLE_TYPE:
+			hint = "Drop money on your castle to upgrade the level of your goblins";
+			break;
+		case ServerWorld.VENDOR_TYPE:
+			hint = "Press 'E' to open/close the shop";
+			break;
+		case ServerWorld.CHEST_TYPE:
+			hint = "Destroy the chest and it will drop items";
+			break;
+
+		}
 	}
 
-	public int getTeam()
-	{
+	public int getTeam() {
 		return team;
 	}
 
-	public void setTeam(int team)
-	{
+	public void setTeam(int team) {
 		this.team = team;
 	}
 
-	public Image getImage()
-	{
+	public Image getImage() {
 		return image;
 	}
 
 	/**
 	 * Change the image of the object
+	 * 
 	 * @param image
 	 */
-	public void setImage(String image)
-	{
-		if (!image.equals(imageName))
-		{
+	public void setImage(String image) {
+		if (!image.equals(imageName)) {
 			imageName = image;
 
 			// If the image of the object is text, don't import an image
-			if (image.charAt(0) != 't')
-			{
+			if (image.charAt(0) != 't') {
 				this.image = Images.getImage(image);
 				height = this.image.getHeight(null);
 				width = this.image.getWidth(null);
@@ -126,56 +134,65 @@ public class ClientObject implements Comparable<ClientObject>
 		}
 	}
 
-	public int getID()
-	{
+	public boolean collidesWith(ClientObject other) {
+		if (x <= other.getX() + other.getWidth() && (x + width) >= other.getX() && y <= other.getY() + other.getHeight()
+		&& (y + height) >= other.getY()) {
+			return true;
+		}
+		return false;
+	}
+
+	public int getID() {
 		return id;
 	}
 
-	public int getX()
-	{
+	public int getX() {
 		return x;
 	}
 
-	public void setX(int x)
-	{
+	public void setX(int x) {
 		this.x = x;
 	}
 
-	public int getY()
-	{
+	public int getY() {
 		return y;
 	}
 
-	public void setY(int y)
-	{
+	public void setY(int y) {
 		this.y = y;
 	}
 
-	public int getHeight()
-	{
+	public int getHeight() {
 		return height;
 	}
 
-	public int getWidth()
-	{
+	public int getWidth() {
 		return width;
 	}
 
 	@Override
-	public int compareTo(ClientObject other)
-	{
+	public int compareTo(ClientObject other) {
 		return id - other.getID();
 	}
 
-	public void setWidth(int width)
-	{
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
-	public void setHeight(int height)
-	{
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
-	
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getHint() {
+		return hint;
+	}
+
 }

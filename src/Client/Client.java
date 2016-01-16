@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.ServerEngine;
+import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
@@ -191,7 +192,8 @@ MouseMotionListener
 			String image = tokens[3];
 			int team = Integer.parseInt(tokens[4]);
 
-			player = new ClientObject(id, x, y, image, team);
+			player = new ClientObject(id, x, y, image, team, ServerWorld.PLAYER_TYPE);
+			world.setPlayer(player);
 		}
 		catch (IOException e)
 		{
@@ -307,7 +309,7 @@ MouseMotionListener
 							}
 							world.setObject(id,x, y,
 									tokens[++token], Integer
-									.parseInt(tokens[++token]));
+									.parseInt(tokens[++token]),tokens[++token]);
 						}
 						else if (tokens[token].equals("P"))
 						{

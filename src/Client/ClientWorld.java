@@ -72,6 +72,11 @@ public class ClientWorld
 	public static double DAMAGE_FONT_WIDTH = 0;
 
 	/**
+	 * The centered player
+	 */
+	ClientObject player = null;
+	
+	/**
 	 * Constructor for the client's side of the world
 	 * @param rows the number of rows in the tile grid
 	 * @param columns the number of columns in the tile grid
@@ -153,13 +158,14 @@ public class ClientWorld
 	/**
 	 * Add an object (not a tile) to the client, or update it if it already
 	 * exists
+	 * @param type 
 	 * @param object the object to add
 	 */
-	public void setObject(int id, int x, int y, String image, int team)
+	public void setObject(int id, int x, int y, String image, int team, String type)
 	{
 		if (objects[id] == null)
 		{
-			objects[id] = new ClientObject(id, x, y, image, team);
+			objects[id] = new ClientObject(id, x, y, image, team, type);
 		}
 		else
 		{
@@ -340,6 +346,13 @@ public class ClientWorld
 						}
 						graphics.drawImage(image, x, y,
 								null);
+						
+						//Draw a hint if necessary
+						if(player.collidesWith(object) && !object.getHint().equals(""))
+						{
+							graphics.setColor(Color.black);
+							graphics.drawString(object.getHint(), player.getX(), 50);
+						}
 					}
 					// If there is no image, then the object is text/numbers
 					else
@@ -429,6 +442,11 @@ public class ClientWorld
 	public void setTileSize(int tileSize)
 	{
 		this.tileSize = tileSize;
+	}
+	
+	public void setPlayer(ClientObject player)
+	{
+		this.player = player;
 	}
 
 }
