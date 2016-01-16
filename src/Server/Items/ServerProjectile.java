@@ -1,4 +1,4 @@
-package Server.Projectile;
+package Server.Items;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -122,6 +122,14 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage(12);
 			setSpeed(6);
+			animated = true;
+			faceAngle = true;
+			break;
+		case ServerWorld.DARKBALL_TYPE:
+			setImage("DARKBALL_0_0.png");
+			setGravity(0);
+			setDamage(20);
+			setSpeed(12);
 			animated = true;
 			faceAngle = true;
 			break;

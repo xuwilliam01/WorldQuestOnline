@@ -170,7 +170,7 @@ public abstract class ServerCreature extends ServerObject {
 
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
-			double damageY = Math.random() * getHeight() / 2 + getY();
+			double damageY = Math.random() * getHeight() / 2 + getY() + getHeight()/4;
 			char colour = ServerDamageIndicator.YELLOW_TEXT;
 
 			if (getType().equals(ServerWorld.PLAYER_TYPE)) {

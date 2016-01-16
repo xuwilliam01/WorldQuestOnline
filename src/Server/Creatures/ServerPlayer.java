@@ -16,9 +16,9 @@ import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
+import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
-import Server.Projectile.ServerProjectile;
 import Tools.RowCol;
 
 /**
@@ -371,9 +371,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setRowCol(new RowCol(2, 8));
 					}
 				}
-				else if (action.equals("FIRE"))
+				else if (action.equals("BOW"))
 				{
 					setRowCol(new RowCol(2, 7));
+				}
+				else if (action.equals("MAGIC"))
+				{
+					if (actionCounter < actionDelay / 3.0)
+					{
+						setRowCol(new RowCol(2, 4));
+					}
+					else
+					{
+						setRowCol(new RowCol(2, 5));
+					}
 				}
 				else if (action.equals("BLOCK"))
 				{
@@ -899,13 +910,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			else
 			{
-				int random = (int) (Math.random() * 3);
+				int random = (int) (Math.random() * 4);
 				if (random == 0)
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
 									+ getHeight() / 4, this, angle,
 							ServerWorld.FIREBALL_TYPE));
+					action = "MAGIC";
 				}
 				else if (random == 1)
 				{
@@ -914,16 +926,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							getY()
 									+ getHeight() / 4, this, angle,
 							ServerWorld.ICEBALL_TYPE));
+					action = "MAGIC";
 				}
 				else if (random == 2)
+				{
+
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()
+									+ getHeight() / 4, this, angle,
+							ServerWorld.DARKBALL_TYPE));
+					action = "MAGIC";
+				}
+				else if (random == 3)
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
 									+ getHeight() / 4, this, angle,
 							ServerWorld.ARROW_TYPE));
+					action = "BOW";
 				}
 				actionDelay = 15;
-				action = "FIRE";
 
 			}
 
@@ -983,7 +1005,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// else if (equippedWeapons[weaponNo].getType().contains(
 			// ServerWorld.RANGED_TYPE))
 			// {
-			// action = "FIRE";
+			// action = "BOW";
 			// }
 		}
 

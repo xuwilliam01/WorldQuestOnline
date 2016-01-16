@@ -50,37 +50,22 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-//		String[] projectiles = { "ARROW"};
-//
-//		for (int no = 0; no < projectiles.length; no++)
-//		{
-//			
-//			BufferedImage image = ImageIO.read(new File(
-//					projectiles[no] + ".png"));
-//			double locationX = image.getWidth() / 2;
-//			double locationY = image.getHeight() / 2;
-//
-//				double rotationRequired = Math.toRadians(angle);
-//				AffineTransform tx;
-//
-//				int actualAngle = angle;
-//
-//				tx = AffineTransform.getRotateInstance(
-//						rotationRequired, locationX, locationY);
-//
-//				AffineTransformOp op = new AffineTransformOp(tx,
-//						AffineTransformOp.TYPE_BILINEAR);
-//
-//				BufferedImage newImage = op
-//						.filter(image, null).getSubimage(0, 0,image.getWidth()-1, image.getHeight()-1);
-//
-//				
-//				images.add(new GameImage(
-//						projectiles[no] + "_" + (actualAngle) + ".png",
-//						newImage,34,34));
-//				ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
-//			
-//		}
+		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
+		BufferedImage[][] imageTiles = new BufferedImage[image
+				.getHeight() / 32][image.getWidth() / 32];
+		for (int row = 0; row < imageTiles.length; row++)
+		{
+			for (int column = 0; column < imageTiles[0].length; column++)
+			{
+				imageTiles[row][column] = image.getSubimage(
+						column * 32, row * 32, 32, 32);
+			}
+		}
+
+		// Rotate the images needed and write to file
+		image = imageTiles[14][2];
+		ImageIO.write(image, "PNG", new File(
+				"DARKWAND_ICON.png"));
 
 	}
 
@@ -315,9 +300,19 @@ public class Images
 								.filter(image, null).getSubimage(0, 0,
 										image.getWidth(), image.getHeight());
 
+						if (weapons[no].contains("HA"))
+						{
+							images.add(new GameImage(
+									weapons[no] + "_" + (actualAngle) + ".png",
+									newImage));
+						}
+						else
+						{
 						images.add(new GameImage(
 								weapons[no] + "_" + (actualAngle) + ".png",
 								newImage));
+						}
+						
 					}
 				}
 				
@@ -326,7 +321,7 @@ public class Images
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1"};
+				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1", "DARKBALL_0", "DARKBALL_1"};
 
 				for (int no = 0; no < projectiles.length; no++)
 				{
@@ -350,9 +345,21 @@ public class Images
 								AffineTransformOp.TYPE_BILINEAR);
 						
 						BufferedImage newImage = op.filter(image, null);
-			
+						
+						if (angle <-90 || angle >= 90)
+						{
+							tx = AffineTransform.getScaleInstance(-1, 1);
+							tx.translate(-newImage.getWidth(), 0);
+							op = new AffineTransformOp(tx,
+									AffineTransformOp.TYPE_BILINEAR);
+							newImage = op.filter(image, null);
+						}
+						
+						
 						int cropWidth = Math.min(image.getWidth(), newImage.getWidth());
 						int cropHeight = Math.min(image.getHeight(), newImage.getHeight());
+						
+						
 								
 						newImage = newImage.getSubimage(0, 0,cropWidth, cropHeight);
 
@@ -363,6 +370,11 @@ public class Images
 						{
 							width = 34;
 							height = 34;
+						}
+						else if (no == 5 || no == 6)
+						{
+							width = 58;
+							height = 58;
 						}
 						else
 						{
@@ -430,8 +442,8 @@ public class Images
 
 			images.add(new GameImage("VENDOR.png", 7*ServerWorld.TILE_SIZE, 7*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("RED_CASTLE.png", 13*ServerWorld.TILE_SIZE, 26*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLUE_CASTLE.png", 13*ServerWorld.TILE_SIZE, 26*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BULLET.png"));
 			images.add(new GameImage("COIN.png",10,10));
 			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
