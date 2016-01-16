@@ -65,7 +65,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The frame of animation for the projectile
 	 */
 	private int animationCounter;
-	
+
 	/**
 	 * Number of frames the explosion lasts
 	 */
@@ -101,13 +101,37 @@ public class ServerProjectile extends ServerFlyingObject
 
 		switch (type)
 		{
-		case ServerWorld.ARROW_TYPE:
-			setImage("ARROW_0.png");
+		case ServerWorld.WOODARROW_TYPE:
+			setImage("WOODARROW_0.png");
 			setGravity(0.2);
 			setDamage(5);
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
+			break;
+		case ServerWorld.STEELARROW_TYPE:
+			setImage("STEELARROW_0.png");
+			setGravity(0.2);
+			setDamage(10);
+			setSpeed(20);
+			animated = false;
+			faceAngle = true;
+			break;
+		case ServerWorld.MEGAARROW_TYPE:
+			setImage("MEGAARROW_0.png");
+			setGravity(0);
+			setDamage(15);
+			setSpeed(20);
+			animated = false;
+			faceAngle = true;
+			break;
+		case ServerWorld.BULLET_TYPE:
+			setImage("BULLET_0.png");
+			setGravity(0.4);
+			setDamage(5);
+			setSpeed(15);
+			animated = false;
+			faceAngle = false;
 			break;
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0.png");
@@ -134,12 +158,13 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		}
-
-		length = Images.getGameImage(getImage()).getWidth();
-
-		hitbox = new Line2D.Double(getX(), getY(), getX()
-				+ ((length / 2) * Math.cos(getAngle())), getY()
-				+ ((length / 2) * Math.sin(getAngle())));
+		if (faceAngle)
+		{
+			length = Images.getGameImage(getImage()).getWidth();
+			hitbox = new Line2D.Double(getX(), getY(), getX()
+					+ ((length / 2) * Math.cos(getAngle())), getY()
+					+ ((length / 2) * Math.sin(getAngle())));
+		}
 	}
 
 	/**
@@ -147,17 +172,17 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void update()
 	{
-
-		setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
-
-		hitbox.setLine(getX(), getY(),
-				getX() + ((length / 2) * Math.cos(getAngle())), getY()
-						+ ((length / 2) * Math.sin(getAngle())));
-
 		int imageAngle = 0;
-
 		if (faceAngle)
+
 		{
+			setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
+
+			hitbox.setLine(getX(), getY(),
+					getX() + ((length / 2) * Math.cos(getAngle())), getY()
+							+ ((length / 2) * Math.sin(getAngle())));
+
+			
 			imageAngle = (int) (Math
 					.round(Math.toDegrees(getAngle()) / 15.0) * 15);
 
@@ -198,10 +223,6 @@ public class ServerProjectile extends ServerFlyingObject
 			{
 				setImage(getBaseImage() + "_" + imageAngle + ".png");
 			}
-			else
-			{
-				setImage(getBaseImage() + ".png");
-			}
 		}
 
 		counter++;
@@ -219,8 +240,13 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public boolean collidesWith(ServerObject other)
 	{
-		return hitbox.intersects(other.getX(), other.getY(), other.getWidth(),
-				other.getHeight());
+		if (faceAngle)
+		{
+			return hitbox.intersects(other.getX(), other.getY(),
+					other.getWidth(),
+					other.getHeight());
+		}
+		return super.collidesWith(other);
 	}
 
 	/**
@@ -249,7 +275,20 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void destroy()
 	{
-		if (getType() == ServerWorld.FIREBALL_TYPE)
+		if (getType() == ServerWorld.BULLET_TYPE)
+		{
+			setType(ServerWorld.EXPLOSION_TYPE);
+			setSpeed(0);
+			setSolid(false);
+			setMapVisible(false);
+			damage = 0;
+			counter = 0;
+			setX(getX() - 16);
+			setY(getY() - 16);
+			setImage("EXPLOSION0_0.png");
+			noOfExplosionFrames = 7;
+		}
+		else if (getType() == ServerWorld.FIREBALL_TYPE)
 		{
 			setType(ServerWorld.EXPLOSION_TYPE);
 			setSpeed(0);

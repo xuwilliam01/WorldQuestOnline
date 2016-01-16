@@ -50,7 +50,7 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_1.png"));
+		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_3.png"));
 		BufferedImage[][] imageTiles = new BufferedImage[image
 				.getHeight() / 32][image.getWidth() / 32];
 		for (int row = 0; row < imageTiles.length; row++)
@@ -62,10 +62,23 @@ public class Images
 			}
 		}
 
-		// Rotate the images needed and write to file
-		image = imageTiles[14][2];
-		ImageIO.write(image, "PNG", new File(
-				"DARKWAND_ICON.png"));
+		image = imageTiles[2][5];
+		
+		double rotationRequired = Math.toRadians(135);
+		AffineTransform tx;
+
+		tx = AffineTransform.getRotateInstance(
+				rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
+
+		AffineTransformOp op = new AffineTransformOp(tx,
+				AffineTransformOp.TYPE_BILINEAR);
+
+		BufferedImage newImage = op
+				.filter(image, null);
+		
+		ImageIO.write(newImage, "PNG", new File(
+				"STEELARROW.png"));
+	
 
 	}
 
@@ -100,7 +113,7 @@ public class Images
 				
 				image = ImageIO.read(new File(
 						"EXPLOSION0_SHEET.png"));
-				for (int no = 0; no < 7; no++)
+				for (int no = 0; no < image.getWidth()/32; no++)
 				{
 					images.add(new GameImage("EXPLOSION0_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
@@ -301,8 +314,6 @@ public class Images
 						double rotationRequired = Math.toRadians(angle);
 						AffineTransform tx;
 
-						int actualAngle = angle;
-
 						tx = AffineTransform.getRotateInstance(
 								rotationRequired, locationX, locationY);
 
@@ -316,13 +327,13 @@ public class Images
 						if (weapons[no].contains("HA"))
 						{
 							images.add(new GameImage(
-									weapons[no] + "_" + (actualAngle) + ".png",
+									weapons[no] + "_" + angle + ".png",
 									newImage));
 						}
 						else
 						{
 						images.add(new GameImage(
-								weapons[no] + "_" + (actualAngle) + ".png",
+								weapons[no] + "_" + angle + ".png",
 								newImage));
 						}
 						
@@ -334,11 +345,12 @@ public class Images
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1", "DARKBALL_0", "DARKBALL_1"};
+				images.add(new GameImage("BULLET_0.png"));
+				
+				String[] projectiles = {"WOODARROW","STEELARROW","MEGAARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1", "DARKBALL_0", "DARKBALL_1"};
 
 				for (int no = 0; no < projectiles.length; no++)
 				{
-					
 					image = ImageIO.read(new File(
 							projectiles[no] + ".png"));
 					double locationX = image.getWidth() / 2;
@@ -378,23 +390,23 @@ public class Images
 								
 						newImage = newImage.getSubimage(0, 0,cropWidth, cropHeight);
 
-						int height = 0;
-						int width = 0;
+						int height = 42;
+						int width = 42;
 						
-						if (no == 0)
-						{
-							width = 34;
-							height = 34;
-						}
-						else if (no == 5 || no == 6)
+						if (no == 5 || no == 6)
 						{
 							width = 58;
 							height = 58;
 						}
-						else
+						else if (no >= 3 && no <= 6)
 						{
 							width = 48;
 							height = 48;
+						}
+						else if (no == 2)
+						{
+							width = 81;
+							height = 81;
 						}
 						
 						
@@ -458,10 +470,37 @@ public class Images
 			images.add(new GameImage("VENDOR_RIGHT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("VENDOR_LEFT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
 			
+			images.add(new GameImage("FIREWAND_RIGHT.png"));
+			images.add(new GameImage("FIREWAND_LEFT.png"));
+			images.add(new GameImage("FIREWAND_ICON.png"));
+			
+			images.add(new GameImage("ICEWAND_RIGHT.png"));
+			images.add(new GameImage("ICEWAND_LEFT.png"));
+			images.add(new GameImage("ICEWAND_ICON.png"));
+			
+			images.add(new GameImage("DARKWAND_RIGHT.png"));
+			images.add(new GameImage("DARKWAND_LEFT.png"));
+			images.add(new GameImage("DARKWAND_ICON.png"));
+			
+			images.add(new GameImage("SLINGSHOT_RIGHT.png"));
+			images.add(new GameImage("SLINGSHOT_LEFT.png"));
+			images.add(new GameImage("SLINGSHOT_ICON.png"));
+			
+			images.add(new GameImage("WOODBOW_RIGHT.png"));
+			images.add(new GameImage("WOODBOW_LEFT.png"));
+			images.add(new GameImage("WOODBOW_ICON.png"));
+			
+			images.add(new GameImage("STEELBOW_RIGHT.png"));
+			images.add(new GameImage("STEELBOW_LEFT.png"));
+			images.add(new GameImage("STEELBOW_ICON.png"));
+			
+			images.add(new GameImage("MEGABOW_RIGHT.png"));
+			images.add(new GameImage("MEGABOW_LEFT.png"));
+			images.add(new GameImage("MEGABOW_ICON.png"));
+			
 			images.add(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BULLET.png"));
 			images.add(new GameImage("COIN.png",10,10));
 			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			images.add(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));

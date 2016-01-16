@@ -185,9 +185,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private boolean rightClick = false;
 
 	/**
-	 * An accessory exclusive to the player
+	 * The weapon being held by the player during action (ex. bows and wands)
 	 */
-	private ServerAccessory shield;
+	private ServerObject heldWeapon;
 
 	private int mana = PLAYER_START_MANA;
 	private int maxMana = PLAYER_START_MANA;
@@ -331,6 +331,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			else
 			{
+				if (heldWeapon != null)
+				{
+					heldWeapon.destroy();
+					heldWeapon = null;
+				}
 				actionCounter = -1;
 				action = "NOTHING";
 				canPerformAction = true;
@@ -377,14 +382,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else if (action.equals("MAGIC"))
 				{
-//					if (actionCounter < actionDelay / 3.0)
-//					{
-//						setRowCol(new RowCol(2, 4));
-//					}
-//					else
-//					{
-						setRowCol(new RowCol(2, 5));
-//					}
+					// if (actionCounter < actionDelay / 3.0)
+					// {
+					// setRowCol(new RowCol(2, 4));
+					// }
+					// else
+					// {
+					setRowCol(new RowCol(2, 5));
+					// }
 				}
 				else if (action.equals("BLOCK"))
 				{
@@ -892,7 +897,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
 		int yDist = mouseY
-				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 4);
+				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight()/2 + getHeight()/3);
 
 		System.out.println("X/Y " + xDist + " " + yDist);
 
@@ -910,13 +915,29 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			else
 			{
-				int random = (int) (Math.random() * 4);
+				int random = (int) (Math.random() * 7);
 				if (random == 0)
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
 									+ getHeight() / 3, this, angle,
 							ServerWorld.FIREBALL_TYPE));
+
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "FIREWAND_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+						image = "FIREWAND_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+
 					action = "MAGIC";
 				}
 				else if (random == 1)
@@ -926,6 +947,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							getY()
 									+ getHeight() / 3, this, angle,
 							ServerWorld.ICEBALL_TYPE));
+
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "ICEWAND_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+						image = "ICEWAND_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+
 					action = "MAGIC";
 				}
 				else if (random == 2)
@@ -935,6 +972,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							getY()
 									+ getHeight() / 3, this, angle,
 							ServerWorld.DARKBALL_TYPE));
+
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "DARKWAND_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+						image = "DARKWAND_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+
 					action = "MAGIC";
 				}
 				else if (random == 3)
@@ -942,9 +995,97 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
 									+ getHeight() / 3, this, angle,
-							ServerWorld.ARROW_TYPE));
+							ServerWorld.WOODARROW_TYPE));
+					
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "WOODBOW_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						image = "WOODBOW_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+					
 					action = "BOW";
 				}
+				
+				else if (random == 4)
+				{
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()
+									+ getHeight() / 3, this, angle,
+							ServerWorld.STEELARROW_TYPE));
+					
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "STEELBOW_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						image = "STEELBOW_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+					
+					action = "BOW";
+				}			
+				else if (random == 5)
+				{
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()+ getHeight() / 3, this, angle,
+							ServerWorld.MEGAARROW_TYPE));
+					
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "MEGABOW_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						image = "MEGABOW_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+					
+					action = "BOW";
+				}
+				else if (random == 6)
+				{
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()+ getHeight() / 4, this, angle,
+							ServerWorld.BULLET_TYPE));
+					
+					yDist = mouseY
+							- (Client.Client.SCREEN_HEIGHT / 2 - getHeight()/2 + getHeight()/4);
+					
+					int x = getDrawX();
+					int y = getDrawY();
+					String image = "SLINGSHOT_RIGHT.png";
+
+					if (getDirection().equals("LEFT"))
+					{
+						image = "SLINGSHOT_LEFT.png";
+					}
+
+					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
+					
+					action = "BOW";
+				}
+				
+				
 				actionDelay = 15;
 
 			}
@@ -1481,16 +1622,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setNewMouseY(int newMouseY)
 	{
 		this.newMouseY = newMouseY;
-	}
-
-	public ServerAccessory getShield()
-	{
-		return shield;
-	}
-
-	public void setShield(ServerAccessory shield)
-	{
-		this.shield = shield;
 	}
 
 	public ServerAccessory getHead()
