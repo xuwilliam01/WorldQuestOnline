@@ -70,11 +70,6 @@ public class ClientWorld
 	 * The width in pixels of one character for the damage font
 	 */
 	public static double DAMAGE_FONT_WIDTH = 0;
-
-	/**
-	 * The centered player
-	 */
-	ClientObject player = null;
 	
 	/**
 	 * Constructor for the client's side of the world
@@ -348,10 +343,11 @@ public class ClientWorld
 								null);
 						
 						//Draw a hint if necessary
+						//DOES NOT DRAW OVER SOLID TILES
 						if(player.collidesWith(object) && !object.getHint().equals(""))
 						{
 							graphics.setColor(Color.black);
-							graphics.drawString(object.getHint(), player.getX(), 50);
+							graphics.drawString(object.getHint(), x, y-50);
 						}
 					}
 					// If there is no image, then the object is text/numbers
@@ -444,9 +440,5 @@ public class ClientWorld
 		this.tileSize = tileSize;
 	}
 	
-	public void setPlayer(ClientObject player)
-	{
-		this.player = player;
-	}
 
 }

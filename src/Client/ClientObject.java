@@ -89,7 +89,7 @@ public class ClientObject implements Comparable<ClientObject> {
 		}
 
 		// Select a hint for this object, if it has one
-		switch (image) 
+		switch (type) 
 		{
 		case ServerWorld.CASTLE_TYPE:
 			hint = "Drop money on your castle to upgrade the level of your goblins";

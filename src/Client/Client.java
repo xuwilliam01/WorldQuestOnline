@@ -193,7 +193,6 @@ MouseMotionListener
 			int team = Integer.parseInt(tokens[4]);
 
 			player = new ClientObject(id, x, y, image, team, ServerWorld.PLAYER_TYPE);
-			world.setPlayer(player);
 		}
 		catch (IOException e)
 		{
