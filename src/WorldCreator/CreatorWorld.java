@@ -831,5 +831,19 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		else
 			isEditable = false;
 	}
+	
+	public void setPosX(int x)
+	{
+		posX = x;
+	}
+	
+	public void setPosY(int y)
+	{
+		posY = y;
+	}
 
+	public void setObjectFactor(int factor)
+	{
+		objectFactor = factor;
+	}
 }

@@ -31,6 +31,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 	private JButton clear = new JButton("Clear");
 	private JButton updateWidth;
 	private JButton updateHeight;
+	private JButton recentre = new JButton("Recentre/Reset Zoom");
 
 
 	public CreatorItems(CreatorWorld world)
@@ -68,6 +69,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 		updateHeight.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-220);
 		updateHeight.addActionListener(this);
 		add(updateHeight);
+		
+		recentre.setSize(225,50);
+		recentre.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-280);
+		recentre.addActionListener(this);
+		add(recentre);
 	}
 
 	public void addButtons()
@@ -137,6 +143,12 @@ public class CreatorItems extends JPanel implements ActionListener{
 				} catch (HeadlessException e) {
 					// TODO Auto-generated catch block
 				}
+		}
+		else if(button.getSource() == recentre)
+		{
+			world.setObjectFactor(1);
+			world.setPosX(200);
+			world.setPosY(200);
 		}
 		else
 		{
