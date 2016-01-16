@@ -318,7 +318,7 @@ public class Images
 				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
 				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1"};
+				String[] projectiles = { "ARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1"};
 
 				for (int no = 0; no < projectiles.length; no++)
 				{
@@ -348,10 +348,24 @@ public class Images
 								
 						newImage = newImage.getSubimage(0, 0,cropWidth, cropHeight);
 
+						int height = 0;
+						int width = 0;
+						
+						if (no == 0)
+						{
+							width = 34;
+							height = 34;
+						}
+						else
+						{
+							width = 48;
+							height = 48;
+						}
+						
 						
 						images.add(new GameImage(
 								projectiles[no] + "_" + (actualAngle) + ".png",
-								newImage,34,34));
+								newImage,width,height));
 						//ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
 					}
 				}

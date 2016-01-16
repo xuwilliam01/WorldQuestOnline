@@ -112,13 +112,19 @@ public class ServerProjectile extends ServerFlyingObject
 			animated = true;
 			faceAngle = true;
 			break;
+		case ServerWorld.ICEBALL_TYPE:
+			setImage("ICEBALL_0_0.png");
+			setGravity(0);
+			setDamage(12);
+			setSpeed(6);
+			animated = true;
+			faceAngle = true;
+			break;
 		}
 
 		length = Images.getGameImage(getImage()).getWidth();
 
-		hitbox = new Line2D.Double(getX()
-				- ((length / 2) * Math.cos(getAngle())), getY()
-				- ((length / 2) * Math.sin(getAngle())), getX()
+		hitbox = new Line2D.Double(getX(), getY(), getX()
 				+ ((length / 2) * Math.cos(getAngle())), getY()
 				+ ((length / 2) * Math.sin(getAngle())));
 	}
@@ -131,11 +137,9 @@ public class ServerProjectile extends ServerFlyingObject
 
 		setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
 
-		hitbox.setLine(getX()
-				- ((length / 2) * Math.cos(getAngle())), getY()
-				- ((length / 2) * Math.sin(getAngle())), getX()
-				+ ((length / 2) * Math.cos(getAngle())), getY()
-				+ ((length / 2) * Math.sin(getAngle())));
+		hitbox.setLine(getX(), getY(),
+				getX() + ((length / 2) * Math.cos(getAngle())), getY()
+						+ ((length / 2) * Math.sin(getAngle())));
 
 		int imageAngle = 0;
 
@@ -153,14 +157,14 @@ public class ServerProjectile extends ServerFlyingObject
 		if (animated)
 		{
 			animationCounter++;
-			if (animationCounter >= 20)
+			if (animationCounter >= 10)
 			{
 				animationCounter = 0;
 			}
 
 			int imageNo = 1;
 
-			if (animationCounter < 10)
+			if (animationCounter < 5)
 			{
 				imageNo = 0;
 			}
@@ -189,7 +193,7 @@ public class ServerProjectile extends ServerFlyingObject
 
 		counter++;
 
-		if (counter >= 180)
+		if (counter >= 300)
 		{
 			destroy();
 		}

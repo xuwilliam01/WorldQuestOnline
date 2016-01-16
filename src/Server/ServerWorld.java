@@ -37,6 +37,7 @@ public class ServerWorld
 
 	public final static String ARROW_TYPE = PIERCING_TYPE + "A";
 	public final static String FIREBALL_TYPE = PROJECTILE_TYPE + "F";
+	public final static String ICEBALL_TYPE = PROJECTILE_TYPE + "I";
 
 	public final static char CREATURE_TYPE = 'C';
 	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";

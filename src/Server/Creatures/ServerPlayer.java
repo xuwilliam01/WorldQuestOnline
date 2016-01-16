@@ -34,7 +34,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public final static int PLAYER_Y = 50;
 	public final static int MAX_INVENTORY = 25;
 	public static final int MAX_WEAPONS = 4;
-	
+
 	public final static int DEFAULT_WIDTH = 34;
 	public final static int DEFAULT_HEIGHT = 90;
 
@@ -880,7 +880,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
-		int yDist = mouseY - (Client.Client.SCREEN_HEIGHT / 2 -getHeight()/4);
+		int yDist = mouseY
+				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 4);
 
 		System.out.println("X/Y " + xDist + " " + yDist);
 
@@ -890,22 +891,42 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		if (isAlive() && canPerformAction)
 		{
+			if (rightClick)
+			{
+				actionDelay = 3600;
+				action = "BLOCK";
+				rightClick = false;
+			}
+			else
+			{
+				int random = (int) (Math.random() * 3);
+				if (random == 0)
+				{
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()
+									+ getHeight() / 4, this, angle,
+							ServerWorld.FIREBALL_TYPE));
+				}
+				else if (random == 1)
+				{
 
-			world.add(new ServerProjectile(getX() + getWidth() / 2, getY()
-					+ getHeight() / 4, this, angle, ServerWorld.FIREBALL_TYPE));
-			
-			world.add(new ServerProjectile(getX() + getWidth() / 2, getY()
-					+ getHeight() / 4, this, angle, ServerWorld.ARROW_TYPE));
-			
-			actionDelay = 15;
-			action = "FIRE";
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()
+									+ getHeight() / 4, this, angle,
+							ServerWorld.ICEBALL_TYPE));
+				}
+				else if (random == 2)
+				{
+					world.add(new ServerProjectile(getX() + getWidth() / 2,
+							getY()
+									+ getHeight() / 4, this, angle,
+							ServerWorld.ARROW_TYPE));
+				}
+				actionDelay = 15;
+				action = "FIRE";
 
-			// if (rightClick)
-			// {
-			// actionDelay = 3600;
-			// action = "BLOCK";
-			// rightClick = false;
-			// }
+			}
+
 			// else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
 			// {
 			// action = "PUNCH";
@@ -1026,7 +1047,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		if (action.equals("BLOCK"))
 		{
-			amount /= 2;
+			amount = 0;
 		}
 
 		if (equippedArmour != null)

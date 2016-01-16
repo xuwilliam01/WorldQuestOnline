@@ -22,7 +22,7 @@ public class ClientWorld
 
 	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
 	public final static Color RED_TEXT = new Color(153, 0, 38);
-
+	public final static Color BLUE_TEXT = new Color(0, 161, 230);
 	/**
 	 * The grid of tiles
 	 */
@@ -346,7 +346,15 @@ public class ClientWorld
 					{
 						String imageName = object.getImageName();
 						char colour = imageName.charAt(1);
-						if (colour == ServerDamageIndicator.RED_TEXT)
+						String text = imageName
+								.substring(2, imageName.length());
+						
+						if (Integer.parseInt(text)==0)
+						{
+							graphics.setColor(BLUE_TEXT);
+							text = "BLOCK";
+						}	
+						else if (colour == ServerDamageIndicator.RED_TEXT)
 						{
 							graphics.setColor(RED_TEXT);
 						}
@@ -356,16 +364,9 @@ public class ClientWorld
 						}
 
 						graphics.setFont(DAMAGE_FONT);
-						String text = imageName
-								.substring(2, imageName.length());
-
-						if (object.getWidth() == 0)
-						{
-							object.setWidth((int) (text.length()
-									* DAMAGE_FONT_WIDTH + 0.5));
-							object.setX(object.getX() - object.getWidth() / 2);
-						}
-						x = centreX + object.getX() - player.getX();
+						
+						x -= ((int) (text.length()
+								* DAMAGE_FONT_WIDTH + 0.5))/2;
 
 						graphics.drawString(text, x, y - 10);
 					}
