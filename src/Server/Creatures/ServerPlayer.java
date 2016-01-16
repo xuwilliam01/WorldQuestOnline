@@ -559,7 +559,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 							queueMessage("O " + object.getID() + " " + x
 									+ " " + y + " " + object.getImage()
-									+ " " + team);
+									+ " " + team + " " + object.getType());
 						}
 						else
 						{
