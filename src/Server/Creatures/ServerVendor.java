@@ -13,7 +13,12 @@ public class ServerVendor extends ServerCreature {
 	private boolean isBusy = false;
 
 	public ServerVendor(double x, double y, ServerWorld world, int quality) {
-		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, "VENDOR.png", ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
+		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, "VENDOR_RIGHT.png", ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
+		
+		if ((int)(Math.random()*2)==1)
+		{
+			setImage("VENDOR_LEFT.png");
+		}
 		
 		this.quality = Math.min(quality, ServerWeapon.NUM_TIERS);
 		makeShop();

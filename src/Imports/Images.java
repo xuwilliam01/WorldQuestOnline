@@ -111,12 +111,12 @@ public class Images
 				for (int no = 0; no < image.getWidth()/160; no++)
 				{
 					images.add(new GameImage("EXPLOSION1_" + no + IMAGE_FORMAT,
-							image.getSubimage(no * 160, 0, 160, 160),80,80));
+							image.getSubimage(no * 160, 0, 160, 160),100,100));
 				}
 				for (int no = 0; no < image.getWidth()/160; no++)
 				{
 					images.add(new GameImage("EXPLOSION1_" + (no+5) + IMAGE_FORMAT,
-							image.getSubimage(no * 160, 160, 160, 160),80,80));
+							image.getSubimage(no * 160, 160, 160, 160),100,100));
 				}
 				
 				image = ImageIO.read(new File(
@@ -348,26 +348,28 @@ public class Images
 					{
 						double rotationRequired = Math.toRadians(angle);
 						AffineTransform tx;
+						BufferedImage newImage = image;
 
-						int actualAngle = angle;
-
+						if (angle <-90 || angle >= 90)
+						{
+							tx = AffineTransform.getScaleInstance(1, -1);
+							tx.translate(0, -image.getHeight());
+							AffineTransformOp op = new AffineTransformOp(tx,
+									AffineTransformOp.TYPE_BILINEAR);
+							newImage = op.filter(image, null);
+							int cropWidth = Math.min(image.getWidth(), newImage.getWidth());
+							int cropHeight = Math.min(image.getHeight(), newImage.getHeight());
+							newImage = newImage.getSubimage(0, 0,cropWidth, cropHeight);
+							
+						}
+						
 						tx = AffineTransform.getRotateInstance(
 								rotationRequired, locationX, locationY);
-
+						
 						AffineTransformOp op = new AffineTransformOp(tx,
 								AffineTransformOp.TYPE_BILINEAR);
 						
-						BufferedImage newImage = op.filter(image, null);
-						
-						if (angle <-90 || angle >= 90)
-						{
-							tx = AffineTransform.getScaleInstance(-1, 1);
-							tx.translate(-newImage.getWidth(), 0);
-							op = new AffineTransformOp(tx,
-									AffineTransformOp.TYPE_BILINEAR);
-							newImage = op.filter(image, null);
-						}
-						
+						newImage = op.filter(newImage, null);
 						
 						int cropWidth = Math.min(image.getWidth(), newImage.getWidth());
 						int cropHeight = Math.min(image.getHeight(), newImage.getHeight());
@@ -397,7 +399,7 @@ public class Images
 						
 						
 						images.add(new GameImage(
-								projectiles[no] + "_" + (actualAngle) + ".png",
+								projectiles[no] + "_" + (angle) + ".png",
 								newImage,width,height));
 						//ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
 					}
@@ -440,7 +442,7 @@ public class Images
 					2*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("CHEST_ICON.png", 2*ServerWorld.TILE_SIZE,
 					2*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("VENDOR_ICON.png", 2*ServerWorld.TILE_SIZE,
+			images.add(new GameImage("VENDOR_LEFT_ICON.png", 2*ServerWorld.TILE_SIZE,
 					2*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
@@ -453,7 +455,9 @@ public class Images
 
 			}
 
-			images.add(new GameImage("VENDOR.png", 7*ServerWorld.TILE_SIZE, 7*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("VENDOR_RIGHT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("VENDOR_LEFT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
+			
 			images.add(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));

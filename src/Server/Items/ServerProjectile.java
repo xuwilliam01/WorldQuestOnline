@@ -283,8 +283,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setMapVisible(false);
 			damage = 0;
 			counter = 0;
-			setX(getX() - 40);
-			setY(getY() - 40);
+			setX(getX() - 50);
+			setY(getY() - 50);
 			setImage("EXPLOSION1_0.png");
 			noOfExplosionFrames = 10;
 		}

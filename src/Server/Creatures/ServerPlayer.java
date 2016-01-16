@@ -377,14 +377,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else if (action.equals("MAGIC"))
 				{
-					if (actionCounter < actionDelay / 3.0)
-					{
-						setRowCol(new RowCol(2, 4));
-					}
-					else
-					{
+//					if (actionCounter < actionDelay / 3.0)
+//					{
+//						setRowCol(new RowCol(2, 4));
+//					}
+//					else
+//					{
 						setRowCol(new RowCol(2, 5));
-					}
+//					}
 				}
 				else if (action.equals("BLOCK"))
 				{
@@ -915,7 +915,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
-									+ getHeight() / 4, this, angle,
+									+ getHeight() / 3, this, angle,
 							ServerWorld.FIREBALL_TYPE));
 					action = "MAGIC";
 				}
@@ -924,7 +924,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
-									+ getHeight() / 4, this, angle,
+									+ getHeight() / 3, this, angle,
 							ServerWorld.ICEBALL_TYPE));
 					action = "MAGIC";
 				}
@@ -933,7 +933,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
-									+ getHeight() / 4, this, angle,
+									+ getHeight() / 3, this, angle,
 							ServerWorld.DARKBALL_TYPE));
 					action = "MAGIC";
 				}
@@ -941,7 +941,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY()
-									+ getHeight() / 4, this, angle,
+									+ getHeight() / 3, this, angle,
 							ServerWorld.ARROW_TYPE));
 					action = "BOW";
 				}

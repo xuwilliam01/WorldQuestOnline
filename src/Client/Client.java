@@ -27,7 +27,7 @@ import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-MouseMotionListener
+		MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -68,7 +68,7 @@ MouseMotionListener
 	private int speed;
 	private int jump;
 
-	//Variables for damage
+	// Variables for damage
 	int damage = 0;
 	int baseDamage = 0;
 
@@ -192,7 +192,8 @@ MouseMotionListener
 			String image = tokens[3];
 			int team = Integer.parseInt(tokens[4]);
 
-			player = new ClientObject(id, x, y, image, team, ServerWorld.PLAYER_TYPE);
+			player = new ClientObject(id, x, y, image, team,
+					ServerWorld.PLAYER_TYPE);
 		}
 		catch (IOException e)
 		{
@@ -306,9 +307,10 @@ MouseMotionListener
 								player.setX(x);
 								player.setY(y);
 							}
-							world.setObject(id,x, y,
+							world.setObject(id, x, y,
 									tokens[++token], Integer
-									.parseInt(tokens[++token]),tokens[++token]);
+											.parseInt(tokens[++token]),
+									tokens[++token]);
 						}
 						else if (tokens[token].equals("P"))
 						{
@@ -329,16 +331,16 @@ MouseMotionListener
 									Integer.parseInt(tokens[++token]));
 							inventory.repaint();
 						}
-						else if(tokens[token].equals("D"))
+						else if (tokens[token].equals("D"))
 						{
 							damage = Integer.parseInt(tokens[++token]);
-							baseDamage =Integer.parseInt(tokens[++token]);
+							baseDamage = Integer.parseInt(tokens[++token]);
 						}
-						else if(tokens[token].equals("S"))
+						else if (tokens[token].equals("S"))
 						{
 							speed = Integer.parseInt(tokens[++token]);
 						}
-						else if(tokens[token].equals("J"))
+						else if (tokens[token].equals("J"))
 						{
 							jump = Integer.parseInt(tokens[++token]);
 						}
@@ -496,7 +498,15 @@ MouseMotionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		world.update(graphics, player);
+
+		try
+		{
+			world.update(graphics, player);
+		}
+		catch (NullPointerException e)
+		{
+
+		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.black);
@@ -524,19 +534,28 @@ MouseMotionListener
 		graphics.setColor(Color.blue);
 		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
 		graphics.setColor(Color.green);
-		graphics.drawString(String.format("Damage: %d(+%d)",damage+baseDamage, baseDamage),20,100);
+		graphics.drawString(String.format("Damage: %d(+%d)", damage
+				+ baseDamage, baseDamage), 20, 100);
 
 		graphics.setColor(Color.gray);
-		if(speed == ServerPlayer.MAX_HSPEED)
-			graphics.drawString(String.format("Speed: %d (Max)",speed-ServerPlayer.MOVE_SPEED+1),20,120);
+		if (speed == ServerPlayer.MAX_HSPEED)
+			graphics.drawString(
+					String.format("Speed: %d (Max)", speed
+							- ServerPlayer.MOVE_SPEED + 1), 20, 120);
 		else
-			graphics.drawString(String.format("Speed: %d",speed-ServerPlayer.MOVE_SPEED+1),20,120);
+			graphics.drawString(
+					String.format("Speed: %d", speed - ServerPlayer.MOVE_SPEED
+							+ 1), 20, 120);
 
 		graphics.setColor(Color.ORANGE);
-		if(jump == ServerPlayer.MAX_VSPEED)
-			graphics.drawString(String.format("Jump: %d (Max)",jump-ServerPlayer.JUMP_SPEED+1),20,140);
+		if (jump == ServerPlayer.MAX_VSPEED)
+			graphics.drawString(
+					String.format("Jump: %d (Max)", jump
+							- ServerPlayer.JUMP_SPEED + 1), 20, 140);
 		else
-			graphics.drawString(String.format("Jump: %d",jump-ServerPlayer.JUMP_SPEED+1),20,140);
+			graphics.drawString(
+					String.format("Jump: %d", jump - ServerPlayer.JUMP_SPEED
+							+ 1), 20, 140);
 	}
 
 	@Override
