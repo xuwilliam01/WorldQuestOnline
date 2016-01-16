@@ -59,7 +59,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * The color of other objects
 	 */
-	public static final Color OTHER = Color.WHITE;
+	public static final Color OTHER = Color.gray;
 
 	/**
 	 * The factor of the scale of the object on the map compared to its actual

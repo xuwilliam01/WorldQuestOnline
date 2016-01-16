@@ -65,6 +65,11 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The frame of animation for the projectile
 	 */
 	private int animationCounter;
+	
+	/**
+	 * Number of frames the explosion lasts
+	 */
+	private int noOfExplosionFrames;
 
 	/**
 	 * The ID's of the objects that have already collided with this projectile
@@ -247,6 +252,20 @@ public class ServerProjectile extends ServerFlyingObject
 			setX(getX() - 32);
 			setY(getY() - 48);
 			setImage("EXPLOSION2_0.png");
+			noOfExplosionFrames = 5;
+		}
+		else if (getType() == ServerWorld.ICEBALL_TYPE)
+		{
+			setType(ServerWorld.EXPLOSION_TYPE);
+			setSpeed(0);
+			setSolid(false);
+			setMapVisible(false);
+			damage = 0;
+			counter = 0;
+			setX(getX() - 41);
+			setY(getY() - 41);
+			setImage("EXPLOSION3_0.png");
+			noOfExplosionFrames = 4;
 		}
 		else
 		{
@@ -264,27 +283,27 @@ public class ServerProjectile extends ServerFlyingObject
 		{
 			setImage(getBaseImage() + "_1.png");
 		}
-		else if (counter <= 6)
+		else if (counter <= 6 && noOfExplosionFrames >= 3)
 		{
 			setImage(getBaseImage() + "_2.png");
 		}
-		else if (counter <= 8)
+		else if (counter <= 8 && noOfExplosionFrames >= 4)
 		{
 			setImage(getBaseImage() + "_3.png");
 		}
-		else if (counter <= 10)
+		else if (counter <= 10 && noOfExplosionFrames >= 5)
 		{
 			setImage(getBaseImage() + "_4.png");
 		}
-		else if (counter <= 12)
+		else if (counter <= 12 && noOfExplosionFrames >= 6)
 		{
 			setImage(getBaseImage() + "_5.png");
 		}
-		else if (counter <= 14)
+		else if (counter <= 14 && noOfExplosionFrames >= 7)
 		{
 			setImage(getBaseImage() + "_6.png");
 		}
-		else if (counter <= 16)
+		else if (counter <= 16 && noOfExplosionFrames >= 8)
 		{
 			setImage(getBaseImage() + "_7.png");
 		}

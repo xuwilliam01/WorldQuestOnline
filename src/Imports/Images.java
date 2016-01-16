@@ -129,6 +129,14 @@ public class Images
 							image.getSubimage(no * 64, 0, 64, 64)));
 				}
 				
+				image = ImageIO.read(new File(
+						"EXPLOSION3_SHEET.png"));
+				for (int no = 0; no < image.getWidth()/82; no++)
+				{
+					images.add(new GameImage("EXPLOSION3_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 82, 0, 82, 82)));
+				}
+				
 
 				// Add all the pics from the player sprite sheets
 				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",
