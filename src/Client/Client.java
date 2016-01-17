@@ -422,11 +422,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
-						lines.add(message);
+					lines.add(message);
 
 					try
 					{
-						Thread.sleep(1);
+						Thread.sleep(5);
 					}
 					catch (InterruptedException e)
 					{
