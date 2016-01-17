@@ -776,6 +776,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				break;
 			}
+			catch (NullPointerException e)
+			{
+				break;
+			}
 		}
 
 		// If the buffered reader breaks, the player has disconnected
