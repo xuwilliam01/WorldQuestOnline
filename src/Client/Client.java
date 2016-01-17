@@ -365,7 +365,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								closeShop();
 						}
 					}
-					
 
 				}
 
@@ -422,10 +421,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				while (true)
 				{
 					String message = input.readLine();
-					lines.add(message);
+
+					if (lines.size() < 100)
+					{
+						lines.add(message);
+					}
+
 					try
 					{
-						Thread.sleep(10);
+						Thread.sleep(1);
 					}
 					catch (InterruptedException e)
 					{
