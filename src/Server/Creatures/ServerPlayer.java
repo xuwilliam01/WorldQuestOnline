@@ -287,7 +287,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 				+ ServerWorld.GOLD_TIER));
-		
+
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE));
@@ -391,7 +391,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (action.equals("BOW"))
 				{
 					setRowCol(new RowCol(2, 7));
-					if (heldWeapon!=null)
+					if (heldWeapon != null)
 					{
 						heldWeapon.setX(getDrawX());
 						heldWeapon.setY(getDrawY());
@@ -400,11 +400,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (action.equals("WAND"))
 				{
 					setRowCol(new RowCol(2, 5));
-					if (heldWeapon!=null)
+					if (heldWeapon != null)
 					{
 						if (getDirection().equals("LEFT"))
 						{
-						heldWeapon.setX(getDrawX()-(90-64));
+							heldWeapon.setX(getDrawX() - (90 - 64));
 						}
 						else
 						{
@@ -478,8 +478,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					if (getTeam() == RED_TEAM)
 					{
-					setX(world.getGrid()[0].length * ServerWorld.TILE_SIZE - 10 * ServerWorld.TILE_SIZE);
-					
+						setX(world.getGrid()[0].length * ServerWorld.TILE_SIZE
+								- 10 * ServerWorld.TILE_SIZE);
+
 					}
 					else
 					{
@@ -632,10 +633,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				currentDamage = equippedWeapons[weaponNo].getDamage();
 			queueMessage("D " + currentDamage + " " + getBaseDamage());
 
-			while (message.length() < 4000)
-			{
-				queueMessage("L " + getHP());
-			}
+//			while (message.length() < 4000)
+//			{
+//				queueMessage("L " + getHP());
+//			}
 
 			// Signal a repaint
 			queueMessage("U");
@@ -920,7 +921,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 2 + getHeight() / 3);
 
 		double angle = Math.atan2(yDist, xDist);
-		
+
 		if (isAlive() && canPerformAction)
 		{
 			int weaponNo = weaponSelected - '0';
@@ -962,7 +963,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
-								((ServerCreature) otherObject).inflictDamage(PUNCHING_DAMAGE + getBaseDamage());
+								((ServerCreature) otherObject)
+										.inflictDamage(PUNCHING_DAMAGE
+												+ getBaseDamage());
 								alreadyPunched
 										.add((ServerCreature) otherObject);
 							}
@@ -1054,7 +1057,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				if (getDirection().equals("LEFT"))
 				{
-					
+
 					image += "_LEFT.png";
 				}
 				else
@@ -1132,12 +1135,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			amount -= amount * equippedArmour.getArmour();
 		}
-		
+
 		if (amount <= 0)
 		{
 			amount = 1;
 		}
-		
+
 		if (action.equals("BLOCK"))
 		{
 			amount = 0;
@@ -1347,6 +1350,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		output.println(message);
 		output.flush();
+		System.out.println(message);
 		message = new StringBuilder();
 	}
 

@@ -380,20 +380,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								closeShop();
 						}
 					}
-
-					// long delay = System.currentTimeMillis()
-					// - startTime;
-
-					// if (delay < 15)
-					// {
-					// try {
-					// Thread.sleep((15-delay)-2);
-					// } catch (InterruptedException e) {
-					//
-					// e.printStackTrace();
-					// }
-					// }
-
 				}
 
 			}

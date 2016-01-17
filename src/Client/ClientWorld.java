@@ -113,7 +113,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 24; no++)
+		for (int no = 0; no < 0; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
