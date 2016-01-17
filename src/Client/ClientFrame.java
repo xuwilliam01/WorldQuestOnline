@@ -33,8 +33,6 @@ public class ClientFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		setAlwaysOnTop(true);
 		setVisible(true);
-		
 	}
 }
