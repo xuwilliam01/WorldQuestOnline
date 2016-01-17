@@ -29,7 +29,9 @@ public class MainMenu {
 
 	private static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
-
+	private static CreatorPanel creatorPanel;
+	private static GamePanel gamePanel;
+	
 	public MainMenu()
 	{
 		Images.importImages();
@@ -149,7 +151,10 @@ public class MainMenu {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			CreatorItems items = new CreatorItems(world);
+			
+			JButton menu = new JButton("Main Menu");
+			menu.addActionListener(new CreatorMenuButton());
+			CreatorItems items = new CreatorItems(world,menu);
 			world.setLocation(0,0);
 			items.setLocation(Client.SCREEN_WIDTH,0);
 
@@ -227,6 +232,24 @@ public class MainMenu {
 		}
 	}
 	
+	private static class CreatorMenuButton implements ActionListener
+	{	
+		public void actionPerformed(ActionEvent e)
+		{
+			System.out.println("extiign creator");
+			//creatorPanel.setLocation(-10000,-10000);
+			creatorPanel.setVisible(false);
+			mainFrame.remove(creatorPanel);
+			mainFrame.invalidate();
+			mainFrame.validate();
+			creatorPanel= null;
+			
+			mainMenu = new MainPanel();
+			mainFrame.add(mainMenu);
+			mainFrame.setVisible(true);
+			mainMenu.revalidate();
+		}
+	}
 	private static class StartGame implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
@@ -235,7 +258,7 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
-			GamePanel gamePanel = new GamePanel();
+			gamePanel = new GamePanel();
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
 			gamePanel.revalidate();
@@ -268,7 +291,7 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
-			CreatorPanel creatorPanel = new CreatorPanel();
+			creatorPanel = new CreatorPanel();
 			mainFrame.add(creatorPanel);
 			mainFrame.setVisible(true);
 			creatorPanel.revalidate();

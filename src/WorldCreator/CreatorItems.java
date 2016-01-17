@@ -34,11 +34,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 	private JButton clear = new JButton("Clear");
 	private JButton updateWidth;
 	private JButton updateHeight;
-	private JButton recentre = new JButton("Recentre/Reset Zoom");
+	private JButton mainMenu;
 
 	private Timer paintTimer = new Timer(10,this);
 
-	public CreatorItems(CreatorWorld world)
+	public CreatorItems(CreatorWorld world, JButton menu)
 	{
 		setDoubleBuffered(true);
 		setBackground(Color.red);
@@ -73,12 +73,15 @@ public class CreatorItems extends JPanel implements ActionListener{
 		updateHeight.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-220);
 		updateHeight.addActionListener(this);
 		add(updateHeight);
-		
-		recentre.setSize(225,50);
-		recentre.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-280);
-		recentre.addActionListener(this);
-		add(recentre);
-		
+
+		if(menu != null)
+		{
+			mainMenu = menu;
+			mainMenu.setSize(225,50);
+			mainMenu.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-280);
+			add(mainMenu);
+		}
+
 		paintTimer.start();
 	}
 
@@ -89,7 +92,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 		int objRow = 0;
 		int objCol = 0;
-		
+
 		for(int button = 0; button < buttons.length;button++)
 			if(buttons[button] != null)
 			{
@@ -152,12 +155,6 @@ public class CreatorItems extends JPanel implements ActionListener{
 				} catch (HeadlessException e) {
 					// TODO Auto-generated catch block
 				}
-		}
-		else if(button.getSource() == recentre)
-		{
-			world.setObjectFactor(1);
-			world.setPosX(200);
-			world.setPosY(200);
 		}
 		else if(button.getSource() == paintTimer)
 		{

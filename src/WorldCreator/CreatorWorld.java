@@ -2,6 +2,7 @@ package WorldCreator;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.IllegalComponentStateException;
 import java.awt.MouseInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -651,12 +652,18 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{
+		try{
 		if (this.hasFocus())
 			selectedBlock = getRowCol(
 					(int) (MouseInfo.getPointerInfo().getLocation().getX() - this
 							.getLocationOnScreen().getX()),
 					(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
 							.getLocationOnScreen().getY()));
+		}
+		catch(IllegalComponentStateException e)
+		{
+			System.out.println("Exiting creator");
+		}
 
 		if (selectedBlock != null && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
