@@ -271,8 +271,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		baseImage = "BASE_" + skinColour;
 
 		// Start the player off with some weapons
-		
 		addItem(new ServerMoney(0, 0, 5));
+		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
+		addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
+
 		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
 				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
@@ -281,6 +285,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.IRON_TIER));
+		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+				+ ServerWorld.GOLD_TIER));
 		
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE));
@@ -290,14 +296,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
 
-		addItem(new ServerPotion(0, 0, ServerWorld.HP_POTION_TYPE));
-		addItem(new ServerPotion(0, 0, ServerWorld.DMG_POTION_TYPE));
-		addItem(new ServerPotion(0, 0, ServerWorld.JUMP_POTION_TYPE));
-		
-		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
 	}
 
 	/**
