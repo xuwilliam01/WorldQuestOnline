@@ -211,7 +211,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
@@ -907,248 +907,137 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		if (isAlive() && canPerformAction)
 		{
+			int weaponNo = weaponSelected - '0';
+			actionDelay = 15;
 			if (rightClick)
 			{
 				actionDelay = 3600;
 				action = "BLOCK";
 				rightClick = false;
 			}
-			else
+			else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
 			{
-				int random = (int) (Math.random() * 7);
-				if (random == 0)
+				action = "PUNCH";
+				actionDelay = 16;
+
+				// List of creatures we've already punched so we dont hit them
+				// twice
+				ArrayList<ServerCreature> alreadyPunched = new
+						ArrayList<ServerCreature>();
+
+				int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+				int endRow = (int) ((getY() + getHeight()) /
+						ServerWorld.OBJECT_TILE_SIZE);
+				int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
+				int endColumn = (int) ((getX() + getWidth()) /
+						ServerWorld.OBJECT_TILE_SIZE);
+
+				for (int row = startRow; row <= endRow; row++)
 				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()
-									+ getHeight() / 3, this, angle,
-							ServerWorld.FIREBALL_TYPE));
-
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "FIREWAND_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
+					for (int column = startColumn; column <= endColumn; column++)
 					{
-						x -= 90 - 64;
-						image = "FIREWAND_LEFT.png";
+						for (ServerObject otherObject :
+							world.getObjectGrid()[row][column])
+						{
+							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
+									&& ((ServerCreature) otherObject)
+									.isAttackable()
+									&& ((ServerCreature) otherObject)
+									.getTeam() != getTeam()
+									&& collidesWith(otherObject)
+									&& !alreadyPunched.contains(otherObject))
+							{
+								((ServerCreature) otherObject).inflictDamage(
+										PUNCHING_DAMAGE + getBaseDamage(), 5);
+								alreadyPunched
+								.add((ServerCreature) otherObject);
+							}
+						}
 					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-
-					action = "MAGIC";
 				}
-				else if (random == 1)
-				{
-
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()
-									+ getHeight() / 3, this, angle,
-							ServerWorld.ICEBALL_TYPE));
-
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "ICEWAND_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						x -= 90 - 64;
-						image = "ICEWAND_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-
-					action = "MAGIC";
-				}
-				else if (random == 2)
-				{
-
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()
-									+ getHeight() / 3, this, angle,
-							ServerWorld.DARKBALL_TYPE));
-
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "DARKWAND_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						x -= 90 - 64;
-						image = "DARKWAND_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-
-					action = "MAGIC";
-				}
-				else if (random == 3)
-				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()
-									+ getHeight() / 3, this, angle,
-							ServerWorld.WOODARROW_TYPE));
-					
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "WOODBOW_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						image = "WOODBOW_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-					
-					action = "BOW";
-				}
-				
-				else if (random == 4)
-				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()
-									+ getHeight() / 3, this, angle,
-							ServerWorld.STEELARROW_TYPE));
-					
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "STEELBOW_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						image = "STEELBOW_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-					
-					action = "BOW";
-				}			
-				else if (random == 5)
-				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()+ getHeight() / 3, this, angle,
-							ServerWorld.MEGAARROW_TYPE));
-					
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "MEGABOW_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						image = "MEGABOW_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-					
-					action = "BOW";
-				}
-				else if (random == 6)
-				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
-							getY()+ getHeight() / 4, this, angle,
-							ServerWorld.BULLET_TYPE));
-					
-					yDist = mouseY
-							- (Client.Client.SCREEN_HEIGHT / 2 - getHeight()/2 + getHeight()/4);
-					
-					int x = getDrawX();
-					int y = getDrawY();
-					String image = "SLINGSHOT_RIGHT.png";
-
-					if (getDirection().equals("LEFT"))
-					{
-						image = "SLINGSHOT_LEFT.png";
-					}
-
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
-					
-					action = "BOW";
-				}
-				
-				
-				actionDelay = 15;
-
 			}
+			else if (equippedWeapons[weaponNo].getType().contains(
+					ServerWorld.MELEE_TYPE))
+			{
+				actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
+						+ (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
+				world.add(new ServerWeaponSwing(this, 0, -25,
+						equippedWeapons[weaponNo].getActionImage(),
+						(int) (Math.toDegrees(angle) + 0.5),
+						equippedWeapons[weaponNo].getSwingSpeed(),
+						equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
+				action = "SWING";
+			}
+			else if (equippedWeapons[weaponNo].getType().contains(
+					ServerWorld.RANGED_TYPE))
+			{
+				int x = getDrawX();
+				int y = getDrawY();
 
-			// else if (weaponNo == 9 || equippedWeapons[weaponNo] == null)
-			// {
-			// action = "PUNCH";
-			// actionDelay = 16;
-			//
-			// // List of creatures we've already punched so we dont hit them
-			// // twice
-			// ArrayList<ServerCreature> alreadyPunched = new
-			// ArrayList<ServerCreature>();
-			//
-			// int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
-			// int endRow = (int) ((getY() + getHeight()) /
-			// ServerWorld.OBJECT_TILE_SIZE);
-			// int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
-			// int endColumn = (int) ((getX() + getWidth()) /
-			// ServerWorld.OBJECT_TILE_SIZE);
-			//
-			// for (int row = startRow; row <= endRow; row++)
-			// {
-			// for (int column = startColumn; column <= endColumn; column++)
-			// {
-			// for (ServerObject otherObject :
-			// world.getObjectGrid()[row][column])
-			// {
-			// if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
-			// && ((ServerCreature) otherObject)
-			// .isAttackable()
-			// && ((ServerCreature) otherObject)
-			// .getTeam() != getTeam()
-			// && collidesWith(otherObject)
-			// && !alreadyPunched.contains(otherObject))
-			// {
-			// ((ServerCreature) otherObject).inflictDamage(
-			// PUNCHING_DAMAGE + getBaseDamage(), 5);
-			// alreadyPunched
-			// .add((ServerCreature) otherObject);
-			// }
-			// }
-			// }
-			// }
-			// }
-			// else if (equippedWeapons[weaponNo].getType().contains(
-			// ServerWorld.MELEE_TYPE))
-			// {
-			// actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
-			// + (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
-			// world.add(new ServerWeaponSwing(this, 0, -25,
-			// equippedWeapons[weaponNo].getActionImage(),
-			// (int) (Math.toDegrees(angle) + 0.5),
-			// equippedWeapons[weaponNo].getSwingSpeed(),
-			// equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
-			// action = "SWING";
-			// }
-			// else if (equippedWeapons[weaponNo].getType().contains(
-			// ServerWorld.RANGED_TYPE))
-			// {
-			// action = "BOW";
-			// }
+				String arrowType = "";
+				String image = "";
+
+				switch(equippedWeapons[weaponNo].getType())
+				{
+				case ServerWorld.SLINGSHOT_TYPE:
+					action = "BOW";
+					arrowType = ServerWorld.BULLET_TYPE;
+					image = "SLINGSHOT";
+					break;
+				case ServerWorld.WOODBOW_TYPE:
+					action = "BOW";
+					arrowType = ServerWorld.WOODARROW_TYPE;
+					image = "WOODBOW";
+					break;
+				case ServerWorld.STEELBOW_TYPE:
+					action = "BOW";
+					arrowType = ServerWorld.STEELARROW_TYPE;
+					image = "STEELBOW";
+					break;
+				case ServerWorld.MEGABOW_TYPE:
+					action = "BOW";
+					arrowType = ServerWorld.MEGAARROW_TYPE;
+					image = "MEGABOW";
+					break;
+				case ServerWorld.FIREWAND_TYPE:
+					action = "WAND";
+					arrowType = ServerWorld.FIREBALL_TYPE;
+					image = "FIREWAND";
+					x -= 90 - 64;
+					break;
+				case ServerWorld.ICEWAND_TYPE:
+					action = "WAND";
+					arrowType = ServerWorld.ICEBALL_TYPE;
+					image = "ICEWAND";
+					x -= 90 - 64;
+					break;
+				case ServerWorld.DARKWAND_TYPE:
+					action = "WAND";
+					arrowType = ServerWorld.DARKBALL_TYPE;
+					image = "DARKWAND";
+					x -= 90 - 64;
+					break;	
+				}
+				world.add(new ServerProjectile(getX() + getWidth() / 2,
+						getY()+ getHeight() / 3, this, angle,
+						arrowType));
+
+
+
+				if (getDirection().equals("LEFT"))
+				{
+					image += "_LEFT.png";
+				}
+				else
+					image += "_RIGHT.png";
+
+				heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+						ServerWorld.WEAPON_HOLD_TYPE);
+				heldWeapon.setSolid(false);
+				world.add(heldWeapon);
+			}
 		}
+
 
 		// if (weaponSelected == '0')
 		// {
@@ -1320,7 +1209,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);

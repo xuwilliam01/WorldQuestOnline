@@ -12,7 +12,7 @@ import Server.Creatures.ServerCreature;
 
 public abstract class ServerItem extends ServerObject {
 
-	private final static int NUM_ITEMS = 32;
+	private final static int NUM_ITEMS = 39;
 	
 	private boolean hasCoolDown = false;
 	private ServerCreature source;
@@ -156,6 +156,34 @@ public abstract class ServerItem extends ServerObject {
 			setImage("HAWOOD_ICON.png");
 			value = 1;
 			break;
+		case ServerWorld.SLINGSHOT_TYPE:
+			setImage("SLINGSHOT_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.WOODBOW_TYPE:
+			setImage("WOODBOW_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.STEELBOW_TYPE:
+			setImage("STEELBOW_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.MEGABOW_TYPE:
+			setImage("MEGABOW_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.FIREWAND_TYPE:
+			setImage("FIREWAND_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.ICEWAND_TYPE:
+			setImage("ICEWAND_ICON.png");
+			value = 5;
+			break;
+		case ServerWorld.DARKWAND_TYPE:
+			setImage("DARKWAND_ICON.png");
+			value = 5;
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -231,6 +259,20 @@ public abstract class ServerItem extends ServerObject {
 			return new ServerPotion(x,y,ServerWorld.SPEED_POTION_TYPE);
 		case 32:
 			return new ServerPotion(x,y,ServerWorld.JUMP_POTION_TYPE);
+		case 33:
+			return new ServerWeapon(x,y,ServerWorld.SLINGSHOT_TYPE);
+		case 34:
+			return new ServerWeapon(x,y,ServerWorld.WOODBOW_TYPE);
+		case 35:
+			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
+		case 36:
+			return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
+		case 37:
+			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
+		case 38:
+			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
+		case 39:
+			return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		}
 		// This won't happen
 		return null;
@@ -274,6 +316,13 @@ public abstract class ServerItem extends ServerObject {
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
+		case ServerWorld.SLINGSHOT_TYPE:
+		case ServerWorld.WOODBOW_TYPE:
+		case ServerWorld.STEELBOW_TYPE:
+		case ServerWorld.MEGABOW_TYPE:
+		case ServerWorld.FIREWAND_TYPE:
+		case ServerWorld.ICEWAND_TYPE:
+		case ServerWorld.DARKWAND_TYPE:
 			return new ServerWeapon(item.getX(), item.getY(), item.getType());
 
 		}

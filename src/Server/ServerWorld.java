@@ -83,6 +83,18 @@ public class ServerWorld
 	public final static String AX_TYPE = MELEE_TYPE + "A";
 	public final static String SWORD_TYPE = MELEE_TYPE + "S";
 	public final static String HALBERD_TYPE = MELEE_TYPE + "H";
+	
+	public final static String BOW_TYPE = RANGED_TYPE +"B";
+	public final static String WAND_TYPE = RANGED_TYPE +"W";
+	
+	public final static String SLINGSHOT_TYPE = BOW_TYPE +"s";
+	public final static String WOODBOW_TYPE = BOW_TYPE +"W";
+	public final static String STEELBOW_TYPE = BOW_TYPE +"S";
+	public final static String MEGABOW_TYPE = BOW_TYPE +"M";
+	
+	public final static String FIREWAND_TYPE = WAND_TYPE + "F";
+	public final static String ICEWAND_TYPE = WAND_TYPE + "I";
+	public final static String DARKWAND_TYPE = WAND_TYPE + "D";
 
 	public final static char WOOD_TIER = 'W';
 	public final static char STONE_TIER = 'S';

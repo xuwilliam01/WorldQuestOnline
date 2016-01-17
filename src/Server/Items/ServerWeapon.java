@@ -5,7 +5,7 @@ import Server.ServerWorld;
 public class ServerWeapon extends ServerItem
 {
 
-	public final static int NUM_WEAPONS = 20;
+	public final static int NUM_WEAPONS = 27;
 	public final static int NUM_TIERS = 5;
 
 	public final static int DADIAMOND_DMG = 25;
@@ -31,6 +31,16 @@ public class ServerWeapon extends ServerItem
 	public final static int HAIRON_DMG = 30;
 	public final static int HASTONE_DMG = 25;
 	public final static int HAWOOD_DMG =20;
+	
+	public final static int SLING_DMG = 5;
+	public final static int WOODBOW_DMG = 10;
+	public final static int STEELBOW_DMG = 15;
+	public final static int MEGABOW_DMG = 20;
+
+	public final static int FIREWAND_DMG = 10;
+	public final static int ICEWAND_DMG = 15;
+	public final static int DARKWAND_DMG = 20;
+	
 	
 	/**
 	 * The damage the weapon will do when you use it
@@ -161,6 +171,27 @@ public class ServerWeapon extends ServerItem
 			actionImage = "HAWOOD_0.png";
 			swingSpeed = HALBERD_SPEED;
 			break;
+		case ServerWorld.SLINGSHOT_TYPE:
+			damage = SLING_DMG;
+			break;
+		case ServerWorld.WOODBOW_TYPE:
+			damage = WOODBOW_DMG;
+			break;
+		case ServerWorld.STEELBOW_TYPE:
+			damage = STEELBOW_DMG;
+			break;
+		case ServerWorld.MEGABOW_TYPE:
+			damage = MEGABOW_DMG;
+			break;
+		case ServerWorld.FIREWAND_TYPE:
+			damage = FIREWAND_DMG;
+			break;
+		case ServerWorld.ICEWAND_TYPE:
+			damage = ICEWAND_DMG;
+			break;
+		case ServerWorld.DARKWAND_TYPE:
+			damage = DARKWAND_DMG;
+			break;
 		}
 	}
 
@@ -239,6 +270,20 @@ public class ServerWeapon extends ServerItem
 		case 1:
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.WOOD_TIER);
+		case 21:
+			return new ServerWeapon(x,y,ServerWorld.SLINGSHOT_TYPE);
+		case 22:
+			return new ServerWeapon(x,y,ServerWorld.WOODBOW_TYPE);
+		case 23:
+			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
+		case 24:
+			return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
+		case 25:
+			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
+		case 26:
+			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
+		case 27:
+			return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		}
 		// This won't happen
 		return null;

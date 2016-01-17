@@ -104,7 +104,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0.png");
 			setGravity(0.25);
-			setDamage(5);
+			setDamage(ServerWeapon.WOODBOW_DMG);
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -112,7 +112,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0.png");
 			setGravity(0.25);
-			setDamage(10);
+			setDamage(ServerWeapon.STEELBOW_DMG);
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -120,7 +120,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.MEGAARROW_TYPE:
 			setImage("MEGAARROW_0.png");
 			setGravity(0);
-			setDamage(15);
+			setDamage(ServerWeapon.MEGABOW_DMG);
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -128,7 +128,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.BULLET_TYPE:
 			setImage("BULLET_0.png");
 			setGravity(0.4);
-			setDamage(5);
+			setDamage(ServerWeapon.SLING_DMG);
 			setSpeed(15);
 			animated = false;
 			faceAngle = false;
@@ -136,7 +136,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0.png");
 			setGravity(0);
-			setDamage(10);
+			setDamage(ServerWeapon.FIREWAND_DMG);
 			setSpeed(15);
 			animated = true;
 			faceAngle = true;
@@ -144,7 +144,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.ICEBALL_TYPE:
 			setImage("ICEBALL_0_0.png");
 			setGravity(0);
-			setDamage(12);
+			setDamage(ServerWeapon.ICEWAND_DMG);
 			setSpeed(6);
 			animated = true;
 			faceAngle = true;
@@ -152,7 +152,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0.png");
 			setGravity(0);
-			setDamage(20);
+			setDamage(ServerWeapon.DARKWAND_DMG);
 			setSpeed(12);
 			animated = true;
 			faceAngle = true;
