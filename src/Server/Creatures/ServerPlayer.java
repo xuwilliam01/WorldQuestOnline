@@ -633,10 +633,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				currentDamage = equippedWeapons[weaponNo].getDamage();
 			queueMessage("D " + currentDamage + " " + getBaseDamage());
 
-			// while (message.length() < 4000)
-			// {
-			// queueMessage("L " + getHP());
-			// }
+			 while (message.length() < 4000)
+			 {
+			 queueMessage("L " + getHP());
+			 }
 
 			// Signal a repaint
 			queueMessage("U");
