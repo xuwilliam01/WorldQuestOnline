@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -119,6 +120,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private ClientShop shop = null;
 
 	/**
+	 * All the leftover lines to read in to the client
+	 */
+	private ArrayList<String> lines = new ArrayList<String>();
+
+	/**
 	 * Constructor for the client
 	 */
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame)
@@ -214,28 +220,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addMouseMotionListener(this);
 
 		direction = 'R';
-	}
 
-	/**
-	 * Gets the amount of money the client has
-	 */
-	public int getMoney()
-	{
-		return inventory.getMoney();
-	}
-
-	public void decreaseMoney(int amount)
-	{
-		inventory.decreaseMoney(amount);
-	}
-
-	/**
-	 * Print to the server
-	 */
-	public void print(String message)
-	{
-		output.println(message);
-		output.flush();
+		// Start the actual game
+		gameThread = new Thread(new readServer());
+		gameThread.start();
 	}
 
 	/**
@@ -244,19 +232,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class runGame implements Runnable
+	class readServer implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			try
+			while (true)
 			{
-				startTime = System.currentTimeMillis();
-
-				while (true)
+				while (!lines.isEmpty())
 				{
-
-					String message = input.readLine();
+					String message = lines.remove(0);
 
 					String[] tokens = message.split(" ");
 
@@ -379,6 +364,73 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 							if (shop != null)
 								closeShop();
 						}
+					}
+					
+
+				}
+
+				try
+				{
+					Thread.sleep(1);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets the amount of money the client has
+	 */
+	public int getMoney()
+	{
+		return inventory.getMoney();
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		inventory.decreaseMoney(amount);
+	}
+
+	/**
+	 * Print to the server
+	 */
+	public void print(String message)
+	{
+		output.println(message);
+		output.flush();
+	}
+
+	/**
+	 * Thread for running the actual game
+	 * 
+	 * @author William Xu && Alex Raita
+	 *
+	 */
+	class runGame implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			try
+			{
+				startTime = System.currentTimeMillis();
+
+				while (true)
+				{
+					String message = input.readLine();
+					lines.add(message);
+					try
+					{
+						Thread.sleep(10);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 
@@ -810,17 +862,17 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		return jump;
 	}
-	
+
 	public BufferedReader getInput()
 	{
 		return input;
 	}
-	
+
 	public PrintWriter getOutput()
 	{
 		return output;
 	}
-	
+
 	public Thread getThread()
 	{
 		return gameThread;
