@@ -24,6 +24,15 @@ public class ServerVendor extends ServerCreature {
 		makeShop();
 
 	}
+	
+	public ServerVendor(double x, double y, ServerWorld world, int quality, String image) {
+		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, image, ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
+	
+		this.quality = Math.min(quality, ServerWeapon.NUM_TIERS);
+		makeShop();
+
+	}
+	
 
 	public void makeShop()
 	{

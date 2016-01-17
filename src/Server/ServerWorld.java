@@ -139,7 +139,7 @@ public class ServerWorld
 	 */
 	public final ServerObject[] objectTypes = {
 			new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4),
+			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4,"VENDOR_RIGHT.png"),new ServerVendor(0, 0, this, 4,"VENDOR_LEFT.png"),
 			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this) };
 
 	/**
