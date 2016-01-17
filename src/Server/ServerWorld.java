@@ -371,14 +371,8 @@ public class ServerWorld
 												&& ((ServerProjectile) object)
 														.collidesWith(otherObject))
 										{
-											double knockBack = ((ServerProjectile) object)
-													.getKnockBack();
 
-											if (object.getHSpeed() < 0)
-											{
-												knockBack *= -1;
-											}
-
+											int knockback = 0;
 											if (object.getType().contains(
 													PIERCING_TYPE))
 											{
@@ -388,20 +382,38 @@ public class ServerWorld
 													.inflictDamage(
 															((ServerProjectile) object)
 																	.getDamage(),
-															knockBack);	
+															knockback);	
 													((ServerProjectile)object).addCollided(otherObject);		
 												}
 											}
 											else
 											{
-												((ServerCreature) otherObject)
-												.inflictDamage(
-														((ServerProjectile) object)
-																.getDamage(),
-														knockBack);
+
 												((ServerProjectile) object)
 												.destroy();
 											}
+										}
+									}
+									else if (object.getType().equals(EXPLOSION_TYPE))
+									{
+										if (otherObject.getType().charAt(0) == CREATURE_TYPE
+												&& ((ServerCreature) otherObject)
+														.isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object)
+														.getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
+												&& object.collidesWith(otherObject) && !((ServerProjectile)object).hasCollided(otherObject))
+										{
+											int knockback = 0;
+											((ServerCreature) otherObject)
+											.inflictDamage(
+													((ServerProjectile) object)
+															.getDamage(),
+													knockback);
+											((ServerProjectile)object).addCollided(otherObject);	
+											
 										}
 									}
 									// If a player collided with an item

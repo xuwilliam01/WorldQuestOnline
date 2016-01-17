@@ -281,8 +281,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(0);
 			setSolid(false);
 			setMapVisible(false);
-			damage = 0;
 			counter = 0;
+			setWidth(32);
+			setHeight(32);
 			setX(getX() - 16);
 			setY(getY() - 16);
 			setImage("EXPLOSION0_0.png");
@@ -294,10 +295,11 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(0);
 			setSolid(false);
 			setMapVisible(false);
-			damage = 0;
 			counter = 0;
+			setWidth(64);
+			setHeight(64);
 			setX(getX() - 32);
-			setY(getY() - 48);
+			setY(getY() - 32);
 			setImage("EXPLOSION2_0.png");
 			noOfExplosionFrames = 5;
 		}
@@ -307,8 +309,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(0);
 			setSolid(false);
 			setMapVisible(false);
-			damage = 0;
 			counter = 0;
+			setWidth(82);
+			setHeight(82);
 			setX(getX() - 41);
 			setY(getY() - 41);
 			setImage("EXPLOSION3_0.png");
@@ -320,8 +323,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(0);
 			setSolid(false);
 			setMapVisible(false);
-			damage = 0;
 			counter = 0;
+			setWidth(82);
+			setHeight(82);
 			setX(getX() - 41);
 			setY(getY() - 41);
 			setImage("EXPLOSION4_0.png");
@@ -333,8 +337,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(0);
 			setSolid(false);
 			setMapVisible(false);
-			damage = 0;
 			counter = 0;
+			setWidth(100);
+			setHeight(100);
 			setX(getX() - 50);
 			setY(getY() - 50);
 			setImage("EXPLOSION1_0.png");

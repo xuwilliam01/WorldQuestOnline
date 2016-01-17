@@ -109,8 +109,6 @@ public class Images
 							image.getSubimage(no * 19, 0, 19, 17), 38, 34));
 				}
 
-				
-				
 				image = ImageIO.read(new File(
 						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/32; no++)

@@ -211,7 +211,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
@@ -271,13 +271,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some weapons
 		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-				+ ServerWorld.WOOD_TIER));
+				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-				+ ServerWorld.WOOD_TIER));
+				+ ServerWorld.DIAMOND_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
-				+ ServerWorld.WOOD_TIER));
+				+ ServerWorld.GOLD_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.WOOD_TIER));
+		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.DARKWAND_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
+		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
 
 		addItem(new ServerMoney(0, 0, 5));
 		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
@@ -380,16 +387,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					setRowCol(new RowCol(2, 7));
 				}
-				else if (action.equals("MAGIC"))
+				else if (action.equals("WAND"))
 				{
-					// if (actionCounter < actionDelay / 3.0)
-					// {
-					// setRowCol(new RowCol(2, 4));
-					// }
-					// else
-					// {
 					setRowCol(new RowCol(2, 5));
-					// }
 				}
 				else if (action.equals("BLOCK"))
 				{
@@ -897,7 +897,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
 		int yDist = mouseY
-				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight()/2 + getHeight()/3);
+				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 2 + getHeight() / 3);
 
 		System.out.println("X/Y " + xDist + " " + yDist);
 
@@ -936,21 +936,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					for (int column = startColumn; column <= endColumn; column++)
 					{
-						for (ServerObject otherObject :
-							world.getObjectGrid()[row][column])
+						for (ServerObject otherObject : world.getObjectGrid()[row][column])
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-									.isAttackable()
+											.isAttackable()
 									&& ((ServerCreature) otherObject)
-									.getTeam() != getTeam()
+											.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject).inflictDamage(
 										PUNCHING_DAMAGE + getBaseDamage(), 5);
 								alreadyPunched
-								.add((ServerCreature) otherObject);
+										.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -965,7 +964,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						equippedWeapons[weaponNo].getActionImage(),
 						(int) (Math.toDegrees(angle) + 0.5),
 						equippedWeapons[weaponNo].getSwingSpeed(),
-						equippedWeapons[weaponNo].getDamage()+getBaseDamage()));
+						equippedWeapons[weaponNo].getDamage() + getBaseDamage()));
 				action = "SWING";
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(
@@ -977,59 +976,76 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				String arrowType = "";
 				String image = "";
 
-				switch(equippedWeapons[weaponNo].getType())
+				switch (equippedWeapons[weaponNo].getType())
 				{
 				case ServerWorld.SLINGSHOT_TYPE:
 					action = "BOW";
 					arrowType = ServerWorld.BULLET_TYPE;
 					image = "SLINGSHOT";
+					actionDelay = 16;
 					break;
 				case ServerWorld.WOODBOW_TYPE:
 					action = "BOW";
 					arrowType = ServerWorld.WOODARROW_TYPE;
 					image = "WOODBOW";
+					actionDelay = 16;
 					break;
 				case ServerWorld.STEELBOW_TYPE:
 					action = "BOW";
 					arrowType = ServerWorld.STEELARROW_TYPE;
 					image = "STEELBOW";
+					actionDelay = 16;
 					break;
 				case ServerWorld.MEGABOW_TYPE:
 					action = "BOW";
 					arrowType = ServerWorld.MEGAARROW_TYPE;
 					image = "MEGABOW";
+					actionDelay = 25;
 					break;
 				case ServerWorld.FIREWAND_TYPE:
 					action = "WAND";
 					arrowType = ServerWorld.FIREBALL_TYPE;
 					image = "FIREWAND";
-					x -= 90 - 64;
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+					}
+					actionDelay = 25;
 					break;
 				case ServerWorld.ICEWAND_TYPE:
 					action = "WAND";
 					arrowType = ServerWorld.ICEBALL_TYPE;
 					image = "ICEWAND";
-					x -= 90 - 64;
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+					}
+					actionDelay = 30;
 					break;
 				case ServerWorld.DARKWAND_TYPE:
 					action = "WAND";
 					arrowType = ServerWorld.DARKBALL_TYPE;
 					image = "DARKWAND";
-					x -= 90 - 64;
-					break;	
+					if (getDirection().equals("LEFT"))
+					{
+						x -= 90 - 64;
+					}
+					actionDelay = 30;
+					break;
 				}
 				world.add(new ServerProjectile(getX() + getWidth() / 2,
-						getY()+ getHeight() / 3, this, angle,
+						getY() + getHeight() / 3, this, angle,
 						arrowType));
-
-
 
 				if (getDirection().equals("LEFT"))
 				{
+					
 					image += "_LEFT.png";
 				}
 				else
+				{
 					image += "_RIGHT.png";
+				}
 
 				heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
 						ServerWorld.WEAPON_HOLD_TYPE);
@@ -1037,7 +1053,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				world.add(heldWeapon);
 			}
 		}
-
 
 		// if (weaponSelected == '0')
 		// {
@@ -1209,7 +1224,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-											.isBusy())
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
