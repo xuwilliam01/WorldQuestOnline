@@ -689,7 +689,7 @@ public class ServerWorld
 										if (y1 + vSpeed <= row * TILE_SIZE
 												+ TILE_SIZE
 												&& y1 >= row * TILE_SIZE
-														+ TILE_SIZE)
+												+ TILE_SIZE)
 										{
 											moveVertical = false;
 											collideRow = row;
@@ -704,57 +704,13 @@ public class ServerWorld
 							}
 							if (!moveVertical)
 							{
-								object.setY(collideRow * TILE_SIZE + TILE_SIZE);
+								object.setY(collideRow * TILE_SIZE + TILE_SIZE + 1);
 								object.setVSpeed(0);
 							}
 						}
 
-						if (hSpeed >= 0)
+						if (hSpeed > 0)
 						{
-							
-							// Trying to skip steps
-							
-//							if (object.getType().charAt(0)==CREATURE_TYPE && vSpeed ==0)
-//							{
-//								int startCheckRow = (int)((object.getY()-ServerWorld.TILE_SIZE -1)/ServerWorld.TILE_SIZE);
-//								int endCheckRow = (int)((object.getY() + object.getHeight() -1)/ServerWorld.TILE_SIZE);
-//								
-//								int startCheckColumn = (int)((object.getX() -1)/ServerWorld.TILE_SIZE);
-//								
-//								
-//								int endCheckColumn = (int)((object.getX() + object.getWidth() + object.getHSpeed())/ServerWorld.TILE_SIZE);
-//								
-//								if (tileGrid[endCheckRow][endCheckColumn] >= 'A')
-//								{
-//									boolean canJumpTile = true;
-//									
-//									for (int column = startCheckColumn; column <= endCheckColumn; column++)
-//									{
-//										if (tileGrid[startCheckRow][column] >= 'A')
-//										{
-//											canJumpTile = false;
-//											break;
-//										}
-//									}
-//									
-//									for(int row = startCheckRow; row <= endCheckRow-1 && canJumpTile; row++)
-//									{
-//										if (tileGrid[row][endCheckColumn] >= 'A')
-//											{
-//												canJumpTile = false;
-//												break;
-//											}
-//									}
-//									
-//									if (canJumpTile)
-//									{
-//										object.setY(endCheckRow * ServerWorld.TILE_SIZE);
-//										y1 = object.getY();
-//										y2 = object.getY() + object.getHeight();
-//									}
-//								}
-//							}
-							
 							// The row and column of the tile that was collided
 							// with
 							int collideColumn = 0;
@@ -768,8 +724,7 @@ public class ServerWorld
 											&& row * TILE_SIZE + TILE_SIZE > y1)
 									{
 										if (x2 + hSpeed >= column * TILE_SIZE
-												&& x2 <= column * TILE_SIZE
-														+ MARGIN_OF_ERROR)
+												&& x2 <= column * TILE_SIZE)
 										{
 											moveHorizontal = false;
 											collideColumn = column;
@@ -789,7 +744,7 @@ public class ServerWorld
 								object.setHSpeed(0);
 							}
 						}
-						else if (hSpeed <= 0)
+						else if (hSpeed < 0)
 						{
 							// The row and column of the tile that was collided
 							// with
@@ -806,8 +761,7 @@ public class ServerWorld
 										if (x1 + hSpeed <= column * TILE_SIZE
 												+ TILE_SIZE
 												&& x1 >= column * TILE_SIZE
-														+ TILE_SIZE
-														- MARGIN_OF_ERROR)
+												+ TILE_SIZE)
 										{
 											moveHorizontal = false;
 											collideColumn = column;
@@ -828,6 +782,8 @@ public class ServerWorld
 							}
 						}
 					}
+					
+					
 
 					if (moveHorizontal)
 					{
