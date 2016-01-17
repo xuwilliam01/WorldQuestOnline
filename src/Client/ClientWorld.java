@@ -112,7 +112,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 6; no++)
+		for (int no = 0; no < 24; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -121,7 +121,7 @@ public class ClientWorld
 
 			double hSpeed = 0;
 
-			hSpeed = (Math.random() * 0.8 + 0.2) * cloudDirection;
+			hSpeed = (Math.random() * 0.9 + 0.1) * cloudDirection;
 
 			int imageNo = no;
 
