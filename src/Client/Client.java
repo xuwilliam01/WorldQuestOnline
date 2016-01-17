@@ -374,7 +374,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 			}

@@ -1328,7 +1328,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		if (this.message.length() < 50000)
+		if (this.message.length() < 30000)
 		{
 			if (message.length() != 0)
 				this.message.append(" " + message);
