@@ -1117,7 +1117,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
 	 */
-	public void inflictDamage(int amount, double knockBack)
+	public void inflictDamage(int amount)
 	{
 
 		if (equippedArmour != null)

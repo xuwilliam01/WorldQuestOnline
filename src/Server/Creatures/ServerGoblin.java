@@ -37,7 +37,7 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * The initial speed the goblin jumps at
 	 */
-	private int jumpSpeed = 20;
+	private int jumpSpeed = 12;
 
 	/**
 	 * The action currently performed by the goblin
@@ -74,6 +74,11 @@ public class ServerGoblin extends ServerCreature
 	 * The range to lock on to an enemy
 	 */
 	private int targetRange = 250;
+	
+	/**
+	 * The range for the goblin to start fighting the target
+	 */
+	private int fightingRange;
 
 	/**
 	 * The amount of armour the goblin has (reducing the total damage taken)
@@ -99,10 +104,12 @@ public class ServerGoblin extends ServerCreature
 		case 1:
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0.png");
+			fightingRange = (int)(Math.random()*ServerWorld.TILE_SIZE) + ServerWorld.TILE_SIZE/2;
 			break;
 		case 2:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0.png");
+			fightingRange = (int)(Math.random()*ServerWorld.TILE_SIZE) + ServerWorld.TILE_SIZE/2;
 			armour = 0.5;
 			break;
 		}
@@ -146,7 +153,7 @@ public class ServerGoblin extends ServerCreature
 
 			if (getTarget() == null)
 			{
-				if (getWorld().getWorldCounter() % 30 == 0)
+				if (getWorld().getWorldCounter() % 15 == 0)
 				{
 					setTarget(findTarget());
 				}
@@ -172,37 +179,45 @@ public class ServerGoblin extends ServerCreature
 			}
 			else
 			{
-				if ((getX() + getWidth())
-						- (getTarget().getX()) < -ServerWorld.TILE_SIZE
-						&& getX()
-								- (getTarget().getX() + getTarget().getWidth()) < -ServerWorld.TILE_SIZE)
+				if ((getX() + getWidth()/2 < getTarget().getX() + getTarget().getWidth()/2) && !onTarget)
 				{
 					setHSpeed(movementSpeed);
-					onTarget = false;
 				}
-				else if (getX()
-						- (getTarget().getX() + getTarget().getWidth()) > ServerWorld.TILE_SIZE
-						&& (getX() + getWidth())
-								- (getTarget().getX()) > ServerWorld.TILE_SIZE)
+				else if ((getX() + getWidth()/2 > getTarget().getX() + getTarget().getWidth()/2) && !onTarget)
 				{
 					setHSpeed(-movementSpeed);
-					onTarget = false;
 				}
 				else
 				{
-					onTarget = true;
 					setHSpeed(0);
 				}
 
-				if (quickInRange(getTarget(), ServerWorld.TILE_SIZE))
+				if (quickInRange(getTarget(), fightingRange))
 				{
+					onTarget = true;
 					if (action == null
 							&& getWorld().getWorldCounter() % 30 == 0)
 					{
-						if ((int) (Math.random() * 5) == 0)
+						int actionChoice = (int)(Math.random()*12);
+						
+						if (actionChoice == 0)
+						{
+							setTarget(null);
+							setVSpeed(-jumpSpeed);
+							setOnSurface(false);
+							if (getDirection().equals("RIGHT"))
+							{
+								setHSpeed(movementSpeed);
+							}
+							else
+							{
+								setHSpeed(-movementSpeed);
+							}
+						}
+						else if (actionChoice == 1 || actionChoice == 2)
 						{
 							action = "BLOCK";
-							actionDelay = 30;
+							actionDelay = 55;
 						}
 						else
 						{
@@ -232,6 +247,10 @@ public class ServerGoblin extends ServerCreature
 							}
 						}
 					}
+				}
+				else
+				{
+					onTarget = false;
 				}
 			}
 		}
