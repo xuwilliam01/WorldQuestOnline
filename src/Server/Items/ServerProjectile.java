@@ -121,7 +121,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setImage("MEGAARROW_0.png");
 			setGravity(0);
 			setDamage(ServerWeapon.MEGABOW_DMG);
-			setSpeed(20);
+			setSpeed(30);
 			animated = false;
 			faceAngle = true;
 			break;

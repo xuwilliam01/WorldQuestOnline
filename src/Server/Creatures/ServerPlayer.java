@@ -391,10 +391,27 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (action.equals("BOW"))
 				{
 					setRowCol(new RowCol(2, 7));
+					if (heldWeapon!=null)
+					{
+						heldWeapon.setX(getDrawX());
+						heldWeapon.setY(getDrawY());
+					}
 				}
 				else if (action.equals("WAND"))
 				{
 					setRowCol(new RowCol(2, 5));
+					if (heldWeapon!=null)
+					{
+						if (getDirection().equals("LEFT"))
+						{
+						heldWeapon.setX(getDrawX()-(90-64));
+						}
+						else
+						{
+							heldWeapon.setX(getDrawX());
+						}
+						heldWeapon.setY(getDrawY());
+					}
 				}
 				else if (action.equals("BLOCK"))
 				{

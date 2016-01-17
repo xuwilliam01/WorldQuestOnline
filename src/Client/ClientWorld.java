@@ -63,7 +63,7 @@ public class ClientWorld
 	/**
 	 * The font for messages
 	 */
-	public final static Font MESSAGE_FONT = new Font("Courier", Font.BOLD, 20);
+	public final static Font MESSAGE_FONT = new Font("Terminal", Font.PLAIN, 20);
 
 	/**
 	 * The normal font for text
