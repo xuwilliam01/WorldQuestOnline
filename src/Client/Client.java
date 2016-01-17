@@ -422,7 +422,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
+					if (lines.size()<10)
+					{
 					lines.add(message);
+					}
 
 					try
 					{
