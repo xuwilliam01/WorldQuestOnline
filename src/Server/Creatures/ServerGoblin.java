@@ -11,9 +11,9 @@ import Tools.RowCol;
 public class ServerGoblin extends ServerCreature
 {
 
-	//Types of goblins
+	// Types of goblins
 	public final static int NUM_TYPES = 2;
-	
+
 	/**
 	 * The default HP of a goblin of a certain type
 	 */
@@ -73,7 +73,7 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * The range to lock on to an enemy
 	 */
-	private int targetRange = 500;
+	private int targetRange = 250;
 
 	/**
 	 * The amount of armour the goblin has (reducing the total damage taken)
@@ -92,8 +92,8 @@ public class ServerGoblin extends ServerCreature
 	{
 		super(x, y, 16, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
 				"", GOBLIN_HP, world, true);
-		
-		int numTypes = (int) (Math.random()*NUM_TYPES+1);
+
+		int numTypes = (int) (Math.random() * NUM_TYPES + 1);
 		switch (numTypes)
 		{
 		case 1:
@@ -197,28 +197,39 @@ public class ServerGoblin extends ServerCreature
 				if (quickInRange(getTarget(), ServerWorld.TILE_SIZE))
 				{
 					if (action == null
-							&& getWorld().getWorldCounter() % 45 == 0)
+							&& getWorld().getWorldCounter() % 30 == 0)
 					{
-						action = "SWING";
-						actionDelay = 16;
-						
-						int angle = 180;
-						if (getDirection().equals("RIGHT"))
+						if ((int) (Math.random() * 5) == 0)
 						{
-							angle = 0;
-						}
-						
-						if (getType().equals(ServerWorld.GOBLIN_GENERAL_TYPE))
-						{
-						getWorld().add(new ServerWeaponSwing(this, 0, -25,
-								"SWIRON_0.png",angle,
-								actionDelay, 4));
+							action = "BLOCK";
+							actionDelay = 30;
 						}
 						else
 						{
-							getWorld().add(new ServerWeaponSwing(this, 0, -25,
-									"DAWOOD_0.png",angle,
-									actionDelay, 2));
+							action = "SWING";
+							actionDelay = 16;
+
+							int angle = 180;
+							if (getDirection().equals("RIGHT"))
+							{
+								angle = 0;
+							}
+
+							if (getType().equals(
+									ServerWorld.GOBLIN_GENERAL_TYPE))
+							{
+								getWorld().add(
+										new ServerWeaponSwing(this, 0, -25,
+												"SWIRON_0.png", angle,
+												actionDelay, 4));
+							}
+							else
+							{
+								getWorld().add(
+										new ServerWeaponSwing(this, 0, -25,
+												"DAWOOD_0.png", angle,
+												actionDelay, 2));
+							}
 						}
 					}
 				}
@@ -257,6 +268,10 @@ public class ServerGoblin extends ServerCreature
 				{
 					setRowCol(new RowCol(2, 8));
 				}
+			}
+			else if (action.equals("BLOCK"))
+			{
+				setRowCol(new RowCol(2, 9));
 			}
 		}
 		else if (getHSpeed() != 0 && isOnSurface())
@@ -362,6 +377,11 @@ public class ServerGoblin extends ServerCreature
 		{
 			amount = 1;
 		}
+		
+		if (action == "BLOCK")
+		{
+			amount = 0;
+		}
 
 		setHP(getHP() - amount);
 
@@ -380,9 +400,9 @@ public class ServerGoblin extends ServerCreature
 			dropInventory();
 			setHSpeed(0);
 			setVSpeed(0);
-			
+
 			setAttackable(false);
-			
+
 			actionCounter = -1;
 			action = null;
 		}
