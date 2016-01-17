@@ -59,7 +59,7 @@ public class StartClient
 		myFrame.add(pane);
 		pane.setVisible(true);
 		
-		ClientInventory inventory = new ClientInventory();
+		ClientInventory inventory = new ClientInventory(null);
 		Client client = new Client(mySocket,inventory,pane);
 		inventory.setClient(client);
 		

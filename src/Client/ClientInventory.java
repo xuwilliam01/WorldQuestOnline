@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Imports.Images;
@@ -23,8 +24,10 @@ public class ClientInventory extends JPanel{
 	private ClientItem equippedShield = null;
 
 	private Client client;
+	
+	private JButton mainMenu;
 
-	public ClientInventory()
+	public ClientInventory(JButton menu)
 	{
 		setDoubleBuffered(true);
 		setBackground(Color.black);
@@ -33,6 +36,14 @@ public class ClientInventory extends JPanel{
 		requestFocusInWindow();
 		setLayout(null);
 		setSize(INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
+		
+		if(menu != null)
+		{
+			mainMenu = menu;
+			mainMenu.setSize(225,50);
+			mainMenu.setLocation(INVENTORY_WIDTH-250,Client.SCREEN_HEIGHT-125);
+			add(mainMenu);
+		}
 	}
 	/**
 	 * Adds an item to the array given its image

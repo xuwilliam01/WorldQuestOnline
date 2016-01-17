@@ -170,6 +170,8 @@ public class MainMenu {
 
 	private static class GamePanel extends JPanel
 	{
+		Client client;
+		
 		public GamePanel()
 		{
 			boolean connected = false;
@@ -213,8 +215,10 @@ public class MainMenu {
 			mainFrame.add(pane);
 			pane.setVisible(true);
 			
-			ClientInventory inventory = new ClientInventory();
-			Client client = new Client(mySocket,inventory,pane);
+			JButton menu = new JButton("Main Menu");
+			menu.addActionListener(new GameMenuButton());
+			ClientInventory inventory = new ClientInventory(menu);
+			client = new Client(mySocket,inventory,pane);
 			inventory.setClient(client);
 			
 			client.setLocation(0,0);
@@ -236,8 +240,6 @@ public class MainMenu {
 	{	
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("extiign creator");
-			//creatorPanel.setLocation(-10000,-10000);
 			creatorPanel.setVisible(false);
 			mainFrame.remove(creatorPanel);
 			mainFrame.invalidate();
@@ -250,6 +252,25 @@ public class MainMenu {
 			mainMenu.revalidate();
 		}
 	}
+	
+	private static class GameMenuButton implements ActionListener
+	{	
+		public void actionPerformed(ActionEvent e)
+		{
+			gamePanel.setLocation(-10000,-10000);
+			gamePanel.setVisible(false);
+			mainFrame.remove(gamePanel);
+			mainFrame.invalidate();
+			mainFrame.validate();
+			gamePanel= null;
+			
+			mainMenu = new MainPanel();
+			mainFrame.add(mainMenu);
+			mainFrame.setVisible(true);
+			mainMenu.revalidate();
+		}
+	}
+	
 	private static class StartGame implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
@@ -309,4 +330,3 @@ public class MainMenu {
 	}
 
 }
-

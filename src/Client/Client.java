@@ -823,4 +823,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		return jump;
 	}
+	
+	public BufferedReader getInput()
+	{
+		return input;
+	}
 }
