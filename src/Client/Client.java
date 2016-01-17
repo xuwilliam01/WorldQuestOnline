@@ -241,6 +241,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			{
 				while (!lines.isEmpty())
 				{
+					System.out.println(lines.size());
 					String message = lines.remove(0);
 
 					String[] tokens = message.split(" ");
@@ -422,10 +423,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
-					if (lines.size()<10)
-					{
 					lines.add(message);
-					}
 
 					try
 					{
