@@ -163,9 +163,9 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerObject[] objectTypes = {
-			new ServerCastle(0, 0, 1, this), new ServerCastle(0, 0, 2, this),
+			new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this), new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
 			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4,"VENDOR_RIGHT.png"),new ServerVendor(0, 0, this, 4,"VENDOR_LEFT.png"),
-			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this) };
+			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this), new ServerSpawner(0,0,new ServerGoblin(0,0,this,ServerPlayer.RED_TEAM),this), new ServerSpawner(0,0,new ServerGoblin(0,0,this,ServerPlayer.BLUE_TEAM),this) };
 
 	/**
 	 * The size of each object tile
@@ -221,16 +221,6 @@ public class ServerWorld
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		
 		newWorld();
-		
-		add(new ServerGoblin(300- 150,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
-		add(new ServerGoblin(300- 100,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
-		add(new ServerGoblin(300- 50,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
-		add(new ServerGoblin(300,300,this,ServerPlayer.BLUE_TEAM,GOBLIN_GENERAL_TYPE));
-		
-		add(new ServerGoblin(472*TILE_SIZE,300,this,ServerPlayer.RED_TEAM,GOBLIN_GENERAL_TYPE));
-		add(new ServerGoblin(472*TILE_SIZE + 50,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
-		add(new ServerGoblin(472*TILE_SIZE + 100,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
-		add(new ServerGoblin(472*TILE_SIZE + 150,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
 	}
 
 	/**

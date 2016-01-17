@@ -11,6 +11,9 @@ import Tools.RowCol;
 public class ServerGoblin extends ServerCreature
 {
 
+	//Types of goblins
+	public final static int NUM_TYPES = 2;
+	
 	/**
 	 * The default HP of a goblin of a certain type
 	 */
@@ -85,18 +88,20 @@ public class ServerGoblin extends ServerCreature
 	 * @param team
 	 * @param type
 	 */
-	public ServerGoblin(double x, double y, ServerWorld world, int team,
-			String type)
+	public ServerGoblin(double x, double y, ServerWorld world, int team)
 	{
 		super(x, y, 16, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
-				type, GOBLIN_HP, world, true);
+				"", GOBLIN_HP, world, true);
 		
-		switch (type)
+		int numTypes = (int) (Math.random()*NUM_TYPES+1);
+		switch (numTypes)
 		{
-		case ServerWorld.NAKED_GOBLIN_TYPE:
+		case 1:
+			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0.png");
 			break;
-		case ServerWorld.GOBLIN_GENERAL_TYPE:
+		case 2:
+			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0.png");
 			armour = 0.5;
 			break;

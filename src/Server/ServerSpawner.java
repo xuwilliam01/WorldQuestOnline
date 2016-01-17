@@ -1,6 +1,7 @@
 package Server;
 
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 
 public class ServerSpawner extends ServerObject{
 
@@ -8,24 +9,36 @@ public class ServerSpawner extends ServerObject{
 	private int delay;
 	private ServerWorld world;
 	private int maxSpawn;
-	
+
 	public ServerSpawner(double x, double y, ServerCreature creatureType, ServerWorld world) {
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE);
 		this.creature = creatureType;
 		this.world = world;
-		
+
 		makeExist();
 		setSolid(false);
-		switch(creature.getType())
+
+		//Since there are many types of goblins, they have special cases
+		if(creature.getType().contains(ServerWorld.GOBLIN_TYPE))
 		{
-		case ServerWorld.SLIME_TYPE:
-			setImage("SLIME_SPAWN.png");
-			maxSpawn = 20;
+			if(creature.getTeam() == ServerPlayer.RED_TEAM)
+				setImage("RED_GOBLIN_SPAWN.png");
+			else
+				setImage("BLUE_GOBLIN_SPAWN.png");
+			maxSpawn = 1000;
 			delay = 10000;
-			break;
 		}
+		else
+			switch(creature.getType())
+			{
+			case ServerWorld.SLIME_TYPE:
+				setImage("SLIME_SPAWN.png");
+				maxSpawn = 20;
+				delay = 10000;
+				break;
+			}
 	}
-	
+
 	public void update(long worldCounter)
 	{
 		if(worldCounter % (delay/ServerEngine.UPDATE_RATE) == 0 && maxSpawn > 0)
@@ -39,17 +52,17 @@ public class ServerSpawner extends ServerObject{
 				destroy();
 		}
 	}
-	
+
 	public int getDelay()
 	{
 		return delay;
 	}
-	
+
 	public ServerCreature getCreature()
 	{
 		return creature;
 	}
-	
+
 	public ServerWorld getWorld()
 	{
 		return world;

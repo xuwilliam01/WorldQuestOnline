@@ -509,6 +509,14 @@ public class Images
 					ServerWorld.TILE_SIZE));	
 			images.add(new GameImage("SLIME_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
 							2*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("RED_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));	
+			images.add(new GameImage("RED_GOBLIN_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
+							2*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLUE_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));	
+			images.add(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
+							2*ServerWorld.TILE_SIZE));
 
 			for (int no = 0; no < 6; no++)
 			{

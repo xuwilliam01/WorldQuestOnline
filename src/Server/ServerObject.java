@@ -6,6 +6,7 @@ import Imports.Images;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
 import Tools.RowCol;
@@ -277,6 +278,14 @@ public class ServerObject
 			ServerSlime newSlime = (ServerSlime)original;
 			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld(),newSlime.getTeam());
 		}
+		
+		//Special case if we have a goblin type
+		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
+		{
+			ServerGoblin newGoblin = (ServerGoblin)original;
+			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam());
+		}
+		
 		return null;
 	}
 	
