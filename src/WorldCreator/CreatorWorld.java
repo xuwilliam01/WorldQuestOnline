@@ -796,8 +796,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
 			{
 				objectFactor *= (1.1 * (notches));
-				posX /= 1.1;
-				posY /= 1.1;
+				posX /= (1.1 * notches);
+				posY /= (1.1*notches);
 
 			}
 			else
@@ -812,8 +812,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			if (objectFactor / (1.1 * (-notches)) >= 1)
 			{
 				objectFactor /= (1.1 * (-notches));
-				posX *= 1.1;
-				posY *= 1.1;
+				posX *= 1.1 * -notches;
+				posY *= 1.1 * -notches;
 
 			}
 			else
