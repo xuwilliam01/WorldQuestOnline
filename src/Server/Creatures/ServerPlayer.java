@@ -190,6 +190,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private ServerObject heldWeapon;
 
+	/**
+	 * Signaling the writer thread to flush
+	 */
+	private boolean flushWriterNow = false;
+
 	private int mana = PLAYER_START_MANA;
 	private int maxMana = PLAYER_START_MANA;
 
@@ -295,8 +300,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
-
+		
+		Thread writer = new Thread(new WriterThread());
+		writer.start();
 	}
+	
 
 	/**
 	 * Send the player the entire map
@@ -536,111 +544,148 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void updateClient()
 	{
-		if (exists())
+		if (!flushWriterNow)
 		{
-			// Send all the objects within all the object tiles in the player's
-			// screen
-			int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
-			int endRow = (int) ((getY() + getHeight() / 2 + Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
-			int startColumn = (int) ((getX() + getWidth() / 2 - Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
-			int endColumn = (int) ((getX() + getWidth() / 2 + Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
+			if (exists())
+			{
+				// Send all the objects within all the object tiles in the
+				// player's
+				// screen
+				int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
+				int endRow = (int) ((getY() + getHeight() / 2 + Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
+				int startColumn = (int) ((getX() + getWidth() / 2 - Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
+				int endColumn = (int) ((getX() + getWidth() / 2 + Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
 
-			if (startRow < 0)
-			{
-				startRow = 0;
-			}
-			else if (endRow > world.getObjectGrid().length - 1)
-			{
-				endRow = world.getObjectGrid().length - 1;
-			}
-
-			if (startColumn < 0)
-			{
-				startColumn = 0;
-			}
-			else if (endColumn > world.getObjectGrid()[0].length - 1)
-			{
-				endColumn = world.getObjectGrid()[0].length - 1;
-			}
-
-			for (int row = startRow; row <= endRow; row++)
-			{
-				for (int column = startColumn; column <= endColumn; column++)
+				if (startRow < 0)
 				{
-					for (ServerObject object : world.getObjectGrid()[row][column])
+					startRow = 0;
+				}
+				else if (endRow > world.getObjectGrid().length - 1)
+				{
+					endRow = world.getObjectGrid().length - 1;
+				}
+
+				if (startColumn < 0)
+				{
+					startColumn = 0;
+				}
+				else if (endColumn > world.getObjectGrid()[0].length - 1)
+				{
+					endColumn = world.getObjectGrid()[0].length - 1;
+				}
+
+				for (int row = startRow; row <= endRow; row++)
+				{
+					for (int column = startColumn; column <= endColumn; column++)
 					{
-						if (object.exists()
-								&& !object.getType().equals(
-										ServerWorld.SPAWN_TYPE))
+						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-							int x = (int) (object.getX() + 0.5);
-							int y = (int) (object.getY() + 0.5);
-							int team = ServerCreature.NEUTRAL;
-
-							if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
+							if (object.exists()
+									&& !object.getType().equals(
+											ServerWorld.SPAWN_TYPE))
 							{
-								x = ((ServerCreature) object).getDrawX();
-								y = ((ServerCreature) object).getDrawY();
-								team = ((ServerCreature) object).getTeam();
-							}
-							else if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
+								int x = (int) (object.getX() + 0.5);
+								int y = (int) (object.getY() + 0.5);
+								int team = ServerCreature.NEUTRAL;
 
+								if (object.getType().charAt(0) == ServerWorld.CREATURE_TYPE)
+								{
+									x = ((ServerCreature) object).getDrawX();
+									y = ((ServerCreature) object).getDrawY();
+									team = ((ServerCreature) object).getTeam();
+								}
+								else if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
+
+								{
+									x = ((ServerProjectile) object).getDrawX();
+									y = ((ServerProjectile) object).getDrawY();
+								}
+
+								queueMessage("O " + object.getID() + " " + x
+										+ " " + y + " " + object.getImage()
+										+ " " + team + " " + object.getType());
+							}
+							else
 							{
-								x = ((ServerProjectile) object).getDrawX();
-								y = ((ServerProjectile) object).getDrawY();
+								queueMessage("R " + object.getID());
 							}
-
-							queueMessage("O " + object.getID() + " " + x
-									+ " " + y + " " + object.getImage()
-									+ " " + team + " " + object.getType());
-						}
-						else
-						{
-							queueMessage("R " + object.getID());
 						}
 					}
 				}
-			}
 
-			// Try to move the player in the direction that the key is holding
-			if (movingDirection != 0)
+				// Try to move the player in the direction that the key is
+				// holding
+				if (movingDirection != 0)
+				{
+					setHSpeed(movingDirection * horizontalMovement);
+				}
+
+				// Check if the vendor is out of range
+				if (vendor != null
+						&& (!collidesWith(vendor) || getHP() <= 0 || isDisconnected()))
+				{
+					vendor.setIsBusy(false);
+					vendor = null;
+					queueMessage("C");
+				}
+
+				// Send the player's HP, Mana, and speed
+				queueMessage("Q " + mana);
+				queueMessage("K " + maxMana);
+				queueMessage("L " + getHP());
+				queueMessage("M " + getMaxHP());
+				queueMessage("S " + horizontalMovement);
+				queueMessage("J " + verticalMovement);
+
+				// Send the player's current damage
+				int currentDamage = PUNCHING_DAMAGE;
+				int weaponNo = weaponSelected - '0';
+				if (weaponNo != DEFAULT_WEAPON_SLOT
+						&& equippedWeapons[weaponNo] != null)
+					currentDamage = equippedWeapons[weaponNo].getDamage();
+				queueMessage("D " + currentDamage + " " + getBaseDamage());
+
+				while (message.length() < 4000)
+				{
+					queueMessage("L " + getHP());
+				}
+
+				// Signal a repaint
+				queueMessage("U");
+				flushWriterNow = true;
+			}
+		}
+	}
+
+	/**
+	 * Thread for running the actual game
+	 * 
+	 * @author William Xu && Alex Raita
+	 *
+	 */
+	class WriterThread implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			while (true)
 			{
-				setHSpeed(movingDirection * horizontalMovement);
+				if (flushWriterNow)
+				{
+					flushWriter();
+					flushWriterNow = false;
+				}
+
+				try
+				{
+					Thread.sleep(1);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
-			// Check if the vendor is out of range
-			if (vendor != null
-					&& (!collidesWith(vendor) || getHP() <= 0 || isDisconnected()))
-			{
-				vendor.setIsBusy(false);
-				vendor = null;
-				queueMessage("C");
-			}
-
-			// Send the player's HP, Mana, and speed
-			queueMessage("Q " + mana);
-			queueMessage("K " + maxMana);
-			queueMessage("L " + getHP());
-			queueMessage("M " + getMaxHP());
-			queueMessage("S " + horizontalMovement);
-			queueMessage("J " + verticalMovement);
-
-			// Send the player's current damage
-			int currentDamage = PUNCHING_DAMAGE;
-			int weaponNo = weaponSelected - '0';
-			if (weaponNo != DEFAULT_WEAPON_SLOT
-					&& equippedWeapons[weaponNo] != null)
-				currentDamage = equippedWeapons[weaponNo].getDamage();
-			queueMessage("D " + currentDamage + " " + getBaseDamage());
-
-			 while (message.length() < 4000)
-			 {
-			 queueMessage("L " + getHP());
-			 }
-
-			// Signal a repaint
-			queueMessage("U");
-			flushWriter();
 		}
 	}
 
@@ -1328,10 +1373,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-			if (message.length() != 0)
-				this.message.append(" " + message);
-			else
-				this.message.append(message);
+		if (message.length() != 0)
+			this.message.append(" " + message);
+		else
+			this.message.append(message);
 	}
 
 	/**
