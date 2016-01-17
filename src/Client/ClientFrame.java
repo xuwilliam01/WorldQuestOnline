@@ -19,10 +19,10 @@ public class ClientFrame extends JFrame
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 	    DisplayMode dm = gs.getDisplayMode();
-	    Client.SCREEN_WIDTH = dm.getWidth()-300;
+	    Client.SCREEN_WIDTH = dm.getWidth()-ClientInventory.INVENTORY_WIDTH;
 	    Client.SCREEN_HEIGHT = dm.getHeight();
 	    
-	    System.out.println(dm.getWidth()-300);
+	    System.out.println(dm.getWidth()-ClientInventory.INVENTORY_WIDTH);
 	    System.out.println(dm.getHeight());
 		
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));

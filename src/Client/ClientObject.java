@@ -2,8 +2,6 @@ package Client;
 
 import java.awt.Image;
 
-import com.sun.javafx.tk.FontMetrics;
-
 import Imports.Images;
 import Server.ServerWorld;
 

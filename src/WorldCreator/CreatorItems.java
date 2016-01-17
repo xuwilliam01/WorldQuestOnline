@@ -12,6 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+
+import Imports.Images;
 
 public class CreatorItems extends JPanel implements ActionListener{
 
@@ -33,6 +36,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 	private JButton updateHeight;
 	private JButton recentre = new JButton("Recentre/Reset Zoom");
 
+	private Timer paintTimer = new Timer(10,this);
 
 	public CreatorItems(CreatorWorld world)
 	{
@@ -74,6 +78,8 @@ public class CreatorItems extends JPanel implements ActionListener{
 		recentre.setLocation(WIDTH-250,Client.Client.SCREEN_HEIGHT-280);
 		recentre.addActionListener(this);
 		add(recentre);
+		
+		paintTimer.start();
 	}
 
 	public void addButtons()
@@ -106,8 +112,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		graphics.setColor(Color.red);
+		graphics.fillRect(0, 0, WIDTH, Client.Client.HEIGHT);
+		graphics.setColor(Color.BLACK);
 		graphics.drawString("TILES", 140, 20);
-
+		repaint();
 	}
 
 	@Override
@@ -149,6 +158,10 @@ public class CreatorItems extends JPanel implements ActionListener{
 			world.setObjectFactor(1);
 			world.setPosX(200);
 			world.setPosY(200);
+		}
+		else if(button.getSource() == paintTimer)
+		{
+			repaint();
 		}
 		else
 		{

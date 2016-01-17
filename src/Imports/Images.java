@@ -573,6 +573,17 @@ public class Images
 
 			images.add(new GameImage("BACKGROUND.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
+			
+			images.add(new GameImage("FindAGame.png",
+					300,100));
+			images.add(new GameImage("CreateAServer.png",
+					400,100));
+			images.add(new GameImage("CreateAMap.png",
+					300,100));
+			images.add(new GameImage("WorldQuestOnline.png",
+					550,125));
+			images.add(new GameImage("Instructions.png",
+					300,100));
 		}
 	}
 
