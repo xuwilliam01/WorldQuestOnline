@@ -37,6 +37,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private PrintWriter output;
 	private BufferedReader input;
 
+	private Thread gameThread;
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
 
@@ -202,7 +203,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 
 		// Start the actual game
-		Thread gameThread = new Thread(new runGame());
+		gameThread = new Thread(new runGame());
 		gameThread.start();
 
 		System.out.println("Game started");
@@ -827,5 +828,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public BufferedReader getInput()
 	{
 		return input;
+	}
+	
+	public PrintWriter getOutput()
+	{
+		return output;
+	}
+	
+	public Thread getThread()
+	{
+		return gameThread;
 	}
 }
