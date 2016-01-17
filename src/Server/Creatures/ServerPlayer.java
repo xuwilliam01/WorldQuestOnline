@@ -1328,6 +1328,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
+		
 		if (message.length() != 0)
 			this.message.append(" " + message);
 		else
@@ -1350,7 +1351,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		output.println(message);
 		output.flush();
-		System.out.println(message);
+		System.out.println(message.length());
 		message = new StringBuilder();
 	}
 
