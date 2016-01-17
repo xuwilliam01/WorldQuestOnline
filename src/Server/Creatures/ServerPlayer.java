@@ -16,6 +16,7 @@ import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
+import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
@@ -270,14 +271,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		baseImage = "BASE_" + skinColour;
 
 		// Start the player off with some weapons
+		
+		addItem(new ServerMoney(0, 0, 5));
 		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
 				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-				+ ServerWorld.DIAMOND_TIER));
+				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
-				+ ServerWorld.GOLD_TIER));
+				+ ServerWorld.IRON_TIER));
 		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
-				+ ServerWorld.WOOD_TIER));
+				+ ServerWorld.IRON_TIER));
+		
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE));
@@ -286,7 +290,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
 
-		addItem(new ServerMoney(0, 0, 5));
+		addItem(new ServerPotion(0, 0, ServerWorld.HP_POTION_TYPE));
+		addItem(new ServerPotion(0, 0, ServerWorld.DMG_POTION_TYPE));
+		addItem(new ServerPotion(0, 0, ServerWorld.JUMP_POTION_TYPE));
+		
 		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
 		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
@@ -446,22 +453,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else
 				{
 					// Respawn the player
-					addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-							+ ServerWorld.WOOD_TIER));
 					addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 							+ ServerWorld.WOOD_TIER));
-					addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
-							+ ServerWorld.WOOD_TIER));
-					addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
-							+ ServerWorld.WOOD_TIER));
-
-					addItem(new ServerMoney(0, 0, 5));
-					addItem(new ServerArmour(0, 0,
-							ServerWorld.BLUE_NINJA_ARMOUR));
-					addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
-					addItem(new ServerArmour(0, 0,
-							ServerWorld.GREY_NINJA_ARMOUR));
-					addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
 
 					setAlive(true);
 
