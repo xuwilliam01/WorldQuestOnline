@@ -83,7 +83,6 @@ public class ClientObject implements Comparable<ClientObject> {
 			height = this.image.getHeight(null);
 			width = this.image.getWidth(null);
 		} else {
-			System.out.println("This is a damage indicator");
 			height = 0;
 			width = 0;
 		}

@@ -34,7 +34,6 @@ public class ServerSpawner extends ServerObject{
 			newCreature.setX(getX());
 			newCreature.setY(getY()-getHeight()-ServerWorld.TILE_SIZE);
 			world.add(newCreature);
-			ServerWorld.noOfEnemies++;
 			maxSpawn--;
 			if(maxSpawn <= 0)
 				destroy();

@@ -172,7 +172,6 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public void addPlayer(ServerPlayer newPlayer)
 	{
-		newPlayer.setTeam(nextTeam()%2 + 1);
 		listOfPlayers.add(newPlayer);
 		world.add(newPlayer);
 	}

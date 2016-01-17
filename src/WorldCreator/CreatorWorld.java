@@ -191,7 +191,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		this.grid = grid;
 	}
-
+	
 	public void readImages() throws NumberFormatException, IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",

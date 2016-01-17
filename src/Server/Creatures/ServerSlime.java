@@ -1,6 +1,6 @@
 package Server.Creatures;
 
-import Server.ServerWorld; 
+import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
 
@@ -36,7 +36,7 @@ public class ServerSlime extends ServerEnemy
 
 	public ServerSlime(double x, double y, ServerWorld world, int team)
 	{
-		super(x, y, -1,-1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, team);
 
 		// Set a random counter to start so not every slime does the exact same
@@ -52,15 +52,16 @@ public class ServerSlime extends ServerEnemy
 		landCounter = 0;
 		setImage("SLIME_6.png");
 		landed = true;
-		
+
 		addItem(ServerItem.randomItem(getX(), getY()));
-		//addItem(new ServerPotion(getX(),getY(),ServerWorld.JUMP_POTION_TYPE));
-		//addItem(new ServerPotion(getX(),getY(),ServerWorld.HP_POTION_TYPE));
+		// addItem(new
+		// ServerPotion(getX(),getY(),ServerWorld.JUMP_POTION_TYPE));
+		// addItem(new ServerPotion(getX(),getY(),ServerWorld.HP_POTION_TYPE));
 	}
 
-	public ServerSlime(double x, double y,ServerWorld world)
+	public ServerSlime(double x, double y, ServerWorld world)
 	{
-		super(x, y, -1,-1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, ServerPlayer.NEUTRAL);
 
 		// Set a random counter to start so not every slime does the exact same
@@ -76,7 +77,7 @@ public class ServerSlime extends ServerEnemy
 		landCounter = 0;
 		setImage("SLIME_6.png");
 		landed = true;
-		
+
 		addItem(ServerItem.randomItem(getX(), getY()));
 	}
 
@@ -88,7 +89,10 @@ public class ServerSlime extends ServerEnemy
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			findTarget();
+			if (getWorld().getWorldCounter() % 30 == 0)
+			{
+				findTarget();
+			}
 			if (!isOnSurface() && getHSpeed() == 0)
 			{
 				if (getCounter() >= changeDirectionCounter)
@@ -110,10 +114,14 @@ public class ServerSlime extends ServerEnemy
 			if ((getX() + getWidth())
 					- (getTarget().getX() + getTarget().getWidth() / 2) < 0
 					&& !isOnSurface())
+			{
 				setHSpeed(speed);
+			}
 			else if (getX() - (getTarget().getX() + getTarget().getWidth() / 2) > 0
 					&& !isOnSurface())
+			{
 				setHSpeed(-speed);
+			}
 			else
 			{
 				setHSpeed(0);

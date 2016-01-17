@@ -12,6 +12,7 @@ import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
+import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
@@ -51,7 +52,21 @@ public class ServerWorld
 	public final static String PLAYER_GHOST_TYPE = PLAYER_TYPE + "G";
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
-	public final static String GHOUL_TYPE = NPC_TYPE + "G";
+	
+	public final static String GOBLIN_TYPE = NPC_TYPE + "G";
+	
+	public final static String NAKED_GOBLIN_TYPE = GOBLIN_TYPE + "N";
+	public final static String GOBLIN_GENERAL_TYPE = GOBLIN_TYPE + "G";
+	public final static String GOBLIN_GUARD_TYPE = GOBLIN_TYPE + "g";
+	public final static String GOBLIN_KING_TYPE = GOBLIN_TYPE + "K";
+	public final static String GOBLIN_KNIGHT_TYPE = GOBLIN_TYPE + "k";
+	public final static String GOBLIN_LORD_TYPE = GOBLIN_TYPE + "L";
+	public final static String GOBLIN_NINJA_TYPE = GOBLIN_TYPE + "N";
+	public final static String GOBLIN_PEASANT_TYPE = GOBLIN_TYPE + "P";
+	public final static String GOBLIN_SOLDIER_TYPE = GOBLIN_TYPE + "S";
+	public final static String GOBLIN_WIZARD_TYPE = GOBLIN_TYPE + "W";
+	public final static String GOBLIN_WORKER_TYPE = GOBLIN_TYPE + "w";
+	
 	public final static String CHEST_TYPE = CREATURE_TYPE + "M";
 	public final static String CASTLE_TYPE = CREATURE_TYPE + "T";
 	public final static String VENDOR_TYPE = CREATURE_TYPE + "V";
@@ -130,6 +145,16 @@ public class ServerWorld
 	 * Grid of objects
 	 */
 	private ArrayList<ServerObject>[][] objectGrid;
+	
+	/**
+	 * All the creatures in red team
+	 */
+	private ArrayList<ServerCreature> redTeam = new ArrayList<ServerCreature>();
+	
+	/**
+	 * All the creatures in blue team
+	 */
+	private ArrayList<ServerCreature> blueTeam = new ArrayList<ServerCreature>();
 
 	/**
 	 * Array of different types of creatures, buildings, background objects, and
@@ -181,16 +206,10 @@ public class ServerWorld
 	private ArrayList<ServerObject> objectsToRemove = new ArrayList<ServerObject>();
 
 	/**
-	 * The next time (in milliseconds) to spawn another enemy
-	 */
-	private long spawnTimer = 0;
-
-	/**
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
 
-	public static int noOfEnemies = 0;
 
 	/**
 	 * Constructor for server
@@ -200,8 +219,18 @@ public class ServerWorld
 	{
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
+		
 		newWorld();
-
+		
+		add(new ServerGoblin(300- 150,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
+		add(new ServerGoblin(300- 100,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
+		add(new ServerGoblin(300- 50,300,this,ServerPlayer.BLUE_TEAM,NAKED_GOBLIN_TYPE));
+		add(new ServerGoblin(300,300,this,ServerPlayer.BLUE_TEAM,GOBLIN_GENERAL_TYPE));
+		
+		add(new ServerGoblin(472*TILE_SIZE,300,this,ServerPlayer.RED_TEAM,GOBLIN_GENERAL_TYPE));
+		add(new ServerGoblin(472*TILE_SIZE + 50,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
+		add(new ServerGoblin(472*TILE_SIZE + 100,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
+		add(new ServerGoblin(472*TILE_SIZE + 150,300,this,ServerPlayer.RED_TEAM,NAKED_GOBLIN_TYPE));
 	}
 
 	/**
@@ -372,7 +401,6 @@ public class ServerWorld
 														.collidesWith(otherObject))
 										{
 
-											int knockback = 0;
 											if (object.getType().contains(
 													PIERCING_TYPE))
 											{
@@ -381,8 +409,7 @@ public class ServerWorld
 													((ServerCreature) otherObject)
 													.inflictDamage(
 															((ServerProjectile) object)
-																	.getDamage(),
-															knockback);	
+																	.getDamage());	
 													((ServerProjectile)object).addCollided(otherObject);		
 												}
 											}
@@ -406,12 +433,10 @@ public class ServerWorld
 														.getOwner().getTeam()
 												&& object.collidesWith(otherObject) && !((ServerProjectile)object).hasCollided(otherObject))
 										{
-											int knockback = 0;
 											((ServerCreature) otherObject)
 											.inflictDamage(
 													((ServerProjectile) object)
-															.getDamage(),
-													knockback);
+															.getDamage());
 											((ServerProjectile)object).addCollided(otherObject);	
 											
 										}
@@ -495,19 +520,10 @@ public class ServerWorld
 												&& !((ServerWeaponSwing) object)
 														.hasCollided(otherObject))
 										{
-											double knockBack = ((ServerWeaponSwing) object)
-													.getKnockBack();
-
-											if (!((ServerWeaponSwing) object)
-													.isClockwise())
-											{
-												knockBack *= -1;
-											}
 											((ServerCreature) otherObject)
 													.inflictDamage(
 															((ServerWeaponSwing) object)
-																	.getDamage(),
-															knockBack);
+																	.getDamage());
 											((ServerWeaponSwing) object)
 													.addCollided(otherObject);
 										}
@@ -884,6 +900,10 @@ public class ServerWorld
 						{
 							((ServerSlime) object).update();
 						}
+						else if (object.getType().contains(GOBLIN_TYPE))
+						{
+							((ServerGoblin) object).update();
+						}
 					}
 
 				}
@@ -1039,5 +1059,64 @@ public class ServerWorld
 	{
 		this.objectGrid = objectGrid;
 	}
+	
+	/**
+	 * Add a creature to blue team
+	 * @param creature
+	 */
+	public void addToBlue(ServerCreature creature)
+	{
+		blueTeam.add(creature);
+	}
+	
+	/**
+	 * Remove a creature from blue team
+	 * @param creature
+	 */
+	public void removeFromBlue(ServerCreature creature)
+	{
+		blueTeam.remove(creature);
+	}
+	
+	/**
+	 * Add a creature to red team
+	 * @param creature
+	 */
+	public void addToRed(ServerCreature creature)
+	{
+		redTeam.add(creature);
+	}
 
+	
+	/**
+	 * Remove a creature from red team
+	 * @param creature
+	 */
+	public void removeFromRed(ServerCreature creature)
+	{
+		redTeam.remove(creature);
+	}
+
+	public ArrayList<ServerCreature> getRedTeam()
+	{
+		return redTeam;
+	}
+
+	public void setRedTeam(ArrayList<ServerCreature> redTeam)
+	{
+		this.redTeam = redTeam;
+	}
+
+	public ArrayList<ServerCreature> getBlueTeam()
+	{
+		return blueTeam;
+	}
+
+	public void setBlueTeam(ArrayList<ServerCreature> blueTeam)
+	{
+		this.blueTeam = blueTeam;
+	}
+	
+	
+	
 }

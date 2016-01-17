@@ -34,7 +34,12 @@ public class ServerGUI extends JPanel implements KeyListener,
 	/**
 	 * A color that java doesn't provide
 	 */
-	public static final Color BLOCK = new Color(112, 112, 112);
+	public static final Color SOLID_BLOCK = new Color(112, 112, 112);
+	
+	/**
+	 * A color that java doesn't provide
+	 */
+	public static final Color BACKGROUND_BLOCK = new Color(176, 176, 176);
 
 	/**
 	 * The color of a player
@@ -153,9 +158,13 @@ public class ServerGUI extends JPanel implements KeyListener,
 				{
 					graphics.setColor(SKY);
 				}
+				else if (grid[row][column] >= 'A')
+				{
+					graphics.setColor(SOLID_BLOCK);
+				}
 				else
 				{
-					graphics.setColor(BLOCK);
+					graphics.setColor(BACKGROUND_BLOCK);
 				}
 
 				graphics.fillRect(

@@ -262,12 +262,15 @@ public class Images
 				for (int no = 0; no < goblinSheets.length; no++)
 				{
 					image = ImageIO.read(new File(goblinSheets[no] + ".png"));
-					BufferedImage[][] imageTiles = new BufferedImage[image.getHeight()/64][image
-							.getWidth() / 32];
+					BufferedImage[][] imageTiles = new BufferedImage[image.getHeight()/64][image.getWidth() / 32];
 					for (int row = 0; row < imageTiles.length; row++)
 					{
 						for (int column = 0; column < imageTiles[0].length; column++)
 						{
+							if (row == 1 && column >= 4)
+							{
+								continue;
+							}
 							BufferedImage currentImage = image.getSubimage(
 									column * 32, row * 64, 32, 64);
 
@@ -290,6 +293,46 @@ public class Images
 											currentImage.getWidth(),
 											currentImage.getHeight()), 64, 128));
 						}
+						
+						// Add the death images
+						BufferedImage currentImage = image.getSubimage(32*4 + 16, 64,
+								32, 64);
+						
+						// Add a right version of this image
+						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
+								+ "_" + 4 + ".png", currentImage, 64, 128));
+
+						AffineTransform tx;
+						tx = AffineTransform.getScaleInstance(-1, 1);
+						tx.translate(-currentImage.getWidth(null), 0);
+						AffineTransformOp op = new AffineTransformOp(tx,
+								AffineTransformOp.TYPE_BILINEAR);
+
+						// Add a left version of this image
+						images.add(new GameImage(goblinSheets[no] + "_LEFT_" + 1
+								+ "_" + 4 + ".png", op.filter(currentImage, null)
+								.getSubimage(0, 0,
+										currentImage.getWidth(),
+										currentImage.getHeight()), 64, 128));
+						
+						currentImage = image.getSubimage(32*6 + 8, 64,
+								36, 64);
+						
+						// Add a right version of this image
+						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
+								+ "_" + 6 + ".png", currentImage, 84, 128));
+
+						tx = AffineTransform.getScaleInstance(-1, 1);
+						tx.translate(-currentImage.getWidth(null), 0);
+						op = new AffineTransformOp(tx,
+								AffineTransformOp.TYPE_BILINEAR);
+
+						// Add a left version of this image
+						images.add(new GameImage(goblinSheets[no] + "_LEFT_" + 1
+								+ "_" + 6 + ".png", op.filter(currentImage, null)
+								.getSubimage(0, 0,
+										currentImage.getWidth(),
+										currentImage.getHeight()), 84, 128));
 					}
 				}
 				

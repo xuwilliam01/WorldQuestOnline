@@ -118,6 +118,7 @@ public abstract class ServerCreature extends ServerObject {
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
+		
 		direction = "RIGHT";
 		nextDirection = "RIGHT";
 
@@ -133,8 +134,32 @@ public abstract class ServerCreature extends ServerObject {
 		this.attackable = attackable;
 	}
 
-	public void setTeam(int team) {
+	public void setTeam(int team) 
+	{
 		this.team = team;
+		
+		if (team == ServerPlayer.BLUE_TEAM)
+		{
+			world.addToBlue(this);
+		}
+		else if (team == ServerPlayer.RED_TEAM)
+		{
+			world.addToRed(this);
+		}
+	}
+	
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		if (team == ServerPlayer.BLUE_TEAM)
+		{
+			world.removeFromBlue(this);
+		}
+		else if (team == ServerPlayer.RED_TEAM)
+		{
+			world.removeFromRed(this);
+		}
 	}
 
 	public int getTeam() {
@@ -164,7 +189,7 @@ public abstract class ServerCreature extends ServerObject {
 	 * 
 	 * @param amount
 	 */
-	public void inflictDamage(int amount, double knockBack) {
+	public void inflictDamage(int amount) {
 		if (HP > 0) {
 			HP -= amount;
 
@@ -183,28 +208,7 @@ public abstract class ServerCreature extends ServerObject {
 		if (HP <= 0) {
 			destroy();
 			dropInventory();
-		} else {
-			// Override inflict damage in each subclass (except for npc and
-			// player because those have knockback) and change what happens when
-			// they get hit
-			// Only for NPC and PLAYER
-			// Knock back the creature based on the knockback force
-			// if (Math.abs(knockBack) - knockBackResistance > 0)
-			// {
-			// setVSpeed(-(Math.abs(knockBack) - knockBackResistance));
-			// if (knockBack > 0)
-			// {
-			// setHSpeed(getHSpeed()+(knockBack-knockBackResistance)/2);
-			// }
-			// else
-			// {
-			// setHSpeed(getHSpeed()-(knockBack+knockBackResistance)/2);
-			// }
-			// }
-
 		}
-
-		System.out.println("Damage taken: " + amount);
 	}
 
 	/**
@@ -397,6 +401,12 @@ public abstract class ServerCreature extends ServerObject {
 	public void setBaseDamage(int baseDamage)
 	{
 		this.baseDamage = baseDamage;
+	}
+
+	public void setMaxHP(int maxHP)
+	{
+		this.maxHP = maxHP;
+		this.HP = maxHP;
 	}
 
 

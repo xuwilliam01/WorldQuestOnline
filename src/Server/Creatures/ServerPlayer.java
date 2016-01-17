@@ -907,12 +907,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		int yDist = mouseY
 				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 2 + getHeight() / 3);
 
-		System.out.println("X/Y " + xDist + " " + yDist);
-
 		double angle = Math.atan2(yDist, xDist);
-
-		System.out.println("Angle: " + angle);
-
+		
 		if (isAlive() && canPerformAction)
 		{
 			int weaponNo = weaponSelected - '0';
@@ -954,8 +950,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
-								((ServerCreature) otherObject).inflictDamage(
-										PUNCHING_DAMAGE + getBaseDamage(), 5);
+								((ServerCreature) otherObject).inflictDamage(PUNCHING_DAMAGE + getBaseDamage());
 								alreadyPunched
 										.add((ServerCreature) otherObject);
 							}
@@ -1120,14 +1115,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void inflictDamage(int amount, double knockBack)
 	{
-		if (action.equals("BLOCK"))
-		{
-			amount = 0;
-		}
 
 		if (equippedArmour != null)
 		{
 			amount -= amount * equippedArmour.getArmour();
+		}
+		
+		if (amount <= 0)
+		{
+			amount = 1;
+		}
+		
+		if (action.equals("BLOCK"))
+		{
+			amount = 0;
 		}
 
 		setHP(getHP() - amount);
@@ -1141,7 +1142,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		if (getHP() <= 0 && isAlive())
 		{
 			setAlive(false);
-			// setHeight(getWidth());
+
 			dropInventory();
 
 			verticalMovement = 0;

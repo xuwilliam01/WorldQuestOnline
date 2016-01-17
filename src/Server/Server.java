@@ -17,7 +17,7 @@ public class Server implements Runnable
 	private ServerEngine engine;
 	private int port;
 
-	private String[] playerColours = { "DARK", "LIGHT","TAN"};
+	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
 
 	int noOfPlayers = 0;
 
@@ -62,11 +62,27 @@ public class Server implements Runnable
 				Socket newClient = socket.accept();
 
 				noOfPlayers++;
-				int x = (int) (Math.random() * 1000 + 50);
+
+				int team = engine.nextTeam() % 2 + 1;
+
+				int x = 200;
+
+				if (team == ServerPlayer.RED_TEAM)
+				{
+					x = 472 * ServerWorld.TILE_SIZE;
+				}
+
 				int y = ServerPlayer.PLAYER_Y;
 
 				int characterSelection = (int) (Math.random() * playerColours.length);
-				ServerPlayer newPlayer = new ServerPlayer(x, y, ServerPlayer.DEFAULT_WIDTH, ServerPlayer.DEFAULT_HEIGHT,-14, -38, ServerWorld.GRAVITY, playerColours[characterSelection], newClient, engine, engine.getWorld());
+				ServerPlayer newPlayer = new ServerPlayer(x, y,
+						ServerPlayer.DEFAULT_WIDTH,
+						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
+						ServerWorld.GRAVITY, playerColours[characterSelection],
+						newClient, engine, engine.getWorld());
+				
+				newPlayer.setTeam(team);
+				
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
