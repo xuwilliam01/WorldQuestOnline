@@ -705,6 +705,50 @@ public class ServerWorld
 
 						if (hSpeed >= 0)
 						{
+							
+							// Trying to skip steps
+							
+//							if (object.getType().charAt(0)==CREATURE_TYPE && vSpeed ==0)
+//							{
+//								int startCheckRow = (int)((object.getY()-ServerWorld.TILE_SIZE -1)/ServerWorld.TILE_SIZE);
+//								int endCheckRow = (int)((object.getY() + object.getHeight() -1)/ServerWorld.TILE_SIZE);
+//								
+//								int startCheckColumn = (int)((object.getX() -1)/ServerWorld.TILE_SIZE);
+//								
+//								
+//								int endCheckColumn = (int)((object.getX() + object.getWidth() + object.getHSpeed())/ServerWorld.TILE_SIZE);
+//								
+//								if (tileGrid[endCheckRow][endCheckColumn] >= 'A')
+//								{
+//									boolean canJumpTile = true;
+//									
+//									for (int column = startCheckColumn; column <= endCheckColumn; column++)
+//									{
+//										if (tileGrid[startCheckRow][column] >= 'A')
+//										{
+//											canJumpTile = false;
+//											break;
+//										}
+//									}
+//									
+//									for(int row = startCheckRow; row <= endCheckRow-1 && canJumpTile; row++)
+//									{
+//										if (tileGrid[row][endCheckColumn] >= 'A')
+//											{
+//												canJumpTile = false;
+//												break;
+//											}
+//									}
+//									
+//									if (canJumpTile)
+//									{
+//										object.setY(endCheckRow * ServerWorld.TILE_SIZE);
+//										y1 = object.getY();
+//										y2 = object.getY() + object.getHeight();
+//									}
+//								}
+//							}
+							
 							// The row and column of the tile that was collided
 							// with
 							int collideColumn = 0;

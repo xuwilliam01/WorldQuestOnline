@@ -91,16 +91,12 @@ public class ClientObject implements Comparable<ClientObject> {
 		// Select a hint for this object, if it has one
 		switch (type) 
 		{
-		case ServerWorld.CASTLE_TYPE:
-			hint = "Drop money on your castle to upgrade the level of your goblins";
-			break;
 		case ServerWorld.VENDOR_TYPE:
 			hint = "Press 'E' to open/close the shop";
 			break;
 		case ServerWorld.CHEST_TYPE:
 			hint = "Destroy the chest and it will drop items";
 			break;
-
 		}
 	}
 
