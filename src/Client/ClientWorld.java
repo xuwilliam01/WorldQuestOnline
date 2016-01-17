@@ -23,6 +23,7 @@ public class ClientWorld
 	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
 	public final static Color RED_TEXT = new Color(153, 0, 38);
 	public final static Color BLUE_TEXT = new Color(0, 161, 230);
+	public final static Color GREEN_TEXT = new Color(0, 153, 0);
 	/**
 	 * The grid of tiles
 	 */
@@ -60,17 +61,30 @@ public class ClientWorld
 	public final static Font DAMAGE_FONT = new Font("Courier", Font.BOLD, 18);
 
 	/**
+	 * The font for messages
+	 */
+	public final static Font MESSAGE_FONT = new Font("Courier", Font.BOLD, 20);
+
+	/**
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
 
-	private FontMetrics damageFontMetrics;
+	/**
+	 * Object for figuring out size of font
+	 */
+	private FontMetrics fontMetrics;
 
 	/**
 	 * The width in pixels of one character for the damage font
 	 */
 	public static double DAMAGE_FONT_WIDTH = 0;
-	
+
+	/**
+	 * The width in pixels of one character for the message font
+	 */
+	public static double MESSAGE_FONT_WIDTH = 0;
+
 	/**
 	 * Constructor for the client's side of the world
 	 * @param rows the number of rows in the tile grid
@@ -153,10 +167,11 @@ public class ClientWorld
 	/**
 	 * Add an object (not a tile) to the client, or update it if it already
 	 * exists
-	 * @param type 
+	 * @param type
 	 * @param object the object to add
 	 */
-	public void setObject(int id, int x, int y, String image, int team, String type)
+	public void setObject(int id, int x, int y, String image, int team,
+			String type)
 	{
 		if (objects[id] == null)
 		{
@@ -199,10 +214,12 @@ public class ClientWorld
 	{
 
 		// Get font metrics
-		if (damageFontMetrics == null)
+		if (fontMetrics == null)
 		{
-			damageFontMetrics = graphics.getFontMetrics(DAMAGE_FONT);
-			DAMAGE_FONT_WIDTH = damageFontMetrics.stringWidth("0");
+			fontMetrics = graphics.getFontMetrics(DAMAGE_FONT);
+			DAMAGE_FONT_WIDTH = fontMetrics.stringWidth("0");
+			fontMetrics = graphics.getFontMetrics(MESSAGE_FONT);
+			MESSAGE_FONT_WIDTH = fontMetrics.stringWidth("0");
 		}
 
 		// Draw the background
@@ -247,7 +264,8 @@ public class ClientWorld
 
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT/ 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT
+				/ 2;
 
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((player.getY() - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
@@ -295,6 +313,9 @@ public class ClientWorld
 		// Create a list of objects to remove after leaving the screen
 		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
 
+		// The text to display to the player in the centre of the screen
+		String displayedText = null;
+
 		// Go through each object in the world and draw it relative to the
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
@@ -341,13 +362,13 @@ public class ClientWorld
 						}
 						graphics.drawImage(image, x, y,
 								null);
-						
-						//Draw a hint if necessary
-						//DOES NOT DRAW OVER SOLID TILES
-						if(player.collidesWith(object) && !object.getHint().equals(""))
+
+						// Draw a hint if necessary
+						// DOES NOT DRAW OVER SOLID TILES
+						if (player.collidesWith(object)
+								&& !object.getHint().equals(""))
 						{
-							graphics.setColor(Color.black);
-							graphics.drawString(object.getHint(), x, y-50);
+							displayedText = object.getHint();
 						}
 					}
 					// If there is no image, then the object is text/numbers
@@ -357,12 +378,12 @@ public class ClientWorld
 						char colour = imageName.charAt(1);
 						String text = imageName
 								.substring(2, imageName.length());
-						
-						if (Integer.parseInt(text)==0)
+
+						if (Integer.parseInt(text) == 0)
 						{
 							graphics.setColor(BLUE_TEXT);
 							text = "BLOCK";
-						}	
+						}
 						else if (colour == ServerDamageIndicator.RED_TEXT)
 						{
 							graphics.setColor(RED_TEXT);
@@ -373,9 +394,9 @@ public class ClientWorld
 						}
 
 						graphics.setFont(DAMAGE_FONT);
-						
+
 						x -= ((int) (text.length()
-								* DAMAGE_FONT_WIDTH + 0.5))/2;
+								* DAMAGE_FONT_WIDTH + 0.5)) / 2;
 
 						graphics.drawString(text, x, y - 10);
 					}
@@ -413,6 +434,19 @@ public class ClientWorld
 			}
 
 		}
+
+		if (displayedText != null)
+		{
+			graphics.setColor(GREEN_TEXT);
+			graphics.setFont(MESSAGE_FONT);
+			graphics.drawString(
+					displayedText,
+					(int) (Client.SCREEN_WIDTH
+							/ 2
+							- (displayedText.length() * MESSAGE_FONT_WIDTH)
+							/ 2 + 0.5),
+					Client.SCREEN_HEIGHT / 3);
+		}
 	}
 
 	public void clear()
@@ -439,6 +473,5 @@ public class ClientWorld
 	{
 		this.tileSize = tileSize;
 	}
-	
 
 }
