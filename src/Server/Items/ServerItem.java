@@ -29,6 +29,8 @@ public abstract class ServerItem extends ServerObject {
 	public ServerItem(double x, double y, String type) {
 		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
 
+		
+		
 		switch (type) {
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");

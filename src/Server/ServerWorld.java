@@ -31,9 +31,9 @@ import Tools.RowCol;
 public class ServerWorld
 {
 	// Character definitions for each type of object
-	
+
 	public final static String WEAPON_HOLD_TYPE = "H";
-	
+
 	public final static char PROJECTILE_TYPE = 'P';
 	public final static String BULLET_TYPE = PROJECTILE_TYPE + "B";
 
@@ -42,7 +42,7 @@ public class ServerWorld
 	public final static String WOODARROW_TYPE = PIERCING_TYPE + "W";
 	public final static String STEELARROW_TYPE = PIERCING_TYPE + "S";
 	public final static String MEGAARROW_TYPE = PIERCING_TYPE + "M";
-	
+
 	public final static String FIREBALL_TYPE = PROJECTILE_TYPE + "F";
 	public final static String ICEBALL_TYPE = PROJECTILE_TYPE + "I";
 	public final static String DARKBALL_TYPE = PROJECTILE_TYPE + "D";
@@ -51,10 +51,11 @@ public class ServerWorld
 	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";
 	public final static String PLAYER_GHOST_TYPE = PLAYER_TYPE + "G";
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
+
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
-	
+
 	public final static String GOBLIN_TYPE = NPC_TYPE + "G";
-	
+
 	public final static String NAKED_GOBLIN_TYPE = GOBLIN_TYPE + "N";
 	public final static String GOBLIN_GENERAL_TYPE = GOBLIN_TYPE + "G";
 	public final static String GOBLIN_GUARD_TYPE = GOBLIN_TYPE + "g";
@@ -66,7 +67,7 @@ public class ServerWorld
 	public final static String GOBLIN_SOLDIER_TYPE = GOBLIN_TYPE + "S";
 	public final static String GOBLIN_WIZARD_TYPE = GOBLIN_TYPE + "W";
 	public final static String GOBLIN_WORKER_TYPE = GOBLIN_TYPE + "w";
-	
+
 	public final static String CHEST_TYPE = CREATURE_TYPE + "M";
 	public final static String CASTLE_TYPE = CREATURE_TYPE + "T";
 	public final static String VENDOR_TYPE = CREATURE_TYPE + "V";
@@ -98,15 +99,15 @@ public class ServerWorld
 	public final static String AX_TYPE = MELEE_TYPE + "A";
 	public final static String SWORD_TYPE = MELEE_TYPE + "S";
 	public final static String HALBERD_TYPE = MELEE_TYPE + "H";
-	
-	public final static String BOW_TYPE = RANGED_TYPE +"B";
-	public final static String WAND_TYPE = RANGED_TYPE +"W";
-	
-	public final static String SLINGSHOT_TYPE = BOW_TYPE +"s";
-	public final static String WOODBOW_TYPE = BOW_TYPE +"W";
-	public final static String STEELBOW_TYPE = BOW_TYPE +"S";
-	public final static String MEGABOW_TYPE = BOW_TYPE +"M";
-	
+
+	public final static String BOW_TYPE = RANGED_TYPE + "B";
+	public final static String WAND_TYPE = RANGED_TYPE + "W";
+
+	public final static String SLINGSHOT_TYPE = BOW_TYPE + "s";
+	public final static String WOODBOW_TYPE = BOW_TYPE + "W";
+	public final static String STEELBOW_TYPE = BOW_TYPE + "S";
+	public final static String MEGABOW_TYPE = BOW_TYPE + "M";
+
 	public final static String FIREWAND_TYPE = WAND_TYPE + "F";
 	public final static String ICEWAND_TYPE = WAND_TYPE + "I";
 	public final static String DARKWAND_TYPE = WAND_TYPE + "D";
@@ -145,16 +146,17 @@ public class ServerWorld
 	 * Grid of objects
 	 */
 	private ArrayList<ServerObject>[][] objectGrid;
-	
+
 	/**
 	 * All the creatures in red team
 	 */
 	private ArrayList<ServerCreature> redTeam = new ArrayList<ServerCreature>();
-	
+
 	/**
 	 * All the creatures in blue team
 	 */
 	private ArrayList<ServerCreature> blueTeam = new ArrayList<ServerCreature>();
+	
 
 	/**
 	 * Array of different types of creatures, buildings, background objects, and
@@ -163,9 +165,16 @@ public class ServerWorld
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
 	public final ServerObject[] objectTypes = {
-			new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this), new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
-			new ServerChest(0, 0, this), new ServerVendor(0, 0, this, 4,"VENDOR_RIGHT.png"),new ServerVendor(0, 0, this, 4,"VENDOR_LEFT.png"),
-			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this), new ServerSpawner(0,0,new ServerGoblin(0,0,this,ServerPlayer.RED_TEAM),this), new ServerSpawner(0,0,new ServerGoblin(0,0,this,ServerPlayer.BLUE_TEAM),this) };
+			new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
+			new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
+			new ServerChest(0, 0, this),
+			new ServerVendor(0, 0, this, 4, "VENDOR_RIGHT.png"),
+			new ServerVendor(0, 0, this, 4, "VENDOR_LEFT.png"),
+			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this),
+			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
+					ServerPlayer.RED_TEAM), this),
+			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
+					ServerPlayer.BLUE_TEAM), this) };
 
 	/**
 	 * The size of each object tile
@@ -210,7 +219,6 @@ public class ServerWorld
 	 */
 	private long worldCounter = 0;
 
-
 	/**
 	 * Constructor for server
 	 * @throws IOException
@@ -219,7 +227,7 @@ public class ServerWorld
 	{
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
-		
+
 		newWorld();
 	}
 
@@ -394,24 +402,27 @@ public class ServerWorld
 											if (object.getType().contains(
 													PIERCING_TYPE))
 											{
-												if (!((ServerProjectile)object).hasCollided(otherObject))
+												if (!((ServerProjectile) object)
+														.hasCollided(otherObject))
 												{
 													((ServerCreature) otherObject)
-													.inflictDamage(
+															.inflictDamage(
 															((ServerProjectile) object)
-																	.getDamage());	
-													((ServerProjectile)object).addCollided(otherObject);		
+																	.getDamage());
+													((ServerProjectile) object)
+															.addCollided(otherObject);
 												}
 											}
 											else
 											{
 
 												((ServerProjectile) object)
-												.destroy();
+														.destroy();
 											}
 										}
 									}
-									else if (object.getType().equals(EXPLOSION_TYPE))
+									else if (object.getType().equals(
+											EXPLOSION_TYPE))
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
 												&& ((ServerCreature) otherObject)
@@ -421,14 +432,41 @@ public class ServerWorld
 												&& ((ServerCreature) otherObject)
 														.getTeam() != ((ServerProjectile) object)
 														.getOwner().getTeam()
-												&& object.collidesWith(otherObject) && !((ServerProjectile)object).hasCollided(otherObject))
+												&& object
+														.collidesWith(otherObject)
+												&& !((ServerProjectile) object)
+														.hasCollided(otherObject))
 										{
 											((ServerCreature) otherObject)
-											.inflictDamage(
+													.inflictDamage(
 													((ServerProjectile) object)
 															.getDamage());
-											((ServerProjectile)object).addCollided(otherObject);	
-											
+											((ServerProjectile) object)
+													.addCollided(otherObject);
+
+										}
+									}
+									else if (object.getType()
+											.equals(SLIME_TYPE))
+									{
+										if (otherObject.getType().charAt(0) == CREATURE_TYPE
+												&& ((ServerCreature) otherObject)
+														.isAttackable()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerCreature) object)
+														.getTeam()
+												&& object
+														.collidesWith(otherObject))
+										{
+											if (((ServerEnemy) object)
+													.getCounter() % 30 == 0)
+											{
+												((ServerCreature) otherObject)
+														.inflictDamage(
+														((ServerSlime) object)
+																.getDamage());
+											}
+
 										}
 									}
 									// If a player collided with an item
@@ -512,45 +550,11 @@ public class ServerWorld
 										{
 											((ServerCreature) otherObject)
 													.inflictDamage(
-															((ServerWeaponSwing) object)
-																	.getDamage());
+													((ServerWeaponSwing) object)
+															.getDamage());
 											((ServerWeaponSwing) object)
 													.addCollided(otherObject);
 										}
-										// Don't need this
-										// else if
-										// (otherObject.getType().contains(
-										// NPC_TYPE) &&
-										// ((ServerCreature)otherObject).getTeam()
-										// != ((ServerWeaponSwing)
-										// object).getWielder().getTeam()
-										// && ((ServerWeaponSwing) object)
-										// .collidesWith(otherObject)
-										// && !((ServerWeaponSwing) object)
-										// .hasCollided(otherObject))
-										// {
-										// double knockBack =
-										// ((ServerWeaponSwing) object)
-										// .getKnockBack();
-										//
-										// if (!((ServerWeaponSwing) object)
-										// .isClockwise())
-										// {
-										// knockBack *= -1;
-										// }
-										//
-										// ((ServerEnemy) otherObject)
-										// .inflictDamage(
-										// ((ServerWeaponSwing) object)
-										// .getDamage(),
-										// knockBack);
-										// ((ServerWeaponSwing) object)
-										// .addCollided(otherObject);
-										//
-										// System.out.println(((ServerWeaponSwing)
-										// object)
-										// .getDamage());
-										// }
 									}
 								}
 							}
@@ -689,7 +693,7 @@ public class ServerWorld
 										if (y1 + vSpeed <= row * TILE_SIZE
 												+ TILE_SIZE
 												&& y1 >= row * TILE_SIZE
-												+ TILE_SIZE)
+														+ TILE_SIZE)
 										{
 											moveVertical = false;
 											collideRow = row;
@@ -704,7 +708,8 @@ public class ServerWorld
 							}
 							if (!moveVertical)
 							{
-								object.setY(collideRow * TILE_SIZE + TILE_SIZE + 1);
+								object.setY(collideRow * TILE_SIZE + TILE_SIZE
+										+ 1);
 								object.setVSpeed(0);
 							}
 						}
@@ -761,7 +766,7 @@ public class ServerWorld
 										if (x1 + hSpeed <= column * TILE_SIZE
 												+ TILE_SIZE
 												&& x1 >= column * TILE_SIZE
-												+ TILE_SIZE)
+														+ TILE_SIZE)
 										{
 											moveHorizontal = false;
 											collideColumn = column;
@@ -782,8 +787,6 @@ public class ServerWorld
 							}
 						}
 					}
-					
-					
 
 					if (moveHorizontal)
 					{
@@ -1005,7 +1008,7 @@ public class ServerWorld
 	{
 		this.objectGrid = objectGrid;
 	}
-	
+
 	/**
 	 * Add a creature to blue team
 	 * @param creature
@@ -1014,7 +1017,7 @@ public class ServerWorld
 	{
 		blueTeam.add(creature);
 	}
-	
+
 	/**
 	 * Remove a creature from blue team
 	 * @param creature
@@ -1023,7 +1026,7 @@ public class ServerWorld
 	{
 		blueTeam.remove(creature);
 	}
-	
+
 	/**
 	 * Add a creature to red team
 	 * @param creature
@@ -1033,7 +1036,6 @@ public class ServerWorld
 		redTeam.add(creature);
 	}
 
-	
 	/**
 	 * Remove a creature from red team
 	 * @param creature
@@ -1062,7 +1064,5 @@ public class ServerWorld
 	{
 		this.blueTeam = blueTeam;
 	}
-	
-	
-	
+
 }

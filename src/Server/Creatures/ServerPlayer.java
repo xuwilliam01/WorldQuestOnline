@@ -461,7 +461,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					setRowCol(new RowCol(5, 2));
 				}
-				else if (world.getWorldCounter() - deathCounter < 300)
+				else if (world.getWorldCounter() - deathCounter < 600)
 				{
 					setRowCol(new RowCol(5, 4));
 				}
@@ -476,7 +476,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					verticalMovement = JUMP_SPEED;
 					horizontalMovement = MOVE_SPEED;
 
-					setX(Math.random() * 1500 + 500);
+					if (getTeam() == RED_TEAM)
+					{
+					setX(world.getGrid()[0].length * ServerWorld.TILE_SIZE - 10 * ServerWorld.TILE_SIZE);
+					
+					}
+					else
+					{
+						setX(10 * ServerWorld.TILE_SIZE);
+					}
 					setY(300);
 
 					setHP(100);
@@ -919,7 +927,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			actionDelay = 15;
 			if (rightClick)
 			{
-				actionDelay = 3600;
+				actionDelay = 300;
 				action = "BLOCK";
 				rightClick = false;
 			}

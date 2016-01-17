@@ -276,7 +276,7 @@ public class ServerObject
 			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getWorld());
 		case ServerWorld.SLIME_TYPE:
 			ServerSlime newSlime = (ServerSlime)original;
-			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld(),newSlime.getTeam());
+			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld());
 		}
 		
 		//Special case if we have a goblin type

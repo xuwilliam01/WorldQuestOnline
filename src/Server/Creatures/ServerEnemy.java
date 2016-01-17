@@ -26,6 +26,11 @@ public abstract class ServerEnemy extends ServerCreature implements ActionListen
 	private ServerPlayer target = null;
 	
 	/**
+	 * The damage the enemy inflicts
+	 */
+	private int damage;
+	
+	/**
 	 * 
 	 * @param x
 	 * @param y
@@ -94,4 +99,16 @@ public abstract class ServerEnemy extends ServerCreature implements ActionListen
 	public void actionPerformed(ActionEvent arg0) {
 		update();
 	}
+
+	public int getDamage()
+	{
+		return damage;
+	}
+
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+	
+	
 }
