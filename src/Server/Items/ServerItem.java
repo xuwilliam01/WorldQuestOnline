@@ -25,6 +25,9 @@ public abstract class ServerItem extends ServerObject {
 
 	// Amount of this item. Will only be used for potions
 	private int amount = 1;
+	
+	//Items despawn after 30 seconds, so store a variable for when the item was dropped
+	private long dropTime;
 
 	public ServerItem(double x, double y, String type) {
 		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
@@ -317,6 +320,16 @@ public abstract class ServerItem extends ServerObject {
 
 	public int getCost() {
 		return value;
+	}
+	
+	public long getDropTime()
+	{
+		return dropTime;
+	}
+	
+	public void setDropTime(long dropTime)
+	{
+		this.dropTime = dropTime;
 	}
 
 }

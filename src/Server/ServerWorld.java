@@ -347,7 +347,10 @@ public class ServerWorld
 
 		while (!objectsToAdd.isEmpty())
 		{
-			objects.add(objectsToAdd.poll());
+			ServerObject newObject = objectsToAdd.poll();
+			if(newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE)
+				((ServerItem)newObject).setDropTime(worldCounter);
+			objects.add(newObject);
 		}
 
 		try
@@ -363,6 +366,8 @@ public class ServerWorld
 							&& object.isOnSurface())
 					{
 						object.setHSpeed(0);
+						if(worldCounter - ((ServerItem)object).getDropTime() > 1800)
+							object.destroy();
 					}
 
 					// Add the object to all the object tiles that it collides

@@ -211,7 +211,7 @@ public class ServerGoblin extends ServerCreature
 			break;
 		}
 
-		if(Math.random()< .25)
+		if(Math.random()< 0.2)
 			addItem(ServerItem.randomItem(getX(),getY()));
 		setTeam(team);
 	}
