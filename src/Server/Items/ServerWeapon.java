@@ -40,6 +40,10 @@ public class ServerWeapon extends ServerItem
 	public final static int FIREWAND_DMG = 30;
 	public final static int ICEWAND_DMG = 50;
 	public final static int DARKWAND_DMG = 80;
+	
+	public final static int FIREWAND_MANA = 10;
+	public final static int ICEWAND_MANA = 15;
+	public final static int DARKWAND_MANA = 20;
 
 
 	/**
@@ -47,6 +51,8 @@ public class ServerWeapon extends ServerItem
 	 */
 	private int damage = -5;
 
+	private int manaCost = 0;
+	
 	/**
 	 * The image to use when the player actually uses the weapon
 	 */
@@ -185,12 +191,15 @@ public class ServerWeapon extends ServerItem
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			damage = FIREWAND_DMG;
+			manaCost = FIREWAND_MANA;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			damage = ICEWAND_DMG;
+			manaCost = ICEWAND_MANA;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			damage = DARKWAND_DMG;
+			manaCost = DARKWAND_MANA;
 			break;
 		}
 	}

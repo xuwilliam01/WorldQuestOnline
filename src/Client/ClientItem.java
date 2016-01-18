@@ -165,13 +165,13 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("Mega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
 			break;
 		case ServerWorld.FIREWAND_TYPE:
-			setToolTipText(String.format("Fire Wand (+%d Damage)",ServerWeapon.FIREWAND_DMG));
+			setToolTipText(String.format("<html>Fire Wand (+%d Damage)<p>ManaCost: %d",ServerWeapon.FIREWAND_DMG,ServerWeapon.FIREWAND_MANA));
 			break;
 		case ServerWorld.ICEWAND_TYPE:
-			setToolTipText(String.format("Ice Wand (+%d Damage)",ServerWeapon.ICEWAND_DMG));
+			setToolTipText(String.format("<html>Ice Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.ICEWAND_DMG,ServerWeapon.ICEWAND_MANA));
 			break;
 		case ServerWorld.DARKWAND_TYPE:
-			setToolTipText(String.format("Dark Wand (+%d Damage)",ServerWeapon.DARKWAND_DMG));
+			setToolTipText(String.format("<html>Dark Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.DARKWAND_DMG,ServerWeapon.DARKWAND_MANA));
 			break;
 		}
 	}
