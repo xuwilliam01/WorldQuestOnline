@@ -122,7 +122,7 @@ public class MainMenu {
 
 	private static class CreatorPanel extends JPanel
 	{
-		public CreatorPanel()
+		public CreatorPanel(String fileName)
 		{
 			setDoubleBuffered(true);
 			setBackground(Color.red);
@@ -132,15 +132,6 @@ public class MainMenu {
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
 			
-			String fileName = "";
-			while(true)
-			{
-				fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create (No blank names)");
-				if(fileName != null && !fileName.trim().isEmpty())
-					break;
-				if(fileName == null)
-					System.exit(0);
-			}
 
 			CreatorWorld world = null;
 			try {
@@ -315,12 +306,23 @@ public class MainMenu {
 	private static class StartCreator implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
+			
+			String fileName = "";
+			while(true)
+			{
+				fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create (No blank names)");
+				if(fileName != null && !fileName.trim().isEmpty())
+					break;
+				if(fileName == null)
+					return;
+			}
+			
 			mainFrame.remove(mainMenu);
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
 
-			creatorPanel = new CreatorPanel();
+			creatorPanel = new CreatorPanel(fileName);
 			mainFrame.add(creatorPanel);
 			mainFrame.setVisible(true);
 			creatorPanel.revalidate();

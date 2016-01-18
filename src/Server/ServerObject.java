@@ -270,7 +270,7 @@ public class ServerObject
 			return new ServerChest(newChest.getX(), newChest.getY(), newChest.getWorld());
 		case ServerWorld.VENDOR_TYPE:
 			ServerVendor newVendor = (ServerVendor)original;
-			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld(),newVendor.getQuality());
+			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld());
 		case ServerWorld.SPAWN_TYPE:
 			ServerSpawner newSpawner = (ServerSpawner)original;
 			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getWorld());
