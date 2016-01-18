@@ -325,7 +325,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
-
+		
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
