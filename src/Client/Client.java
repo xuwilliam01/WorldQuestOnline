@@ -413,6 +413,7 @@ MouseMotionListener
 						catch (NumberFormatException e)
 						{
 							System.out.println("java can't parse integers");
+							e.printStackTrace();
 						}
 					}
 
