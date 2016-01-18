@@ -515,9 +515,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		graphics.drawString("FPS: " + currentFPS, 20, 40);
 		if (HP > 0)
 		{
-			graphics.setColor(Color.red);
-			graphics.drawString(String.format("Health: %d/%d", HP, maxHP), 20,
-					60);
 			justDied = true;
 		}
 		else
@@ -532,8 +529,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
 
-		graphics.setColor(Color.blue);
-		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
 		graphics.setColor(Color.green);
 		graphics.drawString(String.format("Damage: %d(+%d)", damage
 				+ baseDamage, baseDamage), 20, 100);
@@ -833,6 +828,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public PrintWriter getOutput()
 	{
 		return output;
+	}
+	
+	public int getDamage()
+	{
+		return damage;
+	}
+	
+	public int getBaseDamage()
+	{
+		return baseDamage;
 	}
 
 }

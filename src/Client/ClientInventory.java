@@ -25,7 +25,7 @@ public class ClientInventory extends JPanel{
 	private ClientItem equippedShield = null;
 
 	private Client client;
-	
+
 	private JButton mainMenu;
 
 	public ClientInventory(JButton menu)
@@ -37,7 +37,7 @@ public class ClientInventory extends JPanel{
 		requestFocusInWindow();
 		setLayout(null);
 		setSize(INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
-		
+
 		if(menu != null)
 		{
 			mainMenu = menu;
@@ -166,7 +166,7 @@ public class ClientInventory extends JPanel{
 			{
 				equippedArmour = null;
 				client.print("DrW "+item.getEquipSlot());
-				
+
 			}
 			else if(pos == ServerPlayer.DEFAULT_SHIELD_SLOT)
 			{
@@ -201,7 +201,7 @@ public class ClientInventory extends JPanel{
 	{
 		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && client.getHP() == client.getMaxHP())||(item.getType().equals(ServerWorld.MANA_POTION_TYPE) && client.getMana() == client.getMaxMana())||(item.getType().equals(ServerWorld.SPEED_POTION_TYPE)&& client.getSpeed() == ServerPlayer.MAX_HSPEED) || item.getType().equals(ServerWorld.JUMP_POTION_TYPE)&&(client.getJump() == ServerPlayer.MAX_VSPEED))
 			return;
-		
+
 		if(item.getAmount()  > 1)
 		{
 			item.decreaseAmount();
@@ -241,7 +241,7 @@ public class ClientInventory extends JPanel{
 					else
 						remove(inventory[row][col]);
 				}
-		
+
 		inventory = new ClientItem[HEIGHT][WIDTH];
 		if(money != null)
 		{
@@ -250,17 +250,17 @@ public class ClientInventory extends JPanel{
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
-		
+
 		for(int weapon = 0; weapon < equippedWeapons.length;weapon++)
 			if(equippedWeapons[weapon] != null)
 				remove(equippedWeapons[weapon]);
 		equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
-		
+
 		if(equippedArmour != null)
 			remove(equippedArmour);
 		equippedArmour= null;
-		
-		
+
+
 		invalidate();
 		repaint();
 	}
@@ -279,6 +279,39 @@ public class ClientInventory extends JPanel{
 	{
 		super.paintComponent(graphics);
 		graphics.drawImage(Images.getImage("Inventory.png"),0,0,null);
+
+		//Draw stats
+		graphics.setFont(ClientWorld.STATS_FONT);
+		if(client.getHP() > 0)
+		{
+			graphics.setColor(Color.red);
+			graphics.drawString(String.format("%d/%d", client.getHP(), client.getMaxHP()), 130,
+					110);
+		}
+		graphics.setColor(Color.blue);
+		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMana()),130,150);
+		
+		graphics.setColor(Color.black);
+		graphics.drawString(String.format("%d(+%d)", client.getDamage()
+				+ client.getBaseDamage(), client.getBaseDamage()), 115, 215);
+		
+		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
+			graphics.drawString(
+					String.format("%d (Max)", client.getSpeed()
+							- ServerPlayer.MOVE_SPEED + 1), 245, 215);
+		else
+			graphics.drawString(
+					String.format("%d", client.getSpeed() - ServerPlayer.MOVE_SPEED
+							+ 1), 245, 215);
+
+		if (client.getJump() == ServerPlayer.MAX_VSPEED)
+			graphics.drawString(
+					String.format("%d (Max)", client.getJump()
+							- ServerPlayer.JUMP_SPEED + 1), 245, 255);
+		else
+			graphics.drawString(
+					String.format("%d", client.getJump() - ServerPlayer.JUMP_SPEED
+							+ 1), 245, 255);
 	}
 
 	public ClientItem[] getEquippedWeapons() {
@@ -313,8 +346,8 @@ public class ClientInventory extends JPanel{
 	public void setEquippedShield(ClientItem equippedShield) {
 		this.equippedShield = equippedShield;
 	}
-	
-	
+
+
 
 
 }
