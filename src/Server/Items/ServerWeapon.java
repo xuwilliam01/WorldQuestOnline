@@ -212,75 +212,75 @@ public class ServerWeapon extends ServerItem
 	public static ServerWeapon randomWeapon(double x, double y)
 	{
 		// Choose a type between the max and min grade
-		int randType = (int) (Math.random() * 208+1);
-
+		int randType = (int) (Math.random() * 200+1);
+		
 		if(randType == 1) return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		else if(randType == 2) return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
 		else if(randType <= 6) return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.DIAMOND_TIER);
 		else if(randType <= 10) return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 				+ ServerWorld.DIAMOND_TIER);
-		else if(randType <= 18) return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
+		else if(randType <= 12) return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 				+ ServerWorld.DIAMOND_TIER);
-		else if(randType <= 22) return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
+		else if(randType <= 14) return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 				+ ServerWorld.DIAMOND_TIER);
-		else if(randType<= 28)
+		else if(randType<= 20)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 36)
+		else if(randType <= 28)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 46)
+		else if(randType <= 38)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.STONE_TIER);
-		else if(randType <= 58)
+		else if(randType <= 50)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.WOOD_TIER);
+		else if(randType <= 56)
+			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
+					+ ServerWorld.GOLD_TIER);
 		else if(randType <= 64)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
-					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 72)
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 82)
+		else if(randType <= 74)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.STONE_TIER);
+		else if(randType <= 86)
+			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
+					+ ServerWorld.WOOD_TIER);
 		else if(randType <= 94)
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
-					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 102)
 			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 112)
+		else if(randType <= 104)
 			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 124)
+		else if(randType <= 116)
 			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 					+ ServerWorld.STONE_TIER);
+		else if(randType <= 130)
+			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
+					+ ServerWorld.WOOD_TIER);
 		else if(randType <= 138)
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
-					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 146)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 156)
+		else if(randType <= 148)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 168)
+		else if(randType <= 160)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.STONE_TIER);
-		else if(randType <= 182)
+		else if(randType <= 174)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 194)
+		else if(randType <= 186)
 			return new ServerWeapon(x,y,ServerWorld.SLINGSHOT_TYPE);
-		else if(randType <= 200)
+		else if(randType <= 192)
 			return new ServerWeapon(x,y,ServerWorld.WOODBOW_TYPE);
-		else if(randType <= 202)
+		else if(randType <= 194)
 			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
-		else if(randType <= 204)
+		else if(randType <= 196)
 			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
-		else if(randType <= 208)
+		else if(randType <= 200)
 			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
 
 
