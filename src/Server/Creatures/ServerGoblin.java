@@ -350,16 +350,28 @@ public class ServerGoblin extends ServerCreature
 							else
 							{
 								action = "SHOOT";
-								actionDelay = 100;
+								actionDelay = 60;
 								
 								int xDist = (int) (getTarget().getX()
 										+ getTarget().getWidth() / 2
 										- (getX() + getWidth() / 2));
+								
+								if (xDist > 0)
+								{
+									setDirection("RIGHT");
+								}
+								else if (xDist < 0)
+								{
+									setDirection("LEFT");
+								}
+								
 								int yDist = (int) (getTarget().getY()
 										+ getTarget().getHeight() / 2
 										- (getY() + getHeight() / 2));
 
 								double angle = Math.atan2(yDist,xDist);
+								
+								
 								getWorld().add(
 										new ServerProjectile(getX()
 												+ getWidth() / 2, getY()
@@ -403,11 +415,11 @@ public class ServerGoblin extends ServerCreature
 
 			else if (action.equals("SHOOT"))
 			{
-				if (actionCounter < 5)
+				if (actionCounter < 4)
 				{
 					setRowCol(new RowCol(2, 4));
 				}
-				else if (actionCounter < 10)
+				else if (actionCounter < 8)
 				{
 					setRowCol(new RowCol(2, 5));
 				}
@@ -522,8 +534,13 @@ public class ServerGoblin extends ServerCreature
 	}
 
 	@Override
-	public void inflictDamage(int amount)
+	public void inflictDamage(int amount, ServerCreature source)
 	{
+		if (!onTarget && source!= getTarget())
+		{
+			setTarget(source);
+		}
+		
 		amount -= amount * armour;
 
 		if (amount <= 0)

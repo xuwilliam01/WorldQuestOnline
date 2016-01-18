@@ -82,26 +82,32 @@ public class ServerWeaponSwing extends ServerObject
 	 * Number of pixels difference from the original y position
 	 */
 	private double relativeY;
+	
+	/**
+	 * The one who swung the weapon
+	 */
+	private ServerCreature owner;
 
 	/**
 	 * Constructor for the item swing animation
-	 * @param wielder
+	 * @param owner
 	 * @param image
 	 * @param timeInMilliseconds
 	 */
-	public ServerWeaponSwing(ServerCreature wielder, double relativeX, double relativeY, String image, int angle,
+	public ServerWeaponSwing(ServerCreature owner, double relativeX, double relativeY, String image, int angle,
 			int timeInFrames, int damage)
 	{
-		super(wielder.getX(), wielder.getY(), -1, -1, 0, image,
+		super(owner.getX(), owner.getY(), -1, -1, 0, image,
 				ServerWorld.WEAPON_SWING_TYPE);
 		
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;
 		
-		this.wielder = wielder;
+		this.wielder = owner;
 		counter = 0;
 		this.timeInFrames = timeInFrames;
-		ownerID = wielder.getID();
+		this.owner = owner;
+		ownerID = owner.getID();
 
 		objectsCollided = new ArrayList<Integer>();
 
@@ -124,8 +130,8 @@ public class ServerWeaponSwing extends ServerObject
 		width = Images.getGameImage(image).getWidth();
 		height = Images.getGameImage(image).getHeight();
 
-		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
-		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + 10 + relativeY);
+		setX(owner.getX() + owner.getWidth() / 2 - width / 2 + relativeX);
+		setY(owner.getY() + owner.getHeight() / 2 - height / 2 + 10 + relativeY);
 
 		hitbox = new Line2D.Double(
 				getX() + width
@@ -283,4 +289,15 @@ public class ServerWeaponSwing extends ServerObject
 		this.hitbox = hitbox;
 	}
 
+	public ServerCreature getOwner()
+	{
+		return owner;
+	}
+
+	public void setOwner(ServerCreature owner)
+	{
+		this.owner = owner;
+	}
+
+	
 }

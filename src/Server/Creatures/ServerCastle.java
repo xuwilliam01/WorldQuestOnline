@@ -13,10 +13,5 @@ public class ServerCastle extends ServerCreature{
 			setImage("RED_CASTLE.png");
 		setTeam(team);
 	}
-	
-	public void inflictDamage(int amount)
-	{
-		super.inflictDamage(amount);
-	}
 
 }

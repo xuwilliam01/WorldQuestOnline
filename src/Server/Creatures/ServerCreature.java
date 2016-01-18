@@ -189,7 +189,7 @@ public abstract class ServerCreature extends ServerObject {
 	 * 
 	 * @param amount
 	 */
-	public void inflictDamage(int amount) {
+	public void inflictDamage(int amount, ServerCreature source) {
 		if (HP > 0) {
 			HP -= amount;
 

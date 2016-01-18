@@ -1054,7 +1054,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							{
 								((ServerCreature) otherObject)
 								.inflictDamage(PUNCHING_DAMAGE
-										+ getBaseDamage());
+										+ getBaseDamage(),this);
 								alreadyPunched
 								.add((ServerCreature) otherObject);
 							}
@@ -1246,7 +1246,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Damage the player a certain amount, and destroy if hp is 0 or below
 	 * @param amount
 	 */
-	public void inflictDamage(int amount)
+	@Override
+	public void inflictDamage(int amount, ServerCreature source)
 	{
 
 		if (equippedArmour != null)

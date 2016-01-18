@@ -447,7 +447,7 @@ public class ServerWorld
 													((ServerCreature) otherObject)
 															.inflictDamage(
 															((ServerProjectile) object)
-																	.getDamage());
+																	.getDamage(),((ServerProjectile)object).getOwner());
 													((ServerProjectile) object)
 															.addCollided(otherObject);
 												}
@@ -479,7 +479,7 @@ public class ServerWorld
 											((ServerCreature) otherObject)
 													.inflictDamage(
 													((ServerProjectile) object)
-															.getDamage());
+															.getDamage(),((ServerProjectile)object).getOwner());
 											((ServerProjectile) object)
 													.addCollided(otherObject);
 
@@ -496,7 +496,7 @@ public class ServerWorld
 										((ServerCreature) otherObject)
 												.inflictDamage(
 												((ServerSlime) object)
-														.getDamage());
+														.getDamage(),(ServerCreature)object);
 
 									}
 									// If a player collided with an item
@@ -581,7 +581,7 @@ public class ServerWorld
 											((ServerCreature) otherObject)
 													.inflictDamage(
 													((ServerWeaponSwing) object)
-															.getDamage());
+															.getDamage(),((ServerWeaponSwing)object).getOwner());
 											((ServerWeaponSwing) object)
 													.addCollided(otherObject);
 										}
