@@ -70,6 +70,11 @@ public class ClientWorld
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
+	
+	/**
+	 * Font for displaying stats
+	 */
+	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN,16);
 
 	/**
 	 * Object for figuring out size of font

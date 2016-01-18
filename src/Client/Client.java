@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -69,6 +68,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int maxMana;
 	private int speed;
 	private int jump;
+	private double armour;
 
 	// Variables for damage
 	int damage = 0;
@@ -118,11 +118,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * The shop
 	 */
 	private ClientShop shop = null;
-
-	/**
-	 * All the leftover lines to read in to the client
-	 */
-	private ArrayList<String> lines = new ArrayList<String>();
 
 	/**
 	 * Constructor for the client
@@ -220,10 +215,28 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addMouseMotionListener(this);
 
 		direction = 'R';
+	}
 
-		// Start the actual game
-		gameThread = new Thread(new readServer());
-		gameThread.start();
+	/**
+	 * Gets the amount of money the client has
+	 */
+	public int getMoney()
+	{
+		return inventory.getMoney();
+	}
+
+	public void decreaseMoney(int amount)
+	{
+		inventory.decreaseMoney(amount);
+	}
+
+	/**
+	 * Print to the server
+	 */
+	public void print(String message)
+	{
+		output.println(message);
+		output.flush();
 	}
 
 	/**
@@ -232,16 +245,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class readServer implements Runnable
+	class runGame implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			while (true)
+			try
 			{
-				while (!lines.isEmpty())
+				startTime = System.currentTimeMillis();
+
+				while (true)
 				{
-					String message = lines.remove(0);
+
+					String message = input.readLine();
 
 					String[] tokens = message.split(" ");
 
@@ -330,6 +346,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							jump = Integer.parseInt(tokens[++token]);
 						}
+						else if (tokens[token].equals("A"))
+						{
+							armour = Double.parseDouble(tokens[++token]);
+						}
 						else if (tokens[token].equals("V"))
 						{
 							if (Character.isDigit(tokens[token + 1].charAt(0)))
@@ -366,75 +386,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 					}
 
-				}
+					// long delay = System.currentTimeMillis()
+					// - startTime;
 
-				try
-				{
-					Thread.sleep(1);
-				}
-				catch (InterruptedException e)
-				{
+					// if (delay < 15)
+					// {
+					// try {
+					// Thread.sleep((15-delay)-2);
+					// } catch (InterruptedException e) {
+					//
+					// e.printStackTrace();
+					// }
+					// }
 
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Gets the amount of money the client has
-	 */
-	public int getMoney()
-	{
-		return inventory.getMoney();
-	}
-
-	public void decreaseMoney(int amount)
-	{
-		inventory.decreaseMoney(amount);
-	}
-
-	/**
-	 * Print to the server
-	 */
-	public void print(String message)
-	{
-		output.println(message);
-		output.flush();
-	}
-
-	/**
-	 * Thread for running the actual game
-	 * 
-	 * @author William Xu && Alex Raita
-	 *
-	 */
-	class runGame implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				startTime = System.currentTimeMillis();
-
-				while (true)
-				{
-					String message = input.readLine();
-					
-					if (lines.size()<3)
-					{
-					lines.add(message);
-					}
-
-					try
-					{
-						Thread.sleep(1);
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
 				}
 
 			}
@@ -556,9 +520,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		graphics.drawString("FPS: " + currentFPS, 20, 40);
 		if (HP > 0)
 		{
-			graphics.setColor(Color.red);
-			graphics.drawString(String.format("Health: %d/%d", HP, maxHP), 20,
-					60);
 			justDied = true;
 		}
 		else
@@ -570,34 +531,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 			graphics.setColor(Color.black);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
+					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
 
-		graphics.setColor(Color.blue);
-		graphics.drawString(String.format("Mana: %d/%d", mana, maxMana), 20, 80);
-		graphics.setColor(Color.green);
-		graphics.drawString(String.format("Damage: %d(+%d)", damage
-				+ baseDamage, baseDamage), 20, 100);
-
-		graphics.setColor(Color.gray);
-		if (speed == ServerPlayer.MAX_HSPEED)
-			graphics.drawString(
-					String.format("Speed: %d (Max)", speed
-							- ServerPlayer.MOVE_SPEED + 1), 20, 120);
-		else
-			graphics.drawString(
-					String.format("Speed: %d", speed - ServerPlayer.MOVE_SPEED
-							+ 1), 20, 120);
-
-		graphics.setColor(Color.ORANGE);
-		if (jump == ServerPlayer.MAX_VSPEED)
-			graphics.drawString(
-					String.format("Jump: %d (Max)", jump
-							- ServerPlayer.JUMP_SPEED + 1), 20, 140);
-		else
-			graphics.drawString(
-					String.format("Jump: %d", jump - ServerPlayer.JUMP_SPEED
-							+ 1), 20, 140);
+		inventory.repaint();
 	}
 
 	@Override
@@ -865,19 +802,29 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		return jump;
 	}
-
+	
 	public BufferedReader getInput()
 	{
 		return input;
 	}
-
+	
 	public PrintWriter getOutput()
 	{
 		return output;
 	}
-
-	public Thread getThread()
+	
+	public int getDamage()
 	{
-		return gameThread;
+		return damage;
+	}
+	
+	public int getBaseDamage()
+	{
+		return baseDamage;
+	}
+
+	public double getArmour()
+	{
+		return armour;
 	}
 }
