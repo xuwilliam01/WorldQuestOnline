@@ -678,7 +678,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("M " + getMaxHP());
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
-
+				if(equippedArmour != null)
+					queueMessage(String.format("A %.2f",equippedArmour.getArmour()));
+				else
+					queueMessage(String.format("A 0"));
 				// Send the player's current damage
 				int currentDamage = PUNCHING_DAMAGE;
 				int weaponNo = weaponSelected - '0';

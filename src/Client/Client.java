@@ -68,6 +68,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int maxMana;
 	private int speed;
 	private int jump;
+	private double armour;
 
 	// Variables for damage
 	int damage = 0;
@@ -345,6 +346,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							jump = Integer.parseInt(tokens[++token]);
 						}
+						else if (tokens[token].equals("A"))
+						{
+							armour = Double.parseDouble(tokens[++token]);
+						}
 						else if (tokens[token].equals("V"))
 						{
 							if (Character.isDigit(tokens[token + 1].charAt(0)))
@@ -529,29 +534,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
 		}
 
-		graphics.setColor(Color.green);
-		graphics.drawString(String.format("Damage: %d(+%d)", damage
-				+ baseDamage, baseDamage), 20, 100);
-
-		graphics.setColor(Color.gray);
-		if (speed == ServerPlayer.MAX_HSPEED)
-			graphics.drawString(
-					String.format("Speed: %d (Max)", speed
-							- ServerPlayer.MOVE_SPEED + 1), 20, 120);
-		else
-			graphics.drawString(
-					String.format("Speed: %d", speed - ServerPlayer.MOVE_SPEED
-							+ 1), 20, 120);
-
-		graphics.setColor(Color.ORANGE);
-		if (jump == ServerPlayer.MAX_VSPEED)
-			graphics.drawString(
-					String.format("Jump: %d (Max)", jump
-							- ServerPlayer.JUMP_SPEED + 1), 20, 140);
-		else
-			graphics.drawString(
-					String.format("Jump: %d", jump - ServerPlayer.JUMP_SPEED
-							+ 1), 20, 140);
+		inventory.repaint();
 	}
 
 	@Override
@@ -840,4 +823,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		return baseDamage;
 	}
 
+	public double getArmour()
+	{
+		return armour;
+	}
 }
