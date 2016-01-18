@@ -2,6 +2,7 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,8 +16,8 @@ import Server.Creatures.ServerPlayer;
 public class ClientInventory extends JPanel{
 
 	public final static int INVENTORY_WIDTH = 300;
-	public final static int WIDTH = 5;
-	public final static int HEIGHT = 5;
+	public final static int WIDTH = 4;
+	public final static int HEIGHT = 8;
 
 	private ClientItem[][] inventory = new ClientItem[HEIGHT][WIDTH];
 	private ClientItem[] equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
@@ -30,7 +31,7 @@ public class ClientInventory extends JPanel{
 	public ClientInventory(JButton menu)
 	{
 		setDoubleBuffered(true);
-		setBackground(Color.black);
+		//setBackground(Color.black);
 
 		setFocusable(true);
 		requestFocusInWindow();
@@ -277,11 +278,7 @@ public class ClientInventory extends JPanel{
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		graphics.setColor(Color.RED);
-		graphics.drawString("Inventory", 120, 20);
-		graphics.drawString("Equipped Items", 115, 480);
-		graphics.drawString("Weapons",10,520);
-		graphics.drawString("Armour",10,600);
+		graphics.drawImage(Images.getImage("Inventory.png"),0,0,null);
 	}
 
 	public ClientItem[] getEquippedWeapons() {

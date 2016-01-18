@@ -47,7 +47,7 @@ public class ClientItem extends JButton implements MouseListener{
 			equipSlot = ServerPlayer.DEFAULT_SHIELD_SLOT;
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH+10,Images.INVENTORY_IMAGE_SIDELENGTH+10);
-		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29 + 5,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
 		setFocusable(false);
@@ -354,7 +354,7 @@ public class ClientItem extends JButton implements MouseListener{
 					equipSlot = pos;
 					row = -1;
 					col = -1;
-					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+80,500);
+					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+95,865);
 
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
 					//If this is the first item to be equipped, auto select it
@@ -384,7 +384,7 @@ public class ClientItem extends JButton implements MouseListener{
 									invGrid[row][col] = inventory.getEquippedArmour();
 									inventory.getEquippedArmour().setRow(row);
 									inventory.getEquippedArmour().setCol(col);
-									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
 									shouldBreak = true;
 									break;
 
@@ -397,7 +397,7 @@ public class ClientItem extends JButton implements MouseListener{
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(80,580);
+					setLocation(95,925);
 					repaint();
 
 
@@ -420,7 +420,7 @@ public class ClientItem extends JButton implements MouseListener{
 									invGrid[row][col] = inventory.getEquippedShield();
 									inventory.getEquippedShield().setRow(row);
 									inventory.getEquippedShield().setCol(col);
-									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
 									shouldBreak = true;
 									break;
 								}
@@ -432,7 +432,7 @@ public class ClientItem extends JButton implements MouseListener{
 					selected = true;
 					inventory.setEquippedShield(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(80,660);
+					setLocation(80,860);
 					repaint();
 				}
 			}
