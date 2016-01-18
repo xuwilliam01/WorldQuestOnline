@@ -115,7 +115,7 @@ public class ServerGoblin extends ServerCreature
 		super(x, y, 16, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
 				"", GOBLIN_HP, world, true);
 
-		int numTypes = 7;
+		int numTypes = (int)(Math.random()*NUM_TYPES)+1;
 		switch (numTypes)
 		{
 		case 1:
@@ -175,10 +175,11 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
 			setImage("GOBNINJA_RIGHT_0_0.png");
 			targetRange = 750;
-			fightingRange = (int) (Math.random() * 500 + 250);
-			damage = 5;
+			fightingRange = (int) (Math.random() * 100 + 250);
 			weapon = ServerWorld.NINJASTAR_TYPE;
 			isMelee = false;
+			movementSpeed = 5;
+			jumpSpeed = 16;
 			break;
 		case 8:
 			setType(ServerWorld.GOBLIN_PEASANT_TYPE);
@@ -350,14 +351,15 @@ public class ServerGoblin extends ServerCreature
 							{
 								action = "SHOOT";
 								actionDelay = 100;
+								
+								int xDist = (int) (getTarget().getX()
+										+ getTarget().getWidth() / 2
+										- (getX() + getWidth() / 2));
+								int yDist = (int) (getTarget().getY()
+										+ getTarget().getHeight() / 2
+										- (getY() + getHeight() / 2));
 
-								int angle = (int) Math.toDegrees(Math.atan2(
-										getTarget().getY()
-												+ getTarget().getHeight() / 2
-												- (getY() + getHeight() / 2),
-										getTarget().getX()
-												+ getTarget().getWidth() / 2
-												- (getX() + getWidth() / 2)));
+								double angle = Math.atan2(yDist,xDist);
 								getWorld().add(
 										new ServerProjectile(getX()
 												+ getWidth() / 2, getY()

@@ -83,8 +83,8 @@ public class ServerSlime extends ServerEnemy
 		else if (slimeType == 29)
 		{
 			setImage("DARKSLIME_6.png");
-			setDamage(10);
-			setDamage(300);
+			setDamage(30);
+			setHP(100);
 		}
 		
 		landed = true;
