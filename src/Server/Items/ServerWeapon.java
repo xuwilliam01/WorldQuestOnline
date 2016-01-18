@@ -216,7 +216,7 @@ public class ServerWeapon extends ServerItem
 	public static ServerWeapon randomWeapon(double x, double y)
 	{
 		// Choose a type between the max and min grade
-		int randType = (int) (Math.random() * 112+1);
+		int randType = (int) (Math.random() * 135+1);
 
 		if(randType == 1) return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		else if(randType == 2) return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
@@ -228,63 +228,63 @@ public class ServerWeapon extends ServerItem
 				+ ServerWorld.DIAMOND_TIER);
 		else if(randType <= 12) return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 				+ ServerWorld.DIAMOND_TIER);
-		else if(randType<= 15)
+		else if(randType<= 16)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 19)
+		else if(randType <= 21)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 24)
+		else if(randType <= 27)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.STONE_TIER);
-		else if(randType <= 30)
+		else if(randType <= 34)
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 33)
+		else if(randType <= 38)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 37)
+		else if(randType <= 43)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 42)
+		else if(randType <= 49)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.STONE_TIER);
-		else if(randType <= 48)
+		else if(randType <= 56)
 			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 52)
+		else if(randType <= 61)
 			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 57)
+		else if(randType <= 67)
 			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 63)
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
-					+ ServerWorld.STONE_TIER);
-		else if(randType <= 70)
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
-					+ ServerWorld.WOOD_TIER);
 		else if(randType <= 74)
+			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
+					+ ServerWorld.STONE_TIER);
+		else if(randType <= 82)
+			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
+					+ ServerWorld.WOOD_TIER);
+		else if(randType <= 87)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.GOLD_TIER);
-		else if(randType <= 79)
+		else if(randType <= 93)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.IRON_TIER);
-		else if(randType <= 85)
+		else if(randType <= 100)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.STONE_TIER);
-		else if(randType <= 92)
+		else if(randType <= 108)
 			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 					+ ServerWorld.WOOD_TIER);
-		else if(randType <= 99)
+		else if(randType <= 118)
 			return new ServerWeapon(x,y,ServerWorld.SLINGSHOT_TYPE);
-		else if(randType <= 104)
+		else if(randType <= 124)
 			return new ServerWeapon(x,y,ServerWorld.WOODBOW_TYPE);
-		else if(randType <= 107)
+		else if(randType <= 128)
 			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
-		else if(randType <= 110)
+		else if(randType <= 132)
 			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
-		else if(randType <= 112)
+		else if(randType <= 135)
 			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
 
 

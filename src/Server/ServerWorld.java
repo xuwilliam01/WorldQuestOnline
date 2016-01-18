@@ -319,9 +319,6 @@ public class ServerWorld
 					newObject.setY(row * ServerWorld.TILE_SIZE);
 					add(newObject);
 					
-					if(newObject.getType().equals(ServerWorld.VENDOR_TYPE))
-						System.out.println("Added vendor");
-
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
 						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
