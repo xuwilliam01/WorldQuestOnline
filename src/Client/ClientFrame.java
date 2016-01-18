@@ -30,7 +30,6 @@ public class ClientFrame extends JFrame
 		setTitle("WorldQuest Online");
 		setLocationRelativeTo(null);
 		setLayout(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setVisible(true);

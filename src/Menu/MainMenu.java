@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -72,7 +73,7 @@ public class MainMenu {
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
-			playGame.addActionListener(new StartGame());
+			playGame.addActionListener(new GameStart());
 			add(playGame);	
 
 			Image createServerImage = Images.getImage("CreateAServer.png");
@@ -274,23 +275,11 @@ public class MainMenu {
 	{	
 		public void actionPerformed(ActionEvent e)
 		{
-			gamePanel.close();
-			mainFrame.remove(gamePanel);
-			mainFrame.invalidate();
-			mainFrame.validate();
-			gamePanel= null;
-			
-			mainMenu = new MainPanel();
-			mainFrame.add(mainMenu);
-			mainFrame.setVisible(true);
-			mainMenu.revalidate();
-			mainMenu.setVisible(true);
-			mainMenu.repaint();
-			mainMenu.requestFocusInWindow();
+			StartGame.restart(mainFrame);
 		}
 	}
 	
-	private static class StartGame implements ActionListener
+	private static class GameStart implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
 			mainFrame.remove(mainMenu);
