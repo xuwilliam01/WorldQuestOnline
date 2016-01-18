@@ -198,15 +198,15 @@ public abstract class ServerItem extends ServerObject {
 	}
 
 	public static ServerItem randomItem(double x, double y) {
-		int randType = (int) (Math.random() * 7 + 1);
+		int randType = (int) (Math.random() * 10 + 1);
 
-		if(randType <= 2)
-			return new ServerMoney(x,y);
-		if(randType <= 3)
-			return ServerArmour.randomArmour(x, y);
 		if(randType <= 5)
+			return new ServerMoney(x,y);
+		if(randType <= 6)
+			return ServerArmour.randomArmour(x, y);
+		if(randType <= 8)
 			return ServerPotion.randomPotion(x, y);
-		if(randType <= 7)
+		if(randType <= 10)
 			return ServerWeapon.randomWeapon(x,y);
 		
 		
