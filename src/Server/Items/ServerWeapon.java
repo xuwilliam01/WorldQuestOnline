@@ -51,8 +51,6 @@ public class ServerWeapon extends ServerItem
 	 * The damage the weapon will do when you use it
 	 */
 	private int damage = -5;
-
-	private int manaCost = 0;
 	
 	/**
 	 * The image to use when the player actually uses the weapon
@@ -192,15 +190,12 @@ public class ServerWeapon extends ServerItem
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			damage = FIREWAND_DMG;
-			manaCost = FIREWAND_MANA;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			damage = ICEWAND_DMG;
-			manaCost = ICEWAND_MANA;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			damage = DARKWAND_DMG;
-			manaCost = DARKWAND_MANA;
 			break;
 		}
 	}
@@ -221,9 +216,9 @@ public class ServerWeapon extends ServerItem
 
 		if(randType == 1) return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		else if(randType == 2) return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
-		else if(randType <= 8) return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
+		else if(randType <= 6) return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
 				+ ServerWorld.DIAMOND_TIER);
-		else if(randType <= 14) return new ServerWeapon(x, y, ServerWorld.AX_TYPE
+		else if(randType <= 10) return new ServerWeapon(x, y, ServerWorld.AX_TYPE
 				+ ServerWorld.DIAMOND_TIER);
 		else if(randType <= 18) return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
 				+ ServerWorld.DIAMOND_TIER);
