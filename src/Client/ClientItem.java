@@ -329,7 +329,7 @@ public class ClientItem extends JButton implements MouseListener{
 								{
 									inventory.setEquippedShield(null);
 								}
-								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*25,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+50);
+								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
 
 								return;
 							}
@@ -397,7 +397,7 @@ public class ClientItem extends JButton implements MouseListener{
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(95,925);
+					setLocation(95,923);
 					repaint();
 
 

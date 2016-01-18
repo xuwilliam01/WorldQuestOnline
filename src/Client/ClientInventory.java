@@ -1,6 +1,6 @@
 package Client;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -42,7 +42,7 @@ public class ClientInventory extends JPanel{
 		{
 			mainMenu = menu;
 			mainMenu.setSize(225,50);
-			mainMenu.setLocation(INVENTORY_WIDTH-250,Client.SCREEN_HEIGHT-125);
+			mainMenu.setLocation(INVENTORY_WIDTH-250,Client.SCREEN_HEIGHT-100);
 			add(mainMenu);
 		}
 	}

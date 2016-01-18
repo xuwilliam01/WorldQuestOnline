@@ -13,7 +13,9 @@ public class StartGame {
 	
 	public static void restart(JFrame oldFrame)
 	{
-		oldFrame.dispatchEvent(new WindowEvent(oldFrame,WindowEvent.WINDOW_CLOSING));		
+		//oldFrame.dispatchEvent(new WindowEvent(oldFrame,WindowEvent.WINDOW_CLOSING));		
+		oldFrame.setVisible(false);
+		oldFrame.dispose();
 		MainMenu menu = new MainMenu();
 	}
 
