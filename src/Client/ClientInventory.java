@@ -306,7 +306,7 @@ public class ClientInventory extends JPanel{
 		graphics.setColor(Color.black);
 		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMana()),153,150);
 		
-		graphics.setColor(Color.black);
+		graphics.setColor(new Color(253,83,83));
 		graphics.drawString(String.format("%d(+%d)", client.getDamage()
 				+ client.getBaseDamage(), client.getBaseDamage()), 103, 215);
 		
@@ -314,21 +314,21 @@ public class ClientInventory extends JPanel{
 		
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
 			graphics.drawString(
-					String.format("%d (Max)", client.getSpeed()
-							- ServerPlayer.MOVE_SPEED + 1), 242, 215);
+					String.format("%d(Max)", client.getSpeed()
+							- ServerPlayer.MOVE_SPEED + 1), 240, 215);
 		else
 			graphics.drawString(
 					String.format("%d", client.getSpeed() - ServerPlayer.MOVE_SPEED
-							+ 1), 242, 215);
+							+ 1), 240, 215);
 
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
 			graphics.drawString(
-					String.format("%d (Max)", client.getJump()
-							- ServerPlayer.JUMP_SPEED + 1), 242, 255);
+					String.format("%d(Max)", client.getJump()
+							- ServerPlayer.JUMP_SPEED + 1), 240, 255);
 		else
 			graphics.drawString(
 					String.format("%d", client.getJump() - ServerPlayer.JUMP_SPEED
-							+ 1), 242, 255);
+							+ 1), 240, 255);
 	}
 
 	public ClientItem[] getEquippedWeapons() {
