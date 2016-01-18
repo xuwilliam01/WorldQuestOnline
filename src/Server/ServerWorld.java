@@ -318,6 +318,9 @@ public class ServerWorld
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
 					add(newObject);
+					
+					if(newObject.getType().equals(ServerWorld.VENDOR_TYPE))
+						System.out.println("Added vendor");
 
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{

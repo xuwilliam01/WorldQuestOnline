@@ -1326,9 +1326,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send all the objects within all the object tiles in the player's
 		// screen
 		int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
-		int endRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+		int endRow = (int) ((getY() + getHeight()) /
+				ServerWorld.OBJECT_TILE_SIZE);
 		int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
-		int endColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
+		int endColumn = (int) ((getX() + getWidth()) /
+				ServerWorld.OBJECT_TILE_SIZE);
 
 		if (startRow < 0)
 		{
