@@ -284,12 +284,27 @@ public class ClientInventory extends JPanel{
 		graphics.setFont(ClientWorld.STATS_FONT);
 		if(client.getHP() > 0)
 		{
+			if(client.getHP() != client.getMaxHP())
+			{
+				graphics.setColor(Color.green);
+				graphics.fillRect(100, 95, 180, 20);
+			}
 			graphics.setColor(Color.red);
-			graphics.drawString(String.format("%d/%d", client.getHP(), client.getMaxHP()), 130,
+			graphics.fillRect(100,95,(int)(client.getHP()*180.0/client.getMaxHP()),20);
+			graphics.setColor(Color.black);
+			graphics.drawString(String.format("%d/%d", client.getHP(), client.getMaxHP()), 153,
 					110);
 		}
+		
+		if(client.getMana() != client.getMaxMana())
+		{
+			graphics.setColor(Color.green);
+			graphics.fillRect(100, 135, 180, 20);
+		}
 		graphics.setColor(Color.blue);
-		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMana()),130,150);
+		graphics.fillRect(100,135,(int)(client.getMana()*180.0/client.getMaxMana()),20);
+		graphics.setColor(Color.black);
+		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMana()),153,150);
 		
 		graphics.setColor(Color.black);
 		graphics.drawString(String.format("%d(+%d)", client.getDamage()
