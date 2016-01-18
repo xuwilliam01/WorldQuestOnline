@@ -65,12 +65,12 @@ public class Server implements Runnable
 
 				int team = engine.nextTeam() % 2 + 1;
 
-				int x = 1500;
+				int x = 2000;
+				if(team == ServerPlayer.RED_TEAM)
+				 	x = engine.getWorld().getRedCastleX();
+				else
+					x = engine.getWorld().getBlueCastleX();
 
-				if (team == ServerPlayer.RED_TEAM)
-				{
-					x = 472 * ServerWorld.TILE_SIZE;
-				}
 
 				int y = ServerPlayer.PLAYER_Y;
 

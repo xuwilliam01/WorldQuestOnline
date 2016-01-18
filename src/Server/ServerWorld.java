@@ -132,6 +132,9 @@ public class ServerWorld
 
 	public final static String GRID_FILE = "NewWorld.txt";
 
+	private int redCastleX;
+	private int blueCastleX;
+	
 	/**
 	 * Grid of tiles
 	 */
@@ -305,6 +308,14 @@ public class ServerWorld
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
 					add(newObject);
+					
+					if(obj.getType().equals(ServerWorld.CASTLE_TYPE))
+					{
+						if(((ServerCastle)newObject).getTeam() == ServerPlayer.RED_TEAM)
+							redCastleX = (int) newObject.getX()+50;
+						else
+							blueCastleX = (int) newObject.getX()+50;
+					}
 				}
 		}
 		worldInput.close();
@@ -1064,5 +1075,16 @@ public class ServerWorld
 	{
 		this.blueTeam = blueTeam;
 	}
+	
+	public int getRedCastleX()
+	{
+		return redCastleX;
+	}
+	
+	public int getBlueCastleX()
+	{
+		return blueCastleX;
+	}
+	
 
 }

@@ -194,7 +194,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Signaling the writer thread to flush
 	 */
 	private boolean flushWriterNow = false;
-	
+
 	/**
 	 * Whether or not the player is trying to drop from a platform
 	 */
@@ -222,17 +222,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
-		
-		
+
+
 		String hair = "HAIR0BEIGE";
-		
+
 		int randomHair = (int)(Math.random() * 8);
-		
-		
+
+
 		switch(randomHair)
 		{
 		case 1:
@@ -257,13 +257,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			hair = "HAIR1GREY";
 			break;
 		}
-		
+
 		// Give the player a random hairdo
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0);
-		
+
 		setHead(newHair);
 		world.add(newHair);
-		
+
 		actionDelay = 20;
 
 		canPerformAction = true;
@@ -342,11 +342,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
-		
+
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
-	
+
 
 	/**
 	 * Send the player the entire map
@@ -534,7 +534,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					else
 					{
-						setX(10 * ServerWorld.TILE_SIZE);
+						if(getTeam() == RED_TEAM)
+							setX(world.getRedCastleX());
+						else
+							setX(world.getBlueCastleX());
 					}
 					setY(300);
 
@@ -1055,17 +1058,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-											.isAttackable()
+									.isAttackable()
 									&& ((ServerCreature) otherObject)
-											.getTeam() != getTeam()
+									.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject)
-										.inflictDamage(PUNCHING_DAMAGE
-												+ getBaseDamage());
+								.inflictDamage(PUNCHING_DAMAGE
+										+ getBaseDamage());
 								alreadyPunched
-										.add((ServerCreature) otherObject);
+								.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -1347,7 +1350,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1723,8 +1726,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.isDropping = isDropping;
 	}
-	
-	
+
+
 
 }
 
