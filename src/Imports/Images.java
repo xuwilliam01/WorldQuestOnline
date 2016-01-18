@@ -171,6 +171,22 @@ public class Images
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
+				image = ImageIO.read(new File(
+						"STAR0.png"));
+				for (int no = 0; no < image.getWidth()/24; no++)
+				{
+					images.add(new GameImage("STAR0_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 24, 0, 24, 24)));
+				}
+				
+				image = ImageIO.read(new File(
+						"STAR1.png"));
+				for (int no = 0; no < image.getWidth()/24; no++)
+				{
+					images.add(new GameImage("STAR1_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 24, 0, 24, 24)));
+				}
+				
 
 				// Add all the pics from the player sprite sheets
 				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",

@@ -54,7 +54,7 @@ public class MainMenu {
 		}
 
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 12; no++)
+		for (int no = 0; no < 20; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -204,7 +204,7 @@ public class MainMenu {
 			}
 
 			//Draw the title image
-			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2-20,-150,null);
+			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2 - 20,200,null);
 		}
 
 		@Override

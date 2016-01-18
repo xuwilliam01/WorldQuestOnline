@@ -72,6 +72,11 @@ public class ServerProjectile extends ServerFlyingObject
 	private int noOfExplosionFrames;
 
 	/**
+	 * Number of frames for the animation
+	 */
+	private int animationFrames = 2;
+
+	/**
 	 * The ID's of the objects that have already collided with this projectile
 	 */
 	private ArrayList<Integer> objectsCollided;
@@ -101,6 +106,22 @@ public class ServerProjectile extends ServerFlyingObject
 
 		switch (type)
 		{
+		case ServerWorld.NINJASTAR_TYPE:
+			if (Math.toDegrees(angle) >= 90 && Math.toDegrees(angle) < 90)
+			{
+				setImage("STAR0_0.png");
+			}
+			else
+			{
+				setImage("STAR1_0.png");
+			}
+			setGravity(0);
+			setDamage(ServerWeapon.STAR_DMG);
+			setSpeed(7);
+			animated = true;
+			animationFrames = 4;
+			faceAngle = false;
+			break;
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0.png");
 			setGravity(0.25);
@@ -182,7 +203,6 @@ public class ServerProjectile extends ServerFlyingObject
 					getX() + ((length / 2) * Math.cos(getAngle())), getY()
 							+ ((length / 2) * Math.sin(getAngle())));
 
-			
 			imageAngle = (int) (Math
 					.round(Math.toDegrees(getAngle()) / 15.0) * 15);
 
@@ -195,16 +215,40 @@ public class ServerProjectile extends ServerFlyingObject
 		if (animated)
 		{
 			animationCounter++;
-			if (animationCounter >= 10)
+
+			int imageNo = 0;
+
+			if (animationFrames == 2)
 			{
-				animationCounter = 0;
+				if (animationCounter >= 10)
+				{
+					animationCounter = 0;
+				}
+
+				if (animationCounter >= 5)
+				{
+					imageNo = 1;
+				}
 			}
-
-			int imageNo = 1;
-
-			if (animationCounter < 5)
+			else if (animationFrames ==4)
 			{
-				imageNo = 0;
+				if (animationCounter >= 12)
+				{
+					animationCounter = 0;
+				}
+
+				if (animationCounter < 3)
+				{
+					imageNo = 1;
+				}
+				else if (animationCounter<6)
+				{
+					imageNo = 2;
+				}
+				else if (animationCounter <9)
+				{
+					imageNo = 3;
+				}
 			}
 
 			if (faceAngle)

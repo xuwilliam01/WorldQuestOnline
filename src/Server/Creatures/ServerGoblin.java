@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Effects.ServerDamageIndicator;
 import Server.ServerWorld;
 import Server.Items.ServerItem;
+import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
@@ -77,6 +78,11 @@ public class ServerGoblin extends ServerCreature
 	private int targetRange = 500;
 
 	/**
+	 * Whether or not the goblin is a melee user or ranged
+	 */
+	private boolean isMelee = true;
+
+	/**
 	 * The range for the goblin to start fighting the target
 	 */
 	private int fightingRange;
@@ -109,7 +115,7 @@ public class ServerGoblin extends ServerCreature
 		super(x, y, 16, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
 				"", GOBLIN_HP, world, true);
 
-		int numTypes = (int) (Math.random() * NUM_TYPES + 1);
+		int numTypes = 7;
 		switch (numTypes)
 		{
 		case 1:
@@ -168,10 +174,11 @@ public class ServerGoblin extends ServerCreature
 		case 7:
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
 			setImage("GOBNINJA_RIGHT_0_0.png");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+			targetRange = 750;
+			fightingRange = (int) (Math.random() * 500 + 250);
 			damage = 5;
-			weapon = "DAIRON_0.png";
+			weapon = ServerWorld.NINJASTAR_TYPE;
+			isMelee = false;
 			break;
 		case 8:
 			setType(ServerWorld.GOBLIN_PEASANT_TYPE);
@@ -211,8 +218,8 @@ public class ServerGoblin extends ServerCreature
 			break;
 		}
 
-		if(Math.random()< 0.2)
-			addItem(ServerItem.randomItem(getX(),getY()));
+		if (Math.random() < 0.2)
+			addItem(ServerItem.randomItem(getX(), getY()));
 		setTeam(team);
 	}
 
@@ -278,14 +285,13 @@ public class ServerGoblin extends ServerCreature
 			}
 			else
 			{
-				if ((getX() + getWidth() / 2 < getTarget().getX()
-						+ getTarget().getWidth() / 2)
+				if ((getX() + getWidth() / 2 < getTarget().getX())
 						&& !onTarget)
 				{
 					setHSpeed(movementSpeed);
 				}
 				else if ((getX() + getWidth() / 2 > getTarget().getX()
-						+ getTarget().getWidth() / 2)
+						+ getTarget().getWidth())
 						&& !onTarget)
 				{
 					setHSpeed(-movementSpeed);
@@ -324,19 +330,41 @@ public class ServerGoblin extends ServerCreature
 						}
 						else
 						{
-							action = "SWING";
-							actionDelay = 16;
-
-							int angle = 180;
-							if (getDirection().equals("RIGHT"))
+							if (isMelee)
 							{
-								angle = 0;
-							}
+								action = "SWING";
+								actionDelay = 16;
 
-							getWorld().add(
-									new ServerWeaponSwing(this, 0, -25,
-											weapon, angle,
-											actionDelay, damage));
+								int angle = 180;
+								if (getDirection().equals("RIGHT"))
+								{
+									angle = 0;
+								}
+
+								getWorld().add(
+										new ServerWeaponSwing(this, 0, -25,
+												weapon, angle,
+												actionDelay, damage));
+							}
+							else
+							{
+								action = "SHOOT";
+								actionDelay = 100;
+
+								int angle = (int) Math.toDegrees(Math.atan2(
+										getTarget().getY()
+												+ getTarget().getHeight() / 2
+												- (getY() + getHeight() / 2),
+										getTarget().getX()
+												+ getTarget().getWidth() / 2
+												- (getX() + getWidth() / 2)));
+								getWorld().add(
+										new ServerProjectile(getX()
+												+ getWidth() / 2, getY()
+												+ getHeight() / 3, this, angle,
+												weapon));
+
+							}
 
 						}
 					}
@@ -370,15 +398,24 @@ public class ServerGoblin extends ServerCreature
 					setRowCol(new RowCol(2, 3));
 				}
 			}
-			else if (action.equals("PUNCH"))
+
+			else if (action.equals("SHOOT"))
 			{
 				if (actionCounter < 5)
 				{
-					setRowCol(new RowCol(2, 7));
+					setRowCol(new RowCol(2, 4));
 				}
-				else if (actionCounter < 16)
+				else if (actionCounter < 10)
 				{
-					setRowCol(new RowCol(2, 8));
+					setRowCol(new RowCol(2, 5));
+				}
+				else if (actionCounter < 2 * actionDelay / 3)
+				{
+					setRowCol(new RowCol(2, 6));
+				}
+				else
+				{
+					setRowCol(new RowCol(0, 0));
 				}
 			}
 			else if (action.equals("BLOCK"))
