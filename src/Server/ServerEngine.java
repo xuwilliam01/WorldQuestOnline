@@ -83,6 +83,9 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	private ServerGUI gui = null;
 
+	private boolean endGame = false;
+	private int losingTeam;
+	
 	/**
 	 * Constructor for the engine
 	 */
@@ -95,7 +98,7 @@ public class ServerEngine implements Runnable, ActionListener
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		objectIDs = new boolean[NUMBER_OF_IDS];
-		world = new ServerWorld();
+		world = new ServerWorld(this);
 
 	}
 
@@ -134,6 +137,8 @@ public class ServerEngine implements Runnable, ActionListener
 			for (ServerPlayer player : listOfPlayers)
 			{
 				player.updateClient();
+				if(endGame)
+					player.setEndGame(true,losingTeam);
 			}
 		}
 		catch(ConcurrentModificationException e)
@@ -143,6 +148,12 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 	}
 
+	public void endGame(int losingTeam)
+	{
+		endGame = true;
+		this.losingTeam = losingTeam;
+	}
+	
 	/**
 	 * Send an instant message to all clients
 	 */

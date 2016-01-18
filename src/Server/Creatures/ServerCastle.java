@@ -4,7 +4,7 @@ import Server.ServerWorld;
 
 public class ServerCastle extends ServerCreature{
 
-	public final static int CASTLE_HP = 10000;
+	public final static int CASTLE_HP = 1;
 	
 	public ServerCastle(double x, double y, int team, ServerWorld world) 
 	{

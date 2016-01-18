@@ -68,6 +68,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether the game is over or not
 	 */
 	private boolean endGame = false;
+	private int losingTeam;
 
 	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
@@ -324,7 +325,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
-		
+
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
@@ -505,6 +506,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					setAlive(true);
 
+					verticalMovement = JUMP_SPEED;
+					horizontalMovement = MOVE_SPEED;
+
 					if (getTeam() == RED_TEAM)
 					{
 						setX(world.getRedCastleX());
@@ -566,6 +570,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		if(world.getWorldCounter() % 60 == 0 && mana < maxMana)
 			mana++;
+
 		
 		if (!flushWriterNow)
 		{
@@ -603,14 +608,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-							if(object.getType().equals(ServerWorld.CASTLE_TYPE) && !object.exists())
-							{
-								if(((ServerCastle)object).getHP() <= 0)
-								{
-									queueMessage("B "+((ServerCastle)object).getTeam());
-									endGame = true;		
-								}
-							}
 
 							if (object.exists()
 									&& !object.getType().equals(
@@ -1467,6 +1464,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		if(endGame)
 		{
+			queueMessage("B "+losingTeam);
+			output.println(message);
+			output.flush();
 			output.close();
 			try {
 				input.close();
@@ -1750,7 +1750,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.isDropping = isDropping;
 	}
 
-
+	public void setEndGame(boolean endGame,int losingTeam)
+	{
+		this.endGame = endGame;
+		this.losingTeam = losingTeam;
+	}
 
 }
 

@@ -231,15 +231,18 @@ public class ServerWorld
 	 */
 	public final static int maxSlimes = 30;
 
+	private ServerEngine engine;
+	
 	/**
 	 * Constructor for server
 	 * @throws IOException
 	 */
-	public ServerWorld() throws IOException
+	public ServerWorld(ServerEngine engine) throws IOException
 	{
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
+		this.engine = engine;
 		newWorld();
 	}
 
@@ -358,6 +361,9 @@ public class ServerWorld
 			for (ServerObject object : objects)
 			{
 
+				if(object.getType().equals(ServerWorld.CASTLE_TYPE) && ((ServerCreature)object).getHP() <= 0)
+						engine.endGame( ((ServerCreature)object).getTeam());
+				
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
 				{
@@ -962,13 +968,6 @@ public class ServerWorld
 		}
 	}
 	
-	/**
-	 * End the game
-	 */
-	public void endGame(int team)
-	{
-		
-	}
 	
 	/**
 	 * Just remove
