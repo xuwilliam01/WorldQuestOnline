@@ -68,7 +68,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether the game is over or not
 	 */
 	private boolean endGame = false;
-	
+	private int gameOverCounter = 0;
+
 	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
 	 * last flush
@@ -324,7 +325,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
-		
+
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
@@ -515,7 +516,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					else
 					{
-							setX(world.getBlueCastleX());
+						setX(world.getBlueCastleX());
 					}
 					setY(300);
 
@@ -605,11 +606,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if(object.getType().equals(ServerWorld.CASTLE_TYPE) && !object.exists())
 							{
-								if(((ServerCastle)object).getHP() <= 0)
+								if(((ServerCastle)object).getHP() <= 0 && gameOverCounter > 100)
+								{
 									queueMessage("B "+((ServerCastle)object).getTeam());
-								endGame = true;							
+									endGame = true;		
+								}
+								else 
+									gameOverCounter++;
 							}
-							
+
 							if (object.exists()
 									&& !object.getType().equals(
 											ServerWorld.SPAWN_TYPE))
@@ -1431,7 +1436,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		output.println(message);
 		output.flush();
-		
+
 		if(endGame)
 		{
 			output.close();
