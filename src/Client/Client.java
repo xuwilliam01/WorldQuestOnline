@@ -571,7 +571,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 			graphics.setColor(Color.black);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
+					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
 		}
 
 		graphics.setColor(Color.blue);

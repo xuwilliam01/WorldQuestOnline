@@ -194,6 +194,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Signaling the writer thread to flush
 	 */
 	private boolean flushWriterNow = false;
+	
+	/**
+	 * Whether or not the player is trying to drop from a platform
+	 */
+	private boolean isDropping = false;
 
 	private int mana = PLAYER_START_MANA;
 	private int maxMana = PLAYER_START_MANA;
@@ -716,6 +721,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					actionCounter = actionDelay;
 				}
+				else if (command.equals("D") && isAlive())
+				{
+					isDropping = true;
+				}
+				else if (command.equals("!D") && isAlive())
+				{
+					isDropping = false;
+				}
 				else if (command.equals("R") && isAlive())
 				{
 					setHSpeed(horizontalMovement);
@@ -1224,6 +1237,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setVSpeed(0);
 
 			setAttackable(false);
+			isDropping = false;
 
 		}
 		else
@@ -1658,4 +1672,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.verticalMovement = Math.min(verticalMovement, MAX_VSPEED);
 	}
 
+
+	public boolean isDropping()
+	{
+		return isDropping;
+	}
+
+
+	public void setDropping(boolean isDropping)
+	{
+		this.isDropping = isDropping;
+	}
+	
+	
+
 }
+

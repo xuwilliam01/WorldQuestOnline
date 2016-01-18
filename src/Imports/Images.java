@@ -494,6 +494,10 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BDIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BDIRTPLAT.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			images.add(new GameImage("PLAT.png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
 			
 			images.add(new GameImage("SLIME_6_ICON.png", 2*ServerWorld.TILE_SIZE,
 					2*ServerWorld.TILE_SIZE));
