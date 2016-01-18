@@ -94,7 +94,7 @@ public class ClientInventory extends JPanel{
 	public void decreaseMoney(int amount)
 	{
 		for(int row = 0; row < inventory.length;row++)
-			for(int col = 0; col < inventory.length;col++)
+			for(int col = 0; col < inventory[0].length;col++)
 				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
 				{
 					inventory[row][col].decreaseAmount(amount);

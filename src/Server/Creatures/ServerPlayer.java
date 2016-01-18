@@ -528,15 +528,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					if (getTeam() == RED_TEAM)
 					{
-						setX(world.getGrid()[0].length * ServerWorld.TILE_SIZE
-								- 10 * ServerWorld.TILE_SIZE);
+						setX(world.getRedCastleX());
 
 					}
 					else
 					{
-						if(getTeam() == RED_TEAM)
-							setX(world.getRedCastleX());
-						else
 							setX(world.getBlueCastleX());
 					}
 					setY(300);
