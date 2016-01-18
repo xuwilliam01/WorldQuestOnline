@@ -319,29 +319,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
-		addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR));
-		addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR));
-
-		addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-				+ ServerWorld.IRON_TIER));
-		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-				+ ServerWorld.IRON_TIER));
-		addItem(new ServerWeapon(0, 0, ServerWorld.HALBERD_TYPE
-				+ ServerWorld.IRON_TIER));
-		addItem(new ServerWeapon(0, 0, ServerWorld.DAGGER_TYPE
-				+ ServerWorld.IRON_TIER));
-		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-				+ ServerWorld.GOLD_TIER));
-
-		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.DARKWAND_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
-		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
 		
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
