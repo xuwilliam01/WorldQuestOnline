@@ -229,7 +229,7 @@ public class ServerWorld
 	/**
 	 * Max number of slimes in the world at once
 	 */
-	public final static int maxSlimes = 35;
+	public final static int maxSlimes = 45;
 
 	/**
 	 * Constructor for server

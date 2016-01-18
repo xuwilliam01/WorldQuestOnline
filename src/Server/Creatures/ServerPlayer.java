@@ -1260,12 +1260,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			verticalMovement = 0;
 			horizontalMovement = 0;
 
-			if (getHead() != null)
-			{
-				getHead().destroy();
-				setHead(null);
-			}
-
 			if (getBody() != null)
 			{
 				getBody().destroy();

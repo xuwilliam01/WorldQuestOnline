@@ -409,5 +409,6 @@ public abstract class ServerCreature extends ServerObject {
 		this.HP = maxHP;
 	}
 
+	
 
 }

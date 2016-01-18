@@ -110,7 +110,7 @@ public class ServerSlime extends ServerEnemy
 				{
 					direction *= -1;
 					changeDirectionCounter = getCounter()
-							+ (int) (Math.random() * 900);
+							+ (int) (Math.random() * 6000);
 				}
 				setHSpeed(direction * speed);
 			}
@@ -196,13 +196,6 @@ public class ServerSlime extends ServerEnemy
 
 		setCounter(getCounter() + 1);
 
-	}
-	
-	@Override
-	public void destroy()
-	{
-		super.destroy();
-		ServerWorld.slimeCount--;
 	}
 	
 }

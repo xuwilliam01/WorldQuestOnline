@@ -286,7 +286,7 @@ public class ClientInventory extends JPanel{
 		{
 			if(client.getHP() != client.getMaxHP())
 			{
-				graphics.setColor(Color.green);
+				graphics.setColor(Color.black);
 				graphics.fillRect(100, 95, 180, 20);
 			}
 			graphics.setColor(Color.red);
