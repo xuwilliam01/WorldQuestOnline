@@ -233,7 +233,7 @@ public class ServerGoblin extends ServerCreature
 			{
 				setDirection("LEFT");
 			}
-			else if (getHSpeed() == 0
+			else if (Math.abs(getHSpeed()) <= 1
 					&& isOnSurface() && !onTarget)
 			{
 				setVSpeed(-jumpSpeed);

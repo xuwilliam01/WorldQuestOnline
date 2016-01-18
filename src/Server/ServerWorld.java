@@ -134,7 +134,7 @@ public class ServerWorld
 
 	private int redCastleX;
 	private int blueCastleX;
-	
+
 	/**
 	 * Grid of tiles
 	 */
@@ -220,16 +220,16 @@ public class ServerWorld
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
-	
+
 	/**
 	 * The number of slimes in the world
 	 */
 	public static int slimeCount = 0;
-	
+
 	/**
 	 * Max number of slimes in the world at once
 	 */
-	public final static int maxSlimes = 45;
+	public final static int maxSlimes = 30;
 
 	/**
 	 * Constructor for server
@@ -318,13 +318,13 @@ public class ServerWorld
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
 					add(newObject);
-					
-					if(obj.getType().equals(ServerWorld.CASTLE_TYPE))
+
+					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
-						if(((ServerCastle)newObject).getTeam() == ServerPlayer.RED_TEAM)
-							redCastleX = (int) newObject.getX()+50;
+						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
+							redCastleX = (int) newObject.getX() + 50;
 						else
-							blueCastleX = (int) newObject.getX()+50;
+							blueCastleX = (int) newObject.getX() + 50;
 					}
 				}
 		}
@@ -394,6 +394,7 @@ public class ServerWorld
 						continue;
 					}
 
+					ArrayList<ServerObject> collidedAlready = new ArrayList<ServerObject>();
 					// Check collisions with other objects in tiles that they
 					// both
 					// touch
@@ -403,8 +404,11 @@ public class ServerWorld
 						{
 							for (ServerObject otherObject : objectGrid[row][column])
 							{
-								if (otherObject.exists())
+								if (otherObject.exists()
+										&& otherObject.getID() != object
+												.getID() && !collidedAlready.contains(otherObject))
 								{
+									collidedAlready.add(otherObject);
 									if (object.getType().charAt(0) == PROJECTILE_TYPE)
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
@@ -467,27 +471,18 @@ public class ServerWorld
 										}
 									}
 									else if (object.getType()
-											.equals(SLIME_TYPE))
+											.equals(SLIME_TYPE)
+											&& otherObject.getType().equals(
+													PLAYER_TYPE)
+											&& object.collidesWith(otherObject)
+											&& getWorldCounter() % 20 == 0)
 									{
-										if (otherObject.getType().charAt(0) == CREATURE_TYPE
-												&& ((ServerCreature) otherObject)
-														.isAttackable()
-												&& ((ServerCreature) otherObject)
-														.getTeam() != ((ServerCreature) object)
-														.getTeam()
-												&& object
-														.collidesWith(otherObject))
-										{
-											if (((ServerEnemy) object)
-													.getCounter() % 30 == 0)
-											{
-												((ServerCreature) otherObject)
-														.inflictDamage(
-														((ServerSlime) object)
-																.getDamage());
-											}
 
-										}
+										((ServerCreature) otherObject)
+												.inflictDamage(
+												((ServerSlime) object)
+														.getDamage());
+
 									}
 									// If a player collided with an item
 									else if (otherObject.getType().charAt(0) == ITEM_TYPE
@@ -666,8 +661,11 @@ public class ServerWorld
 							{
 								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if ((tileGrid[row][column] >= 'A' || (((object.getType().equals(PLAYER_TYPE) && !((ServerPlayer)object).isDropping())||!object.getType().equals(PLAYER_TYPE))
-										&&	(tileGrid[row][column] == '*' || tileGrid[row][column] == '+')))
+									if ((tileGrid[row][column] >= 'A' || (((object
+											.getType().equals(PLAYER_TYPE) && !((ServerPlayer) object)
+											.isDropping()) || !object.getType()
+											.equals(PLAYER_TYPE))
+											&& (tileGrid[row][column] == '*' || tileGrid[row][column] == '+')))
 											&& column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1)
 									{
@@ -1085,16 +1083,15 @@ public class ServerWorld
 	{
 		this.blueTeam = blueTeam;
 	}
-	
+
 	public int getRedCastleX()
 	{
 		return redCastleX;
 	}
-	
+
 	public int getBlueCastleX()
 	{
 		return blueCastleX;
 	}
-	
 
 }

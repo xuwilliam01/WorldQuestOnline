@@ -52,7 +52,7 @@ public class ServerSlime extends ServerEnemy
 		landCounter = 0;
 		
 		
-		setDamage(3);
+		setDamage(2);
 		
 		int slimeType = (int)(Math.random()*30);
 		
