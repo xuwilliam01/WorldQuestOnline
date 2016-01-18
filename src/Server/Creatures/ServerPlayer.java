@@ -342,7 +342,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		addItem(new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE));
 		addItem(new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE));
-
+		
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
