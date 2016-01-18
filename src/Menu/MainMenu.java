@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -16,8 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import Client.Client;
+import Client.ClientBackground;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Imports.Images;
@@ -32,10 +35,53 @@ public class MainMenu {
 	private static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
+
+	//Cloud variables
+	private static ArrayList<ClientBackground> clouds;
+	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 2;
+	private static int cloudDirection = 0;
+
+	public void generateClouds()
+	{
+		// Generate clouds
+		if ((int) (Math.random() * 2) == 0)
+		{
+			cloudDirection = 1;
+		}
+		else
+		{
+			cloudDirection = -1;
+		}
+
+		clouds = new ArrayList<ClientBackground>();
+		for (int no = 0; no < 12; no++)
+		{
+			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
+					- (CLOUD_DISTANCE / 2);
+			double y = Math.random() * (Client.SCREEN_HEIGHT)
+					- (2 * Client.SCREEN_HEIGHT / 3);
+
+			double hSpeed = 0;
+
+			hSpeed = (Math.random() * 0.9 + 0.1) * cloudDirection;
+
+			int imageNo = no;
+
+			while (imageNo >= 6)
+			{
+				imageNo -= 6;
+			}
+
+			String image = "CLOUD_" + imageNo + ".png";
+
+			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
+		}
+	}
 	
 	public MainMenu()
 	{
 		Images.importImages();
+		generateClouds();
 		mainFrame = new ClientFrame();
 		mainFrame.setLayout(null);
 		mainMenu = new MainPanel();
@@ -45,14 +91,18 @@ public class MainMenu {
 		mainMenu.repaint();
 	}
 
-	private static class MainPanel extends JPanel
+	private static class MainPanel extends JPanel implements ActionListener
 	{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH)/2;
 		Image titleImage = Images.getImage("WorldQuestOnline.png");
+		Image background = Images.getImage("BACKGROUND.png");
 		JButton playGame;
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
+
+
+		private Timer repaintTimer = new Timer(15,this);
 
 		public MainPanel()
 		{
@@ -64,12 +114,13 @@ public class MainMenu {
 			setLocation(0,0);
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
+			repaintTimer.start();
 
 
 			Image playGameImage = Images.getImage("FindAGame.png");
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),playGameImage.getHeight(null));
-			playGame.setLocation(middle - playGameImage.getWidth(null)/2,200);
+			playGame.setLocation(middle - playGameImage.getWidth(null)/2,250);
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
@@ -79,7 +130,7 @@ public class MainMenu {
 			Image createServerImage = Images.getImage("CreateAServer.png");
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),createServerImage.getHeight(null));
-			createServer.setLocation(middle - createServerImage.getWidth(null)/2,350);
+			createServer.setLocation(middle - createServerImage.getWidth(null)/2,400);
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
@@ -89,7 +140,7 @@ public class MainMenu {
 			Image createMapImage = Images.getImage("CreateAMap.png");
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),createMapImage.getHeight(null));
-			createMap.setLocation(middle - createMapImage.getWidth(null)/2,500);
+			createMap.setLocation(middle - createMapImage.getWidth(null)/2,550);
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
@@ -99,12 +150,13 @@ public class MainMenu {
 			Image instructionsImage = Images.getImage("Instructions.png");
 			instructions = new JButton(new ImageIcon(instructionsImage));
 			instructions.setSize(instructionsImage.getWidth(null),instructionsImage.getHeight(null));
-			instructions.setLocation(middle - instructionsImage.getWidth(null)/2,650);
+			instructions.setLocation(middle - instructionsImage.getWidth(null)/2,700);
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
 			instructions.addActionListener(new OpenInstructions());
 			add(instructions);	
+
 
 			setVisible(true);
 			repaint();
@@ -113,8 +165,52 @@ public class MainMenu {
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
-			graphics.fillRect(0, 0, Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
-			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2,50,null);
+			graphics.drawImage(background,0, 0, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT,null);
+			// Draw and move the clouds
+			for (ClientBackground cloud : clouds)
+			{
+				if (cloud.getX() <= Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH
+						&& cloud.getX() + cloud.getWidth() >= 0
+						&& cloud.getY() <= Client.SCREEN_HEIGHT
+						&& cloud.getY() + cloud.getHeight() >= 0)
+				{
+					graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
+							(int) cloud.getY(), null);
+				}
+
+				if (cloud.getX() < middle - CLOUD_DISTANCE / 2)
+				{
+					cloud.setX(middle + CLOUD_DISTANCE / 2);
+					// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+					// cloud.setImage(Images.getImage(image));
+					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+							- (2 * Client.SCREEN_HEIGHT / 3));
+					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
+
+				}
+				else if (cloud.getX() > middle + CLOUD_DISTANCE
+						/ 2)
+				{
+					cloud.setX(middle - CLOUD_DISTANCE / 2);
+					// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
+					// cloud.setImage(Images.getImage(image));
+					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+							- (2 * Client.SCREEN_HEIGHT / 3));
+					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
+				}
+				cloud.setX(cloud.getX() + cloud.gethSpeed());
+
+				// System.out.println(cloud.getX());
+			}
+
+			//Draw the title image
+			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2-20,-150,null);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			repaint();
+
 		}
 
 
@@ -131,7 +227,7 @@ public class MainMenu {
 			setLocation(0,0);
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
-			
+
 
 			CreatorWorld world = null;
 			try {
@@ -143,7 +239,7 @@ public class MainMenu {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			JButton menu = new JButton("Main Menu");
 			menu.addActionListener(new CreatorMenuButton());
 			CreatorItems items = new CreatorItems(world,menu);
@@ -164,7 +260,7 @@ public class MainMenu {
 	{
 		Client client;
 		ClientInventory inventory;
-		
+
 		public GamePanel()
 		{
 			boolean connected = false;
@@ -207,16 +303,16 @@ public class MainMenu {
 			pane.setDoubleBuffered(true);
 			mainFrame.add(pane);
 			pane.setVisible(true);
-			
+
 			JButton menu = new JButton("Main Menu");
 			menu.addActionListener(new GameMenuButton());
 			inventory = new ClientInventory(menu);
 			client = new Client(mySocket,inventory,pane);
 			inventory.setClient(client);
-			
+
 			client.setLocation(0,0);
 			inventory.setLocation(Client.SCREEN_WIDTH,0);
-			
+
 			pane.add(client);
 			mainFrame.add(inventory);
 			client.initialize();
@@ -227,7 +323,7 @@ public class MainMenu {
 			mainFrame.setVisible(true);
 			inventory.repaint();
 		}
-		
+
 		public void close()
 		{
 			client.getOutput().close();
@@ -242,9 +338,9 @@ public class MainMenu {
 			client.removeAll();
 			client.repaint();
 		}
-		
+
 	}
-	
+
 	private static class CreatorMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -254,14 +350,14 @@ public class MainMenu {
 			mainFrame.invalidate();
 			mainFrame.validate();
 			creatorPanel= null;
-			
+
 			mainMenu = new MainPanel();
 			mainFrame.add(mainMenu);
 			mainFrame.setVisible(true);
 			mainMenu.revalidate();
 		}
 	}
-	
+
 	private static class GameMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -269,7 +365,7 @@ public class MainMenu {
 			StartGame.restart(mainFrame);
 		}
 	}
-	
+
 	private static class GameStart implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
@@ -306,7 +402,7 @@ public class MainMenu {
 	private static class StartCreator implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			
+
 			String fileName = "";
 			while(true)
 			{
@@ -316,7 +412,7 @@ public class MainMenu {
 				if(fileName == null)
 					return;
 			}
-			
+
 			mainFrame.remove(mainMenu);
 			mainFrame.invalidate();
 			mainFrame.validate();

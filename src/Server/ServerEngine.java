@@ -235,6 +235,7 @@ public class ServerEngine implements Runnable, ActionListener
 			if (player.isDisconnected())
 			{
 				listOfRemovedPlayers.add(player);
+				lastTeam--;
 			}
 		}
 
