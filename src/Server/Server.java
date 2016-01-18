@@ -65,7 +65,7 @@ public class Server implements Runnable
 
 				int team = engine.nextTeam() % 2 + 1;
 
-				int x = 200;
+				int x = 1500;
 
 				if (team == ServerPlayer.RED_TEAM)
 				{
