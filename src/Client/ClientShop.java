@@ -44,16 +44,16 @@ public class ClientShop extends JPanel{
 						shopItems[row][col].increaseAmount(amount);
 						return;
 					}
-		
+
 		for(int row = 0; row < shopItems.length;row++)
 			for(int col = 0; col < shopItems[0].length;col++)
-			if(shopItems[row][col] == null)
-			{
-				shopItems[row][col]= new ClientShopItem(imageName,type,amount,cost,row,col,this);
-				add(shopItems[row][col]);
-				repaint();
-				return;
-			}
+				if(shopItems[row][col] == null)
+				{
+					shopItems[row][col]= new ClientShopItem(imageName,type,amount,cost,row,col,this);
+					add(shopItems[row][col]);
+					repaint();
+					return;
+				}
 
 
 	}
@@ -83,23 +83,26 @@ public class ClientShop extends JPanel{
 					return false;
 		return true;
 	}
-	
+
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.RED);
 		graphics.drawString("Shop", 250, 20);
-		
+
 		//For each item write the price under it
 		graphics.setColor(new Color(218,165,32));
 		for(int row = 0; row < shopItems.length;row++)
 			for(int col = 0; col < shopItems[0].length;col++)
-		{
-			if(shopItems[row][col] != null)
 			{
-				graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX(), shopItems[row][col].getY()+15+Images.INVENTORY_IMAGE_SIDELENGTH);
-				graphics.drawImage(coinImage, shopItems[row][col].getX()+15, shopItems[row][col].getY()+5+Images.INVENTORY_IMAGE_SIDELENGTH,this);
+				if(shopItems[row][col] != null)
+				{
+					if(shopItems[row][col].getCost() > 9)
+						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX(), shopItems[row][col].getY()+15+Images.INVENTORY_IMAGE_SIDELENGTH);
+					else
+						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX()+3, shopItems[row][col].getY()+15+Images.INVENTORY_IMAGE_SIDELENGTH);
+					graphics.drawImage(coinImage, shopItems[row][col].getX()+18, shopItems[row][col].getY()+5+Images.INVENTORY_IMAGE_SIDELENGTH,this);
+				}
 			}
-		}
 	}
 }
