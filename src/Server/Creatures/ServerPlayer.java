@@ -63,7 +63,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private BufferedReader input;
 	private ServerEngine engine;
 	private ServerWorld world;
-	
+
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
 
@@ -575,7 +575,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			mana++;
 		if(world.getWorldCounter() % 80 == 0 &&  getHP() < getMaxHP())
 			setHP(getHP()+1);
-		
+
 		if (!flushWriterNow)
 		{
 			if (exists())
@@ -1443,10 +1443,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		if (message.length() != 0)
-			this.message.append(" " + message);
-		else
-			this.message.append(message);
+		this.message.append(" " + message);
 	}
 
 	/**
@@ -1479,7 +1476,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				e.printStackTrace();
 			}
 		}
-		message = new StringBuilder();
+		message = new StringBuilder("Z");
 	}
 
 	/**
