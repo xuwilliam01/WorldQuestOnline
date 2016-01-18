@@ -170,8 +170,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 					int newHeightNum = Integer.parseInt(newHeight);
 					if(newHeightNum < MIN_WORLD_SIZE || newHeightNum > MAX_WORLD_SIZE)
 						continue;
-					world.setNewWidth(newHeightNum);
-					world.setNewHeight(Integer.parseInt(newHeight));
+					world.setNewHeight(newHeightNum);
 					updateHeight.setText("Change Height "+"(Current: "+Integer.parseInt(newHeight)+")");
 					break;
 
