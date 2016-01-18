@@ -34,45 +34,46 @@ public abstract class ServerItem extends ServerObject {
 		switch (type) {
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");
+			value = 2;
 			break;
 		case ServerWorld.MAX_HP_TYPE:
 			setImage("MAX_HP_POTION.png");
-			value = 3;
+			value = 5;
 			break;
 		case ServerWorld.MANA_POTION_TYPE:
 			setImage("MANA_POTION.png");
-			value = 1;
+			value = 2;
 			break;
 		case ServerWorld.MAX_MANA_TYPE:
 			setImage("MAX_MANA_POTION.png");
-			value = 3;
+			value = 5;
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
 			setImage("DMG_POTION.png");
-			value = 5;
+			value = 8;
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setImage("SPEED_POTION.png");
-			value = 5;
+			value = 8;
 			break;
 		case ServerWorld.JUMP_POTION_TYPE:
 			setImage("JUMP_POTION.png");
-			value = 5;
+			value = 8;
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON.png");
-			value = 4;
+			value = 10;
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 			setImage("OUTFITNINJABLUE_ICON.png");
-			value = 3;
+			value = 6;
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
 			setImage("OUTFITNINJARED_ICON.png");
-			value = 2;
+			value = 3;
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
 			setImage("OUTFITNINJAGREY_ICON.png");
@@ -80,19 +81,19 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
-			value = 5;
+			value = 15;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setImage("DAGOLD_ICON.png");
-			value = 4;
+			value = 10;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setImage("DAIRON_ICON.png");
-			value = 3;
+			value = 6;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			setImage("DASTONE_ICON.png");
-			value = 2;
+			value = 3;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setImage("DAWOOD_ICON.png");
@@ -100,19 +101,19 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("AXDIAMOND_ICON.png");
-			value = 5;
+			value = 15;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			setImage("AXGOLD_ICON.png");
-			value = 4;
+			value = 10;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			setImage("AXIRON_ICON.png");
-			value = 3;
+			value = 6;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			setImage("AXSTONE_ICON.png");
-			value = 2;
+			value = 3;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			setImage("AXWOOD_ICON.png");
@@ -120,47 +121,47 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("SWDIAMOND_ICON.png");
-			value = 5;
+			value = 16;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("SWGOLD_ICON.png");
-			value = 4;
+			value = 11;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			setImage("SWIRON_ICON.png");
-			value = 3;
+			value = 7;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			setImage("SWSTONE_ICON.png");
-			value = 2;
+			value = 4;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("SWWOOD_ICON.png");
-			value = 1;
+			value = 2;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("HADIAMOND_ICON.png");
-			value = 5;
+			value = 16;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("HAGOLD_ICON.png");
-			value = 4;
+			value = 11;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			setImage("HAIRON_ICON.png");
-			value = 3;
+			value = 7;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			setImage("HASTONE_ICON.png");
-			value = 2;
+			value = 4;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			setImage("HAWOOD_ICON.png");
-			value = 1;
+			value = 2;
 			break;
 		case ServerWorld.SLINGSHOT_TYPE:
 			setImage("SLINGSHOT_ICON.png");
-			value = 5;
+			value = 1;
 			break;
 		case ServerWorld.WOODBOW_TYPE:
 			setImage("WOODBOW_ICON.png");
@@ -168,23 +169,23 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.STEELBOW_TYPE:
 			setImage("STEELBOW_ICON.png");
-			value = 5;
+			value = 10;
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON.png");
-			value = 5;
+			value = 20;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON.png");
-			value = 5;
+			value = 10;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			setImage("ICEWAND_ICON.png");
-			value = 5;
+			value = 20;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			setImage("DARKWAND_ICON.png");
-			value = 5;
+			value = 30;
 			break;
 		}
 
