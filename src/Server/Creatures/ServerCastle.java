@@ -4,7 +4,7 @@ import Server.ServerWorld;
 
 public class ServerCastle extends ServerCreature{
 
-	public final static int CASTLE_HP = 10000;
+	public final static int CASTLE_HP = 10;
 	
 	public ServerCastle(double x, double y, int team, ServerWorld world) 
 	{
@@ -17,10 +17,6 @@ public class ServerCastle extends ServerCreature{
 	public void inflictDamage(int amount)
 	{
 		super.inflictDamage(amount);
-		if (getHP() <= 0)
-		{
-			//End the game
-		}
 	}
 
 }

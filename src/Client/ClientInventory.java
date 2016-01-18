@@ -364,7 +364,10 @@ public class ClientInventory extends JPanel{
 		this.equippedShield = equippedShield;
 	}
 
-
+	public JButton getMenuButton()
+	{
+		return mainMenu;
+	}
 
 
 }

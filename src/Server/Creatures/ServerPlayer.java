@@ -65,6 +65,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private ServerWorld world;
 
 	/**
+	 * Whether the game is over or not
+	 */
+	private boolean endGame = false;
+	
+	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
 	 * last flush
 	 */
@@ -598,6 +603,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
+							if(object.getType().equals(ServerWorld.CASTLE_TYPE) && !object.exists())
+							{
+								if(((ServerCastle)object).getHP() <= 0)
+									queueMessage("B "+((ServerCastle)object).getTeam());
+								endGame = true;							
+							}
+							
 							if (object.exists()
 									&& !object.getType().equals(
 											ServerWorld.SPAWN_TYPE))
@@ -1419,6 +1431,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		output.println(message);
 		output.flush();
+		
+		if(endGame)
+		{
+			output.close();
+			try {
+				input.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		message = new StringBuilder();
 	}
 

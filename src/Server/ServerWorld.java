@@ -877,7 +877,8 @@ public class ServerWorld
 				}
 				else
 				{
-					objectsToRemove.add(object);
+					if(!object.getType().equals(CASTLE_TYPE))
+						objectsToRemove.add(object);
 				}
 			}
 
@@ -955,7 +956,15 @@ public class ServerWorld
 			}
 		}
 	}
-
+	
+	/**
+	 * End the game
+	 */
+	public void endGame(int team)
+	{
+		
+	}
+	
 	/**
 	 * Just remove
 	 * @param object

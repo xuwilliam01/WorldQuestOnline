@@ -40,6 +40,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private Thread gameThread;
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
+	
+	private boolean endGame = false;
 
 	/**
 	 * The current message that the client is sending to the server
@@ -276,6 +278,27 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						{
 							mana = Integer.parseInt(tokens[++token]);
 						}
+						else if(tokens[token].equals("B"))
+						{
+							//End the game
+							int team = Integer.parseInt(tokens[++token]);
+							String winner = "Red Team";
+							String loser = "Blue Team";
+							if(team == ServerPlayer.RED_TEAM)
+							{
+								winner = "Blue Team";
+								loser = "Red Team";
+							}
+							endGame = true;
+
+							JOptionPane.showMessageDialog(Client.this, String.format("The %s castle has been destroyed, the winner is the %s!",loser,winner));
+							input.close();
+							output.close();
+							if(inventory.getMenuButton() != null)
+								inventory.getMenuButton().doClick();
+							break;
+							
+						}
 						else if (tokens[token].equals("K"))
 						{
 							maxMana = Integer.parseInt(tokens[++token]);
@@ -386,6 +409,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 					}
 
+					if(endGame)
+						break;
 					// long delay = System.currentTimeMillis()
 					// - startTime;
 
