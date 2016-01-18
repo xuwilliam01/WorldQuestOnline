@@ -326,6 +326,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		baseImage = "BASE_" + skinColour;
 
+		
+		int randomStartWeapon = (int)(Math.random()*3);
+		
+		switch(randomStartWeapon)
+		{
+		case 0:
+			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+					+ ServerWorld.WOOD_TIER));
+		case 1:
+			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+					+ ServerWorld.WOOD_TIER));
+		case 2:
+			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+		}
+		
+		
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
 
@@ -503,10 +519,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else
 				{
-					// Respawn the player
-					addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-							+ ServerWorld.WOOD_TIER));
 
+					int randomStartWeapon = (int)(Math.random()*3);
+					
+					switch(randomStartWeapon)
+					{
+					case 0:
+						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+								+ ServerWorld.WOOD_TIER));
+					case 1:
+						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+								+ ServerWorld.WOOD_TIER));
+					case 2:
+						addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+					}
+					
 					setAlive(true);
 
 					verticalMovement = respawnYSpeed;
