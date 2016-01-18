@@ -157,9 +157,9 @@ public class Images
 
 				// Add all the pics from the player sprite sheets
 				String[] playerSheets = { "BASE_DARK", "BASE_LIGHT",
-						"BASE_TAN", "HAIR_0_BEIGE", "HAIR_1_BEIGE",
-						"HAIR_0_BLACK", "HAIR_1_BLACK", "HAIR_0_BLOND",
-						"HAIR_0_BLOND", "HAIR_0_GREY", "HAIR_1_GREY",
+						"BASE_TAN", "HAIR0BEIGE", "HAIR1BEIGE",
+						"HAIR0BLACK", "HAIR1BLACK", "HAIR0BLOND",
+						"HAIR1BLOND", "HAIR0GREY", "HAIR1GREY",
 						"OUTFITARMOR", "OUTFITNINJABLUE",
 						"OUTFITNINJAGREY", "OUTFITNINJARED" };
 				for (int no = 0; no < playerSheets.length; no++)

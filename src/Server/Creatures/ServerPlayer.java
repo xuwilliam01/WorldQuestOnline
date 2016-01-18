@@ -226,7 +226,44 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				PLAYER_START_HP, world, true);
 
 		this.skinColour = skinColour;
-
+		
+		
+		String hair = "HAIR0BEIGE";
+		
+		int randomHair = (int)(Math.random() * 8);
+		
+		
+		switch(randomHair)
+		{
+		case 1:
+			hair = "HAIR1BEIGE";
+			break;
+		case 2:
+			hair = "HAIR0BLACK";
+			break;
+		case 3:
+			hair = "HAIR1BLACK";
+			break;
+		case 4:
+			hair = "HAIR0BLOND";
+			break;
+		case 5:
+			hair = "HAIR1BLOND";
+			break;
+		case 6:
+			hair = "HAIR0GREY";
+			break;
+		case 7:
+			hair = "HAIR1GREY";
+			break;
+		}
+		
+		// Give the player a random hairdo
+		ServerAccessory newHair = new ServerAccessory(this, hair, 0);
+		
+		setHead(newHair);
+		world.add(newHair);
+		
 		actionDelay = 20;
 
 		canPerformAction = true;
