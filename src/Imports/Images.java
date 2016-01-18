@@ -101,13 +101,30 @@ public class Images
 			// Import sprite sheets to create images with
 			try
 			{
+				
+				// Add all the pics from the player sprite sheets
+				String[] slimeSheets = { "GREENSLIME","REDSLIME", "BLUESLIME", "YELLOWSLIME", "DARKSLIME"};
+				for (int sheetNo = 0; sheetNo < slimeSheets.length; sheetNo++)
+				{
+					image = ImageIO.read(new File(
+							slimeSheets[sheetNo] + ".png"));
+					
+					for (int no = 0; no < 9; no++)
+					{
+						images.add(new GameImage(slimeSheets[sheetNo] + "_" + no + IMAGE_FORMAT,
+								image.getSubimage(no * 19, 0, 19, 17), 38, 34));
+					}
+				}
+				
 				image = ImageIO.read(new File(
-						"SLIME_SHEET.png"));
+						"GREENSLIME.png"));
+				
 				for (int no = 0; no < 9; no++)
 				{
-					images.add(new GameImage("SLIME_" + no + IMAGE_FORMAT,
-							image.getSubimage(no * 19, 0, 19, 17), 38, 34));
+					images.add(new GameImage("GIANTSLIME" + "_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 19, 0, 19, 17), 144, 102));
 				}
+
 
 				image = ImageIO.read(new File(
 						"EXPLOSION0_SHEET.png"));

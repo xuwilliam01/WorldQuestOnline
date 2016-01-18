@@ -10,7 +10,7 @@ public class ServerSlime extends ServerEnemy
 	/**
 	 * The default HP of a slime
 	 */
-	public final static int SLIME_HP = 30;
+	public final static int SLIME_HP = 50;
 
 	private int speed = 5;
 
@@ -37,7 +37,7 @@ public class ServerSlime extends ServerEnemy
 
 	public ServerSlime(double x, double y, ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "SLIME_0.png", SLIME_HP,
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0.png", SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, ServerPlayer.NEUTRAL);
 
 		// Set a random counter to start so not every slime does the exact same
@@ -49,11 +49,43 @@ public class ServerSlime extends ServerEnemy
 		{
 			direction *= -1;
 		}
-
 		landCounter = 0;
-		setImage("SLIME_6.png");
+		
 		
 		setDamage(3);
+		
+		int slimeType = (int)(Math.random()*30);
+		
+		if (slimeType <15)
+		{
+		setImage("GREENSLIME_6.png");
+		}
+		else if (slimeType >= 15 && slimeType <= 18)
+		{
+			setImage("BLUESLIME_6.png");
+		}
+		else if (slimeType >= 19 && slimeType <= 22)
+		{
+			setImage("REDSLIME_6.png");
+		}
+		else if (slimeType >= 23 && slimeType <= 26)
+		{
+			setImage("YELLOWSLIME_6.png");
+		}
+		else if (slimeType >= 27 && slimeType <= 28)
+		{
+			setImage("GIANTSLIME_6.png");
+			setDamage(5);
+			setHP(150);
+			setWidth(-1);
+			setHeight(-1);
+		}
+		else if (slimeType == 29)
+		{
+			setImage("DARKSLIME_6.png");
+			setDamage(10);
+			setDamage(300);
+		}
 		
 		landed = true;
 

@@ -241,7 +241,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			{
 				while (!lines.isEmpty())
 				{
-					System.out.println(lines.size());
 					String message = lines.remove(0);
 
 					String[] tokens = message.split(" ");
