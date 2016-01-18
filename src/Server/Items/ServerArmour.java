@@ -51,17 +51,16 @@ public class ServerArmour extends ServerItem {
 	}
 
 	public static ServerArmour randomArmour(double x, double y) {
-		int randType = (int) (Math.random() * NUM_ARMOURS) + 1;
-		switch (randType) {
-		case 1:
-			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
-		case 2:
-			return new ServerArmour(x, y, ServerWorld.BLUE_NINJA_ARMOUR);
-		case 3:
-			return new ServerArmour(x, y, ServerWorld.RED_NINJA_ARMOUR);
-		case 4:
-			return new ServerArmour(x, y, ServerWorld.STEEL_ARMOUR);
-		}
+		int randType = (int) (Math.random() * 10) + 1;
+		
+		if(randType <= 1)
+			return new ServerArmour(x,y,ServerWorld.STEEL_ARMOUR);
+		if(randType <= 3)
+			return new ServerArmour(x,y,ServerWorld.RED_NINJA_ARMOUR);
+		if(randType <= 6)
+			return new ServerArmour(x,y,ServerWorld.BLUE_NINJA_ARMOUR);
+		if(randType <= 10)
+			return new ServerArmour(x,y,ServerWorld.GREY_NINJA_ARMOUR);
 		return null;
 	}
 

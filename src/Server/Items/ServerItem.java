@@ -195,88 +195,18 @@ public abstract class ServerItem extends ServerObject {
 	}
 
 	public static ServerItem randomItem(double x, double y) {
-		int randType = (int) (Math.random() * NUM_ITEMS + 1);
+		int randType = (int) (Math.random() * 7 + 1);
 
-		switch (randType) {
-		case 1:
-			return new ServerPotion(x, y, ServerWorld.HP_POTION_TYPE);
-		case 2:
-			return new ServerMoney(x, y);
-		case 3:
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER);
-		case 4:
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER);
-		case 5:
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER);
-		case 6:
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER);
-		case 7:
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER);
-		case 8:
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER);
-		case 9:
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER);
-		case 10:
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER);
-		case 11:
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER);
-		case 12:
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER);
-		case 13:
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER);
-		case 14:
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER);
-		case 15:
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE + ServerWorld.IRON_TIER);
-		case 16:
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE + ServerWorld.STONE_TIER);
-		case 17:
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER);
-		case 18:
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER);
-		case 19:
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER);
-		case 20:
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER);
-		case 21:
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER);
-		case 22:
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER);
-		case 23:
-			return new ServerArmour(x, y, ServerWorld.STEEL_ARMOUR);
-		case 24:
-			return new ServerArmour(x, y, ServerWorld.BLUE_NINJA_ARMOUR);
-		case 25:
-			return new ServerArmour(x, y, ServerWorld.RED_NINJA_ARMOUR);
-		case 26:
-			return new ServerArmour(x, y, ServerWorld.GREY_NINJA_ARMOUR);
-		case 27:
-			return new ServerPotion(x, y, ServerWorld.MAX_HP_TYPE);
-		case 28:
-			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE);
-		case 29:
-			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE);
-		case 30:
-			return new ServerPotion(x,y,ServerWorld.DMG_POTION_TYPE);
-		case 31:
-			return new ServerPotion(x,y,ServerWorld.SPEED_POTION_TYPE);
-		case 32:
-			return new ServerPotion(x,y,ServerWorld.JUMP_POTION_TYPE);
-		case 33:
-			return new ServerWeapon(x,y,ServerWorld.SLINGSHOT_TYPE);
-		case 34:
-			return new ServerWeapon(x,y,ServerWorld.WOODBOW_TYPE);
-		case 35:
-			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
-		case 36:
-			return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
-		case 37:
-			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
-		case 38:
-			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
-		case 39:
-			return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
-		}
+		if(randType <= 2)
+			return new ServerMoney(x,y);
+		if(randType <= 3)
+			return ServerArmour.randomArmour(x, y);
+		if(randType <= 5)
+			return ServerPotion.randomPotion(x, y);
+		if(randType <= 7)
+			return ServerWeapon.randomWeapon(x,y);
+		
+		
 		// This won't happen
 		return null;
 

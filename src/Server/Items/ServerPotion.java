@@ -19,24 +19,23 @@ public class ServerPotion extends ServerItem {
 	}
 
 	public static ServerPotion randomPotion(double x, double y) {
-		int randType = (int) (Math.random() * NUM_POTIONS + 1);
+		int randType = (int) (Math.random() * 15 + 1);
 
-		switch (randType) {
-		case 1:
-			return new ServerPotion(x, y,ServerWorld.HP_POTION_TYPE);
-		case 2:
-			return new ServerPotion(x,y,ServerWorld.MAX_HP_TYPE);
-		case 3:
-			return new ServerPotion(x,y,ServerWorld.MANA_POTION_TYPE);
-		case 4:
-			return new ServerPotion(x,y,ServerWorld.MAX_MANA_TYPE);
-		case 5:
+		if(randType <= 1)
 			return new ServerPotion(x,y,ServerWorld.DMG_POTION_TYPE);
-		case 6:
+		if(randType <= 2)
 			return new ServerPotion(x,y,ServerWorld.SPEED_POTION_TYPE);
-		case 7:
+		if(randType <= 3)
 			return new ServerPotion(x,y,ServerWorld.JUMP_POTION_TYPE);
-		}
+		if(randType <= 5)
+			return new ServerPotion(x,y,ServerWorld.MAX_MANA_TYPE);
+		if(randType <= 7)
+			return new ServerPotion(x,y,ServerWorld.MAX_HP_TYPE);
+		if(randType <= 11)
+			return new ServerPotion(x,y,ServerWorld.HP_POTION_TYPE);
+		if(randType <= 15)
+			return new ServerPotion(x,y,ServerWorld.MANA_POTION_TYPE);
+		
 		// This won't happen
 		return null;
 	}

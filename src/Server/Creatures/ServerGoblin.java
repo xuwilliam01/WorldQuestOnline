@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Effects.ServerDamageIndicator;
 import Server.ServerWorld;
+import Server.Items.ServerItem;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
@@ -210,6 +211,8 @@ public class ServerGoblin extends ServerCreature
 			break;
 		}
 
+		if(Math.random()< .25)
+			addItem(ServerItem.randomItem(getX(),getY()));
 		setTeam(team);
 	}
 

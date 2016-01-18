@@ -32,11 +32,11 @@ public class ServerVendor extends ServerCreature {
 
 	public void makeShop()
 	{
-		for(int potion = 0; potion < 6; potion++)
+		for(int potion = 0; potion < 10; potion++)
 			addItem(ServerPotion.randomPotion(getX(),getY()));
-		for(int weapon = 0; weapon < 10; weapon++)
+		for(int weapon = 0; weapon < 15; weapon++)
 			addItem(ServerWeapon.randomWeapon(getX(), getY()));
-		for(int armour = 0; armour < 3; armour++)
+		for(int armour = 0; armour < 8; armour++)
 			addItem(ServerArmour.randomArmour(getX(), getY()));
 	}
 	
