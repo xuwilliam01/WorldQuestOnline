@@ -198,5 +198,11 @@ public class ServerSlime extends ServerEnemy
 
 	}
 	
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		ServerWorld.slimeCount--;
+	}
 	
 }

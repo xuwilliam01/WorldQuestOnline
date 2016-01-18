@@ -220,6 +220,16 @@ public class ServerWorld
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
+	
+	/**
+	 * The number of slimes in the world
+	 */
+	public static int slimeCount = 0;
+	
+	/**
+	 * Max number of slimes in the world at once
+	 */
+	public final static int maxSlimes = 35;
 
 	/**
 	 * Constructor for server
