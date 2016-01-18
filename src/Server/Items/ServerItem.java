@@ -168,23 +168,23 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.WOODBOW_TYPE:
 			setImage("WOODBOW_ICON.png");
-			value = 5;
+			value = 10;
 			break;
 		case ServerWorld.STEELBOW_TYPE:
 			setImage("STEELBOW_ICON.png");
-			value = 10;
+			value = 20;
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON.png");
-			value = 20;
+			value = 30;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON.png");
-			value = 10;
+			value = 20;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			setImage("ICEWAND_ICON.png");
-			value = 20;
+			value = 10;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			setImage("DARKWAND_ICON.png");
