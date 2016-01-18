@@ -646,7 +646,7 @@ public class ServerWorld
 								for (int column = startColumn; column <= endColumn; column++)
 								{
 									if ((tileGrid[row][column] >= 'A' || (object.getType().equals(PLAYER_TYPE) && !((ServerPlayer)object).isDropping()
-										&&	(tileGrid[row][column] == '-' || tileGrid[row][column] == '+')))
+										&&	(tileGrid[row][column] == '*' || tileGrid[row][column] == '+')))
 											&& column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1)
 									{
