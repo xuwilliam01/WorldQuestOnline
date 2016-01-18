@@ -64,6 +64,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private ServerEngine engine;
 	private ServerWorld world;
 
+	private int respawnXSpeed = MOVE_SPEED;
+	private int respawnYSpeed = JUMP_SPEED;
+
 	/**
 	 * Whether the game is over or not
 	 */
@@ -506,8 +509,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					setAlive(true);
 
-					verticalMovement = JUMP_SPEED;
-					horizontalMovement = MOVE_SPEED;
+					verticalMovement = respawnYSpeed;
+					horizontalMovement = respawnXSpeed;
 
 					if (getTeam() == RED_TEAM)
 					{
@@ -568,10 +571,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void updateClient()
 	{
-		if(world.getWorldCounter() % 60 == 0 && mana < maxMana)
+		if(world.getWorldCounter() % 40 == 0 && mana < maxMana)
 			mana++;
+		if(world.getWorldCounter() % 80 == 0 &&  getHP() < getMaxHP())
+			setHP(getHP()+1);
 
-		
 		if (!flushWriterNow)
 		{
 			if (exists())
@@ -1439,10 +1443,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		if (message.length() != 0)
-			this.message.append(" " + message);
-		else
-			this.message.append(message);
+		this.message.append(" " + message);
 	}
 
 	/**
@@ -1475,7 +1476,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				e.printStackTrace();
 			}
 		}
-		message = new StringBuilder();
+		message = new StringBuilder("Z");
 	}
 
 	/**
@@ -1726,6 +1727,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 
 		this.horizontalMovement = Math.min(horizontalMovement, MAX_HSPEED);
+		respawnXSpeed = this.horizontalMovement;
 	}
 
 	public int getVerticalMovement()
@@ -1736,6 +1738,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setVerticalMovement(int verticalMovement)
 	{
 		this.verticalMovement = Math.min(verticalMovement, MAX_VSPEED);
+		respawnYSpeed = this.verticalMovement;
 	}
 
 

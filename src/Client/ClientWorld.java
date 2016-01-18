@@ -74,7 +74,7 @@ public class ClientWorld
 	/**
 	 * Font for displaying stats
 	 */
-	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN,16);
+	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN,15);
 
 	/**
 	 * Object for figuring out size of font

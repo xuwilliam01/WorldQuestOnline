@@ -297,8 +297,12 @@ public class ClientInventory extends JPanel{
 		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMaxMana()),153,150);
 		
 		graphics.setColor(new Color(253,83,83));
+		if(client.getBaseDamage() > 9)
 		graphics.drawString(String.format("%d(+%d)", client.getDamage()
-				+ client.getBaseDamage(), client.getBaseDamage()), 103, 215);
+				+ client.getBaseDamage(), client.getBaseDamage()), 101, 215);
+		else
+			graphics.drawString(String.format("%d(+%d)", client.getDamage()
+					+ client.getBaseDamage(), client.getBaseDamage()), 105, 215);
 		
 		graphics.drawString(String.format("%.0f%%",client.getArmour()*100),115,255);
 		
