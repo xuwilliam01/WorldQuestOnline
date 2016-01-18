@@ -246,7 +246,7 @@ public class ClientInventory extends JPanel{
 		if(money != null)
 		{
 			inventory[0][0] = money;
-			inventory[0][0].setLocation(25,50);
+			inventory[0][0].setLocation(29,375);
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
