@@ -68,7 +68,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether the game is over or not
 	 */
 	private boolean endGame = false;
-	private int gameOverCounter = 0;
 
 	/**
 	 * Boolean describing whether or not the x coordinate has changed since the
@@ -609,13 +608,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if(object.getType().equals(ServerWorld.CASTLE_TYPE) && !object.exists())
 							{
-								if(((ServerCastle)object).getHP() <= 0 && gameOverCounter > 100)
+								if(((ServerCastle)object).getHP() <= 0)
 								{
 									queueMessage("B "+((ServerCastle)object).getTeam());
 									endGame = true;		
 								}
-								else 
-									gameOverCounter++;
 							}
 
 							if (object.exists()
