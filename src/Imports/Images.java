@@ -31,7 +31,7 @@ public class Images
 	 * The size the image will be in the inventory
 	 */
 	public static final int INVENTORY_IMAGE_SIDELENGTH = ClientInventory.INVENTORY_WIDTH
-			/ (ClientInventory.WIDTH + 1) - 20;
+			/ (ClientInventory.WIDTH + 2) - 20;
 
 	/**
 	 * Array list of the game images
@@ -580,10 +580,11 @@ public class Images
 					400,100));
 			images.add(new GameImage("CreateAMap.png",
 					300,100));
-			images.add(new GameImage("WorldQuestOnline.png",
-					550,125));
+			images.add(new GameImage("WorldQuestOnline.png"));
 			images.add(new GameImage("Instructions.png",
 					300,100));
+			
+			images.add(new GameImage("Inventory.png",300,1080));
 		}
 	}
 
