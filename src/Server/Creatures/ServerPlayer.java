@@ -505,9 +505,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					setAlive(true);
 
-					verticalMovement = JUMP_SPEED;
-					horizontalMovement = MOVE_SPEED;
-
 					if (getTeam() == RED_TEAM)
 					{
 						setX(world.getRedCastleX());
