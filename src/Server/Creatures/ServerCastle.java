@@ -10,7 +10,7 @@ public class ServerCastle extends ServerCreature
 
 	public final static int CASTLE_HP = 10000;
 
-	private int targetRange = 500;
+	private int targetRange = 2000;
 
 	/**
 	 * The target for the castle to attack
@@ -22,7 +22,9 @@ public class ServerCastle extends ServerCreature
 		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "BLUE_CASTLE.png",
 				ServerWorld.CASTLE_TYPE, CASTLE_HP, world, true);
 		if (team == ServerCreature.RED_TEAM)
+		{
 			setImage("RED_CASTLE.png");
+		}
 		setTeam(team);
 	}
 
@@ -51,15 +53,6 @@ public class ServerCastle extends ServerCreature
 						+ getTarget().getWidth() / 2
 						- (getX() + 270));
 
-				if (xDist > 0)
-				{
-					setDirection("RIGHT");
-				}
-				else if (xDist < 0)
-				{
-					setDirection("LEFT");
-				}
-
 				int yDist = (int) (getTarget().getY()
 						+ getTarget().getHeight() / 2
 						- (getY() + 232));
@@ -82,12 +75,16 @@ public class ServerCastle extends ServerCreature
 	 */
 	public ServerCreature findTarget()
 	{
-		ArrayList<ServerCreature> enemyTeam = getWorld().getBlueTeam();
+		ArrayList<ServerCreature> enemyTeam = null;
 		ServerCreature target = null;
 
 		if (getTeam() == ServerPlayer.BLUE_TEAM)
 		{
 			enemyTeam = getWorld().getRedTeam();
+		}
+		else if (getTeam() == ServerPlayer.RED_TEAM)
+		{
+			enemyTeam = getWorld().getBlueTeam();
 		}
 
 		for (ServerCreature enemy : enemyTeam)
