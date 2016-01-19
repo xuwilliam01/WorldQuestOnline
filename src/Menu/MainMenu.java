@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.Socket;
@@ -94,7 +97,7 @@ public class MainMenu {
 		mainMenu.repaint();
 	}
 
-	private static class MainPanel extends JPanel implements ActionListener
+	private static class MainPanel extends JPanel implements ActionListener, MouseListener
 	{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH)/2;
 		Image titleImage = Images.getImage("WorldQuestOnline.png");
@@ -104,7 +107,9 @@ public class MainMenu {
 		JButton createMap;
 		JButton instructions;
 
-
+		Image createMapImage = Images.getImage("CreateAMap.png");
+		Image createMapOver = Images.getImage("CreateAMapClicked.png");
+		
 		private Timer repaintTimer = new Timer(15,this);
 
 		public MainPanel()
@@ -140,7 +145,7 @@ public class MainMenu {
 			createServer.addActionListener(new StartServer());
 			add(createServer);	
 
-			Image createMapImage = Images.getImage("CreateAMap.png");
+			
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),createMapImage.getHeight(null));
 			createMap.setLocation(middle - createMapImage.getWidth(null)/2,675);
@@ -148,6 +153,7 @@ public class MainMenu {
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
 			createMap.addActionListener(new StartCreator());
+			createMap.addMouseListener(this);
 			add(createMap);	
 
 			Image instructionsImage = Images.getImage("Instructions.png");
@@ -214,6 +220,42 @@ public class MainMenu {
 		public void actionPerformed(ActionEvent e) {
 			repaint();
 
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			if(e.getSource()== createMap)
+			{
+				createMap.setIcon(new ImageIcon(createMapOver));
+			}
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			if(e.getSource()== createMap)
+			{
+				createMap.setIcon(new ImageIcon(createMapImage));
+			}
+			
 		}
 
 

@@ -618,6 +618,8 @@ public class Images
 					400,100));
 			images.add(new GameImage("CreateAMap.png",
 					300,100));
+			images.add(new GameImage("CreateAMapClicked.png",
+					300,100));
 			images.add(new GameImage("WorldQuestOnline.png"));
 			images.add(new GameImage("Instructions.png",
 					300,100));
