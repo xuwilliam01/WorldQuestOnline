@@ -34,8 +34,12 @@ public class ServerVendor extends ServerCreature {
 	{
 		for(int potion = 0; potion < 10; potion++)
 			addItem(ServerPotion.randomPotion(getX(),getY()));
+		addItem(new ServerPotion(getX(),getY(),ServerWorld.DMG_POTION_TYPE));
+		addItem(new ServerPotion(getX(),getY(),ServerWorld.JUMP_POTION_TYPE));
+		addItem(new ServerPotion(getX(),getY(),ServerWorld.SPEED_POTION_TYPE));
+		
 		for(int weapon = 0; weapon < 20; weapon++)
-			addItem(ServerWeapon.randomWeapon(getX(), getY()));
+			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
 
 		//Add a rare weapon
 		int randWeapon = (int)(Math.random() * 6+1);

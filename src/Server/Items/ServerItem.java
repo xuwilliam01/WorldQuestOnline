@@ -144,7 +144,7 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("HADIAMOND_ICON.png");
-			value = 45;
+			value = 35;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("HAGOLD_ICON.png");
@@ -176,7 +176,7 @@ public abstract class ServerItem extends ServerObject {
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON.png");
-			value = 35;
+			value = 45;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON.png");
