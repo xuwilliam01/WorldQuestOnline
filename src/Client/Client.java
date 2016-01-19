@@ -568,6 +568,7 @@ MouseMotionListener
 		}
 
 		inventory.repaint();
+		requestFocusInWindow();
 	}
 
 	@Override
