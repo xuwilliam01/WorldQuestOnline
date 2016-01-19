@@ -94,6 +94,9 @@ public class ClientObject implements Comparable<ClientObject> {
 		case ServerWorld.CHEST_TYPE:
 			hint = "Destroy the chest and it will drop items";
 			break;
+		case ServerWorld.CASTLE_TYPE:
+			hint = "Drop money on the castle to upgrade your goblins";
+			break;
 		}
 	}
 

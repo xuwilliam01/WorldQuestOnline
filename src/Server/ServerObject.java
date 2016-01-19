@@ -283,7 +283,7 @@ public class ServerObject
 		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
 		{
 			ServerGoblin newGoblin = (ServerGoblin)original;
-			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam());
+			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam(),newGoblin.getMaxGoblinLevel());
 		}
 		
 		return null;

@@ -2,6 +2,7 @@ package Server.Creatures;
 
 import java.util.ArrayList;
 
+import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerProjectile;
 
@@ -11,6 +12,8 @@ public class ServerCastle extends ServerCreature
 	public final static int CASTLE_HP = 10000;
 
 	private int targetRange = 1000;
+	private int money = 0;
+	private int currentGoblinTier = 0;
 
 	/**
 	 * The target for the castle to attack
@@ -33,6 +36,20 @@ public class ServerCastle extends ServerCreature
 	 */
 	public void update()
 	{
+		if(currentGoblinTier < ServerGoblin.NUM_TYPES-1 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
+		{
+			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
+			currentGoblinTier++;
+			ArrayList<ServerSpawner> teamSpawners;
+			if(getTeam() == RED_TEAM)
+				teamSpawners = getWorld().getRedSpawners();
+			else teamSpawners = getWorld().getBlueSpawners();
+
+			if(teamSpawners.size() > 0)
+				((ServerGoblin)teamSpawners.get(0).getCreature()).increaseMaxGoblinLevel();
+
+		}
+
 		if (getTarget() == null)
 		{
 			if (getWorld().getWorldCounter() % 15 == 0)
@@ -106,4 +123,8 @@ public class ServerCastle extends ServerCreature
 		this.target = target;
 	}
 
+	public void addMoney(int money)
+	{
+		this.money += money;
+	}
 }

@@ -178,10 +178,14 @@ public class ServerWorld
 			new ServerVendor(0, 0, this, "VENDOR_LEFT.png"),
 			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this),
 			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-					ServerPlayer.RED_TEAM), this),
+					ServerPlayer.RED_TEAM,1), this),
 			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-					ServerPlayer.BLUE_TEAM), this) };
+					ServerPlayer.BLUE_TEAM,1), this) };
 
+	//Store the goblin spawners so the castles can access them and change their settings
+	ArrayList<ServerSpawner> redSpawners = new ArrayList<ServerSpawner>();
+	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>(); 
+	
 	/**
 	 * The size of each object tile
 	 */
@@ -332,6 +336,15 @@ public class ServerWorld
 							redCastleX = (int) newObject.getX() + 50;
 						else
 							blueCastleX = (int) newObject.getX() + 50;
+					}
+					
+					if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
+					{
+						redSpawners.add((ServerSpawner)newObject);
+					}
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("BLUE_GOBLIN_SPAWN.png"))
+					{
+						blueSpawners.add((ServerSpawner)newObject);
 					}
 				}
 		}
@@ -585,6 +598,11 @@ public class ServerWorld
 											((ServerWeaponSwing) object)
 													.addCollided(otherObject);
 										}
+									}
+									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown())
+									{
+										((ServerCastle)object).addMoney(((ServerMoney)otherObject).getAmount());
+										otherObject.destroy();
 									}
 								}
 							}
@@ -1115,4 +1133,13 @@ public class ServerWorld
 		return blueCastleX;
 	}
 
+	public ArrayList<ServerSpawner> getRedSpawners()
+	{
+		return redSpawners;
+	}
+	
+	public ArrayList<ServerSpawner> getBlueSpawners()
+	{
+		return blueSpawners;
+	}
 }

@@ -31,6 +31,8 @@ public class ServerGoblin extends ServerCreature
 	public final static int GOBLIN_GENERAL_HP = 80;
 	public final static int GOBLIN_KING_HP = 80;
 
+	public final static int[] GOBLIN_TIER_PRICE = {2,5,10,17,25,35,50,70,95,125};
+	
 	/**
 	 * The speed at which the goblin walks
 	 */
@@ -103,6 +105,11 @@ public class ServerGoblin extends ServerCreature
 	private String weapon;
 
 	/**
+	 * The max goblin level that this goblin can be
+	 */
+	private int maxGoblinLevel;
+	
+	/**
 	 * Constructor
 	 * @param x
 	 * @param y
@@ -110,12 +117,14 @@ public class ServerGoblin extends ServerCreature
 	 * @param team
 	 * @param type
 	 */
-	public ServerGoblin(double x, double y, ServerWorld world, int team)
+	public ServerGoblin(double x, double y, ServerWorld world, int team, int maxGoblinLevel)
 	{
 		super(x, y, 16, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
 				"", GOBLIN_HP, world, true);
 
-		int numTypes = (int)(Math.random()*NUM_TYPES)+1;
+		int numTypes = (int)(Math.random()*Math.min(NUM_TYPES,maxGoblinLevel)+1);
+		this.maxGoblinLevel = maxGoblinLevel;
+		
 		switch (numTypes)
 		{
 		case 1:
@@ -597,4 +606,13 @@ public class ServerGoblin extends ServerCreature
 		this.target = target;
 	}
 
+	public int getMaxGoblinLevel()
+	{
+		return maxGoblinLevel;
+	}
+	
+	public void increaseMaxGoblinLevel()
+	{
+		maxGoblinLevel++;
+	}
 }
