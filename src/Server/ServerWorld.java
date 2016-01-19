@@ -888,6 +888,11 @@ public class ServerWorld
 							((ServerGoblin) object).update();
 						}
 					}
+					else if (object.getType().equals(CASTLE_TYPE))
+					{
+
+						((ServerCastle)object).update();
+					}
 
 				}
 				else
