@@ -40,7 +40,7 @@ public class ClientShopItem extends JButton implements ActionListener{
 		this.inventory = inventory;
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
-		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20,60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20));
+		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20+20,60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+40);
 		setVisible(true);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);

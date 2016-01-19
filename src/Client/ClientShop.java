@@ -12,14 +12,15 @@ import Server.Creatures.ServerVendor;
 
 public class ClientShop extends JPanel{
 
-	public final static int SHOP_WIDTH = 520;
-	public final static int SHOP_HEIGHT = 400;
+	public final static int SHOP_WIDTH = 560;
+	public final static int SHOP_HEIGHT = 440;
 	public final static int WIDTH = 10;
 	public final static int HEIGHT = 6;
 
 	private ClientShopItem[][] shopItems = new ClientShopItem[HEIGHT][WIDTH];
 	private Client client;
 	private Image coinImage = Images.getImage("COIN.png");
+	private Image shopImage = Images.getImage("Shop.png");
 
 	public ClientShop(Client client)
 	{
@@ -31,7 +32,7 @@ public class ClientShop extends JPanel{
 		requestFocusInWindow();
 		setLayout(null);
 		setSize(SHOP_WIDTH, SHOP_HEIGHT);
-		setLocation(300,100);
+		setLocation(1000,50);
 	}
 
 	public void addItem(String imageName, String type, int amount, int cost)
@@ -87,8 +88,7 @@ public class ClientShop extends JPanel{
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		graphics.setColor(Color.RED);
-		graphics.drawString("Shop", 250, 20);
+		graphics.drawImage(shopImage, 0, 0, null);
 
 		//For each item write the price under it
 		graphics.setColor(new Color(218,165,32));
