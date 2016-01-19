@@ -42,6 +42,8 @@ public class MainMenu {
 	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 2;
 	private static int cloudDirection = 0;
 
+	private static Client client;
+	
 	public void generateClouds()
 	{
 		// Generate clouds
@@ -259,7 +261,6 @@ public class MainMenu {
 
 	private static class GamePanel extends JPanel
 	{
-		Client client;
 		ClientInventory inventory;
 
 		public GamePanel(String serverIP, int port)
@@ -417,6 +418,7 @@ public class MainMenu {
 	{	
 		public void actionPerformed(ActionEvent e)
 		{
+			client.getOutput().close();
 			StartGame.restart(mainFrame);
 		}
 	}

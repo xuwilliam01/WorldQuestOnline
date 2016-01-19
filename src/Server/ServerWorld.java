@@ -241,6 +241,9 @@ public class ServerWorld
 
 	private ServerEngine engine;
 	
+	private ServerCastle blueCastle;
+	private ServerCastle redCastle;
+	
 	/**
 	 * Constructor for server
 	 * @throws IOException
@@ -333,9 +336,15 @@ public class ServerWorld
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
 						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
+						{
 							redCastleX = (int) newObject.getX() + 50;
+							redCastle = (ServerCastle)newObject;
+						}
 						else
+						{
 							blueCastleX = (int) newObject.getX() + 50;
+							blueCastle = (ServerCastle)newObject;
+						}
 					}
 					
 					if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
@@ -1142,4 +1151,16 @@ public class ServerWorld
 	{
 		return blueSpawners;
 	}
+	
+	public ServerCastle getBlueCastle()
+	{
+		return blueCastle;
+	}
+	
+	public ServerCastle getRedCastle()
+	{
+		return redCastle;
+	}
+
 }
+

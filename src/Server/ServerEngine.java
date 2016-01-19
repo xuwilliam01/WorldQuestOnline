@@ -172,6 +172,7 @@ public class ServerEngine implements Runnable, ActionListener
 	public synchronized void removePlayer(ServerPlayer remove)
 	{
 		toRemove.add(remove);
+		lastTeam--;
 		listOfPlayers.remove(remove);
 		world.remove(remove);
 		broadcast("R " + remove.getID());
@@ -246,7 +247,6 @@ public class ServerEngine implements Runnable, ActionListener
 			if (player.isDisconnected())
 			{
 				listOfRemovedPlayers.add(player);
-				lastTeam--;
 			}
 		}
 

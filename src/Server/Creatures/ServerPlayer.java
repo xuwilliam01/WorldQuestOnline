@@ -697,6 +697,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("M " + getMaxHP());
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
+				queueMessage("XB " + world.getBlueCastle().getHP());
+				queueMessage("XR " + world.getRedCastle().getHP());
 				if(equippedArmour != null)
 					queueMessage(String.format("A %.2f",equippedArmour.getArmour()));
 				else

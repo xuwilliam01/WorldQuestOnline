@@ -73,8 +73,12 @@ MouseMotionListener
 	private double armour;
 
 	// Variables for damage
-	int damage = 0;
-	int baseDamage = 0;
+	private int damage = 0;
+	private int baseDamage = 0;
+	
+	//HP of each castle
+	private int redCastleHP;
+	private int blueCastleHP;
 
 	/**
 	 * The player's inventory
@@ -409,6 +413,14 @@ MouseMotionListener
 								if (shop != null)
 									closeShop();
 							}
+							else if(tokens[token].equals("XR"))
+							{
+								redCastleHP = Integer.parseInt(tokens[++token]);
+							}
+							else if(tokens[token].equals("XB"))
+							{
+								blueCastleHP = Integer.parseInt(tokens[++token]);
+							}
 						}
 						catch (NumberFormatException e)
 						{
@@ -495,7 +507,7 @@ MouseMotionListener
 				}
 			}
 
-			world = new ClientWorld(grid, tileSize);
+			world = new ClientWorld(grid, tileSize,this);
 		}
 		catch (IOException e)
 		{
@@ -860,5 +872,15 @@ MouseMotionListener
 	public double getArmour()
 	{
 		return armour;
+	}
+	
+	public int getRedCastleHP()
+	{
+		return redCastleHP;
+	}
+	
+	public int getBlueCastleHP()
+	{
+		return blueCastleHP;
 	}
 }

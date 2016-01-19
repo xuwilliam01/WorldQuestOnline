@@ -14,6 +14,8 @@ import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
+import Server.ServerWorld;
+import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -91,6 +93,8 @@ public class ClientWorld
 	 */
 	public static double MESSAGE_FONT_WIDTH = 0;
 
+	private Client client;
+	
 	/**
 	 * Constructor for the client's side of the world
 	 * @param rows the number of rows in the tile grid
@@ -98,10 +102,12 @@ public class ClientWorld
 	 * @param grid the tile grid
 	 * @throws IOException
 	 */
-	public ClientWorld(char[][] grid, int tileSize) throws IOException
+	public ClientWorld(char[][] grid, int tileSize, Client client) throws IOException
 	{
 		this.tileSize = tileSize;
 		this.grid = grid;
+		this.client = client;
+		
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
@@ -453,6 +459,17 @@ public class ClientWorld
 							/ 2 + 0.5),
 					Client.SCREEN_HEIGHT / 3);
 		}
+		
+		//Draw the castle hp bars
+		graphics.setFont(NORMAL_FONT);
+		graphics.setColor(Color.red);
+		graphics.fillRect(100, 950,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 30);
+		graphics.fillRect(1000, 950,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 30);
+		graphics.setColor(Color.white);
+		graphics.drawRect(100, 950, 500, 30);
+		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 970);
+		graphics.drawRect(1000, 950, 500, 30);
+		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 970);
 	}
 
 	public void clear()
