@@ -700,6 +700,20 @@ MouseMotionListener
 	@Override
 	public void mousePressed(MouseEvent event)
 	{
+		// Make sure the player changes direction
+		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		{
+			print("DR");
+			direction = 'R';
+		}
+		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		{
+			print("DL");
+			direction = 'L';
+		}
+		
+		
+		
 		if (event.getButton() == MouseEvent.BUTTON1
 				&& currentMessage.charAt(0) != 'A')
 		{
