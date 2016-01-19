@@ -37,6 +37,7 @@ public class ServerVendor extends ServerCreature {
 		for(int weapon = 0; weapon < 20; weapon++)
 			addItem(ServerWeapon.randomWeapon(getX(), getY()));
 
+		//Add a rare weapon
 		int randWeapon = (int)(Math.random() * 6+1);
 		switch(randWeapon)
 		{
@@ -64,6 +65,7 @@ public class ServerVendor extends ServerCreature {
 
 		//Always have the steel armour
 		addItem(new ServerArmour(getX(),getY(),ServerWorld.STEEL_ARMOUR));
+	
 	}
 
 	public boolean isBusy()

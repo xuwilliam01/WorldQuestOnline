@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import Client.ClientInventory;
+import Client.ClientShop;
 import Server.ServerWorld;
 import Tools.BinaryTree;
 import WorldCreator.CreatorObject;
@@ -628,6 +629,8 @@ public class Images
 			images.add(new GameImage("Stats.png"));
 			
 			images.add(new GameImage("Next.png"));
+			
+			images.add(new GameImage("Shop.png",ClientShop.SHOP_WIDTH,ClientShop.SHOP_HEIGHT));
 		}
 	}
 
