@@ -703,8 +703,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("M " + getMaxHP());
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
-				queueMessage("XB " + world.getBlueCastle().getHP());
-				queueMessage("XR " + world.getRedCastle().getHP());
+				queueMessage("XB " + world.getBlueCastle().getHP() +" "+ world.getBlueCastle().getCurrentGoblinTier() + " "+world.getBlueCastle().getMoney());
+				queueMessage("XR " + world.getRedCastle().getHP() +" "+ world.getRedCastle().getCurrentGoblinTier() + " "+world.getRedCastle().getMoney());
 				if(equippedArmour != null)
 					queueMessage(String.format("A %.2f",equippedArmour.getArmour()));
 				else
@@ -988,9 +988,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void increaseMoney(int amount)
 	{
-		ServerMoney newMoney = new ServerMoney(getX(), getY(), amount);
+		ServerMoney newMoney = new ServerMoney(getX()+getWidth()/2, getY()+getHeight()/2, amount);
 		newMoney.makeExist();
-		newMoney.setSource(this);
+		if(vendor!= null)
+			newMoney.setSource(vendor);
+		newMoney.startCoolDown();
+		//newMoney.setDropTime(world.getWorldCounter());
 		world.add(newMoney);
 	}
 
@@ -1553,6 +1556,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void addItem(ServerItem item)
 	{
 		super.addItem(item);
+		System.out.println("Added item");
 		queueMessage("I " + item.getImage() + " " + item.getType() + " "
 				+ item.getAmount() + " " + item.getCost());
 	}
@@ -1799,7 +1803,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.endGame = endGame;
 		this.losingTeam = losingTeam;
 	}
-	
+
 	public String getName()
 	{
 		return name;

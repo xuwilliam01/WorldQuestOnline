@@ -127,4 +127,14 @@ public class ServerCastle extends ServerCreature
 	{
 		this.money += money;
 	}
+	
+	public int getCurrentGoblinTier()
+	{
+		return currentGoblinTier;
+	}
+	
+	public int getMoney()
+	{
+		return money;
+	}
 }

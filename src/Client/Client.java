@@ -76,9 +76,14 @@ MouseMotionListener
 	private int damage = 0;
 	private int baseDamage = 0;
 	
-	//HP of each castle
+	//Stats of each castle
 	private int redCastleHP;
+	private int redCastleTier;
+	private int redCastleMoney;
+	
 	private int blueCastleHP;
+	private int blueCastleTier;
+	private int blueCastleMoney;
 
 	/**
 	 * The player's inventory
@@ -421,10 +426,14 @@ MouseMotionListener
 							else if(tokens[token].equals("XR"))
 							{
 								redCastleHP = Integer.parseInt(tokens[++token]);
+								redCastleTier = Integer.parseInt(tokens[++token]);
+								redCastleMoney = Integer.parseInt(tokens[++token]);
 							}
 							else if(tokens[token].equals("XB"))
 							{
 								blueCastleHP = Integer.parseInt(tokens[++token]);
+								blueCastleTier = Integer.parseInt(tokens[++token]);
+								blueCastleMoney = Integer.parseInt(tokens[++token]);
 							}
 						}
 						catch (NumberFormatException e)
@@ -888,4 +897,38 @@ MouseMotionListener
 	{
 		return blueCastleHP;
 	}
+
+	public int getRedCastleTier() {
+		return redCastleTier;
+	}
+
+	public void setRedCastleTier(int redCastleTier) {
+		this.redCastleTier = redCastleTier;
+	}
+
+	public int getRedCastleMoney() {
+		return redCastleMoney;
+	}
+
+	public void setRedCastleMoney(int redCastleMoney) {
+		this.redCastleMoney = redCastleMoney;
+	}
+
+	public int getBlueCastleTier() {
+		return blueCastleTier;
+	}
+
+	public void setBlueCastleTier(int blueCastleTier) {
+		this.blueCastleTier = blueCastleTier;
+	}
+
+	public int getBlueCastleMoney() {
+		return blueCastleMoney;
+	}
+
+	public void setBlueCastleMoney(int blueCastleMoney) {
+		this.blueCastleMoney = blueCastleMoney;
+	}
+	
+	
 }

@@ -46,7 +46,7 @@ public class MainMenu {
 	private static int cloudDirection = 0;
 
 	private static Client client;
-	
+
 	public void generateClouds()
 	{
 		// Generate clouds
@@ -109,6 +109,15 @@ public class MainMenu {
 
 		Image createMapImage = Images.getImage("CreateAMap.png");
 		Image createMapOver = Images.getImage("CreateAMapClicked.png");
+
+		Image instructionsImage = Images.getImage("Instructions.png");
+		Image instructionsOver = Images.getImage("InstructionsClicked.png");
+
+		Image playGameImage = Images.getImage("FindAGame.png");
+		Image playGameOver = Images.getImage("FindAGameClicked.png");
+
+		Image createServerImage = Images.getImage("CreateAServer.png");
+		Image createServerOver = Images.getImage("CreateAServerClicked.png");
 		
 		private Timer repaintTimer = new Timer(15,this);
 
@@ -125,7 +134,7 @@ public class MainMenu {
 			repaintTimer.start();
 
 
-			Image playGameImage = Images.getImage("FindAGame.png");
+
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),playGameImage.getHeight(null));
 			playGame.setLocation(middle - playGameImage.getWidth(null)/2,375);
@@ -133,9 +142,9 @@ public class MainMenu {
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
 			playGame.addActionListener(new GameStart());
+			playGame.addMouseListener(this);
 			add(playGame);	
 
-			Image createServerImage = Images.getImage("CreateAServer.png");
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),createServerImage.getHeight(null));
 			createServer.setLocation(middle - createServerImage.getWidth(null)/2,525);
@@ -143,9 +152,10 @@ public class MainMenu {
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
 			createServer.addActionListener(new StartServer());
+			createServer.addMouseListener(this);
 			add(createServer);	
 
-			
+
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),createMapImage.getHeight(null));
 			createMap.setLocation(middle - createMapImage.getWidth(null)/2,675);
@@ -156,7 +166,7 @@ public class MainMenu {
 			createMap.addMouseListener(this);
 			add(createMap);	
 
-			Image instructionsImage = Images.getImage("Instructions.png");
+
 			instructions = new JButton(new ImageIcon(instructionsImage));
 			instructions.setSize(instructionsImage.getWidth(null),instructionsImage.getHeight(null));
 			instructions.setLocation(middle - instructionsImage.getWidth(null)/2,825);
@@ -164,6 +174,7 @@ public class MainMenu {
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
 			instructions.addActionListener(new OpenInstructions());
+			instructions.addMouseListener(this);
 			add(instructions);	
 
 
@@ -225,19 +236,19 @@ public class MainMenu {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -246,7 +257,19 @@ public class MainMenu {
 			{
 				createMap.setIcon(new ImageIcon(createMapOver));
 			}
-			
+			else if(e.getSource() == instructions)
+			{
+				instructions.setIcon(new ImageIcon(instructionsOver));
+			}
+			else if(e.getSource() == playGame)
+			{
+				playGame.setIcon(new ImageIcon(playGameOver));
+			}
+			else if(e.getSource() == createServer)
+			{
+				createServer.setIcon(new ImageIcon(createServerOver));
+			}
+
 		}
 
 		@Override
@@ -255,7 +278,18 @@ public class MainMenu {
 			{
 				createMap.setIcon(new ImageIcon(createMapImage));
 			}
-			
+			else if(e.getSource() == instructions)
+			{
+				instructions.setIcon(new ImageIcon(instructionsImage));
+			}
+			else if(e.getSource() == playGame)
+			{
+				playGame.setIcon(new ImageIcon(playGameImage));
+			}
+			else if(e.getSource() == createServer)
+			{
+				createServer.setIcon(new ImageIcon(createServerImage));
+			}
 		}
 
 
@@ -393,11 +427,11 @@ public class MainMenu {
 		int currentPanel = 0;
 		JButton next;
 		JButton previous;
-		
+
 		Image objective = Images.getImage("Objective.png");
 		Image controls = Images.getImage("Controls.png");
 		Image stats = Images.getImage("Stats.png");
-		
+
 		public InstructionPanel()
 		{
 			setDoubleBuffered(true);
@@ -407,7 +441,7 @@ public class MainMenu {
 			setLocation(0,0);
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
-			
+
 			Image nextImage = Images.getImage("Next.png");
 			next = new JButton(new ImageIcon(nextImage));
 			next.setSize(nextImage.getWidth(null),nextImage.getHeight(null));
@@ -417,25 +451,25 @@ public class MainMenu {
 			next.setOpaque(false);
 			next.addActionListener(this);
 			add(next);	
-			
+
 			setVisible(true);
-			
+
 			repaint();
 		}
-		
+
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
-			
+
 			if(currentPanel == 0)
 				graphics.drawImage(objective, 0, 0, null);
 			else if(currentPanel == 1)
 				graphics.drawImage(controls, 0, 0, null);
 			else if(currentPanel == 2)
 				graphics.drawImage(stats, 0, 0, null);
-		
+
 		}
-		
+
 		public void actionPerformed(ActionEvent e) {
 			currentPanel++;
 
@@ -452,10 +486,10 @@ public class MainMenu {
 				mainMenu.revalidate();
 			}
 			repaint();
-			
+
 		}
 	}
-	
+
 	private static class GameMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -493,9 +527,9 @@ public class MainMenu {
 								.showInputDialog("Please enter the port of the server");
 						if(portNum == null)
 							return;
-						
+
 						port = Integer.parseInt(portNum);
-						
+
 						playerName = JOptionPane
 								.showInputDialog("Please enter your name");
 						if(playerName == null)
@@ -573,13 +607,13 @@ public class MainMenu {
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
-			
+
 			instructionPanel = new InstructionPanel();
 			mainFrame.add(instructionPanel);
 			mainFrame.setVisible(true);
 			instructionPanel.revalidate();
 			instructionPanel.repaint();
-			
+
 
 
 		}

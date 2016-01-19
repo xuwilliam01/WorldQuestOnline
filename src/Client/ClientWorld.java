@@ -17,6 +17,7 @@ import Server.ServerEngine;
 import Server.ServerWorld;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 
 public class ClientWorld
@@ -73,6 +74,8 @@ public class ClientWorld
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
+	
+	public final static Font BIG_NORMAL_FONT = new Font("Arial",Font.PLAIN,20);
 
 	/**
 	 * Font for displaying stats
@@ -474,11 +477,18 @@ public class ClientWorld
 		graphics.setColor(Color.red);
 		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 30);
 		graphics.fillRect(1000, 980,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 30);
+		
 		graphics.setColor(Color.white);
 		graphics.drawRect(100, 980, 500, 30);
 		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 1000);
 		graphics.drawRect(1000, 980, 500, 30);
 		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 1000);
+		
+		graphics.setFont(BIG_NORMAL_FONT);
+		graphics.setColor(Color.red);
+		graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1000,975);
+		graphics.setColor(Color.blue);
+		graphics.drawString(String.format("Blue Castle HP Tier %d (Money For Next Tier  %d/%d)",client.getBlueCastleTier()+1,client.getBlueCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getBlueCastleTier()]),100,975);
 	}
 
 	public void clear()

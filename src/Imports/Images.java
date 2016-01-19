@@ -614,7 +614,11 @@ public class Images
 			
 			images.add(new GameImage("FindAGame.png",
 					300,100));
+			images.add(new GameImage("FindAGameClicked.png",
+					300,100));
 			images.add(new GameImage("CreateAServer.png",
+					400,100));
+			images.add(new GameImage("CreateAServerClicked.png",
 					400,100));
 			images.add(new GameImage("CreateAMap.png",
 					300,100));
@@ -622,6 +626,8 @@ public class Images
 					300,100));
 			images.add(new GameImage("WorldQuestOnline.png"));
 			images.add(new GameImage("Instructions.png",
+					300,100));
+			images.add(new GameImage("InstructionsClicked.png",
 					300,100));
 			
 			images.add(new GameImage("Inventory.png",300,1080));
