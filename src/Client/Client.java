@@ -125,14 +125,17 @@ MouseMotionListener
 	 */
 	private ClientShop shop = null;
 
+	private String playerName;
+	
 	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame)
+	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame, String playerName)
 	{
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
+		this.playerName = playerName;
 		this.inventory = inventory;
 		this.frame = frame;
 	}
@@ -184,6 +187,8 @@ MouseMotionListener
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
+		output.println("Na "+playerName);
+		output.flush();
 
 		// Import the map from the server
 		importMap();
@@ -341,7 +346,7 @@ MouseMotionListener
 								world.setObject(id, x, y,
 										tokens[++token], Integer
 										.parseInt(tokens[++token]),
-										tokens[++token]);
+										tokens[++token],tokens[++token]);
 							}
 							else if (tokens[token].equals("P"))
 							{

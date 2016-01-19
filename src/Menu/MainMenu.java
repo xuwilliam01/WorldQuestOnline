@@ -263,7 +263,7 @@ public class MainMenu {
 	{
 		ClientInventory inventory;
 
-		public GamePanel(String serverIP, int port)
+		public GamePanel(String serverIP, int port, String playerName)
 		{
 			boolean connected = false;
 
@@ -295,7 +295,7 @@ public class MainMenu {
 			JButton menu = new JButton("Main Menu");
 			menu.addActionListener(new GameMenuButton());
 			inventory = new ClientInventory(menu);
-			client = new Client(mySocket,inventory,pane);
+			client = new Client(mySocket,inventory,pane,playerName);
 			inventory.setClient(client);
 
 			client.setLocation(0,0);
@@ -429,7 +429,7 @@ public class MainMenu {
 
 			String serverIP;
 			int port;
-
+			String playerName;
 
 			serverIP = JOptionPane
 					.showInputDialog("Please enter the IP address of the server");
@@ -439,6 +439,7 @@ public class MainMenu {
 			{
 				serverIP = "192.168.0.16";
 				port = 5000;
+				playerName = "Player";
 			}
 			else
 			{
@@ -452,6 +453,11 @@ public class MainMenu {
 							return;
 						
 						port = Integer.parseInt(portNum);
+						
+						playerName = JOptionPane
+								.showInputDialog("Please enter your name");
+						if(playerName == null)
+							return;
 						break;
 					}
 					catch(NumberFormatException E)
@@ -466,7 +472,7 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
-			gamePanel = new GamePanel(serverIP, port);
+			gamePanel = new GamePanel(serverIP, port,playerName);
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
 			gamePanel.revalidate();

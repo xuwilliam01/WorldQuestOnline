@@ -62,6 +62,8 @@ public class ClientObject implements Comparable<ClientObject> {
 	 * The hint that will be displayed when a player is over this object
 	 */
 	private String hint = "";
+	
+	private String name = "";
 
 	/**
 	 * Constructor
@@ -99,6 +101,45 @@ public class ClientObject implements Comparable<ClientObject> {
 			break;
 		}
 	}
+	
+	/**
+	 * Constructor
+	 */
+	public ClientObject(int id, int x, int y, String image, int team, String type, String name) {
+		this.team = team;
+		this.x = x;
+		this.y = y;
+		this.id = id;
+		this.imageName = image;
+		this.type = type;
+		this.name = name;
+
+		// All objects that are just text have lower case names
+		// Don't import an actual image if it is just text
+		if (image.charAt(0) != 't') {
+			this.image = Images.getImage(image);
+			height = this.image.getHeight(null);
+			width = this.image.getWidth(null);
+		} else {
+			height = 0;
+			width = 0;
+		}
+
+		// Select a hint for this object, if it has one
+		switch (type) 
+		{
+		case ServerWorld.VENDOR_TYPE:
+			hint = "Press 'E' to open/close the shop";
+			break;
+		case ServerWorld.CHEST_TYPE:
+			hint = "Destroy the chest and it will drop items";
+			break;
+		case ServerWorld.CASTLE_TYPE:
+			hint = "Drop money on the castle to upgrade your goblins";
+			break;
+		}
+	}
+	
 
 	public int getTeam() {
 		return team;
@@ -189,6 +230,11 @@ public class ClientObject implements Comparable<ClientObject> {
 
 	public String getHint() {
 		return hint;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 
 }

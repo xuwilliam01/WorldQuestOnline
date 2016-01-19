@@ -72,7 +72,7 @@ public class ClientWorld
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
-	
+
 	/**
 	 * Font for displaying stats
 	 */
@@ -94,7 +94,7 @@ public class ClientWorld
 	public static double MESSAGE_FONT_WIDTH = 0;
 
 	private Client client;
-	
+
 	/**
 	 * Constructor for the client's side of the world
 	 * @param rows the number of rows in the tile grid
@@ -107,7 +107,7 @@ public class ClientWorld
 		this.tileSize = tileSize;
 		this.grid = grid;
 		this.client = client;
-		
+
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
@@ -183,11 +183,14 @@ public class ClientWorld
 	 * @param object the object to add
 	 */
 	public void setObject(int id, int x, int y, String image, int team,
-			String type)
+			String type,String name)
 	{
 		if (objects[id] == null)
 		{
-			objects[id] = new ClientObject(id, x, y, image, team, type);
+			if(name.equals("{"))
+				objects[id] = new ClientObject(id, x, y, image, team, type);
+			else
+				objects[id] = new ClientObject(id, x, y, image, team, type,name);
 		}
 		else
 		{
@@ -313,10 +316,10 @@ public class ClientWorld
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
 									+ column * tileSize - player.getX(),
-							centreY
+									centreY
 									+ row
 									* tileSize - player.getY(),
-							null);
+									null);
 				}
 			}
 
@@ -360,17 +363,22 @@ public class ClientWorld
 				{
 					if (image != null)
 					{
+						graphics.setFont(DAMAGE_FONT);
 						if (object.getTeam() == ServerCreature.RED_TEAM)
 						{
 							graphics.setColor(Color.red);
-							graphics.fillRect(x + image.getWidth(null) / 2 - 5,
-									y - 15, 10, 10);
+							if(object.getName().equals(""))				
+								graphics.fillRect(x + image.getWidth(null) / 2 - 5,
+										y - 15, 10, 10);
+							else graphics.drawString(object.getName(),(int)(x + image.getWidth(null)/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						else if (object.getTeam() == ServerCreature.BLUE_TEAM)
 						{
 							graphics.setColor(Color.blue);
+							if(object.getName().equals(""))
 							graphics.fillRect(x + image.getWidth(null) / 2 - 5,
 									y - 15, 10, 10);
+							else graphics.drawString(object.getName(),(int)(x + image.getWidth(null)/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						graphics.drawImage(image, x, y,
 								null);
@@ -423,7 +431,7 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-					.println("Tried to access the object list while it was being used");
+			.println("Tried to access the object list while it was being used");
 		}
 
 		// Draw solid tiles at the very front
@@ -438,10 +446,10 @@ public class ClientWorld
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
 									+ column * tileSize - player.getX(),
-							centreY
+									centreY
 									+ row
 									* tileSize - player.getY(),
-							null);
+									null);
 				}
 			}
 
@@ -457,9 +465,9 @@ public class ClientWorld
 							/ 2
 							- (displayedText.length() * MESSAGE_FONT_WIDTH)
 							/ 2 + 0.5),
-					Client.SCREEN_HEIGHT / 3);
+							Client.SCREEN_HEIGHT / 3);
 		}
-		
+
 		//Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.red);

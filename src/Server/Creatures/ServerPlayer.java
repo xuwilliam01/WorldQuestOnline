@@ -66,6 +66,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
+	private String name = "player";
 
 	/**
 	 * Whether the game is over or not
@@ -326,9 +327,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		baseImage = "BASE_" + skinColour;
 
-		
+
 		int randomStartWeapon = (int)(Math.random()*3);
-		
+
 		switch(randomStartWeapon)
 		{
 		case 0:
@@ -340,8 +341,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		case 2:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
 		}
-		
-		
+
+
 		// Start the player off with some weapons
 		addItem(new ServerMoney(0, 0, 5));
 
@@ -521,7 +522,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 
 					int randomStartWeapon = (int)(Math.random()*3);
-					
+
 					switch(randomStartWeapon)
 					{
 					case 0:
@@ -533,7 +534,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					case 2:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
 					}
-					
+
 					setAlive(true);
 
 					verticalMovement = respawnYSpeed;
@@ -552,7 +553,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					setHP(getMaxHP());
 					mana = maxMana;
-					
+
 					setAttackable(true);
 					deathCounter = -1;
 				}
@@ -662,9 +663,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									y = ((ServerProjectile) object).getDrawY();
 								}
 
-								queueMessage("O " + object.getID() + " " + x
-										+ " " + y + " " + object.getImage()
-										+ " " + team + " " + object.getType());
+								if(object.getType().equals(ServerWorld.PLAYER_TYPE))
+									queueMessage("O " + object.getID() + " " + x
+											+ " " + y + " " + object.getImage()
+											+ " " + team + " " + object.getType() +" "+ ((ServerPlayer)object).getName());
+								else
+									queueMessage("O " + object.getID() + " " + x
+											+ " " + y + " " + object.getImage()
+											+ " " + team + " " + object.getType() +" "+ "{");
 							}
 							else
 							{
@@ -898,6 +904,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					String type = command.substring(2);
 					if (!type.equals(ServerWorld.MONEY_TYPE))
 						sell(type);
+				}
+				else if(command.length() > 2 && command.substring(0,2).equals("Na"))
+				{
+					name = command.substring(3);
 				}
 			}
 			catch (IOException e)
@@ -1788,6 +1798,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.endGame = endGame;
 		this.losingTeam = losingTeam;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 
 }

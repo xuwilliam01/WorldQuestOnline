@@ -1,7 +1,9 @@
 package Client;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.Socket;
+
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
@@ -15,19 +17,44 @@ public class StartClient
 	public static void main(String[] args)
 	{
 		boolean connected = false;
+		String serverIP;
 		int port;
+		String playerName;
 
-		String serverIP = JOptionPane
+		serverIP = JOptionPane
 				.showInputDialog("Please enter the IP address of the server");
+		if(serverIP == null)
+			return;
 		if (serverIP.equals(""))
 		{
 			serverIP = "192.168.0.16";
 			port = 5000;
+			playerName = "Player";
 		}
 		else
 		{
-			port = Integer.parseInt(JOptionPane
-					.showInputDialog("Please enter the port of the server"));
+			while(true)
+			{
+				try
+				{
+					String portNum = JOptionPane
+							.showInputDialog("Please enter the port of the server");
+					if(portNum == null)
+						return;
+
+					port = Integer.parseInt(portNum);
+
+					playerName = JOptionPane
+							.showInputDialog("Please enter your name");
+					if(playerName == null)
+						return;
+					break;
+				}
+				catch(NumberFormatException E)
+				{
+
+				}
+			}
 		}
 
 		Socket mySocket = null;
@@ -58,7 +85,7 @@ public class StartClient
 		pane.setVisible(true);
 
 		ClientInventory inventory = new ClientInventory(null);
-		Client client = new Client(mySocket, inventory, pane);
+		Client client = new Client(mySocket, inventory, pane,playerName);
 		inventory.setClient(client);
 
 		client.setLocation(0, 0);
