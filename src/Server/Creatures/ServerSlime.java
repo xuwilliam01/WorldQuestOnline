@@ -100,7 +100,7 @@ public class ServerSlime extends ServerEnemy
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			if (getWorld().getWorldCounter() % 30 == 0)
+			if (getWorld().getWorldCounter() % 10 == 0)
 			{
 				findTarget();
 			}
@@ -196,6 +196,16 @@ public class ServerSlime extends ServerEnemy
 
 		setCounter(getCounter() + 1);
 
+	}
+	
+	@Override
+	public void inflictDamage(int amount, ServerCreature source)
+	{
+		super.inflictDamage(amount, source);
+		if (source.getType().equals(ServerWorld.PLAYER_TYPE) && source!= getTarget())
+		{
+			setTarget((ServerPlayer)source);
+		}
 	}
 	
 }
