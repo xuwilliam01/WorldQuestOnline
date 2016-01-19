@@ -58,9 +58,6 @@ public class ServerCastle extends ServerCreature
 						- (getY() + 232));
 
 				double angle = Math.atan2(yDist, xDist);
-				
-				if(getTeam() == ServerPlayer.BLUE_TEAM)
-					angle += Math.PI;
 
 				ServerProjectile arrow = new ServerProjectile(getX()
 						+ 270, getY()
