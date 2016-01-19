@@ -622,6 +622,12 @@ public class Images
 					300,100));
 			
 			images.add(new GameImage("Inventory.png",300,1080));
+			
+			images.add(new GameImage("Objective.png"));
+			images.add(new GameImage("Controls.png"));
+			images.add(new GameImage("Stats.png"));
+			
+			images.add(new GameImage("Next.png"));
 		}
 	}
 

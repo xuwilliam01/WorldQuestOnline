@@ -35,6 +35,7 @@ public class MainMenu {
 	private static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
+	private static InstructionPanel instructionPanel;
 
 	//Cloud variables
 	private static ArrayList<ClientBackground> clouds;
@@ -120,7 +121,7 @@ public class MainMenu {
 			Image playGameImage = Images.getImage("FindAGame.png");
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),playGameImage.getHeight(null));
-			playGame.setLocation(middle - playGameImage.getWidth(null)/2,250);
+			playGame.setLocation(middle - playGameImage.getWidth(null)/2,375);
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
@@ -130,7 +131,7 @@ public class MainMenu {
 			Image createServerImage = Images.getImage("CreateAServer.png");
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),createServerImage.getHeight(null));
-			createServer.setLocation(middle - createServerImage.getWidth(null)/2,400);
+			createServer.setLocation(middle - createServerImage.getWidth(null)/2,525);
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
@@ -140,7 +141,7 @@ public class MainMenu {
 			Image createMapImage = Images.getImage("CreateAMap.png");
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),createMapImage.getHeight(null));
-			createMap.setLocation(middle - createMapImage.getWidth(null)/2,550);
+			createMap.setLocation(middle - createMapImage.getWidth(null)/2,675);
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
@@ -150,7 +151,7 @@ public class MainMenu {
 			Image instructionsImage = Images.getImage("Instructions.png");
 			instructions = new JButton(new ImageIcon(instructionsImage));
 			instructions.setSize(instructionsImage.getWidth(null),instructionsImage.getHeight(null));
-			instructions.setLocation(middle - instructionsImage.getWidth(null)/2,700);
+			instructions.setLocation(middle - instructionsImage.getWidth(null)/2,825);
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
@@ -204,7 +205,7 @@ public class MainMenu {
 			}
 
 			//Draw the title image
-			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2 - 20,200,null);
+			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2 - 20,75,null);
 		}
 
 		@Override
@@ -344,6 +345,74 @@ public class MainMenu {
 		}
 	}
 
+	private static class InstructionPanel extends JPanel implements ActionListener
+	{
+		int currentPanel = 0;
+		JButton next;
+		JButton previous;
+		
+		Image objective = Images.getImage("Objective.png");
+		Image controls = Images.getImage("Controls.png");
+		Image stats = Images.getImage("Stats.png");
+		
+		public InstructionPanel()
+		{
+			setDoubleBuffered(true);
+			setBackground(Color.red);
+			setFocusable(true);
+			setLayout(null);
+			setLocation(0,0);
+			requestFocusInWindow();
+			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
+			
+			Image nextImage = Images.getImage("Next.png");
+			next = new JButton(new ImageIcon(nextImage));
+			next.setSize(nextImage.getWidth(null),nextImage.getHeight(null));
+			next.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-350,Client.SCREEN_HEIGHT-200);
+			next.setBorder(BorderFactory.createEmptyBorder());
+			next.setContentAreaFilled(false);
+			next.setOpaque(false);
+			next.addActionListener(this);
+			add(next);	
+			
+			setVisible(true);
+			
+			repaint();
+		}
+		
+		public void paintComponent(Graphics graphics)
+		{
+			super.paintComponent(graphics);
+			
+			if(currentPanel == 0)
+				graphics.drawImage(objective, 0, 0, null);
+			else if(currentPanel == 1)
+				graphics.drawImage(controls, 0, 0, null);
+			else if(currentPanel == 2)
+				graphics.drawImage(stats, 0, 0, null);
+		
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			currentPanel++;
+
+			if(currentPanel == 3)
+			{
+				setVisible(false);
+				mainFrame.remove(this);
+				mainFrame.invalidate();
+				mainFrame.validate();
+
+				mainMenu = new MainPanel();
+				mainFrame.add(mainMenu);
+				mainFrame.setVisible(true);
+				mainMenu.revalidate();
+			}
+			repaint();
+			
+		}
+	}
+	
 	private static class GameMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -450,7 +519,18 @@ public class MainMenu {
 	private static class OpenInstructions implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			mainFrame.remove(mainMenu);
+			mainFrame.invalidate();
+			mainFrame.validate();
+			mainMenu = null;
+			
+			instructionPanel = new InstructionPanel();
+			mainFrame.add(instructionPanel);
+			mainFrame.setVisible(true);
+			instructionPanel.revalidate();
+			instructionPanel.repaint();
+			
+
 
 		}
 
