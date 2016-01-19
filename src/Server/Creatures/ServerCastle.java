@@ -10,7 +10,7 @@ public class ServerCastle extends ServerCreature
 
 	public final static int CASTLE_HP = 10000;
 
-	private int targetRange = 2000;
+	private int targetRange = 1000;
 
 	/**
 	 * The target for the castle to attack
@@ -47,7 +47,7 @@ public class ServerCastle extends ServerCreature
 		}
 		else
 		{
-			if (getWorld().getWorldCounter() % 30 == 0)
+			if (getWorld().getWorldCounter() % 90 == 0)
 			{
 				int xDist = (int) (getTarget().getX()
 						+ getTarget().getWidth() / 2
@@ -58,14 +58,11 @@ public class ServerCastle extends ServerCreature
 						- (getY() + 232));
 
 				double angle = Math.atan2(yDist, xDist);
-				
-				if(getTeam() == ServerPlayer.BLUE_TEAM)
-					angle += Math.PI;
 
 				ServerProjectile arrow = new ServerProjectile(getX()
 						+ 270, getY()
 						+ 232, this, angle,
-						ServerWorld.STEELARROW_TYPE);
+						ServerWorld.WOODARROW_TYPE);
 				arrow.setGravity(0);
 
 				getWorld().add(arrow);
@@ -79,7 +76,6 @@ public class ServerCastle extends ServerCreature
 	public ServerCreature findTarget()
 	{
 		ArrayList<ServerCreature> enemyTeam = null;
-		ServerCreature target = null;
 
 		if (getTeam() == ServerPlayer.BLUE_TEAM)
 		{
@@ -92,13 +88,12 @@ public class ServerCastle extends ServerCreature
 
 		for (ServerCreature enemy : enemyTeam)
 		{
-			if (enemy.isAlive() && quickInRange(enemy, targetRange))
+			if (enemy.isAlive() && quickInRange(enemy, targetRange) && !enemy.getType().equals(ServerWorld.CASTLE_TYPE))
 			{
-				target = enemy;
+				return enemy;
 			}
 		}
-
-		return target;
+		return null;
 	}
 
 	public ServerCreature getTarget()

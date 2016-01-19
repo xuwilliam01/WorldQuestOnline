@@ -524,7 +524,6 @@ public class ServerGoblin extends ServerCreature
 	public ServerCreature findTarget()
 	{
 		ArrayList<ServerCreature> enemyTeam = getWorld().getBlueTeam();
-		ServerCreature target = null;
 
 		if (getTeam() == ServerPlayer.BLUE_TEAM)
 		{
@@ -535,11 +534,11 @@ public class ServerGoblin extends ServerCreature
 		{
 			if (enemy.isAlive() && quickInRange(enemy, targetRange))
 			{
-				target = enemy;
+				return enemy;
 			}
 		}
 
-		return target;
+		return null;
 
 	}
 
