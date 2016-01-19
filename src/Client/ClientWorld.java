@@ -463,13 +463,13 @@ public class ClientWorld
 		//Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.red);
-		graphics.fillRect(100, 950,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 30);
-		graphics.fillRect(1000, 950,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 30);
+		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 30);
+		graphics.fillRect(1000, 980,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 30);
 		graphics.setColor(Color.white);
-		graphics.drawRect(100, 950, 500, 30);
-		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 970);
-		graphics.drawRect(1000, 950, 500, 30);
-		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 970);
+		graphics.drawRect(100, 980, 500, 30);
+		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 1000);
+		graphics.drawRect(1000, 980, 500, 30);
+		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 1000);
 	}
 
 	public void clear()
