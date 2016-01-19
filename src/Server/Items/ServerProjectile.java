@@ -311,12 +311,20 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void addCollided(ServerObject other)
 	{
-		objectsCollided.add(other.getID());
+		if (objectsCollided.size()<3)
+		{
+			objectsCollided.add(other.getID());
+		}
+		else
+		{
+			destroy();
+		}
 	}
 
 	/**
 	 * Destroy the projectile
 	 */
+	@Override
 	public void destroy()
 	{
 		if (getType() == ServerWorld.BULLET_TYPE)

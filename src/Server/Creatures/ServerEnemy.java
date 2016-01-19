@@ -25,7 +25,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	 */
 	private int targetRange = 500;
 
-	// Players in server
+
 	private ServerPlayer target = null;
 
 	/**

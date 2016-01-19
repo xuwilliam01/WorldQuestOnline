@@ -174,7 +174,6 @@ public class ServerGoblin extends ServerCreature
 		case 7:
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
 			setImage("GOBNINJA_RIGHT_0_0.png");
-			targetRange = 750;
 			fightingRange = (int) (Math.random() * 100 + 250);
 			weapon = ServerWorld.NINJASTAR_TYPE;
 			isMelee = false;
@@ -185,7 +184,7 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_PEASANT_TYPE);
 			setImage("GOBPEASANT_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE *2;
 			armour = 0.1;
 			damage = 3;
 			weapon = "HASTONE_0.png";
@@ -202,11 +201,22 @@ public class ServerGoblin extends ServerCreature
 		case 10:
 			setType(ServerWorld.GOBLIN_WIZARD_TYPE);
 			setImage("GOBWIZARD_RIGHT_0_0.png");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+			fightingRange = (int) (Math.random() * 250 + 250);
 			armour = 0.1;
 			damage = 4;
-			weapon = "DAIRON_0.png";
+			
+			int weaponChoice = (int)(Math.random()*5);
+			
+			weapon = ServerWorld.ICEBALL_TYPE;
+			actionDelay = 300;
+			
+			if (weaponChoice == 4)
+			{
+				weapon = ServerWorld.FIREBALL_TYPE;
+				actionDelay = 220;
+			}
+			
+			isMelee = false;
 			break;
 		case 11:
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
@@ -367,7 +377,7 @@ public class ServerGoblin extends ServerCreature
 								
 								int yDist = (int) (getTarget().getY()
 										+ getTarget().getHeight() / 2
-										- (getY() + getHeight() / 2));
+										- (getY() + getHeight() / 3));
 
 								double angle = Math.atan2(yDist,xDist);
 								
