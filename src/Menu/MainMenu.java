@@ -77,7 +77,7 @@ public class MainMenu {
 			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
 		}
 	}
-	
+
 	public MainMenu()
 	{
 		Images.importImages();
@@ -261,23 +261,9 @@ public class MainMenu {
 		Client client;
 		ClientInventory inventory;
 
-		public GamePanel()
+		public GamePanel(String serverIP, int port)
 		{
 			boolean connected = false;
-			int port;
-
-			String serverIP = JOptionPane
-					.showInputDialog("Please enter the IP address of the server");
-			if (serverIP.equals(""))
-			{
-				serverIP = "192.168.0.16";
-				port = 5000;
-			}
-			else
-			{
-				port = Integer.parseInt(JOptionPane
-						.showInputDialog("Please enter the port of the server"));
-			}
 
 			Socket mySocket = null;
 
@@ -369,12 +355,47 @@ public class MainMenu {
 	private static class GameStart implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
+
+			String serverIP;
+			int port;
+
+
+			serverIP = JOptionPane
+					.showInputDialog("Please enter the IP address of the server");
+			if(serverIP == null)
+				return;
+			if (serverIP.equals(""))
+			{
+				serverIP = "192.168.0.16";
+				port = 5000;
+			}
+			else
+			{
+				while(true)
+				{
+					try
+					{
+						String portNum = JOptionPane
+								.showInputDialog("Please enter the port of the server");
+						if(portNum == null)
+							return;
+						
+						port = Integer.parseInt(portNum);
+						break;
+					}
+					catch(NumberFormatException E)
+					{
+
+					}
+				}
+			}
+
 			mainFrame.remove(mainMenu);
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
 
-			gamePanel = new GamePanel();
+			gamePanel = new GamePanel(serverIP, port);
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
 			gamePanel.revalidate();

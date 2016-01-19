@@ -446,7 +446,7 @@ public class ClientItem extends JButton implements MouseListener{
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			//Sell item
-			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE) && !inventory.getClient().getShop().isFull(type))
+			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE) && !inventory.getClient().getShop().isFull(type) && !selected)
 			{
 				inventory.sellItem(this,equipSlot);
 			}

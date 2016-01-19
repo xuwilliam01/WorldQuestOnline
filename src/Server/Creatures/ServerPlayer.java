@@ -550,8 +550,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					setY(300);
 
-					setHP(100);
-
+					setHP(getMaxHP());
+					mana = maxMana;
+					
 					setAttackable(true);
 					deathCounter = -1;
 				}
@@ -600,7 +601,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		if(world.getWorldCounter() % 40 == 0 && mana < maxMana)
 			mana++;
-		if(world.getWorldCounter() % 80 == 0 &&  getHP() < getMaxHP())
+		if(world.getWorldCounter() % 80 == 0 &&  getHP() < getMaxHP() && getHP() > 0)
 			setHP(getHP()+1);
 
 		if (!flushWriterNow)
