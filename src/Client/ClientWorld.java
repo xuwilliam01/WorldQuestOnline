@@ -128,12 +128,12 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientBackground>();
-		for (int no = 0; no < 12; no++)
+		for (int no = 0; no < 8; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
 			double y = Math.random() * (Client.SCREEN_HEIGHT)
-					- (2 * Client.SCREEN_HEIGHT / 3);
+					- (Client.SCREEN_HEIGHT / 3);
 
 			double hSpeed = 0;
 
@@ -259,10 +259,8 @@ public class ClientWorld
 			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
-				// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-				// cloud.setImage(Images.getImage(image));
 				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-						- (2 * Client.SCREEN_HEIGHT / 3));
+						- (Client.SCREEN_HEIGHT / 3));
 				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 
 			}
@@ -270,10 +268,8 @@ public class ClientWorld
 					/ 2)
 			{
 				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
-				// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-				// cloud.setImage(Images.getImage(image));
 				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-						- (2 * Client.SCREEN_HEIGHT / 3));
+						- (Client.SCREEN_HEIGHT / 3));
 				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 			}
 			cloud.setX(cloud.getX() + cloud.gethSpeed());
@@ -479,9 +475,9 @@ public class ClientWorld
 		//Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.CYAN);
-		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 20);
+		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/(ServerCastle.CASTLE_HP)), 20);
 		graphics.setColor(Color.PINK);
-		graphics.fillRect(1050, 980,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 20);
+		graphics.fillRect(1050, 980,(int)(500.0*client.getRedCastleHP()/(ServerCastle.CASTLE_HP)), 20);
 		
 		graphics.setColor(PURPLE_TEXT);
 		graphics.drawRect(100, 980, 500, 20);

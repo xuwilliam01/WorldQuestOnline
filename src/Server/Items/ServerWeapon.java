@@ -32,8 +32,8 @@ public class ServerWeapon extends ServerItem
 	public final static int HASTONE_DMG = 22;
 	public final static int HAWOOD_DMG =14;
 
-	public final static int STAR_DMG = 7;
-	public final static int SLING_DMG = 5;
+	public final static int STAR_DMG = 10;
+	public final static int SLING_DMG = 7;
 	public final static int WOODBOW_DMG = 10;
 	public final static int STEELBOW_DMG = 14;
 	public final static int MEGABOW_DMG = 25;

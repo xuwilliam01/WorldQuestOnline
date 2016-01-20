@@ -9,7 +9,7 @@ import Server.Items.ServerProjectile;
 public class ServerCastle extends ServerCreature
 {
 
-	public final static int CASTLE_HP = 10000;
+	public final static int CASTLE_HP = 15000;
 
 	private int targetRange = 1000;
 	private int money = 0;
@@ -40,6 +40,7 @@ public class ServerCastle extends ServerCreature
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
 			currentGoblinTier++;
+			
 			ArrayList<ServerSpawner> teamSpawners;
 			if(getTeam() == RED_TEAM)
 				teamSpawners = getWorld().getRedSpawners();
