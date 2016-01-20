@@ -1,8 +1,11 @@
-package Menu;
+package START;
+
 
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+
+import Menu.MainMenu;
 
 public class StartGame {
 

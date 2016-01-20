@@ -29,14 +29,14 @@ public class ServerGoblin extends ServerCreature
 	public final static int GOBLIN_GUARD_HP = 80;
 	public final static int GOBLIN_KNIGHT_HP = 100;
 	public final static int GOBLIN_GENERAL_HP = 150;
-	public final static int GOBLIN_KING_HP = 250;
+	public final static int GOBLIN_KING_HP = 300;
 
-	public final static int[] GOBLIN_TIER_PRICE = {10,20,30,40,50};
+	public final static int[] GOBLIN_TIER_PRICE = {10,20,40,70,100};
 	
 	/**
 	 * The speed at which the goblin walks
 	 */
-	private int movementSpeed = 3;
+	private double movementSpeed = 3;
 
 	/**
 	 * The initial speed the goblin jumps at
@@ -141,7 +141,7 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_PEASANT_TYPE);
 			setImage("GOBPEASANT_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE *2;
+					+ ServerWorld.TILE_SIZE * 3;
 			setMaxHP(GOBLIN_PEASANT_HP);
 			
 			armour = 0.1;
@@ -149,11 +149,12 @@ public class ServerGoblin extends ServerCreature
 			weapon = "HASTONE_0.png";
 			break;		
 		case 3:
-			setType(ServerWorld.GOBLIN_GUARD_TYPE);
-			setImage("GOBGUARD_RIGHT_0_0.png");
+			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
+			setImage("GOBSOLDIER_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
-			setMaxHP(GOBLIN_GUARD_HP);
+					+ ServerWorld.TILE_SIZE;	
+
+			setMaxHP(GOBLIN_SOLDIER_HP);
 			
 			armour = 0.4;
 			weapon = "AXIRON_0.png";
@@ -174,20 +175,23 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
 			setImage("GOBWORKER_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_WORKER_HP);
 			
 			armour = 0.1;
 			damage = 7;
+			movementSpeed = 4;
+			jumpSpeed = 14;
 			weapon = "HAIRON_0.png";
 			break;
 		case 6:
-			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
-			setImage("GOBSOLDIER_RIGHT_0_0.png");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
-			setMaxHP(GOBLIN_SOLDIER_HP);
+			setType(ServerWorld.GOBLIN_GUARD_TYPE);
+			setImage("GOBGUARD_RIGHT_0_0.png");
+
+			setMaxHP(GOBLIN_GUARD_HP);
 			
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;	
 			armour = 0.2;
 			damage = 8;
 			weapon = "SWIRON_0.png";
@@ -196,7 +200,7 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_KNIGHT_TYPE);
 			setImage("GOBKNIGHT_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_KNIGHT_HP);
 			
 			armour = 0.4;
@@ -207,7 +211,7 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_LORD_TYPE);
 			setImage("GOBLORD_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_LORD_HP);
 			
 			armour = 0.3;
@@ -238,10 +242,10 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_GENERAL_HP);
 			
-			armour = 0.6;
+			armour = 0.5;
 			weapon = "SWDIAMOND_0.png";
 			damage = 16;
 			break;
@@ -258,6 +262,8 @@ public class ServerGoblin extends ServerCreature
 			break;
 		}
 
+		movementSpeed = Math.random()*1.0*(movementSpeed/2) + movementSpeed*3.0/4;
+		
 		if (Math.random() < 0.2)
 			addItem(ServerItem.randomItem(getX(), getY()));
 		setTeam(team);

@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 /**
  * Run the client here
  * @author William Xu and Alex Raita
- *
+ *aw
  */
 public class StartClient
 {

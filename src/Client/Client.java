@@ -503,10 +503,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
-					if (lines.size() < 60)
-					{
-						lines.add(message);
-					}
+//					if (lines.size() < 100)
+//					{
+					lines.add(message);
+//					}
 
 					try
 					{
