@@ -834,6 +834,46 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
 					setOnSurface(false);
 				}
+				else if(command.equalsIgnoreCase("W"))
+				{
+					inflictDamage(10000,this);
+					if(getTeam() == RED_TEAM)
+					{
+						setTeam(BLUE_TEAM);
+						while(true)
+						{
+							try{
+								world.getBlueTeam().add(this);
+								world.getRedTeam().remove(this);
+								break;
+							}
+							catch(ConcurrentModificationException E)
+							{
+
+							}
+						}
+					}
+					else 
+					{
+						 setTeam(RED_TEAM);
+						 while(true)
+							{
+								try{
+									world.getBlueTeam().remove(this);
+									world.getRedTeam().add(this);
+									break;
+								}
+								catch(ConcurrentModificationException E)
+								{
+
+								}
+							}
+					}
+
+
+					
+
+				}
 				else if (command.equals("DR"))
 				{
 					setDirection("RIGHT");

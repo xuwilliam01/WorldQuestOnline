@@ -3,6 +3,8 @@ package Client;
 import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,7 +15,7 @@ import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
-public class ClientInventory extends JPanel{
+public class ClientInventory extends JPanel implements ActionListener{
 
 	public final static int INVENTORY_WIDTH = 300;
 	public final static int WIDTH = 4;
@@ -27,6 +29,7 @@ public class ClientInventory extends JPanel{
 	private Client client;
 
 	private JButton mainMenu;
+	private JButton switchTeams;
 
 	public ClientInventory(JButton menu)
 	{
@@ -41,10 +44,16 @@ public class ClientInventory extends JPanel{
 		if(menu != null)
 		{
 			mainMenu = menu;
-			mainMenu.setSize(225,50);
-			mainMenu.setLocation(INVENTORY_WIDTH-250,Client.SCREEN_HEIGHT-100);
+			mainMenu.setSize(100,50);
+			mainMenu.setLocation(25,Client.SCREEN_HEIGHT-100);
 			add(mainMenu);
 		}
+		
+		switchTeams = new JButton("Switch Teams");
+		switchTeams.setSize(150,50);
+		switchTeams.setLocation(125,Client.SCREEN_HEIGHT-100);
+		switchTeams.addActionListener(this);
+		add(switchTeams);
 	}
 	/**
 	 * Adds an item to the array given its image
@@ -361,6 +370,11 @@ public class ClientInventory extends JPanel{
 	public JButton getMenuButton()
 	{
 		return mainMenu;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		client.print("W");
+		
 	}
 
 

@@ -200,6 +200,7 @@ public class ClientWorld
 		{
 			objects[id].setX(x);
 			objects[id].setY(y);
+			objects[id].setTeam(team);
 			objects[id].setImage(image);
 		}
 	}
