@@ -28,7 +28,7 @@ public class ServerSpawner extends ServerObject
 				setImage("RED_GOBLIN_SPAWN.png");
 			else
 				setImage("BLUE_GOBLIN_SPAWN.png");
-			delay = 25000;
+			delay = 30000;
 		}
 		else
 			switch (creature.getType())
