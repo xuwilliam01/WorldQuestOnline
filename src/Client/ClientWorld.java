@@ -487,7 +487,7 @@ public class ClientWorld
 		graphics.drawRect(100, 980, 500, 20);
 		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 995);
 		graphics.drawRect(1050, 980, 500, 20);
-		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 995);
+		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1275, 995);
 		
 		graphics.setFont(BIG_NORMAL_FONT);
 		graphics.setColor(Color.red);
