@@ -89,6 +89,22 @@ public class ServerEngine implements Runnable, ActionListener
 	/**
 	 * Constructor for the engine
 	 */
+	public ServerEngine(String map) throws IOException
+	{
+		// Start importing the images from the file (place in a loading screen
+		// or something later)
+		Images.importImages();
+		ImageReferencePair.importReferences();
+
+		listOfPlayers = new ArrayList<ServerPlayer>();
+		objectIDs = new boolean[NUMBER_OF_IDS];
+		world = new ServerWorld(this,map);
+
+	}
+	
+	/**
+	 * Constructor for the engine
+	 */
 	public ServerEngine() throws IOException
 	{
 		// Start importing the images from the file (place in a loading screen
@@ -101,6 +117,7 @@ public class ServerEngine implements Runnable, ActionListener
 		world = new ServerWorld(this);
 
 	}
+	
 
 	/**
 	 * Set the gui

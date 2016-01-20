@@ -29,6 +29,8 @@ import Client.ClientInventory;
 import Imports.Images;
 import START.StartGame;
 import Server.Server;
+import Server.ServerFrame;
+import Server.ServerGUI;
 import WorldCreator.CreatorFrame;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;
@@ -562,13 +564,45 @@ public class MainMenu {
 	private static class StartServer implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			Server server = new Server();
+			String fileName = JOptionPane
+					.showInputDialog("Please enter the file you want to use for the server");
+			if(fileName == null)
+				return;
+
+			int portNum;
+			while(true)
+			{
+				String port = JOptionPane
+						.showInputDialog("Please enter the port you want to use for the server");
+				if(port == null)
+					return;
+				
+				try{
+					portNum = Integer.parseInt(port);
+					break;
+				}
+				catch(NumberFormatException E)
+				{		
+				}
+			}
+
+			
+			Server server = new Server(fileName,portNum);
 
 			Thread serverThread = new Thread(server);
 
 			serverThread.start();
-
-			JOptionPane.showMessageDialog(mainMenu, "A Server was opened!");
+		
+			int dialogResult = JOptionPane.showConfirmDialog (null, "A Server was opened! Would you like to see a map of the entire world?\nThis will cause server lag when zoomed out. ","Warning",0);
+			if(dialogResult == JOptionPane.YES_OPTION){
+			
+				ServerFrame myFrame = new ServerFrame();
+				ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
+				gui.setLocation(0,0);
+				myFrame.add(gui);
+				gui.revalidate();
+				server.getEngine().setGui(gui);
+			}
 
 		}
 

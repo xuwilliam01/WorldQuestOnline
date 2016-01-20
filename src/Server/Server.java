@@ -16,15 +16,15 @@ public class Server implements Runnable
 	private ServerSocket socket;
 	private ServerEngine engine;
 	private int port;
+	private String map;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
 
 	int noOfPlayers = 0;
 
-	public Server()
+	public Server(String map, int port)
 	{
-		port = 5000;
-
+		this.map = map;
 		try
 		{
 			this.socket = new ServerSocket(port);
@@ -43,7 +43,10 @@ public class Server implements Runnable
 		System.out.println("Creating world...");
 		try
 		{
-			engine = new ServerEngine();
+			if(map.equals(""))
+				engine = new ServerEngine();
+			else
+				engine = new ServerEngine(map);
 		}
 		catch (IOException e1)
 		{
@@ -67,7 +70,7 @@ public class Server implements Runnable
 
 				int x = 2000;
 				if(team == ServerPlayer.RED_TEAM)
-				 	x = engine.getWorld().getRedCastleX();
+					x = engine.getWorld().getRedCastleX();
 				else
 					x = engine.getWorld().getBlueCastleX();
 
@@ -80,9 +83,9 @@ public class Server implements Runnable
 						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
 						ServerWorld.GRAVITY, playerColours[characterSelection],
 						newClient, engine, engine.getWorld());
-				
+
 				newPlayer.setTeam(team);
-				
+
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();

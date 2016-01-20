@@ -36,7 +36,7 @@ public class ServerCastle extends ServerCreature
 	 */
 	public void update()
 	{
-		if(currentGoblinTier < ServerGoblin.NUM_TYPES-1 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
+		if(currentGoblinTier < 5 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
 			currentGoblinTier++;

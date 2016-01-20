@@ -1,9 +1,12 @@
 package Server;
 
+import Imports.ImageReferencePair;
+import Imports.Images;
 import Server.Items.ServerWeaponSwing;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -17,7 +20,7 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class ServerGUI extends JPanel implements KeyListener,
-		MouseWheelListener, MouseListener, MouseMotionListener
+MouseWheelListener, MouseListener, MouseMotionListener
 {
 
 	private ServerWorld world;
@@ -35,7 +38,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	 * A color that java doesn't provide
 	 */
 	public static final Color SOLID_BLOCK = new Color(112, 112, 112);
-	
+
 	/**
 	 * A color that java doesn't provide
 	 */
@@ -94,6 +97,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 	 */
 	private int dragSourceY;
 
+	private Image background = Images.getImage("BACKGROUND.png");
+
 	// Movement booleans
 	private boolean up = false;
 	private boolean down = false;
@@ -129,6 +134,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		graphics.drawImage(background,0,0,null);
 
 		int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startRow < 0)
@@ -154,29 +160,22 @@ public class ServerGUI extends JPanel implements KeyListener,
 		{
 			for (int column = startColumn; column <= endColumn; column++)
 			{
-				if (grid[row][column] == ' ')
+				if(grid[row][column] != ' ')
 				{
-					graphics.setColor(SKY);
+					graphics.setColor(ImageReferencePair.getImages()[grid[row][column]].getColor());
+					graphics.fillRect(
+							(int) (CENTRE_X + column
+									* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
+									(int) (CENTRE_Y + row
+											* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+											(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+											(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 				}
-				else if (grid[row][column] >= 'A')
-				{
-					graphics.setColor(SOLID_BLOCK);
-				}
-				else
-				{
-					graphics.setColor(BACKGROUND_BLOCK);
-				}
-
-				graphics.fillRect(
-						(int) (CENTRE_X + column
-								* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-						(int) (CENTRE_Y + row
-								* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-						(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-						(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 			}
 		}
 
+		
+		
 		// Draw each object on the gui if it's inside the screen
 		for (ServerObject object : world.getObjects())
 		{
@@ -184,11 +183,11 @@ public class ServerGUI extends JPanel implements KeyListener,
 					((CENTRE_X + object.getX() / objectFactor - posX)
 							+ 1
 							+ (object.getWidth() / objectFactor) + 1) > 0
-					&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
-					&& ((CENTRE_Y + object.getY() / objectFactor - posY)
-							+ 1
-							+ (object.getHeight() / objectFactor) + 1) > 0
-					&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
+							&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
+							&& ((CENTRE_Y + object.getY() / objectFactor - posY)
+									+ 1
+									+ (object.getHeight() / objectFactor) + 1) > 0
+									&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 			{
 				if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
 				{
@@ -319,8 +318,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 			if (objectFactor * (1.1 * (notches)) < ServerFrame.FRAME_FACTOR * 16)
 			{
 				objectFactor *= (1.1 * (notches));
-				posX /= 1.1;
-				posY /= 1.1;
+				posX /= (1.1 * notches);
+				posY /= (1.1 * notches);
 			}
 			else
 			{
@@ -334,8 +333,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 			if (objectFactor / (1.1 * (-notches)) >= 1)
 			{
 				objectFactor /= (1.1 * (-notches));
-				posX *= 1.1;
-				posY *= 1.1;
+				posX *= 1.1 * -notches;
+				posY *= 1.1 * - notches;
 			}
 			else
 			{

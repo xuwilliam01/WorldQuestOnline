@@ -134,7 +134,10 @@ public class ServerWorld
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
 
-	public final static String GRID_FILE = "World.txt";
+	/**
+	 * Map name
+	 */
+	private String mapFile = "World.txt";
 
 	private int redCastleX;
 	private int blueCastleX;
@@ -257,6 +260,21 @@ public class ServerWorld
 		newWorld();
 	}
 
+
+	/**
+	 * Constructor for server
+	 * @throws IOException
+	 */
+	public ServerWorld(ServerEngine engine, String map) throws IOException
+	{
+		objects = new ArrayList<ServerObject>();
+		objectsToAdd = new ArrayDeque<ServerObject>();
+		mapFile = map;
+		this.engine = engine;
+		newWorld();
+	}
+	
+	
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -265,7 +283,7 @@ public class ServerWorld
 	public void newWorld() throws IOException
 	{
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
-				"Resources", GRID_FILE)));
+				"Resources", mapFile)));
 
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 
@@ -608,7 +626,7 @@ public class ServerWorld
 											.addCollided(otherObject);
 										}
 									}
-									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown())
+									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown() && ((ServerCastle)object).getCurrentGoblinTier() < 5)
 									{
 										((ServerCastle)object).addMoney(((ServerMoney)otherObject).getAmount());
 										otherObject.destroy();
