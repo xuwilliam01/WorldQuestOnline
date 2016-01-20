@@ -783,6 +783,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						rightClick = true;
 					}
+					else
+					{
+						rightClick = false;
+					}
 				}
 				else if (command.equals("!a") && isAlive())
 				{
@@ -1161,7 +1165,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						mana -= ServerWeapon.FIREWAND_MANA;
 					}
 					else
+					{
 						canAttack = false;
+					}
 					arrowType = ServerWorld.FIREBALL_TYPE;
 					image = "FIREWAND";
 					if (getDirection().equals("LEFT"))
@@ -1177,7 +1183,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						mana -= ServerWeapon.ICEWAND_MANA;
 					}
 					else
+					{
 						canAttack = false;
+					}
 					arrowType = ServerWorld.ICEBALL_TYPE;
 					image = "ICEWAND";
 					if (getDirection().equals("LEFT"))
@@ -1193,7 +1201,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						mana -= ServerWeapon.DARKWAND_MANA;
 					}
 					else
+					{
 						canAttack = false;
+					}
 					arrowType = ServerWorld.DARKBALL_TYPE;
 					image = "DARKWAND";
 					if (getDirection().equals("LEFT"))
@@ -1229,6 +1239,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					action="";
 					actionDelay = 0;
+					ServerDamageIndicator message = new ServerDamageIndicator(getX()+getWidth()/2, getY()-getHeight()/2, "!M", ServerDamageIndicator.PURPLE_TEXT, world);
+					message.setFramesAlive(120);
+					world.add(message);
 				}
 			}
 		}

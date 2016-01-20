@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -27,7 +28,7 @@ import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
 public class Client extends JPanel implements KeyListener, MouseListener,
-MouseMotionListener
+		MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -75,12 +76,12 @@ MouseMotionListener
 	// Variables for damage
 	private int damage = 0;
 	private int baseDamage = 0;
-	
-	//Stats of each castle
+
+	// Stats of each castle
 	private int redCastleHP;
 	private int redCastleTier;
 	private int redCastleMoney;
-	
+
 	private int blueCastleHP;
 	private int blueCastleTier;
 	private int blueCastleMoney;
@@ -130,12 +131,18 @@ MouseMotionListener
 	 */
 	private ClientShop shop = null;
 
+	/**
+	 * All the leftover lines to read in to the client
+	 */
+	private ArrayList<String> lines = new ArrayList<String>();
+
 	private String playerName;
-	
+
 	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame, String playerName)
+	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
+			String playerName)
 	{
 		Images.importImages();
 		mySocket = socket;
@@ -192,7 +199,7 @@ MouseMotionListener
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
-		output.println("Na "+playerName);
+		output.println("Na " + playerName);
 		output.flush();
 
 		// Import the map from the server
@@ -221,6 +228,10 @@ MouseMotionListener
 
 		// Start the actual game
 		gameThread = new Thread(new runGame());
+		gameThread.start();
+
+		// Start the actual game
+		gameThread = new Thread(new readServer());
 		gameThread.start();
 
 		System.out.println("Game started");
@@ -261,19 +272,16 @@ MouseMotionListener
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class runGame implements Runnable
+	class readServer implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			try
+			while (true)
 			{
-				startTime = System.currentTimeMillis();
-
-				while (true)
+				while (!lines.isEmpty())
 				{
-
-					String message = input.readLine();
+					String message = lines.remove(0);
 
 					String[] tokens = message.split(" ");
 
@@ -294,23 +302,28 @@ MouseMotionListener
 							{
 								mana = Integer.parseInt(tokens[++token]);
 							}
-							else if(tokens[token].equals("B"))
+							else if (tokens[token].equals("B"))
 							{
-								//End the game
+								// End the game
 								int team = Integer.parseInt(tokens[++token]);
 								String winner = "Red Team";
 								String loser = "Blue Team";
-								if(team == ServerPlayer.RED_TEAM)
+								if (team == ServerPlayer.RED_TEAM)
 								{
 									winner = "Blue Team";
 									loser = "Red Team";
 								}
 								endGame = true;
 
-								JOptionPane.showMessageDialog(Client.this, String.format("The %s castle has been destroyed, the winner is the %s!",loser,winner));
+								JOptionPane
+										.showMessageDialog(
+												Client.this,
+												String.format(
+														"The %s castle has been destroyed, the winner is the %s!",
+														loser, winner));
 								input.close();
 								output.close();
-								if(inventory.getMenuButton() != null)
+								if (inventory.getMenuButton() != null)
 									inventory.getMenuButton().doClick();
 								break;
 
@@ -350,8 +363,8 @@ MouseMotionListener
 								}
 								world.setObject(id, x, y,
 										tokens[++token], Integer
-										.parseInt(tokens[++token]),
-										tokens[++token],tokens[++token]);
+												.parseInt(tokens[++token]),
+										tokens[++token], tokens[++token]);
 							}
 							else if (tokens[token].equals("P"))
 							{
@@ -367,7 +380,8 @@ MouseMotionListener
 							else if (tokens[token].equals("I"))
 							{
 								System.out.println("Received an item");
-								inventory.addItem(tokens[++token], tokens[++token],
+								inventory.addItem(tokens[++token],
+										tokens[++token],
 										Integer.parseInt(tokens[++token]),
 										Integer.parseInt(tokens[++token]));
 								inventory.repaint();
@@ -391,7 +405,8 @@ MouseMotionListener
 							}
 							else if (tokens[token].equals("V"))
 							{
-								if (Character.isDigit(tokens[token + 1].charAt(0)))
+								if (Character.isDigit(tokens[token + 1]
+										.charAt(0)))
 								{
 									if (shop != null)
 									{
@@ -404,7 +419,8 @@ MouseMotionListener
 									int numItems = Integer
 											.parseInt(tokens[++token]);
 									for (int item = 0; item < numItems; item++)
-										shop.addItem(tokens[++token],
+										shop.addItem(
+												tokens[++token],
 												tokens[++token],
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));
@@ -413,7 +429,8 @@ MouseMotionListener
 									frame.setVisible(true);
 								}
 								else if (shop != null)
-									shop.addItem(tokens[++token], tokens[++token],
+									shop.addItem(tokens[++token],
+											tokens[++token],
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 
@@ -423,41 +440,82 @@ MouseMotionListener
 								if (shop != null)
 									closeShop();
 							}
-							else if(tokens[token].equals("XR"))
+							else if (tokens[token].equals("XR"))
 							{
 								redCastleHP = Integer.parseInt(tokens[++token]);
-								redCastleTier = Integer.parseInt(tokens[++token]);
-								redCastleMoney = Integer.parseInt(tokens[++token]);
+								redCastleTier = Integer
+										.parseInt(tokens[++token]);
+								redCastleMoney = Integer
+										.parseInt(tokens[++token]);
 							}
-							else if(tokens[token].equals("XB"))
+							else if (tokens[token].equals("XB"))
 							{
-								blueCastleHP = Integer.parseInt(tokens[++token]);
-								blueCastleTier = Integer.parseInt(tokens[++token]);
-								blueCastleMoney = Integer.parseInt(tokens[++token]);
+								blueCastleHP = Integer
+										.parseInt(tokens[++token]);
+								blueCastleTier = Integer
+										.parseInt(tokens[++token]);
+								blueCastleMoney = Integer
+										.parseInt(tokens[++token]);
 							}
 						}
 						catch (NumberFormatException e)
 						{
-							System.out.println("java can't parse integers");
+							System.out.println("Java can't parse integers");
 							e.printStackTrace();
 						}
+						catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+				}
+				try
+				{
+					Thread.sleep(1);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Thread for running the actual game
+	 * 
+	 * @author William Xu && Alex Raita
+	 *
+	 */
+	class runGame implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			try
+			{
+				startTime = System.currentTimeMillis();
+
+				while (true)
+				{
+					String message = input.readLine();
+
+					if (lines.size() < 10)
+					{
+						lines.add(message);
 					}
 
-					if(endGame)
-						break;
-					// long delay = System.currentTimeMillis()
-					// - startTime;
-
-					// if (delay < 15)
-					// {
-					// try {
-					// Thread.sleep((15-delay)-2);
-					// } catch (InterruptedException e) {
-					//
-					// e.printStackTrace();
-					// }
-					// }
-
+					try
+					{
+						Thread.sleep(1);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
 				}
 
 			}
@@ -472,6 +530,225 @@ MouseMotionListener
 
 		}
 	}
+
+	// /**
+	// * Thread for running the actual game
+	// *
+	// * @author William Xu && Alex Raita
+	// *
+	// */
+	// class runGame implements Runnable
+	// {
+	// @Override
+	// public void run()
+	// {
+	// try
+	// {
+	// startTime = System.currentTimeMillis();
+	//
+	// while (true)
+	// {
+	//
+	// String message = input.readLine();
+	//
+	// String[] tokens = message.split(" ");
+	//
+	// for (int token = 0; token < tokens.length; token++)
+	// {
+	// try
+	// {
+	// // If our player has moved
+	// if (tokens[token].equals("L"))
+	// {
+	// HP = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("M"))
+	// {
+	// maxHP = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("Q"))
+	// {
+	// mana = Integer.parseInt(tokens[++token]);
+	// }
+	// else if(tokens[token].equals("B"))
+	// {
+	// //End the game
+	// int team = Integer.parseInt(tokens[++token]);
+	// String winner = "Red Team";
+	// String loser = "Blue Team";
+	// if(team == ServerPlayer.RED_TEAM)
+	// {
+	// winner = "Blue Team";
+	// loser = "Red Team";
+	// }
+	// endGame = true;
+	//
+	// JOptionPane.showMessageDialog(Client.this,
+	// String.format("The %s castle has been destroyed, the winner is the %s!",loser,winner));
+	// input.close();
+	// output.close();
+	// if(inventory.getMenuButton() != null)
+	// inventory.getMenuButton().doClick();
+	// break;
+	//
+	// }
+	// else if (tokens[token].equals("K"))
+	// {
+	// maxMana = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("U"))
+	// {
+	// repaint();
+	//
+	// // Update the FPS counter
+	// if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
+	// {
+	// FPScounter = 0;
+	// currentFPS = (int) ((1000.0
+	// / (System.currentTimeMillis() - startTime)
+	// * (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
+	// startTime = System.currentTimeMillis();
+	// }
+	//
+	// FPScounter++;
+	// }
+	// // If there is a player to be updated
+	// else if (tokens[token].equals("O"))
+	// {
+	// int id = Integer.parseInt(tokens[++token]);
+	// int x = Integer
+	// .parseInt(tokens[++token]);
+	// int y = Integer
+	// .parseInt(tokens[++token]);
+	// if (id == player.getID())
+	// {
+	// player.setX(x);
+	// player.setY(y);
+	// }
+	// world.setObject(id, x, y,
+	// tokens[++token], Integer
+	// .parseInt(tokens[++token]),
+	// tokens[++token],tokens[++token]);
+	// }
+	// else if (tokens[token].equals("P"))
+	// {
+	// pingString = "LATENCY: "
+	// + (System.currentTimeMillis() - ping);
+	// }
+	//
+	// // Remove an object after disconnection/destruction
+	// else if (tokens[token].equals("R"))
+	// {
+	// world.remove(Integer.parseInt(tokens[++token]));
+	// }
+	// else if (tokens[token].equals("I"))
+	// {
+	// System.out.println("Received an item");
+	// inventory.addItem(tokens[++token], tokens[++token],
+	// Integer.parseInt(tokens[++token]),
+	// Integer.parseInt(tokens[++token]));
+	// inventory.repaint();
+	// }
+	// else if (tokens[token].equals("D"))
+	// {
+	// damage = Integer.parseInt(tokens[++token]);
+	// baseDamage = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("S"))
+	// {
+	// speed = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("J"))
+	// {
+	// jump = Integer.parseInt(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("A"))
+	// {
+	// armour = Double.parseDouble(tokens[++token]);
+	// }
+	// else if (tokens[token].equals("V"))
+	// {
+	// if (Character.isDigit(tokens[token + 1].charAt(0)))
+	// {
+	// if (shop != null)
+	// {
+	// shop.setVisible(false);
+	// frame.remove(shop);
+	// frame.invalidate();
+	// shop = null;
+	// }
+	// shop = new ClientShop(Client.this);
+	// int numItems = Integer
+	// .parseInt(tokens[++token]);
+	// for (int item = 0; item < numItems; item++)
+	// shop.addItem(tokens[++token],
+	// tokens[++token],
+	// Integer.parseInt(tokens[++token]),
+	// Integer.parseInt(tokens[++token]));
+	// frame.add(shop, JLayeredPane.PALETTE_LAYER);
+	// shop.revalidate();
+	// frame.setVisible(true);
+	// }
+	// else if (shop != null)
+	// shop.addItem(tokens[++token], tokens[++token],
+	// Integer.parseInt(tokens[++token]),
+	// Integer.parseInt(tokens[++token]));
+	//
+	// }
+	// else if (tokens[token].equals("C"))
+	// {
+	// if (shop != null)
+	// closeShop();
+	// }
+	// else if(tokens[token].equals("XR"))
+	// {
+	// redCastleHP = Integer.parseInt(tokens[++token]);
+	// redCastleTier = Integer.parseInt(tokens[++token]);
+	// redCastleMoney = Integer.parseInt(tokens[++token]);
+	// }
+	// else if(tokens[token].equals("XB"))
+	// {
+	// blueCastleHP = Integer.parseInt(tokens[++token]);
+	// blueCastleTier = Integer.parseInt(tokens[++token]);
+	// blueCastleMoney = Integer.parseInt(tokens[++token]);
+	// }
+	// }
+	// catch (NumberFormatException e)
+	// {
+	// System.out.println("Java can't parse integers");
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// if(endGame)
+	// break;
+	// // long delay = System.currentTimeMillis()
+	// // - startTime;
+	//
+	// // if (delay < 15)
+	// // {
+	// // try {
+	// // Thread.sleep((15-delay)-2);
+	// // } catch (InterruptedException e) {
+	// //
+	// // e.printStackTrace();
+	// // }
+	// // }
+	//
+	// }
+	//
+	// }
+	// catch (NumberFormatException e1)
+	// {
+	// e1.printStackTrace();
+	// }
+	// catch (IOException e2)
+	// {
+	// serverClosed();
+	// }
+	//
+	// }
+	// }
 
 	/**
 	 * Close the shop
@@ -521,7 +798,7 @@ MouseMotionListener
 				}
 			}
 
-			world = new ClientWorld(grid, tileSize,this);
+			world = new ClientWorld(grid, tileSize, this);
 		}
 		catch (IOException e)
 		{
@@ -590,7 +867,7 @@ MouseMotionListener
 			}
 			graphics.setColor(Color.black);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 5 seconds to respawn", 20, 60);
+					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
 		}
 
 		inventory.repaint();
@@ -720,9 +997,7 @@ MouseMotionListener
 			print("DL");
 			direction = 'L';
 		}
-		
-		
-		
+
 		if (event.getButton() == MouseEvent.BUTTON1
 				&& currentMessage.charAt(0) != 'A')
 		{
@@ -901,48 +1176,55 @@ MouseMotionListener
 	{
 		return armour;
 	}
-	
+
 	public int getRedCastleHP()
 	{
 		return redCastleHP;
 	}
-	
+
 	public int getBlueCastleHP()
 	{
 		return blueCastleHP;
 	}
 
-	public int getRedCastleTier() {
+	public int getRedCastleTier()
+	{
 		return redCastleTier;
 	}
 
-	public void setRedCastleTier(int redCastleTier) {
+	public void setRedCastleTier(int redCastleTier)
+	{
 		this.redCastleTier = redCastleTier;
 	}
 
-	public int getRedCastleMoney() {
+	public int getRedCastleMoney()
+	{
 		return redCastleMoney;
 	}
 
-	public void setRedCastleMoney(int redCastleMoney) {
+	public void setRedCastleMoney(int redCastleMoney)
+	{
 		this.redCastleMoney = redCastleMoney;
 	}
 
-	public int getBlueCastleTier() {
+	public int getBlueCastleTier()
+	{
 		return blueCastleTier;
 	}
 
-	public void setBlueCastleTier(int blueCastleTier) {
+	public void setBlueCastleTier(int blueCastleTier)
+	{
 		this.blueCastleTier = blueCastleTier;
 	}
 
-	public int getBlueCastleMoney() {
+	public int getBlueCastleMoney()
+	{
 		return blueCastleMoney;
 	}
 
-	public void setBlueCastleMoney(int blueCastleMoney) {
+	public void setBlueCastleMoney(int blueCastleMoney)
+	{
 		this.blueCastleMoney = blueCastleMoney;
 	}
-	
-	
+
 }

@@ -11,11 +11,12 @@ public class ServerDamageIndicator extends ServerText
 {
 	public final static char RED_TEXT = 'r';
 	public final static char YELLOW_TEXT = 'y';
+	public final static char PURPLE_TEXT = 'p';
 	
 	/**
 	 * How long the damage indicator lasts for
 	 */
-	public final static int FRAMES_ALIVE = 45;
+	private int framesAlive = 45;
 	
 	/**
 	 * The world
@@ -26,9 +27,6 @@ public class ServerDamageIndicator extends ServerText
 	 * The time the Damage indicator started
 	 */
 	private long startCounter;
-	
-	
-	
 	
 	/**
 	 * Constructor for a damage indicator
@@ -50,11 +48,19 @@ public class ServerDamageIndicator extends ServerText
 	 */
 	public void update()
 	{
-		if (world.getWorldCounter()-startCounter >= FRAMES_ALIVE)
+		if (world.getWorldCounter()-startCounter >= framesAlive)
 		{
 			destroy();
 		}
 	}
-	
-	
+
+	public int getFramesAlive()
+	{
+		return framesAlive;
+	}
+
+	public void setFramesAlive(int framesAlive)
+	{
+		this.framesAlive = framesAlive;
+	}
 }

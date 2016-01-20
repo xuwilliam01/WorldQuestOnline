@@ -402,8 +402,13 @@ public class ClientWorld
 						char colour = imageName.charAt(1);
 						String text = imageName
 								.substring(2, imageName.length());
-
-						if (Integer.parseInt(text) == 0)
+						
+						if (text.equals("!M"))
+						{
+							text = "NOT ENOUGH MANA";
+							graphics.setColor(PURPLE_TEXT);
+						}
+						else if (Integer.parseInt(text) == 0)
 						{
 							graphics.setColor(BLUE_TEXT);
 							text = "BLOCK";
@@ -467,26 +472,26 @@ public class ClientWorld
 					displayedText,
 					(int) (Client.SCREEN_WIDTH
 							/ 2
-							- (displayedText.length() * MESSAGE_FONT_WIDTH)
-							/ 2 + 0.5),
+							- (displayedText.length() * MESSAGE_FONT_WIDTH)*(2.0/5) + 0.5),
 							Client.SCREEN_HEIGHT / 3);
 		}
 
 		//Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
-		graphics.setColor(Color.red);
-		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 30);
-		graphics.fillRect(1000, 980,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 30);
+		graphics.setColor(Color.CYAN);
+		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/ServerCastle.CASTLE_HP), 20);
+		graphics.setColor(Color.PINK);
+		graphics.fillRect(1050, 980,(int)(500.0*client.getRedCastleHP()/ServerCastle.CASTLE_HP), 20);
 		
-		graphics.setColor(Color.white);
-		graphics.drawRect(100, 980, 500, 30);
-		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 1000);
-		graphics.drawRect(1000, 980, 500, 30);
-		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 1000);
+		graphics.setColor(PURPLE_TEXT);
+		graphics.drawRect(100, 980, 500, 20);
+		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),ServerCastle.CASTLE_HP), 325, 995);
+		graphics.drawRect(1050, 980, 500, 20);
+		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),ServerCastle.CASTLE_HP), 1225, 995);
 		
 		graphics.setFont(BIG_NORMAL_FONT);
 		graphics.setColor(Color.red);
-		graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1000,975);
+		graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1050,975);
 		graphics.setColor(Color.blue);
 		graphics.drawString(String.format("Blue Castle HP Tier %d (Money For Next Tier  %d/%d)",client.getBlueCastleTier()+1,client.getBlueCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getBlueCastleTier()]),100,975);
 	}
