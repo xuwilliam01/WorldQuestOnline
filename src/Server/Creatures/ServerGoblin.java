@@ -77,7 +77,7 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * The range to lock on to an enemy
 	 */
-	private int targetRange = 500;
+	private int targetRange = 250;
 
 	/**
 	 * Whether or not the goblin is a melee user or ranged
