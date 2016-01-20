@@ -280,7 +280,8 @@ public class ServerGoblin extends ServerCreature
 			{
 				setDirection("LEFT");
 			}
-			else if (Math.abs(getHSpeed()) <= 1
+			
+			if (Math.abs(getHSpeed()) <= 1
 					&& isOnSurface() && !onTarget)
 			{
 				setVSpeed(-jumpSpeed);
@@ -299,6 +300,7 @@ public class ServerGoblin extends ServerCreature
 
 			if (getTarget() == null)
 			{
+				onTarget = false;
 				if (getWorld().getWorldCounter() % 15 == 0)
 				{
 					setTarget(findTarget());
@@ -321,7 +323,6 @@ public class ServerGoblin extends ServerCreature
 					|| !quickInRange(getTarget(), targetRange))
 			{
 				setTarget(null);
-				onTarget = false;
 			}
 			else
 			{
