@@ -165,10 +165,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public void initialize()
 	{
-		// Create the screen
+		
 		setDoubleBuffered(true);
-		setBackground(Color.white);
-
 		setFocusable(true);
 		requestFocusInWindow();
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -277,6 +275,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
+			setDoubleBuffered(true);
+			
 			while (true)
 			{
 				while (!lines.isEmpty())
@@ -503,7 +503,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
-					if (lines.size() < 10)
+					if (lines.size() < 60)
 					{
 						lines.add(message);
 					}
