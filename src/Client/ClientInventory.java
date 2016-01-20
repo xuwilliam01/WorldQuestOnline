@@ -45,13 +45,13 @@ public class ClientInventory extends JPanel implements ActionListener{
 		{
 			mainMenu = menu;
 			mainMenu.setSize(100,50);
-			mainMenu.setLocation(25,Client.SCREEN_HEIGHT-100);
+			mainMenu.setLocation(20,Client.SCREEN_HEIGHT-100);
 			add(mainMenu);
 		}
 		
 		switchTeams = new JButton("Switch Teams");
 		switchTeams.setSize(150,50);
-		switchTeams.setLocation(125,Client.SCREEN_HEIGHT-100);
+		switchTeams.setLocation(135,Client.SCREEN_HEIGHT-100);
 		switchTeams.addActionListener(this);
 		add(switchTeams);
 	}
