@@ -8,6 +8,11 @@ import javax.swing.JFrame;
 
 
 @SuppressWarnings("serial")
+/**
+ * The frame that the game will be displayed on
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ClientFrame extends JFrame
 {
 
@@ -19,6 +24,8 @@ public class ClientFrame extends JFrame
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 	    DisplayMode dm = gs.getDisplayMode();
+	    
+	    //Set the window to the size of the screen
 	    Client.SCREEN_WIDTH = dm.getWidth()-ClientInventory.INVENTORY_WIDTH;
 	    Client.SCREEN_HEIGHT = dm.getHeight();
 	    

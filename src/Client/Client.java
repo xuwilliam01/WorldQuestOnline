@@ -27,6 +27,11 @@ import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
+/**
+ * The main client class that deals with server communication and outsources graphics to the client world
+ * @author Alex Raita & William Xu
+ *
+ */
 public class Client extends JPanel implements KeyListener, MouseListener,
 		MouseMotionListener
 {
@@ -41,8 +46,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private Thread gameThread;
 	private long ping;
 	private String pingString = "LATENCY: (PRESS P)";
-
-	private boolean endGame = false;
 
 	/**
 	 * The current message that the client is sending to the server
@@ -136,6 +139,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	private ArrayList<String> lines = new ArrayList<String>();
 
+	/**
+	 * The name of the player
+	 */
 	private String playerName;
 
 	/**
@@ -313,7 +319,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									winner = "Blue Team";
 									loser = "Red Team";
 								}
-								endGame = true;
 
 								JOptionPane
 										.showMessageDialog(
@@ -818,6 +823,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		return shop != null;
 	}
 
+	/**
+	 * Sets the weapon selected
+	 * @param weaponSelected
+	 */
 	public void setWeaponSelected(int weaponSelected)
 	{
 		if (this.weaponSelected != 9
@@ -841,6 +850,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		super.paintComponent(graphics);
 
+		//Updat the map
 		try
 		{
 			world.update(graphics, player);
@@ -850,6 +860,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		}
 
+		//Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.black);
 		graphics.drawString(pingString, 20, 20);
@@ -870,6 +881,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
 		}
 
+		//Repaint the inventory
 		inventory.repaint();
 		requestFocusInWindow();
 	}

@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -35,8 +36,14 @@ import WorldCreator.CreatorFrame;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;
 
+/**
+ * The main menu for the game
+ * @author Alex Raita & William Xu
+ *
+ */
 public class MainMenu {
 
+	//All the panels
 	private static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
@@ -87,6 +94,9 @@ public class MainMenu {
 		}
 	}
 
+	/**
+	 * Constructor
+	 */
 	public MainMenu()
 	{
 		Images.importImages();
@@ -100,6 +110,11 @@ public class MainMenu {
 		mainMenu.repaint();
 	}
 
+	/**
+	 * The main JPanel
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class MainPanel extends JPanel implements ActionListener, MouseListener
 	{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH)/2;
@@ -121,9 +136,12 @@ public class MainMenu {
 
 		Image createServerImage = Images.getImage("CreateAServer.png");
 		Image createServerOver = Images.getImage("CreateAServerClicked.png");
-		
+
 		private Timer repaintTimer = new Timer(15,this);
 
+		/**
+		 * Constructor
+		 */
 		public MainPanel()
 		{
 			setDoubleBuffered(true);
@@ -185,6 +203,9 @@ public class MainMenu {
 			repaint();
 		}
 
+		/**
+		 * Draw the clouds
+		 */
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
@@ -203,9 +224,7 @@ public class MainMenu {
 
 				if (cloud.getX() < middle - CLOUD_DISTANCE / 2)
 				{
-					cloud.setX(middle + CLOUD_DISTANCE / 2);
-					// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-					// cloud.setImage(Images.getImage(image));
+					cloud.setX(middle + CLOUD_DISTANCE / 2);			
 					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
 							- (2 * Client.SCREEN_HEIGHT / 3));
 					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
@@ -215,15 +234,12 @@ public class MainMenu {
 						/ 2)
 				{
 					cloud.setX(middle - CLOUD_DISTANCE / 2);
-					// String image = "CLOUD_" + (int) (Math.random() * 6) + ".png";
-					// cloud.setImage(Images.getImage(image));
 					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
 							- (2 * Client.SCREEN_HEIGHT / 3));
 					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 				}
 				cloud.setX(cloud.getX() + cloud.gethSpeed());
 
-				// System.out.println(cloud.getX());
 			}
 
 			//Draw the title image
@@ -238,23 +254,26 @@ public class MainMenu {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
+		/**
+		 * When mouse hovers over a button, change the colour
+		 */
 		public void mouseEntered(MouseEvent e) {
 			if(e.getSource()== createMap)
 			{
@@ -298,8 +317,17 @@ public class MainMenu {
 
 	}
 
+	/**
+	 * The Panel that displays the map creator
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class CreatorPanel extends JPanel
 	{
+		/**
+		 * Constructor
+		 * @param fileName the file to be used
+		 */
 		public CreatorPanel(String fileName)
 		{
 			setDoubleBuffered(true);
@@ -315,10 +343,10 @@ public class MainMenu {
 			try {
 				world = new CreatorWorld(fileName);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+	
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			}
 
@@ -338,10 +366,21 @@ public class MainMenu {
 		}
 	}
 
+	/**
+	 * The panel to run the actual game
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class GamePanel extends JPanel
 	{
 		ClientInventory inventory;
 
+		/**
+		 * Constructor
+		 * @param serverIP the server IP
+		 * @param port the port number
+		 * @param playerName the player's name
+		 */
 		public GamePanel(String serverIP, int port, String playerName)
 		{
 			boolean connected = false;
@@ -390,24 +429,13 @@ public class MainMenu {
 			mainFrame.setVisible(true);
 			inventory.repaint();
 		}
-
-		public void close()
-		{
-			client.getOutput().close();
-			try {
-				client.getInput().close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			setVisible(false);
-			inventory.removeAll();
-			client.removeAll();
-			client.repaint();
-		}
-
 	}
 
+	/**
+	 * Reacts when the menu button in the creator is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class CreatorMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -425,6 +453,11 @@ public class MainMenu {
 		}
 	}
 
+	/**
+	 * The instruction menu
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class InstructionPanel extends JPanel implements ActionListener
 	{
 		int currentPanel = 0;
@@ -435,6 +468,9 @@ public class MainMenu {
 		Image controls = Images.getImage("Controls.png");
 		Image stats = Images.getImage("Stats.png");
 
+		/**
+		 * Constructor
+		 */
 		public InstructionPanel()
 		{
 			setDoubleBuffered(true);
@@ -460,6 +496,9 @@ public class MainMenu {
 			repaint();
 		}
 
+		/**
+		 * Paints an image depending on the screen the user is on
+		 */
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
@@ -473,6 +512,9 @@ public class MainMenu {
 
 		}
 
+		/**
+		 * Increase the currentPanel until it reaches the main menu again
+		 */
 		public void actionPerformed(ActionEvent e) {
 			currentPanel++;
 
@@ -493,6 +535,11 @@ public class MainMenu {
 		}
 	}
 
+	/**
+	 * Reacts when the menu button in game is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class GameMenuButton implements ActionListener
 	{	
 		public void actionPerformed(ActionEvent e)
@@ -502,10 +549,16 @@ public class MainMenu {
 		}
 	}
 
+	/**
+	 * Starts the game when this button is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class GameStart implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
 
+			//Get user info. If it invalid, then ask for it again or exit back to the main menu
 			String serverIP;
 			int port;
 			String playerName;
@@ -561,13 +614,28 @@ public class MainMenu {
 
 	}
 
+	/**
+	 * Starts the server when this button is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class StartServer implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
-			String fileName = JOptionPane
-					.showInputDialog("Please enter the file you want to use for the server");
-			if(fileName == null)
-				return;
+			//Get info for the server and exit if it is invalid
+			String fileName;
+			while(true)
+			{
+				fileName = JOptionPane
+						.showInputDialog("Please enter the file you want to use for the server");
+				if(fileName == null)
+					return;
+
+				File f = new File("Resources",fileName);
+				if(f.exists() && !f.isDirectory()) { 
+					break;
+				}
+			}
 
 			int portNum;
 			while(true)
@@ -576,7 +644,7 @@ public class MainMenu {
 						.showInputDialog("Please enter the port you want to use for the server");
 				if(port == null)
 					return;
-				
+
 				try{
 					portNum = Integer.parseInt(port);
 					break;
@@ -586,16 +654,18 @@ public class MainMenu {
 				}
 			}
 
-			
+
+			//Starts the server
 			Server server = new Server(fileName,portNum);
 
 			Thread serverThread = new Thread(server);
 
 			serverThread.start();
-		
+
+			//Ask the user if they want to open the a map of the server, but warns them about lag
 			int dialogResult = JOptionPane.showConfirmDialog (null, "A Server was opened! Would you like to see a map of the entire world?\nThis will cause server lag when zoomed out. ","Warning",0);
 			if(dialogResult == JOptionPane.YES_OPTION){
-			
+
 				ServerFrame myFrame = new ServerFrame();
 				ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
 				gui.setLocation(0,0);
@@ -608,10 +678,16 @@ public class MainMenu {
 
 	}
 
+	/**
+	 * Starts the creator when this button is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class StartCreator implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {
 
+			//Get filename. If it invalid, exit
 			String fileName = "";
 			while(true)
 			{
@@ -635,6 +711,11 @@ public class MainMenu {
 
 	}
 
+	/**
+	 * Open the instructions when this button is pressed
+	 * @author Alex Raita & William Xu
+	 *
+	 */
 	private static class OpenInstructions implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) {

@@ -9,6 +9,11 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 
+/**
+ * Class for projectiles
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerProjectile extends ServerFlyingObject
 {
 	/**
@@ -83,15 +88,6 @@ public class ServerProjectile extends ServerFlyingObject
 
 	/**
 	 * Constructor for a projectile
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param gravity
-	 * @param ID
-	 * @param image
-	 * @param speed
-	 * @param angle
 	 */
 	public ServerProjectile(double x, double y, ServerCreature owner,
 			double angle, String type)

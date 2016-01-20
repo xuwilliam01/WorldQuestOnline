@@ -15,8 +15,14 @@ import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
+/**
+ * Stores and displays the inventory for the client
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ClientInventory extends JPanel implements ActionListener{
 
+	//Pixel width, and inventory dimensions for capacity
 	public final static int INVENTORY_WIDTH = 300;
 	public final static int WIDTH = 4;
 	public final static int HEIGHT = 8;
@@ -24,17 +30,19 @@ public class ClientInventory extends JPanel implements ActionListener{
 	private ClientItem[][] inventory = new ClientItem[HEIGHT][WIDTH];
 	private ClientItem[] equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
 	private ClientItem equippedArmour = null;
-	private ClientItem equippedShield = null;
 
 	private Client client;
 
 	private JButton mainMenu;
 	private JButton switchTeams;
 
+	/**
+	 * Constructor
+	 * @param menu the button that will take the player back to the main menu
+	 */
 	public ClientInventory(JButton menu)
 	{
 		setDoubleBuffered(true);
-		//setBackground(Color.black);
 
 		setFocusable(true);
 		requestFocusInWindow();
@@ -55,6 +63,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 		switchTeams.addActionListener(this);
 		add(switchTeams);
 	}
+	
 	/**
 	 * Adds an item to the array given its image
 	 * @param image
@@ -100,6 +109,10 @@ public class ClientInventory extends JPanel implements ActionListener{
 		return 0;
 	}
 
+	/**
+	 * Decrease the amount of money in the inventory
+	 * @param amount the amount to decrease money by
+	 */
 	public void decreaseMoney(int amount)
 	{
 		for(int row = 0; row < inventory.length;row++)
@@ -107,6 +120,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MONEY_TYPE))
 				{
 					inventory[row][col].decreaseAmount(amount);
+					//If we have no money, remove the button
 					if(inventory[row][col].getAmount() <= 0)
 					{
 						inventory[row][col].setVisible(false);
@@ -119,8 +133,14 @@ public class ClientInventory extends JPanel implements ActionListener{
 				}
 	}
 
+	/**
+	 * Sell a given item
+	 * @param item the item to be sold
+	 * @param pos where the item is located
+	 */
 	public void sellItem(ClientItem item, int pos)
 	{
+		//If there is more than one of this item stacked, remove 1 occurence of it and tell the server
 		if(item.getAmount() > 1)
 		{
 			item.decreaseAmount();	
@@ -128,6 +148,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 		}
 		else
 		{
+			//Completely remove the item from the inventory
 			item.setVisible(false);
 			remove(item);
 			invalidate();
@@ -147,8 +168,14 @@ public class ClientInventory extends JPanel implements ActionListener{
 
 
 	}
+	/**
+	 * Removes an item from the inventory
+	 * @param item the item to be removed
+	 * @param pos where the item is located
+	 */
 	public void removeItem(ClientItem item, int pos)
 	{
+		//Drop 1 item at a time and tell the server
 		if(item.getAmount()  > 1)
 		{
 			item.decreaseAmount();
@@ -156,9 +183,11 @@ public class ClientInventory extends JPanel implements ActionListener{
 		}
 		else
 		{
+			//Remove the item completely
 			item.setVisible(false);
 			remove(item);
 			invalidate();
+			//If it is in the inventory
 			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected())
 				for(int row = 0; row < inventory.length;row++)
 					for(int col = 0; col < inventory[row].length;col++)
@@ -171,17 +200,14 @@ public class ClientInventory extends JPanel implements ActionListener{
 							return;
 						}
 					}
+			//If it's armour
 			else if(pos == ServerPlayer.DEFAULT_ARMOUR_SLOT)
 			{
 				equippedArmour = null;
 				client.print("DrW "+item.getEquipSlot());
 
 			}
-			else if(pos == ServerPlayer.DEFAULT_SHIELD_SLOT)
-			{
-				equippedShield = null;
-				client.print("DrW "+item.getEquipSlot());
-			}
+			//If it's a weapon
 			else
 			{
 				equippedWeapons[pos] = null;
@@ -206,11 +232,17 @@ public class ClientInventory extends JPanel implements ActionListener{
 
 	}
 
+	/**
+	 * Use an item (potion)
+	 * @param item the item to be used
+	 */
 	public void use(ClientItem item)
 	{
+		//If we are trying to use a potion that we cannot use, return
 		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && client.getHP() == client.getMaxHP())||(item.getType().equals(ServerWorld.MANA_POTION_TYPE) && client.getMana() == client.getMaxMana())||(item.getType().equals(ServerWorld.SPEED_POTION_TYPE)&& client.getSpeed() == ServerPlayer.MAX_HSPEED) || item.getType().equals(ServerWorld.JUMP_POTION_TYPE)&&(client.getJump() == ServerPlayer.MAX_VSPEED))
 			return;
 
+		//Decrease the amonut of the potion
 		if(item.getAmount()  > 1)
 		{
 			item.decreaseAmount();
@@ -218,6 +250,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 		}
 		else
 		{
+			//Remove it from the inventory
 			item.setVisible(false);
 			remove(item);
 			invalidate();
@@ -236,6 +269,9 @@ public class ClientInventory extends JPanel implements ActionListener{
 		}
 	}
 
+	/**
+	 * Clear the inventory except for the money
+	 */
 	public void clear()
 	{
 		ClientItem money = null;
@@ -252,6 +288,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 				}
 
 		inventory = new ClientItem[HEIGHT][WIDTH];
+		//Reset the money
 		if(money != null)
 		{
 			inventory[0][0] = money;
@@ -260,6 +297,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 			inventory[0][0].setCol(0);
 		}
 
+		//Remove all weapons
 		for(int weapon = 0; weapon < equippedWeapons.length;weapon++)
 			if(equippedWeapons[weapon] != null)
 				remove(equippedWeapons[weapon]);
@@ -284,9 +322,13 @@ public class ClientInventory extends JPanel implements ActionListener{
 		this.client = client;
 	}
 
+	/**
+	 * Paint the inventory
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		//Background
 		graphics.drawImage(Images.getImage("Inventory.png"),0,0,null);
 
 		//Draw stats
@@ -359,12 +401,6 @@ public class ClientInventory extends JPanel implements ActionListener{
 	}
 	public void setEquippedArmour(ClientItem equippedArmour) {
 		this.equippedArmour = equippedArmour;
-	}
-	public ClientItem getEquippedShield() {
-		return equippedShield;
-	}
-	public void setEquippedShield(ClientItem equippedShield) {
-		this.equippedShield = equippedShield;
 	}
 
 	public JButton getMenuButton()

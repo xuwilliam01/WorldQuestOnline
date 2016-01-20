@@ -41,7 +41,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
-	public static final int DEFAULT_SHIELD_SLOT = -2;
 
 	// The starting mana and hp for the player
 	public final static int PLAYER_START_HP = 100;
@@ -1074,11 +1073,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			getBody().destroy();
 			setBody(null);
 		}
-		else if (slot == DEFAULT_SHIELD_SLOT)
-		{
-			// dropItem(equippedShield);
-			// equippedShield = null;
-		}
 		else
 		{
 			dropItem(equippedWeapons[slot]);
@@ -1711,12 +1705,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				getBody().destroy();
 				setBody(null);
 				equippedArmour = null;
-			}
-			else if (slot == DEFAULT_SHIELD_SLOT)
-			{
-				// UNCOMMENT
-				// getInventory().add(equippedShield);
-				// equippedShield = null;
 			}
 			else
 			{

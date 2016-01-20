@@ -6,6 +6,11 @@ import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerProjectile;
 
+/**
+ * A castle for a given team
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerCastle extends ServerCreature
 {
 
@@ -20,6 +25,13 @@ public class ServerCastle extends ServerCreature
 	 */
 	private ServerCreature target;
 
+	/**
+	 * Constructor
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param team the team of the castle
+	 * @param world the world of the castle
+	 */
 	public ServerCastle(double x, double y, int team, ServerWorld world)
 	{
 		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "BLUE_CASTLE.png",
@@ -36,6 +48,7 @@ public class ServerCastle extends ServerCreature
 	 */
 	public void update()
 	{
+		//Try to purchase the next tier of goblin
 		if(currentGoblinTier < 5 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
@@ -51,6 +64,7 @@ public class ServerCastle extends ServerCreature
 
 		}
 
+		//Attack a target
 		if (getTarget() == null)
 		{
 			if (getWorld().getWorldCounter() % 15 == 0)

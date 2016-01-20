@@ -4,6 +4,11 @@ import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
 
+/**
+ * A slime enemy
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerSlime extends ServerEnemy
 {
 

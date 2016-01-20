@@ -19,6 +19,11 @@ import java.awt.geom.Line2D;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
+/**
+ * Displays a scrollable map of the server
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerGUI extends JPanel implements KeyListener,
 MouseWheelListener, MouseListener, MouseMotionListener
 {

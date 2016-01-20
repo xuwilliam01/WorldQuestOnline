@@ -34,16 +34,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	private int damage;
 
 	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param gravity
-	 * @param ID
-	 * @param image
-	 * @param maxHP
-	 * @param world
+	 * Constructor
 	 */
 	public ServerEnemy(double x, double y, int width, int height,
 			double relativeDrawX, double relativeDrawY, double gravity,

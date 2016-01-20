@@ -258,6 +258,11 @@ public class ServerObject
 				* (thisY - otherY));
 	}
 
+	/**
+	 * Makes a copy of a given object
+	 * @param original the original object
+	 * @return a copy of the original object
+	 */
 	public static ServerObject copy(ServerObject original)
 	{
 		switch(original.getType())

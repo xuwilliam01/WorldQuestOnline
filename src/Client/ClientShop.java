@@ -10,6 +10,11 @@ import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerVendor;
 
+/**
+ * The shop for the client. Works very similar to the inventory
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ClientShop extends JPanel{
 
 	public final static int SHOP_WIDTH = 560;
@@ -22,6 +27,10 @@ public class ClientShop extends JPanel{
 	private Image coinImage = Images.getImage("COIN.png");
 	private Image shopImage = Images.getImage("Shop.png");
 
+	/**
+	 * Constructor
+	 * @param client the client that is using the shop
+	 */
 	public ClientShop(Client client)
 	{
 		this.client = client;
@@ -35,8 +44,16 @@ public class ClientShop extends JPanel{
 		setLocation(1000,50);
 	}
 
+	/**
+	 * Add an item to the shop
+	 * @param imageName
+	 * @param type
+	 * @param amount
+	 * @param cost
+	 */
 	public void addItem(String imageName, String type, int amount, int cost)
 	{
+		//Check if it can be stacked
 		if(type.charAt(1)==ServerWorld.STACK_TYPE.charAt(1))
 			for(int row = 0; row < shopItems.length;row++)
 				for(int col = 0;col < shopItems[row].length;col++)
@@ -46,6 +63,7 @@ public class ClientShop extends JPanel{
 						return;
 					}
 
+		//Add it to the shop
 		for(int row = 0; row < shopItems.length;row++)
 			for(int col = 0; col < shopItems[0].length;col++)
 				if(shopItems[row][col] == null)
@@ -59,6 +77,10 @@ public class ClientShop extends JPanel{
 
 	}
 
+	/**
+	 * Remove an item from the shop
+	 * @param item the item to be removed
+	 */
 	public void removeItem(ClientShopItem item)
 	{
 
@@ -74,6 +96,11 @@ public class ClientShop extends JPanel{
 		return client;
 	}
 
+	/**
+	 * Checks if the shop is full given an object to be added
+	 * @param type the object that wants to be added
+	 * @return whether the shop is full or not
+	 */
 	public boolean isFull(String type)
 	{
 		for(int row = 0; row < shopItems.length;row++)
@@ -85,6 +112,9 @@ public class ClientShop extends JPanel{
 		return true;
 	}
 
+	/**
+	 * Paint the number of items and the cost of each item
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);

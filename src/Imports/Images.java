@@ -496,7 +496,6 @@ public class Images
 						images.add(new GameImage(
 								projectiles[no] + "_" + (angle) + ".png",
 								newImage,width,height));
-						//ImageIO.write(newImage, "PNG", new File(projectiles[no] + "_" + (actualAngle) + ".png"));
 					}
 				}
 				

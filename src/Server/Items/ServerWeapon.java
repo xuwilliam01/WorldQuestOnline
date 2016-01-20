@@ -2,12 +2,18 @@ package Server.Items;
 
 import Server.ServerWorld;
 
+/**
+ * Class for each weapon
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerWeapon extends ServerItem
 {
 
 	public final static int NUM_WEAPONS = 27;
 	public final static int NUM_TIERS = 5;
 
+	//Weapons
 	public final static int DADIAMOND_DMG = 35;
 	public final static int DAGOLD_DMG = 25;
 	public final static int DAIRON_DMG = 18;
@@ -70,6 +76,9 @@ public class ServerWeapon extends ServerItem
 
 	public final static int HALBERD_SPEED = 26;
 
+	/**
+	 * Constructor builds a weapon
+	 */
 	public ServerWeapon(double x, double y, String type)
 	{
 		super(x, y, type);
@@ -202,17 +211,12 @@ public class ServerWeapon extends ServerItem
 
 	/**
 	 * Creates a random weapon at specified location
-	 * 
-	 * @param x
-	 * @param y
-	 * @param min the minimum grade of the weapon
-	 * @param max the maximum grade of the weapon
-	 * @return
+	 * Better weapons are more rare
+	 * @return a new weapon
 	 */
 	public static ServerWeapon randomWeapon(double x, double y)
 	{
-		// Choose a type between the max and min grade
-		int randType = (int) (Math.random() * 200+1);
+		int randType = (int) (Math.random() * 202+1);
 		
 		if(randType == 1) return new ServerWeapon(x,y,ServerWorld.DARKWAND_TYPE);
 		else if(randType == 2) return new ServerWeapon(x,y,ServerWorld.MEGABOW_TYPE);
@@ -280,7 +284,7 @@ public class ServerWeapon extends ServerItem
 			return new ServerWeapon(x,y,ServerWorld.STEELBOW_TYPE);
 		else if(randType <= 196)
 			return new ServerWeapon(x,y,ServerWorld.FIREWAND_TYPE);
-		else if(randType <= 200)
+		else if(randType <= 202)
 			return new ServerWeapon(x,y,ServerWorld.ICEWAND_TYPE);
 
 
@@ -288,6 +292,9 @@ public class ServerWeapon extends ServerItem
 		return null;
 	}
 
+	/**
+	 * Creates a random weapon for the shop, meaning equal probabilities for each weapon
+	 */
 	public static ServerWeapon randomShopWeapon(double x, double y)
 	{
 		// Choose a type between the max and min grade

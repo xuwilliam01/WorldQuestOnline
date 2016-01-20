@@ -16,6 +16,11 @@ import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
 @SuppressWarnings("serial")
+/**
+ * An item in the inventory. It is also a button to identify clicking
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ClientItem extends JButton implements MouseListener{
 
 	private Image image;
@@ -29,6 +34,9 @@ public class ClientItem extends JButton implements MouseListener{
 	private int amount = 1;
 	private int cost;
 
+	/**
+	 * Constructor
+	 */
 	public ClientItem(String imageName, String type,int amount,int cost,int row, int col, ClientInventory inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName)));
@@ -43,8 +51,6 @@ public class ClientItem extends JButton implements MouseListener{
 
 		if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
 			equipSlot = ServerPlayer.DEFAULT_ARMOUR_SLOT;
-		if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
-			equipSlot = ServerPlayer.DEFAULT_SHIELD_SLOT;
 
 		setSize(Images.INVENTORY_IMAGE_SIDELENGTH+10,Images.INVENTORY_IMAGE_SIDELENGTH+10);
 		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29 + 5,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
@@ -176,6 +182,9 @@ public class ClientItem extends JButton implements MouseListener{
 		}
 	}
 
+	/**
+	 * Paint the amount of that this item occurs
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -286,12 +295,16 @@ public class ClientItem extends JButton implements MouseListener{
 	}
 
 	@Override
+	/**
+	 * React to user clicks
+	 */
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton()== MouseEvent.BUTTON1)
 		{
 			//If it can be equipped
 			if(type.charAt(1) == ServerWorld.EQUIP_TYPE.charAt(1))
 			{
+				//If this is already equipped remove it
 				if(selected)
 				{
 					
@@ -325,15 +338,12 @@ public class ClientItem extends JButton implements MouseListener{
 								{
 									inventory.setEquippedArmour(null);
 								}
-								else if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
-								{
-									inventory.setEquippedShield(null);
-								}
 								setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
 
 								return;
 							}
 				}
+				//If it is not equipped, equip it
 				else if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2))
 				{
 					//Only move to weapons if there is room
@@ -366,6 +376,7 @@ public class ClientItem extends JButton implements MouseListener{
 
 					repaint();
 				}
+				//If it is not equipped, equip it
 				else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
 				{
 					inventory.getInventory()[row][col] = null;
@@ -402,39 +413,6 @@ public class ClientItem extends JButton implements MouseListener{
 
 
 				}
-				else if(type.charAt(2) == ServerWorld.SHIELD_TYPE.charAt(2))
-				{
-					inventory.getInventory()[row][col] = null;
-					if(inventory.getEquippedShield() != null)
-					{
-						inventory.getEquippedShield().setBorder(BorderFactory.createEmptyBorder());
-						inventory.getEquippedShield().setSelected(false);
-
-						ClientItem[][] invGrid = inventory.getInventory();
-						boolean shouldBreak = false;
-						for(int row = 0; row < invGrid.length;row++)
-						{
-							for(int col = 0;col < invGrid[row].length;col++)
-								if(invGrid[row][col] == null)
-								{
-									invGrid[row][col] = inventory.getEquippedShield();
-									inventory.getEquippedShield().setRow(row);
-									inventory.getEquippedShield().setCol(col);
-									inventory.getEquippedShield().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
-									shouldBreak = true;
-									break;
-								}
-							if(shouldBreak)
-								break;
-						}
-					}
-					inventory.getClient().print("MS "+type);
-					selected = true;
-					inventory.setEquippedShield(this);
-					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(80,860);
-					repaint();
-				}
 			}
 			//If it's a potion use it
 			else if(type.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
@@ -443,6 +421,7 @@ public class ClientItem extends JButton implements MouseListener{
 			}
 
 		}
+		//Right clicks either sell of drop an item
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			//Sell item

@@ -10,6 +10,11 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 
+/**
+ * The basic item superclass
+ * @author Alex Raita & William Xu
+ *
+ */
 public abstract class ServerItem extends ServerObject {
 
 	private final static int NUM_ITEMS = 39;
@@ -29,11 +34,11 @@ public abstract class ServerItem extends ServerObject {
 	//Items despawn after 30 seconds, so store a variable for when the item was dropped
 	private long dropTime;
 
+	/**
+	 * Constructor that assigns and image and a value to every item
+	 */
 	public ServerItem(double x, double y, String type) {
-		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
-
-		
-		
+		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);	
 		switch (type) {
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");
@@ -197,6 +202,9 @@ public abstract class ServerItem extends ServerObject {
 
 	}
 
+	/**
+	 * Creates a random item
+	 */
 	public static ServerItem randomItem(double x, double y) {
 		int randType = (int) (Math.random() * 10 + 1);
 
@@ -215,6 +223,11 @@ public abstract class ServerItem extends ServerObject {
 
 	}
 
+	/**
+	 * Copies a given item
+	 * @param item the item to be copied
+	 * @return a copy of the item
+	 */
 	public static ServerItem copy(ServerItem item) {
 		switch (item.getType()) {
 		case ServerWorld.HP_POTION_TYPE:

@@ -5,6 +5,11 @@ import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Tools.RowCol;
 
+/**
+ * Accessories for the player
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerAccessory extends ServerObject
 {
 

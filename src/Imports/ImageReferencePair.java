@@ -26,6 +26,11 @@ public class ImageReferencePair {
 	private Image image;
 	private Color color;
 	
+	/**
+	 * Constructor
+	 * @param ref the reference
+	 * @param name the image name
+	 */
 	public ImageReferencePair(char ref, String name)
 	{
 		reference = ref;
@@ -34,10 +39,12 @@ public class ImageReferencePair {
 		GameImage gameImage = Images.getGameImage(name);
 		image = Images.getImage(name);
 		color = gameImage.getCentreColor();
-		
-		//Import all reference pairs
+
 	}
 	
+	/**
+	 * Imports the reference
+	 */
 	public static void importReferences() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",

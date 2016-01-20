@@ -33,6 +33,11 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerSlime;
 
+/**
+ * The world for the creator that draws everything
+ * @author Alex Raita & William Xu
+ *
+ */
 public class CreatorWorld extends JPanel implements KeyListener,
 ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {
@@ -103,6 +108,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	private CreatorObject[] tiles = new CreatorObject[256];
 
+	/**
+	 * Constructor
+	 * @param fileName
+	 */
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
 	{	
@@ -140,6 +149,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		addMouseMotionListener(this);
 	}
 
+	/**
+	 * Import the grid from a file if it exists. Otherwise make a new file
+	 */
 	public void importGrid() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader(new File(
@@ -175,6 +187,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		br.close();
 	}
 
+	/**
+	 * Clear the grid completely
+	 */
 	public void clearGrid()
 	{
 		for (int row = 0; row < grid.length; row++)
@@ -193,6 +208,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		this.grid = grid;
 	}
 	
+	/**
+	 * Read in the images from the config file and make new objects
+	 */
 	public void readImages() throws NumberFormatException, IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",
@@ -211,6 +229,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		br.close();
 	}
 
+	/**
+	 * Draw the world
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -253,25 +274,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			endColumn = grid[0].length - 1;
 		}
 
+		//If the world can be edited draw the actual images
 		if (isEditable)
 		{
 			for (int row = startRow; row <= endRow; row++)
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					//					if (grid[row][column] == ' ')
-					//					{
-					//						graphics.setColor(LIGHT_GRAY);
-					//						graphics.fillRect(
-					//								(int) (ServerGUI.CENTRE_X
-					//										+ column
-					//										* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-					//								(int) (ServerGUI.CENTRE_Y
-					//										+ row
-					//										* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-					//								(int) (ServerWorld.TILE_SIZE / objectFactor ),
-					//								(int) (ServerWorld.TILE_SIZE / objectFactor ));
-					//					}
 					if (grid[row][column] != ' ')
 					{
 						graphics.drawImage(
@@ -288,16 +297,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				}
 			}
 		}
+		//If the world can't be edited, draw coloured rectangles
 		else
 		{
 			for (int row = startRow; row <= endRow; row++)
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					//					if (grid[row][column] == ' ')
-					//					{
-					//						graphics.setColor(LIGHT_GRAY);
-					//					}
 					if (grid[row][column] != ' ')
 					{
 						graphics.setColor(tiles[grid[row][column]].getColor());
@@ -312,14 +318,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
 								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					}
-					// graphics.setColor(Color.black);
-					// graphics.drawRect((int) (ServerGUI.CENTRE_X + column*
-					// (ServerWorld.TILE_SIZE / objectFactor) - posX),
-					// (int) (ServerGUI.CENTRE_Y + row
-					// * (ServerWorld.TILE_SIZE / objectFactor) - posY),
-					// (int)(ServerWorld.TILE_SIZE /
-					// objectFactor+0.5),(int)(ServerWorld.TILE_SIZE /
-					// objectFactor+0.5));
 
 				}
 			}
@@ -341,7 +339,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 		}
 
-		
+		//If we are highlighting an area to draw multiple blocks in
 		if (highlightingArea)
 		{
 			canDrawObject = false;
@@ -389,6 +387,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				height = -height;
 			}
 
+			//If we let go of the mouse, colour everything in
 			if (highlight)
 			{
 				highlight = false;
@@ -403,6 +402,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				graphics.drawRect(startX, startY, width, height);
 			}
 		}
+		//Draw a white box around where we can to place a tile
 		else if (selectedTile != '-' && selectedBlock != null
 				&& selectedBlock[0] >= startRow && selectedBlock[0] <= endRow
 				&& selectedBlock[1] >= startColumn
@@ -479,6 +479,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 	}
 
+	/**
+	 * Checks whether an object can fit in a given area
+	 */
 	public boolean canFit(int startRow, int startCol, int width, int height, boolean isTile)
 	{
 		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
@@ -502,6 +505,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		return true;
 	}
 
+	/**
+	 * Updates the position of the user in the map
+	 */
 	public void update()
 	{
 		if (up)
@@ -517,6 +523,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		repaint();
 	}
 
+	/**
+	 * Gets a row and column given x and y positions
+	 */
 	public int[] getRowCol(int x, int y)
 	{
 		int col = (int) ((x - ServerGUI.CENTRE_X + posX) / (ServerWorld.TILE_SIZE / objectFactor));
@@ -524,6 +533,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		return new int[] { row, col };
 	}
 
+	/**
+	 * Saves the world
+	 */
 	public void save() throws FileNotFoundException
 	{	
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
@@ -546,6 +558,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		output.close();
 	}
 
+	/**
+	 * Sets a new height
+	 */
 	public void setHeight(int height)
 	{
 		char[][] currentGrid = grid.clone();
@@ -561,6 +576,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 	}
 
+	/**
+	 * Sets a new width
+	 */
 	public void setWidth(int width)
 	{
 		char[][] currentGrid = grid.clone();
@@ -649,7 +667,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 	}
 
-	@Override
+	/**
+	 * Timer event that checks if adding or deleting tiles
+	 */
 	public void actionPerformed(ActionEvent arg0)
 	{
 		try{
@@ -716,6 +736,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	}
 
 	@Override
+	/**
+	 * Set some variables when the mouse is clicked
+	 */
 	public void mousePressed(MouseEvent event)
 	{
 		if (event.getButton() == MouseEvent.BUTTON1)
@@ -759,6 +782,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	}
 
 	@Override
+	/**
+	 * When the mouse is released, set variables accordingly
+	 */
 	public void mouseReleased(MouseEvent event)
 	{
 		if (event.getButton() == MouseEvent.BUTTON1)
@@ -771,7 +797,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		highlight = true;
 	}
 
-	@Override
+	/**
+	 * Move the x and y position of the player
+	 */
 	public void mouseDragged(MouseEvent event)
 	{
 		if ((ctrlPressed || !isEditable || selectedTile =='-')
@@ -793,6 +821,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	}
 
 	@Override
+	/**
+	 * Scroll in and out
+	 */
 	public void mouseWheelMoved(MouseWheelEvent scroll)
 	{
 		int notches = scroll.getWheelRotation();

@@ -5,11 +5,22 @@ import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
+/**
+ * A vendor that sells items
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerVendor extends ServerCreature {
 
 	public final static int MAX_INVENTORY = 60;
 	private boolean isBusy = false;
 
+	/**
+	 * Constructor
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param world the world
+	 */
 	public ServerVendor(double x, double y, ServerWorld world) {
 		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, "VENDOR_RIGHT.png", ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
 
@@ -22,6 +33,13 @@ public class ServerVendor extends ServerCreature {
 
 	}
 
+	/**
+	 * Constructor
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @param world the world the vendor is in
+	 * @param image the image for the vendor
+	 */
 	public ServerVendor(double x, double y, ServerWorld world, String image) {
 		super(x, y, -1,-1,0,0, ServerWorld.GRAVITY, image, ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world,false);
 
@@ -29,7 +47,9 @@ public class ServerVendor extends ServerCreature {
 
 	}
 
-
+	/**
+	 * Make the vendor's shop
+	 */
 	public void makeShop()
 	{
 		for(int potion = 0; potion < 10; potion++)
@@ -37,7 +57,7 @@ public class ServerVendor extends ServerCreature {
 		addItem(new ServerPotion(getX(),getY(),ServerWorld.DMG_POTION_TYPE));
 		addItem(new ServerPotion(getX(),getY(),ServerWorld.JUMP_POTION_TYPE));
 		addItem(new ServerPotion(getX(),getY(),ServerWorld.SPEED_POTION_TYPE));
-		
+
 		for(int weapon = 0; weapon < 20; weapon++)
 			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
 
@@ -69,7 +89,7 @@ public class ServerVendor extends ServerCreature {
 
 		//Always have the steel armour
 		addItem(new ServerArmour(getX(),getY(),ServerWorld.STEEL_ARMOUR));
-	
+
 	}
 
 	public boolean isBusy()

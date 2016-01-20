@@ -11,6 +11,11 @@ import Client.Client;
 import Client.ClientInventory;
 import Server.Creatures.ServerPlayer;
 
+/**
+ * Frame for the world creator
+ * @author Alex Raita & William Xu
+ *
+ */
 public class CreatorFrame extends JFrame{
 
 	/**
@@ -21,6 +26,8 @@ public class CreatorFrame extends JFrame{
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 	    DisplayMode dm = gs.getDisplayMode();
+	    
+	    //Match to the screen size
 	    Client.SCREEN_WIDTH = dm.getWidth()-300;
 	    Client.SCREEN_HEIGHT = dm.getHeight();
 	    

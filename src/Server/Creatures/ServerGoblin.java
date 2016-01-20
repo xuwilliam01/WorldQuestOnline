@@ -10,6 +10,11 @@ import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
+/**
+ * A goblin class
+ * @author alex
+ *
+ */
 public class ServerGoblin extends ServerCreature
 {
 
@@ -111,11 +116,6 @@ public class ServerGoblin extends ServerCreature
 	
 	/**
 	 * Constructor
-	 * @param x
-	 * @param y
-	 * @param world
-	 * @param team
-	 * @param type
 	 */
 	public ServerGoblin(double x, double y, ServerWorld world, int team, int maxGoblinLevel)
 	{

@@ -8,6 +8,11 @@ import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 
+/**
+ * Class for displaying weapon swing
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerWeaponSwing extends ServerObject
 {
 

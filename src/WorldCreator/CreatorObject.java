@@ -13,6 +13,11 @@ import Imports.GameImage;
 import Imports.ImageReferencePair;
 import Imports.Images;
 
+/**
+ * An object that can be selected in the world creator
+ * @author Alex Raita & William Xu
+ *
+ */
 public class CreatorObject extends JButton implements MouseListener{
 
 
@@ -20,6 +25,14 @@ public class CreatorObject extends JButton implements MouseListener{
 	private ImageReferencePair imageRef;
 	private boolean isTile;
 
+	/**
+	 * Constructor
+	 * @param ref the reference
+	 * @param name the image name
+	 * @param isTile whether it is a tile or not
+	 * @param description the description for the tool tip
+	 * @param world the world it will be placed in
+	 */
 	public CreatorObject(char ref, String name, boolean isTile, String description,CreatorWorld world)
 	{
 		if(isTile)
@@ -98,6 +111,9 @@ public class CreatorObject extends JButton implements MouseListener{
 	}
 
 	@Override
+	/**
+	 * If we select this object. Highlight it
+	 */
 	public void mousePressed(MouseEvent e) {
 		world.setSelectedTile(imageRef.getReference());
 		setBorder(BorderFactory.createLineBorder(Color.white));

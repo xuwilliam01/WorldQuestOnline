@@ -16,6 +16,11 @@ import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
+/**
+ * Item for the client shop. Works similar to ClientItem
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ClientShopItem extends JButton implements ActionListener{
 
 	private String imageName;
@@ -27,6 +32,9 @@ public class ClientShopItem extends JButton implements ActionListener{
 	private ClientShop inventory;
 	private Image image;
 
+	/**
+	 * Constructor
+	 */
 	public ClientShopItem(String imageName, String type,int amount,int cost,int row, int col, ClientShop inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName)));
@@ -170,9 +178,13 @@ public class ClientShopItem extends JButton implements ActionListener{
 		}
 	}
 
+	/**
+	 * If the item is clicked buy it
+	 */
 	public void actionPerformed(ActionEvent event) 
 	{
 		System.out.println("clicked");
+		//If the user has enough money
 		if(inventory.getClient().getMoney() >= cost)
 		{
 			inventory.getClient().print("B "+type);
@@ -188,6 +200,9 @@ public class ClientShopItem extends JButton implements ActionListener{
 		repaint();
 	}
 
+	/**
+	 * Paint the amount of the item
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);

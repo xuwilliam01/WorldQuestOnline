@@ -11,7 +11,14 @@ import Server.Items.ServerPotion;
 import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
+/**
+ * A creature in the world
+ * This encompasses players, enemies, chests, vendors, castles
+ * @author Alex Raita & William Xu
+ *
+ */
 public abstract class ServerCreature extends ServerObject {
+	
 	/**
 	 * Teams
 	 */
@@ -93,18 +100,6 @@ public abstract class ServerCreature extends ServerObject {
 
 	/**
 	 * Constructor for a creature
-	 * 
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param relativeDrawX
-	 * @param relativeDrawY
-	 * @param gravity
-	 * @param image
-	 * @param type
-	 * @param maxHP
-	 * @param world
 	 */
 	public ServerCreature(double x, double y, int width, int height, double relativeDrawX, double relativeDrawY,
 			double gravity, String image, String type, int maxHP, ServerWorld world, boolean attackable) {

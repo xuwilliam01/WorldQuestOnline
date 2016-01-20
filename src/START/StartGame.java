@@ -7,6 +7,11 @@ import javax.swing.JFrame;
 
 import Menu.MainMenu;
 
+/**
+ * Starts the game
+ * @author Alex Raita & William Xu
+ *
+ */
 public class StartGame {
 
 	public static void main(String[] args) {
@@ -14,6 +19,10 @@ public class StartGame {
 
 	}
 	
+	/**
+	 * Restarts the game on a new frame
+	 * @param oldFrame the frame that should be closed
+	 */
 	public static void restart(JFrame oldFrame)
 	{
 		//oldFrame.dispatchEvent(new WindowEvent(oldFrame,WindowEvent.WINDOW_CLOSING));		

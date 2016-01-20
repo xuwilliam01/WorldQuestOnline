@@ -5,6 +5,11 @@ import java.awt.Image;
 import Imports.ImageReferencePair;
 import Server.ServerWorld;
 
+/**
+ * An object in the creator that will be drawn
+ * @author Alex Raita & William Xu
+ *
+ */
 public class CreatorWorldObject {
 
 	private int col;
@@ -14,6 +19,9 @@ public class CreatorWorldObject {
 	private Image image;
 	private char ref;
 	
+	/**
+	 * Constructor
+	 */
 	public CreatorWorldObject(int row, int col, char ref)
 	{
 		this.col = col;
@@ -24,6 +32,9 @@ public class CreatorWorldObject {
 		this.height = image.getHeight(null)/ServerWorld.TILE_SIZE;
 	}
 
+	/**
+	 * Checks collisions with another object
+	 */
 	public boolean collidesWith(int x1, int y1, int x2, int y2)
 	{
 		if (col < x2 && (col + width) > x1 && row < y2 && (row + height) > y1)

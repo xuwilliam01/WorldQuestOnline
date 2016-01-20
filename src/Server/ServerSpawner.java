@@ -3,6 +3,11 @@ package Server;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
+/**
+ * Spawns a given creature to the world
+ * @author Alex Raita & William Xu
+ *
+ */
 public class ServerSpawner extends ServerObject
 {
 
@@ -10,6 +15,13 @@ public class ServerSpawner extends ServerObject
 	private int delay;
 	private ServerWorld world;
 
+	/**
+	 * Constructor
+	 * @param x the x-coordinate of the spawner
+	 * @param y the y-coordinate of the spawner
+	 * @param creatureType the type of creature that will be spawned
+	 * @param world the world the creature will be added in
+	 */
 	public ServerSpawner(double x, double y, ServerCreature creatureType,
 			ServerWorld world)
 	{

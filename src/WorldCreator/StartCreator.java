@@ -2,11 +2,16 @@ package WorldCreator;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
-
+/**
+ * Starts the world creator
+ * @author Alex Raita & William Xu
+ *
+ */
 public class StartCreator {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 
+		//Get a file name
 		String fileName = "";
 		while(true)
 		{
@@ -17,6 +22,7 @@ public class StartCreator {
 				System.exit(0);
 		}
 
+		//Create the frame and add the world and items
 		CreatorFrame frame = new CreatorFrame();
 		CreatorWorld world = new CreatorWorld(fileName);
 		CreatorItems items = new CreatorItems(world,null);

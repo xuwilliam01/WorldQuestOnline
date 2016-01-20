@@ -16,6 +16,11 @@ import javax.swing.Timer;
 
 import Imports.Images;
 
+/**
+ * Stores the possible items that can be added to the world
+ * @author Alex Raita & William Xu
+ *
+ */
 public class CreatorItems extends JPanel implements ActionListener{
 
 	public static final int WIDTH = 300;
@@ -38,6 +43,11 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 	private Timer paintTimer = new Timer(10,this);
 
+	/**
+	 * Consutrcotr
+	 * @param world the world to be painted in
+	 * @param menu a button go back to the main menu
+	 */
 	public CreatorItems(CreatorWorld world, JButton menu)
 	{
 		setDoubleBuffered(true);
@@ -85,6 +95,9 @@ public class CreatorItems extends JPanel implements ActionListener{
 		paintTimer.start();
 	}
 
+	/**
+	 * Add buttons to the world for selecting objects to add the to the world
+	 */
 	public void addButtons()
 	{
 		int tileRow = 0;
@@ -112,6 +125,9 @@ public class CreatorItems extends JPanel implements ActionListener{
 		repaint();
 	}
 
+	/**
+	 * Paint the background and the title
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -123,8 +139,12 @@ public class CreatorItems extends JPanel implements ActionListener{
 	}
 
 	@Override
+	/**
+	 * If we click a button
+	 */
 	public void actionPerformed(ActionEvent button) {
 
+		//Save
 		if(button.getSource() == save)
 			try {
 				world.save();
@@ -132,10 +152,12 @@ public class CreatorItems extends JPanel implements ActionListener{
 				System.out.println("Was not able to save file");
 				e.printStackTrace();
 			}
+		//Clear the world
 		else if(button.getSource() == clear)
 		{
 			world.clearGrid();
 		}
+		//Update the width
 		else if(button.getSource() == updateWidth)
 		{
 			while(true)
@@ -156,10 +178,12 @@ public class CreatorItems extends JPanel implements ActionListener{
 					// TODO Auto-generated catch block
 				}
 		}
+		//Repaint this
 		else if(button.getSource() == paintTimer)
 		{
 			repaint();
 		}
+		//Update the height
 		else
 		{
 			while(true)
