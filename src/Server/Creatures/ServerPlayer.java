@@ -1064,7 +1064,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		newMoney.makeExist();
 		if (vendor != null)
 			newMoney.setSource(vendor);
-		newMoney.startCoolDown();
+		newMoney.startCoolDown(world.getWorldCounter());
 		world.add(newMoney);
 	}
 

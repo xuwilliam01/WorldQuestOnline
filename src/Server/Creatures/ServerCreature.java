@@ -265,7 +265,7 @@ public abstract class ServerCreature extends ServerObject
 		item.setX(getX() + getWidth() / 2);
 		item.setY(getY() + getHeight() / 2 - item.getHeight());
 		item.makeExist();
-		item.startCoolDown();
+		item.startCoolDown(world.getWorldCounter());
 		item.setSource(this);
 		world.add(item);
 		item.setOnSurface(false);

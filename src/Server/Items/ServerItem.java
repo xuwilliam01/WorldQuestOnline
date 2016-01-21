@@ -1,10 +1,5 @@
 package Server.Items;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 import Imports.Images;
 import Server.ServerObject;
 import Server.ServerWorld;
@@ -27,11 +22,7 @@ public abstract class ServerItem extends ServerObject
 	 * The creature who owns or previously owned the item
 	 */
 	private ServerCreature source;
-	
-	/**
-	 * The timer for which an item cannot be picked up after immediately being dropped
-	 */
-	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
+
 
 	/**
 	 * The money value of the item
@@ -48,6 +39,11 @@ public abstract class ServerItem extends ServerObject
 	 * dropped
 	 */
 	private long dropTime;
+	
+	/**
+	 * When the cooldown was started
+	 */
+	private long coolDownStart;
 
 	/**
 	 * Constructor that assigns and image and a value to every item
@@ -300,29 +296,29 @@ public abstract class ServerItem extends ServerObject
 	/**
 	 * Start a cooldown before the item can be picked up again so it isn't
 	 * instantly picked up by the creature that dropped it
+	 * @param start the start time of the cooldown
 	 */
-	public void startCoolDown()
+	public void startCoolDown(long start)
 	{
 		hasCoolDown = true;
-
-		// Start a timer for when to set cooldown to false
-		coolDownTimer.start();
+		coolDownStart = start;
 	}
 
 	/**
-	 * Thread running the cooldown for an item
-	 * @author William and Alex
-	 *
+	 * Checks if the item has a cooldown and if it should be destroyed
+	 * @param currentTime the current world time
 	 */
-	private class CoolDownTimer implements ActionListener
+	public void update(long currentTime)
 	{
-		public void actionPerformed(ActionEvent e)
+		if(hasCoolDown && currentTime - coolDownStart > 120)
 		{
 			hasCoolDown = false;
-			coolDownTimer.stop();
+		}
+		else if(currentTime - dropTime > 1800)
+		{
+			destroy();
 		}
 	}
-
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////

@@ -415,8 +415,7 @@ public class ServerWorld
 							&& object.isOnSurface())
 					{
 						object.setHSpeed(0);
-						if(worldCounter - ((ServerItem)object).getDropTime() > 1800)
-							object.destroy();
+						((ServerItem)object).update(worldCounter);
 					}
 
 					// Add the object to all the object tiles that it collides
