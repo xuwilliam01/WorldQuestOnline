@@ -205,26 +205,6 @@ public class ServerEngine implements Runnable, ActionListener
 		world.add(newPlayer);
 	}
 
-	public int nextTeam()
-	{
-		return ++lastTeam;
-	}
-
-	public ServerWorld getWorld()
-	{
-		return world;
-	}
-
-	public static ArrayList<ServerPlayer> getListOfPlayers()
-	{
-		return listOfPlayers;
-	}
-
-	public static void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers)
-	{
-		listOfPlayers = newListOfPlayers;
-	}
-
 	/**
 	 * Use and reserve the next available ID in the list of booleans
 	 * @return the id
@@ -243,22 +223,22 @@ public class ServerEngine implements Runnable, ActionListener
 	}
 
 	@Override
+	/**
+	 * Update the game after every game tick (15 milliseconds)
+	 */
 	public void actionPerformed(ActionEvent e)
 	{
-		// Update the FPS counter
+		// Update the FPS counter on the server gui
 		if (FPScounter >= (1000.0/UPDATE_RATE + 0.5))
 		{
 			FPScounter = 0;
 			currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
 			startTime = System.currentTimeMillis();
 		}
-
 		FPScounter ++;
 
-
-		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
-
 		// Remove disconnected players
+		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 		for (ServerPlayer player : listOfPlayers)
 		{
 			if (player.isDisconnected())
@@ -266,13 +246,12 @@ public class ServerEngine implements Runnable, ActionListener
 				listOfRemovedPlayers.add(player);
 			}
 		}
-
 		for (ServerPlayer player : listOfRemovedPlayers)
 		{
 			listOfPlayers.remove(player);
 		}
 
-		// Move all the objects around
+		// Move all the objects around and update them
 		world.update();
 
 		// Update all the clients with the new player data
@@ -285,17 +264,31 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 	}
 
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public int getCurrentFPS()
 	{
 		return currentFPS;
 	}
-
 	public void setCurrentFPS(int currentFPS)
 	{
 		this.currentFPS = currentFPS;
 	}
-
-
-
-
+	public int nextTeam()
+	{
+		return ++lastTeam;
+	}
+	public ServerWorld getWorld()
+	{
+		return world;
+	}
+	public static ArrayList<ServerPlayer> getListOfPlayers()
+	{
+		return listOfPlayers;
+	}
+	public static void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers)
+	{
+		listOfPlayers = newListOfPlayers;
+	}
 }

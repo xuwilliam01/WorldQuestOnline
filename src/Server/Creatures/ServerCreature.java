@@ -1,6 +1,6 @@
 package Server.Creatures;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 import Effects.ServerDamageIndicator;
 import Server.ServerObject;
@@ -12,13 +12,14 @@ import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
 /**
- * A creature in the world
- * This encompasses players, enemies, chests, vendors, castles
+ * A creature in the world This encompasses players, enemies, chests, vendors,
+ * castles
  * @author Alex Raita & William Xu
  *
  */
-public abstract class ServerCreature extends ServerObject {
-	
+public abstract class ServerCreature extends ServerObject
+{
+
 	/**
 	 * Teams
 	 */
@@ -101,8 +102,11 @@ public abstract class ServerCreature extends ServerObject {
 	/**
 	 * Constructor for a creature
 	 */
-	public ServerCreature(double x, double y, int width, int height, double relativeDrawX, double relativeDrawY,
-			double gravity, String image, String type, int maxHP, ServerWorld world, boolean attackable) {
+	public ServerCreature(double x, double y, int width, int height,
+			double relativeDrawX, double relativeDrawY,
+			double gravity, String image, String type, int maxHP,
+			ServerWorld world, boolean attackable)
+	{
 		super(x, y, width, height, gravity, image, type);
 
 		this.attackable = attackable;
@@ -113,7 +117,7 @@ public abstract class ServerCreature extends ServerObject {
 		this.maxHP = maxHP;
 		HP = maxHP;
 		this.world = world;
-		
+
 		direction = "RIGHT";
 		nextDirection = "RIGHT";
 
@@ -121,18 +125,20 @@ public abstract class ServerCreature extends ServerObject {
 		knockBackResistance = Math.sqrt((getWidth() * getHeight())) / 16;
 	}
 
-	public boolean isAttackable() {
+	public boolean isAttackable()
+	{
 		return attackable;
 	}
 
-	public void setAttackable(boolean attackable) {
+	public void setAttackable(boolean attackable)
+	{
 		this.attackable = attackable;
 	}
 
-	public void setTeam(int team) 
+	public void setTeam(int team)
 	{
 		this.team = team;
-		
+
 		if (team == ServerPlayer.BLUE_TEAM)
 		{
 			world.addToBlue(this);
@@ -142,7 +148,7 @@ public abstract class ServerCreature extends ServerObject {
 			world.addToRed(this);
 		}
 	}
-	
+
 	@Override
 	public void destroy()
 	{
@@ -157,15 +163,18 @@ public abstract class ServerCreature extends ServerObject {
 		}
 	}
 
-	public int getTeam() {
+	public int getTeam()
+	{
 		return team;
 	}
 
-	public int getMaxHP() {
+	public int getMaxHP()
+	{
 		return maxHP;
 	}
 
-	public int getHP() {
+	public int getHP()
+	{
 		return HP;
 	}
 
@@ -174,7 +183,8 @@ public abstract class ServerCreature extends ServerObject {
 	 * 
 	 * @param HP
 	 */
-	public void setHP(int HP) {
+	public void setHP(int HP)
+	{
 		this.HP = HP;
 	}
 
@@ -184,36 +194,46 @@ public abstract class ServerCreature extends ServerObject {
 	 * 
 	 * @param amount
 	 */
-	public void inflictDamage(int amount, ServerCreature source) {
-		if (HP > 0) {
+	public void inflictDamage(int amount, ServerCreature source)
+	{
+		if (HP > 0)
+		{
 			HP -= amount;
 
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
-			double damageY = Math.random() * getHeight() / 2 + getY() + getHeight()/4;
+			double damageY = Math.random() * getHeight() / 2 + getY()
+					+ getHeight() / 4;
 			char colour = ServerDamageIndicator.YELLOW_TEXT;
 
-			if (getType().equals(ServerWorld.PLAYER_TYPE)) {
+			if (getType().equals(ServerWorld.PLAYER_TYPE))
+			{
 				colour = ServerDamageIndicator.RED_TEXT;
 			}
 
-			world.add(new ServerDamageIndicator(damageX, damageY, Integer.toString(amount), colour, world));
+			world.add(new ServerDamageIndicator(damageX, damageY, Integer
+					.toString(amount), colour, world));
 		}
 
-		if (HP <= 0) {
+		// Drop the creature's inventory and kill it when its HP drops below 0
+		if (HP <= 0)
+		{
 			destroy();
 			dropInventory();
 		}
 	}
 
 	/**
-	 * Drop every item in the creature's inventory
+	 * Drop every item in the creature's inventory, except for money in the case of the player
 	 */
-	public void dropInventory() {
+	public void dropInventory()
+	{
 		ServerItem money = null;
-		for (ServerItem item : inventory) {
+		for (ServerItem item : inventory)
+		{
 			if (item.getType().equals(ServerWorld.MONEY_TYPE)
-					&& getType().substring(0, 2).equals(ServerWorld.PLAYER_TYPE))
+					&& getType().substring(0, 2)
+							.equals(ServerWorld.PLAYER_TYPE))
 				money = item;
 			else
 				dropItem(item);
@@ -225,14 +245,13 @@ public abstract class ServerCreature extends ServerObject {
 
 	}
 
-	public ArrayList<ServerItem> getInventory() {
-		return inventory;
-	}
-
-	public void addItem(ServerItem item) {
+	public void addItem(ServerItem item)
+	{
 		if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
-			for (ServerItem sItem : inventory) {
-				if (item.getType().equals(sItem.getType())) {
+			for (ServerItem sItem : inventory)
+			{
+				if (item.getType().equals(sItem.getType()))
+				{
 					sItem.increaseAmount(item.getAmount());
 					return;
 				}
@@ -240,7 +259,8 @@ public abstract class ServerCreature extends ServerObject {
 		inventory.add(item);
 	}
 
-	public void dropItem(ServerItem item) {
+	public void dropItem(ServerItem item)
+	{
 
 		item.setX(getX() + getWidth() / 2);
 		item.setY(getY() + getHeight() / 2 - item.getHeight());
@@ -251,60 +271,74 @@ public abstract class ServerCreature extends ServerObject {
 		item.setOnSurface(false);
 		item.setVSpeed(-Math.random() * 15 - 5);
 
-		if (HP <= 0) {
+		if (HP <= 0)
+		{
 			int direction = Math.random() < 0.5 ? -1 : 1;
 			item.setHSpeed(direction * (Math.random() * 5 + 3));
-		} else
+		}
+		else
 			item.setHSpeed(Math.random() * 5 + 3);
 
 	}
 
-	public void use(String item) {
+	public void use(String item)
+	{
 		ServerItem toRemove = null;
-		for (ServerItem sItem : inventory) {
-			if (sItem.getType().equals(item)) {
-				toRemove = sItem;			
-					switch (item) {
-					case ServerWorld.HP_POTION_TYPE:
-						HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
-						break;
-					case ServerWorld.MAX_HP_TYPE:
-						maxHP += ServerPotion.MAX_HP_INCREASE;
-						break;
-					case ServerWorld.MANA_POTION_TYPE:
-						ServerPlayer thisPlayer = (ServerPlayer)this;
-						thisPlayer.setMana( Math.min(thisPlayer.getMaxMana(), thisPlayer.getMana()+ ServerPotion.MANA_AMOUNT));
-						break;
-					case ServerWorld.MAX_MANA_TYPE:
-						thisPlayer = (ServerPlayer)this;
-						thisPlayer.setMaxMana( thisPlayer.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
-						break;
-					case ServerWorld.DMG_POTION_TYPE:
-						baseDamage += ServerPotion.DMG_AMOUNT;
-						break;
-					case ServerWorld.SPEED_POTION_TYPE:
-						thisPlayer = (ServerPlayer)this;
-						thisPlayer.setHorizontalMovement(thisPlayer.getHorizontalMovement()+ServerPotion.SPEED_AMOUNT);
-						break;
-					case ServerWorld.JUMP_POTION_TYPE:
-						thisPlayer = (ServerPlayer)this;
-						thisPlayer.setVerticalMovement(thisPlayer.getVerticalMovement()+ServerPotion.JUMP_AMOUNT);
-					
-					}				
+		for (ServerItem sItem : inventory)
+		{
+			if (sItem.getType().equals(item))
+			{
+				toRemove = sItem;
+				switch (item)
+				{
+				case ServerWorld.HP_POTION_TYPE:
+					HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
+					break;
+				case ServerWorld.MAX_HP_TYPE:
+					maxHP += ServerPotion.MAX_HP_INCREASE;
+					break;
+				case ServerWorld.MANA_POTION_TYPE:
+					ServerPlayer thisPlayer = (ServerPlayer) this;
+					thisPlayer.setMana(Math.min(thisPlayer.getMaxMana(),
+							thisPlayer.getMana() + ServerPotion.MANA_AMOUNT));
+					break;
+				case ServerWorld.MAX_MANA_TYPE:
+					thisPlayer = (ServerPlayer) this;
+					thisPlayer.setMaxMana(thisPlayer.getMaxMana()
+							+ ServerPotion.MAX_MANA_INCREASE);
+					break;
+				case ServerWorld.DMG_POTION_TYPE:
+					baseDamage += ServerPotion.DMG_AMOUNT;
+					break;
+				case ServerWorld.SPEED_POTION_TYPE:
+					thisPlayer = (ServerPlayer) this;
+					thisPlayer.setHorizontalMovement(thisPlayer
+							.getHorizontalMovement()
+							+ ServerPotion.SPEED_AMOUNT);
+					break;
+				case ServerWorld.JUMP_POTION_TYPE:
+					thisPlayer = (ServerPlayer) this;
+					thisPlayer.setVerticalMovement(thisPlayer
+							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+
+				}
 			}
 		}
 
-		if(toRemove != null)
+		if (toRemove != null)
 			if (toRemove.getAmount() > 1)
 				toRemove.decreaseAmount();
 			else
 				inventory.remove(toRemove);
 	}
 
-	public void drop(String item) {
+	public void drop(String item)
+	{
 		ServerItem toRemove = null;
-		for (ServerItem sItem : inventory) {
-			if (sItem.getType().equals(item)) {
+		for (ServerItem sItem : inventory)
+		{
+			if (sItem.getType().equals(item))
+			{
 				toRemove = sItem;
 				if (toRemove.getAmount() > 1)
 					dropItem(ServerItem.copy(sItem));
@@ -319,91 +353,89 @@ public abstract class ServerCreature extends ServerObject {
 		else
 			inventory.remove(toRemove);
 	}
-
-	public double getKnockBackResistance() {
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
+	public ArrayList<ServerItem> getInventory()
+	{
+		return inventory;
+	}
+	public double getKnockBackResistance()
+	{
 		return knockBackResistance;
 	}
-
-	public void setKnockBackResistance(double knockBackResistance) {
+	public void setKnockBackResistance(double knockBackResistance)
+	{
 		this.knockBackResistance = knockBackResistance;
 	}
-
-	public ServerWorld getWorld() {
+	public ServerWorld getWorld()
+	{
 		return world;
 	}
-
-	public void setWorld(ServerWorld world) {
+	public void setWorld(ServerWorld world)
+	{
 		this.world = world;
 	}
-
-	public String getDirection() {
+	public String getDirection()
+	{
 		return direction;
 	}
-
-	public void setDirection(String direction) {
+	public void setDirection(String direction)
+	{
 		this.direction = direction;
 	}
-
 	/**
-	 * Get the location to draw the image of the creature
-	 * 
+	 * Get the location to draw the image of the creature (used when the image dimensions are different from the hitbox)
 	 * @return
 	 */
-	public int getDrawX() {
+	public int getDrawX()
+	{
 		return (int) (getX() + relativeDrawX + 0.5);
 	}
-
 	/**
-	 * Get the location to draw the image of the creature
-	 * 
+	 * Get the location to draw the image of the creature (used when the image dimensions are different from the hitbox)
 	 * @return
 	 */
-	public int getDrawY() {
+	public int getDrawY()
+	{
 		return (int) (getY() + relativeDrawY + 0.5);
 	}
-
-	public String getNextDirection() {
+	public String getNextDirection()
+	{
 		return nextDirection;
 	}
-
-	public void setNextDirection(String nextDirection) {
+	public void setNextDirection(String nextDirection)
+	{
 		this.nextDirection = nextDirection;
 	}
-
-	public RowCol getRowCol() {
+	public RowCol getRowCol()
+	{
 		return rowCol;
 	}
-
-	public void setRowCol(RowCol rowCol) {
+	public void setRowCol(RowCol rowCol)
+	{
 		this.rowCol = rowCol;
 	}
-
 	public boolean isAlive()
 	{
 		return alive;
 	}
-
 	public void setAlive(boolean alive)
 	{
 		this.alive = alive;
 	}
-
 	public int getBaseDamage()
 	{
 		return baseDamage;
 	}
-
 	public void setBaseDamage(int baseDamage)
 	{
 		this.baseDamage = baseDamage;
 	}
-
 	public void setMaxHP(int maxHP)
 	{
 		this.maxHP = maxHP;
 		this.HP = maxHP;
 	}
-
-	
-
 }

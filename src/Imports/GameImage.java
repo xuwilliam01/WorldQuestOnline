@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
 public class GameImage implements Comparable<GameImage>
 {
 	private String name;
-
 	private BufferedImage bufferedImage;
 	private Image image;
 
@@ -121,42 +120,36 @@ public class GameImage implements Comparable<GameImage>
 	}
 
 	
-	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public String getName()
 	{
 		return name;
 	}
-
 	public Image getImage()
 	{
 		return image;
 	}
-
 	public int getWidth()
 	{
 		return width;
 	}
-
 	public int getHeight()
 	{
 		return height;
 	}
-
 	@Override
 	public int compareTo(GameImage other)
 	{
 		return name.compareTo(other.getName());
 	}
-
 	public Color getCentreColor()
 	{
 		return color;
 	}
-
 	public void setCentreColor(Color centreColor)
 	{
 		this.color = centreColor;
 	}
-	
-	
 }

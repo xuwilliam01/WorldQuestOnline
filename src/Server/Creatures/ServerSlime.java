@@ -56,7 +56,6 @@ public class ServerSlime extends ServerEnemy
 		}
 		landCounter = 0;
 		
-		
 		setDamage(2);
 		
 		int slimeType = (int)(Math.random()*30);
@@ -91,9 +90,7 @@ public class ServerSlime extends ServerEnemy
 			setDamage(30);
 			setHP(100);
 		}
-		
 		landed = true;
-
 		addItem(ServerItem.randomItem(getX(), getY()));
 	}
 

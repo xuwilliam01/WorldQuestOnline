@@ -11,8 +11,19 @@ import Server.Creatures.ServerPlayer;
 public class ServerSpawner extends ServerObject
 {
 
+	/**
+	 * The creature to spawn
+	 */
 	private ServerCreature creature;
+	
+	/**
+	 * The delay between spawning creatures
+	 */
 	private int delay;
+	
+	/**
+	 * A reference to the main world
+	 */
 	private ServerWorld world;
 
 	/**
@@ -29,7 +40,6 @@ public class ServerSpawner extends ServerObject
 				ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE);
 		this.creature = creatureType;
 		this.world = world;
-
 		makeExist();
 		setSolid(false);
 

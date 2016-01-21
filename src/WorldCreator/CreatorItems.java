@@ -19,7 +19,6 @@ import Imports.Images;
 /**
  * Stores the possible items that can be added to the world
  * @author Alex Raita & William Xu
- *
  */
 public class CreatorItems extends JPanel implements ActionListener{
 
@@ -44,7 +43,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 	private Timer paintTimer = new Timer(10,this);
 
 	/**
-	 * Consutrcotr
+	 * Constructor
 	 * @param world the world to be painted in
 	 * @param menu a button go back to the main menu
 	 */
@@ -199,9 +198,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 					break;
 
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
 				} catch (HeadlessException e) {
-					// TODO Auto-generated catch block
 				}
 		}
 	}

@@ -57,6 +57,9 @@ public class MainMenu {
 
 	private static Client client;
 
+	/**
+	 * Create the initial clouds for the main menu screen
+	 */
 	public void generateClouds()
 	{
 		// Generate clouds
@@ -210,6 +213,7 @@ public class MainMenu {
 		{
 			super.paintComponent(graphics);
 			graphics.drawImage(background,0, 0, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT,null);
+			
 			// Draw and move the clouds
 			for (ClientBackground cloud : clouds)
 			{
@@ -244,6 +248,8 @@ public class MainMenu {
 
 			//Draw the title image
 			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2 - 20,75,null);
+			
+			graphics.drawString("William Xu and Alex Raita", 20, Client.SCREEN_HEIGHT - 30);
 		}
 
 		@Override
