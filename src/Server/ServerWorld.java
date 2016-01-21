@@ -944,7 +944,6 @@ public class ServerWorld
 					// Remove this object from the game if its 'exists' variable is false, unless it's a castle
 					if(!object.getType().equals(CASTLE_TYPE))
 					{
-						removeFromObjectTiles(object);
 						objectsToRemove.add(object);
 					}
 				}
