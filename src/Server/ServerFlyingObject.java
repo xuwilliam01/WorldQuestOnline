@@ -19,14 +19,14 @@ public class ServerFlyingObject extends ServerObject
 
 	/**
 	 * Constructor for flying object
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param ID
-	 * @param image
-	 * @param speed
-	 * @param angle
+	 * @param x the x coordinate
+	 * @param y the y coordinate 
+	 * @param width the width of the object
+	 * @param height the height of the object
+	 * @param ID the identifier of the object
+	 * @param image the image
+	 * @param speed the speed of the object towards its angle
+	 * @param angle the angle the object is moving towards
 	 */
 	public ServerFlyingObject(double x, double y, int width, int height,
 			double gravity, String image, double speed, double angle,

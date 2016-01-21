@@ -14,18 +14,17 @@ import WorldCreator.CreatorObject;
  * @author Alex Raita & William Xu
  *
  */
-public class ImageReferencePair {
-	
+public class ImageReferencePair
+{
 	/**
 	 * Store all tiles and their images
 	 */
-	
 	private static ImageReferencePair[] images = new ImageReferencePair[256];
 	private char reference;
 	private String imageName;
 	private Image image;
 	private Color color;
-	
+
 	/**
 	 * Constructor
 	 * @param ref the reference
@@ -35,67 +34,69 @@ public class ImageReferencePair {
 	{
 		reference = ref;
 		imageName = name;
-		
+
 		GameImage gameImage = Images.getGameImage(name);
 		image = Images.getImage(name);
 		color = gameImage.getCentreColor();
 
 	}
-	
+
 	/**
 	 * Imports the reference
 	 */
 	public static void importReferences() throws IOException
 	{
-		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",
+		BufferedReader br = new BufferedReader(new FileReader(new File(
+				"Resources",
 				"WorldCreator.cfg")));
 		int numTiles = Integer.parseInt(br.readLine());
 		for (int tile = 0; tile < numTiles; tile++)
 		{
 			String line = br.readLine();
 			String[] name = line.substring(2).split(" ");
-			images[line.charAt(0)] = new ImageReferencePair(line.charAt(0),name[0]);
+			images[line.charAt(0)] = new ImageReferencePair(line.charAt(0),
+					name[0]);
 		}
 		br.close();
 	}
-
-	public static ImageReferencePair[] getImages() {
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
+	public static ImageReferencePair[] getImages()
+	{
 		return images;
 	}
-
-	public static void setImages(ImageReferencePair[] images) {
+	public static void setImages(ImageReferencePair[] images)
+	{
 		ImageReferencePair.images = images;
 	}
-
-	public char getReference() {
+	public char getReference()
+	{
 		return reference;
 	}
-
-	public void setReference(char reference) {
+	public void setReference(char reference)
+	{
 		this.reference = reference;
 	}
-
 	public String getImageName()
 	{
 		return imageName;
 	}
-	
-	public Image getImage() {
+	public Image getImage()
+	{
 		return image;
 	}
-
-	public void setImage(Image image) {
+	public void setImage(Image image)
+	{
 		this.image = image;
 	}
-
-	public Color getColor() {
+	public Color getColor()
+	{
 		return color;
 	}
-
-	public void setColor(Color color) {
+	public void setColor(Color color)
+	{
 		this.color = color;
 	}
-	
-	
-
 }

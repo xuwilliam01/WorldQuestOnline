@@ -15,7 +15,6 @@ import Server.Creatures.ServerCreature;
  */
 public class ServerWeaponSwing extends ServerObject
 {
-
 	/**
 	 * Counter for timing update
 	 */
@@ -55,7 +54,7 @@ public class ServerWeaponSwing extends ServerObject
 	 * The hitbox line for the weapon
 	 */
 	private Line2D.Double hitbox;
-	
+
 	/**
 	 * The id of the wielder
 	 */
@@ -76,18 +75,17 @@ public class ServerWeaponSwing extends ServerObject
 	 * The ID's of the objects that have already collided with this weapon swing
 	 */
 	private ArrayList<Integer> objectsCollided;
-	
+
 	/**
 	 * Number of pixels difference from the original x position
 	 */
 	private double relativeX;
-	
-	
+
 	/**
 	 * Number of pixels difference from the original y position
 	 */
 	private double relativeY;
-	
+
 	/**
 	 * The one who swung the weapon
 	 */
@@ -95,19 +93,20 @@ public class ServerWeaponSwing extends ServerObject
 
 	/**
 	 * Constructor for the item swing animation
-	 * @param owner
-	 * @param image
-	 * @param timeInMilliseconds
+	 * @param owner the one who swung the weapon
+	 * @param image the initial image for the weapon
+	 * @param timeInMilliseconds the time that the swinging will last
 	 */
-	public ServerWeaponSwing(ServerCreature owner, double relativeX, double relativeY, String image, int angle,
+	public ServerWeaponSwing(ServerCreature owner, double relativeX,
+			double relativeY, String image, int angle,
 			int timeInFrames, int damage)
 	{
 		super(owner.getX(), owner.getY(), -1, -1, 0, image,
 				ServerWorld.WEAPON_SWING_TYPE);
-		
+
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;
-		
+
 		this.wielder = owner;
 		counter = 0;
 		this.timeInFrames = timeInFrames;
@@ -120,7 +119,7 @@ public class ServerWeaponSwing extends ServerObject
 		setSolid(false);
 
 		this.damage = damage;
-		
+
 		if (angle > -90 && angle <= 90)
 		{
 			currentAngle = -135;
@@ -135,20 +134,26 @@ public class ServerWeaponSwing extends ServerObject
 		width = Images.getGameImage(image).getWidth();
 		height = Images.getGameImage(image).getHeight();
 
+		// Lock the weapon onto the owner
 		setX(owner.getX() + owner.getWidth() / 2 - width / 2 + relativeX);
 		setY(owner.getY() + owner.getHeight() / 2 - height / 2 + 10 + relativeY);
 
+		// Set the hitbox for the weapon based on the angle
 		hitbox = new Line2D.Double(
-				getX() + width
+				getX()
+						+ width
 						/ 2
 						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
-				getY() + height
+				getY()
+						+ height
 						/ 2
 						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
-				getX() + width
+				getX()
+						+ width
 						/ 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
-				getY() + height
+				getY()
+						+ height
 						/ 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
@@ -156,21 +161,19 @@ public class ServerWeaponSwing extends ServerObject
 
 	}
 
-	public ServerCreature getWielder()
-	{
-		return wielder;
-	}
-	
 	/**
 	 * Update counter for the object
 	 */
 	public void update()
 	{
+		// Destroy the weapon when the animation ends
 		if (counter >= (int) (timeInFrames / 13.0 + 0.5) * 13)
 		{
 			destroy();
 		}
-		else if (counter % (int) (timeInFrames / 13.0 + 0.5) == 0 && counter != 0)
+		// Display a certain animation for the weapon
+		else if (counter % (int) (timeInFrames / 13.0 + 0.5) == 0
+				&& counter != 0)
 		{
 			if (isClockwise)
 			{
@@ -191,28 +194,20 @@ public class ServerWeaponSwing extends ServerObject
 			setImage(getBaseImage() + "_" + currentAngle + ".png");
 		}
 
+		// Lock the weapon onto the player
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
 		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + relativeY);
+		
+		// Rotate the hitbox for the weapon
 		hitbox.setLine(
-				getX()
-						+ width
-						/ 2
+				getX() + width / 2
 						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
-				getY()
-						+ height
-						/ 2
+				getY() + height / 2
 						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
-				getX()
-						+ width
-						/ 2
+				getX() + width / 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
-				getY()
-						+ height
-						/ 2
+				getY() + height / 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
-
-		// System.out.println(hitbox.getX1() + " " + hitbox.getX2() + " " +
-		// hitbox.getY1() + " " + hitbox.getY2());
 
 		counter++;
 	}
@@ -249,6 +244,15 @@ public class ServerWeaponSwing extends ServerObject
 		objectsCollided.add(other.getID());
 	}
 
+	// ///////////////////////
+	// GETTERS AND SETTERS //
+	// ///////////////////////
+	
+	public ServerCreature getWielder()
+	{
+		return wielder;
+	}
+	
 	public int getDamage()
 	{
 		return damage;
@@ -303,6 +307,4 @@ public class ServerWeaponSwing extends ServerObject
 	{
 		this.owner = owner;
 	}
-
-	
 }

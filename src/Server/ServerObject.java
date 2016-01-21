@@ -294,6 +294,10 @@ public class ServerObject
 		return null;
 	}
 	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
+	
 	public ArrayList<RowCol> getObjectTiles()
 	{
 		return objectTiles;

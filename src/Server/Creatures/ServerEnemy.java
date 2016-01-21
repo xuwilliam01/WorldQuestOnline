@@ -45,7 +45,6 @@ public abstract class ServerEnemy extends ServerCreature implements
 		setTeam(team);
 	}
 
-	// All this should be overridden by other AI classes
 	/**
 	 * Moves the AI and makes decisions for it, i.e. whether to attack or not
 	 */
@@ -54,6 +53,9 @@ public abstract class ServerEnemy extends ServerCreature implements
 		counter++;
 	}
 
+	/**
+	 * Find the nearest player and target it, if within range
+	 */
 	public void findTarget()
 	{
 		for (ServerPlayer player : ServerEngine.getListOfPlayers())
@@ -66,51 +68,9 @@ public abstract class ServerEnemy extends ServerCreature implements
 		}
 	}
 
-	public int getTargetRange()
-	{
-		return targetRange;
-	}
-
-	public void setTargetRange(int targetRange)
-	{
-		this.targetRange = targetRange;
-	}
-
-	public ServerPlayer getTarget()
-	{
-		return target;
-	}
-
-	public void setTarget(ServerPlayer target)
-	{
-		this.target = target;
-	}
-
-	public int getCounter()
-	{
-		return counter;
-	}
-
-	public void setCounter(int counter)
-	{
-		this.counter = counter;
-	}
-
-	public void actionPerformed(ActionEvent arg0)
-	{
-		update();
-	}
-
-	public int getDamage()
-	{
-		return damage;
-	}
-
-	public void setDamage(int damage)
-	{
-		this.damage = damage;
-	}
-
+	/**
+	 * Destroy the slime
+	 */
 	@Override
 	public void destroy()
 	{
@@ -119,5 +79,45 @@ public abstract class ServerEnemy extends ServerCreature implements
 		{
 			ServerWorld.slimeCount--;
 		}
+	}
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
+	public int getTargetRange()
+	{
+		return targetRange;
+	}
+	public void setTargetRange(int targetRange)
+	{
+		this.targetRange = targetRange;
+	}
+	public ServerPlayer getTarget()
+	{
+		return target;
+	}
+	public void setTarget(ServerPlayer target)
+	{
+		this.target = target;
+	}
+	public int getCounter()
+	{
+		return counter;
+	}
+	public void setCounter(int counter)
+	{
+		this.counter = counter;
+	}
+	public void actionPerformed(ActionEvent arg0)
+	{
+		update();
+	}
+	public int getDamage()
+	{
+		return damage;
+	}
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
 	}
 }

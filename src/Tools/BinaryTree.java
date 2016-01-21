@@ -9,7 +9,9 @@ package Tools;
  */
 public class BinaryTree<E extends Comparable<E>>
 {
-	//Store the first elements of the tree
+	/**
+	 * Store the first elements of the tree
+	 */
 	private BinaryTreeNode<E> head;
 
 	/**

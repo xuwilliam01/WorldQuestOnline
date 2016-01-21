@@ -9,11 +9,11 @@ import Server.ServerWorld;
  */
 public class ServerWeapon extends ServerItem
 {
-
+	// The total number of weapons and number of tiers for melee weapons
 	public final static int NUM_WEAPONS = 27;
 	public final static int NUM_TIERS = 5;
 
-	//Weapons
+	// Weapon damage for every weapon
 	public final static int DADIAMOND_DMG = 35;
 	public final static int DAGOLD_DMG = 25;
 	public final static int DAIRON_DMG = 18;
@@ -68,12 +68,10 @@ public class ServerWeapon extends ServerItem
 	 */
 	private int swingSpeed;
 
+	// The speeds at which certain melee weapons swing (in world ticks)
 	public final static int DAGGER_SPEED = 13;
-
 	public final static int AX_SPEED = 26;
-
 	public final static int SWORD_SPEED = 13;
-
 	public final static int HALBERD_SPEED = 26;
 
 	/**

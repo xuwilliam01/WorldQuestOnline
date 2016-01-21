@@ -18,8 +18,8 @@ import Imports.Images;
  * @author Alex Raita & William Xu
  *
  */
-public class CreatorObject extends JButton implements MouseListener{
-
+public class CreatorObject extends JButton implements MouseListener
+{
 
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
@@ -33,45 +33,52 @@ public class CreatorObject extends JButton implements MouseListener{
 	 * @param description the description for the tool tip
 	 * @param world the world it will be placed in
 	 */
-	public CreatorObject(char ref, String name, boolean isTile, String description,CreatorWorld world)
+	public CreatorObject(char ref, String name, boolean isTile,
+			String description, CreatorWorld world)
 	{
-		if(isTile)
+		if (isTile)
 			setIcon(new ImageIcon(Images.getImage(name)));
 		else
-			setIcon(new ImageIcon(Images.getImage(name.substring(0,name.length()-4)+"_ICON.png")));
-		
-		imageRef = new ImageReferencePair(ref,name);
-			
+			setIcon(new ImageIcon(Images.getImage(name.substring(0,
+					name.length() - 4)
+					+ "_ICON.png")));
+
+		imageRef = new ImageReferencePair(ref, name);
+
 		this.world = world;
 		this.isTile = isTile;
-		
+
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
 		setFocusable(false);
 		addMouseListener(this);
 		setToolTipText(description);
-		
-		setSize(getIcon().getIconWidth(),getIcon().getIconHeight());
+
+		setSize(getIcon().getIconWidth(), getIcon().getIconHeight());
 	}
 
 	public String getImageName()
 	{
 		return imageRef.getImageName();
 	}
-	
-	public char getReference() {
+
+	public char getReference()
+	{
 		return imageRef.getReference();
 	}
 
-	public void setReference(char reference) {
+	public void setReference(char reference)
+	{
 		imageRef.setReference(reference);
 	}
 
-	public Image getImage() {
+	public Image getImage()
+	{
 		return imageRef.getImage();
 	}
 
-	public void setImage(Image image) {
+	public void setImage(Image image)
+	{
 		imageRef.setImage(image);
 	}
 
@@ -79,52 +86,57 @@ public class CreatorObject extends JButton implements MouseListener{
 	{
 		return isTile;
 	}
-	
+
 	public void deselect()
 	{
 		setBorder(BorderFactory.createEmptyBorder());
 	}
-	
+
 	public void setPosition(int row, int col)
 	{
-		if(isTile)
-			setLocation(col*imageRef.getImage().getWidth(null)+(col+1)*10,row*imageRef.getImage().getHeight(null)+row*10+50);
-		else setLocation(col*getIcon().getIconWidth()+(col+1)*10,row*getIcon().getIconHeight()+row*10+300);
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		if (isTile)
+			setLocation(col * imageRef.getImage().getWidth(null) + (col + 1)
+					* 10, row * imageRef.getImage().getHeight(null) + row * 10
+					+ 50);
+		else
+			setLocation(col * getIcon().getIconWidth() + (col + 1) * 10, row
+					* getIcon().getIconHeight() + row * 10 + 300);
 	}
 
 	@Override
 	/**
 	 * If we select this object. Highlight it
 	 */
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e)
+	{
 		world.setSelectedTile(imageRef.getReference());
 		setBorder(BorderFactory.createLineBorder(Color.white));
 	}
-
+	
+	// UNUSED BUT REQUIRED METHODS
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	public void mouseClicked(MouseEvent e)
+	{
 	}
 
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+	}
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public Color getColor()
 	{
 		return imageRef.getColor();
@@ -134,6 +146,5 @@ public class CreatorObject extends JButton implements MouseListener{
 	{
 		imageRef.setColor(color);
 	}
-	
-	
+
 }

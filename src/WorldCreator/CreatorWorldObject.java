@@ -10,15 +10,22 @@ import Server.ServerWorld;
  * @author Alex Raita & William Xu
  *
  */
-public class CreatorWorldObject {
-
+public class CreatorWorldObject
+{
+	/**
+	 * The column that the object sits in
+	 */
 	private int col;
+	
+	/**
+	 * The row that the object sits in
+	 */
 	private int row;
 	private int width;
 	private int height;
 	private Image image;
 	private char ref;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -26,10 +33,10 @@ public class CreatorWorldObject {
 	{
 		this.col = col;
 		this.row = row;
-		this.ref = ref;	
+		this.ref = ref;
 		this.image = ImageReferencePair.getImages()[ref].getImage();
-		this.width = image.getWidth(null)/ServerWorld.TILE_SIZE;
-		this.height = image.getHeight(null)/ServerWorld.TILE_SIZE;
+		this.width = image.getWidth(null) / ServerWorld.TILE_SIZE;
+		this.height = image.getHeight(null) / ServerWorld.TILE_SIZE;
 	}
 
 	/**
@@ -43,52 +50,52 @@ public class CreatorWorldObject {
 		}
 		return false;
 	}
-	
+
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public char getRef()
 	{
 		return ref;
 	}
-	
-	public int getCol() {
+	public int getCol()
+	{
 		return col;
 	}
-
-	public void setCol(int x) {
+	public void setCol(int x)
+	{
 		this.col = x;
 	}
-
-	public int getRow() {
+	public int getRow()
+	{
 		return row;
 	}
-
-	public void setRow(int y) {
+	public void setRow(int y)
+	{
 		this.row = y;
 	}
-
-	public int getWidth() {
+	public int getWidth()
+	{
 		return width;
 	}
-
-	public void setWidth(int width) {
+	public void setWidth(int width)
+	{
 		this.width = width;
 	}
-
-	public int getHeight() {
+	public int getHeight()
+	{
 		return height;
 	}
-
-	public void setHeight(int height) {
+	public void setHeight(int height)
+	{
 		this.height = height;
 	}
-
-	public Image getImage() {
+	public Image getImage()
+	{
 		return image;
 	}
-
-	public void setImage(Image image) {
+	public void setImage(Image image)
+	{
 		this.image = image;
 	}
-	
-	
-	
 }

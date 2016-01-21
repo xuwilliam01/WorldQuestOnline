@@ -53,12 +53,14 @@ public class ServerDamageIndicator extends ServerText
 			destroy();
 		}
 	}
-
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public int getFramesAlive()
 	{
 		return framesAlive;
 	}
-
 	public void setFramesAlive(int framesAlive)
 	{
 		this.framesAlive = framesAlive;

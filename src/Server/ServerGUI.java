@@ -28,10 +28,29 @@ public class ServerGUI extends JPanel implements KeyListener,
 MouseWheelListener, MouseListener, MouseMotionListener
 {
 
+	/**
+	 * Reference to the game world
+	 */
 	private ServerWorld world;
+	
+	/**
+	 * Reference to the game engine
+	 */
 	private ServerEngine engine;
+	
+	/**
+	 * Grid of all the tiles
+	 */
 	private char[][] grid;
+	
+	/**
+	 * Position of the map when viewing the world
+	 */
 	private int posX = 200;
+	
+	/**
+	 * Position of the map when viewing the world
+	 */
 	private int posY = 300;
 
 	/**
@@ -136,11 +155,15 @@ MouseWheelListener, MouseListener, MouseMotionListener
 		addMouseMotionListener(this);
 	}
 
+	/**
+	 * Draw the world map
+	 */
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
 		graphics.drawImage(background,0,0,null);
 
+		// Draw each tile on the screen
 		int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startRow < 0)
 		{
@@ -232,6 +255,9 @@ MouseWheelListener, MouseListener, MouseMotionListener
 				10, 40);
 	}
 
+	/**
+	 * Scroll the map around
+	 */
 	public void keyPressed(KeyEvent key)
 	{
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
@@ -252,9 +278,11 @@ MouseWheelListener, MouseListener, MouseMotionListener
 		}
 	}
 
+	/**
+	 * Stop scrolling the map around
+	 */
 	public void keyReleased(KeyEvent key)
 	{
-
 		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
 			right = false;
@@ -274,6 +302,9 @@ MouseWheelListener, MouseListener, MouseMotionListener
 
 	}
 
+	/**
+	 * Unused but required method
+	 */
 	public void keyTyped(KeyEvent arg0)
 	{
 	}
@@ -314,6 +345,9 @@ MouseWheelListener, MouseListener, MouseMotionListener
 	}
 
 	@Override
+	/**
+	 * Zoom in and out of the map by changing the factor at which to scale objects
+	 */
 	public void mouseWheelMoved(MouseWheelEvent scroll)
 	{
 		int notches = scroll.getWheelRotation();
@@ -347,28 +381,7 @@ MouseWheelListener, MouseListener, MouseMotionListener
 				posY *= objectFactor;
 				objectFactor = 1;
 			}
-
 		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent event)
-	{
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -382,14 +395,29 @@ MouseWheelListener, MouseListener, MouseMotionListener
 
 	}
 
+	// UNUSED BUT REQUIRED METHODS
 	@Override
 	public void mouseReleased(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
-
+	}
+	@Override
+	public void mouseClicked(MouseEvent event)
+	{
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0)
+	{
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0)
+	{
 	}
 
+	
 	@Override
+	/**
+	 * Drag the map around with the mouse
+	 */
 	public void mouseDragged(MouseEvent event)
 	{
 		posX -= event.getX() - dragSourceX;

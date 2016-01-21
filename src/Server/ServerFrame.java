@@ -7,7 +7,11 @@ import javax.swing.JFrame;
 public class ServerFrame extends JFrame
 {
 
+	/**
+	 * The zoom amount for the map
+	 */
 	public static final int FRAME_FACTOR = 1;
+	
 	/**
 	 * Constructor for the game frame
 	 */
@@ -18,9 +22,7 @@ public class ServerFrame extends JFrame
 		setTitle("WorldQuest Online - Server Map");
 		setLocationRelativeTo(null);
 		setLayout(null);
-	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
-		
 	}
 }

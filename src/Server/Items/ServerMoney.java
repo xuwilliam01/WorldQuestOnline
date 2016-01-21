@@ -10,7 +10,7 @@ import Server.ServerWorld;
 public class ServerMoney extends ServerItem{
 
 	/**
-	 * Constructor
+	 * Constructor for money
 	 * @param amount the amount of money
 	 */
 	public ServerMoney(double x, double y, int amount) {
@@ -19,9 +19,9 @@ public class ServerMoney extends ServerItem{
 	}
 
 	/**
-	 * Constructor
-	 * @param x
-	 * @param y
+	 * Constructor for money
+	 * @param x the x coordinate
+	 * @param y the y coordinate
 	 */
 	public ServerMoney(double x, double y) {
 		super(x, y, ServerWorld.MONEY_TYPE);

@@ -79,8 +79,6 @@ public class Images
 		
 		ImageIO.write(newImage, "PNG", new File(
 				"STEELARROW.png"));
-	
-
 	}
 
 	/**

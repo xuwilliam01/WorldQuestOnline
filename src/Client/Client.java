@@ -171,7 +171,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public void initialize()
 	{
-		
 		setDoubleBuffered(true);
 		setFocusable(true);
 		requestFocusInWindow();
@@ -470,7 +469,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 						catch (IOException e)
 						{
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
@@ -482,7 +480,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -508,10 +505,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				{
 					String message = input.readLine();
 
-//					if (lines.size() < 100)
-//					{
 					lines.add(message);
-//					}
 
 					try
 					{

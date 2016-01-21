@@ -1,10 +1,5 @@
 package START;
-
-
-import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
-
 import Menu.MainMenu;
 
 /**
@@ -14,6 +9,10 @@ import Menu.MainMenu;
  */
 public class StartGame {
 
+	/**
+	 * Start the game
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		MainMenu menu = new MainMenu();
 
@@ -24,11 +23,9 @@ public class StartGame {
 	 * @param oldFrame the frame that should be closed
 	 */
 	public static void restart(JFrame oldFrame)
-	{
-		//oldFrame.dispatchEvent(new WindowEvent(oldFrame,WindowEvent.WINDOW_CLOSING));		
+	{	
 		oldFrame.setVisible(false);
 		oldFrame.dispose();
 		MainMenu menu = new MainMenu();
 	}
-
 }

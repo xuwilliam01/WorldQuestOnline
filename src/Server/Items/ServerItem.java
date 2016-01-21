@@ -15,12 +15,22 @@ import Server.Creatures.ServerCreature;
  * @author Alex Raita & William Xu
  *
  */
-public abstract class ServerItem extends ServerObject {
+public abstract class ServerItem extends ServerObject
+{
 
-	private final static int NUM_ITEMS = 39;
-	
+	/**
+	 * Whether or not the item has a cooldown when dropped
+	 */
 	private boolean hasCoolDown = false;
+	
+	/**
+	 * The creature who owns or previously owned the item
+	 */
 	private ServerCreature source;
+	
+	/**
+	 * The timer for which an item cannot be picked up after immediately being dropped
+	 */
 	private Timer coolDownTimer = new Timer(2000, new CoolDownTimer());
 
 	/**
@@ -28,18 +38,25 @@ public abstract class ServerItem extends ServerObject {
 	 */
 	private int value = 1;
 
-	// Amount of this item. Will only be used for potions
+	/**
+	 * Amount of this item. Will only be used for potions
+	 */
 	private int amount = 1;
-	
-	//Items despawn after 30 seconds, so store a variable for when the item was dropped
+
+	/**
+	 * Items despawn after 30 seconds, so store a variable for when the item was
+	 * dropped
+	 */
 	private long dropTime;
 
 	/**
 	 * Constructor that assigns and image and a value to every item
 	 */
-	public ServerItem(double x, double y, String type) {
-		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);	
-		switch (type) {
+	public ServerItem(double x, double y, String type)
+	{
+		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
+		switch (type)
+		{
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION.png");
 			value = 2;
@@ -205,19 +222,19 @@ public abstract class ServerItem extends ServerObject {
 	/**
 	 * Creates a random item
 	 */
-	public static ServerItem randomItem(double x, double y) {
+	public static ServerItem randomItem(double x, double y)
+	{
 		int randType = (int) (Math.random() * 10 + 1);
 
-		if(randType <= 5)
-			return new ServerMoney(x,y);
-		if(randType <= 6)
+		if (randType <= 5)
+			return new ServerMoney(x, y);
+		if (randType <= 6)
 			return ServerArmour.randomArmour(x, y);
-		if(randType <= 8)
+		if (randType <= 8)
 			return ServerPotion.randomPotion(x, y);
-		if(randType <= 10)
-			return ServerWeapon.randomWeapon(x,y);
-		
-		
+		if (randType <= 10)
+			return ServerWeapon.randomWeapon(x, y);
+
 		// This won't happen
 		return null;
 
@@ -228,8 +245,10 @@ public abstract class ServerItem extends ServerObject {
 	 * @param item the item to be copied
 	 * @return a copy of the item
 	 */
-	public static ServerItem copy(ServerItem item) {
-		switch (item.getType()) {
+	public static ServerItem copy(ServerItem item)
+	{
+		switch (item.getType())
+		{
 		case ServerWorld.HP_POTION_TYPE:
 		case ServerWorld.MAX_HP_TYPE:
 		case ServerWorld.MANA_POTION_TYPE:
@@ -276,73 +295,94 @@ public abstract class ServerItem extends ServerObject {
 
 		}
 		return null;
-
 	}
 
-	public void startCoolDown() {
+	/**
+	 * Start a cooldown before the item can be picked up again so it isn't
+	 * instantly picked up by the creature that dropped it
+	 */
+	public void startCoolDown()
+	{
 		hasCoolDown = true;
 
 		// Start a timer for when to set cooldown to false
 		coolDownTimer.start();
-
 	}
 
-	public void setSource(ServerCreature source) {
-		this.source = source;
-	}
-
-	public boolean hasCoolDown() {
-		return hasCoolDown;
-	}
-
-	public ServerCreature getSource() {
-		return source;
-	}
-
-	private class CoolDownTimer implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+	/**
+	 * Thread running the cooldown for an item
+	 * @author William and Alex
+	 *
+	 */
+	private class CoolDownTimer implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
 			hasCoolDown = false;
 			coolDownTimer.stop();
 		}
-
 	}
 
-	public void increaseAmount() {
+	// ///////////////////////
+	// GETTERS AND SETTERS //
+	// ///////////////////////
+	public void setSource(ServerCreature source)
+	{
+		this.source = source;
+	}
+
+	public boolean hasCoolDown()
+	{
+		return hasCoolDown;
+	}
+
+	public ServerCreature getSource()
+	{
+		return source;
+	}
+
+	public void increaseAmount()
+	{
 		amount++;
 	}
 
-	public void increaseAmount(int value) {
+	public void increaseAmount(int value)
+	{
 		amount += value;
 	}
 
-	public int getAmount() {
+	public int getAmount()
+	{
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(int amount)
+	{
 		this.amount = amount;
 	}
 
-	public void decreaseAmount() {
+	public void decreaseAmount()
+	{
 		amount--;
 	}
 
-	public void decreaseAmount(int amount) {
+	public void decreaseAmount(int amount)
+	{
 		this.amount -= amount;
 	}
 
-	public int getCost() {
+	public int getCost()
+	{
 		return value;
 	}
-	
+
 	public long getDropTime()
 	{
 		return dropTime;
 	}
-	
+
 	public void setDropTime(long dropTime)
 	{
 		this.dropTime = dropTime;
 	}
-
 }

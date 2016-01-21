@@ -14,10 +14,24 @@ import Server.Items.ServerProjectile;
 public class ServerCastle extends ServerCreature
 {
 
+	/**
+	 * The default HP of a castle
+	 */
 	public final static int CASTLE_HP = 15000;
 
+	/**
+	 * The number of pixels for a target to be in range for the castle to fire at it
+	 */
 	private int targetRange = 1000;
+	
+	/**
+	 * The money invested in upgrading the castle
+	 */
 	private int money = 0;
+	
+	/**
+	 * The current tier of the castle
+	 */
 	private int currentGoblinTier = 0;
 
 	/**
@@ -48,7 +62,7 @@ public class ServerCastle extends ServerCreature
 	 */
 	public void update()
 	{
-		//Try to purchase the next tier of goblin
+		// Try to purchase the next tier of goblin
 		if(currentGoblinTier < 5 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
@@ -64,7 +78,7 @@ public class ServerCastle extends ServerCreature
 
 		}
 
-		//Attack a target
+		// Attack a target
 		if (getTarget() == null)
 		{
 			if (getWorld().getWorldCounter() % 15 == 0)
@@ -79,6 +93,7 @@ public class ServerCastle extends ServerCreature
 		}
 		else
 		{
+			// Every second and a half calculate the angle to shoot the target from and launch a projectile at it
 			if (getWorld().getWorldCounter() % 90 == 0)
 			{
 				int xDist = (int) (getTarget().getX()
@@ -103,7 +118,7 @@ public class ServerCastle extends ServerCreature
 	}
 
 	/**
-	 * Find the nearest enemy creature and attack it
+	 * Find the nearest enemy creature and attack it (in this case any creature from the enemy team)
 	 */
 	public ServerCreature findTarget()
 	{
@@ -117,7 +132,6 @@ public class ServerCastle extends ServerCreature
 		{
 			enemyTeam = getWorld().getBlueTeam();
 		}
-
 		for (ServerCreature enemy : enemyTeam)
 		{
 			if (enemy.isAlive() && quickInRange(enemy, targetRange) && !enemy.getType().equals(ServerWorld.CASTLE_TYPE))
@@ -128,26 +142,25 @@ public class ServerCastle extends ServerCreature
 		return null;
 	}
 
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public ServerCreature getTarget()
 	{
 		return target;
 	}
-
 	public void setTarget(ServerCreature target)
 	{
 		this.target = target;
 	}
-
 	public void addMoney(int money)
 	{
 		this.money += money;
 	}
-	
 	public int getCurrentGoblinTier()
 	{
 		return currentGoblinTier;
 	}
-	
 	public int getMoney()
 	{
 		return money;

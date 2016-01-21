@@ -41,17 +41,23 @@ import Server.Creatures.ServerSlime;
 public class CreatorWorld extends JPanel implements KeyListener,
 ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {
-
 	public final static int SCROLL_SPEED = 13;
-
 	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
-
 	public final static double MIN_EDIT_ZOOM = ServerFrame.FRAME_FACTOR * 2.5;
 
+	/**
+	 * The grid of tiles for the creator
+	 */
 	private char[][] grid = new char[Client.Client.SCREEN_HEIGHT
-	                                 / ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH
-	                                                              / ServerWorld.TILE_SIZE + 1];
+	                                 / ServerWorld.TILE_SIZE + 1][Client.Client.SCREEN_WIDTH / ServerWorld.TILE_SIZE + 1];
+	/**
+	 * The position on the creator being viewed
+	 */
 	private int posY = 200;
+	
+	/**
+	 * The position of the creator being viewed
+	 */
 	private int posX = 200;
 
 	//Objects in world
@@ -196,16 +202,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			for (int col = 0; col < grid[row].length; col++)
 				grid[row][col] = ' ';
 		objects.clear();
-	}
-
-	public char[][] getGrid()
-	{
-		return grid;
-	}
-
-	public void setGrid(char[][] grid)
-	{
-		this.grid = grid;
 	}
 	
 	/**
@@ -387,7 +383,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				height = -height;
 			}
 
-			//If we let go of the mouse, colour everything in
+			// If we let go of the mouse, colour everything in
 			if (highlight)
 			{
 				highlight = false;
@@ -402,7 +398,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				graphics.drawRect(startX, startY, width, height);
 			}
 		}
-		//Draw a white box around where we can to place a tile
+		// Draw a white box around where we can to place a tile
 		else if (selectedTile != '-' && selectedBlock != null
 				&& selectedBlock[0] >= startRow && selectedBlock[0] <= endRow
 				&& selectedBlock[1] >= startColumn
@@ -411,7 +407,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		{
 			graphics.setColor(Color.white);
 
-			//if we are highlighting  single tile
+			// If we are highlighting  single tile
 			if(tiles[selectedTile].isTile())
 			{			
 				if(!canFit(selectedBlock[0],selectedBlock[1],1,1,true) && selectedTile >= 'A')
@@ -425,7 +421,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 						(int) (ServerWorld.TILE_SIZE / objectFactor) );
 				canDrawObject = false;
 			}
-			//Draw a box for the object if it can be added to the screen
+			// Draw a box for the object if it can be added to the screen
 			else 
 			{
 				int x = (int) (ServerGUI.CENTRE_X + selectedBlock[1]
@@ -452,12 +448,12 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		graphics.setColor(Color.white);
 
-		//Draw an outline
+		// Draw an outline
 		graphics.drawRect((int) (ServerGUI.CENTRE_X - posX), (int) (ServerGUI.CENTRE_Y  - posY),(int)((grid[0].length)
 				* (ServerWorld.TILE_SIZE / objectFactor)), (int)((grid.length)
 						* (ServerWorld.TILE_SIZE / objectFactor)));
 
-		//Draw instructions
+		// Draw instructions
 		graphics.drawString(String.format("Map can only be edited when zoomed in %d%% or more (Current: %d%%)", (int)( 100/MIN_EDIT_ZOOM),(int)( 100/objectFactor)), 10,
 				20);
 		graphics.drawString("Select an object using the mouse", 10, 35);
@@ -475,8 +471,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.drawString(
 				"Tip: Zoom out and use mouse drags to quickly access other parts of the map",
 				10, 125);
-
-
 	}
 
 	/**
@@ -486,14 +480,11 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
 			return false;
-
-		//System.out.printf("%d %d %d %d%n",startRow,startCol,width,height);
 		for(CreatorWorldObject object : objects)
 		{
 			if(object.collidesWith(startCol, startRow, startCol+width, startRow+height))
 				return false;
 		}
-
 		if(!isTile)
 			for(int row = startRow; row < startRow + height;row++)
 				for(int col = startCol; col < startCol+width;col++)
@@ -501,7 +492,6 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					if(grid[row][col] >= 'A')
 						return false;
 				}
-
 		return true;
 	}
 
@@ -540,7 +530,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{	
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 		
-		//print the grid
+		// Print the grid
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -549,7 +539,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			output.println();
 		}
 		
-		//print the objects
+		// Print the objects
 		output.println(objects.size());
 		for(CreatorWorldObject object : objects)
 		{
@@ -593,42 +583,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					grid[row][col] = ' ';
 			}
 	}
-
-	public void setNewHeight(int newHeight)
-	{
-		isNewHeight = true;
-		this.newHeight = newHeight;
-	}
-
-	public void setNewWidth(int newWidth)
-	{
-		isNewWidth = true;
-		this.newWidth = newWidth;
-	}
-
-	public CreatorObject[] getTiles()
-	{
-		return tiles;
-	}
-
-	public void setTiles(CreatorObject[] tiles)
-	{
-		this.tiles = tiles;
-	}
-
-	public char getSelectedTile()
-	{
-		return selectedTile;
-	}
-
-	public void setSelectedTile(char selectedTile)
-	{
-
-		if (this.selectedTile != '-')
-			tiles[this.selectedTile].deselect();
-		this.selectedTile = selectedTile;
-	}
-
+	
+	/**
+	 * Scroll or start hightlightin
+	 */
 	public void keyPressed(KeyEvent event)
 	{
 		if (event.getKeyCode() == KeyEvent.VK_W)
@@ -645,6 +603,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 	}
 
+	/**
+	 * Stop scrolling or stop highlighting
+	 */
 	public void keyReleased(KeyEvent event)
 	{
 		if (event.getKeyCode() == KeyEvent.VK_W)
@@ -717,22 +678,16 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	@Override
 	public void mouseClicked(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -816,18 +771,15 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	@Override
 	public void mouseMoved(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	/**
-	 * Scroll in and out
+	 * Scroll in and out by modifying the factor by which to draw objects
 	 */
 	public void mouseWheelMoved(MouseWheelEvent scroll)
 	{
 		int notches = scroll.getWheelRotation();
-
 
 		if (notches > 0 )
 		{
@@ -870,18 +822,54 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			isEditable = false;
 	}
 	
+
+	public void setNewHeight(int newHeight)
+	{
+		isNewHeight = true;
+		this.newHeight = newHeight;
+	}
+	public void setNewWidth(int newWidth)
+	{
+		isNewWidth = true;
+		this.newWidth = newWidth;
+	}
+	public CreatorObject[] getTiles()
+	{
+		return tiles;
+	}
+	public void setTiles(CreatorObject[] tiles)
+	{
+		this.tiles = tiles;
+	}
+	public char getSelectedTile()
+	{
+		return selectedTile;
+	}
+	public void setSelectedTile(char selectedTile)
+	{
+		if (this.selectedTile != '-')
+			tiles[this.selectedTile].deselect();
+		this.selectedTile = selectedTile;
+	}
 	public void setPosX(int x)
 	{
 		posX = x;
 	}
-	
 	public void setPosY(int y)
 	{
 		posY = y;
 	}
-
 	public void setObjectFactor(int factor)
 	{
 		objectFactor = factor;
+	}
+
+	public char[][] getGrid()
+	{
+		return grid;
+	}
+	public void setGrid(char[][] grid)
+	{
+		this.grid = grid;
 	}
 }

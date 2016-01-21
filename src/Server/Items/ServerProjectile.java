@@ -185,7 +185,7 @@ public class ServerProjectile extends ServerFlyingObject
 	}
 
 	/**
-	 * Update the projectile
+	 * Update the projectile every game tick
 	 */
 	public void update()
 	{
@@ -246,7 +246,6 @@ public class ServerProjectile extends ServerFlyingObject
 					imageNo = 3;
 				}
 			}
-
 			if (faceAngle)
 			{
 				setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
@@ -264,9 +263,9 @@ public class ServerProjectile extends ServerFlyingObject
 				setImage(getBaseImage() + "_" + imageAngle + ".png");
 			}
 		}
-
+		
+		// Update the projectile's counter
 		counter++;
-
 		if (counter >= 300)
 		{
 			destroy();
@@ -318,7 +317,7 @@ public class ServerProjectile extends ServerFlyingObject
 	}
 
 	/**
-	 * Destroy the projectile
+	 * Destroy the projectile and possibly set an explosion
 	 */
 	@Override
 	public void destroy()
@@ -397,7 +396,6 @@ public class ServerProjectile extends ServerFlyingObject
 		{
 			super.destroy();
 		}
-
 	}
 
 	/**
@@ -405,6 +403,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void updateExplosion()
 	{
+		// Update the explosion animation
 		if (counter <= 4)
 		{
 			setImage(getBaseImage() + "_1.png");
@@ -450,54 +449,47 @@ public class ServerProjectile extends ServerFlyingObject
 
 	}
 
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
 	public int getDrawX()
 	{
 		return (int) (getX() - length / 2);
 	}
-
 	public int getDrawY()
 	{
 		return (int) (getY() - length / 2);
 	}
-
 	public int getDamage()
 	{
 		return damage;
 	}
-
 	public void setDamage(int damage)
 	{
 		this.damage = damage;
 	}
-
 	public ServerCreature getOwner()
 	{
 		return owner;
 	}
-
 	public void setOwner(ServerCreature owner)
 	{
 		this.owner = owner;
 	}
-
 	public int getOwnerID()
 	{
 		return ownerID;
 	}
-
 	public void setOwnerID(int ownerID)
 	{
 		this.ownerID = ownerID;
 	}
-
 	public double getKnockBack()
 	{
 		return knockBack;
 	}
-
 	public void setKnockBack(double knockBack)
 	{
 		this.knockBack = knockBack;
 	}
-
 }

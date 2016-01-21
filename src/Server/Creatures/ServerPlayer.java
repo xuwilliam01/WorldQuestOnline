@@ -180,11 +180,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private int newMouseY;
 
 	/**
-	 * The skin colour for the base image of the player
-	 */
-	private String skinColour;
-
-	/**
 	 * The string for the base image not including the specific animation frame
 	 */
 	private String baseImage;
@@ -209,19 +204,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private boolean isDropping = false;
 
+	/**
+	 * Stores the mana the player currently has
+	 */
 	private int mana = PLAYER_START_MANA;
+
+	/**
+	 * Stores the maximum possible mana for the player
+	 */
 	private int maxMana = PLAYER_START_MANA;
 
 	/**
 	 * Constructor for a player in the server
-	 * @param socket
-	 * @param engine
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param ID
-	 * @param image
+	 * @param socket the connection between the client and the server
+	 * @param engine the engine the server is running on
+	 * @param x the x coordinate of the player
+	 * @param y the y coordinate of the player
+	 * @param width the width of the player
+	 * @param height the height of the player
+	 * @param ID the identifier of the player
+	 * @param image the image of the player
 	 */
 	public ServerPlayer(double x, double y,
 			int width,
@@ -231,18 +233,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
-		this.skinColour = skinColour;
-
-
+		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
-
-		int randomHair = (int)(Math.random() * 8);
-
-
-		switch(randomHair)
+		int randomHair = (int) (Math.random() * 8);
+		switch (randomHair)
 		{
 		case 1:
 			hair = "HAIR1BEIGE";
@@ -266,25 +263,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			hair = "HAIR1GREY";
 			break;
 		}
-
-		// Give the player a random hairdo
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0);
-
 		setHead(newHair);
 		world.add(newHair);
 
+		// Set the initial variables
 		actionDelay = 20;
-
 		canPerformAction = true;
-
 		action = "NOTHING";
-
 		performingAction = false;
-
 		newMouseX = 0;
 		newMouseY = 0;
 
-		// Set to -1 when not used
+		// Set the action counter to -1 when not used
 		actionCounter = -1;
 
 		// Import the socket, server, and world
@@ -326,29 +317,32 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		baseImage = "BASE_" + skinColour;
 
+		// Give the player random start weapon(s)
+		int randomStartWeapon = (int) (Math.random() * 3);
 
-		int randomStartWeapon = (int)(Math.random()*3);
-
-		switch(randomStartWeapon)
+		switch (randomStartWeapon)
 		{
 		case 0:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 					+ ServerWorld.WOOD_TIER));
+			break;
 		case 1:
 			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
 					+ ServerWorld.WOOD_TIER));
+			break;
 		case 2:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+			break;
 		}
 
-
-		// Start the player off with some weapons
+		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 5));
 
+		// Use a separate thread to print to the client to prevent the client
+		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 	}
-
 
 	/**
 	 * Send the player the entire map
@@ -375,11 +369,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		flush();
 	}
 
+	/**
+	 * Update the player after each tick
+	 */
 	public void updatePlayer()
 	{
 		if (exists())
 		{
-
+			// Change the player's facing direction after its current action
 			if (actionCounter < 0)
 			{
 				super.setDirection(getNextDirection());
@@ -520,18 +517,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else
 				{
 
-					int randomStartWeapon = (int)(Math.random()*3);
+					int randomStartWeapon = (int) (Math.random() * 3);
 
-					switch(randomStartWeapon)
+					switch (randomStartWeapon)
 					{
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 								+ ServerWorld.WOOD_TIER));
+						break;
 					case 1:
 						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
 								+ ServerWorld.WOOD_TIER));
+						break;
 					case 2:
-						addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+						addItem(new ServerWeapon(0, 0,
+								ServerWorld.SLINGSHOT_TYPE));
+						break;
 					}
 
 					setAlive(true);
@@ -576,14 +577,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					+ "_"
 					+ getRowCol().getColumn()
 					+ ".png");
-
 			if (getHead() != null)
 			{
 				getHead().update(
 						getDirection(),
 						getRowCol());
 			}
-
 			if (getBody() != null)
 			{
 				getBody().update(
@@ -599,18 +598,25 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void updateClient()
 	{
-		if(world.getWorldCounter() % 40 == 0 && mana < maxMana)
+		// Slowly regenerate the player's mana and hp, and send it to the client
+		if (world.getWorldCounter() % 40 == 0 && mana < maxMana)
+		{
 			mana++;
-		if(world.getWorldCounter() % 80 == 0 &&  getHP() < getMaxHP() && getHP() > 0)
-			setHP(getHP()+1);
+		}
+		if (world.getWorldCounter() % 80 == 0 && getHP() < getMaxHP()
+				&& getHP() > 0)
+		{
+			setHP(getHP() + 1);
+		}
 
+		// While the writer is not being currently flushed, send the information
+		// to the client
 		if (!flushWriterNow)
 		{
 			if (exists())
-			{					
+			{
 				// Send all the objects within all the object tiles in the
-				// player's
-				// screen
+				// player's screen
 				int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
 				int endRow = (int) ((getY() + getHeight() / 2 + Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
 				int startColumn = (int) ((getX() + getWidth() / 2 - Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
@@ -624,7 +630,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					endRow = world.getObjectGrid().length - 1;
 				}
-
 				if (startColumn < 0)
 				{
 					startColumn = 0;
@@ -634,13 +639,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					endColumn = world.getObjectGrid()[0].length - 1;
 				}
 
+				// Send information to the client about all the objects
 				for (int row = startRow; row <= endRow; row++)
 				{
 					for (int column = startColumn; column <= endColumn; column++)
 					{
 						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-
 							if (object.exists()
 									&& !object.getType().equals(
 											ServerWorld.SPAWN_TYPE))
@@ -656,20 +661,29 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									team = ((ServerCreature) object).getTeam();
 								}
 								else if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
-
 								{
 									x = ((ServerProjectile) object).getDrawX();
 									y = ((ServerProjectile) object).getDrawY();
 								}
 
-								if(object.getType().equals(ServerWorld.PLAYER_TYPE))
-									queueMessage("O " + object.getID() + " " + x
+								if (object.getType().equals(
+										ServerWorld.PLAYER_TYPE))
+								{
+									queueMessage("O " + object.getID() + " "
+											+ x
 											+ " " + y + " " + object.getImage()
-											+ " " + team + " " + object.getType() +" "+ ((ServerPlayer)object).getName());
+											+ " " + team + " "
+											+ object.getType() + " "
+											+ ((ServerPlayer) object).getName());
+								}
 								else
-									queueMessage("O " + object.getID() + " " + x
+								{
+									queueMessage("O " + object.getID() + " "
+											+ x
 											+ " " + y + " " + object.getImage()
-											+ " " + team + " " + object.getType() +" "+ "{");
+											+ " " + team + " "
+											+ object.getType() + " " + "{");
+								}
 							}
 							else
 							{
@@ -702,12 +716,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("M " + getMaxHP());
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
-				queueMessage("XB " + world.getBlueCastle().getHP() +" "+ world.getBlueCastle().getCurrentGoblinTier() + " "+world.getBlueCastle().getMoney());
-				queueMessage("XR " + world.getRedCastle().getHP() +" "+ world.getRedCastle().getCurrentGoblinTier() + " "+world.getRedCastle().getMoney());
-				if(equippedArmour != null)
-					queueMessage(String.format("A %.2f",equippedArmour.getArmour()));
+				queueMessage("XB " + world.getBlueCastle().getHP() + " "
+						+ world.getBlueCastle().getCurrentGoblinTier() + " "
+						+ world.getBlueCastle().getMoney());
+				queueMessage("XR " + world.getRedCastle().getHP() + " "
+						+ world.getRedCastle().getCurrentGoblinTier() + " "
+						+ world.getRedCastle().getMoney());
+				if (equippedArmour != null)
+					queueMessage(String.format("A %.2f",
+							equippedArmour.getArmour()));
 				else
 					queueMessage(String.format("A 0"));
+
 				// Send the player's current damage
 				int currentDamage = PUNCHING_DAMAGE;
 				int weaponNo = weaponSelected - '0';
@@ -729,7 +749,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 	/**
-	 * Thread for running the actual game
+	 * Thread for printing the writer to the client
 	 * 
 	 * @author William Xu && Alex Raita
 	 *
@@ -746,7 +766,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					flushWriter();
 					flushWriterNow = false;
 				}
-
 				try
 				{
 					Thread.sleep(1);
@@ -761,15 +780,20 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 	@Override
+	/**
+	 * Main thread of the class receiving input from the player
+	 */
 	public void run()
 	{
-		// Get input from the player
 		while (true)
 		{
 			try
 			{
+				// Read the next line the player sent in
 				String command = input.readLine();
 
+				// Execute the player's action based on the command received
+				// from the client
 				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')
 						&& isOnSurface()
 						&& !performingAction && isAlive())
@@ -803,7 +827,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
-
 				}
 				else if (command.equals("!R"))
 				{
@@ -830,47 +853,45 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						&& !inAction())
 				{
 					setVSpeed(-verticalMovement);
-					// setVSpeed(-(ServerWorld.GRAVITY+Math.sqrt((ServerWorld.GRAVITY)*((ServerWorld.GRAVITY)+8*128.0)))/2.0);
 					setOnSurface(false);
 				}
-				else if(command.equalsIgnoreCase("W"))
+				else if (command.equalsIgnoreCase("W"))
 				{
-					inflictDamage(10000,this);
-					if(getTeam() == RED_TEAM)
+					inflictDamage(10000, this);
+					if (getTeam() == RED_TEAM)
 					{
 						setTeam(BLUE_TEAM);
-						while(true)
+						while (true)
 						{
-							try{
+							try
+							{
 								world.getBlueTeam().add(this);
 								world.getRedTeam().remove(this);
 								break;
 							}
-							catch(ConcurrentModificationException E)
+							catch (ConcurrentModificationException E)
 							{
 
 							}
 						}
 					}
-					else 
+					else
 					{
-						 setTeam(RED_TEAM);
-						 while(true)
+						setTeam(RED_TEAM);
+						while (true)
+						{
+							try
 							{
-								try{
-									world.getBlueTeam().remove(this);
-									world.getRedTeam().add(this);
-									break;
-								}
-								catch(ConcurrentModificationException E)
-								{
-
-								}
+								world.getBlueTeam().remove(this);
+								world.getRedTeam().add(this);
+								break;
 							}
+							catch (ConcurrentModificationException E)
+							{
+
+							}
+						}
 					}
-
-
-					
 
 				}
 				else if (command.equals("DR"))
@@ -914,10 +935,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						equipArmour(command.substring(3));
 					}
-					else if (command.charAt(1) == 'S')
-					{
-						equipShield(command.substring(3));
-					}
 				}
 				// This is temporary for selecting a gun or a sword
 				else if (command.charAt(0) == 'W')
@@ -948,7 +965,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					if (!type.equals(ServerWorld.MONEY_TYPE))
 						sell(type);
 				}
-				else if(command.length() > 2 && command.substring(0,2).equals("Na"))
+				else if (command.length() > 2
+						&& command.substring(0, 2).equals("Na"))
 				{
 					name = command.substring(3);
 				}
@@ -982,12 +1000,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		output.close();
 		disconnected = true;
+
+		// Destroy all the accessories the player has
 		if (getHead() != null)
 		{
 			getHead().destroy();
 			setHead(null);
 		}
-
 		if (getBody() != null)
 		{
 			getBody().destroy();
@@ -999,13 +1018,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		engine.removePlayer(this);
 	}
 
+	/**
+	 * Sell a specific item to the shop
+	 * @param type the item to sell to the shop
+	 */
 	public void sell(String type)
 	{
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
 			if (item.getType().equals(type))
 			{
-
 				if (item.getAmount() > 1)
 				{
 					item.decreaseAmount();
@@ -1025,45 +1047,71 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				break;
 			}
 		if (toRemove != null)
+		{
 			getInventory().remove(toRemove);
+		}
 
 	}
 
+	/**
+	 * Add money to the player's inventory
+	 * @param amount
+	 */
 	public void increaseMoney(int amount)
 	{
-		ServerMoney newMoney = new ServerMoney(getX()+getWidth()/2, getY()+getHeight()/2, amount);
+		ServerMoney newMoney = new ServerMoney(getX() + getWidth() / 2, getY()
+				+ getHeight() / 2, amount);
 		newMoney.makeExist();
-		if(vendor!= null)
+		if (vendor != null)
 			newMoney.setSource(vendor);
 		newMoney.startCoolDown();
-		//newMoney.setDropTime(world.getWorldCounter());
 		world.add(newMoney);
 	}
 
+	/**
+	 * Get the amount of money the player has
+	 * @return the amount of money
+	 */
 	public int getMoney()
 	{
 		for (ServerItem item : getInventory())
+		{
 			if (item.getType().equals(ServerWorld.MONEY_TYPE))
+			{
 				return item.getAmount();
+			}
+		}
 		return 0;
-
 	}
 
+	/**
+	 * Remove money from the player's inventory
+	 * @param amount the amount to decrease the player's money by
+	 */
 	public void decreaseMoney(int amount)
 	{
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
+		{
 			if (item.getType().equals(ServerWorld.MONEY_TYPE))
 			{
 				item.decreaseAmount(amount);
 				if (item.getAmount() <= 0)
+				{
 					toRemove = item;
+				}
 			}
-
+		}
 		if (toRemove != null)
+		{
 			getInventory().remove(toRemove);
+		}
 	}
 
+	/**
+	 * Drop an item from the player's inventory
+	 * @param slot
+	 */
 	public void drop(int slot)
 	{
 		if (slot == DEFAULT_ARMOUR_SLOT)
@@ -1085,13 +1133,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void performAction(int mouseX, int mouseY)
 	{
-
+		// Calculate the distance from the mouse to the player and the angle
 		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
 		int yDist = mouseY
 				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 2 + getHeight() / 3);
 
 		double angle = Math.atan2(yDist, xDist);
 
+		/**
+		 * Perform a specific action based on the player's circumstances and the
+		 * mouse button that was pressed
+		 */
 		if (isAlive() && canPerformAction)
 		{
 			int weaponNo = weaponSelected - '0';
@@ -1119,6 +1171,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				int endColumn = (int) ((getX() + getWidth()) /
 						ServerWorld.OBJECT_TILE_SIZE);
 
+				// Inflict damage to every creature in range of the player's
+				// punch
 				for (int row = startRow; row <= endRow; row++)
 				{
 					for (int column = startColumn; column <= endColumn; column++)
@@ -1127,17 +1181,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-									.isAttackable()
+											.isAttackable()
 									&& ((ServerCreature) otherObject)
-									.getTeam() != getTeam()
+											.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject)
-								.inflictDamage(PUNCHING_DAMAGE
-										+ getBaseDamage(),this);
+										.inflictDamage(PUNCHING_DAMAGE
+												+ getBaseDamage(), this);
 								alreadyPunched
-								.add((ServerCreature) otherObject);
+										.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -1166,6 +1220,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				boolean canAttack = true;
 
+				// Vary the player's attack based on the weapon currently
+				// equipped
 				switch (equippedWeapons[weaponNo].getType())
 				{
 				case ServerWorld.SLINGSHOT_TYPE:
@@ -1194,7 +1250,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					break;
 				case ServerWorld.FIREWAND_TYPE:
 					action = "WAND";
-					if(mana >= ServerWeapon.FIREWAND_MANA)
+					if (mana >= ServerWeapon.FIREWAND_MANA)
 					{
 						mana -= ServerWeapon.FIREWAND_MANA;
 					}
@@ -1212,7 +1268,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					break;
 				case ServerWorld.ICEWAND_TYPE:
 					action = "WAND";
-					if(mana >= ServerWeapon.ICEWAND_MANA)
+					if (mana >= ServerWeapon.ICEWAND_MANA)
 					{
 						mana -= ServerWeapon.ICEWAND_MANA;
 					}
@@ -1230,7 +1286,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					break;
 				case ServerWorld.DARKWAND_TYPE:
 					action = "WAND";
-					if(mana >= ServerWeapon.DARKWAND_MANA)
+					if (mana >= ServerWeapon.DARKWAND_MANA)
 					{
 						mana -= ServerWeapon.DARKWAND_MANA;
 					}
@@ -1248,7 +1304,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					break;
 				}
 
-				if(canAttack)
+				if (canAttack)
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY() + getHeight() / 3, this, angle,
@@ -1271,48 +1327,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else
 				{
-					action="";
+					action = "";
 					actionDelay = 0;
-					ServerDamageIndicator message = new ServerDamageIndicator(getX()+getWidth()/2, getY()-getHeight()/2, "!M", ServerDamageIndicator.PURPLE_TEXT, world);
+					ServerDamageIndicator message = new ServerDamageIndicator(
+							getX() + getWidth() / 2, getY() - getHeight() / 2,
+							"!M", ServerDamageIndicator.PURPLE_TEXT, world);
 					message.setFramesAlive(120);
 					world.add(message);
 				}
 			}
 		}
-
-		// if (weaponSelected == '0')
-		// {
-		// world.add(new ServerWeaponSwing(this, 0,-25, "DAIRON_0.png",
-		// (int) (Math.toDegrees(angle) + 0.5), 7, 10, 10));
-		// }
-		// else if (weaponSelected == '1')
-		// {
-		// // Get the width and height of the image
-		// int bulletWidth = Images.getGameImage("BULLET.png").getWidth();
-		// int bulletHeight = Images.getGameImage("BULLET.png")
-		// .getHeight();
-		//
-		// // Shoot the projectile for testing
-		// double speed = 30;
-		// double x = getX() + getWidth() / 2.0 - bulletWidth / 2.0;
-		// double y = getY() + getHeight() / 2.0 - bulletHeight / 2.0;
-		// double inaccuracy = 0;
-		//
-		// if (getHSpeed() != 0)
-		// {
-		// inaccuracy += Math.PI / 6;
-		// }
-		//
-		// if (Math.abs(getVSpeed()) >= 3)
-		// {
-		// inaccuracy += Math.PI / 3;
-		// }
-		//
-		// world.add(new ServerProjectile(x, y, -1, -1, 0,
-		// this, "BULLET.png", speed, angle, inaccuracy,
-		// ServerWorld.BULLET_TYPE));
-		// }
-
 		canPerformAction = false;
 	}
 
@@ -1333,13 +1357,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 	/**
-	 * Damage the player a certain amount, and destroy if hp is 0 or below
-	 * @param amount
+	 * Damage the player a certain amount, and destroy if hp is 0 or below (With
+	 * specific differences from regular creatures)
+	 * @param amount the amount of damage to inflict
+	 * @param source the source of the attack
 	 */
 	@Override
 	public void inflictDamage(int amount, ServerCreature source)
 	{
-
 		if (equippedArmour != null)
 		{
 			amount -= amount * equippedArmour.getArmour();
@@ -1363,6 +1388,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		world.add(new ServerDamageIndicator(damageX, damageY, Integer
 				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
 
+		// Play the death animation of the player when the HP drops to 0 or below, and eventually respawn the player
 		if (getHP() <= 0 && isAlive())
 		{
 			setAlive(false);
@@ -1377,30 +1403,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				getBody().destroy();
 				setBody(null);
 			}
-
 			setHSpeed(0);
 			setVSpeed(0);
 
 			setAttackable(false);
 			isDropping = false;
-
-		}
-		else
-		{
-			// Knock back the creature based on the knockback force
-			// if (Math.abs(knockBack) - getKnockBackResistance() > 0)
-			// setVSpeed(-(Math.abs(knockBack) - getKnockBackResistance()));
-			// if (knockBack > 0)
-			// {
-			// setHSpeed(getHSpeed()
-			// + (knockBack - getKnockBackResistance()) / 2);
-			// }
-			// else
-			// {
-			// setHSpeed(getHSpeed()
-			// - (knockBack + getKnockBackResistance()) / 2);
-			// }
-			// }
 		}
 	}
 
@@ -1454,7 +1461,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-											.isBusy())
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1506,16 +1513,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 	}
 
-	public boolean isDisconnected()
-	{
-		return disconnected;
-	}
-
-	public void setDisconnected(boolean disconnected)
-	{
-		this.disconnected = disconnected;
-	}
-
 	/**
 	 * Send a message to the client (flushing included)
 	 * 
@@ -1554,15 +1551,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		output.println(message);
 		output.flush();
 
-		if(endGame)
+		if (endGame)
 		{
-			queueMessage("B "+losingTeam);
+			queueMessage("B " + losingTeam);
 			output.println(message);
 			output.flush();
 			output.close();
-			try {
+			try
+			{
 				input.close();
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -1578,25 +1578,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		output.flush();
 	}
 
-	public void setX(double x)
-	{
-		if (x != super.getX())
-		{
-			xUpdated = true;
-			super.setX(x);
-		}
-
-	}
-
-	public void setY(double y)
-	{
-		if (y != super.getY())
-		{
-			super.setY(y);
-			yUpdated = true;
-		}
-	}
-
 	/**
 	 * Add an item to the player's inventory and also tell the client about it
 	 */
@@ -1608,6 +1589,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ item.getAmount() + " " + item.getCost());
 	}
 
+	/**
+	 * Equip a weapon onto the player
+	 * @param itemType the weapon to equip
+	 */
 	public void equipWeapon(String itemType)
 	{
 		// Find next open spot in equipped
@@ -1637,28 +1622,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		getInventory().remove(toRemove);
 	}
 
-	public void equipShield(String itemType)
-	{
-		// First replace the shield in the inventory with the current shield, if
-		// it exists
-		// UNCOMMENT
-		// if(equippedShield != null)
-		{
-			// getInventory().add(equippedShield)
-		}
-
-		ServerItem toRemove = null;
-		for (ServerItem item : getInventory())
-			if (item.getType().equals(itemType))
-			{
-				toRemove = item;
-			}
-		if (toRemove != null)
-			getInventory().remove(toRemove);
-		// UNCOMMENT
-		// equippedShield = (ServerShield)toRemove;
-	}
-
+	/**
+	 * Equip a certain armor
+	 * @param itemType the type of armor to equip
+	 */
 	public void equipArmour(String itemType)
 	{
 		// First replace the shield in the inventory with the current shield, if
@@ -1681,7 +1648,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			getInventory().remove(toRemove);
 		}
-		// UNCOMMENT
+
 		equippedArmour = (ServerArmour) toRemove;
 
 		ServerAccessory newArmour = new ServerAccessory(this,
@@ -1695,6 +1662,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	}
 
+	/**
+	 * Remove a weapon or armour from the weapon or armour slot
+	 * @param slot the slot to remove from
+	 */
 	public void unequip(int slot)
 	{
 		if (getInventory().size() < MAX_INVENTORY)
@@ -1714,7 +1685,38 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 	}
+	
+	/////////////////////////
+	// GETTERS AND SETTERS //
+	/////////////////////////
+	public boolean isDisconnected()
+	{
+		return disconnected;
+	}
 
+	public void setDisconnected(boolean disconnected)
+	{
+		this.disconnected = disconnected;
+	}
+	
+	public void setX(double x)
+	{
+		if (x != super.getX())
+		{
+			xUpdated = true;
+			super.setX(x);
+		}
+	}
+
+	public void setY(double y)
+	{
+		if (y != super.getY())
+		{
+			super.setY(y);
+			yUpdated = true;
+		}
+	}
+	
 	public boolean isxUpdated()
 	{
 		return xUpdated;
@@ -1827,19 +1829,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		respawnYSpeed = this.verticalMovement;
 	}
 
-
 	public boolean isDropping()
 	{
 		return isDropping;
 	}
-
 
 	public void setDropping(boolean isDropping)
 	{
 		this.isDropping = isDropping;
 	}
 
-	public void setEndGame(boolean endGame,int losingTeam)
+	public void setEndGame(boolean endGame, int losingTeam)
 	{
 		this.endGame = endGame;
 		this.losingTeam = losingTeam;
@@ -1851,4 +1851,3 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	}
 
 }
-
