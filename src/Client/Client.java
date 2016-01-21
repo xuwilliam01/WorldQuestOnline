@@ -281,197 +281,208 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		public void run()
 		{
 			setDoubleBuffered(true);
-			
+
 			while (true)
 			{
 				while (!lines.isEmpty())
 				{
 					String message = lines.remove(0);
 
-					String[] tokens = message.split(" ");
-
-					for (int token = 0; token < tokens.length; token++)
+					if (message != null)
 					{
-						try
+						String[] tokens = message.split(" ");
+
+						for (int token = 0; token < tokens.length; token++)
 						{
-							// If our player has moved
-							if (tokens[token].equals("L"))
+							try
 							{
-								HP = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("M"))
-							{
-								maxHP = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("Q"))
-							{
-								mana = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("B"))
-							{
-								// End the game
-								int team = Integer.parseInt(tokens[++token]);
-								String winner = "Red Team";
-								String loser = "Blue Team";
-								if (team == ServerPlayer.RED_TEAM)
+								// If our player has moved
+								if (tokens[token].equals("L"))
 								{
-									winner = "Blue Team";
-									loser = "Red Team";
+									HP = Integer.parseInt(tokens[++token]);
 								}
-
-								JOptionPane
-										.showMessageDialog(
-												Client.this,
-												String.format(
-														"The %s castle has been destroyed, the winner is the %s!",
-														loser, winner));
-								input.close();
-								output.close();
-								if (inventory.getMenuButton() != null)
-									inventory.getMenuButton().doClick();
-								break;
-
-							}
-							else if (tokens[token].equals("K"))
-							{
-								maxMana = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("U"))
-							{
-								repaint();
-
-								// Update the FPS counter
-								if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
+								else if (tokens[token].equals("M"))
 								{
-									FPScounter = 0;
-									currentFPS = (int) ((1000.0
-											/ (System.currentTimeMillis() - startTime)
-											* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
-									startTime = System.currentTimeMillis();
+									maxHP = Integer.parseInt(tokens[++token]);
 								}
-
-								FPScounter++;
-							}
-							// If there is a player to be updated
-							else if (tokens[token].equals("O"))
-							{
-								int id = Integer.parseInt(tokens[++token]);
-								int x = Integer
-										.parseInt(tokens[++token]);
-								int y = Integer
-										.parseInt(tokens[++token]);
-								if (id == player.getID())
+								else if (tokens[token].equals("Q"))
 								{
-									player.setX(x);
-									player.setY(y);
+									mana = Integer.parseInt(tokens[++token]);
 								}
-								world.setObject(id, x, y,
-										tokens[++token], Integer
-												.parseInt(tokens[++token]),
-										tokens[++token], tokens[++token]);
-							}
-							else if (tokens[token].equals("P"))
-							{
-								pingString = "LATENCY: "
-										+ (System.currentTimeMillis() - ping);
-							}
-
-							// Remove an object after disconnection/destruction
-							else if (tokens[token].equals("R"))
-							{
-								world.remove(Integer.parseInt(tokens[++token]));
-							}
-							else if (tokens[token].equals("I"))
-							{
-								System.out.println("Received an item");
-								inventory.addItem(tokens[++token],
-										tokens[++token],
-										Integer.parseInt(tokens[++token]),
-										Integer.parseInt(tokens[++token]));
-								inventory.repaint();
-							}
-							else if (tokens[token].equals("D"))
-							{
-								damage = Integer.parseInt(tokens[++token]);
-								baseDamage = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("S"))
-							{
-								speed = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("J"))
-							{
-								jump = Integer.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("A"))
-							{
-								armour = Double.parseDouble(tokens[++token]);
-							}
-							else if (tokens[token].equals("V"))
-							{
-								if (Character.isDigit(tokens[token + 1]
-										.charAt(0)))
+								else if (tokens[token].equals("B"))
 								{
-									if (shop != null)
-									{
-										shop.setVisible(false);
-										frame.remove(shop);
-										frame.invalidate();
-										shop = null;
-									}
-									shop = new ClientShop(Client.this);
-									int numItems = Integer
+									// End the game
+									int team = Integer
 											.parseInt(tokens[++token]);
-									for (int item = 0; item < numItems; item++)
+									String winner = "Red Team";
+									String loser = "Blue Team";
+									if (team == ServerPlayer.RED_TEAM)
+									{
+										winner = "Blue Team";
+										loser = "Red Team";
+									}
+
+									JOptionPane
+											.showMessageDialog(
+													Client.this,
+													String.format(
+															"The %s castle has been destroyed, the winner is the %s!",
+															loser, winner));
+									input.close();
+									output.close();
+									if (inventory.getMenuButton() != null)
+										inventory.getMenuButton().doClick();
+									break;
+
+								}
+								else if (tokens[token].equals("K"))
+								{
+									maxMana = Integer.parseInt(tokens[++token]);
+								}
+								else if (tokens[token].equals("U"))
+								{
+									repaint();
+
+									// Update the FPS counter
+									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
+									{
+										FPScounter = 0;
+										currentFPS = (int) ((1000.0
+												/ (System.currentTimeMillis() - startTime)
+												* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
+										startTime = System.currentTimeMillis();
+									}
+
+									FPScounter++;
+								}
+								// If there is a player to be updated
+								else if (tokens[token].equals("O"))
+								{
+									int id = Integer.parseInt(tokens[++token]);
+									int x = Integer
+											.parseInt(tokens[++token]);
+									int y = Integer
+											.parseInt(tokens[++token]);
+									if (id == player.getID())
+									{
+										player.setX(x);
+										player.setY(y);
+									}
+									world.setObject(id, x, y,
+											tokens[++token], Integer
+													.parseInt(tokens[++token]),
+											tokens[++token], tokens[++token]);
+								}
+								else if (tokens[token].equals("P"))
+								{
+									pingString = "LATENCY: "
+											+ (System.currentTimeMillis() - ping);
+								}
+
+								// Remove an object after
+								// disconnection/destruction
+								else if (tokens[token].equals("R"))
+								{
+									world.remove(Integer
+											.parseInt(tokens[++token]));
+								}
+								else if (tokens[token].equals("I"))
+								{
+									System.out.println("Received an item");
+									inventory.addItem(tokens[++token],
+											tokens[++token],
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]));
+									inventory.repaint();
+								}
+								else if (tokens[token].equals("D"))
+								{
+									damage = Integer.parseInt(tokens[++token]);
+									baseDamage = Integer
+											.parseInt(tokens[++token]);
+								}
+								else if (tokens[token].equals("S"))
+								{
+									speed = Integer.parseInt(tokens[++token]);
+								}
+								else if (tokens[token].equals("J"))
+								{
+									jump = Integer.parseInt(tokens[++token]);
+								}
+								else if (tokens[token].equals("A"))
+								{
+									armour = Double
+											.parseDouble(tokens[++token]);
+								}
+								else if (tokens[token].equals("V"))
+								{
+									if (Character.isDigit(tokens[token + 1]
+											.charAt(0)))
+									{
+										if (shop != null)
+										{
+											shop.setVisible(false);
+											frame.remove(shop);
+											frame.invalidate();
+											shop = null;
+										}
+										shop = new ClientShop(Client.this);
+										int numItems = Integer
+												.parseInt(tokens[++token]);
+										for (int item = 0; item < numItems; item++)
+											shop.addItem(
+													tokens[++token],
+													tokens[++token],
+													Integer.parseInt(tokens[++token]),
+													Integer.parseInt(tokens[++token]));
+										frame.add(shop,
+												JLayeredPane.PALETTE_LAYER);
+										shop.revalidate();
+										frame.setVisible(true);
+									}
+									else if (shop != null)
 										shop.addItem(
 												tokens[++token],
 												tokens[++token],
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));
-									frame.add(shop, JLayeredPane.PALETTE_LAYER);
-									shop.revalidate();
-									frame.setVisible(true);
+
 								}
-								else if (shop != null)
-									shop.addItem(tokens[++token],
-											tokens[++token],
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]));
+								else if (tokens[token].equals("C"))
+								{
+									if (shop != null)
+										closeShop();
+								}
+								else if (tokens[token].equals("XR"))
+								{
+									redCastleHP = Integer
+											.parseInt(tokens[++token]);
+									redCastleTier = Integer
+											.parseInt(tokens[++token]);
+									redCastleMoney = Integer
+											.parseInt(tokens[++token]);
+								}
+								else if (tokens[token].equals("XB"))
+								{
+									blueCastleHP = Integer
+											.parseInt(tokens[++token]);
+									blueCastleTier = Integer
+											.parseInt(tokens[++token]);
+									blueCastleMoney = Integer
+											.parseInt(tokens[++token]);
+								}
+							}
+							catch (NumberFormatException e)
+							{
+								System.out.println("Java can't parse integers");
+								e.printStackTrace();
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
 
-							}
-							else if (tokens[token].equals("C"))
-							{
-								if (shop != null)
-									closeShop();
-							}
-							else if (tokens[token].equals("XR"))
-							{
-								redCastleHP = Integer.parseInt(tokens[++token]);
-								redCastleTier = Integer
-										.parseInt(tokens[++token]);
-								redCastleMoney = Integer
-										.parseInt(tokens[++token]);
-							}
-							else if (tokens[token].equals("XB"))
-							{
-								blueCastleHP = Integer
-										.parseInt(tokens[++token]);
-								blueCastleTier = Integer
-										.parseInt(tokens[++token]);
-								blueCastleMoney = Integer
-										.parseInt(tokens[++token]);
-							}
 						}
-						catch (NumberFormatException e)
-						{
-							System.out.println("Java can't parse integers");
-							e.printStackTrace();
-						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
-
 					}
 				}
 				try
@@ -844,7 +855,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		super.paintComponent(graphics);
 
-		//Updat the map
+		// Updat the map
 		try
 		{
 			world.update(graphics, player);
@@ -854,7 +865,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		}
 
-		//Draw the ping and the FPS
+		// Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.black);
 		graphics.drawString(pingString, 20, 20);
@@ -875,7 +886,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
 		}
 
-		//Repaint the inventory
+		// Repaint the inventory
 		inventory.repaint();
 		requestFocusInWindow();
 	}
