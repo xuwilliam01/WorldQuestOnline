@@ -409,7 +409,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		client.print("W");
+		client.print("X");
 		
 	}
 

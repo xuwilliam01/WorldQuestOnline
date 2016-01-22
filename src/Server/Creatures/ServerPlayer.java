@@ -217,7 +217,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * When the player joined the server
 	 */
-	private int joinTime;
+	private long joinTime;
 	
 	/**
 	 * Constructor for a player in the server
@@ -861,7 +861,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					setVSpeed(-verticalMovement);
 					setOnSurface(false);
 				}
-				else if (command.equalsIgnoreCase("W") && world.getWorldCounter() - joinTime <= 1800)
+				else if (command.equalsIgnoreCase("X") && world.getWorldCounter() - joinTime <= 1800)
 				{
 					inflictDamage(10000, this);
 					if (getTeam() == RED_TEAM)
