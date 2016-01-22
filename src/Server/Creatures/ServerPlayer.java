@@ -215,6 +215,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private int maxMana = PLAYER_START_MANA;
 
 	/**
+	 * When the player joined the server
+	 */
+	private int joinTime;
+	
+	/**
 	 * Constructor for a player in the server
 	 * @param socket the connection between the client and the server
 	 * @param engine the engine the server is running on
@@ -283,7 +288,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.engine = engine;
 		xUpdated = true;
 		yUpdated = true;
-
+		this.joinTime = world.getWorldCounter();
+		
 		// Set up the output
 		try
 		{
@@ -855,7 +861,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					setVSpeed(-verticalMovement);
 					setOnSurface(false);
 				}
-				else if (command.equalsIgnoreCase("W"))
+				else if (command.equalsIgnoreCase("W") && world.getWorldCounter() - joinTime <= 1800)
 				{
 					inflictDamage(10000, this);
 					if (getTeam() == RED_TEAM)
