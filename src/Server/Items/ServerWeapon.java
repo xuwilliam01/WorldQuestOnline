@@ -20,36 +20,36 @@ public class ServerWeapon extends ServerItem
 	public final static int DASTONE_DMG = 12;
 	public final static int DAWOOD_DMG = 8;
 
-	public final static int AXDIAMOND_DMG = 50;
+	public final static int AXDIAMOND_DMG = 45;
 	public final static int AXGOLD_DMG = 35;
 	public final static int AXIRON_DMG = 24;
 	public final static int AXSTONE_DMG = 18;
 	public final static int AXWOOD_DMG = 13;
 
-	public final static int SWDIAMOND_DMG = 40;
+	public final static int SWDIAMOND_DMG = 35;
 	public final static int SWGOLD_DMG = 27;
 	public final static int SWIRON_DMG = 21;
 	public final static int SWSTONE_DMG = 13;
 	public final static int SWWOOD_DMG = 9;
 
-	public final static int HADIAMOND_DMG = 60;
+	public final static int HADIAMOND_DMG = 50;
 	public final static int HAGOLD_DMG = 45;
 	public final static int HAIRON_DMG = 30;
 	public final static int HASTONE_DMG = 22;
 	public final static int HAWOOD_DMG =14;
 
 	public final static int STAR_DMG = 10;
-	public final static int SLING_DMG = 7;
+	public final static int SLING_DMG = 12;
 	public final static int WOODBOW_DMG = 10;
 	public final static int STEELBOW_DMG = 14;
-	public final static int MEGABOW_DMG = 25;
+	public final static int MEGABOW_DMG = 20;
 
-	public final static int FIREWAND_DMG = 40;
-	public final static int ICEWAND_DMG = 50;
-	public final static int DARKWAND_DMG = 80;
+	public final static int FIREWAND_DMG = 35;
+	public final static int ICEWAND_DMG = 40;
+	public final static int DARKWAND_DMG = 70;
 	
 	public final static int FIREWAND_MANA = 7;
-	public final static int ICEWAND_MANA = 8;
+	public final static int ICEWAND_MANA = 11;
 	public final static int DARKWAND_MANA = 15;
 
 

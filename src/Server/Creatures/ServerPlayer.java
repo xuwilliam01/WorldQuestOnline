@@ -330,11 +330,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 		case 0:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-					+ ServerWorld.WOOD_TIER));
+					+ ServerWorld.STONE_TIER));
 			break;
 		case 1:
 			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-					+ ServerWorld.WOOD_TIER));
+					+ ServerWorld.STONE_TIER));
 			break;
 		case 2:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
@@ -529,11 +529,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-								+ ServerWorld.WOOD_TIER));
+								+ ServerWorld.STONE_TIER));
 						break;
 					case 1:
 						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-								+ ServerWorld.WOOD_TIER));
+								+ ServerWorld.STONE_TIER));
 						break;
 					case 2:
 						addItem(new ServerWeapon(0, 0,

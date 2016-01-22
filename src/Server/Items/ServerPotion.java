@@ -15,7 +15,7 @@ public class ServerPotion extends ServerItem
 	public final static int MAX_HP_INCREASE = 25;
 	public final static int MANA_AMOUNT = 25;
 	public final static int MAX_MANA_INCREASE = 25;
-	public final static int DMG_AMOUNT = 5;
+	public final static int DMG_AMOUNT = 3;
 	public final static int SPEED_AMOUNT = 1;
 	public final static int JUMP_AMOUNT = 1;
 
