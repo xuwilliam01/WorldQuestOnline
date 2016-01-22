@@ -362,14 +362,18 @@ public class ServerWorld
 							blueCastle = (ServerCastle)newObject;
 						}
 					}
-
-					if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
 					{
 						redSpawners.add((ServerSpawner)newObject);
 					}
 					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("BLUE_GOBLIN_SPAWN.png"))
 					{
 						blueSpawners.add((ServerSpawner)newObject);
+					}
+					else if(obj.getType().equals(ServerWorld.CHEST_TYPE))
+					{
+						//Chests don't spawn immediately
+						newObject.destroy();
 					}
 				}
 		}
@@ -938,13 +942,14 @@ public class ServerWorld
 					}
 
 				}
-				else
-				{
-					// Remove this object from the game if its 'exists' variable is false, unless it's a castle
-					if(!object.getType().equals(CASTLE_TYPE))
+				// Remove this object from the game if its 'exists' variable is false, unless it's a castle or a chest
+				else if(!object.getType().equals(CASTLE_TYPE) && !object.getType().equals(CHEST_TYPE))
 					{
 						objectsToRemove.add(object);
 					}
+				else if(object.getType().equals(CHEST_TYPE))
+				{
+					((ServerChest)object).update();
 				}
 			}
 

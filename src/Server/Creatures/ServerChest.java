@@ -20,6 +20,16 @@ public class ServerChest extends ServerCreature
 	 * The default number of items the chest will store, subject to change later
 	 */
 	private int numItems = 5;
+	
+	/**
+	 * When this chest was destroyed
+	 */
+	private long destroyTime;
+	
+	/**
+	 * How long the chest waits to respawn
+	 */
+	private int respawnTime;
 
 	/**
 	 * Constructor
@@ -59,5 +69,22 @@ public class ServerChest extends ServerCreature
 	{
 		for (int item = 0; item < numItems; item++)
 			addItem(ServerItem.randomItem(getX(), getY()));
+	}
+	
+	public void destroy()
+	{
+		super.destroy();
+		destroyTime = getWorld().getWorldCounter();
+		respawnTime = (int) (Math.random() * 18000 +10800);
+	}
+	
+	public void update()
+	{
+		if(getWorld().getWorldCounter() - destroyTime > respawnTime)
+		{
+			makeExist();
+			setHP(CHEST_HP);
+			addItems();
+		}
 	}
 }
