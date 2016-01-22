@@ -15,7 +15,7 @@ public class ServerVendor extends ServerCreature
 	/**
 	 * The maximum size of the vendor's inventory
 	 */
-	public final static int MAX_INVENTORY = 60;
+	public final static int MAX_INVENTORY = 150;
 
 	/**
 	 * Whether or not a player is already using the vendor
@@ -63,13 +63,18 @@ public class ServerVendor extends ServerCreature
 	 */
 	public void makeShop()
 	{
-		for (int potion = 0; potion < 10; potion++)
-			addItem(ServerPotion.randomPotion(getX(), getY()));
-		addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
-		addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE));
-		addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE));
+		for (int potion = 0; potion < 5; potion++)
+		{
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.HP_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MANA_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_HP_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_MANA_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
+		}
 
-		for (int weapon = 0; weapon < 20; weapon++)
+		for (int weapon = 0; weapon < 25; weapon++)
 			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
 
 		// Add a rare weapon
@@ -104,7 +109,7 @@ public class ServerVendor extends ServerCreature
 		addItem(new ServerArmour(getX(), getY(), ServerWorld.STEEL_ARMOUR));
 
 	}
-	
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////

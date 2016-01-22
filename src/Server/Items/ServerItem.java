@@ -75,11 +75,11 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setImage("SPEED_POTION.png");
-			value = 8;
+			value = 7;
 			break;
 		case ServerWorld.JUMP_POTION_TYPE:
 			setImage("JUMP_POTION.png");
-			value = 8;
+			value = 5;
 			break;
 		case ServerWorld.MONEY_TYPE:
 			setImage("MONEY.png");
