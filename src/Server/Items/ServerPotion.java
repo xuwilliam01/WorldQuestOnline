@@ -13,7 +13,7 @@ public class ServerPotion extends ServerItem
 	// Variables for each type of potion
 	public final static int HEAL_AMOUNT = 25;
 	public final static int MAX_HP_INCREASE = 25;
-	public final static int MANA_AMOUNT = 25;
+	public final static int MANA_AMOUNT = 50;
 	public final static int MAX_MANA_INCREASE = 25;
 	public final static int DMG_AMOUNT = 3;
 	public final static int SPEED_AMOUNT = 1;
