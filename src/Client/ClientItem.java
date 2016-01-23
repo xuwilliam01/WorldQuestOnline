@@ -188,11 +188,15 @@ public class ClientItem extends JButton implements MouseListener{
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		if(amount <= 1)
+			return;
 		graphics.setColor(Color.white);
-		if(amount >= 10)
-			graphics.drawString(amount+"", getWidth()-16, 10);
-		else if(amount > 1)
+		if(amount <= 9)
 			graphics.drawString(amount+"", getWidth()-8, 10);
+		else if(amount <= 99)
+			graphics.drawString(amount+"", getWidth()-16, 10);
+		else
+			graphics.drawString(amount+"", getWidth()-24, 10);
 	}
 	public int getEquipSlot()
 	{

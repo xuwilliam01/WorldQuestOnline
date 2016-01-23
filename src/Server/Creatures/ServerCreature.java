@@ -233,7 +233,7 @@ public abstract class ServerCreature extends ServerObject
 		{
 			if (item.getType().equals(ServerWorld.MONEY_TYPE)
 					&& getType().substring(0, 2)
-							.equals(ServerWorld.PLAYER_TYPE))
+					.equals(ServerWorld.PLAYER_TYPE))
 				money = item;
 			else
 				dropItem(item);
@@ -295,7 +295,7 @@ public abstract class ServerCreature extends ServerObject
 					HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
 					break;
 				case ServerWorld.MAX_HP_TYPE:
-					maxHP += ServerPotion.MAX_HP_INCREASE;
+					maxHP = Math.min(ServerPlayer.PLAYER_MAX_HP,maxHP + ServerPotion.MAX_HP_INCREASE);
 					break;
 				case ServerWorld.MANA_POTION_TYPE:
 					ServerPlayer thisPlayer = (ServerPlayer) this;
@@ -308,7 +308,7 @@ public abstract class ServerCreature extends ServerObject
 							+ ServerPotion.MAX_MANA_INCREASE);
 					break;
 				case ServerWorld.DMG_POTION_TYPE:
-					baseDamage += ServerPotion.DMG_AMOUNT;
+					baseDamage = Math.min(ServerPlayer.MAX_DMG, baseDamage+ ServerPotion.DMG_AMOUNT);
 					break;
 				case ServerWorld.SPEED_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
@@ -320,6 +320,7 @@ public abstract class ServerCreature extends ServerObject
 					thisPlayer = (ServerPlayer) this;
 					thisPlayer.setVerticalMovement(thisPlayer
 							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+					break;
 
 				}
 			}
@@ -353,7 +354,7 @@ public abstract class ServerCreature extends ServerObject
 		else
 			inventory.remove(toRemove);
 	}
-	
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////

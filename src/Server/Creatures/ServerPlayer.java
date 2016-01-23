@@ -52,6 +52,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public final static int MAX_HSPEED = 10;
 	public final static int MAX_VSPEED = 28;
+	public final static int MAX_DMG = 15;
+	public final static int PLAYER_MAX_HP = 300;
+	public final static int PLAYER_MAX_MANA = 300;
 
 	private StringBuilder message = new StringBuilder();
 
@@ -343,6 +346,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 5));
+		
+		for (int potion = 0; potion < 10; potion++)
+		{
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.HP_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MANA_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_HP_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_MANA_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
+		}
 		
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -1824,7 +1838,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void setMaxMana(int maxMana)
 	{
-		this.maxMana = maxMana;
+		this.maxMana = Math.min(PLAYER_MAX_MANA,maxMana);
 	}
 
 	public int getHorizontalMovement()
