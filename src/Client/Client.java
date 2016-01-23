@@ -339,6 +339,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								{
 									maxMana = Integer.parseInt(tokens[++token]);
 								}
+								else if(tokens[token].equals("SI"))
+								{
+									String type = tokens[++token];
+									inventory.removeThis(type);
+								}
 								else if (tokens[token].equals("U"))
 								{
 									repaint();

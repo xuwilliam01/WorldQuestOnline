@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,6 +37,8 @@ public class ClientInventory extends JPanel implements ActionListener{
 	private JButton mainMenu;
 	private JButton switchTeams;
 
+	private ArrayList<ClientItem> removeList = new ArrayList<ClientItem>();
+
 	/**
 	 * Constructor
 	 * @param menu the button that will take the player back to the main menu
@@ -56,14 +59,14 @@ public class ClientInventory extends JPanel implements ActionListener{
 			mainMenu.setLocation(20,Client.SCREEN_HEIGHT-100);
 			add(mainMenu);
 		}
-		
+
 		switchTeams = new JButton("Switch Teams");
 		switchTeams.setSize(150,50);
 		switchTeams.setLocation(135,Client.SCREEN_HEIGHT-100);
 		switchTeams.addActionListener(this);
 		add(switchTeams);
 	}
-	
+
 	/**
 	 * Adds an item to the array given its image
 	 * @param image
@@ -140,33 +143,46 @@ public class ClientInventory extends JPanel implements ActionListener{
 	 */
 	public void sellItem(ClientItem item, int pos)
 	{
-		//If there is more than one of this item stacked, remove 1 occurence of it and tell the server
-		if(item.getAmount() > 1)
+		//Tell the server you are selling the item
+		if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected())
 		{
-			item.decreaseAmount();	
 			client.print("S "+item.getType());
+			if(!removeList.contains(item))
+				removeList.add(item);
 		}
-		else
+	}
+
+	/**
+	 * When an item is confirmed to be sold, get rid of it
+	 */
+	public void removeThis(String type)
+	{
+		for(ClientItem item : removeList)
 		{
-			//Completely remove the item from the inventory
-			item.setVisible(false);
-			remove(item);
-			invalidate();
-			if(pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected())
-				for(int row = 0; row < inventory.length;row++)
-					for(int col = 0; col < inventory[row].length;col++)
-					{
-						if(inventory[row][col] == item)
+			if(item.getType().equals(type))
+			{
+				if(item.getAmount() > 1)
+				{
+					item.decreaseAmount();
+				}
+				else
+				{
+					item.setVisible(false);
+					remove(item);
+					invalidate();
+					for(int row = 0; row < inventory.length;row++)
+						for(int col = 0; col < inventory[row].length;col++)
 						{
-							inventory[row][col] = null;
-							client.print("S "+item.getType());
-							repaint();
-							return;
+							if(inventory[row][col] == item)
+							{
+								inventory[row][col] = null;
+								repaint();
+								return;
+							}
 						}
-					}
+				}
+			}
 		}
-
-
 	}
 	/**
 	 * Removes an item from the inventory
@@ -341,22 +357,22 @@ public class ClientInventory extends JPanel implements ActionListener{
 			graphics.drawString(String.format("%d/%d", client.getHP(), client.getMaxHP()), 153,
 					110);
 		}
-		
+
 		graphics.setColor(Color.blue);
 		graphics.fillRect(100,135,(int)(client.getMana()*180.0/client.getMaxMana()),20);
 		graphics.setColor(Color.white);
 		graphics.drawString(String.format("%d/%d",client.getMana(),client.getMaxMana()),153,150);
-		
+
 		graphics.setColor(new Color(253,83,83));
 		if(client.getBaseDamage() > 9)
-		graphics.drawString(String.format("%d(+%d)", client.getDamage()
-				+ client.getBaseDamage(), client.getBaseDamage()), 101, 215);
+			graphics.drawString(String.format("%d(+%d)", client.getDamage()
+					+ client.getBaseDamage(), client.getBaseDamage()), 101, 215);
 		else
 			graphics.drawString(String.format("%d(+%d)", client.getDamage()
 					+ client.getBaseDamage(), client.getBaseDamage()), 105, 215);
-		
+
 		graphics.drawString(String.format("%.0f%%",client.getArmour()*100),115,255);
-		
+
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
 			graphics.drawString(
 					String.format("%d(Max)", client.getSpeed()
@@ -410,7 +426,7 @@ public class ClientInventory extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		client.print("X");
-		
+
 	}
 
 

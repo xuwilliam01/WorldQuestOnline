@@ -218,7 +218,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * When the player joined the server
 	 */
 	private long joinTime;
-	
+
 	/**
 	 * Constructor for a player in the server
 	 * @param socket the connection between the client and the server
@@ -238,7 +238,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		// Set a random hair style for the player
@@ -289,7 +289,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		xUpdated = true;
 		yUpdated = true;
 		this.joinTime = world.getWorldCounter();
-		
+
 		// Set up the output
 		try
 		{
@@ -969,7 +969,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					String type = command.substring(2);
 					if (!type.equals(ServerWorld.MONEY_TYPE))
+					{
 						sell(type);
+						queueMessage("SI "+type);
+					}
 				}
 				else if (command.length() > 2
 						&& command.substring(0, 2).equals("Na"))
@@ -1187,17 +1190,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
 									&& ((ServerCreature) otherObject)
-											.isAttackable()
+									.isAttackable()
 									&& ((ServerCreature) otherObject)
-											.getTeam() != getTeam()
+									.getTeam() != getTeam()
 									&& collidesWith(otherObject)
 									&& !alreadyPunched.contains(otherObject))
 							{
 								((ServerCreature) otherObject)
-										.inflictDamage(PUNCHING_DAMAGE
-												+ getBaseDamage(), this);
+								.inflictDamage(PUNCHING_DAMAGE
+										+ getBaseDamage(), this);
 								alreadyPunched
-										.add((ServerCreature) otherObject);
+								.add((ServerCreature) otherObject);
 							}
 						}
 					}
@@ -1467,7 +1470,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1691,7 +1694,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 	}
-	
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////
@@ -1704,7 +1707,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.disconnected = disconnected;
 	}
-	
+
 	public void setX(double x)
 	{
 		if (x != super.getX())
@@ -1722,7 +1725,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			yUpdated = true;
 		}
 	}
-	
+
 	public boolean isxUpdated()
 	{
 		return xUpdated;
