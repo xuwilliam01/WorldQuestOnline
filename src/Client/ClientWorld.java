@@ -369,17 +369,17 @@ public class ClientWorld
 						{
 							graphics.setColor(Color.red);
 							if(object.getName().equals(""))				
-								graphics.fillRect(x + image.getWidth(null) / 2 - 5,
-										y - 15, 10, 10);
-							else graphics.drawString(object.getName(),(int)(x + image.getWidth(null)/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
+								graphics.fillRect(x + object.getWidth() / 2 - 5,
+										y + object.getHeight()/4, 10, 10);
+							else graphics.drawString(object.getName(),(int)(x + object.getWidth()/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						else if (object.getTeam() == ServerCreature.BLUE_TEAM)
 						{
 							graphics.setColor(Color.blue);
 							if(object.getName().equals(""))
-								graphics.fillRect(x + image.getWidth(null) / 2 - 5,
-										y - 15, 10, 10);
-							else graphics.drawString(object.getName(),(int)(x + image.getWidth(null)/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
+								graphics.fillRect(x + object.getWidth() / 2 - 5,
+										y + object.getHeight()/4, 10, 10);
+							else graphics.drawString(object.getName(),(int)(x + object.getWidth() - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						graphics.drawImage(image, x, y,
 								null);
@@ -489,13 +489,13 @@ public class ClientWorld
 		graphics.setFont(BIG_NORMAL_FONT);
 		
 		graphics.setColor(Color.red);
-		if(client.getRedCastleTier() == 5)
+		if(client.getRedCastleTier() == 6)
 			graphics.drawString(String.format("Red Castle Tier %d (Max)",client.getRedCastleTier()+1),1050,975);
 		else
 			graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1050,975);
 	
 		graphics.setColor(Color.blue);
-		if(client.getBlueCastleTier() == 5)
+		if(client.getBlueCastleTier() == 6)
 			graphics.drawString(String.format("Blue Castle Tier %d (Max)",client.getBlueCastleTier()+1),100,975);
 		else
 			graphics.drawString(String.format("Blue Castle Tier %d (Money For Next Tier  %d/%d)",client.getBlueCastleTier()+1,client.getBlueCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getBlueCastleTier()]),100,975);

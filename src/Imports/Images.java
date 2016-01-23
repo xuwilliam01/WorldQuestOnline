@@ -102,7 +102,7 @@ public class Images
 			{
 				
 				// Add all the pics from the player sprite sheets
-				String[] slimeSheets = { "GREENSLIME","REDSLIME", "BLUESLIME", "YELLOWSLIME", "DARKSLIME"};
+				String[] slimeSheets = { "GREENSLIME","REDSLIME", "BLUESLIME", "YELLOWSLIME"};
 				for (int sheetNo = 0; sheetNo < slimeSheets.length; sheetNo++)
 				{
 					image = ImageIO.read(new File(
@@ -122,6 +122,15 @@ public class Images
 				{
 					images.add(new GameImage("GIANTSLIME" + "_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 19, 0, 19, 17), 144, 102));
+				}
+				
+				image = ImageIO.read(new File(
+						"DARKSLIME.png"));
+				
+				for (int no = 0; no < 9; no++)
+				{
+					images.add(new GameImage("DARKSLIME" + "_" + no + IMAGE_FORMAT,
+							image.getSubimage(no * 19, 0, 19, 17), 19, 17));
 				}
 
 
@@ -289,11 +298,20 @@ public class Images
 				
 				
 				// Add all the pics from the player sprite sheets
-				String[] goblinSheets = { "GOB","GOBGENERAL","GOBGUARD","GOBKING","GOBKNIGHT","GOBLORD","GOBNINJA","GOBPEASANT","GOBSOLDIER","GOBWIZARD","GOBWORKER",};
+				String[] goblinSheets = { "GOB","GOBGENERAL","GOBGUARD","GOBKING","GOBKNIGHT","GOBLORD","GOBNINJA","GOBPEASANT","GOBSOLDIER","GOBWIZARD","GOBWORKER", "GOBGIANT"};
 				
 				for (int no = 0; no < goblinSheets.length; no++)
 				{
+					double size = 1;
+					if (!goblinSheets[no].equals("GOBGIANT"))
+					{
 					image = ImageIO.read(new File(goblinSheets[no] + ".png"));
+					}
+					else
+					{
+						image = ImageIO.read(new File("GOB.png"));
+						size = 2;
+					}
 					BufferedImage[][] imageTiles = new BufferedImage[image.getHeight()/64][image.getWidth() / 32];
 					for (int row = 0; row < imageTiles.length; row++)
 					{
@@ -309,7 +327,7 @@ public class Images
 							// Add a right version of this image
 							images.add(new GameImage(goblinSheets[no]
 									+ "_RIGHT_" + row + "_" + column + ".png",
-									currentImage, 64, 128));
+									currentImage, (int)(64*size + 0.5), (int)(128*size + 0.5)));
 
 							AffineTransform tx;
 							tx = AffineTransform.getScaleInstance(-1, 1);
@@ -323,7 +341,7 @@ public class Images
 									op.filter(currentImage, null).getSubimage(
 											0, 0,
 											currentImage.getWidth(),
-											currentImage.getHeight()), 64, 128));
+											currentImage.getHeight()), (int)(64*size + 0.5), (int)(128*size + 0.5)));
 						}
 						
 						// Add the death images
@@ -332,7 +350,7 @@ public class Images
 						
 						// Add a right version of this image
 						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
-								+ "_" + 4 + ".png", currentImage, 64, 128));
+								+ "_" + 4 + ".png", currentImage, (int)(64*size + 0.5), (int)(128*size + 0.5)));
 
 						AffineTransform tx;
 						tx = AffineTransform.getScaleInstance(-1, 1);
@@ -345,14 +363,14 @@ public class Images
 								+ "_" + 4 + ".png", op.filter(currentImage, null)
 								.getSubimage(0, 0,
 										currentImage.getWidth(),
-										currentImage.getHeight()), 64, 128));
+										currentImage.getHeight()), (int)(64*size + 0.5), (int)(128*size + 0.5)));
 						
 						currentImage = image.getSubimage(32*6 + 8, 64,
-								36, 64);
+								42, 64);
 						
 						// Add a right version of this image
 						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
-								+ "_" + 6 + ".png", currentImage, 84, 128));
+								+ "_" + 6 + ".png", currentImage, (int)(84*size + 0.5), (int)(128*size + 0.5)));
 
 						tx = AffineTransform.getScaleInstance(-1, 1);
 						tx.translate(-currentImage.getWidth(null), 0);
@@ -364,7 +382,7 @@ public class Images
 								+ "_" + 6 + ".png", op.filter(currentImage, null)
 								.getSubimage(0, 0,
 										currentImage.getWidth(),
-										currentImage.getHeight()), 84, 128));
+										currentImage.getHeight()), (int)(84*size + 0.5), (int)(128*size + 0.5)));
 					}
 				}
 				

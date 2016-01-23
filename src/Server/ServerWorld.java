@@ -62,6 +62,7 @@ public class ServerWorld
 	public final static String NAKED_GOBLIN_TYPE = GOBLIN_TYPE + "N";
 	public final static String GOBLIN_GENERAL_TYPE = GOBLIN_TYPE + "G";
 	public final static String GOBLIN_GUARD_TYPE = GOBLIN_TYPE + "g";
+	public final static String GOBLIN_GIANT_TYPE = GOBLIN_TYPE + "J";
 	public final static String GOBLIN_KING_TYPE = GOBLIN_TYPE + "K";
 	public final static String GOBLIN_KNIGHT_TYPE = GOBLIN_TYPE + "k";
 	public final static String GOBLIN_LORD_TYPE = GOBLIN_TYPE + "L";
@@ -627,7 +628,7 @@ public class ServerWorld
 											.addCollided(otherObject);
 										}
 									}
-									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown() && ((ServerCastle)object).getCurrentGoblinTier() < 5)
+									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown() && ((ServerCastle)object).getCurrentGoblinTier() < 6)
 									{
 										((ServerCastle)object).addMoney(((ServerMoney)otherObject).getAmount());
 										otherObject.destroy();

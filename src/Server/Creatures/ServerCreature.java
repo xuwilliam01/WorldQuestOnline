@@ -98,6 +98,11 @@ public abstract class ServerCreature extends ServerObject
 	 * The base damage the creature does
 	 */
 	private int baseDamage = 0;
+	
+	/**
+	 * Whether or not the creature has already punched in one instance of punching (to avoid multiple punch detection in one punch)
+	 */
+	private boolean hasPunched = false;
 
 	/**
 	 * Constructor for a creature
@@ -354,6 +359,68 @@ public abstract class ServerCreature extends ServerObject
 			inventory.remove(toRemove);
 	}
 	
+	/**
+	 * Punch stuff
+	 * @param damage
+	 */
+	public void punch(int damage)
+	{
+		// List of creatures we've already punched so we dont hit them
+		// twice
+		ArrayList<ServerCreature> alreadyPunched = new
+				ArrayList<ServerCreature>();
+
+		int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
+		int endRow = (int) ((getY() + getHeight()) /
+				ServerWorld.OBJECT_TILE_SIZE);
+		
+		int y1 = (int)(getY());
+		int y2 = (int)(getY()+getHeight());
+		
+		int startColumn = (int) ((getX()- getWidth()/2) / ServerWorld.OBJECT_TILE_SIZE);
+		int endColumn = (int) ((getX() + getWidth()) /
+				ServerWorld.OBJECT_TILE_SIZE);
+		int x1 = (int) (getX()- getWidth()/2);
+		int x2 = (int) (getX() + getWidth());
+		
+		
+		
+		if (getDirection().equals("RIGHT"))
+		{
+			startColumn = (int) ((getX()) / ServerWorld.OBJECT_TILE_SIZE);
+			endColumn = (int) ((getX() + getWidth() + getWidth()/2) /
+					ServerWorld.OBJECT_TILE_SIZE);
+			x1 = (int)(getX());
+			x2 = (int) (getX() + getWidth() + getWidth()/2);
+		}
+		
+		// Inflict damage to every creature in range of the player's
+		// punch
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
+			{
+				for (ServerObject otherObject : getWorld().getObjectGrid()[row][column])
+				{
+					if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
+							&& ((ServerCreature) otherObject)
+							.isAttackable()
+							&& ((ServerCreature) otherObject)
+							.getTeam() != getTeam()
+							&& otherObject.collidesWith(x1,y1,x2,y2)
+							&& !alreadyPunched.contains(otherObject))
+					{
+						((ServerCreature) otherObject)
+						.inflictDamage(damage
+								+ getBaseDamage(), this);
+						alreadyPunched
+						.add((ServerCreature) otherObject);
+					}
+				}
+			}
+		}
+	}
+	
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////
@@ -438,4 +505,35 @@ public abstract class ServerCreature extends ServerObject
 		this.maxHP = maxHP;
 		this.HP = maxHP;
 	}
+
+	public double getRelativeDrawX()
+	{
+		return relativeDrawX;
+	}
+
+	public void setRelativeDrawX(double relativeDrawX)
+	{
+		this.relativeDrawX = relativeDrawX;
+	}
+
+	public double getRelativeDrawY()
+	{
+		return relativeDrawY;
+	}
+
+	public void setRelativeDrawY(double relativeDrawY)
+	{
+		this.relativeDrawY = relativeDrawY;
+	}
+
+	public boolean isHasPunched()
+	{
+		return hasPunched;
+	}
+
+	public void setHasPunched(boolean hasPunched)
+	{
+		this.hasPunched = hasPunched;
+	}
+	
 }

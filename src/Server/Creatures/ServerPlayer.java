@@ -238,7 +238,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		// Set a random hair style for the player
@@ -342,7 +342,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 5));
+		addItem(new ServerMoney(0, 0, 500));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -441,6 +441,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					else if (actionCounter < 16)
 					{
 						setRowCol(new RowCol(2, 8));
+						if (!isHasPunched())
+						{
+							punch(PUNCHING_DAMAGE + getBaseDamage());
+							setHasPunched(true);
+						}
 					}
 				}
 				else if (action.equals("BOW"))
@@ -861,7 +866,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					setVSpeed(-verticalMovement);
 					setOnSurface(false);
 				}
-				else if (command.equalsIgnoreCase("X") && world.getWorldCounter() - joinTime <= 1800)
+				else if (command.equalsIgnoreCase("X")
+						&& world.getWorldCounter() - joinTime <= 1800)
 				{
 					inflictDamage(10000, this);
 					if (getTeam() == RED_TEAM)
@@ -971,7 +977,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					if (!type.equals(ServerWorld.MONEY_TYPE))
 					{
 						sell(type);
-						queueMessage("SI "+type);
+						queueMessage("SI " + type);
 					}
 				}
 				else if (command.length() > 2
@@ -1167,44 +1173,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				action = "PUNCH";
 				actionDelay = 16;
-
-				// List of creatures we've already punched so we dont hit them
-				// twice
-				ArrayList<ServerCreature> alreadyPunched = new
-						ArrayList<ServerCreature>();
-
-				int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
-				int endRow = (int) ((getY() + getHeight()) /
-						ServerWorld.OBJECT_TILE_SIZE);
-				int startColumn = (int) (getX() / ServerWorld.OBJECT_TILE_SIZE);
-				int endColumn = (int) ((getX() + getWidth()) /
-						ServerWorld.OBJECT_TILE_SIZE);
-
-				// Inflict damage to every creature in range of the player's
-				// punch
-				for (int row = startRow; row <= endRow; row++)
-				{
-					for (int column = startColumn; column <= endColumn; column++)
-					{
-						for (ServerObject otherObject : world.getObjectGrid()[row][column])
-						{
-							if (otherObject.getType().charAt(0) == ServerWorld.CREATURE_TYPE
-									&& ((ServerCreature) otherObject)
-									.isAttackable()
-									&& ((ServerCreature) otherObject)
-									.getTeam() != getTeam()
-									&& collidesWith(otherObject)
-									&& !alreadyPunched.contains(otherObject))
-							{
-								((ServerCreature) otherObject)
-								.inflictDamage(PUNCHING_DAMAGE
-										+ getBaseDamage(), this);
-								alreadyPunched
-								.add((ServerCreature) otherObject);
-							}
-						}
-					}
-				}
+				setHasPunched(false);
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.MELEE_TYPE))
@@ -1374,49 +1343,54 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	@Override
 	public void inflictDamage(int amount, ServerCreature source)
 	{
-		if (equippedArmour != null)
+		if (isAlive())
 		{
-			amount -= amount * equippedArmour.getArmour();
-		}
-
-		if (amount <= 0)
-		{
-			amount = 1;
-		}
-
-		if (action.equals("BLOCK"))
-		{
-			amount = 0;
-		}
-
-		setHP(getHP() - amount);
-
-		double damageX = Math.random() * getWidth() + getX();
-		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
-				/ 3;
-		world.add(new ServerDamageIndicator(damageX, damageY, Integer
-				.toString(amount), ServerDamageIndicator.RED_TEXT, world));
-
-		// Play the death animation of the player when the HP drops to 0 or below, and eventually respawn the player
-		if (getHP() <= 0 && isAlive())
-		{
-			setAlive(false);
-
-			dropInventory();
-
-			verticalMovement = 0;
-			horizontalMovement = 0;
-
-			if (getBody() != null)
+			if (equippedArmour != null)
 			{
-				getBody().destroy();
-				setBody(null);
+				amount -= amount * equippedArmour.getArmour();
 			}
-			setHSpeed(0);
-			setVSpeed(0);
 
-			setAttackable(false);
-			isDropping = false;
+			if (amount <= 0)
+			{
+				amount = 1;
+			}
+
+			if (action.equals("BLOCK"))
+			{
+				amount = 0;
+			}
+
+			setHP(getHP() - amount);
+
+			double damageX = Math.random() * getWidth() + getX();
+			double damageY = Math.random() * getHeight() / 2 + getY()
+					- getHeight()
+					/ 3;
+			world.add(new ServerDamageIndicator(damageX, damageY, Integer
+					.toString(amount), ServerDamageIndicator.RED_TEXT, world));
+
+			// Play the death animation of the player when the HP drops to 0 or
+			// below, and eventually respawn the player
+			if (getHP() <= 0)
+			{
+				setAlive(false);
+
+				dropInventory();
+
+				verticalMovement = 0;
+				horizontalMovement = 0;
+
+				if (getBody() != null)
+				{
+					getBody().destroy();
+					setBody(null);
+				}
+				setHSpeed(0);
+				setVSpeed(0);
+
+				setAttackable(false);
+				isDropping = false;
+			}
 		}
 	}
 
@@ -1470,7 +1444,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-											.isBusy())
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1695,9 +1669,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	}
 
-	/////////////////////////
+	// ///////////////////////
 	// GETTERS AND SETTERS //
-	/////////////////////////
+	// ///////////////////////
 	public boolean isDisconnected()
 	{
 		return disconnected;
