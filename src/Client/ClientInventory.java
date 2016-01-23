@@ -384,14 +384,14 @@ public class ClientInventory extends JPanel implements ActionListener {
 			graphics.setColor(Color.green);
 		graphics.drawString(
 				String.format("%d", client.getSpeed() - ServerPlayer.MOVE_SPEED
-						+ 1), 240, 215);
+						+ 1), 250, 215);
 
 		graphics.setColor(RED);
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
 			graphics.setColor(Color.green);
 		graphics.drawString(
 				String.format("%d", client.getJump() - ServerPlayer.JUMP_SPEED
-						+ 1), 240, 255);
+						+ 1), 250, 255);
 	}
 
 	public ClientItem[] getEquippedWeapons() {
