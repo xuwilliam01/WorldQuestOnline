@@ -86,27 +86,27 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON.png");
-			value = 10;
+			value = 20;
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
 			setImage("OUTFITNINJARED_ICON.png");
-			value = 6;
+			value = 10;
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 			setImage("OUTFITNINJABLUE_ICON.png");
-			value = 3;
+			value = 6;
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
 			setImage("OUTFITNINJAGREY_ICON.png");
-			value = 1;
+			value = 3;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON.png");
-			value = 20;
+			value = 25;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setImage("DAGOLD_ICON.png");
-			value = 10;
+			value = 15;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setImage("DAIRON_ICON.png");
@@ -162,7 +162,7 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("HADIAMOND_ICON.png");
-			value = 35;
+			value = 40;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setImage("HAGOLD_ICON.png");
@@ -198,7 +198,7 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON.png");
-			value = 25;
+			value = 35;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			setImage("ICEWAND_ICON.png");
@@ -220,15 +220,15 @@ public abstract class ServerItem extends ServerObject
 	 */
 	public static ServerItem randomItem(double x, double y)
 	{
-		int randType = (int) (Math.random() * 10 + 1);
+		int randType = (int) (Math.random() * 13 + 1);
 
-		if (randType <= 5)
+		if (randType <= 7)
 			return new ServerMoney(x, y);
-		if (randType <= 6)
-			return ServerArmour.randomArmour(x, y);
 		if (randType <= 8)
-			return ServerPotion.randomPotion(x, y);
+			return ServerArmour.randomArmour(x, y);
 		if (randType <= 10)
+			return ServerPotion.randomPotion(x, y);
+		if (randType <= 13)
 			return ServerWeapon.randomWeapon(x, y);
 
 		// This won't happen

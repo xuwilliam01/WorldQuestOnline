@@ -343,7 +343,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 5));
-
+		
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
@@ -1540,7 +1540,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		this.message.append(" " + message);
+		while(true){
+			try
+			{
+				this.message.append(" " + message);
+				break;
+			}
+
+			catch(ArrayIndexOutOfBoundsException e)
+			{
+				System.out.println("Stirng builder queue lagged and out of bounds happened");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
