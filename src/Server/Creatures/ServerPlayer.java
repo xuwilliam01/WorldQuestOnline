@@ -52,6 +52,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public final static int MAX_HSPEED = 10;
 	public final static int MAX_VSPEED = 28;
+	public final static int MAX_DMG = 15;
+	public final static int PLAYER_MAX_HP = 300;
+	public final static int PLAYER_MAX_MANA = 300;
 
 	private StringBuilder message = new StringBuilder();
 
@@ -342,8 +345,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 500));
-
+		addItem(new ServerMoney(0, 0, 5));
+		
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
@@ -1514,7 +1517,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		this.message.append(" " + message);
+		while(true){
+			try
+			{
+				this.message.append(" " + message);
+				break;
+			}
+
+			catch(ArrayIndexOutOfBoundsException e)
+			{
+				System.out.println("Stirng builder queue lagged and out of bounds happened");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -1786,7 +1801,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void setMaxMana(int maxMana)
 	{
-		this.maxMana = maxMana;
+		this.maxMana = Math.min(PLAYER_MAX_MANA,maxMana);
 	}
 
 	public int getHorizontalMovement()
