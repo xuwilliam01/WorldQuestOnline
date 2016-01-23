@@ -71,7 +71,7 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
 			setImage("DMG_POTION.png");
-			value = 8;
+			value = 10;
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setImage("SPEED_POTION.png");
