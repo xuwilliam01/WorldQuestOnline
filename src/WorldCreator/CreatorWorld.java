@@ -554,16 +554,23 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void setHeight(int height)
 	{
 		char[][] currentGrid = grid.clone();
+		int deltaHeight = height - grid.length;
 		grid = new char[height][grid[0].length];
 
 		for (int row = 0; row < grid.length; row++)
 			for (int col = 0; col < grid[0].length; col++)
 			{
-				if (row < currentGrid.length)
-					grid[row][col] = currentGrid[row][col];
+				if (row >= deltaHeight/2 && row < currentGrid.length + deltaHeight/2)
+					grid[row][col] = currentGrid[row - deltaHeight/2][col];
 				else
 					grid[row][col] = ' ';
 			}
+		
+		for(CreatorWorldObject object : objects)
+		{
+			object.setRow(object.getRow()+deltaHeight/2);
+			repaint();
+		}
 	}
 
 	/**
@@ -572,16 +579,23 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void setWidth(int width)
 	{
 		char[][] currentGrid = grid.clone();
+		int deltaWidth = width - grid[0].length;
 		grid = new char[grid.length][width];
 
 		for (int row = 0; row < grid.length; row++)
 			for (int col = 0; col < grid[0].length; col++)
 			{
-				if (col < currentGrid[0].length)
-					grid[row][col] = currentGrid[row][col];
+				if (col >= deltaWidth/2 && col < currentGrid[0].length + deltaWidth/2)
+					grid[row][col] = currentGrid[row][col-deltaWidth/2];
 				else
 					grid[row][col] = ' ';
 			}
+		
+		for(CreatorWorldObject object : objects)
+		{
+			object.setCol(object.getCol()+deltaWidth/2);
+			repaint();
+		}
 	}
 	
 	/**
