@@ -243,7 +243,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				"BASE_" + skinColour
 						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
-
+		
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
 		int randomHair = (int) (Math.random() * 8);
@@ -557,13 +557,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					if (getTeam() == RED_TEAM)
 					{
 						setX(world.getRedCastleX());
+						setY(world.getRedCastleY());
 
 					}
 					else
 					{
 						setX(world.getBlueCastleX());
+						setY(world.getBlueCastleY());
 					}
-					setY(300);
 
 					setHP(getMaxHP());
 					mana = maxMana;
@@ -732,10 +733,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("J " + verticalMovement);
 				queueMessage("XB " + world.getBlueCastle().getHP() + " "
 						+ world.getBlueCastle().getCurrentGoblinTier() + " "
-						+ world.getBlueCastle().getMoney());
+						+ world.getBlueCastle().getMoney() + " " + world.getBlueCastle().getMaxHP());
 				queueMessage("XR " + world.getRedCastle().getHP() + " "
 						+ world.getRedCastle().getCurrentGoblinTier() + " "
-						+ world.getRedCastle().getMoney());
+						+ world.getRedCastle().getMoney() + " " + world.getRedCastle().getMaxHP());
 				if (equippedArmour != null)
 					queueMessage(String.format("A %.2f",
 							equippedArmour.getArmour()));

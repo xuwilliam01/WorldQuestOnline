@@ -66,6 +66,8 @@ public class ServerCastle extends ServerCreature
 		if(currentGoblinTier < 6 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
+			setMaxHP(getMaxHP()+5000);
+			setHP(getHP()+5000);
 			currentGoblinTier++;
 			
 			ArrayList<ServerSpawner> teamSpawners;

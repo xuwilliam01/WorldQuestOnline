@@ -69,13 +69,17 @@ public class Server implements Runnable
 				int team = engine.nextTeam() % 2 + 1;
 
 				int x = 2000;
+				int y = 2000;
 				if(team == ServerPlayer.RED_TEAM)
+				{
 					x = engine.getWorld().getRedCastleX();
+					y = engine.getWorld().getRedCastleY();
+				}
 				else
+				{
 					x = engine.getWorld().getBlueCastleX();
-
-
-				int y = ServerPlayer.PLAYER_Y;
+					y = engine.getWorld().getBlueCastleY();
+				}
 
 				int characterSelection = (int) (Math.random() * playerColours.length);
 				ServerPlayer newPlayer = new ServerPlayer(x, y,

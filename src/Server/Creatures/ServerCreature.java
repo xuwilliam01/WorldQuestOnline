@@ -503,7 +503,6 @@ public abstract class ServerCreature extends ServerObject
 	public void setMaxHP(int maxHP)
 	{
 		this.maxHP = maxHP;
-		this.HP = maxHP;
 	}
 
 	public double getRelativeDrawX()

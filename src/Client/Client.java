@@ -84,10 +84,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int redCastleHP;
 	private int redCastleTier;
 	private int redCastleMoney;
+	private int redCastleMaxHP;
 
 	private int blueCastleHP;
 	private int blueCastleTier;
 	private int blueCastleMoney;
+	private int blueCastleMaxHP;
 
 	/**
 	 * The player's inventory
@@ -466,6 +468,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 											.parseInt(tokens[++token]);
 									redCastleMoney = Integer
 											.parseInt(tokens[++token]);
+									redCastleMaxHP = Integer
+											.parseInt(tokens[++token]);
 								}
 								else if (tokens[token].equals("XB"))
 								{
@@ -474,6 +478,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									blueCastleTier = Integer
 											.parseInt(tokens[++token]);
 									blueCastleMoney = Integer
+											.parseInt(tokens[++token]);
+									blueCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
 								}
 							}
@@ -1248,5 +1254,23 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		this.blueCastleMoney = blueCastleMoney;
 	}
+
+	public int getRedCastleMaxHP() {
+		return redCastleMaxHP;
+	}
+
+	public void setRedCastleMaxHP(int redCastleMaxHP) {
+		this.redCastleMaxHP = redCastleMaxHP;
+	}
+
+	public int getBlueCastleMaxHP() {
+		return blueCastleMaxHP;
+	}
+
+	public void setBlueCastleMaxHP(int blueCastleMaxHP) {
+		this.blueCastleMaxHP = blueCastleMaxHP;
+	}
+	
+	
 
 }

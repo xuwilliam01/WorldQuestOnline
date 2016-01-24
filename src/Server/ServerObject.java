@@ -204,8 +204,8 @@ public class ServerObject
 		// essentially
 		if (other.getX() <= x + width + distance
 				&& other.getX() + other.getWidth() >= x - distance
-				&& other.getY() <= y + height + distance
-				&& other.getY() + other.getHeight() >= y - distance)
+				&& other.getY() <= y + height + distance/3
+				&& other.getY() + other.getHeight() >= y - distance/3)
 		{
 			return true;
 		}

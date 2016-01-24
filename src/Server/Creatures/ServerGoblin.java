@@ -125,7 +125,6 @@ public class ServerGoblin extends ServerCreature
 		super(x, y, 20, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0.png",
 				"", GOBLIN_HP, world, true);
 
-		maxGoblinLevel = 6;
 		int numTypes = (int) (Math.random()
 				* Math.min(NUM_TYPES, maxGoblinLevel * 2) + 1);
 

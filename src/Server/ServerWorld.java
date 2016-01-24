@@ -140,6 +140,8 @@ public class ServerWorld
 
 	private int redCastleX;
 	private int blueCastleX;
+	private int redCastleY;
+	private int blueCastleY;
 
 	/**
 	 * Grid of tiles
@@ -355,11 +357,13 @@ public class ServerWorld
 						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
 						{
 							redCastleX = (int) newObject.getX() + 50;
+							redCastleY = (int) newObject.getY() + 100;
 							redCastle = (ServerCastle)newObject;
 						}
 						else
 						{
 							blueCastleX = (int) newObject.getX() + 50;
+							blueCastleY = (int) newObject.getY() + 100;
 							blueCastle = (ServerCastle)newObject;
 						}
 					}
@@ -725,7 +729,7 @@ public class ServerWorld
 											.getType().equals(PLAYER_TYPE) && !((ServerPlayer) object)
 											.isDropping()) || !object.getType()
 											.equals(PLAYER_TYPE))
-											&& (tileGrid[row][column] == '*' || tileGrid[row][column] == '+')))
+											&& (tileGrid[row][column] == '*' || tileGrid[row][column] == '+' || tileGrid[row][column] == '/')))
 											&& column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1)
 									{
@@ -1170,6 +1174,16 @@ public class ServerWorld
 	{
 		return blueCastleX;
 	}
+	
+	public int getRedCastleY()
+	{
+		return redCastleY;
+	}
+	public int getBlueCastleY()
+	{
+		return blueCastleY;
+	}
+	
 	public ArrayList<ServerSpawner> getRedSpawners()
 	{
 		return redSpawners;
