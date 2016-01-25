@@ -33,12 +33,12 @@ public class ServerGoblin extends ServerCreature
 	public final static int GOBLIN_LORD_HP = 150;
 	public final static int GOBLIN_SOLDIER_HP = 80;
 	public final static int GOBLIN_GUARD_HP = 90;
-	public final static int GOBLIN_KNIGHT_HP = 120;
+	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_GENERAL_HP = 150;
 	public final static int GOBLIN_GIANT_HP = 500;
 	public final static int GOBLIN_KING_HP = 250;
 
-	public final static int[] GOBLIN_TIER_PRICE = { 10, 20, 30, 45, 60, 80, 100 };
+	public final static int[] GOBLIN_TIER_PRICE = {10, 25, 45, 70, 100, 135, 175};
 
 	/**
 	 * The speed at which the goblin walks
@@ -138,6 +138,7 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE / 2;
 			setMaxHP(GOBLIN_HP);
+			setHP(GOBLIN_HP);
 
 			weapon = "DAWOOD_0.png";
 			damage = 3;
@@ -148,6 +149,7 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE * 3;
 			setMaxHP(GOBLIN_PEASANT_HP);
+			setHP(GOBLIN_PEASANT_HP);
 
 			armour = 0.1;
 			damage = 4;
@@ -160,6 +162,7 @@ public class ServerGoblin extends ServerCreature
 					+ ServerWorld.TILE_SIZE;
 
 			setMaxHP(GOBLIN_SOLDIER_HP);
+			setHP(GOBLIN_SOLDIER_HP);
 
 			armour = 0.4;
 			weapon = "AXIRON_0.png";
@@ -170,6 +173,7 @@ public class ServerGoblin extends ServerCreature
 			setImage("GOBNINJA_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * 100 + 250);
 			setMaxHP(GOBLIN_NINJA_HP);
+			setHP(GOBLIN_NINJA_HP);
 
 			weapon = ServerWorld.NINJASTAR_TYPE;
 			isMelee = false;
@@ -182,6 +186,8 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_WORKER_HP);
+			setHP(GOBLIN_WORKER_HP);
+			
 			armour = 0.1;
 			damage = 7;
 			movementSpeed = 4;
@@ -192,6 +198,8 @@ public class ServerGoblin extends ServerCreature
 			setType(ServerWorld.GOBLIN_GUARD_TYPE);
 			setImage("GOBGUARD_RIGHT_0_0.png");
 			setMaxHP(GOBLIN_GUARD_HP);
+			setHP(GOBLIN_GUARD_HP);
+			
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE;
 			armour = 0.2;
@@ -204,6 +212,8 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_KNIGHT_HP);
+			setHP(GOBLIN_KNIGHT_HP);
+			
 			armour = 0.4;
 			weapon = "SWIRON_0.png";
 			damage = 8;
@@ -214,6 +224,8 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_LORD_HP);
+			setHP(GOBLIN_LORD_HP);
+			
 			armour = 0.3;
 			weapon = "SWGOLD_0.png";
 			damage = 12;
@@ -223,6 +235,8 @@ public class ServerGoblin extends ServerCreature
 			setImage("GOBWIZARD_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * 250 + 250);
 			setMaxHP(GOBLIN_WIZARD_HP);
+			setHP(GOBLIN_WIZARD_HP);
+			
 			armour = 0.2;
 			int weaponChoice = (int) (Math.random() * 5);
 			weapon = ServerWorld.ICEBALL_TYPE;
@@ -239,6 +253,8 @@ public class ServerGoblin extends ServerCreature
 			setImage("GOBGIANT_RIGHT_0_0.png");
 			fightingRange = (int) (Math.random() * 16 + 4);
 			setMaxHP(GOBLIN_GIANT_HP);
+			setHP(GOBLIN_GIANT_HP);
+			
 			movementSpeed = 2;
 			armour = 0;
 			damage = 15;
@@ -253,6 +269,8 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_GENERAL_HP);
+			setHP(GOBLIN_GENERAL_HP);
+			
 			armour = 0.7;
 			weapon = "SWDIAMOND_0.png";
 			damage = 16;
@@ -263,6 +281,8 @@ public class ServerGoblin extends ServerCreature
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
 					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_KING_HP);
+			setHP(GOBLIN_KING_HP);
+			
 			armour = 0.7;
 			weapon = "AXDIAMOND_0.png";
 			damage = 20;

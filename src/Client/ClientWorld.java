@@ -280,8 +280,7 @@ public class ClientWorld
 
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT
-				/ 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
 
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((player.getY() - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);

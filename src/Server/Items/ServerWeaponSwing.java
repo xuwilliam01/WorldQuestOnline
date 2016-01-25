@@ -120,7 +120,7 @@ public class ServerWeaponSwing extends ServerObject
 
 		this.damage = damage;
 
-		if (angle > -90 && angle <= 90)
+		if (owner.getDirection().equals("RIGHT"))
 		{
 			currentAngle = -135;
 			isClockwise = true;

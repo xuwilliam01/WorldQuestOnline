@@ -69,6 +69,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
 	private String name = "player";
+	
+	// The width and height of the screen of this specific player
+	private int playerScreenWidth = 1620;
+	private int playerScreenHeight = 1080;
 
 	/**
 	 * Whether the game is over or not
@@ -632,10 +636,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				// Send all the objects within all the object tiles in the
 				// player's screen
-				int startRow = (int) ((getY() + getHeight() / 2 - Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
-				int endRow = (int) ((getY() + getHeight() / 2 + Client.Client.SCREEN_HEIGHT) / ServerWorld.OBJECT_TILE_SIZE);
-				int startColumn = (int) ((getX() + getWidth() / 2 - Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
-				int endColumn = (int) ((getX() + getWidth() / 2 + Client.Client.SCREEN_WIDTH) / ServerWorld.OBJECT_TILE_SIZE);
+				int startRow = (int) ((getY() + getHeight() / 2 - playerScreenHeight) / ServerWorld.OBJECT_TILE_SIZE);
+				int endRow = (int) ((getY() + getHeight() / 2 + playerScreenHeight) / ServerWorld.OBJECT_TILE_SIZE);
+				int startColumn = (int) ((getX() + getWidth() / 2 - playerScreenWidth) / ServerWorld.OBJECT_TILE_SIZE);
+				int endColumn = (int) ((getX() + getWidth() / 2 + playerScreenWidth) / ServerWorld.OBJECT_TILE_SIZE);
 
 				if (startRow < 0)
 				{
@@ -989,6 +993,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					name = command.substring(3);
 				}
+				// Adjust the screen width and height for the player
+				else if (command.charAt(0) == 's')
+				{
+					String[] tokens = command.split(" ");
+					playerScreenWidth = Integer.parseInt(tokens[1]);
+					playerScreenHeight = Integer.parseInt(tokens[2]);
+				}
 			}
 			catch (IOException e)
 			{
@@ -1153,9 +1164,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void performAction(int mouseX, int mouseY)
 	{
 		// Calculate the distance from the mouse to the player and the angle
-		int xDist = mouseX - Client.Client.SCREEN_WIDTH / 2;
-		int yDist = mouseY
-				- (Client.Client.SCREEN_HEIGHT / 2 - getHeight() / 2 + getHeight() / 3);
+		int xDist = mouseX - playerScreenWidth / 2 - getWidth()/2;
+		int yDist = mouseY - (playerScreenHeight / 2 - getHeight() / 2 + getHeight() / 3);
 
 		double angle = Math.atan2(yDist, xDist);
 
@@ -1847,6 +1857,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public String getName()
 	{
 		return name;
+	}
+
+	public int getPlayerScreenWidth()
+	{
+		return playerScreenWidth;
+	}
+
+	public void setPlayerScreenWidth(int playerScreenWidth)
+	{
+		this.playerScreenWidth = playerScreenWidth;
+	}
+
+	public int getPlayerScreenHeight()
+	{
+		return playerScreenHeight;
+	}
+
+	public void setPlayerScreenHeight(int playerScreenHeight)
+	{
+		this.playerScreenHeight = playerScreenHeight;
 	}
 
 }

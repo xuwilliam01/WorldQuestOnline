@@ -232,11 +232,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 
 		// Start the actual game
-		gameThread = new Thread(new runGame());
+		gameThread = new Thread(new RunGame());
 		gameThread.start();
 
 		// Start the actual game
-		gameThread = new Thread(new readServer());
+		gameThread = new Thread(new ReadServer());
 		gameThread.start();
 
 		System.out.println("Game started");
@@ -247,6 +247,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addMouseMotionListener(this);
 
 		direction = 'R';
+		
+		print("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
 	}
 
 	/**
@@ -277,7 +279,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class readServer implements Runnable
+	class ReadServer implements Runnable
 	{
 		@Override
 		public void run()
@@ -514,7 +516,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class runGame implements Runnable
+	class RunGame implements Runnable
 	{
 		@Override
 		public void run()
@@ -551,225 +553,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		}
 	}
-
-	// /**
-	// * Thread for running the actual game
-	// *
-	// * @author William Xu && Alex Raita
-	// *
-	// */
-	// class runGame implements Runnable
-	// {
-	// @Override
-	// public void run()
-	// {
-	// try
-	// {
-	// startTime = System.currentTimeMillis();
-	//
-	// while (true)
-	// {
-	//
-	// String message = input.readLine();
-	//
-	// String[] tokens = message.split(" ");
-	//
-	// for (int token = 0; token < tokens.length; token++)
-	// {
-	// try
-	// {
-	// // If our player has moved
-	// if (tokens[token].equals("L"))
-	// {
-	// HP = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("M"))
-	// {
-	// maxHP = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("Q"))
-	// {
-	// mana = Integer.parseInt(tokens[++token]);
-	// }
-	// else if(tokens[token].equals("B"))
-	// {
-	// //End the game
-	// int team = Integer.parseInt(tokens[++token]);
-	// String winner = "Red Team";
-	// String loser = "Blue Team";
-	// if(team == ServerPlayer.RED_TEAM)
-	// {
-	// winner = "Blue Team";
-	// loser = "Red Team";
-	// }
-	// endGame = true;
-	//
-	// JOptionPane.showMessageDialog(Client.this,
-	// String.format("The %s castle has been destroyed, the winner is the %s!",loser,winner));
-	// input.close();
-	// output.close();
-	// if(inventory.getMenuButton() != null)
-	// inventory.getMenuButton().doClick();
-	// break;
-	//
-	// }
-	// else if (tokens[token].equals("K"))
-	// {
-	// maxMana = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("U"))
-	// {
-	// repaint();
-	//
-	// // Update the FPS counter
-	// if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
-	// {
-	// FPScounter = 0;
-	// currentFPS = (int) ((1000.0
-	// / (System.currentTimeMillis() - startTime)
-	// * (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
-	// startTime = System.currentTimeMillis();
-	// }
-	//
-	// FPScounter++;
-	// }
-	// // If there is a player to be updated
-	// else if (tokens[token].equals("O"))
-	// {
-	// int id = Integer.parseInt(tokens[++token]);
-	// int x = Integer
-	// .parseInt(tokens[++token]);
-	// int y = Integer
-	// .parseInt(tokens[++token]);
-	// if (id == player.getID())
-	// {
-	// player.setX(x);
-	// player.setY(y);
-	// }
-	// world.setObject(id, x, y,
-	// tokens[++token], Integer
-	// .parseInt(tokens[++token]),
-	// tokens[++token],tokens[++token]);
-	// }
-	// else if (tokens[token].equals("P"))
-	// {
-	// pingString = "LATENCY: "
-	// + (System.currentTimeMillis() - ping);
-	// }
-	//
-	// // Remove an object after disconnection/destruction
-	// else if (tokens[token].equals("R"))
-	// {
-	// world.remove(Integer.parseInt(tokens[++token]));
-	// }
-	// else if (tokens[token].equals("I"))
-	// {
-	// System.out.println("Received an item");
-	// inventory.addItem(tokens[++token], tokens[++token],
-	// Integer.parseInt(tokens[++token]),
-	// Integer.parseInt(tokens[++token]));
-	// inventory.repaint();
-	// }
-	// else if (tokens[token].equals("D"))
-	// {
-	// damage = Integer.parseInt(tokens[++token]);
-	// baseDamage = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("S"))
-	// {
-	// speed = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("J"))
-	// {
-	// jump = Integer.parseInt(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("A"))
-	// {
-	// armour = Double.parseDouble(tokens[++token]);
-	// }
-	// else if (tokens[token].equals("V"))
-	// {
-	// if (Character.isDigit(tokens[token + 1].charAt(0)))
-	// {
-	// if (shop != null)
-	// {
-	// shop.setVisible(false);
-	// frame.remove(shop);
-	// frame.invalidate();
-	// shop = null;
-	// }
-	// shop = new ClientShop(Client.this);
-	// int numItems = Integer
-	// .parseInt(tokens[++token]);
-	// for (int item = 0; item < numItems; item++)
-	// shop.addItem(tokens[++token],
-	// tokens[++token],
-	// Integer.parseInt(tokens[++token]),
-	// Integer.parseInt(tokens[++token]));
-	// frame.add(shop, JLayeredPane.PALETTE_LAYER);
-	// shop.revalidate();
-	// frame.setVisible(true);
-	// }
-	// else if (shop != null)
-	// shop.addItem(tokens[++token], tokens[++token],
-	// Integer.parseInt(tokens[++token]),
-	// Integer.parseInt(tokens[++token]));
-	//
-	// }
-	// else if (tokens[token].equals("C"))
-	// {
-	// if (shop != null)
-	// closeShop();
-	// }
-	// else if(tokens[token].equals("XR"))
-	// {
-	// redCastleHP = Integer.parseInt(tokens[++token]);
-	// redCastleTier = Integer.parseInt(tokens[++token]);
-	// redCastleMoney = Integer.parseInt(tokens[++token]);
-	// }
-	// else if(tokens[token].equals("XB"))
-	// {
-	// blueCastleHP = Integer.parseInt(tokens[++token]);
-	// blueCastleTier = Integer.parseInt(tokens[++token]);
-	// blueCastleMoney = Integer.parseInt(tokens[++token]);
-	// }
-	// }
-	// catch (NumberFormatException e)
-	// {
-	// System.out.println("Java can't parse integers");
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// if(endGame)
-	// break;
-	// // long delay = System.currentTimeMillis()
-	// // - startTime;
-	//
-	// // if (delay < 15)
-	// // {
-	// // try {
-	// // Thread.sleep((15-delay)-2);
-	// // } catch (InterruptedException e) {
-	// //
-	// // e.printStackTrace();
-	// // }
-	// // }
-	//
-	// }
-	//
-	// }
-	// catch (NumberFormatException e1)
-	// {
-	// e1.printStackTrace();
-	// }
-	// catch (IOException e2)
-	// {
-	// serverClosed();
-	// }
-	//
-	// }
-	// }
 
 	/**
 	 * Close the shop
@@ -1015,12 +798,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void mousePressed(MouseEvent event)
 	{
 		// Make sure the player changes direction
-		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT/2)
 		{
 			print("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2)
 		{
 			print("DL");
 			direction = 'L';
@@ -1091,12 +874,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void mouseDragged(MouseEvent event)
 	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'R')
 		{
 			print("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'L')
 		{
 			print("DL");
 			direction = 'L';
@@ -1108,12 +891,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void mouseMoved(MouseEvent event)
 	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 && direction != 'R')
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'R')
 		{
 			print("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 && direction != 'L')
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'L')
 		{
 			print("DL");
 			direction = 'L';

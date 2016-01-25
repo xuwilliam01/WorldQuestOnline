@@ -30,7 +30,8 @@ import Tools.RowCol;
  */
 public class ServerWorld
 {
-	// String definitions for each type of object to identify them when in the super class "ServerObject" state
+	// String definitions for each type of object to identify them when in the
+	// super class "ServerObject" state
 	public final static String BACKGROUND_OBJECT_TYPE = "B";
 
 	public final static String WEAPON_HOLD_TYPE = "H";
@@ -44,7 +45,6 @@ public class ServerWorld
 	public final static String STEELARROW_TYPE = PIERCING_TYPE + "S";
 	public final static String MEGAARROW_TYPE = PIERCING_TYPE + "M";
 	public final static String NINJASTAR_TYPE = PIERCING_TYPE + "N";
-
 
 	public final static String FIREBALL_TYPE = PROJECTILE_TYPE + "F";
 	public final static String ICEBALL_TYPE = PROJECTILE_TYPE + "I";
@@ -182,13 +182,14 @@ public class ServerWorld
 			new ServerVendor(0, 0, this, "VENDOR_LEFT.png"),
 			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this),
 			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-					ServerPlayer.RED_TEAM,1), this),
-					new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-							ServerPlayer.BLUE_TEAM,1), this) };
+					ServerPlayer.RED_TEAM, 1), this),
+			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
+					ServerPlayer.BLUE_TEAM, 1), this) };
 
-	//Store the goblin spawners so the castles can access them and change their settings
+	// Store the goblin spawners so the castles can access them and change their
+	// settings
 	ArrayList<ServerSpawner> redSpawners = new ArrayList<ServerSpawner>();
-	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>(); 
+	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>();
 
 	/**
 	 * The size of each object tile
@@ -261,7 +262,6 @@ public class ServerWorld
 		newWorld();
 	}
 
-
 	/**
 	 * Constructor for server
 	 * @throws IOException
@@ -274,8 +274,7 @@ public class ServerWorld
 		this.engine = engine;
 		newWorld();
 	}
-	
-	
+
 	/**
 	 * Create a new world
 	 * @throws IOException
@@ -290,11 +289,11 @@ public class ServerWorld
 
 		// Add to both sides to make room for the invisible walls
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
-		                                                                 .parseInt(tokenizer.nextToken()) + 6];
+				.parseInt(tokenizer.nextToken()) + 6];
 
 		objectGrid = new ArrayList[tileGrid.length
-		                           / (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-		                                                                 / (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
+				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
 		// Initialize each arraylist of objects in the objectGrid
 		for (int row = 0; row < objectGrid.length; row++)
@@ -358,26 +357,28 @@ public class ServerWorld
 						{
 							redCastleX = (int) newObject.getX() + 50;
 							redCastleY = (int) newObject.getY() + 100;
-							redCastle = (ServerCastle)newObject;
+							redCastle = (ServerCastle) newObject;
 						}
 						else
 						{
 							blueCastleX = (int) newObject.getX() + 50;
 							blueCastleY = (int) newObject.getY() + 100;
-							blueCastle = (ServerCastle)newObject;
+							blueCastle = (ServerCastle) newObject;
 						}
 					}
-					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+							&& obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
 					{
-						redSpawners.add((ServerSpawner)newObject);
+						redSpawners.add((ServerSpawner) newObject);
 					}
-					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE) && obj.getImage().equals("BLUE_GOBLIN_SPAWN.png"))
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN.png"))
 					{
-						blueSpawners.add((ServerSpawner)newObject);
+						blueSpawners.add((ServerSpawner) newObject);
 					}
-					else if(obj.getType().equals(ServerWorld.CHEST_TYPE))
+					else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
 					{
-						//Chests don't spawn immediately
+						// Chests don't spawn immediately
 						newObject.destroy();
 					}
 				}
@@ -403,8 +404,8 @@ public class ServerWorld
 		while (!objectsToAdd.isEmpty())
 		{
 			ServerObject newObject = objectsToAdd.poll();
-			if(newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE)
-				((ServerItem)newObject).setDropTime(worldCounter);
+			if (newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE)
+				((ServerItem) newObject).setDropTime(worldCounter);
 			objects.add(newObject);
 		}
 
@@ -413,8 +414,9 @@ public class ServerWorld
 			// Go through and update each object in the game
 			for (ServerObject object : objects)
 			{
-				if(object.getType().equals(ServerWorld.CASTLE_TYPE) && ((ServerCreature)object).getHP() <= 0)
-					engine.endGame( ((ServerCreature)object).getTeam());
+				if (object.getType().equals(ServerWorld.CASTLE_TYPE)
+						&& ((ServerCreature) object).getHP() <= 0)
+					engine.endGame(((ServerCreature) object).getTeam());
 
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
@@ -424,7 +426,7 @@ public class ServerWorld
 							&& object.isOnSurface())
 					{
 						object.setHSpeed(0);
-						((ServerItem)object).update(worldCounter);
+						((ServerItem) object).update(worldCounter);
 					}
 
 					// Add the object to all the object tiles that it collides
@@ -456,10 +458,12 @@ public class ServerWorld
 						continue;
 					}
 
-					// Store the objects that the tile has already collided with so there are no repeats when checking in tiles 
+					// Store the objects that the tile has already collided with
+					// so there are no repeats when checking in tiles
 					ArrayList<ServerObject> collidedAlready = new ArrayList<ServerObject>();
-					
-					// Check collisions with other objects in tiles that they both touch
+
+					// Check collisions with other objects in tiles that they
+					// both touch
 					for (int row = startRow; row <= endRow; row++)
 					{
 						for (int column = startColumn; column <= endColumn; column++)
@@ -468,21 +472,23 @@ public class ServerWorld
 							{
 								if (otherObject.exists()
 										&& otherObject.getID() != object
-										.getID() && !collidedAlready.contains(otherObject))
+												.getID()
+										&& !collidedAlready
+												.contains(otherObject))
 								{
 									collidedAlready.add(otherObject);
 									if (object.getType().charAt(0) == PROJECTILE_TYPE)
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
 												&& ((ServerCreature) otherObject)
-												.isAttackable()
+														.isAttackable()
 												&& otherObject.getID() != ((ServerProjectile) object)
-												.getOwnerID()
+														.getOwnerID()
 												&& ((ServerCreature) otherObject)
-												.getTeam() != ((ServerProjectile) object)
-												.getOwner().getTeam()
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
 												&& ((ServerProjectile) object)
-												.collidesWith(otherObject))
+														.collidesWith(otherObject))
 										{
 											if (object.getType().contains(
 													PIERCING_TYPE))
@@ -491,18 +497,20 @@ public class ServerWorld
 														.hasCollided(otherObject))
 												{
 													((ServerCreature) otherObject)
-													.inflictDamage(
-															((ServerProjectile) object)
-															.getDamage(),((ServerProjectile)object).getOwner());
+															.inflictDamage(
+																	((ServerProjectile) object)
+																			.getDamage(),
+																	((ServerProjectile) object)
+																			.getOwner());
 													((ServerProjectile) object)
-													.addCollided(otherObject);
+															.addCollided(otherObject);
 												}
 											}
 											else
 											{
 
 												((ServerProjectile) object)
-												.destroy();
+														.destroy();
 											}
 										}
 									}
@@ -511,23 +519,25 @@ public class ServerWorld
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
 												&& ((ServerCreature) otherObject)
-												.isAttackable()
+														.isAttackable()
 												&& otherObject.getID() != ((ServerProjectile) object)
-												.getOwnerID()
+														.getOwnerID()
 												&& ((ServerCreature) otherObject)
-												.getTeam() != ((ServerProjectile) object)
-												.getOwner().getTeam()
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
 												&& object
-												.collidesWith(otherObject)
+														.collidesWith(otherObject)
 												&& !((ServerProjectile) object)
-												.hasCollided(otherObject))
+														.hasCollided(otherObject))
 										{
 											((ServerCreature) otherObject)
-											.inflictDamage(
-													((ServerProjectile) object)
-													.getDamage(),((ServerProjectile)object).getOwner());
+													.inflictDamage(
+															((ServerProjectile) object)
+																	.getDamage(),
+															((ServerProjectile) object)
+																	.getOwner());
 											((ServerProjectile) object)
-											.addCollided(otherObject);
+													.addCollided(otherObject);
 
 										}
 									}
@@ -535,23 +545,24 @@ public class ServerWorld
 											.equals(SLIME_TYPE)
 											&& otherObject.getType().equals(
 													PLAYER_TYPE)
-													&& object.collidesWith(otherObject)
-													&& getWorldCounter() % 20 == 0)
+											&& object.collidesWith(otherObject)
+											&& getWorldCounter() % 20 == 0)
 									{
 
 										((ServerCreature) otherObject)
-										.inflictDamage(
-												((ServerSlime) object)
-												.getDamage(),(ServerCreature)object);
+												.inflictDamage(
+														((ServerSlime) object)
+																.getDamage(),
+														(ServerCreature) object);
 
 									}
 									// If a player collided with an item
 									else if (otherObject.getType().charAt(0) == ITEM_TYPE
 											&& object.getType().equals(
 													PLAYER_TYPE)
-													&& ((ServerCreature) object)
+											&& ((ServerCreature) object)
 													.isAlive()
-													&& object.collidesWith(otherObject))
+											&& object.collidesWith(otherObject))
 									{
 										ServerItem item = (ServerItem) otherObject;
 										ServerCreature player = (ServerCreature) object;
@@ -569,7 +580,7 @@ public class ServerWorld
 											else if (player.getInventory()
 													.size() == ServerPlayer.MAX_INVENTORY
 													&& item.getType().charAt(1) == STACK_TYPE
-													.charAt(1))
+															.charAt(1))
 											{
 												// Only if the potion already
 												// exists, add it
@@ -591,50 +602,61 @@ public class ServerWorld
 											&& object.getType().charAt(0) == ITEM_TYPE
 											&& otherObject.getType().charAt(0) == ITEM_TYPE
 											&& object.getType().charAt(1) == STACK_TYPE
-											.charAt(1)
+													.charAt(1)
 											&& otherObject.getType().charAt(1) == STACK_TYPE
-											.charAt(1))
+													.charAt(1))
 									{
 										if (object.getType().equals(
 												otherObject.getType())
 												&& object.getID() != otherObject
-												.getID())
+														.getID())
 										{
 											((ServerItem) object)
-											.increaseAmount(((ServerItem) otherObject)
-													.getAmount());
+													.increaseAmount(((ServerItem) otherObject)
+															.getAmount());
 											otherObject.destroy();
 										}
 									}
 									// Collision of weapons and creatures
 									else if (object.getType().charAt(0) == ANIMATION_TYPE
 											&& object.getType().charAt(1) == WEAPON_SWING_TYPE
-											.charAt(1))
+													.charAt(1))
 									{
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
 												&& ((ServerCreature) otherObject)
-												.isAttackable()
+														.isAttackable()
 												&& otherObject.getID() != ((ServerWeaponSwing) object)
-												.getOwnerID()
+														.getOwnerID()
 												&& ((ServerCreature) otherObject)
-												.getTeam() != ((ServerWeaponSwing) object)
-												.getWielder().getTeam()
+														.getTeam() != ((ServerWeaponSwing) object)
+														.getWielder().getTeam()
 												&& ((ServerWeaponSwing) object)
-												.collidesWith(otherObject)
+														.collidesWith(otherObject)
 												&& !((ServerWeaponSwing) object)
-												.hasCollided(otherObject))
+														.hasCollided(otherObject))
 										{
 											((ServerCreature) otherObject)
-											.inflictDamage(
-													((ServerWeaponSwing) object)
-													.getDamage(),((ServerWeaponSwing)object).getOwner());
+													.inflictDamage(
+															((ServerWeaponSwing) object)
+																	.getDamage(),
+															((ServerWeaponSwing) object)
+																	.getOwner());
 											((ServerWeaponSwing) object)
-											.addCollided(otherObject);
+													.addCollided(otherObject);
 										}
 									}
-									else if(object.getType().equals(CASTLE_TYPE) && otherObject.getType().equals(MONEY_TYPE) && !((ServerMoney)otherObject).hasCoolDown() && ((ServerCastle)object).getCurrentGoblinTier() < 6)
+									else if (object.getType().equals(
+											CASTLE_TYPE)
+											&& otherObject.getType().equals(
+													MONEY_TYPE)
+											&& !((ServerMoney) otherObject)
+													.hasCoolDown()
+											&& ((ServerCastle) object)
+													.getCurrentGoblinTier() < 6)
 									{
-										((ServerCastle)object).addMoney(((ServerMoney)otherObject).getAmount());
+										((ServerCastle) object)
+												.addMoney(((ServerMoney) otherObject)
+														.getAmount());
 										otherObject.destroy();
 									}
 								}
@@ -665,8 +687,9 @@ public class ServerWorld
 						double x2 = object.getX() + object.getWidth();
 						double y1 = object.getY();
 						double y2 = object.getY() + object.getHeight();
-						
-						// Detect the rows and columns of the tiles that the object collides with in this tick
+
+						// Detect the rows and columns of the tiles that the
+						// object collides with in this tick
 						if (vSpeed > 0)
 						{
 							startRow = (int) (y1 / TILE_SIZE - 1);
@@ -725,13 +748,13 @@ public class ServerWorld
 							{
 								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if ((tileGrid[row][column] >= 'A' || (((object
-											.getType().equals(PLAYER_TYPE) && !((ServerPlayer) object)
-											.isDropping()) || !object.getType()
-											.equals(PLAYER_TYPE))
-											&& (tileGrid[row][column] == '*' || tileGrid[row][column] == '+' || tileGrid[row][column] == '/')))
+									if (((tileGrid[row][column] >= 'A' || ((tileGrid[row][column] == '*'
+											|| tileGrid[row][column] == '+' || tileGrid[row][column] == '/') && !((((object
+											.getType().equals(PLAYER_TYPE) && ((ServerPlayer) object)
+											.isDropping()) || object.getType()
+											.charAt(0) == PROJECTILE_TYPE)))))
 											&& column * TILE_SIZE < x2
-											&& column * TILE_SIZE + TILE_SIZE > x1)
+											&& column * TILE_SIZE + TILE_SIZE > x1))
 									{
 										if (y2 + vSpeed >= row * TILE_SIZE
 												&& y2 <= row * TILE_SIZE)
@@ -777,7 +800,7 @@ public class ServerWorld
 										if (y1 + vSpeed <= row * TILE_SIZE
 												+ TILE_SIZE
 												&& y1 >= row * TILE_SIZE
-												+ TILE_SIZE)
+														+ TILE_SIZE)
 										{
 											moveVertical = false;
 											collideRow = row;
@@ -852,7 +875,7 @@ public class ServerWorld
 										if (x1 + hSpeed <= column * TILE_SIZE
 												+ TILE_SIZE
 												&& x1 >= column * TILE_SIZE
-												+ TILE_SIZE)
+														+ TILE_SIZE)
 										{
 											moveHorizontal = false;
 											collideColumn = column;
@@ -875,7 +898,8 @@ public class ServerWorld
 						}
 					}
 
-					// Move this object based on its vertical speed and horizontal speed
+					// Move this object based on its vertical speed and
+					// horizontal speed
 					if (moveHorizontal)
 					{
 						// Don't let the player move when trying to swing a
@@ -890,7 +914,7 @@ public class ServerWorld
 					{
 						object.setY(object.getY() + object.getVSpeed());
 					}
-					
+
 					// Update this object based on its type
 					if (object.getType().equals(DAMAGE_INDICATOR_TYPE))
 					{
@@ -928,7 +952,7 @@ public class ServerWorld
 										((ServerPlayer) object).getNewMouseX(),
 										((ServerPlayer) object).getNewMouseY());
 								((ServerPlayer) object)
-								.setPerformingAction(false);
+										.setPerformingAction(false);
 							}
 							((ServerPlayer) object).updatePlayer();
 						}
@@ -942,19 +966,21 @@ public class ServerWorld
 						}
 						else if (object.getType().equals(CASTLE_TYPE))
 						{
-							((ServerCastle)object).update();
+							((ServerCastle) object).update();
 						}
 					}
 
 				}
-				// Remove this object from the game if its 'exists' variable is false, unless it's a castle or a chest
-				else if(!object.getType().equals(CASTLE_TYPE) && !object.getType().equals(CHEST_TYPE))
-					{
-						objectsToRemove.add(object);
-					}
-				else if(object.getType().equals(CHEST_TYPE))
+				// Remove this object from the game if its 'exists' variable is
+				// false, unless it's a castle or a chest
+				else if (!object.getType().equals(CASTLE_TYPE)
+						&& !object.getType().equals(CHEST_TYPE))
 				{
-					((ServerChest)object).update();
+					objectsToRemove.add(object);
+				}
+				else if (object.getType().equals(CHEST_TYPE))
+				{
+					((ServerChest) object).update();
 				}
 			}
 
@@ -992,7 +1018,7 @@ public class ServerWorld
 	 * @param startRow the row to start checking for the object
 	 * @param endRow the row to end checking for the object
 	 * @param startColumn the column to start checking for the object
-	 * @param endColumn	the column to end checking for the object
+	 * @param endColumn the column to end checking for the object
 	 */
 	public void updateObjectTiles(ServerObject object, int startRow,
 			int endRow, int startColumn, int endColumn)
@@ -1036,9 +1062,8 @@ public class ServerWorld
 		}
 	}
 
-
 	/**
-	 * Just remove an object from 
+	 * Just remove an object from
 	 * @param object
 	 */
 	public void removeFromObjectTiles(ServerObject object)
@@ -1049,16 +1074,20 @@ public class ServerWorld
 		// Choose the object tiles to remove the object from
 		for (RowCol tile : objectTiles)
 		{
-			if (!object.exists() || !(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
-					tile.getRow() * OBJECT_TILE_SIZE,
-					tile.getColumn() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE,
-					tile.getRow() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE)))
+			if (!object.exists()
+					|| !(object
+							.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
+									tile.getRow() * OBJECT_TILE_SIZE,
+									tile.getColumn() * OBJECT_TILE_SIZE
+											+ OBJECT_TILE_SIZE,
+									tile.getRow() * OBJECT_TILE_SIZE
+											+ OBJECT_TILE_SIZE)))
 				;
 			{
 				indexesToRemove.add(tile);
 			}
 		}
-		
+
 		// Remove all the tiles that the object has left
 		for (RowCol tile : indexesToRemove)
 		{
@@ -1086,7 +1115,7 @@ public class ServerWorld
 	{
 		objectGrid[objectTile.getRow()][objectTile.getColumn()].remove(object);
 	}
-	
+
 	/**
 	 * Add a creature to blue team
 	 * @param creature
@@ -1123,82 +1152,96 @@ public class ServerWorld
 		redTeam.remove(creature);
 	}
 
-	////////////////////////
+	// //////////////////////
 	// GETTERS AND SETTERS//
-	////////////////////////
+	// //////////////////////
 	public char[][] getGrid()
 	{
 		return tileGrid;
 	}
+
 	public void setGrid(char[][] grid)
 	{
 		this.tileGrid = grid;
 	}
+
 	public ArrayList<ServerObject> getObjects()
 	{
 		return objects;
 	}
+
 	public long getWorldCounter()
 	{
 		return worldCounter;
 	}
+
 	public ArrayList<ServerObject>[][] getObjectGrid()
 	{
 		return objectGrid;
 	}
+
 	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid)
 	{
 		this.objectGrid = objectGrid;
 	}
+
 	public ArrayList<ServerCreature> getRedTeam()
 	{
 		return redTeam;
 	}
+
 	public void setRedTeam(ArrayList<ServerCreature> redTeam)
 	{
 		this.redTeam = redTeam;
 	}
+
 	public ArrayList<ServerCreature> getBlueTeam()
 	{
 		return blueTeam;
 	}
+
 	public void setBlueTeam(ArrayList<ServerCreature> blueTeam)
 	{
 		this.blueTeam = blueTeam;
 	}
+
 	public int getRedCastleX()
 	{
 		return redCastleX;
 	}
+
 	public int getBlueCastleX()
 	{
 		return blueCastleX;
 	}
-	
+
 	public int getRedCastleY()
 	{
 		return redCastleY;
 	}
+
 	public int getBlueCastleY()
 	{
 		return blueCastleY;
 	}
-	
+
 	public ArrayList<ServerSpawner> getRedSpawners()
 	{
 		return redSpawners;
 	}
+
 	public ArrayList<ServerSpawner> getBlueSpawners()
 	{
 		return blueSpawners;
 	}
+
 	public ServerCastle getBlueCastle()
 	{
 		return blueCastle;
 	}
+
 	public ServerCastle getRedCastle()
 	{
 		return redCastle;
 	}
 }
-

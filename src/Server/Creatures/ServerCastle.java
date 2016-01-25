@@ -17,7 +17,7 @@ public class ServerCastle extends ServerCreature
 	/**
 	 * The default HP of a castle
 	 */
-	public final static int CASTLE_HP = 15000;
+	public final static int CASTLE_HP = 5000;
 
 	/**
 	 * The number of pixels for a target to be in range for the castle to fire at it
