@@ -38,6 +38,11 @@ public class ServerCastle extends ServerCreature
 	 * The target for the castle to attack
 	 */
 	private ServerCreature target;
+	
+	/**
+	 * The type of arrows the castle shoots
+	 */
+	private String arrowType = ServerWorld.WOODARROW_TYPE;
 
 	/**
 	 * Constructor
@@ -63,12 +68,17 @@ public class ServerCastle extends ServerCreature
 	public void update()
 	{
 		// Try to purchase the next tier of goblin
-		if(currentGoblinTier < 6 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
+		if(currentGoblinTier < 5 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
 		{
 			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
 			setMaxHP(getMaxHP()+5000);
 			setHP(getHP()+5000);
 			currentGoblinTier++;
+			
+			if (currentGoblinTier == 3)
+			{
+				arrowType = ServerWorld.STEELARROW_TYPE;
+			}
 			
 			ArrayList<ServerSpawner> teamSpawners;
 			if(getTeam() == RED_TEAM)
@@ -110,8 +120,7 @@ public class ServerCastle extends ServerCreature
 
 				ServerProjectile arrow = new ServerProjectile(getX()
 						+ 270, getY()
-						+ 232, this, angle,
-						ServerWorld.WOODARROW_TYPE);
+						+ 232, this, angle, arrowType);
 				arrow.setGravity(0);
 
 				getWorld().add(arrow);

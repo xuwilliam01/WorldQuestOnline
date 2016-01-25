@@ -652,7 +652,7 @@ public class ServerWorld
 											&& !((ServerMoney) otherObject)
 													.hasCoolDown()
 											&& ((ServerCastle) object)
-													.getCurrentGoblinTier() < 6)
+													.getCurrentGoblinTier() < 5)
 									{
 										((ServerCastle) object)
 												.addMoney(((ServerMoney) otherObject)

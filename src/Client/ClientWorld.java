@@ -488,13 +488,13 @@ public class ClientWorld
 		graphics.setFont(BIG_NORMAL_FONT);
 		
 		graphics.setColor(Color.red);
-		if(client.getRedCastleTier() == 6)
+		if(client.getRedCastleTier() == 5)
 			graphics.drawString(String.format("Red Castle Tier %d (Max)",client.getRedCastleTier()+1),1050,975);
 		else
 			graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1050,975);
 	
 		graphics.setColor(Color.blue);
-		if(client.getBlueCastleTier() == 6)
+		if(client.getBlueCastleTier() == 5)
 			graphics.drawString(String.format("Blue Castle Tier %d (Max)",client.getBlueCastleTier()+1),100,975);
 		else
 			graphics.drawString(String.format("Blue Castle Tier %d (Money For Next Tier  %d/%d)",client.getBlueCastleTier()+1,client.getBlueCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getBlueCastleTier()]),100,975);

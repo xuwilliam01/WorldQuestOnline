@@ -349,7 +349,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 5));
+		addItem(new ServerMoney(0, 0, 500));
 		
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself

@@ -50,21 +50,21 @@ public class ServerSpawner extends ServerObject
 				setImage("RED_GOBLIN_SPAWN.png");
 			else
 				setImage("BLUE_GOBLIN_SPAWN.png");
-			delay = 30000;
+			delay = 2000;
 		}
 		else
 			switch (creature.getType())
 			{
 			case ServerWorld.SLIME_TYPE:
 				setImage("SLIME_SPAWN.png");
-				delay = 30000;
+				delay = 2000;
 				break;
 			}
 	}
 
 	public void update(long worldCounter)
 	{
-		if (worldCounter % (delay / ServerEngine.UPDATE_RATE) == 0)
+		if (worldCounter % (delay) == 0)
 		{
 			if (!creature.getType().equals(ServerWorld.SLIME_TYPE)
 					|| ServerWorld.slimeCount < ServerWorld.maxSlimes)
