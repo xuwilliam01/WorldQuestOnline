@@ -43,6 +43,8 @@ import WorldCreator.CreatorWorld;
  */
 public class MainMenu {
 
+	//Default port number
+	final private static int DEF_PORT = 5000;
 	//All the panels
 	private static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
@@ -213,7 +215,7 @@ public class MainMenu {
 		{
 			super.paintComponent(graphics);
 			graphics.drawImage(background,0, 0, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT,null);
-			
+
 			// Draw and move the clouds
 			for (ClientBackground cloud : clouds)
 			{
@@ -248,7 +250,7 @@ public class MainMenu {
 
 			//Draw the title image
 			graphics.drawImage(titleImage,middle - titleImage.getWidth(null)/2 - 20,75,null);
-			
+
 			graphics.drawString("William Xu and Alex Raita", 20, Client.SCREEN_HEIGHT - 30);
 		}
 
@@ -260,19 +262,19 @@ public class MainMenu {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			
+
 
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			
+
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			
+
 
 		}
 
@@ -349,10 +351,10 @@ public class MainMenu {
 			try {
 				world = new CreatorWorld(fileName);
 			} catch (NumberFormatException e) {
-	
+
 				e.printStackTrace();
 			} catch (IOException e) {
-			
+
 				e.printStackTrace();
 			}
 
@@ -390,7 +392,7 @@ public class MainMenu {
 		public GamePanel(String serverIP, int port, String playerName)
 		{
 			boolean connected = false;
-
+			boolean exit = false;
 			Socket mySocket = null;
 
 			while (!connected)
@@ -403,37 +405,78 @@ public class MainMenu {
 				catch (IOException e)
 				{
 					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please a new IP");
-					port = Integer.parseInt(JOptionPane
-							.showInputDialog("Please enter the port of the server"));
+							.showInputDialog("Connection Failed. Please enter a new IP");
+					if(serverIP == null)
+						exit = true;
+					else
+						while(true)
+						{
+							try
+							{
+								String portNum = JOptionPane
+										.showInputDialog("Please enter the port of the server");
+								if(portNum == null)
+								{
+									exit = true;
+								}
+								else if(portNum.equals(""))
+								{
+									port = DEF_PORT;
+								}
+								else
+									port = Integer.parseInt(portNum);
+								break;
+							}
+							catch(NumberFormatException E)
+							{
+							}
+						}
 				}
+				if(exit)
+					break;
 			}
-			JLayeredPane pane = new JLayeredPane();
-			pane.setLocation(0,0);
-			pane.setLayout(null);
-			pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
-			pane.setDoubleBuffered(true);
-			mainFrame.add(pane);
-			pane.setVisible(true);
 
-			JButton menu = new JButton("Main Menu");
-			menu.addActionListener(new GameMenuButton());
-			inventory = new ClientInventory(menu);
-			client = new Client(mySocket,inventory,pane,playerName);
-			inventory.setClient(client);
+			if(exit)
+			{
+				setVisible(false);
+				mainFrame.remove(this);
+				mainFrame.invalidate();
+				mainFrame.validate();
+				
+				mainMenu = new MainPanel();
+				mainFrame.add(mainMenu);
+				mainFrame.setVisible(true);
+				mainMenu.revalidate();
+			}
+			else
+			{
+				JLayeredPane pane = new JLayeredPane();
+				pane.setLocation(0,0);
+				pane.setLayout(null);
+				pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+				pane.setDoubleBuffered(true);
+				mainFrame.add(pane);
+				pane.setVisible(true);
 
-			client.setLocation(0,0);
-			inventory.setLocation(Client.SCREEN_WIDTH,0);
+				JButton menu = new JButton("Main Menu");
+				menu.addActionListener(new GameMenuButton());
+				inventory = new ClientInventory(menu);
+				client = new Client(mySocket,inventory,pane,playerName);
+				inventory.setClient(client);
 
-			pane.add(client);
-			mainFrame.add(inventory);
-			client.initialize();
-			client.revalidate();
-			inventory.revalidate();
-			pane.revalidate();
-			pane.setVisible(true);
-			mainFrame.setVisible(true);
-			inventory.repaint();
+				client.setLocation(0,0);
+				inventory.setLocation(Client.SCREEN_WIDTH,0);
+
+				pane.add(client);
+				mainFrame.add(inventory);
+				client.initialize();
+				client.revalidate();
+				inventory.revalidate();
+				pane.revalidate();
+				pane.setVisible(true);
+				mainFrame.setVisible(true);
+				inventory.repaint();
+			}
 		}
 	}
 
@@ -576,7 +619,7 @@ public class MainMenu {
 			if (serverIP.equals(""))
 			{
 				serverIP = "127.0.0.1";
-				port = 5000;
+				port = DEF_PORT;
 				playerName = "Player";
 			}
 			else
@@ -589,7 +632,8 @@ public class MainMenu {
 								.showInputDialog("Please enter the port of the server");
 						if(portNum == null)
 							return;
-
+						else if(portNum.equals(""))
+							portNum = ""+DEF_PORT;
 						port = Integer.parseInt(portNum);
 
 						playerName = JOptionPane
@@ -649,10 +693,13 @@ public class MainMenu {
 			while(true)
 			{
 				String port = JOptionPane
-						.showInputDialog("Please enter the port you want to use for the server");
+						.showInputDialog("Please enter the port you want to use for the server (Default "+DEF_PORT+")");
 				if(port == null)
 					return;
-
+				else if(port.equals(""))
+				{
+					port = ""+DEF_PORT;
+				}
 				try{
 					portNum = Integer.parseInt(port);
 					break;
