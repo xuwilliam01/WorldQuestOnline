@@ -38,7 +38,7 @@ public class ServerGoblin extends ServerCreature
 	public final static int GOBLIN_GENERAL_HP = 150;
 	public final static int GOBLIN_KING_HP = 250;
 
-	public final static int[] GOBLIN_TIER_PRICE = {25, 50, 75, 100, 150};
+	public final static int[] GOBLIN_TIER_PRICE = {10, 25, 50, 75, 100};
 
 	/**
 	 * The speed at which the goblin walks

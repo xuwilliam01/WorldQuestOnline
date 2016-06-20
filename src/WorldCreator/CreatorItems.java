@@ -50,7 +50,7 @@ public class CreatorItems extends JPanel implements ActionListener{
 	public CreatorItems(CreatorWorld world, JButton menu)
 	{
 		setDoubleBuffered(true);
-		setBackground(Color.red);
+		setBackground(Color.black);
 
 		setFocusable(true);
 		requestFocusInWindow();

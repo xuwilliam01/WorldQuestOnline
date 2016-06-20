@@ -376,11 +376,11 @@ public class ServerWorld
 					{
 						blueSpawners.add((ServerSpawner) newObject);
 					}
-					else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
-					{
-						// Chests don't spawn immediately
-						newObject.destroy();
-					}
+//					else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
+//					{
+//						// Chests don't spawn immediately
+//						newObject.destroy();
+//					}
 				}
 		}
 		worldInput.close();

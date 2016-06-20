@@ -570,12 +570,12 @@ public class MainMenu {
 			String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Please enter the IP address of the server");
+					.showInputDialog("Server IP (local: 127.0.0.1)");
 			if(serverIP == null)
 				return;
 			if (serverIP.equals(""))
 			{
-				serverIP = "192.168.0.16";
+				serverIP = "127.0.0.1";
 				port = 5000;
 				playerName = "Player";
 			}
@@ -633,9 +633,11 @@ public class MainMenu {
 			while(true)
 			{
 				fileName = JOptionPane
-						.showInputDialog("Please enter the file you want to use for the server");
+						.showInputDialog("Map name (Default: WORLD)");
 				if(fileName == null)
 					return;
+				else
+					fileName+=".txt";
 
 				File f = new File("Resources",fileName);
 				if(f.exists() && !f.isDirectory()) { 
@@ -697,11 +699,12 @@ public class MainMenu {
 			String fileName = "";
 			while(true)
 			{
-				fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create (No blank names)");
-				if(fileName != null && !fileName.trim().isEmpty())
+				fileName = (String)JOptionPane.showInputDialog("File name (new or existing) (default: WORLD)").trim();
+				if(fileName != null && !fileName.isEmpty())
+				{
+					fileName+=".txt";
 					break;
-				if(fileName == null)
-					return;
+				}
 			}
 
 			mainFrame.remove(mainMenu);

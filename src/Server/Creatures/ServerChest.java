@@ -14,12 +14,12 @@ public class ServerChest extends ServerCreature
 	/**
 	 * The default HP of a chest
 	 */
-	public final static int CHEST_HP = 100;
+	public final static int CHEST_HP = 300;
 
 	/**
 	 * The default number of items the chest will store, subject to change later
 	 */
-	private int numItems = 5;
+	private int numItems = 4;
 	
 	/**
 	 * When this chest was destroyed
@@ -58,7 +58,6 @@ public class ServerChest extends ServerCreature
 	{
 		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST.png",
 				ServerWorld.CHEST_TYPE, CHEST_HP, world, true);
-		// Default 5 items
 		addItems();
 	}
 
@@ -67,6 +66,7 @@ public class ServerChest extends ServerCreature
 	 */
 	public void addItems()
 	{
+		numItems = (int)(Math.random()*4);
 		for (int item = 0; item < numItems; item++)
 			addItem(ServerItem.randomItem(getX(), getY()));
 	}

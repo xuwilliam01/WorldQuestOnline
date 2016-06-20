@@ -15,11 +15,13 @@ public class StartCreator {
 		String fileName = "";
 		while(true)
 		{
-			fileName = (String)JOptionPane.showInputDialog("Please enter the name of the file you want to edit/create (No blank names)");
-			if(fileName != null && !fileName.trim().isEmpty())
-				break;
-			if(fileName == null)
+			fileName = (String)JOptionPane.showInputDialog("File name (new or existing) (default: WORLD)").trim();
+			if(fileName != null && !fileName.isEmpty())
+			{
+				fileName+=".txt";
 				System.exit(0);
+				break;
+			}		
 		}
 
 		//Create the frame and add the world and items
