@@ -628,6 +628,8 @@ public class Images
 
 			images.add(new GameImage("BACKGROUND.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
+			images.add(new GameImage("PLAINBLACK.png",
+					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 			
 			images.add(new GameImage("FindAGame.png",
 					300,100));
@@ -656,6 +658,8 @@ public class Images
 			images.add(new GameImage("Next.png"));
 			
 			images.add(new GameImage("Shop.png",ClientShop.SHOP_WIDTH,ClientShop.SHOP_HEIGHT));
+			
+			
 		}
 	}
 

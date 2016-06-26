@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -97,6 +100,19 @@ public class ClientWorld
 	 */
 	public static double MESSAGE_FONT_WIDTH = 0;
 
+	
+	/**
+	 * Background colour image
+	 */
+	private Image backgroundColour;
+	
+	/**
+	 * Adjusts the alpha of the darkness
+	 */
+	private double alphaMultiplier;
+	private double adjustment;
+	
+
 	private Client client;
 
 	/**
@@ -112,11 +128,17 @@ public class ClientWorld
 		this.grid = grid;
 		this.client = client;
 
+		alphaMultiplier = 0;
+		adjustment = 0.001;
+		
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 
+		// Get the background image and darken it by 50%
+		backgroundColour = Images.getImage("BACKGROUND.png");
+		
 		// Generate clouds
 		if ((int) (Math.random() * 2) == 0)
 		{
@@ -243,7 +265,17 @@ public class ClientWorld
 		}
 
 		// Draw the background
-		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
+		graphics.drawImage(backgroundColour, 0, 0, null);
+		
+		// Adjust the time of day
+		alphaMultiplier += adjustment;
+		if (alphaMultiplier<= 0 || alphaMultiplier >= 1)
+		{
+			adjustment*=-1;
+		}
+		
+		graphics.setColor(new Color(0,0,0,(float)(1f * alphaMultiplier)));
+		graphics.fillRect(0,0,Client.SCREEN_WIDTH,Client.SCREEN_HEIGHT);
 
 		// Draw and move the clouds
 		for (ClientBackground cloud : clouds)
@@ -523,6 +555,16 @@ public class ClientWorld
 	public void setTileSize(int tileSize)
 	{
 		this.tileSize = tileSize;
+	}
+
+	public double getAlphaMultiplier()
+	{
+		return alphaMultiplier;
+	}
+
+	public void setAlphaMultiplier(double alphaMultiplier)
+	{
+		this.alphaMultiplier = alphaMultiplier;
 	}
 
 }
