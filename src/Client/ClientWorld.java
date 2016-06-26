@@ -114,7 +114,6 @@ public class ClientWorld
 	 * Adjusts the alpha of the darkness
 	 */
 	private double alphaMultiplier;
-	private double adjustment;
 
 	private Client client;
 
@@ -133,7 +132,6 @@ public class ClientWorld
 		this.client = client;
 
 		alphaMultiplier = 0;
-		adjustment = 0.001;
 		worldTime = 0;
 
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
