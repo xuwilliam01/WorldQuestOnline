@@ -811,9 +811,9 @@ MouseMotionListener
 						}
 						
 						if(str.substring(0,3).equals("KF1"))
-							graphics.drawString("was " + killWord + " by a ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+							graphics.drawString("was " + killWord + " by a ",9+ graphics.getFontMetrics().stringWidth(firstName),textY);
 						else
-							graphics.drawString(secondKillWord + " ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+							graphics.drawString(secondKillWord + " ",9+ graphics.getFontMetrics().stringWidth(firstName),textY);
 						
 
 						if(lastName.charAt(0)-'0' == ServerCreature.RED_TEAM)
@@ -823,9 +823,9 @@ MouseMotionListener
 						else graphics.setColor(Color.GREEN);
 						
 						if(str.substring(0,3).equals("KF1"))
-							graphics.drawString(lastName.substring(1),13+ graphics.getFontMetrics().stringWidth(firstName+"was killed by a  "),textY);
+							graphics.drawString(lastName.substring(1),9+ graphics.getFontMetrics().stringWidth(firstName+"was " + killWord + " by a "),textY);
 						else
-							graphics.drawString(lastName.substring(1),13+ graphics.getFontMetrics().stringWidth(firstName+"killed  "),textY);
+							graphics.drawString(lastName.substring(1),9+ graphics.getFontMetrics().stringWidth(firstName+secondKillWord + " "),textY);
 					}
 					textY+=20;
 				}
