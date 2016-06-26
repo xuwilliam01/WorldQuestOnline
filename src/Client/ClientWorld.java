@@ -30,7 +30,7 @@ public class ClientWorld
 	public final static Color RED_TEXT = new Color(153, 0, 38);
 	public final static Color BLUE_TEXT = new Color(0, 161, 230);
 	public final static Color GREEN_TEXT = new Color(0, 153, 0);
-	public final static Color PURPLE_TEXT = new Color(82,42,122);
+	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
 	public final static Color GRAY_TEXT = Color.gray;
 	/**
 	 * The grid of tiles
@@ -78,12 +78,12 @@ public class ClientWorld
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
 
-	public final static Font BIG_NORMAL_FONT = new Font("Arial",Font.PLAIN,20);
+	public final static Font BIG_NORMAL_FONT = new Font("Arial", Font.PLAIN, 20);
 
 	/**
 	 * Font for displaying stats
 	 */
-	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN,15);
+	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN, 15);
 
 	/**
 	 * Object for figuring out size of font
@@ -100,18 +100,16 @@ public class ClientWorld
 	 */
 	public static double MESSAGE_FONT_WIDTH = 0;
 
-	
 	/**
 	 * Background colour image
 	 */
 	private Image backgroundColour;
-	
+
 	/**
 	 * Adjusts the alpha of the darkness
 	 */
 	private double alphaMultiplier;
 	private double adjustment;
-	
 
 	private Client client;
 
@@ -122,7 +120,8 @@ public class ClientWorld
 	 * @param grid the tile grid
 	 * @throws IOException
 	 */
-	public ClientWorld(char[][] grid, int tileSize, Client client) throws IOException
+	public ClientWorld(char[][] grid, int tileSize, Client client)
+			throws IOException
 	{
 		this.tileSize = tileSize;
 		this.grid = grid;
@@ -130,7 +129,7 @@ public class ClientWorld
 
 		alphaMultiplier = 0;
 		adjustment = 0.001;
-		
+
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
@@ -138,7 +137,7 @@ public class ClientWorld
 
 		// Get the background image and darken it by 50%
 		backgroundColour = Images.getImage("BACKGROUND.png");
-		
+
 		// Generate clouds
 		if ((int) (Math.random() * 2) == 0)
 		{
@@ -209,14 +208,15 @@ public class ClientWorld
 	 * @param object the object to add
 	 */
 	public void setObject(int id, int x, int y, String image, int team,
-			String type,String name)
+			String type, String name)
 	{
 		if (objects[id] == null)
 		{
-			if(name.equals("{"))
+			if (name.equals("{"))
 				objects[id] = new ClientObject(id, x, y, image, team, type);
 			else
-				objects[id] = new ClientObject(id, x, y, image, team, type,name);
+				objects[id] = new ClientObject(id, x, y, image, team, type,
+						name);
 		}
 		else
 		{
@@ -266,16 +266,16 @@ public class ClientWorld
 
 		// Draw the background
 		graphics.drawImage(backgroundColour, 0, 0, null);
-		
+
 		// Adjust the time of day
 		alphaMultiplier += adjustment;
-		if (alphaMultiplier<= 0 || alphaMultiplier >= 1)
+		if (alphaMultiplier <= 0 || alphaMultiplier >= 1)
 		{
-			adjustment*=-1;
+			adjustment *= -1;
 		}
-		
-		graphics.setColor(new Color(0,0,0,(float)(1f * alphaMultiplier)));
-		graphics.fillRect(0,0,Client.SCREEN_WIDTH,Client.SCREEN_HEIGHT);
+
+		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
+		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 		// Draw and move the clouds
 		for (ClientBackground cloud : clouds)
@@ -312,7 +312,8 @@ public class ClientWorld
 
 		// Center of the screen
 		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
+		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT
+				/ 2;
 
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((player.getY() - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
@@ -348,10 +349,10 @@ public class ClientWorld
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
 									+ column * tileSize - player.getX(),
-									centreY
+							centreY
 									+ row
 									* tileSize - player.getY(),
-									null);
+							null);
 				}
 			}
 
@@ -399,19 +400,37 @@ public class ClientWorld
 						if (object.getTeam() == ServerCreature.RED_TEAM)
 						{
 							graphics.setColor(Color.red);
-							if(object.getName().equals(""))				
+							if (object.getName().equals(""))
+							{
 								graphics.fillRect(x + object.getWidth() / 2 - 5,
-										y + object.getHeight()/4, 10, 10);
-							else graphics.drawString(object.getName().trim(),(int)(x + object.getWidth()/2 - object.getName().trim().length()*DAMAGE_FONT_WIDTH/2),y);
+										y + object.getHeight() / 4, 10, 10);
+							}
+							else
+							{
+								graphics.drawString(object.getName().trim(),
+										(int) (x + object.getWidth()/2 - object
+												.getName().trim().length()
+												* DAMAGE_FONT_WIDTH / 2), y);
+							}
 						}
 						else if (object.getTeam() == ServerCreature.BLUE_TEAM)
 						{
 							graphics.setColor(Color.blue);
-							if(object.getName().equals(""))
+							if (object.getName().equals(""))
+							{
 								graphics.fillRect(x + object.getWidth() / 2 - 5,
-										y + object.getHeight()/4, 10, 10);
-							else graphics.drawString(object.getName().trim(),(int)(x + object.getWidth() - object.getName().trim().length()*DAMAGE_FONT_WIDTH/2),y);
+										y + object.getHeight() / 4, 10, 10);
+							}
+							else
+							{
+								graphics.drawString(object.getName().trim(),
+										(int) (x + object.getWidth()/2 - object
+												.getName().trim().length()
+												* DAMAGE_FONT_WIDTH / 2), y);
+							}
 						}
+						
+					
 						graphics.drawImage(image, x, y,
 								null);
 
@@ -468,7 +487,7 @@ public class ClientWorld
 		catch (ConcurrentModificationException E)
 		{
 			System.out
-			.println("Tried to access the object list while it was being used");
+					.println("Tried to access the object list while it was being used");
 		}
 
 		// Draw solid tiles at the very front
@@ -483,10 +502,10 @@ public class ClientWorld
 							ImageReferencePair.getImages()[(int) (grid[row][column])]
 									.getImage(), centreX
 									+ column * tileSize - player.getX(),
-									centreY
+							centreY
 									+ row
 									* tileSize - player.getY(),
-									null);
+							null);
 				}
 			}
 
@@ -500,36 +519,59 @@ public class ClientWorld
 					displayedText,
 					(int) (Client.SCREEN_WIDTH
 							/ 2
-							- (displayedText.length() * MESSAGE_FONT_WIDTH)*(2.0/5) + 0.5),
-							Client.SCREEN_HEIGHT / 3);
+							- (displayedText.length() * MESSAGE_FONT_WIDTH)
+							* (2.0 / 5) + 0.5),
+					Client.SCREEN_HEIGHT / 3);
 		}
 
-		//Draw the castle hp bars
+		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.CYAN);
-		graphics.fillRect(100, 980,(int)(500.0*client.getBlueCastleHP()/(client.getBlueCastleMaxHP())), 20);
+		graphics.fillRect(100, 980,
+				(int) (500.0 * client.getBlueCastleHP() / (client
+						.getBlueCastleMaxHP())), 20);
 		graphics.setColor(Color.PINK);
-		graphics.fillRect(1050, 980,(int)(500.0*client.getRedCastleHP()/(client.getRedCastleMaxHP())), 20);
+		graphics.fillRect(1050, 980,
+				(int) (500.0 * client.getRedCastleHP() / (client
+						.getRedCastleMaxHP())), 20);
 
 		graphics.setColor(PURPLE_TEXT);
 		graphics.drawRect(100, 980, 500, 20);
-		graphics.drawString(String.format("%d/%d",client.getBlueCastleHP(),client.getBlueCastleMaxHP()), 325, 995);
+		graphics.drawString(
+				String.format("%d/%d", client.getBlueCastleHP(),
+						client.getBlueCastleMaxHP()), 325, 995);
 		graphics.drawRect(1050, 980, 500, 20);
-		graphics.drawString(String.format("%d/%d",client.getRedCastleHP(),client.getRedCastleMaxHP()), 1275, 995);
+		graphics.drawString(
+				String.format("%d/%d", client.getRedCastleHP(),
+						client.getRedCastleMaxHP()), 1275, 995);
 
 		graphics.setFont(BIG_NORMAL_FONT);
-		
+
 		graphics.setColor(Color.red);
-		if(client.getRedCastleTier() == 5)
-			graphics.drawString(String.format("Red Castle Tier %d (Max)",client.getRedCastleTier()+1),1050,975);
+		if (client.getRedCastleTier() == 5)
+			graphics.drawString(
+					String.format("Red Castle Tier %d (Max)",
+							client.getRedCastleTier() + 1), 1050, 975);
 		else
-			graphics.drawString(String.format("Red Castle Tier %d (Money For Next Tier  %d/%d)",client.getRedCastleTier()+1,client.getRedCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),1050,975);
-	
+			graphics.drawString(String.format(
+					"Red Castle Tier %d (Money For Next Tier  %d/%d)",
+					client.getRedCastleTier() + 1, client.getRedCastleMoney(),
+					ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),
+					1050, 975);
+
 		graphics.setColor(Color.blue);
-		if(client.getBlueCastleTier() == 5)
-			graphics.drawString(String.format("Blue Castle Tier %d (Max)",client.getBlueCastleTier()+1),100,975);
+		if (client.getBlueCastleTier() == 5)
+			graphics.drawString(
+					String.format("Blue Castle Tier %d (Max)",
+							client.getBlueCastleTier() + 1), 100, 975);
 		else
-			graphics.drawString(String.format("Blue Castle Tier %d (Money For Next Tier  %d/%d)",client.getBlueCastleTier()+1,client.getBlueCastleMoney(),ServerGoblin.GOBLIN_TIER_PRICE[client.getBlueCastleTier()]),100,975);
+			graphics.drawString(
+					String.format(
+							"Blue Castle Tier %d (Money For Next Tier  %d/%d)",
+							client.getBlueCastleTier() + 1, client
+									.getBlueCastleMoney(),
+							ServerGoblin.GOBLIN_TIER_PRICE[client
+									.getBlueCastleTier()]), 100, 975);
 	}
 
 	public void clear()
