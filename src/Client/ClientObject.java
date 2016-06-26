@@ -112,7 +112,7 @@ public class ClientObject implements Comparable<ClientObject> {
 		this.id = id;
 		this.imageName = image;
 		this.type = type;
-		this.name = name;
+		this.name = name.trim();
 
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
@@ -234,7 +234,7 @@ public class ClientObject implements Comparable<ClientObject> {
 	
 	public String getName()
 	{
-		return name;
+		return name.trim();
 	}
 
 }
