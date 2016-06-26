@@ -161,7 +161,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * The name of the player
 	 */
 	private String playerName;
-	
+
 	private long startTimer = 0;
 
 	/**
@@ -287,11 +287,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		direction = 'R';
 
 		printToServer("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
-		
+
 		// Get the ping
 		printToServer("P");
-		
-		
+
 	}
 
 	/**
@@ -620,15 +619,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					String message = input.readLine();
 
 					lines.add(message);
-					
+
 					// Update the ping after 1 second
-					if (startTimer >= 0 && System.currentTimeMillis()-startTimer >= 500)
+					if (startTimer >= 0
+							&& System.currentTimeMillis() - startTimer >= 500)
 					{
 						ping = System.currentTimeMillis();
 						printToServer("P");
 						startTimer = -1;
 					}
-					
 
 					try
 					{
@@ -761,32 +760,66 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.white);
-		graphics.drawString(pingString, SCREEN_WIDTH-90, 20);
-		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH-90, 40);
-		
+		graphics.drawString(pingString, SCREEN_WIDTH - 60, 20);
+		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH - 60, 40);
+
 		// Set the time of day to be displayed
 		// DAWN: 5AM - 9AM
 		// DAY: 9AM - 5PM
 		// DUSK: 5PM - 9PM
 		// NIGHT: 9PM - 5AM
 		String timeOfDay = "DAY";
-		
-		if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/6 * 5)
+
+		if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
 			timeOfDay = "DAWN";
 		}
-		else if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/2)
+		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
 		{
 			timeOfDay = "NIGHT";
 		}
-		else if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/3)
+		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
 		{
 			timeOfDay = "DUSK";
 		}
+
+		int hour = (world.getWorldTime() / 60) + 9;
+		if (hour >= 24)
+		{
+			hour -= 24;
+		}
+		int minute = world.getWorldTime() % 60;
+
+		String amPm = "AM";
+
+		if (hour >= 12)
+		{
+			hour -= 12;
+			amPm = "PM";
+		}
 		
-		graphics.drawString("Time: " + timeOfDay, SCREEN_WIDTH-90, 60);
+		if (hour == 0)
+		{
+			hour = 12;
+		}
+
+		String hourString = "";
+		String minuteString = "";
+
+		if (hour < 10)
+		{
+			hourString = "0";
+		}
+		if (minute < 10)
+		{
+			minuteString = "0";
+		}
+		hourString += hour;
+		minuteString += minute;
 		
-		graphics.drawString("World Time: " + world.getWorldTime(), SCREEN_WIDTH-90, 80);
+		graphics.drawString(hourString + ":" + minuteString + " " + amPm,
+				SCREEN_WIDTH - 60, 60);
+		graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);

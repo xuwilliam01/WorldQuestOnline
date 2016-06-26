@@ -280,16 +280,16 @@ public class ClientWorld
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
-			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
+			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)*0.95
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		}
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 2 && worldTime < ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
-			alphaMultiplier = 1;
+			alphaMultiplier = 0.95;
 		}
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
-			alphaMultiplier = 1 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
+			alphaMultiplier = 0.95 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)*0.95
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
