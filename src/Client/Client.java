@@ -290,6 +290,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		
 		// Get the ping
 		printToServer("P");
+		
+		
 	}
 
 	/**
@@ -567,6 +569,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									blueCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
 								}
+								else if (tokens[token].equals("T"))
+								{
+									world.setWorldTime(Integer
+											.parseInt(tokens[++token]));
+								}
 							}
 							catch (NumberFormatException e)
 							{
@@ -754,8 +761,32 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		// Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.white);
-		graphics.drawString(pingString, SCREEN_WIDTH-60, 20);
-		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH-60, 40);
+		graphics.drawString(pingString, SCREEN_WIDTH-90, 20);
+		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH-90, 40);
+		
+		// Set the time of day to be displayed
+		// DAWN: 5AM - 9AM
+		// DAY: 9AM - 5PM
+		// DUSK: 5PM - 9PM
+		// NIGHT: 9PM - 5AM
+		String timeOfDay = "DAY";
+		
+		if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/6 * 5)
+		{
+			timeOfDay = "DAWN";
+		}
+		else if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/2)
+		{
+			timeOfDay = "NIGHT";
+		}
+		else if (world.getWorldTime()>= ServerWorld.DAY_COUNTERS/3)
+		{
+			timeOfDay = "DUSK";
+		}
+		
+		graphics.drawString("Time: " + timeOfDay, SCREEN_WIDTH-90, 60);
+		
+		graphics.drawString("World Time: " + world.getWorldTime(), SCREEN_WIDTH-90, 80);
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);

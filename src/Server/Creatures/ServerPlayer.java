@@ -758,6 +758,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					queueMessage("L " + getHP());
 				}
+				// Send the current time in the world
+				queueMessage("T " + world.getWorldTime());
 
 				// Signal a repaint
 				queueMessage("U");

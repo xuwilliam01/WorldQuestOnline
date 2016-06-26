@@ -211,6 +211,16 @@ public class ServerWorld
 	 * The amount of gravity per refresh
 	 */
 	public final static double GRAVITY = 1;
+	
+	/**
+	 * Number of counters (minutes) in a day
+	 */
+	public final static int DAY_COUNTERS = 1440;
+	
+	/**
+	 * Number of frames in a day counter
+	 */
+	public final static int COUNTER_TIME = 5;
 
 	/**
 	 * List of all the non-tile objects in the world (for movement and collision
@@ -233,6 +243,11 @@ public class ServerWorld
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
+	
+	/**
+	 * The current time in the world
+	 */
+	private int worldTime = 0;
 
 	/**
 	 * The number of slimes in the world
@@ -384,6 +399,8 @@ public class ServerWorld
 				}
 		}
 		worldInput.close();
+		
+		worldTime = (int) (Math.random()*DAY_COUNTERS);
 	}
 
 	/**
@@ -992,6 +1009,16 @@ public class ServerWorld
 
 		// Increase the world counter by 1 after this game tick
 		worldCounter++;
+		
+		if (worldCounter % COUNTER_TIME == 0)
+		{
+			worldTime ++;
+			
+			if (worldTime >= DAY_COUNTERS)
+			{
+				worldTime = 0;
+			}
+		}
 	}
 
 	/**
@@ -1244,4 +1271,20 @@ public class ServerWorld
 	{
 		return redCastle;
 	}
+
+	public int getWorldTime()
+	{
+		return worldTime;
+	}
+
+	public void setWorldTime(int worldTime)
+	{
+		this.worldTime = worldTime;
+	}
+
+	public void setWorldCounter(long worldCounter)
+	{
+		this.worldCounter = worldCounter;
+	}
+	
 }

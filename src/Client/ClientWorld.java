@@ -106,6 +106,11 @@ public class ClientWorld
 	private Image backgroundColour;
 
 	/**
+	 * The time in the world
+	 */
+	private int worldTime;
+
+	/**
 	 * Adjusts the alpha of the darkness
 	 */
 	private double alphaMultiplier;
@@ -129,12 +134,13 @@ public class ClientWorld
 
 		alphaMultiplier = 0;
 		adjustment = 0.001;
+		worldTime = 0;
 
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
-		
+
 		backgroundColour = Images.getImage("BACKGROUND.png");
 
 		// Generate clouds
@@ -267,10 +273,24 @@ public class ClientWorld
 		graphics.drawImage(backgroundColour, 0, 0, null);
 
 		// Adjust the time of day
-		alphaMultiplier += adjustment;
-		if (alphaMultiplier <= 0 || alphaMultiplier >= 1)
+		if (worldTime >= 0 && worldTime < ServerWorld.DAY_COUNTERS / 3)
 		{
-			adjustment *= -1;
+			alphaMultiplier = 0;
+		}
+		else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
+				&& worldTime < ServerWorld.DAY_COUNTERS / 2)
+		{
+			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
+					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
+		}
+		else if (worldTime >= ServerWorld.DAY_COUNTERS / 2 && worldTime < ServerWorld.DAY_COUNTERS / 6 * 5)
+		{
+			alphaMultiplier = 1;
+		}
+		else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5)
+		{
+			alphaMultiplier = 1 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
+					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
 		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
@@ -401,13 +421,15 @@ public class ClientWorld
 							graphics.setColor(Color.red);
 							if (object.getName().equals(""))
 							{
-								graphics.fillRect(x + object.getWidth() / 2 - 5,
+								graphics.fillRect(
+										x + object.getWidth() / 2 - 5,
 										y + object.getHeight() / 4, 10, 10);
 							}
 							else
 							{
-								graphics.drawString(object.getName().trim(),
-										(int) (x + object.getWidth()/2 - object
+								graphics.drawString(
+										object.getName().trim(),
+										(int) (x + object.getWidth() / 2 - object
 												.getName().trim().length()
 												* DAMAGE_FONT_WIDTH / 2), y);
 							}
@@ -417,19 +439,20 @@ public class ClientWorld
 							graphics.setColor(Color.blue);
 							if (object.getName().equals(""))
 							{
-								graphics.fillRect(x + object.getWidth() / 2 - 5,
+								graphics.fillRect(
+										x + object.getWidth() / 2 - 5,
 										y + object.getHeight() / 4, 10, 10);
 							}
 							else
 							{
-								graphics.drawString(object.getName().trim(),
-										(int) (x + object.getWidth()/2 - object
+								graphics.drawString(
+										object.getName().trim(),
+										(int) (x + object.getWidth() / 2 - object
 												.getName().trim().length()
 												* DAMAGE_FONT_WIDTH / 2), y);
 							}
 						}
-						
-					
+
 						graphics.drawImage(image, x, y,
 								null);
 
@@ -606,6 +629,16 @@ public class ClientWorld
 	public void setAlphaMultiplier(double alphaMultiplier)
 	{
 		this.alphaMultiplier = alphaMultiplier;
+	}
+
+	public int getWorldTime()
+	{
+		return worldTime;
+	}
+
+	public void setWorldTime(int worldTime)
+	{
+		this.worldTime = worldTime;
 	}
 
 }
