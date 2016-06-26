@@ -778,19 +778,49 @@ MouseMotionListener
 						else graphics.setColor(Color.DARK_GRAY);
 						graphics.drawString(firstName.substring(1),10,textY);
 						
-						graphics.setColor(Color.YELLOW);
+						graphics.setColor(Color.ORANGE);
+						
+						int random = (int) Math.random()*5;
+						String killWord = "killed";
+						String secondKillWord = "killed";
+						
+						if (random == 0)
+						{
+							killWord = "slain";
+							secondKillWord = "slayed";
+						}
+						else if (random == 1)
+						{
+							killWord = "defeated";
+							secondKillWord = "defeated";
+						}
+						else if (random == 2)
+						{
+							killWord = "murdered";
+							secondKillWord = "murdered";
+						}
+						else if (random == 3)
+						{
+							killWord = "slaughtered";
+							secondKillWord = "slaughtered";
+						}
+						else if (random == 4)
+						{
+							killWord = "ended";
+							secondKillWord = "ended";
+						}
 						
 						if(str.substring(0,3).equals("KF1"))
-							graphics.drawString("was killed by a ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+							graphics.drawString("was " + killWord + " by a ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
 						else
-							graphics.drawString("killed ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+							graphics.drawString(secondKillWord + " ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
 						
 
 						if(lastName.charAt(0)-'0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
 						else if(lastName.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
 							graphics.setColor(Color.BLUE);
-						else graphics.setColor(Color.DARK_GRAY);
+						else graphics.setColor(Color.GREEN);
 						
 						if(str.substring(0,3).equals("KF1"))
 							graphics.drawString(lastName.substring(1),13+ graphics.getFontMetrics().stringWidth(firstName+"was killed by a  "),textY);
