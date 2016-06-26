@@ -1,6 +1,8 @@
 package Client;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -15,13 +17,19 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
@@ -30,8 +38,8 @@ import Server.Creatures.ServerPlayer;
  * @author Alex Raita & William Xu
  *
  */
-public class Client extends JPanel implements KeyListener, MouseListener,
-		MouseMotionListener
+public class Client extends JPanel implements KeyListener, MouseListener, ActionListener,
+MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -88,6 +96,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int blueCastleTier;
 	private int blueCastleMoney;
 	private int blueCastleMaxHP;
+	
+	//Chat Components
+	final static int MAX_MESSAGES = 15;
+	final static int MAX_CHARACTERS = 100;
+	private JTextField chat;
+	private JButton enter;
+	private ArrayList<String> chatQueue = new ArrayList<String>();
 
 	/**
 	 * The player's inventory
@@ -156,6 +171,25 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.playerName = playerName;
 		this.inventory = inventory;
 		this.frame = frame;
+
+		chat = new JTextField();
+		chat.setLocation(0,0);
+		chat.setSize(200,20);
+		chat.addKeyListener(new JTextFieldEnter());
+		chat.setVisible(true);
+		chat.setFocusable(true);
+		chat.setDocument(new JTextFieldLimit(MAX_CHARACTERS));
+		chat.setForeground(Color.GRAY);
+
+		enter = new JButton("Enter");
+		enter.setLocation(200,0);
+		enter.setSize(50,20);
+		enter.setVisible(true);
+		enter.addActionListener(this);
+
+		setLayout(null);
+		add(chat);
+		add(enter);
 	}
 
 	/**
@@ -245,7 +279,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addMouseMotionListener(this);
 
 		direction = 'R';
-		
+
 		print("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
 	}
 
@@ -325,11 +359,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 
 									JOptionPane
-											.showMessageDialog(
-													Client.this,
-													String.format(
-															"The %s castle has been destroyed, the winner is the %s!",
-															loser, winner));
+									.showMessageDialog(
+											Client.this,
+											String.format(
+													"The %s castle has been destroyed, the winner is the %s!",
+													loser, winner));
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)
@@ -377,7 +411,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									world.setObject(id, x, y,
 											tokens[++token], Integer
-													.parseInt(tokens[++token]),
+											.parseInt(tokens[++token]),
 											tokens[++token], tokens[++token]);
 								}
 								else if (tokens[token].equals("P"))
@@ -459,6 +493,24 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								{
 									if (shop != null)
 										closeShop();
+								}
+								else if(tokens[token].equals("CH"))
+								{									
+									char who = tokens[++token].charAt(0);
+									String name = tokens[++token];
+									int numWords = Integer.parseInt(tokens[++token]);
+									String text = "";
+									for(int i = 0; i < numWords;i++)
+									{
+										text+= tokens[++token]+" ";
+									}
+									if(chatQueue.size() >= MAX_MESSAGES)
+										chatQueue.remove(0);
+									if(who == 'E')
+										chatQueue.add(name+": "+text);
+									else
+										chatQueue.add(name+"[TEAM]: "+text.substring(2));
+									
 								}
 								else if (tokens[token].equals("XR"))
 								{
@@ -658,10 +710,31 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 
 		// Draw the ping and the FPS
+		//		graphics.setFont(ClientWorld.NORMAL_FONT);
+		//		graphics.setColor(Color.black);
+		//		graphics.drawString(pingString, 20, 20);
+		//		graphics.drawString("FPS: " + currentFPS, 20, 40);
+		
+		//Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		graphics.setColor(Color.black);
-		graphics.drawString(pingString, 20, 20);
-		graphics.drawString("FPS: " + currentFPS, 20, 40);
+		int textY = 40;
+		for(String str: chatQueue)
+		{
+			int space = str.indexOf(' ');
+			String coloured = str.substring(1,space);
+			String mssg = str.substring(space+1);
+			if(str.charAt(0)-'0' == ServerCreature.RED_TEAM)
+				graphics.setColor(Color.RED);
+			else if(str.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+				graphics.setColor(Color.BLUE);
+			else graphics.setColor(Color.GRAY);
+			graphics.drawString(coloured+" ",10,textY);
+			graphics.setColor(Color.YELLOW);
+			graphics.drawString(mssg,10+ 6*coloured.length(),textY);
+			textY+=20;
+			
+		}
+
 		if (HP > 0)
 		{
 			justDied = true;
@@ -680,7 +753,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		// Repaint the inventory
 		inventory.repaint();
-		requestFocusInWindow();
+		if(!chat.hasFocus())
+			requestFocusInWindow();
 	}
 
 	@Override
@@ -755,6 +829,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			{
 				closeShop();
 			}
+		}
+		else if (key.getKeyCode() == KeyEvent.VK_T)
+		{
+			chat.requestFocus();
 		}
 	}
 
@@ -1051,7 +1129,65 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void setBlueCastleMaxHP(int blueCastleMaxHP) {
 		this.blueCastleMaxHP = blueCastleMaxHP;
 	}
+
+	/**
+	 * Class to limit the number of characters in a JTextField
+	 */
+	private class JTextFieldLimit extends PlainDocument {
+		  private int limit;
+
+		  JTextFieldLimit(int limit) {
+		   super();
+		   this.limit = limit;
+		   }
+
+		  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+		    if (str == null) return;
+
+		    if ((getLength() + str.length()) <= limit) {
+		      super.insertString(offset, str, attr);
+		    }
+		  }
+		}
+
 	
+	public void actionPerformed(ActionEvent e) {
+		//Send the message
+		String message =  chat.getText();
+		if(message.length() > 0)
+		{
+			print("C "+message);
+		}
+		chat.setForeground(Color.GRAY);
+		chat.setText("");
+		requestFocusInWindow();
+		
+		
+	}
 	
+	private class JTextFieldEnter implements KeyListener
+	{
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				enter.doClick();
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
 
 }

@@ -926,6 +926,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
+				else if(command.charAt(0) == 'C')
+				{
+					String message = command.substring(2);
+					String[] tokens = message.split(" ");
+					System.out.println("This "+tokens[0]);
+					if(tokens[0].equals("!t"))
+					{
+						engine.broadCastTeam("CH "+"T "+getTeam()+name+" "+tokens.length+" "+message, getTeam());
+					}
+					else
+						engine.broadcast("CH "+"E "+getTeam()+name+" "+tokens.length+" "+message);
+				}
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))
 				{

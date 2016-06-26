@@ -10,6 +10,7 @@ import javax.swing.Timer;
 
 import Imports.ImageReferencePair;
 import Imports.Images;
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 /**
@@ -181,7 +182,20 @@ public class ServerEngine implements Runnable, ActionListener
 			player.sendMessage(message);
 		}
 	}
+	
+	/**
+	 * Sends a message to the given team
+	 */
+	public void broadCastTeam(String message, int team)
+	{
+		for (ServerPlayer player : listOfPlayers)
+		{
+			if(player.getTeam() == team)
+				player.sendMessage(message);
+		}
+	}
 
+	
 	/**
 	 * Remove a player from the array list
 	 * @param remove
