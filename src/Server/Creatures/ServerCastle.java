@@ -60,6 +60,10 @@ public class ServerCastle extends ServerCreature
 			setImage("RED_CASTLE.png");
 		}
 		setTeam(team);
+		if(team == RED_TEAM)
+			setName("Red Team's Castle");
+		else
+			setName("Blue Team's Castle");
 	}
 
 	/**

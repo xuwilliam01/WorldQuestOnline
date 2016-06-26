@@ -64,6 +64,7 @@ public class ServerChest extends ServerCreature
 		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST.png",
 				ServerWorld.CHEST_TYPE, CHEST_HP, world, true);
 		addItems();
+		setName("Chest");
 	}
 
 	/**

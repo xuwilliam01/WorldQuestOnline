@@ -142,6 +142,7 @@ public class ServerGoblin extends ServerCreature
 
 			weapon = "DAWOOD_0.png";
 			damage = 3;
+			setName("A Naked Goblin");
 			break;
 		case 2:
 			setType(ServerWorld.GOBLIN_PEASANT_TYPE);
@@ -154,6 +155,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.1;
 			damage = 4;
 			weapon = "HASTONE_0.png";
+			setName("A Goblin Peasant");
 			break;
 		case 3:
 			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
@@ -167,6 +169,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.4;
 			weapon = "AXIRON_0.png";
 			damage = 6;
+			setName("A Goblin Soldier");
 			break;
 		case 4:
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
@@ -179,6 +182,7 @@ public class ServerGoblin extends ServerCreature
 			isMelee = false;
 			movementSpeed = 5;
 			jumpSpeed = 16;
+			setName("A Ninja Goblin");
 			break;
 		case 5:
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
@@ -193,6 +197,7 @@ public class ServerGoblin extends ServerCreature
 			movementSpeed = 4;
 			jumpSpeed = 14;
 			weapon = "HAIRON_0.png";
+			setName("A Goblin Warrior");
 			break;
 		case 6:
 			setType(ServerWorld.GOBLIN_GUARD_TYPE);
@@ -205,6 +210,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.2;
 			damage = 8;
 			weapon = "SWIRON_0.png";
+			setName("A Goblin Guard");
 			break;
 		case 7:
 			setType(ServerWorld.GOBLIN_KNIGHT_TYPE);
@@ -217,6 +223,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.4;
 			weapon = "SWIRON_0.png";
 			damage = 8;
+			setName("A Goblin Knight");
 			break;
 		case 8:
 			setType(ServerWorld.GOBLIN_LORD_TYPE);
@@ -229,6 +236,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.3;
 			weapon = "SWGOLD_0.png";
 			damage = 12;
+			setName("A Goblin Lord");
 			break;
 		case 9:
 			setType(ServerWorld.GOBLIN_WIZARD_TYPE);
@@ -247,6 +255,7 @@ public class ServerGoblin extends ServerCreature
 				actionDelay = 180;
 			}
 			isMelee = false;
+			setName("A Goblin Wizard");
 			break;
 		case 10:
 			setType(ServerWorld.GOBLIN_GIANT_TYPE);
@@ -262,6 +271,7 @@ public class ServerGoblin extends ServerCreature
 			setHeight(getHeight() * 2);
 			setRelativeDrawX(getRelativeDrawX() * 2);
 			setRelativeDrawY(getRelativeDrawY() * 2);
+			setName("A Goblin Giant");
 			break;
 		case 11:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
@@ -274,6 +284,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.7;
 			weapon = "SWDIAMOND_0.png";
 			damage = 16;
+			setName("A Goblin General");
 			break;
 		case 12:
 			setType(ServerWorld.GOBLIN_KING_TYPE);
@@ -286,6 +297,7 @@ public class ServerGoblin extends ServerCreature
 			armour = 0.7;
 			weapon = "AXDIAMOND_0.png";
 			damage = 20;
+			setName("A Goblin King");
 			break;
 		}
 

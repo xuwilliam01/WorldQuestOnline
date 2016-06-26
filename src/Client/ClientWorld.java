@@ -402,7 +402,7 @@ public class ClientWorld
 							if(object.getName().equals(""))				
 								graphics.fillRect(x + object.getWidth() / 2 - 5,
 										y + object.getHeight()/4, 10, 10);
-							else graphics.drawString(object.getName(),(int)(x + object.getWidth()/2 - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
+							else graphics.drawString(object.getName().trim(),(int)(x + object.getWidth()/2 - object.getName().trim().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						else if (object.getTeam() == ServerCreature.BLUE_TEAM)
 						{
@@ -410,7 +410,7 @@ public class ClientWorld
 							if(object.getName().equals(""))
 								graphics.fillRect(x + object.getWidth() / 2 - 5,
 										y + object.getHeight()/4, 10, 10);
-							else graphics.drawString(object.getName(),(int)(x + object.getWidth() - object.getName().length()*DAMAGE_FONT_WIDTH/2),y);
+							else graphics.drawString(object.getName().trim(),(int)(x + object.getWidth() - object.getName().trim().length()*DAMAGE_FONT_WIDTH/2),y);
 						}
 						graphics.drawImage(image, x, y,
 								null);

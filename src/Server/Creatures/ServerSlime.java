@@ -55,26 +55,30 @@ public class ServerSlime extends ServerEnemy
 			direction *= -1;
 		}
 		landCounter = 0;
-		
+
 		setDamage(2);
-		
+
 		int slimeType = (int)(Math.random()*30);
-		
+
 		if (slimeType <15)
 		{
-		setImage("GREENSLIME_6.png");
+			setImage("GREENSLIME_6.png");
+			setName("Green Slime");
 		}
 		else if (slimeType >= 15 && slimeType <= 18)
 		{
 			setImage("BLUESLIME_6.png");
+			setName("Blue Slime");
 		}
 		else if (slimeType >= 19 && slimeType <= 22)
 		{
 			setImage("REDSLIME_6.png");
+			setName("Red Slime");
 		}
 		else if (slimeType >= 23 && slimeType <= 26)
 		{
 			setImage("YELLOWSLIME_6.png");
+			setName("Yellow Slime");
 		}
 		else if (slimeType >= 27 && slimeType <= 28)
 		{
@@ -83,6 +87,7 @@ public class ServerSlime extends ServerEnemy
 			setHP(150);
 			setWidth(-1);
 			setHeight(-1);
+			setName("Giant Slime");
 		}
 		else if (slimeType == 29)
 		{
@@ -91,6 +96,7 @@ public class ServerSlime extends ServerEnemy
 			setHeight(-1);
 			setDamage(30);
 			setHP(100);
+			setName("Dark Slime");
 		}
 		landed = true;
 		addItem(ServerItem.randomItem(getX(), getY()));
@@ -201,7 +207,7 @@ public class ServerSlime extends ServerEnemy
 		setCounter(getCounter() + 1);
 
 	}
-	
+
 	@Override
 	public void inflictDamage(int amount, ServerCreature source)
 	{
@@ -211,5 +217,5 @@ public class ServerSlime extends ServerEnemy
 			setTarget((ServerPlayer)source);
 		}
 	}
-	
+
 }

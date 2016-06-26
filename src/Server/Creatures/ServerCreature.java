@@ -37,6 +37,12 @@ public abstract class ServerCreature extends ServerObject
 	private int HP;
 
 	/**
+	 * Name of the creature
+	 */
+	private String name;
+	
+	
+	/**
 	 * Whether this creature is attackable or not
 	 */
 	private boolean attackable;
@@ -533,6 +539,16 @@ public abstract class ServerCreature extends ServerObject
 	public void setHasPunched(boolean hasPunched)
 	{
 		this.hasPunched = hasPunched;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 	
 }

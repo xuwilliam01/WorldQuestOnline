@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -96,7 +97,7 @@ MouseMotionListener
 	private int blueCastleTier;
 	private int blueCastleMoney;
 	private int blueCastleMaxHP;
-	
+
 	//Chat Components
 	final static int MAX_MESSAGES = 15;
 	final static int MAX_CHARACTERS = 100;
@@ -508,10 +509,28 @@ MouseMotionListener
 									if(chatQueue.size() >= MAX_MESSAGES)
 										chatQueue.remove(0);
 									if(who == 'E')
-										chatQueue.add(name+": "+text);
+										chatQueue.add("CH "+name+": "+text.trim());
 									else
-										chatQueue.add(name+"[TEAM]: "+text.substring(2));
+										chatQueue.add("CH "+name+"[TEAM]: "+text.substring(2).trim());
+
+								}
+								else if(tokens[token].equals("KF1") || tokens[token].equals("KF2"))
+								{
+									if(chatQueue.size() >= MAX_MESSAGES)
+										chatQueue.remove(0);
+									String text ="";
+									int amount = Integer.parseInt(tokens[token+1])+2;
+									for(int i = 0; i < amount;i++,token++)
+									{
+										text+= tokens[token]+" ";
+									}
 									
+									amount = Integer.parseInt(tokens[token])+1;
+									for(int i = 0; i < amount;i++,token++)
+									{
+										text+= tokens[token]+" ";
+									}
+									chatQueue.add(text.trim());
 								}
 								else if (tokens[token].equals("XR"))
 								{
@@ -715,25 +734,77 @@ MouseMotionListener
 		//		graphics.setColor(Color.black);
 		//		graphics.drawString(pingString, 20, 20);
 		//		graphics.drawString("FPS: " + currentFPS, 20, 40);
-		
+
 		//Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		int textY = 40;
-		for(String str: chatQueue)
+		while(true)
 		{
-			int space = str.indexOf(' ');
-			String coloured = str.substring(1,space);
-			String mssg = str.substring(space+1);
-			if(str.charAt(0)-'0' == ServerCreature.RED_TEAM)
-				graphics.setColor(Color.RED);
-			else if(str.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
-				graphics.setColor(Color.BLUE);
-			else graphics.setColor(Color.GRAY);
-			graphics.drawString(coloured+" ",10,textY);
-			graphics.setColor(Color.YELLOW);
-			graphics.drawString(mssg,10+ 6*coloured.length(),textY);
-			textY+=20;
-			
+			try{
+				for(String str: chatQueue)
+				{		
+					if(str.substring(0,2).equals("CH"))
+					{
+						String newStr = str.substring(3);
+						int space = newStr.indexOf(' ');
+						String coloured = newStr.substring(1,space);
+						String mssg = newStr.substring(space+1);
+						if(newStr.charAt(0)-'0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if(newStr.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else graphics.setColor(Color.GRAY);
+						graphics.drawString(coloured+" ",10,textY);
+						graphics.setColor(Color.YELLOW);
+						graphics.drawString(mssg,10+ graphics.getFontMetrics().stringWidth(coloured+" "),textY);
+					}
+					else 
+					{
+						String[] split = str.split(" ");
+						int firstLen = Integer.parseInt(split[1]);
+						String firstName ="";
+						for(int i = 0; i < firstLen;i++)
+							firstName += split[i+2]+" ";
+						
+						int secondLen = Integer.parseInt(split[firstLen+2]);
+						String lastName = "";
+						for(int i = 0; i < secondLen;i++)
+							lastName += split[firstLen+3 + i]+" ";
+						
+						if(firstName.charAt(0)-'0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if(firstName.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else graphics.setColor(Color.DARK_GRAY);
+						graphics.drawString(firstName.substring(1),10,textY);
+						
+						graphics.setColor(Color.YELLOW);
+						
+						if(str.substring(0,3).equals("KF1"))
+							graphics.drawString("was killed by a ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+						else
+							graphics.drawString("killed ",10+ graphics.getFontMetrics().stringWidth(firstName),textY);
+						
+
+						if(lastName.charAt(0)-'0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if(lastName.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else graphics.setColor(Color.DARK_GRAY);
+						
+						if(str.substring(0,3).equals("KF1"))
+							graphics.drawString(lastName.substring(1),13+ graphics.getFontMetrics().stringWidth(firstName+"was killed by a  "),textY);
+						else
+							graphics.drawString(lastName.substring(1),13+ graphics.getFontMetrics().stringWidth(firstName+"killed  "),textY);
+					}
+					textY+=20;
+				}
+				break;
+			}
+			catch (ConcurrentModificationException E)
+			{
+
+			}
 		}
 
 		if (HP > 0)
@@ -748,8 +819,9 @@ MouseMotionListener
 				justDied = false;
 			}
 			graphics.setColor(Color.black);
+			graphics.setFont(ClientWorld.MESSAGE_FONT);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 20, 60);
+					"YOU ARE DEAD. Please wait 10 seconds to respawn", 550, 60);
 		}
 
 		// Repaint the inventory
@@ -1135,23 +1207,23 @@ MouseMotionListener
 	 * Class to limit the number of characters in a JTextField
 	 */
 	private class JTextFieldLimit extends PlainDocument {
-		  private int limit;
+		private int limit;
 
-		  JTextFieldLimit(int limit) {
-		   super();
-		   this.limit = limit;
-		   }
-
-		  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
-		    if (str == null) return;
-
-		    if ((getLength() + str.length()) <= limit) {
-		      super.insertString(offset, str, attr);
-		    }
-		  }
+		JTextFieldLimit(int limit) {
+			super();
+			this.limit = limit;
 		}
 
-	
+		public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+			if (str == null) return;
+
+			if ((getLength() + str.length()) <= limit) {
+				super.insertString(offset, str, attr);
+			}
+		}
+	}
+
+
 	public void actionPerformed(ActionEvent e) {
 		//Send the message
 		String message =  chat.getText();
@@ -1162,32 +1234,32 @@ MouseMotionListener
 		chat.setForeground(Color.GRAY);
 		chat.setText("");
 		requestFocusInWindow();
-		
-		
+
+
 	}
-	
+
 	private class JTextFieldEnter implements KeyListener
 	{
 
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				enter.doClick();
-			
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 
 

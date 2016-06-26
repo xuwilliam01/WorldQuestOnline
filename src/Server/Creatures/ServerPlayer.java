@@ -68,7 +68,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
-	private String name = "player";
 	
 	// The width and height of the screen of this specific player
 	private int playerScreenWidth = 1620;
@@ -932,10 +931,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					String[] tokens = message.split(" ");
 					if(tokens[0].equals("/t"))
 					{
-						engine.broadCastTeam("CH "+"T "+getTeam()+name+" "+tokens.length+" "+message, getTeam());
+						engine.broadCastTeam("CH "+"T "+getTeam()+getName()+" "+tokens.length+" "+message, getTeam());
 					}
 					else
-						engine.broadcast("CH "+"E "+getTeam()+name+" "+tokens.length+" "+message);
+						engine.broadcast("CH "+"E "+getTeam()+getName()+" "+tokens.length+" "+message);
 				}
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))
@@ -1002,7 +1001,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (command.length() > 2
 						&& command.substring(0, 2).equals("Na"))
 				{
-					name = command.substring(3);
+					setName(command.substring(3));
 				}
 				// Adjust the screen width and height for the player
 				else if (command.charAt(0) == 's')
@@ -1398,6 +1397,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// below, and eventually respawn the player
 			if (getHP() <= 0)
 			{
+				if(source.getTeam() == ServerCreature.NEUTRAL)
+				{
+					String firstName = getTeam()+getName();
+					String secondName = ServerCreature.NEUTRAL+source.getName();
+					engine.broadcast("KF1 "+firstName.split(" ").length+" "+ firstName + " "+secondName.split(" ").length+" "+secondName);
+				}
+				else
+				{
+					String firstName = source.getTeam()+source.getName();
+					String secondName = getTeam()+getName();
+					engine.broadcast("KF2 "+firstName.split(" ").length+" "+ firstName + " "+secondName.split(" ").length+" "+secondName);
+				}
 				setAlive(false);
 
 				dropInventory();
@@ -1863,11 +1874,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.endGame = endGame;
 		this.losingTeam = losingTeam;
-	}
-
-	public String getName()
-	{
-		return name;
 	}
 
 	public int getPlayerScreenWidth()
