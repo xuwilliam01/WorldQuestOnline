@@ -180,8 +180,9 @@ MouseMotionListener
 		chat.setFocusable(true);
 		chat.setDocument(new JTextFieldLimit(MAX_CHARACTERS));
 		chat.setForeground(Color.GRAY);
+		chat.setToolTipText("Press 't' as a shortcut to chat. Type '/t ' before a message to send it only to your team");
 
-		enter = new JButton("Enter");
+		enter = new JButton("Chat");
 		enter.setLocation(200,0);
 		enter.setSize(50,20);
 		enter.setVisible(true);

@@ -930,8 +930,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					String message = command.substring(2);
 					String[] tokens = message.split(" ");
-					System.out.println("This "+tokens[0]);
-					if(tokens[0].equals("!t"))
+					if(tokens[0].equals("/t"))
 					{
 						engine.broadCastTeam("CH "+"T "+getTeam()+name+" "+tokens.length+" "+message, getTeam());
 					}
