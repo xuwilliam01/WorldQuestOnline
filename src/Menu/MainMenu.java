@@ -44,7 +44,7 @@ import WorldCreator.CreatorWorld;
 public class MainMenu {
 
 	//Default port number
-	final private static int DEF_PORT = 5000;
+	final private static int DEF_PORT = 9988;
 	//All the panels
 	private static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
@@ -414,7 +414,7 @@ public class MainMenu {
 							try
 							{
 								String portNum = JOptionPane
-										.showInputDialog("Please enter the port of the server");
+										.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")");
 								if(portNum == null)
 								{
 									exit = true;
@@ -613,23 +613,20 @@ public class MainMenu {
 			String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Server IP (local: 127.0.0.1)");
+					.showInputDialog("Server IP (Leave blank for this computer)");
 			if(serverIP == null)
 				return;
 			if (serverIP.equals(""))
 			{
 				serverIP = "127.0.0.1";
-				port = DEF_PORT;
-				playerName = "Player";
 			}
-			else
-			{
+
 				while(true)
 				{
 					try
 					{
 						String portNum = JOptionPane
-								.showInputDialog("Please enter the port of the server");
+								.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")");
 						if(portNum == null)
 							return;
 						else if(portNum.equals(""))
@@ -640,13 +637,15 @@ public class MainMenu {
 								.showInputDialog("Please enter your name");
 						if(playerName == null)
 							return;
+						else if(playerName.equals(""))
+							playerName = "Player";
 						break;
 					}
 					catch(NumberFormatException E)
 					{
 
 					}
-				}
+				
 			}
 
 			mainFrame.remove(mainMenu);
@@ -680,6 +679,8 @@ public class MainMenu {
 						.showInputDialog("Map name (Default: WORLD)");
 				if(fileName == null)
 					return;
+				else if(fileName.equals(""))
+					fileName = "world.txt";
 				else
 					fileName+=".txt";
 

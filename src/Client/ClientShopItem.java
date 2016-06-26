@@ -187,7 +187,7 @@ public class ClientShopItem extends JButton implements ActionListener{
 		//If the user has enough money
 		if(inventory.getClient().getMoney() >= cost)
 		{
-			inventory.getClient().print("B "+type);
+			inventory.getClient().printToServer("B "+type);
 			inventory.getClient().decreaseMoney(cost);
 
 			if(amount > 1)

@@ -41,7 +41,7 @@ public class ClientShop extends JPanel{
 		requestFocusInWindow();
 		setLayout(null);
 		setSize(SHOP_WIDTH, SHOP_HEIGHT);
-		setLocation(200,25);
+		setLocation(Client.SCREEN_WIDTH - SHOP_WIDTH - 50,25);
 	}
 
 	/**

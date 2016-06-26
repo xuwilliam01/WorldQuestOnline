@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Timer;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -39,8 +40,9 @@ import Server.Creatures.ServerPlayer;
  * @author Alex Raita & William Xu
  *
  */
-public class Client extends JPanel implements KeyListener, MouseListener, ActionListener,
-MouseMotionListener
+public class Client extends JPanel implements KeyListener, MouseListener,
+		ActionListener,
+		MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -52,7 +54,7 @@ MouseMotionListener
 
 	private Thread gameThread;
 	private long ping;
-	private String pingString = "LATENCY: (PRESS P)";
+	private String pingString = "Ping:";
 
 	/**
 	 * The current message that the client is sending to the server
@@ -98,7 +100,7 @@ MouseMotionListener
 	private int blueCastleMoney;
 	private int blueCastleMaxHP;
 
-	//Chat Components
+	// Chat Components
 	final static int MAX_MESSAGES = 15;
 	final static int MAX_CHARACTERS = 100;
 	private JTextField chat;
@@ -159,6 +161,8 @@ MouseMotionListener
 	 * The name of the player
 	 */
 	private String playerName;
+	
+	private long startTimer = 0;
 
 	/**
 	 * Constructor for the client
@@ -174,8 +178,8 @@ MouseMotionListener
 		this.frame = frame;
 
 		chat = new JTextField();
-		chat.setLocation(0,0);
-		chat.setSize(200,20);
+		chat.setLocation(0, 0);
+		chat.setSize(200, 20);
 		chat.addKeyListener(new JTextFieldEnter());
 		chat.setVisible(true);
 		chat.setFocusable(true);
@@ -184,8 +188,8 @@ MouseMotionListener
 		chat.setToolTipText("Press 't' as a shortcut to chat. Type '/t ' before a message to send it only to your team");
 
 		enter = new JButton("Chat");
-		enter.setLocation(200,0);
-		enter.setSize(50,20);
+		enter.setLocation(200, 0);
+		enter.setSize(80, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
 
@@ -282,7 +286,10 @@ MouseMotionListener
 
 		direction = 'R';
 
-		print("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
+		printToServer("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
+		
+		// Get the ping
+		printToServer("P");
 	}
 
 	/**
@@ -301,7 +308,7 @@ MouseMotionListener
 	/**
 	 * Print to the server
 	 */
-	public void print(String message)
+	public void printToServer(String message)
 	{
 		output.println(message);
 		output.flush();
@@ -361,11 +368,11 @@ MouseMotionListener
 									}
 
 									JOptionPane
-									.showMessageDialog(
-											Client.this,
-											String.format(
-													"The %s castle has been destroyed, the winner is the %s!",
-													loser, winner));
+											.showMessageDialog(
+													Client.this,
+													String.format(
+															"The %s castle has been destroyed, the winner is the %s!",
+															loser, winner));
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)
@@ -377,7 +384,7 @@ MouseMotionListener
 								{
 									maxMana = Integer.parseInt(tokens[++token]);
 								}
-								else if(tokens[token].equals("SI"))
+								else if (tokens[token].equals("SI"))
 								{
 									String type = tokens[++token];
 									inventory.removeThis(type);
@@ -413,13 +420,14 @@ MouseMotionListener
 									}
 									world.setObject(id, x, y,
 											tokens[++token], Integer
-											.parseInt(tokens[++token]),
+													.parseInt(tokens[++token]),
 											tokens[++token], tokens[++token]);
 								}
 								else if (tokens[token].equals("P"))
 								{
-									pingString = "LATENCY: "
+									pingString = "Ping: "
 											+ (System.currentTimeMillis() - ping);
+									startTimer = System.currentTimeMillis();
 								}
 
 								// Remove an object after
@@ -496,39 +504,44 @@ MouseMotionListener
 									if (shop != null)
 										closeShop();
 								}
-								else if(tokens[token].equals("CH"))
-								{									
+								else if (tokens[token].equals("CH"))
+								{
 									char who = tokens[++token].charAt(0);
 									String name = tokens[++token];
-									int numWords = Integer.parseInt(tokens[++token]);
+									int numWords = Integer
+											.parseInt(tokens[++token]);
 									String text = "";
-									for(int i = 0; i < numWords;i++)
+									for (int i = 0; i < numWords; i++)
 									{
-										text+= tokens[++token]+" ";
+										text += tokens[++token] + " ";
 									}
-									if(chatQueue.size() >= MAX_MESSAGES)
+									if (chatQueue.size() >= MAX_MESSAGES)
 										chatQueue.remove(0);
-									if(who == 'E')
-										chatQueue.add("CH "+name+": "+text.trim());
+									if (who == 'E')
+										chatQueue.add("CH " + name + ": "
+												+ text.trim());
 									else
-										chatQueue.add("CH "+name+"[TEAM]: "+text.substring(2).trim());
+										chatQueue.add("CH " + name + "[TEAM]: "
+												+ text.substring(2).trim());
 
 								}
-								else if(tokens[token].equals("KF1") || tokens[token].equals("KF2"))
+								else if (tokens[token].equals("KF1")
+										|| tokens[token].equals("KF2"))
 								{
-									if(chatQueue.size() >= MAX_MESSAGES)
+									if (chatQueue.size() >= MAX_MESSAGES)
 										chatQueue.remove(0);
-									String text ="";
-									int amount = Integer.parseInt(tokens[token+1])+2;
-									for(int i = 0; i < amount;i++,token++)
+									String text = "";
+									int amount = Integer
+											.parseInt(tokens[token + 1]) + 2;
+									for (int i = 0; i < amount; i++, token++)
 									{
-										text+= tokens[token]+" ";
+										text += tokens[token] + " ";
 									}
-									
-									amount = Integer.parseInt(tokens[token])+1;
-									for(int i = 0; i < amount;i++,token++)
+
+									amount = Integer.parseInt(tokens[token]) + 1;
+									for (int i = 0; i < amount; i++, token++)
 									{
-										text+= tokens[token]+" ";
+										text += tokens[token] + " ";
 									}
 									chatQueue.add(text.trim());
 								}
@@ -600,6 +613,15 @@ MouseMotionListener
 					String message = input.readLine();
 
 					lines.add(message);
+					
+					// Update the ping after 1 second
+					if (startTimer >= 0 && System.currentTimeMillis()-startTimer >= 500)
+					{
+						ping = System.currentTimeMillis();
+						printToServer("P");
+						startTimer = -1;
+					}
+					
 
 					try
 					{
@@ -730,60 +752,65 @@ MouseMotionListener
 		}
 
 		// Draw the ping and the FPS
-		//		graphics.setFont(ClientWorld.NORMAL_FONT);
-		//		graphics.setColor(Color.black);
-		//		graphics.drawString(pingString, 20, 20);
-		//		graphics.drawString("FPS: " + currentFPS, 20, 40);
+		graphics.setFont(ClientWorld.NORMAL_FONT);
+		graphics.setColor(Color.white);
+		graphics.drawString(pingString, SCREEN_WIDTH-60, 20);
+		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH-60, 40);
 
-		//Draw the chat
+		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		int textY = 40;
-		while(true)
+		while (true)
 		{
-			try{
-				for(String str: chatQueue)
-				{		
-					if(str.substring(0,2).equals("CH"))
+			try
+			{
+				for (String str : chatQueue)
+				{
+					if (str.substring(0, 2).equals("CH"))
 					{
 						String newStr = str.substring(3);
 						int space = newStr.indexOf(' ');
-						String coloured = newStr.substring(1,space);
-						String mssg = newStr.substring(space+1);
-						if(newStr.charAt(0)-'0' == ServerCreature.RED_TEAM)
+						String coloured = newStr.substring(1, space);
+						String mssg = newStr.substring(space + 1);
+						if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
-						else if(newStr.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+						else if (newStr.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
 							graphics.setColor(Color.BLUE);
-						else graphics.setColor(Color.GRAY);
-						graphics.drawString(coloured+" ",10,textY);
+						else
+							graphics.setColor(Color.GRAY);
+						graphics.drawString(coloured + " ", 10, textY);
 						graphics.setColor(Color.YELLOW);
-						graphics.drawString(mssg,10+ graphics.getFontMetrics().stringWidth(coloured+" "),textY);
+						graphics.drawString(mssg, 10 + graphics
+								.getFontMetrics().stringWidth(coloured + " "),
+								textY);
 					}
-					else 
+					else
 					{
 						String[] split = str.split(" ");
 						int firstLen = Integer.parseInt(split[1]);
-						String firstName ="";
-						for(int i = 0; i < firstLen;i++)
-							firstName += split[i+2]+" ";
-						
-						int secondLen = Integer.parseInt(split[firstLen+2]);
+						String firstName = "";
+						for (int i = 0; i < firstLen; i++)
+							firstName += split[i + 2] + " ";
+
+						int secondLen = Integer.parseInt(split[firstLen + 2]);
 						String lastName = "";
-						for(int i = 0; i < secondLen;i++)
-							lastName += split[firstLen+3 + i]+" ";
-						
-						if(firstName.charAt(0)-'0' == ServerCreature.RED_TEAM)
+						for (int i = 0; i < secondLen; i++)
+							lastName += split[firstLen + 3 + i] + " ";
+
+						if (firstName.charAt(0) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
-						else if(firstName.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
+						else if (firstName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
 							graphics.setColor(Color.BLUE);
-						else graphics.setColor(Color.DARK_GRAY);
-						graphics.drawString(firstName.substring(1),10,textY);
-						
+						else
+							graphics.setColor(Color.DARK_GRAY);
+						graphics.drawString(firstName.substring(1), 10, textY);
+
 						graphics.setColor(Color.ORANGE);
-						
-						int random = (int) Math.random()*5;
+
+						int random = (int) Math.random() * 5;
 						String killWord = "killed";
 						String secondKillWord = "killed";
-						
+
 						if (random == 0)
 						{
 							killWord = "slain";
@@ -809,25 +836,39 @@ MouseMotionListener
 							killWord = "ended";
 							secondKillWord = "ended";
 						}
-						
-						if(str.substring(0,3).equals("KF1"))
-							graphics.drawString("was " + killWord + " by a ",9+ graphics.getFontMetrics().stringWidth(firstName),textY);
-						else
-							graphics.drawString(secondKillWord + " ",9+ graphics.getFontMetrics().stringWidth(firstName),textY);
-						
 
-						if(lastName.charAt(0)-'0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if(lastName.charAt(0) -'0'== ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else graphics.setColor(Color.GREEN);
-						
-						if(str.substring(0,3).equals("KF1"))
-							graphics.drawString(lastName.substring(1),9+ graphics.getFontMetrics().stringWidth(firstName+"was " + killWord + " by a "),textY);
+						if (str.substring(0, 3).equals("KF1"))
+							graphics.drawString(
+									"was " + killWord + " by a ",
+									5 + graphics.getFontMetrics().stringWidth(
+											firstName), textY);
 						else
-							graphics.drawString(lastName.substring(1),9+ graphics.getFontMetrics().stringWidth(firstName+secondKillWord + " "),textY);
+							graphics.drawString(
+									secondKillWord + " ",
+									5 + graphics.getFontMetrics().stringWidth(
+											firstName), textY);
+
+						if (lastName.charAt(0) - '0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if (lastName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else
+							graphics.setColor(Color.GREEN);
+
+						if (str.substring(0, 3).equals("KF1"))
+							graphics.drawString(
+									lastName.substring(1),
+									8 + graphics.getFontMetrics().stringWidth(
+											firstName + "was " + killWord
+													+ " by a "), textY);
+						else
+							graphics.drawString(
+									lastName.substring(1),
+									8 + graphics.getFontMetrics().stringWidth(
+											firstName + secondKillWord + " "),
+									textY);
 					}
-					textY+=20;
+					textY += 20;
 				}
 				break;
 			}
@@ -851,12 +892,12 @@ MouseMotionListener
 			graphics.setColor(Color.black);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 550, 60);
+					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
 
 		// Repaint the inventory
 		inventory.repaint();
-		if(!chat.hasFocus())
+		if (!chat.hasFocus())
 			requestFocusInWindow();
 	}
 
@@ -869,14 +910,14 @@ MouseMotionListener
 		{
 			// R for right
 			currentMessage = "R";
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("L"))
 		{
 			// L for left
 			currentMessage = "L";
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_W
 				|| key.getKeyCode() == KeyEvent.VK_UP
@@ -885,20 +926,14 @@ MouseMotionListener
 		{
 			// U for up
 			currentMessage = "U";
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
 				&& !currentMessage.equals("D"))
 		{
 			// D for down
 			currentMessage = "D";
-			print(currentMessage);
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_P)
-		{
-			// P for ping
-			ping = System.currentTimeMillis();
-			print("P");
+			printToServer(currentMessage);
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_1
 				&& !currentMessage.equals("W0")
@@ -927,7 +962,7 @@ MouseMotionListener
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_E)
 		{
-			print("E");
+			printToServer("E");
 			if (shop != null)
 			{
 				closeShop();
@@ -965,11 +1000,7 @@ MouseMotionListener
 		{
 			currentMessage = "!D";
 		}
-		else if (key.getKeyCode() == KeyEvent.VK_P)
-		{
-			pingString = "LATENCY: (PRESS P)";
-		}
-		print(currentMessage);
+		printToServer(currentMessage);
 
 	}
 
@@ -977,14 +1008,15 @@ MouseMotionListener
 	public void mousePressed(MouseEvent event)
 	{
 		// Make sure the player changes direction
-		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT/2)
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT / 2)
 		{
-			print("DR");
+			printToServer("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2)
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+				/ 2)
 		{
-			print("DL");
+			printToServer("DL");
 			direction = 'L';
 		}
 
@@ -994,7 +1026,7 @@ MouseMotionListener
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 		else if (event.getButton() == MouseEvent.BUTTON3
 				&& currentMessage.charAt(0) != 'a')
@@ -1002,7 +1034,7 @@ MouseMotionListener
 			// A for action
 			currentMessage = "a " + event.getX() + " " + event.getY();
 
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 	}
 
@@ -1014,14 +1046,14 @@ MouseMotionListener
 		{
 			currentMessage = "!A";
 
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 		else if (event.getButton() == MouseEvent.BUTTON3
 				&& !currentMessage.equals("!a"))
 		{
 			currentMessage = "!a";
 
-			print(currentMessage);
+			printToServer(currentMessage);
 		}
 	}
 
@@ -1053,14 +1085,17 @@ MouseMotionListener
 	public void mouseDragged(MouseEvent event)
 	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'R')
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
+				&& direction != 'R')
 		{
-			print("DR");
+			printToServer("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'L')
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+				/ 2
+				&& direction != 'L')
 		{
-			print("DL");
+			printToServer("DL");
 			direction = 'L';
 		}
 
@@ -1070,14 +1105,17 @@ MouseMotionListener
 	public void mouseMoved(MouseEvent event)
 	{
 		// Make the player face the direction of the mouse
-		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'R')
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
+				&& direction != 'R')
 		{
-			print("DR");
+			printToServer("DR");
 			direction = 'R';
 		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH/2 && direction != 'L')
+		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+				/ 2
+				&& direction != 'L')
 		{
-			print("DL");
+			printToServer("DL");
 			direction = 'L';
 		}
 	}
@@ -1217,54 +1255,63 @@ MouseMotionListener
 		this.blueCastleMoney = blueCastleMoney;
 	}
 
-	public int getRedCastleMaxHP() {
+	public int getRedCastleMaxHP()
+	{
 		return redCastleMaxHP;
 	}
 
-	public void setRedCastleMaxHP(int redCastleMaxHP) {
+	public void setRedCastleMaxHP(int redCastleMaxHP)
+	{
 		this.redCastleMaxHP = redCastleMaxHP;
 	}
 
-	public int getBlueCastleMaxHP() {
+	public int getBlueCastleMaxHP()
+	{
 		return blueCastleMaxHP;
 	}
 
-	public void setBlueCastleMaxHP(int blueCastleMaxHP) {
+	public void setBlueCastleMaxHP(int blueCastleMaxHP)
+	{
 		this.blueCastleMaxHP = blueCastleMaxHP;
 	}
 
 	/**
 	 * Class to limit the number of characters in a JTextField
 	 */
-	private class JTextFieldLimit extends PlainDocument {
+	private class JTextFieldLimit extends PlainDocument
+	{
 		private int limit;
 
-		JTextFieldLimit(int limit) {
+		JTextFieldLimit(int limit)
+		{
 			super();
 			this.limit = limit;
 		}
 
-		public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
-			if (str == null) return;
+		public void insertString(int offset, String str, AttributeSet attr)
+				throws BadLocationException
+		{
+			if (str == null)
+				return;
 
-			if ((getLength() + str.length()) <= limit) {
+			if ((getLength() + str.length()) <= limit)
+			{
 				super.insertString(offset, str, attr);
 			}
 		}
 	}
 
-
-	public void actionPerformed(ActionEvent e) {
-		//Send the message
-		String message =  chat.getText();
-		if(message.length() > 0)
+	public void actionPerformed(ActionEvent e)
+	{
+		// Send the message
+		String message = chat.getText();
+		if (message.length() > 0)
 		{
-			print("C "+message);
+			printToServer("C " + message);
 		}
 		chat.setForeground(Color.GRAY);
 		chat.setText("");
 		requestFocusInWindow();
-
 
 	}
 
@@ -1272,25 +1319,27 @@ MouseMotionListener
 	{
 
 		@Override
-		public void keyTyped(KeyEvent e) {
+		public void keyTyped(KeyEvent e)
+		{
 			// TODO Auto-generated method stub
 
 		}
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
+		public void keyPressed(KeyEvent e)
+		{
+			if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				enter.doClick();
 
 		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
+		public void keyReleased(KeyEvent e)
+		{
 			// TODO Auto-generated method stub
 
 		}
 
 	}
-
 
 }

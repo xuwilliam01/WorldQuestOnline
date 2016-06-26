@@ -318,7 +318,7 @@ public class ClientItem extends JButton implements MouseListener{
 							if(invGrid[row][col] == null)
 							{
 								//Move back to inventory
-								inventory.getClient().print("MI "+equipSlot);
+								inventory.getClient().printToServer("MI "+equipSlot);
 								setBorder(BorderFactory.createEmptyBorder());
 								selected = false;
 								
@@ -361,7 +361,7 @@ public class ClientItem extends JButton implements MouseListener{
 					if(pos == ServerPlayer.MAX_WEAPONS)
 						return;
 
-					inventory.getClient().print("MW "+type);
+					inventory.getClient().printToServer("MW "+type);
 					selected = true;
 					inventory.getInventory()[row][col] = null;
 					inventory.getEquippedWeapons()[pos] = this;
@@ -408,7 +408,7 @@ public class ClientItem extends JButton implements MouseListener{
 								break;
 						}
 					}		
-					inventory.getClient().print("MA "+type);
+					inventory.getClient().printToServer("MA "+type);
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));

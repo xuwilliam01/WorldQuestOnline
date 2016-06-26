@@ -149,7 +149,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 	public void sellItem(ClientItem item, int pos) {
 		// Tell the server you are selling the item
 		if (pos == ServerPlayer.DEFAULT_WEAPON_SLOT || !item.isSelected()) {
-			client.print("S " + item.getType());
+			client.printToServer("S " + item.getType());
 			if (!removeList.contains(item))
 				removeList.add(item);
 		}
@@ -192,7 +192,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 		// Drop 1 item at a time and tell the server
 		if (item.getAmount() > 1) {
 			item.decreaseAmount();
-			client.print("DrI " + item.getType());
+			client.printToServer("DrI " + item.getType());
 		} else {
 			// Remove the item completely
 			item.setVisible(false);
@@ -204,7 +204,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 					for (int col = 0; col < inventory[row].length; col++) {
 						if (inventory[row][col] == item) {
 							inventory[row][col] = null;
-							client.print("DrI " + item.getType());
+							client.printToServer("DrI " + item.getType());
 							repaint();
 							return;
 						}
@@ -212,13 +212,13 @@ public class ClientInventory extends JPanel implements ActionListener {
 			// If it's armour
 			else if (pos == ServerPlayer.DEFAULT_ARMOUR_SLOT) {
 				equippedArmour = null;
-				client.print("DrW " + item.getEquipSlot());
+				client.printToServer("DrW " + item.getEquipSlot());
 
 			}
 			// If it's a weapon
 			else {
 				equippedWeapons[pos] = null;
-				client.print("DrW " + item.getEquipSlot());
+				client.printToServer("DrW " + item.getEquipSlot());
 
 				// If we dropped the weapon we selected, select a new weapon
 				if (client.getWeaponSelected() == pos) {
@@ -265,7 +265,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 		// Decrease the amonut of the potion
 		if (item.getAmount() > 1) {
 			item.decreaseAmount();
-			client.print("DrU " + item.getType());
+			client.printToServer("DrU " + item.getType());
 		} else {
 			// Remove it from the inventory
 			item.setVisible(false);
@@ -276,7 +276,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 				for (int col = 0; col < inventory[row].length; col++) {
 					if (inventory[row][col] == item) {
 						inventory[row][col] = null;
-						client.print("DrU " + item.getType());
+						client.printToServer("DrU " + item.getType());
 						repaint();
 						return;
 					}
@@ -431,7 +431,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		client.print("X");
+		client.printToServer("X");
 
 	}
 

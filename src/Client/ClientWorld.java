@@ -71,7 +71,7 @@ public class ClientWorld
 	/**
 	 * The font for messages
 	 */
-	public final static Font MESSAGE_FONT = new Font("Terminal", Font.PLAIN, 20);
+	public final static Font MESSAGE_FONT = new Font("Arial", Font.PLAIN, 16);
 
 	/**
 	 * The normal font for text
@@ -134,8 +134,7 @@ public class ClientWorld
 
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
-
-		// Get the background image and darken it by 50%
+		
 		backgroundColour = Images.getImage("BACKGROUND.png");
 
 		// Generate clouds
