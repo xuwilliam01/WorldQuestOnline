@@ -963,7 +963,7 @@ MouseMotionListener
 //						{
 //							killWord = "ended";
 //							secondKillWord = "ended";
-						}
+//						}
 
 						if (str.substring(0, 3).equals("KF1"))
 							graphics.drawString(
