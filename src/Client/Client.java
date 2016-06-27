@@ -861,7 +861,7 @@ MouseMotionListener
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		int textY = 20 + 20*chatQueue.size();
+		int textY = 40;
 		while (true)
 		{
 			try
@@ -933,7 +933,7 @@ MouseMotionListener
 
 						graphics.setColor(Color.ORANGE);
 
-						int random = (int) (Math.random() * 5);
+						int random = (int) Math.random() * 5;
 						String killWord = "killed";
 						String secondKillWord = "killed";
 
@@ -994,7 +994,7 @@ MouseMotionListener
 											firstName + secondKillWord + " "),
 											textY);
 					}
-					textY -= 20;
+					textY += 20;
 				}
 				break;
 			}
