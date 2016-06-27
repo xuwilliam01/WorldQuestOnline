@@ -60,7 +60,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	{
 		for (ServerPlayer player : ServerEngine.getListOfPlayers())
 		{
-			if (player.isAlive() && inRange(player, targetRange))
+			if (player.isAlive() && quickInRange(player, targetRange))
 			{
 				setTarget(player);
 				break;

@@ -934,8 +934,8 @@ MouseMotionListener
 						graphics.setColor(Color.ORANGE);
 
 						
-						String killWord = "killed";
-						String secondKillWord = "slain";
+						String killWord = "slain";
+						String secondKillWord = "killed";
 						
 						//int random = (int) (Math.random() * 5);
 

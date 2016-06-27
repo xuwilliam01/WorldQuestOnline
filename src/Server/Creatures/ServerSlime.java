@@ -135,10 +135,6 @@ public class ServerSlime extends ServerEnemy
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			if (getWorld().getWorldCounter() % 10 == 0)
-			{
-				findTarget();
-			}
 			if (!isOnSurface() && getHSpeed() == 0)
 			{
 				if (getCounter() >= changeDirectionCounter)
@@ -149,6 +145,12 @@ public class ServerSlime extends ServerEnemy
 				}
 				setHSpeed(direction * speed);
 			}
+			
+//			if (getWorld().getWorldCounter() % 10 == 0)
+//			{
+				findTarget();
+			//}
+			
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
 				|| !quickInRange(getTarget(), getTargetRange()))
