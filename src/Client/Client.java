@@ -933,34 +933,36 @@ MouseMotionListener
 
 						graphics.setColor(Color.ORANGE);
 
-						int random = (int) (Math.random() * 5);
+						
 						String killWord = "killed";
-						String secondKillWord = "killed";
+						String secondKillWord = "slain";
+						
+						//int random = (int) (Math.random() * 5);
 
-						if (random == 0)
-						{
-							killWord = "slain";
-							secondKillWord = "slayed";
-						}
-						else if (random == 1)
-						{
-							killWord = "defeated";
-							secondKillWord = "defeated";
-						}
-						else if (random == 2)
-						{
-							killWord = "murdered";
-							secondKillWord = "murdered";
-						}
-						else if (random == 3)
-						{
-							killWord = "slaughtered";
-							secondKillWord = "slaughtered";
-						}
-						else if (random == 4)
-						{
-							killWord = "ended";
-							secondKillWord = "ended";
+//						if (random == 0)
+//						{
+//							killWord = "slain";
+//							secondKillWord = "slayed";
+//						}
+//						else if (random == 1)
+//						{
+//							killWord = "defeated";
+//							secondKillWord = "defeated";
+//						}
+//						else if (random == 2)
+//						{
+//							killWord = "murdered";
+//							secondKillWord = "murdered";
+//						}
+//						else if (random == 3)
+//						{
+//							killWord = "slaughtered";
+//							secondKillWord = "slaughtered";
+//						}
+//						else if (random == 4)
+//						{
+//							killWord = "ended";
+//							secondKillWord = "ended";
 						}
 
 						if (str.substring(0, 3).equals("KF1"))
