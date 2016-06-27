@@ -11,6 +11,7 @@ public class ClientStar
 	private boolean exists;
 	private int counter;
 	private int lifeTime;
+	private int size;
 
 	public ClientStar()
 	{
@@ -19,9 +20,11 @@ public class ClientStar
 		alpha = 0;
 		maxAlpha = Math.random();
 		exists = true;
-		counter = -(int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4);
+		counter = -(int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 6);
 		lifeTime = (int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4)
-				+ ServerWorld.COUNTER_TIME * 60 * 8;
+				+ ServerWorld.COUNTER_TIME * 60 * 6;
+		
+		size = (int)(Math.random()*2)+1;
 	}
 
 	/**
@@ -29,22 +32,23 @@ public class ClientStar
 	 */
 	public void update()
 	{
-		if (counter >= lifeTime - ServerWorld.COUNTER_TIME * 60 && alpha > 0)
+		if (counter >= lifeTime - ServerWorld.COUNTER_TIME * 60.0 && alpha > 0)
 		{
-			if (alpha - 1 / (ServerWorld.COUNTER_TIME * 60) > 0)
+			if (alpha - 1 / (ServerWorld.COUNTER_TIME * 60.0) > 0)
 			{
-				alpha -= 1 / (ServerWorld.COUNTER_TIME * 60);
+				alpha -= 1 / (ServerWorld.COUNTER_TIME * 60.0);
 			}
 			else
 			{
 				alpha = 0;
 			}
 		}
-		else if (counter >= 0 && alpha < maxAlpha)
+		else 
+			if (counter >= 0 && alpha < maxAlpha)
 		{
-			if (alpha <= maxAlpha - 1 / (ServerWorld.COUNTER_TIME * 60))
+			if (alpha < maxAlpha - 1 / (ServerWorld.COUNTER_TIME * 60.0))
 			{
-				alpha += 1 / (ServerWorld.COUNTER_TIME * 60);
+				alpha += 1 / (ServerWorld.COUNTER_TIME * 60.0);;
 			}
 			else
 			{
@@ -101,5 +105,16 @@ public class ClientStar
 	{
 		this.exists = exists;
 	}
+
+	public int getSize()
+	{
+		return size;
+	}
+
+	public void setSize(int size)
+	{
+		this.size = size;
+	}
+	
 
 }

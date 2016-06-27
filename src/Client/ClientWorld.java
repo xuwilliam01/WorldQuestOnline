@@ -114,6 +114,8 @@ public class ClientWorld
 	 * Adjusts the alpha of the darkness
 	 */
 	private double alphaMultiplier;
+	
+	private ArrayList<ClientStar> stars;
 
 	private Client client;
 
@@ -174,6 +176,8 @@ public class ClientWorld
 
 			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
+		
+		stars = new ArrayList<ClientStar>();
 	}
 
 	/**
@@ -293,7 +297,45 @@ public class ClientWorld
 
 		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
 		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
-
+		
+		// Add stars when dusk begins
+		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3 && worldTime < ServerWorld.DAY_COUNTERS / 2)
+		{
+			int noOfStars = (int)(Math.random()*100)+25;
+			for (int no= 0; no < noOfStars; no++)
+			{
+				stars.add(new ClientStar());
+			}
+		}
+		
+		ArrayList<ClientStar> removeStars = new ArrayList<ClientStar>();
+		
+		
+		
+		for (ClientStar star:stars)
+		{
+			if (star.exists())
+			{
+				if (star.getAlpha()>0)
+				{
+					
+					graphics.setColor(new Color(1f, 1f, 1f,(float)( 1f * star.getAlpha())));
+					graphics.fillRect(star.getX(), star.getY(), star.getSize(), star.getSize());
+				}
+				star.update();
+			}
+			else
+			{
+				removeStars.add(star);
+			}
+		}
+	
+		
+		for (ClientStar star : removeStars)
+		{
+			stars.remove(star);
+		}
+		
 		// Draw and move the clouds
 		for (ClientCloud cloud : clouds)
 		{
