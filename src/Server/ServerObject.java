@@ -25,7 +25,7 @@ public class ServerObject
 	private int id;
 
 	/**
-	 * Y-coordinate of the object (left)
+	 * X-coordinate of the object (left)
 	 */
 	private double x;
 

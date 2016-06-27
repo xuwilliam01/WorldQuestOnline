@@ -34,7 +34,7 @@ public class ServerPotion extends ServerItem
 	 */
 	public static ServerPotion randomPotion(double x, double y)
 	{
-		int randType = (int) (Math.random() * 17 + 1);
+		int randType = (int) (Math.random() * 21 + 1);
 
 		if (randType <= 1)
 			return new ServerPotion(x, y, ServerWorld.DMG_POTION_TYPE);
@@ -46,9 +46,9 @@ public class ServerPotion extends ServerItem
 			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE);
 		if (randType <= 9)
 			return new ServerPotion(x, y, ServerWorld.MAX_HP_TYPE);
-		if (randType <= 13)
+		if (randType <= 15)
 			return new ServerPotion(x, y, ServerWorld.HP_POTION_TYPE);
-		if (randType <= 17)
+		if (randType <= 21)
 			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE);
 
 		// This won't happen

@@ -189,7 +189,7 @@ MouseMotionListener
 
 		enter = new JButton("Chat");
 		enter.setLocation(200, 0);
-		enter.setSize(80, 20);
+		enter.setSize(60, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
 
@@ -896,7 +896,7 @@ MouseMotionListener
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(str.substring(4) + " ", 10, textY);
 						graphics.setColor(Color.ORANGE);
-						graphics.drawString("joined", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
+						graphics.drawString("joined the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
 					}
 					else if(str.substring(0,2).equals("RO"))
 					{
@@ -908,7 +908,7 @@ MouseMotionListener
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(str.substring(4) + " ", 10, textY);
 						graphics.setColor(Color.ORANGE);
-						graphics.drawString("left", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
+						graphics.drawString("left the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
 					}
 					else
 					{

@@ -255,7 +255,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 				|| (item.getType().equals(ServerWorld.JUMP_POTION_TYPE) && client
 						.getJump() == ServerPlayer.MAX_VSPEED)
 				|| (item.getType().equals(ServerWorld.DMG_POTION_TYPE) && client
-						.getBaseDamage() == ServerPlayer.MAX_DMG)
+						.getBaseDamage() == ServerPlayer.MAX_DMGADD)
 				|| (item.getType().equals(ServerWorld.MAX_HP_TYPE) && client
 						.getMaxHP() == ServerPlayer.PLAYER_MAX_HP)
 				|| (item.getType().equals(ServerWorld.MAX_MANA_TYPE) && client
@@ -366,7 +366,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 		graphics.drawString(String.format("%.0f%%", client.getArmour() * 100),
 				115, 255);
 
-		if (client.getBaseDamage() == ServerPlayer.MAX_DMG)
+		if (client.getBaseDamage() == ServerPlayer.MAX_DMGADD)
 			graphics.setColor(Color.green);
 		if (client.getBaseDamage() > 9)
 			graphics.drawString(

@@ -613,7 +613,7 @@ public class MainMenu {
 			String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Server IP (Leave blank for a server on this computer)");
+					.showInputDialog("Server IP (Leave blank for a server on this computer)").trim();
 			if(serverIP == null)
 				return;
 			if (serverIP.equals(""))
@@ -626,7 +626,7 @@ public class MainMenu {
 					try
 					{
 						String portNum = JOptionPane
-								.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")");
+								.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")").trim();
 						if(portNum == null)
 							return;
 						else if(portNum.equals(""))
@@ -634,7 +634,7 @@ public class MainMenu {
 						port = Integer.parseInt(portNum);
 
 						playerName = JOptionPane
-								.showInputDialog("Please enter your name (max 20 characters)");
+								.showInputDialog("Please enter your name (max 20 characters)").trim();
 						if(playerName == null)
 							return;
 						else if(playerName.equals(""))

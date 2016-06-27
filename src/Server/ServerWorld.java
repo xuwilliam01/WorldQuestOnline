@@ -211,12 +211,12 @@ public class ServerWorld
 	 * The amount of gravity per refresh
 	 */
 	public final static double GRAVITY = 1;
-	
+
 	/**
 	 * Number of counters (minutes) in a day
 	 */
 	public final static int DAY_COUNTERS = 1440;
-	
+
 	/**
 	 * Number of frames in a day counter
 	 */
@@ -243,7 +243,7 @@ public class ServerWorld
 	 * The counter showing how many frames the server has run
 	 */
 	private long worldCounter = 0;
-	
+
 	/**
 	 * The current time in the world
 	 */
@@ -391,16 +391,21 @@ public class ServerWorld
 					{
 						blueSpawners.add((ServerSpawner) newObject);
 					}
-//					else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
-//					{
-//						// Chests don't spawn immediately
-//						newObject.destroy();
-//					}
+					// else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
+					// {
+					// // Chests don't spawn immediately
+					// newObject.destroy();
+					// }
 				}
 		}
 		worldInput.close();
-		
-		worldTime = (int) (Math.random()*DAY_COUNTERS);
+
+		worldTime = DAY_COUNTERS / 12 * 11
+				+ (int) (Math.random() * (DAY_COUNTERS / 6));
+		if (worldTime >= DAY_COUNTERS)
+		{
+			worldTime -= DAY_COUNTERS;
+		}
 	}
 
 	/**
@@ -1009,11 +1014,11 @@ public class ServerWorld
 
 		// Increase the world counter by 1 after this game tick
 		worldCounter++;
-		
+
 		if (worldCounter % COUNTER_TIME == 0)
 		{
-			worldTime ++;
-			
+			worldTime++;
+
 			if (worldTime >= DAY_COUNTERS)
 			{
 				worldTime = 0;
@@ -1286,5 +1291,5 @@ public class ServerWorld
 	{
 		this.worldCounter = worldCounter;
 	}
-	
+
 }

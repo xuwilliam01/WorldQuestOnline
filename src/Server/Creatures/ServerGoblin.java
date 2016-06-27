@@ -306,7 +306,7 @@ public class ServerGoblin extends ServerCreature
 		movementSpeed = Math.random() * 1.0 * (movementSpeed / 2)
 				+ movementSpeed * 3.0 / 4;
 
-		if (Math.random() < 0.2)
+		if (Math.random() < 0.1)
 			addItem(ServerItem.randomItem(getX(), getY()));
 		setTeam(team);
 	}

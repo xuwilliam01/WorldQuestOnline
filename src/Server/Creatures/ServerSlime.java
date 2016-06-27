@@ -17,7 +17,7 @@ public class ServerSlime extends ServerEnemy
 	 */
 	public final static int SLIME_HP = 50;
 
-	private int speed = 5;
+	private int speed;
 
 	/**
 	 * The point in time when the slime lands
@@ -35,15 +35,27 @@ public class ServerSlime extends ServerEnemy
 	int direction = 1;
 
 	/**
+	 * The jump height
+	 */
+	int jumpHeight;
+
+	/**
 	 * Whether or not the slime has landed, for purposes of changing the image
 	 */
 	private boolean landed;
 
+	/**
+	 * The x-coordinate of the last landing position the slime was in
+	 */
+	private double lastX;
 
 	public ServerSlime(double x, double y, ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0.png", SLIME_HP,
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0.png",
+				SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, ServerPlayer.NEUTRAL);
+
+		lastX = 0;
 
 		// Set a random counter to start so not every slime does the exact same
 		// thing
@@ -56,50 +68,63 @@ public class ServerSlime extends ServerEnemy
 		}
 		landCounter = 0;
 
-		setDamage(2);
+		setDamage((int) (Math.random() * 3) + 2);
+		jumpHeight = (int) (Math.random() * 3 + 14);
+		speed = (int) (Math.random() * 3 + 4);
 
-		int slimeType = (int)(Math.random()*30);
+		int slimeType = (int) (Math.random() * 31);
 
-		if (slimeType <15)
+		if (slimeType < 15)
 		{
 			setImage("GREENSLIME_6.png");
 			setName("Green Slime");
 		}
-		else if (slimeType >= 15 && slimeType <= 18)
+		else if (slimeType <= 18)
 		{
 			setImage("BLUESLIME_6.png");
 			setName("Blue Slime");
 		}
-		else if (slimeType >= 19 && slimeType <= 22)
+		else if (slimeType <= 22)
 		{
 			setImage("REDSLIME_6.png");
 			setName("Red Slime");
 		}
-		else if (slimeType >= 23 && slimeType <= 26)
+		else if (slimeType <= 26)
 		{
 			setImage("YELLOWSLIME_6.png");
 			setName("Yellow Slime");
 		}
-		else if (slimeType >= 27 && slimeType <= 28)
+		else if (slimeType <= 29)
 		{
 			setImage("GIANTSLIME_6.png");
-			setDamage(5);
+			setDamage(15);
 			setHP(150);
 			setWidth(-1);
 			setHeight(-1);
 			setName("Giant Slime");
+			if (Math.random() < 0.5)
+			{
+				addItem(ServerItem.randomItem(getX(), getY()));
+			}
 		}
-		else if (slimeType == 29)
+		else if (slimeType <= 30)
 		{
 			setImage("DARKSLIME_6.png");
 			setWidth(-1);
 			setHeight(-1);
 			setDamage(30);
-			setHP(100);
+			setHP(150);
 			setName("Dark Slime");
+			addItem(ServerItem.randomItem(getX(), getY()));
+			addItem(ServerItem.randomItem(getX(), getY()));
+			jumpHeight = (int) (Math.random() * 3 + 20);
+			speed = (int) (Math.random() * 3 + 7);
 		}
 		landed = true;
-		addItem(ServerItem.randomItem(getX(), getY()));
+		if (Math.random() < 0.5)
+		{
+			addItem(ServerItem.randomItem(getX(), getY()));
+		}
 	}
 
 	/**
@@ -157,7 +182,7 @@ public class ServerSlime extends ServerEnemy
 			{
 				landCounter = getCounter();
 
-				setImage( getBaseImage() +"_6.png");
+				setImage(getBaseImage() + "_6.png");
 
 				landed = true;
 			}
@@ -165,30 +190,35 @@ public class ServerSlime extends ServerEnemy
 			{
 				if (getCounter() - landCounter > 10)
 				{
-					setImage(getBaseImage() +"_7.png");
+					setImage(getBaseImage() + "_7.png");
 				}
 			}
 			else if (getCounter() - landCounter <= 25)
 			{
-				setImage(getBaseImage() +"_0.png");
+				setImage(getBaseImage() + "_0.png");
 			}
 			else if (getCounter() - landCounter <= 45)
 			{
-				setImage(getBaseImage() +"_1.png");
+				setImage(getBaseImage() + "_1.png");
 			}
 			else if (getCounter() - landCounter <= 65)
 			{
-				setImage(getBaseImage() +"_0.png");
+				setImage(getBaseImage() + "_0.png");
 			}
 			else if (getCounter() - landCounter <= 85)
 			{
-				setImage(getBaseImage() +"_1.png");
+				setImage(getBaseImage() + "_1.png");
 			}
 			else
 			{
+				if (Math.abs(getX() - lastX) < 1)
+				{
+					direction *= -1;
+				}
+				lastX = getX();
 				setVSpeed(-15);
 				setOnSurface(false);
-				setImage(getBaseImage() +"_2.png");
+				setImage(getBaseImage() + "_2.png");
 			}
 		}
 		else
@@ -196,11 +226,11 @@ public class ServerSlime extends ServerEnemy
 			landed = false;
 			if (Math.abs(getVSpeed()) < 8)
 			{
-				setImage(getBaseImage() +"_4.png");
+				setImage(getBaseImage() + "_4.png");
 			}
 			else
 			{
-				setImage(getBaseImage() +"_2.png");
+				setImage(getBaseImage() + "_2.png");
 			}
 		}
 
@@ -212,9 +242,10 @@ public class ServerSlime extends ServerEnemy
 	public void inflictDamage(int amount, ServerCreature source)
 	{
 		super.inflictDamage(amount, source);
-		if (source.getType().equals(ServerWorld.PLAYER_TYPE) && source!= getTarget())
+		if (source.getType().equals(ServerWorld.PLAYER_TYPE)
+				&& source != getTarget())
 		{
-			setTarget((ServerPlayer)source);
+			setTarget((ServerPlayer) source);
 		}
 	}
 

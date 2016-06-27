@@ -280,7 +280,7 @@ public abstract class ServerCreature extends ServerObject
 		item.setSource(this);
 		world.add(item);
 		item.setOnSurface(false);
-		item.setVSpeed(-Math.random() * 15 - 5);
+		item.setVSpeed(-Math.random() * 10 - 5);
 
 		if (HP <= 0)
 		{
@@ -288,7 +288,9 @@ public abstract class ServerCreature extends ServerObject
 			item.setHSpeed(direction * (Math.random() * 5 + 3));
 		}
 		else
+		{
 			item.setHSpeed(Math.random() * 5 + 3);
+		}
 
 	}
 
@@ -319,7 +321,7 @@ public abstract class ServerCreature extends ServerObject
 							+ ServerPotion.MAX_MANA_INCREASE);
 					break;
 				case ServerWorld.DMG_POTION_TYPE:
-					baseDamage = Math.min(ServerPlayer.MAX_DMG, baseDamage+ ServerPotion.DMG_AMOUNT);
+					baseDamage = Math.min(ServerPlayer.MAX_DMGADD, baseDamage+ ServerPotion.DMG_AMOUNT);
 					break;
 				case ServerWorld.SPEED_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;

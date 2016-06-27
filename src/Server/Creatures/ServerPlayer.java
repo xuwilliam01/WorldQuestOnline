@@ -50,11 +50,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public final static int MOVE_SPEED = 5;
 	public final static int JUMP_SPEED = 20;
 
-	public final static int MAX_HSPEED = 10;
-	public final static int MAX_VSPEED = 28;
-	public final static int MAX_DMG = 15;
-	public final static int PLAYER_MAX_HP = 300;
-	public final static int PLAYER_MAX_MANA = 300;
+	public final static int MAX_HSPEED = 8;
+	public final static int MAX_VSPEED = 26;
+	public final static int MAX_DMGADD = 12;
+	public final static int PLAYER_MAX_HP = 250;
+	public final static int PLAYER_MAX_MANA = 250;
 
 	private StringBuilder message = new StringBuilder();
 
