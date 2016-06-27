@@ -181,6 +181,7 @@ public class ServerEngine implements Runnable, ActionListener
 		{
 			player.sendMessage(message);
 		}
+		gui.addToChat(message);
 	}
 	
 	/**

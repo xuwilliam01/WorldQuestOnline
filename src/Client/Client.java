@@ -101,8 +101,8 @@ MouseMotionListener
 	private int blueCastleMaxHP;
 
 	// Chat Components
-	final static int MAX_MESSAGES = 15;
-	final static int MAX_CHARACTERS = 100;
+	public final static int MAX_MESSAGES = 15;
+	public final static int MAX_CHARACTERS = 100;
 	private JTextField chat;
 	private JButton enter;
 	private ArrayList<String> chatQueue = new ArrayList<String>();
@@ -260,7 +260,7 @@ MouseMotionListener
 			String image = tokens[3];
 			int team = Integer.parseInt(tokens[4]);
 
-			player = new ClientObject(id, x, y, image, team,
+			player = new ClientObject(id, x, y, image, team, 
 					ServerWorld.PLAYER_TYPE);
 		}
 		catch (IOException e)
@@ -861,11 +861,12 @@ MouseMotionListener
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		int textY = 40;
+		
 		while (true)
 		{
 			try
 			{
+				int textY = 40;
 				for (String str : chatQueue)
 				{
 					if (str.substring(0, 2).equals("CH"))
@@ -1406,11 +1407,11 @@ MouseMotionListener
 	/**
 	 * Class to limit the number of characters in a JTextField
 	 */
-	private class JTextFieldLimit extends PlainDocument
+	public static class JTextFieldLimit extends PlainDocument
 	{
 		private int limit;
 
-		JTextFieldLimit(int limit)
+		public JTextFieldLimit(int limit)
 		{
 			super();
 			this.limit = limit;
@@ -1445,7 +1446,6 @@ MouseMotionListener
 
 	private class JTextFieldEnter implements KeyListener
 	{
-
 		@Override
 		public void keyTyped(KeyEvent e)
 		{

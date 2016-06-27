@@ -442,7 +442,7 @@ public class MainMenu {
 				mainFrame.remove(this);
 				mainFrame.invalidate();
 				mainFrame.validate();
-				
+
 				mainMenu = new MainPanel();
 				mainFrame.add(mainMenu);
 				mainFrame.setVisible(true);
@@ -621,33 +621,33 @@ public class MainMenu {
 				serverIP = "127.0.0.1";
 			}
 
-				while(true)
+			while(true)
+			{
+				try
 				{
-					try
-					{
-						String portNum = JOptionPane
-								.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")").trim();
-						if(portNum == null)
-							return;
-						else if(portNum.equals(""))
-							portNum = ""+DEF_PORT;
-						port = Integer.parseInt(portNum);
+					String portNum = JOptionPane
+							.showInputDialog("Please enter the port of the server (Default: " + DEF_PORT + ")").trim();
+					if(portNum == null)
+						return;
+					else if(portNum.equals(""))
+						portNum = ""+DEF_PORT;
+					port = Integer.parseInt(portNum);
 
-						playerName = JOptionPane
-								.showInputDialog("Please enter your name (max 20 characters)").trim();
-						if(playerName == null)
-							return;
-						else if(playerName.equals(""))
-							playerName = "Player";
-						else if(playerName.length()>20)
-							playerName = playerName.substring(0, 20);
-						break;
-					}
-					catch(NumberFormatException E)
-					{
+					playerName = JOptionPane
+							.showInputDialog("Please enter your name (max 20 characters)").trim();
+					if(playerName == null)
+						return;
+					else if(playerName.equals(""))
+						playerName = "Player";
+					else if(playerName.length()>20)
+						playerName = playerName.substring(0, 20);
+					break;
+				}
+				catch(NumberFormatException E)
+				{
 
-					}
-				
+				}
+
 			}
 
 			mainFrame.remove(mainMenu);
@@ -720,16 +720,22 @@ public class MainMenu {
 
 			serverThread.start();
 
-			//Ask the user if they want to open the a map of the server, but warns them about lag
-			int dialogResult = JOptionPane.showConfirmDialog (null, "A Server was opened! Would you like to see a map of the entire world?\nThis will cause server lag when zoomed out. ","Warning",0);
-			if(dialogResult == JOptionPane.YES_OPTION){
 
-				ServerFrame myFrame = new ServerFrame();
-				ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
-				gui.setLocation(0,0);
-				myFrame.add(gui);
-				gui.revalidate();
-				server.getEngine().setGui(gui);
+			while(true)
+			{
+				try{
+					ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
+					ServerFrame myFrame = new ServerFrame();
+					gui.setLocation(0,0);
+					myFrame.add(gui);
+					gui.revalidate();
+					server.getEngine().setGui(gui);
+					break;
+				}
+				catch(NullPointerException E)
+				{
+
+				}
 			}
 
 		}
