@@ -1,13 +1,18 @@
 package Server;
 
+import Client.ClientInventory;
+import Client.ClientWorld;
 import Client.Client.JTextFieldLimit;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -173,8 +178,8 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 
 		//Show/hide map button
-		showHide.setLocation(400,0);
-		showHide.setSize(400,60);
+		showHide.setLocation(10,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-75);
+		showHide.setSize(200,30);
 		showHide.setVisible(true);
 		showHide.addActionListener(this);
 
@@ -212,7 +217,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		super.paintComponent(graphics);
 
 		graphics.drawImage(background,0,0,null);
-		
+
 		//Draw the map
 		if(visible)
 		{		
@@ -298,12 +303,15 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				}
 			}
 		}
-		else
-		{
-			graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
-			graphics.drawString("The server runs smoother when the map is hidden",400,500);
-		}
+		//	else
+		//{
+		graphics.setColor(Color.BLACK);
+		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
+		graphics.drawString("The server runs smoother when the map is hidden",(int) ((Toolkit.getDefaultToolkit().getScreenSize().getWidth()-ClientInventory.INVENTORY_WIDTH)/2-graphics
+				.getFontMetrics().stringWidth("The server runs smoother when the map is hidden")/2),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-50);
+		//}
 		//Draw the chat
+		graphics.setFont(ClientWorld.NORMAL_FONT);
 		while (true)
 		{
 			try
@@ -451,8 +459,38 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 
 		//Write the player names for each team
+		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
+		graphics.setColor(Color.BLUE);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int blueX = (int)screenSize.getWidth()-400 - ClientInventory.INVENTORY_WIDTH;
+		int redX = (int)screenSize.getWidth()-200 - ClientInventory.INVENTORY_WIDTH;
+		graphics.drawString("Blue Team",blueX,50);
+		graphics.setColor(Color.RED);
+		graphics.drawString("Red Team",redX,50);
+		int redStart = 90;
+		int blueStart = 90;
+		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
+		try{
+			for(ServerPlayer player : ServerEngine.getListOfPlayers())
+			{
+				if(player.getTeam() == ServerCreature.RED_TEAM)
+				{
+					graphics.setColor(Color.RED);
+					graphics.drawString(player.getName(), redX+5, redStart);
+					redStart+=20;
+				}
+				else
+				{
+					graphics.setColor(Color.BLUE);
+					graphics.drawString(player.getName(), blueX+5, blueStart);
+					blueStart+=20;
+				}
+			}
+		}
+		catch(ConcurrentModificationException E)
+		{
 
-
+		}
 		// Tell the user to scroll with arrow keys
 		//		graphics.setColor(Color.black);
 		//		graphics.drawString(
