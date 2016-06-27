@@ -207,6 +207,7 @@ public class ServerEngine implements Runnable, ActionListener
 		listOfPlayers.remove(remove);
 		world.remove(remove);
 		broadcast("R " + remove.getID());
+		broadcast("RO " + remove.getName().split(" ").length+" "+remove.getTeam()+remove.getName());
 	}
 
 	/**

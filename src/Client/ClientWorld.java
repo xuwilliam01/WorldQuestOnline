@@ -599,6 +599,10 @@ public class ClientWorld
 		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
 	}
 
+	public ClientObject[] getObjects()
+	{
+		return objects;
+	}
 	public char[][] getGrid()
 	{
 		return grid;

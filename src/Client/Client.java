@@ -449,8 +449,8 @@ MouseMotionListener
 								// disconnection/destruction
 								else if (tokens[token].equals("R"))
 								{
-									world.remove(Integer
-											.parseInt(tokens[++token]));
+									int ID = Integer.parseInt(tokens[++token]);
+									world.remove(ID);
 								}
 								else if (tokens[token].equals("I"))
 								{
@@ -574,6 +574,15 @@ MouseMotionListener
 									for(int i = 0; i < len;i++)
 										name += tokens[++token]+" ";
 									chatQueue.add("JO "+name.trim());
+								}
+								else if(tokens[token].equals("RO"))
+								{
+									int len = Integer.parseInt(tokens[++token]);
+									String name = "";
+									
+									for(int i = 0; i < len;i++)
+										name += tokens[++token]+" ";
+									chatQueue.add("RO "+name.trim());
 								}
 								else if (tokens[token].equals("XR"))
 								{
@@ -888,6 +897,18 @@ MouseMotionListener
 						graphics.drawString(str.substring(4) + " ", 10, textY);
 						graphics.setColor(Color.ORANGE);
 						graphics.drawString("joined", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
+					}
+					else if(str.substring(0,2).equals("RO"))
+					{
+						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else
+							graphics.setColor(Color.GRAY);
+						graphics.drawString(str.substring(4) + " ", 10, textY);
+						graphics.setColor(Color.ORANGE);
+						graphics.drawString("left", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
 					}
 					else
 					{
