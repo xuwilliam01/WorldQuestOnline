@@ -63,18 +63,25 @@ public class ServerVendor extends ServerCreature
 	 */
 	public void makeShop()
 	{
-		for (int potion = 0; potion < 5; potion++)
+		for (int potion = 0; potion < 10; potion++)
 		{
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.HP_POTION_TYPE));
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.MANA_POTION_TYPE));
+		}
+		for (int potion = 0; potion < 5; potion++)
+		{
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_HP_TYPE));
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_MANA_TYPE));
+		}
+		for (int potion = 0; potion < 3; potion++)
+		{
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE));
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE));
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
 		}
-
-		for (int weapon = 0; weapon < 25; weapon++)
+		
+		int noOfWeapons = (int)(Math.random()*10 + 20);
+		for (int weapon = 0; weapon < noOfWeapons; weapon++)
 			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
 
 		// Add a rare weapon
