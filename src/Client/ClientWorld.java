@@ -426,7 +426,7 @@ public class ClientWorld
 							else
 							{
 								graphics.drawString(
-										object.getName().trim(),
+										object.getName(),
 										(int) (x + object.getWidth() / 2 - object
 												.getName().trim().length()
 												* DAMAGE_FONT_WIDTH / 2), y);
@@ -444,7 +444,7 @@ public class ClientWorld
 							else
 							{
 								graphics.drawString(
-										object.getName().trim(),
+										object.getName(),
 										(int) (x + object.getWidth() / 2 - object
 												.getName().trim().length()
 												* DAMAGE_FONT_WIDTH / 2), y);

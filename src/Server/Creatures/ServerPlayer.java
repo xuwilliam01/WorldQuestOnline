@@ -692,7 +692,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ " " + y + " " + object.getImage()
 											+ " " + team + " "
 											+ object.getType() + " "
-											+ ((ServerPlayer) object).getName());
+											+ ((ServerPlayer) object).getName().split(" ").length + " " + ((ServerPlayer) object).getName());
 								}
 								else
 								{
@@ -933,10 +933,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					String[] tokens = message.split(" ");
 					if(tokens[0].equals("/t"))
 					{
-						engine.broadCastTeam("CH "+"T "+getTeam()+getName()+" "+tokens.length+" "+message, getTeam());
+						engine.broadCastTeam("CH "+"T "+(getTeam()+getName()).split(" ").length+" "+getTeam()+getName()+" "+tokens.length+" "+message, getTeam());
 					}
 					else
-						engine.broadcast("CH "+"E "+getTeam()+getName()+" "+tokens.length+" "+message);
+						engine.broadcast("CH "+"E "+(getTeam()+getName()).split(" ").length+" "+getTeam()+getName()+" "+tokens.length+" "+message);
 				}
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))
@@ -1004,6 +1004,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						&& command.substring(0, 2).equals("Na"))
 				{
 					setName(command.substring(3));
+					engine.broadcast("JO "+getName().split(" ").length+" "+getTeam()+getName());
 				}
 				// Adjust the screen width and height for the player
 				else if (command.charAt(0) == 's')

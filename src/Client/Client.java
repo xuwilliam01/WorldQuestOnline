@@ -41,8 +41,8 @@ import Server.Creatures.ServerPlayer;
  *
  */
 public class Client extends JPanel implements KeyListener, MouseListener,
-		ActionListener,
-		MouseMotionListener
+ActionListener,
+MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -369,11 +369,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 
 									JOptionPane
-											.showMessageDialog(
-													Client.this,
-													String.format(
-															"The %s castle has been destroyed, the winner is the %s!",
-															loser, winner));
+									.showMessageDialog(
+											Client.this,
+											String.format(
+													"The %s castle has been destroyed, the winner is the %s!",
+													loser, winner));
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)
@@ -419,10 +419,24 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										player.setX(x);
 										player.setY(y);
 									}
-									world.setObject(id, x, y,
-											tokens[++token], Integer
-													.parseInt(tokens[++token]),
-											tokens[++token], tokens[++token]);
+									if(tokens[token+4].equals("{"))
+										world.setObject(id, x, y,
+												tokens[++token], Integer
+												.parseInt(tokens[++token]),
+												tokens[++token], tokens[++token]);
+									else
+									{
+										int len = Integer.parseInt(tokens[token+4]);
+										String name = "";
+										for(int i = 0; i < len;i++)
+											name+= tokens[token+5+i]+" ";
+										world.setObject(id, x, y,
+												tokens[++token], Integer
+												.parseInt(tokens[++token]),
+												tokens[++token], name.trim());
+										token+= len;
+									}
+
 								}
 								else if (tokens[token].equals("P"))
 								{
@@ -508,7 +522,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								else if (tokens[token].equals("CH"))
 								{
 									char who = tokens[++token].charAt(0);
+									int nameLen = Integer.parseInt(tokens[++token]);
 									String name = tokens[++token];
+
+									for(int i = 1; i < nameLen;i++)
+									{
+										name+=" "+tokens[++token];
+									}
 									int numWords = Integer
 											.parseInt(tokens[++token]);
 									String text = "";
@@ -545,6 +565,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										text += tokens[token] + " ";
 									}
 									chatQueue.add(text.trim());
+								}
+								else if(tokens[token].equals("JO"))
+								{
+									int len = Integer.parseInt(tokens[++token]);
+									String name = "";
+									
+									for(int i = 0; i < len;i++)
+										name += tokens[++token]+" ";
+									chatQueue.add("JO "+name.trim());
 								}
 								else if (tokens[token].equals("XR"))
 								{
@@ -797,7 +826,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			hour -= 12;
 			amPm = "PM";
 		}
-		
+
 		if (hour == 0)
 		{
 			hour = 12;
@@ -816,7 +845,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		hourString += hour;
 		minuteString += minute;
-		
+
 		graphics.drawString(hourString + ":" + minuteString + " " + amPm,
 				SCREEN_WIDTH - 60, 60);
 		graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
@@ -833,9 +862,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					if (str.substring(0, 2).equals("CH"))
 					{
 						String newStr = str.substring(3);
-						int space = newStr.indexOf(' ');
-						String coloured = newStr.substring(1, space);
-						String mssg = newStr.substring(space + 1);
+						int space = newStr.indexOf(':');
+						String coloured = newStr.substring(1, space+1);
+						String mssg = newStr.substring(space + 2);
 						if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
 						else if (newStr.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
@@ -847,6 +876,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						graphics.drawString(mssg, 10 + graphics
 								.getFontMetrics().stringWidth(coloured + " "),
 								textY);
+					}
+					else if(str.substring(0,2).equals("JO"))
+					{
+						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
+							graphics.setColor(Color.RED);
+						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
+							graphics.setColor(Color.BLUE);
+						else
+							graphics.setColor(Color.GRAY);
+						graphics.drawString(str.substring(4) + " ", 10, textY);
+						graphics.setColor(Color.ORANGE);
+						graphics.drawString("joined", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
 					}
 					else
 					{
@@ -924,13 +965,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-													+ " by a "), textY);
+											+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-									textY);
+											textY);
 					}
 					textY += 20;
 				}

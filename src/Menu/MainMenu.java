@@ -613,7 +613,7 @@ public class MainMenu {
 			String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Server IP (Leave blank for this computer)");
+					.showInputDialog("Server IP (Leave blank for a server on this computer)");
 			if(serverIP == null)
 				return;
 			if (serverIP.equals(""))
@@ -634,11 +634,13 @@ public class MainMenu {
 						port = Integer.parseInt(portNum);
 
 						playerName = JOptionPane
-								.showInputDialog("Please enter your name");
+								.showInputDialog("Please enter your name (max 20 characters)");
 						if(playerName == null)
 							return;
 						else if(playerName.equals(""))
 							playerName = "Player";
+						else if(playerName.length()>20)
+							playerName = playerName.substring(0, 20);
 						break;
 					}
 					catch(NumberFormatException E)
