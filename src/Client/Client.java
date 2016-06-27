@@ -861,7 +861,7 @@ MouseMotionListener
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		int textY = 40;
+		int textY = 20 + 20*chatQueue.size();
 		while (true)
 		{
 			try
@@ -994,7 +994,7 @@ MouseMotionListener
 											firstName + secondKillWord + " "),
 											textY);
 					}
-					textY += 20;
+					textY -= 20;
 				}
 				break;
 			}
