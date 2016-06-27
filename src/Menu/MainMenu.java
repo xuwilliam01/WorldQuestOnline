@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import Client.Client;
-import Client.ClientBackground;
+import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Imports.Images;
@@ -53,7 +53,7 @@ public class MainMenu {
 	private static InstructionPanel instructionPanel;
 
 	//Cloud variables
-	private static ArrayList<ClientBackground> clouds;
+	private static ArrayList<ClientCloud> clouds;
 	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 2;
 	private static int cloudDirection = 0;
 
@@ -74,7 +74,7 @@ public class MainMenu {
 			cloudDirection = -1;
 		}
 
-		clouds = new ArrayList<ClientBackground>();
+		clouds = new ArrayList<ClientCloud>();
 		for (int no = 0; no < 20; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
@@ -95,7 +95,7 @@ public class MainMenu {
 
 			String image = "CLOUD_" + imageNo + ".png";
 
-			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
+			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
 	}
 
@@ -217,7 +217,7 @@ public class MainMenu {
 			graphics.drawImage(background,0, 0, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT,null);
 
 			// Draw and move the clouds
-			for (ClientBackground cloud : clouds)
+			for (ClientCloud cloud : clouds)
 			{
 				if (cloud.getX() <= Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH
 						&& cloud.getX() + cloud.getWidth() >= 0

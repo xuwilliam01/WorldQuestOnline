@@ -8,7 +8,7 @@ import Imports.Images;
  * A background object on the client side that doesn't affect the game
  * @author William Xu & Alex Raita
  */
-public class ClientBackground
+public class ClientCloud
 {
 
 	/**
@@ -47,7 +47,7 @@ public class ClientBackground
 	private Image image;
 
 	
-	public ClientBackground(double x, double y, double hSpeed, double vSpeed, String imageName)
+	public ClientCloud(double x, double y, double hSpeed, double vSpeed, String imageName)
 	{
 		this.x = x;
 		this.y = y;

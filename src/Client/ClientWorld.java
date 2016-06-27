@@ -46,7 +46,7 @@ public class ClientWorld
 	/**
 	 * Arraylist of clouds on the client side
 	 */
-	private ArrayList<ClientBackground> clouds;
+	private ArrayList<ClientCloud> clouds;
 
 	/**
 	 * The distance a cloud travels before teleporting back
@@ -151,7 +151,7 @@ public class ClientWorld
 			cloudDirection = -1;
 		}
 
-		clouds = new ArrayList<ClientBackground>();
+		clouds = new ArrayList<ClientCloud>();
 		for (int no = 0; no < 12; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
@@ -172,7 +172,7 @@ public class ClientWorld
 
 			String image = "CLOUD_" + imageNo + ".png";
 
-			clouds.add(new ClientBackground(x, y, hSpeed, 0, image));
+			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
 	}
 
@@ -295,7 +295,7 @@ public class ClientWorld
 		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 		// Draw and move the clouds
-		for (ClientBackground cloud : clouds)
+		for (ClientCloud cloud : clouds)
 		{
 			if (cloud.getX() <= Client.SCREEN_WIDTH
 					&& cloud.getX() + cloud.getWidth() >= 0

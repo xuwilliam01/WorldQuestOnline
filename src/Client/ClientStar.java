@@ -8,21 +8,60 @@ public class ClientStar
 	private int y;
 	private double alpha;
 	private double maxAlpha;
-	
-	public ClientStar ()
+	private boolean exists;
+	private int counter;
+	private int lifeTime;
+
+	public ClientStar()
 	{
-		x = (int)(Math.random()*Client.SCREEN_WIDTH);
-		y = (int)(Math.random()*Client.SCREEN_HEIGHT);
+		x = (int) (Math.random() * Client.SCREEN_WIDTH);
+		y = (int) (Math.random() * Client.SCREEN_HEIGHT);
 		alpha = 0;
 		maxAlpha = Math.random();
+		exists = true;
+		counter = -(int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4);
+		lifeTime = (int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4)
+				+ ServerWorld.COUNTER_TIME * 60 * 8;
 	}
 
+	/**
+	 * Update the opacity of the star
+	 */
 	public void update()
 	{
-		if (alpha <= maxAlpha - 1/ServerWorld.COUNTER_TIME*60)
-		alpha += 1/ServerWorld.COUNTER_TIME*60;
+		if (counter >= lifeTime - ServerWorld.COUNTER_TIME * 60 && alpha > 0)
+		{
+			if (alpha - 1 / (ServerWorld.COUNTER_TIME * 60) > 0)
+			{
+				alpha -= 1 / (ServerWorld.COUNTER_TIME * 60);
+			}
+			else
+			{
+				alpha = 0;
+			}
+		}
+		else if (counter >= 0 && alpha < maxAlpha)
+		{
+			if (alpha <= maxAlpha - 1 / (ServerWorld.COUNTER_TIME * 60))
+			{
+				alpha += 1 / (ServerWorld.COUNTER_TIME * 60);
+			}
+			else
+			{
+				alpha = maxAlpha;
+			}
+		}
+
+		if (counter >= lifeTime)
+		{
+			exists = false;
+		}
+		else
+		{
+			counter++;
+		}
 	}
-	
+
 	public int getX()
 	{
 		return x;
@@ -52,6 +91,15 @@ public class ClientStar
 	{
 		this.alpha = alpha;
 	}
-	
-	
+
+	public boolean exists()
+	{
+		return exists;
+	}
+
+	public void setExists(boolean exists)
+	{
+		this.exists = exists;
+	}
+
 }
