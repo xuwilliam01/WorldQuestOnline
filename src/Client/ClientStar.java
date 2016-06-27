@@ -20,7 +20,7 @@ public class ClientStar
 		alpha = 0;
 		maxAlpha = Math.random();
 		exists = true;
-		counter = -(int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4)+ServerWorld.COUNTER_TIME * 60*4;
+		counter = -((int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 4)+ServerWorld.COUNTER_TIME * 60*4);
 		lifeTime = (int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 8)
 				+ ServerWorld.COUNTER_TIME * 60 * 4;
 		
