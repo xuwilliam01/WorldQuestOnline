@@ -420,8 +420,7 @@ public abstract class ServerCreature extends ServerObject
 							&& !alreadyPunched.contains(otherObject))
 					{
 						((ServerCreature) otherObject)
-						.inflictDamage(damage
-								+ getBaseDamage(), this);
+						.inflictDamage(damage, this);
 						alreadyPunched
 						.add((ServerCreature) otherObject);
 					}

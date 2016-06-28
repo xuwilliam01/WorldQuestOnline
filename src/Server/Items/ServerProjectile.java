@@ -121,7 +121,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0.png");
 			setGravity(0.25);
-			setDamage(ServerWeapon.WOODBOW_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.WOODBOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -129,7 +129,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0.png");
 			setGravity(0.25);
-			setDamage(ServerWeapon.STEELBOW_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.STEELBOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -137,7 +137,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.MEGAARROW_TYPE:
 			setImage("MEGAARROW_0.png");
 			setGravity(0);
-			setDamage(ServerWeapon.MEGABOW_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.MEGABOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(30);
 			animated = false;
 			faceAngle = true;
@@ -145,7 +145,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.BULLET_TYPE:
 			setImage("BULLET_0.png");
 			setGravity(0.4);
-			setDamage(ServerWeapon.SLING_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.SLING_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(15);
 			animated = false;
 			faceAngle = false;
@@ -153,7 +153,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0.png");
 			setGravity(0);
-			setDamage(ServerWeapon.FIREWAND_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.FIREWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(15);
 			animated = true;
 			faceAngle = true;
@@ -161,7 +161,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.ICEBALL_TYPE:
 			setImage("ICEBALL_0_0.png");
 			setGravity(0);
-			setDamage(ServerWeapon.ICEWAND_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(6);
 			animated = true;
 			faceAngle = true;
@@ -169,7 +169,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0.png");
 			setGravity(0);
-			setDamage(ServerWeapon.DARKWAND_DMG + owner.getBaseDamage());
+			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(12);
 			animated = true;
 			faceAngle = true;

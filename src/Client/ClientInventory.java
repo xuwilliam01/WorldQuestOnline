@@ -370,28 +370,28 @@ public class ClientInventory extends JPanel implements ActionListener {
 			graphics.setColor(Color.green);
 		if (client.getBaseDamage() > 9)
 			graphics.drawString(
-					String.format("%d(+%d)",
-							client.getDamage() + client.getBaseDamage(),
-							client.getBaseDamage()), 101, 215);
+					String.format("%d(+%d%%)",
+							(int)Math.ceil(client.getDamage()*(1+client.getBaseDamage()/100.0)),
+							client.getBaseDamage()), 105, 215);
 		else
 			graphics.drawString(
-					String.format("%d(+%d)",
-							client.getDamage() + client.getBaseDamage(),
-							client.getBaseDamage()), 105, 215);
+					String.format("%d(+%d%%)",
+							(int)Math.ceil(client.getDamage()*(1+client.getBaseDamage()/100.0)),
+							client.getBaseDamage()), 109, 215);
 
 		graphics.setColor(RED);
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
 			graphics.setColor(Color.green);
 		graphics.drawString(
 				String.format("%d", client.getSpeed() - ServerPlayer.MOVE_SPEED
-						+ 1), 250, 215);
+						+ 1), 260, 215);
 
 		graphics.setColor(RED);
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
 			graphics.setColor(Color.green);
 		graphics.drawString(
 				String.format("%d", client.getJump() - ServerPlayer.JUMP_SPEED
-						+ 1), 250, 255);
+						+ 1), 260, 255);
 	}
 
 	public ClientItem[] getEquippedWeapons() {

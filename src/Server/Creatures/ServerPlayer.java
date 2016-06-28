@@ -52,7 +52,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public final static int MAX_HSPEED = 8;
 	public final static int MAX_VSPEED = 26;
-	public final static int MAX_DMGADD = 12;
+	public final static int MAX_DMGADD = 30;
 	public final static int PLAYER_MAX_HP = 250;
 	public final static int PLAYER_MAX_MANA = 250;
 
@@ -245,7 +245,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		// Set a random hair style for the player
@@ -351,6 +351,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10));
+		for(int i = 0;i < 10;i++)
+			addItem(new ServerPotion(0,0,ServerWorld.DMG_POTION_TYPE));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -451,7 +453,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						setRowCol(new RowCol(2, 8));
 						if (!isHasPunched())
 						{
-							punch(PUNCHING_DAMAGE + getBaseDamage());
+							punch((int) Math.ceil(PUNCHING_DAMAGE*(1+getBaseDamage()/100.0)));
 							setHasPunched(true);
 						}
 					}
@@ -703,7 +705,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ object.getType()
 											+ " "
 											+ ((ServerPlayer) object).getName()
-													.split(" ").length + " "
+											.split(" ").length + " "
 											+ ((ServerPlayer) object).getName());
 								}
 								else
@@ -1233,7 +1235,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						equippedWeapons[weaponNo].getActionImage(),
 						(int) (Math.toDegrees(angle) + 0.5),
 						equippedWeapons[weaponNo].getActionSpeed(),
-						equippedWeapons[weaponNo].getDamage() + getBaseDamage()));
+						(int)Math.ceil(equippedWeapons[weaponNo].getDamage()*(1+getBaseDamage()/100.0))));
 				action = "SWING";
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(
@@ -1510,7 +1512,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1591,7 +1593,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			catch (ArrayIndexOutOfBoundsException e)
 			{
 				System.out
-						.println("Stirng builder queue lagged and out of bounds happened");
+				.println("Stirng builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}
