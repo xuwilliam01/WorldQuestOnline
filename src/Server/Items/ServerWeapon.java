@@ -74,15 +74,26 @@ public class ServerWeapon extends ServerItem
 	private String actionImage;
 
 	/**
-	 * Number of counters for the swing
+	 * Number of counters for the action
 	 */
-	private int swingSpeed;
+	private int actionSpeed;
+	
+	/**
+	 * Number of counters between actions
+	 */
+	private int actionDelay;
 
-	// The speeds at which certain melee weapons swing (in world ticks)
-	public final static int DAGGER_SPEED = 13;
-	public final static int AX_SPEED = 26;
-	public final static int SWORD_SPEED = 13;
-	public final static int HALBERD_SPEED = 26;
+	// The speeds at which melee weapons swing (in world ticks)
+	public final static int SWING_SPEED = 13;
+	public final static int STAB_SPEED = 13;
+	
+	// The delay between swings
+	public final static int DAGGER_DELAY = STAB_SPEED+ 1;
+	public final static int AX_DELAY = SWING_SPEED+6;
+	public final static int SWORD_DELAY = SWING_SPEED+3;
+	public final static int HALBERD_DELAY = STAB_SPEED+6;
+	
+	
 
 	/**
 	 * Constructor builds a weapon
@@ -96,102 +107,122 @@ public class ServerWeapon extends ServerItem
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = DADIAMOND_DMG;
 			actionImage = "DADIAMOND_0.png";
-			swingSpeed = DAGGER_SPEED;
+			actionDelay = DAGGER_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			damage = DAGOLD_DMG;
 			actionImage = "DAGOLD_0.png";
-			swingSpeed = DAGGER_SPEED;
+			actionDelay = DAGGER_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			damage = DAIRON_DMG;
 			actionImage = "DAIRON_0.png";
-			swingSpeed = DAGGER_SPEED;
+			actionDelay = DAGGER_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			damage = DASTONE_DMG;
 			actionImage = "DASTONE_0.png";
-			swingSpeed = DAGGER_SPEED;
+			actionDelay = DAGGER_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			damage = DAWOOD_DMG;
 			actionImage = "DAWOOD_0.png";
-			swingSpeed = DAGGER_SPEED;
+			actionDelay = DAGGER_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = AXDIAMOND_DMG;
 			actionImage = "AXDIAMOND_0.png";
-			swingSpeed = AX_SPEED;
+			actionDelay = AX_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			damage = AXGOLD_DMG;
 			actionImage = "AXGOLD_0.png";
-			swingSpeed = AX_SPEED;
+			actionDelay = AX_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			damage = AXIRON_DMG;
 			actionImage = "AXIRON_0.png";
-			swingSpeed = AX_SPEED;
+			actionDelay = AX_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			damage = AXSTONE_DMG;
 			actionImage = "AXSTONE_0.png";
-			swingSpeed = AX_SPEED;
+			actionDelay = AX_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			damage = AXWOOD_DMG;
 			actionImage = "AXWOOD_0.png";
-			swingSpeed = AX_SPEED;
+			actionDelay = AX_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = SWDIAMOND_DMG;
 			actionImage = "SWDIAMOND_0.png";
-			swingSpeed = SWORD_SPEED;
+			actionDelay = SWORD_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			damage = SWGOLD_DMG;
 			actionImage = "SWGOLD_0.png";
-			swingSpeed = SWORD_SPEED;
+			actionDelay = SWORD_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			damage = SWIRON_DMG;
 			actionImage = "SWIRON_0.png";
-			swingSpeed = SWORD_SPEED;
+			actionDelay = SWORD_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			damage = SWSTONE_DMG;
 			actionImage = "SWSTONE_0.png";
-			swingSpeed = SWORD_SPEED;
+			actionDelay = SWORD_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			damage = SWWOOD_DMG;
 			actionImage = "SWWOOD_0.png";
-			swingSpeed = SWORD_SPEED;
+			actionDelay = SWORD_DELAY;
+			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = HADIAMOND_DMG;
 			actionImage = "HADIAMOND_0.png";
-			swingSpeed = HALBERD_SPEED;
+			actionDelay = HALBERD_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			damage = HAGOLD_DMG;
 			actionImage = "HAGOLD_0.png";
-			swingSpeed = HALBERD_SPEED;
+			actionDelay = HALBERD_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			damage = HAIRON_DMG;
 			actionImage = "HAIRON_0.png";
-			swingSpeed = HALBERD_SPEED;
+			actionDelay = HALBERD_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			damage = HASTONE_DMG;
 			actionImage = "HASTONE_0.png";
-			swingSpeed = HALBERD_SPEED;
+			actionDelay = HALBERD_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			damage = HAWOOD_DMG;
 			actionImage = "HAWOOD_0.png";
-			swingSpeed = HALBERD_SPEED;
+			actionDelay = HALBERD_DELAY;
+			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.SLINGSHOT_TYPE:
 			damage = SLING_DMG;
@@ -415,14 +446,24 @@ public class ServerWeapon extends ServerItem
 		this.actionImage = actionImage;
 	}
 
-	public int getSwingSpeed()
+	public int getActionSpeed()
 	{
-		return swingSpeed;
+		return actionSpeed;
 	}
 
-	public void setSwingSpeed(int swingSpeed)
+	public void setActionSpeed(int actionSpeed)
 	{
-		this.swingSpeed = swingSpeed;
+		this.actionSpeed = actionSpeed;
+	}
+
+	public int getActionDelay()
+	{
+		return actionDelay;
+	}
+
+	public void setActionDelay(int actionDelay)
+	{
+		this.actionDelay = actionDelay;
 	}
 
 }
