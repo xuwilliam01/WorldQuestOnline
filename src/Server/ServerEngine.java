@@ -86,14 +86,7 @@ public class ServerEngine implements Runnable, ActionListener
 
 	private boolean endGame = false;
 	private int losingTeam;
-
-	private boolean started = false;
 	
-	/**
-	 * The map name
-	 */
-	String map;
-
 	/**
 	 * Constructor for the engine
 	 */
@@ -103,13 +96,13 @@ public class ServerEngine implements Runnable, ActionListener
 		// or something later)
 		Images.importImages();
 		ImageReferencePair.importReferences();
-		this.map = map;
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
-		objectIDs = new boolean[NUMBER_OF_IDS];		
+		objectIDs = new boolean[NUMBER_OF_IDS];
+		world = new ServerWorld(this,map);
 
 	}
-
+	
 	/**
 	 * Constructor for the engine
 	 */
@@ -122,9 +115,10 @@ public class ServerEngine implements Runnable, ActionListener
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		objectIDs = new boolean[NUMBER_OF_IDS];
+		world = new ServerWorld(this);
 
 	}
-
+	
 
 	/**
 	 * Set the gui
@@ -177,7 +171,7 @@ public class ServerEngine implements Runnable, ActionListener
 		endGame = true;
 		this.losingTeam = losingTeam;
 	}
-
+	
 	/**
 	 * Send an instant message to all clients
 	 */
@@ -189,7 +183,7 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 		gui.addToChat(message);
 	}
-
+	
 	/**
 	 * Sends a message to the given team
 	 */
@@ -202,7 +196,7 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 	}
 
-
+	
 	/**
 	 * Remove a player from the array list
 	 * @param remove
@@ -224,42 +218,7 @@ public class ServerEngine implements Runnable, ActionListener
 	public void addPlayer(ServerPlayer newPlayer)
 	{
 		listOfPlayers.add(newPlayer);
-	}
-
-	/**
-	 * Start the world
-	 * @throws IOException 
-	 */
-	public void startGame() throws IOException
-	{
-		world = new ServerWorld(this,map);
-		gui.setWorld(world,this);
-		for(ServerPlayer player : listOfPlayers)
-		{
-			int x = 2000;
-			int y = 2000;
-			if(player.getTeam() == ServerPlayer.RED_TEAM)
-			{
-				x = getWorld().getRedCastleX();
-				y = getWorld().getRedCastleY();
-			}
-			else
-			{
-				x = getWorld().getBlueCastleX();
-				y = getWorld().getBlueCastleY();
-			}
-			player.setX(x);
-			player.setY(y);
-			world.add(player);
-			player.setWorld(world);
-			player.initializePlayer();
-			player.setTeam(player.getTeam());
-		
-			
-		}
-		
-		broadcast("Start");
-		started = true;
+		world.add(newPlayer);
 	}
 
 	/**
@@ -285,6 +244,15 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
+		// Update the FPS counter on the server gui
+		if (FPScounter >= (1000.0/UPDATE_RATE + 0.5))
+		{
+			FPScounter = 0;
+			currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
+			startTime = System.currentTimeMillis();
+		}
+		FPScounter ++;
+
 		// Remove disconnected players
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 		for (ServerPlayer player : listOfPlayers)
@@ -299,28 +267,16 @@ public class ServerEngine implements Runnable, ActionListener
 			listOfPlayers.remove(player);
 		}
 
-		if(started)
+		// Move all the objects around and update them
+		world.update();
+
+		// Update all the clients with the new player data
+		updateClients();
+
+		// Update the gui
+		if (gui != null)
 		{
-			// Update the FPS counter on the server gui
-			if (FPScounter >= (1000.0/UPDATE_RATE + 0.5))
-			{
-				FPScounter = 0;
-				currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
-				startTime = System.currentTimeMillis();
-			}
-			FPScounter ++;
-
-			// Move all the objects around and update them
-			world.update();
-
-			// Update all the clients with the new player data
-			updateClients();
-
-			// Update the gui
-			if (gui != null)
-			{
-				gui.update();
-			}
+			gui.update();
 		}
 	}
 

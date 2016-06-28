@@ -68,12 +68,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
-
+	
 	// The width and height of the screen of this specific player
 	private int playerScreenWidth = 1620;
 	private int playerScreenHeight = 1080;
-
-	private boolean isLobbyLeader = false;
 
 	/**
 	 * Whether the game is over or not
@@ -227,8 +225,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private long joinTime;
 
-	private String skinColour;
-	
 	/**
 	 * Constructor for a player in the server
 	 * @param socket the connection between the client and the server
@@ -248,65 +244,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
-
-		this.skinColour = skinColour;
 		
-		// Set the initial variables
-		actionDelay = 20;
-		canPerformAction = true;
-		action = "NOTHING";
-		performingAction = false;
-		newMouseX = 0;
-		newMouseY = 0;
-
-		// Set the action counter to -1 when not used
-		actionCounter = -1;
-
-		// Import the socket, server, and world
-		this.socket = socket;
-		this.engine = engine;
-		xUpdated = true;
-		yUpdated = true;
-
-		// Set up the output
-		try
-		{
-			output = new PrintWriter(this.socket.getOutputStream());
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's output stream");
-			e.printStackTrace();
-		}
-
-		// Set up the input
-		try
-		{
-			input = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's input stream");
-			e.printStackTrace();
-		}
-
-
-
-		// Use a separate thread to print to the client to prevent the client
-		// from lagging the server itself
-		Thread writer = new Thread(new WriterThread());
-		writer.start();
-	}
-
-	/**
-	 * Starts sending and initializgin world related info when the game starts
-	 */
-	public void initializePlayer()
-	{
-	
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
 		int randomHair = (int) (Math.random() * 8);
@@ -336,16 +276,54 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0);
 		setHead(newHair);
-		world = getWorld();
-		getWorld().add(newHair);
-		this.joinTime = getWorld().getWorldCounter();
-		
+		world.add(newHair);
+
+		// Set the initial variables
+		actionDelay = 20;
+		canPerformAction = true;
+		action = "NOTHING";
+		performingAction = false;
+		newMouseX = 0;
+		newMouseY = 0;
+
+		// Set the action counter to -1 when not used
+		actionCounter = -1;
+
+		// Import the socket, server, and world
+		this.socket = socket;
+		this.engine = engine;
+		xUpdated = true;
+		yUpdated = true;
+		this.joinTime = world.getWorldCounter();
+
+		// Set up the output
+		try
+		{
+			output = new PrintWriter(this.socket.getOutputStream());
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error getting client's output stream");
+			e.printStackTrace();
+		}
+
+		// Set up the input
+		try
+		{
+			input = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error getting client's input stream");
+			e.printStackTrace();
+		}
+
 		// Send the 2D grid of the world to the client
-		
 		sendMap();
-		
+
 		// Send the player's information
-		sendMessage(getID() + " " + (int) (getX() + 0.5) + " " + (int) (getY() + 0.5)
+		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
 				+ "BASE_" + skinColour + "_RIGHT_0_0.png " + getTeam());
 
@@ -371,7 +349,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10));
+		
+		// Use a separate thread to print to the client to prevent the client
+		// from lagging the server itself
+		Thread writer = new Thread(new WriterThread());
+		writer.start();
 	}
+
 	/**
 	 * Send the player the entire map
 	 */
@@ -383,7 +367,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send to the client the height and width of the grid, the starting x
 		// and y position of the grid (top left) and the side length of each
 		// tile
-		printMessage("Map");
 		printMessage(grid.length + " " + grid[0].length + " "
 				+ ServerWorld.TILE_SIZE);
 		for (int row = 0; row < grid.length; row++)
@@ -944,11 +927,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
-				else if(command.equals("ST") && isLobbyLeader)
-				{
-					isLobbyLeader = false;
-					engine.startGame();
-				}
 				else if(command.charAt(0) == 'C')
 				{
 					String message = command.substring(2);
@@ -1042,7 +1020,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			catch (NullPointerException e)
 			{
-				//System.out.println("null pointer");
 				break;
 			}
 		}
@@ -1228,11 +1205,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.MELEE_TYPE))
 			{
-				actionDelay = equippedWeapons[weaponNo].getActionDelay();
+				actionDelay = equippedWeapons[weaponNo].getSwingSpeed()
+						+ (int) (equippedWeapons[weaponNo].getSwingSpeed() / 4.0);
 				world.add(new ServerWeaponSwing(this, 0, -25,
 						equippedWeapons[weaponNo].getActionImage(),
 						(int) (Math.toDegrees(angle) + 0.5),
-						equippedWeapons[weaponNo].getActionSpeed(),
+						equippedWeapons[weaponNo].getSwingSpeed(),
 						equippedWeapons[weaponNo].getDamage() + getBaseDamage()));
 				action = "SWING";
 			}
@@ -1505,7 +1483,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-											.isBusy())
+													.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1921,8 +1899,4 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.playerScreenHeight = playerScreenHeight;
 	}
 
-	public void setLobbyLeader()
-	{
-		isLobbyLeader = true;
-	}
 }
