@@ -20,16 +20,24 @@ public class ClientStar
 		alpha = 0;
 		maxAlpha = Math.random();
 		exists = true;
-		counter = -((int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 7)+ServerWorld.COUNTER_TIME * 60*1);
+		counter = -((int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 6)+ServerWorld.COUNTER_TIME * 60*2);
 		lifeTime = (int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 6)
 				+ ServerWorld.COUNTER_TIME * 60 * 4;
 		
-		
-		size = (int)(Math.random()*4);
-		if (size !=2)
+		if (maxAlpha > 0.75 && Math.random() > 0.5)
+		{
+			size = 2;
+		}
+		else
 		{
 			size = 1;
 		}
+		
+//		size = (int)(Math.random()*4);
+//		if (size !=2)
+//		{
+//			size = 1;
+//		}
 	}
 
 	/**

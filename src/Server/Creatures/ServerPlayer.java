@@ -68,7 +68,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
-	
+
 	// The width and height of the screen of this specific player
 	private int playerScreenWidth = 1620;
 	private int playerScreenHeight = 1080;
@@ -123,6 +123,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * The number of frames before the player can perform another action
 	 */
 	private int actionDelay;
+	private int actionSpeed = 13;
 
 	/**
 	 * The number of frames that has passed after the player's action is
@@ -246,7 +247,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				"BASE_" + skinColour
 						+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
-		
+
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
 		int randomHair = (int) (Math.random() * 8);
@@ -280,6 +281,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Set the initial variables
 		actionDelay = 20;
+		actionSpeed = 13;
 		canPerformAction = true;
 		action = "NOTHING";
 		performingAction = false;
@@ -349,7 +351,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10));
-		
+
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
@@ -421,19 +423,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (action.equals("SWING"))
 				{
-					if (actionCounter < 1.0 * actionDelay / 4.0)
+					if (actionCounter < 1.0 * actionSpeed / 4.0)
 					{
 						setRowCol(new RowCol(2, 0));
 					}
-					else if (actionCounter < 1.0 * actionDelay / 2.0)
+					else if (actionCounter < 1.0 * actionSpeed / 2.0)
 					{
 						setRowCol(new RowCol(2, 1));
 					}
-					else if (actionCounter < 1.0 * actionDelay / 4.0 * 3)
+					else if (actionCounter < 1.0 * actionSpeed / 4.0 * 3)
 					{
 						setRowCol(new RowCol(2, 2));
 					}
-					else if (actionCounter < actionDelay)
+					else if (actionCounter < actionSpeed)
 					{
 						setRowCol(new RowCol(2, 3));
 					}
@@ -687,12 +689,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								if (object.getType().equals(
 										ServerWorld.PLAYER_TYPE))
 								{
-									queueMessage("O " + object.getID() + " "
+									queueMessage("O "
+											+ object.getID()
+											+ " "
 											+ x
-											+ " " + y + " " + object.getImage()
-											+ " " + team + " "
-											+ object.getType() + " "
-											+ ((ServerPlayer) object).getName().split(" ").length + " " + ((ServerPlayer) object).getName());
+											+ " "
+											+ y
+											+ " "
+											+ object.getImage()
+											+ " "
+											+ team
+											+ " "
+											+ object.getType()
+											+ " "
+											+ ((ServerPlayer) object).getName()
+													.split(" ").length + " "
+											+ ((ServerPlayer) object).getName());
 								}
 								else
 								{
@@ -736,10 +748,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("J " + verticalMovement);
 				queueMessage("XB " + world.getBlueCastle().getHP() + " "
 						+ world.getBlueCastle().getCurrentGoblinTier() + " "
-						+ world.getBlueCastle().getMoney() + " " + world.getBlueCastle().getMaxHP());
+						+ world.getBlueCastle().getMoney() + " "
+						+ world.getBlueCastle().getMaxHP());
 				queueMessage("XR " + world.getRedCastle().getHP() + " "
 						+ world.getRedCastle().getCurrentGoblinTier() + " "
-						+ world.getRedCastle().getMoney() + " " + world.getRedCastle().getMaxHP());
+						+ world.getRedCastle().getMoney() + " "
+						+ world.getRedCastle().getMaxHP());
 				if (equippedArmour != null)
 					queueMessage(String.format("A %.2f",
 							equippedArmour.getArmour()));
@@ -927,16 +941,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
-				else if(command.charAt(0) == 'C')
+				else if (command.charAt(0) == 'C')
 				{
 					String message = command.substring(2);
 					String[] tokens = message.split(" ");
-					if(tokens[0].equals("/t"))
+					if (tokens[0].equals("/t"))
 					{
-						engine.broadCastTeam("CH "+"T "+(getTeam()+getName()).split(" ").length+" "+getTeam()+getName()+" "+tokens.length+" "+message, getTeam());
+						engine.broadCastTeam("CH " + "T "
+								+ (getTeam() + getName()).split(" ").length
+								+ " " + getTeam() + getName() + " "
+								+ tokens.length + " " + message, getTeam());
 					}
 					else
-						engine.broadcast("CH "+"E "+(getTeam()+getName()).split(" ").length+" "+getTeam()+getName()+" "+tokens.length+" "+message);
+						engine.broadcast("CH " + "E "
+								+ (getTeam() + getName()).split(" ").length
+								+ " " + getTeam() + getName() + " "
+								+ tokens.length + " " + message);
 				}
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))
@@ -1004,7 +1024,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						&& command.substring(0, 2).equals("Na"))
 				{
 					setName(command.substring(3));
-					engine.broadcast("JO "+getName().split(" ").length+" "+getTeam()+getName());
+					engine.broadcast("JO " + getName().split(" ").length + " "
+							+ getTeam() + getName());
 				}
 				// Adjust the screen width and height for the player
 				else if (command.charAt(0) == 's')
@@ -1177,8 +1198,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void performAction(int mouseX, int mouseY)
 	{
 		// Calculate the distance from the mouse to the player and the angle
-		int xDist = mouseX - playerScreenWidth / 2 - getWidth()/2;
-		int yDist = mouseY - (playerScreenHeight / 2 - getHeight() / 2 + getHeight() / 3);
+		int xDist = mouseX - playerScreenWidth / 2 - getWidth() / 2;
+		int yDist = mouseY
+				- (playerScreenHeight / 2 - getHeight() / 2 + getHeight() / 3);
 
 		double angle = Math.atan2(yDist, xDist);
 
@@ -1206,6 +1228,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					ServerWorld.MELEE_TYPE))
 			{
 				actionDelay = equippedWeapons[weaponNo].getActionDelay();
+				actionSpeed = equippedWeapons[weaponNo].getActionSpeed();
 				world.add(new ServerWeaponSwing(this, 0, -25,
 						equippedWeapons[weaponNo].getActionImage(),
 						(int) (Math.toDegrees(angle) + 0.5),
@@ -1399,17 +1422,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			// below, and eventually respawn the player
 			if (getHP() <= 0)
 			{
-				if(source.getTeam() == ServerCreature.NEUTRAL)
+				if (source.getTeam() == ServerCreature.NEUTRAL)
 				{
-					String firstName = getTeam()+getName();
-					String secondName = ServerCreature.NEUTRAL+source.getName();
-					engine.broadcast("KF1 "+firstName.split(" ").length+" "+ firstName + " "+secondName.split(" ").length+" "+secondName);
+					String firstName = getTeam() + getName();
+					String secondName = ServerCreature.NEUTRAL
+							+ source.getName();
+					engine.broadcast("KF1 " + firstName.split(" ").length + " "
+							+ firstName + " " + secondName.split(" ").length
+							+ " " + secondName);
 				}
 				else
 				{
-					String firstName = source.getTeam()+source.getName();
-					String secondName = getTeam()+getName();
-					engine.broadcast("KF2 "+firstName.split(" ").length+" "+ firstName + " "+secondName.split(" ").length+" "+secondName);
+					String firstName = source.getTeam() + source.getName();
+					String secondName = getTeam() + getName();
+					engine.broadcast("KF2 " + firstName.split(" ").length + " "
+							+ firstName + " " + secondName.split(" ").length
+							+ " " + secondName);
 				}
 				setAlive(false);
 
@@ -1552,16 +1580,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void queueMessage(String message)
 	{
-		while(true){
+		while (true)
+		{
 			try
 			{
 				this.message.append(" " + message);
 				break;
 			}
 
-			catch(ArrayIndexOutOfBoundsException e)
+			catch (ArrayIndexOutOfBoundsException e)
 			{
-				System.out.println("Stirng builder queue lagged and out of bounds happened");
+				System.out
+						.println("Stirng builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}
@@ -1836,7 +1866,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	public void setMaxMana(int maxMana)
 	{
-		this.maxMana = Math.min(PLAYER_MAX_MANA,maxMana);
+		this.maxMana = Math.min(PLAYER_MAX_MANA, maxMana);
 	}
 
 	public int getHorizontalMovement()

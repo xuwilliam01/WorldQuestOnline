@@ -301,7 +301,7 @@ public class ClientWorld
 		// Add stars when dusk begins
 		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3 && worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
-			int noOfStars = (int)(Math.random()*125)+25;
+			int noOfStars = (int)(Math.random()*1900)+100;
 			for (int no= 0; no < noOfStars; no++)
 			{
 				stars.add(new ClientStar());

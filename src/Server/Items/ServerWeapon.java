@@ -88,10 +88,10 @@ public class ServerWeapon extends ServerItem
 	public final static int STAB_SPEED = 13;
 	
 	// The delay between swings
-	public final static int DAGGER_DELAY = STAB_SPEED+ 1;
-	public final static int AX_DELAY = SWING_SPEED+6;
-	public final static int SWORD_DELAY = SWING_SPEED+3;
-	public final static int HALBERD_DELAY = STAB_SPEED+6;
+	public final static int DAGGER_DELAY = STAB_SPEED;
+	public final static int AX_DELAY = SWING_SPEED+10;
+	public final static int SWORD_DELAY = SWING_SPEED;
+	public final static int HALBERD_DELAY = STAB_SPEED+10;
 	
 	
 
