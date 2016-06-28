@@ -220,7 +220,7 @@ public class ServerWorld
 	/**
 	 * Number of frames in a day counter
 	 */
-	public final static int COUNTER_TIME = 5;
+	public final static int COUNTER_TIME = 15;
 
 	/**
 	 * List of all the non-tile objects in the world (for movement and collision
@@ -400,8 +400,7 @@ public class ServerWorld
 		}
 		worldInput.close();
 
-		worldTime = DAY_COUNTERS / 12 * 11
-				+ (int) (Math.random() * (DAY_COUNTERS / 6));
+		worldTime= DAY_COUNTERS / 12 * 11 + (int) (Math.random() * (DAY_COUNTERS / 6));
 		if (worldTime >= DAY_COUNTERS)
 		{
 			worldTime -= DAY_COUNTERS;

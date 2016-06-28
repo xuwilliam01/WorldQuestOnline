@@ -24,7 +24,7 @@ public class ClientStar
 		lifeTime = (int) (Math.random() * ServerWorld.COUNTER_TIME * 60 * 6)
 				+ ServerWorld.COUNTER_TIME * 60 * 4;
 		
-		if (maxAlpha > 0.75 && Math.random() > 0.5)
+		if (maxAlpha > 0.75 && Math.random() > 0.75)
 		{
 			size = 2;
 		}
