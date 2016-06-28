@@ -51,7 +51,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public final static int JUMP_SPEED = 20;
 
 	public final static int MAX_HSPEED = 8;
-	public final static int MAX_VSPEED = 26;
+	public final static int MAX_VSPEED = 24;
 	public final static int MAX_DMGADD = 30;
 	public final static int PLAYER_MAX_HP = 250;
 	public final static int PLAYER_MAX_MANA = 250;
@@ -351,8 +351,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10));
-		for(int i = 0;i < 10;i++)
-			addItem(new ServerPotion(0,0,ServerWorld.DMG_POTION_TYPE));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -746,8 +744,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("K " + maxMana);
 				queueMessage("L " + getHP());
 				queueMessage("M " + getMaxHP());
-				queueMessage("S " + horizontalMovement);
-				queueMessage("J " + verticalMovement);
+				if(isAlive())
+				{
+					queueMessage("S " + horizontalMovement);
+					queueMessage("J " + verticalMovement);
+				}
 				queueMessage("XB " + world.getBlueCastle().getHP() + " "
 						+ world.getBlueCastle().getCurrentGoblinTier() + " "
 						+ world.getBlueCastle().getMoney() + " "
