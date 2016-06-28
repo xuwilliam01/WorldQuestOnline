@@ -77,12 +77,22 @@ public class ServerWeapon extends ServerItem
 	 * Number of counters for the swing
 	 */
 	private int swingSpeed;
+	
+	/**
+	 * Number of counters between swings
+	 */
+	private int swingDelay;
 
-	// The speeds at which certain melee weapons swing (in world ticks)
-	public final static int DAGGER_SPEED = 13;
-	public final static int AX_SPEED = 26;
-	public final static int SWORD_SPEED = 13;
-	public final static int HALBERD_SPEED = 26;
+	// The speeds at which melee weapons swing (in world ticks)
+	public final static int SWING_SPEED = 13;
+	
+	// The delay between swings
+	public final static int DAGGER_SPEED = 1;
+	public final static int AX_SPEED = 6;
+	public final static int SWORD_SPEED = 3;
+	public final static int HALBERD_SPEED = 6;
+	
+	
 
 	/**
 	 * Constructor builds a weapon
