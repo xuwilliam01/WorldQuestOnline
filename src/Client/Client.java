@@ -72,6 +72,11 @@ MouseMotionListener
 	private ClientWorld world;
 
 	/**
+	 * If the game has started
+	 */
+	private boolean started = false;
+
+	/**
 	 * The framerate of the client
 	 */
 	public final static int FRAME_DELAY = 0;
@@ -164,6 +169,9 @@ MouseMotionListener
 
 	private long startTimer = 0;
 
+	//Lobby variables
+	private JButton start = new JButton("Start");
+
 	/**
 	 * Constructor for the client
 	 */
@@ -193,9 +201,15 @@ MouseMotionListener
 		enter.setVisible(true);
 		enter.addActionListener(this);
 
+		start.setLocation(50,500);
+		start.setSize(100,30);
+		start.setVisible(true);
+		start.addActionListener(this);
+
 		setLayout(null);
 		add(chat);
 		add(enter);
+		add(start);
 	}
 
 	/**
@@ -245,30 +259,6 @@ MouseMotionListener
 		output.println("Na " + playerName);
 		output.flush();
 
-		// Import the map from the server
-		importMap();
-
-		// Get the user's player
-		try
-		{
-			String message = input.readLine();
-			String[] tokens = message.split(" ");
-
-			int id = Integer.parseInt(tokens[0]);
-			int x = Integer.parseInt(tokens[1]);
-			int y = Integer.parseInt(tokens[2]);
-			String image = tokens[3];
-			int team = Integer.parseInt(tokens[4]);
-
-			player = new ClientObject(id, x, y, image, team, 
-					ServerWorld.PLAYER_TYPE);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting player from server");
-			e.printStackTrace();
-		}
-
 		// Start the actual game
 		gameThread = new Thread(new RunGame());
 		gameThread.start();
@@ -277,12 +267,7 @@ MouseMotionListener
 		gameThread = new Thread(new ReadServer());
 		gameThread.start();
 
-		System.out.println("Game started");
 
-		// Add listeners AT THE END
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseMotionListener(this);
 
 		direction = 'R';
 
@@ -570,7 +555,7 @@ MouseMotionListener
 								{
 									int len = Integer.parseInt(tokens[++token]);
 									String name = "";
-									
+
 									for(int i = 0; i < len;i++)
 										name += tokens[++token]+" ";
 									chatQueue.add("JO "+name.trim());
@@ -579,7 +564,7 @@ MouseMotionListener
 								{
 									int len = Integer.parseInt(tokens[++token]);
 									String name = "";
-									
+
 									for(int i = 0; i < len;i++)
 										name += tokens[++token]+" ";
 									chatQueue.add("RO "+name.trim());
@@ -610,6 +595,31 @@ MouseMotionListener
 								{
 									world.setWorldTime(Integer
 											.parseInt(tokens[++token]));
+								}
+								else if(tokens[token].equals("Start"))
+								{
+									start.setVisible(false);
+									remove(start);
+									revalidate();
+								}
+								else if(tokens[token].equals("Map"))
+								{
+									try {
+										Thread.sleep(2000);
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									importMap(lines);
+
+									System.out.println("Game started");
+
+									// Add listeners AT THE END
+									Client.this.addKeyListener(Client.this);
+									Client.this.addMouseListener(Client.this);
+									Client.this.addMouseMotionListener(Client.this);
+									started = true;
+									repaint();
 								}
 							}
 							catch (NumberFormatException e)
@@ -664,6 +674,7 @@ MouseMotionListener
 					{
 						ping = System.currentTimeMillis();
 						printToServer("P");
+						//System.out.println("printed P");
 						startTimer = -1;
 					}
 
@@ -711,39 +722,36 @@ MouseMotionListener
 
 	/**
 	 * Import the map
+	 * @throws IOException 
 	 */
-	private void importMap()
+	private void importMap(ArrayList<String> lines) throws IOException
 	{
 		System.out.println("Importing the map from the server...");
 
 		// Get the 2D grid from the server
 		String gridSize;
 
-		try
+
+		gridSize = lines.remove(0);
+		String dimensions[] = gridSize.split(" ");
+		int height = Integer.parseInt(dimensions[0]);
+		int width = Integer.parseInt(dimensions[1]);
+		int tileSize = Integer.parseInt(dimensions[2]);
+
+		char grid[][] = new char[height][width];
+
+		for (int row = 0; row < height; row++)
 		{
-			gridSize = input.readLine();
-			String dimensions[] = gridSize.split(" ");
-			int height = Integer.parseInt(dimensions[0]);
-			int width = Integer.parseInt(dimensions[1]);
-			int tileSize = Integer.parseInt(dimensions[2]);
-
-			char grid[][] = new char[height][width];
-
-			for (int row = 0; row < height; row++)
+			String gridRow = lines.remove(0);
+			for (int column = 0; column < width; column++)
 			{
-				String gridRow = input.readLine();
-				for (int column = 0; column < width; column++)
-				{
-					grid[row][column] = gridRow.charAt(column);
-				}
+				grid[row][column] = gridRow.charAt(column);
 			}
+		}
+		String[] playerInfo = lines.remove(0).split(" ");
+		player = new ClientObject(Integer.parseInt(playerInfo[0]), Integer.parseInt(playerInfo[1]),Integer.parseInt(playerInfo[2]), playerInfo[3], Integer.parseInt(playerInfo[4]),ServerWorld.PLAYER_TYPE,playerName);
+		world = new ClientWorld(grid, tileSize, this);
 
-			world = new ClientWorld(grid, tileSize, this);
-		}
-		catch (IOException e)
-		{
-			serverClosed();
-		}
 
 		System.out.println("Map import has finished");
 	}
@@ -785,83 +793,90 @@ MouseMotionListener
 	{
 		super.paintComponent(graphics);
 
-		// Updat the map
-		try
+		if(started)
 		{
-			world.update(graphics, player);
+			// Update the map
+			try
+			{
+				world.update(graphics, player);
+			}
+			catch (NullPointerException e)
+			{
+
+			}
+
+			// Draw the ping and the FPS
+			graphics.setFont(ClientWorld.NORMAL_FONT);
+			graphics.setColor(Color.white);
+			graphics.drawString(pingString, SCREEN_WIDTH - 60, 20);
+			graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH - 60, 40);
+
+			// Set the time of day to be displayed
+			// DAWN: 5AM - 9AM
+			// DAY: 9AM - 5PM
+			// DUSK: 5PM - 9PM
+			// NIGHT: 9PM - 5AM
+			String timeOfDay = "DAY";
+
+			if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
+			{
+				timeOfDay = "DAWN";
+			}
+			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
+			{
+				timeOfDay = "NIGHT";
+			}
+			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
+			{
+				timeOfDay = "DUSK";
+			}
+
+			int hour = (world.getWorldTime() / 60) + 9;
+			if (hour >= 24)
+			{
+				hour -= 24;
+			}
+			int minute = world.getWorldTime() % 60;
+
+			String amPm = "AM";
+
+			if (hour >= 12)
+			{
+				hour -= 12;
+				amPm = "PM";
+			}
+
+			if (hour == 0)
+			{
+				hour = 12;
+			}
+
+			String hourString = "";
+			String minuteString = "";
+
+			if (hour < 10)
+			{
+				hourString = "0";
+			}
+			if (minute < 10)
+			{
+				minuteString = "0";
+			}
+			hourString += hour;
+			minuteString += minute;
+
+			graphics.drawString(hourString + ":" + minuteString + " " + amPm,
+					SCREEN_WIDTH - 60, 60);
+			graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
 		}
-		catch (NullPointerException e)
+		//We are in the lobby so draw the lobby components
+		else
 		{
 
 		}
-
-		// Draw the ping and the FPS
-		graphics.setFont(ClientWorld.NORMAL_FONT);
-		graphics.setColor(Color.white);
-		graphics.drawString(pingString, SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH - 60, 40);
-
-		// Set the time of day to be displayed
-		// DAWN: 5AM - 9AM
-		// DAY: 9AM - 5PM
-		// DUSK: 5PM - 9PM
-		// NIGHT: 9PM - 5AM
-		String timeOfDay = "DAY";
-
-		if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
-		{
-			timeOfDay = "DAWN";
-		}
-		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
-		{
-			timeOfDay = "NIGHT";
-		}
-		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
-		{
-			timeOfDay = "DUSK";
-		}
-
-		int hour = (world.getWorldTime() / 60) + 9;
-		if (hour >= 24)
-		{
-			hour -= 24;
-		}
-		int minute = world.getWorldTime() % 60;
-
-		String amPm = "AM";
-
-		if (hour >= 12)
-		{
-			hour -= 12;
-			amPm = "PM";
-		}
-
-		if (hour == 0)
-		{
-			hour = 12;
-		}
-
-		String hourString = "";
-		String minuteString = "";
-
-		if (hour < 10)
-		{
-			hourString = "0";
-		}
-		if (minute < 10)
-		{
-			minuteString = "0";
-		}
-		hourString += hour;
-		minuteString += minute;
-
-		graphics.drawString(hourString + ":" + minuteString + " " + amPm,
-				SCREEN_WIDTH - 60, 60);
-		graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
-
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		
+
 		while (true)
 		{
 			try
@@ -934,37 +949,37 @@ MouseMotionListener
 
 						graphics.setColor(Color.ORANGE);
 
-						
+
 						String killWord = "slain";
 						String secondKillWord = "killed";
-						
+
 						//int random = (int) (Math.random() * 5);
 
-//						if (random == 0)
-//						{
-//							killWord = "slain";
-//							secondKillWord = "slayed";
-//						}
-//						else if (random == 1)
-//						{
-//							killWord = "defeated";
-//							secondKillWord = "defeated";
-//						}
-//						else if (random == 2)
-//						{
-//							killWord = "murdered";
-//							secondKillWord = "murdered";
-//						}
-//						else if (random == 3)
-//						{
-//							killWord = "slaughtered";
-//							secondKillWord = "slaughtered";
-//						}
-//						else if (random == 4)
-//						{
-//							killWord = "ended";
-//							secondKillWord = "ended";
-//						}
+						//						if (random == 0)
+						//						{
+						//							killWord = "slain";
+						//							secondKillWord = "slayed";
+						//						}
+						//						else if (random == 1)
+						//						{
+						//							killWord = "defeated";
+						//							secondKillWord = "defeated";
+						//						}
+						//						else if (random == 2)
+						//						{
+						//							killWord = "murdered";
+						//							secondKillWord = "murdered";
+						//						}
+						//						else if (random == 3)
+						//						{
+						//							killWord = "slaughtered";
+						//							secondKillWord = "slaughtered";
+						//						}
+						//						else if (random == 4)
+						//						{
+						//							killWord = "ended";
+						//							secondKillWord = "ended";
+						//						}
 
 						if (str.substring(0, 3).equals("KF1"))
 							graphics.drawString(
@@ -1024,8 +1039,9 @@ MouseMotionListener
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
 
-		// Repaint the inventory
-		inventory.repaint();
+		//Repaint the inventory
+		if(started)
+			inventory.repaint();
 		if (!chat.hasFocus())
 			requestFocusInWindow();
 	}
@@ -1432,15 +1448,22 @@ MouseMotionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		// Send the message
-		String message = chat.getText();
-		if (message.length() > 0)
+		if(e.getSource() == enter)
 		{
-			printToServer("C " + message);
+			// Send the message
+			String message = chat.getText();
+			if (message.length() > 0)
+			{
+				printToServer("C " + message);
+			}
+			chat.setForeground(Color.GRAY);
+			chat.setText("");
+			requestFocusInWindow();
 		}
-		chat.setForeground(Color.GRAY);
-		chat.setText("");
-		requestFocusInWindow();
+		else if(e.getSource() == start)
+		{
+			printToServer("ST");
+		}
 
 	}
 

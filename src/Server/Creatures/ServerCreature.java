@@ -146,6 +146,15 @@ public abstract class ServerCreature extends ServerObject
 		this.attackable = attackable;
 	}
 
+	/**
+	 * Does not officially set a team, but has a reference number
+	 * @param team the team
+	 */
+	public void setTeamNum(int team)
+	{
+		this.team = team;
+	}
+	
 	public void setTeam(int team)
 	{
 		this.team = team;

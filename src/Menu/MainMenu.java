@@ -721,22 +721,14 @@ public class MainMenu {
 			serverThread.start();
 
 
-			while(true)
-			{
-				try{
-					ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
-					ServerFrame myFrame = new ServerFrame();
-					gui.setLocation(0,0);
-					myFrame.add(gui);
-					gui.revalidate();
-					server.getEngine().setGui(gui);
-					break;
-				}
-				catch(NullPointerException E)
-				{
 
-				}
-			}
+			ServerGUI gui = new ServerGUI(null, server.getEngine());
+			ServerFrame myFrame = new ServerFrame();
+			gui.setLocation(0,0);
+			myFrame.add(gui);
+			gui.revalidate();
+			server.getEngine().setGui(gui);
+
 
 		}
 

@@ -200,8 +200,6 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		this.world = world;
 		this.engine = engine;
 
-		grid = world.getGrid();
-
 		// Add key, mouse wheel listener and repaint timer
 		addKeyListener(this);
 		addMouseWheelListener(this);
@@ -219,7 +217,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		graphics.drawImage(background,0,0,null);
 
 		//Draw the map
-		if(visible)
+		if(visible && world!=null)
 		{		
 			// Draw each tile on the screen
 			int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
@@ -764,6 +762,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		this.objectFactor = objectFactor;
 	}
 
+	public void setWorld(ServerWorld world,ServerEngine engine)
+	{
+		this.world = world;
+		this.engine = engine;
+		grid = world.getGrid();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
