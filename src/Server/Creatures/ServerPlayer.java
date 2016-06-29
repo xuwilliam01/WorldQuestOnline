@@ -835,17 +835,24 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						&& isOnSurface()
 						&& !performingAction && isAlive())
 				{
-					String[] tokens = command.split(" ");
-					performingAction = true;
-					newMouseX = Integer.parseInt(tokens[1]);
-					newMouseY = Integer.parseInt(tokens[2]);
-					if (command.charAt(0) == 'a')
-					{
-						rightClick = true;
+					//If the client tries to send an invalid message
+					try{
+						String[] tokens = command.split(" ");
+						performingAction = true;
+						newMouseX = Integer.parseInt(tokens[1]);
+						newMouseY = Integer.parseInt(tokens[2]);
+						if (command.charAt(0) == 'a')
+						{
+							rightClick = true;
+						}
+						else
+						{
+							rightClick = false;
+						}
 					}
-					else
+					catch(Exception e)
 					{
-						rightClick = false;
+
 					}
 				}
 				else if (command.equals("!a") && isAlive())
@@ -903,13 +910,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							try
 							{
-								world.getBlueTeam().add(this);
+								if(!world.getBlueTeam().contains(this))
+									world.getBlueTeam().add(this);
 								world.getRedTeam().remove(this);
 								break;
 							}
 							catch (ConcurrentModificationException E)
 							{
-
 							}
 						}
 					}
@@ -921,7 +928,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							try
 							{
 								world.getBlueTeam().remove(this);
-								world.getRedTeam().add(this);
+								if(!world.getRedTeam().contains(this))
+									world.getRedTeam().add(this);
 								break;
 							}
 							catch (ConcurrentModificationException E)
@@ -944,7 +952,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
-				else if (command.charAt(0) == 'C')
+				else if (command.length() >= 3 && command.charAt(0) == 'C')
 				{
 					String message = command.substring(2);
 					String[] tokens = message.split(" ");
@@ -964,43 +972,71 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))
 				{
-					// If dropping from inventory
-					if (command.charAt(2) == 'I')
-						super.drop(command.substring(4));
-					// If dropping from equipped
-					else if (command.charAt(2) == 'W')
-						drop(Integer.parseInt(command.substring(4)));
-					// If using a potion
-					else if (command.charAt(2) == 'U')
-						super.use(command.substring(4));
+					try{
+						// If dropping from inventory
+						if (command.charAt(2) == 'I')
+							super.drop(command.substring(4));
+						// If dropping from equipped
+						else if (command.charAt(2) == 'W')
+							drop(Integer.parseInt(command.substring(4)));
+						// If using a potion
+						else if (command.charAt(2) == 'U')
+							super.use(command.substring(4));
+					}
+					//If the player sends a bad message
+					catch(Exception E)
+					{
+
+					}
 				}
 				else if (command.charAt(0) == 'M')
 				{
-					// Move to inventory
-					if (command.charAt(1) == 'I')
-					{
-						unequip(Integer.parseInt(command.substring(3)));
+					try{
+						// Move to inventory
+						if (command.charAt(1) == 'I')
+						{
+							unequip(Integer.parseInt(command.substring(3)));
+						}
+						// Move to equipped weapons
+						else if (command.charAt(1) == 'W')
+						{
+							equipWeapon(command.substring(3));
+						}
+						else if (command.charAt(1) == 'A')
+						{
+							equipArmour(command.substring(3));
+						}
 					}
-					// Move to equipped weapons
-					else if (command.charAt(1) == 'W')
+					catch(Exception E)
 					{
-						equipWeapon(command.substring(3));
-					}
-					else if (command.charAt(1) == 'A')
-					{
-						equipArmour(command.substring(3));
+
 					}
 				}
 				// This is temporary for selecting a gun or a sword
 				else if (command.charAt(0) == 'W')
 				{
-					weaponSelected = command.charAt(1);
+					try{
+						weaponSelected = command.charAt(1);
+					}
+					catch(Exception E)
+					{
+
+					}
 				}
 				else if (command.charAt(0) == 'B' && vendor != null)
 				{
 					ServerItem vendorItem = null;
+					String itemName = "";
+					try
+					{
+						itemName = command.substring(2);
+					}
+					catch(Exception E)
+					{
+						continue;
+					}
 					for (ServerItem item : vendor.getInventory())
-						if (item.getType().equals(command.substring(2)))
+						if (item.getType().equals(itemName))
 							vendorItem = item;
 
 					if (vendorItem != null
@@ -1016,7 +1052,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 				else if (command.charAt(0) == 'S' && vendor != null)
 				{
-					String type = command.substring(2);
+					String type ="";
+					try
+					{
+						type = command.substring(2);
+					}
+					catch(Exception E)
+					{
+						continue;
+					}
 					if (!type.equals(ServerWorld.MONEY_TYPE))
 					{
 						sell(type);
@@ -1026,16 +1070,29 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				else if (command.length() > 2
 						&& command.substring(0, 2).equals("Na"))
 				{
-					setName(command.substring(3));
+					try{
+						setName(command.substring(3));
+					}
+					catch(Exception E)
+					{
+						continue;
+					}
 					engine.broadcast("JO " + getName().split(" ").length + " "
 							+ getTeam() + getName());
 				}
 				// Adjust the screen width and height for the player
 				else if (command.charAt(0) == 's')
 				{
-					String[] tokens = command.split(" ");
-					playerScreenWidth = Integer.parseInt(tokens[1]);
-					playerScreenHeight = Integer.parseInt(tokens[2]);
+					try
+					{
+						String[] tokens = command.split(" ");
+						playerScreenWidth = Integer.parseInt(tokens[1]);
+						playerScreenHeight = Integer.parseInt(tokens[2]);
+					}
+					catch(Exception E)
+					{
+						continue;
+					}
 				}
 			}
 			catch (IOException e)
