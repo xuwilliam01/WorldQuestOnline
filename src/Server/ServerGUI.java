@@ -596,6 +596,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		{
 			down = true;
 		}
+		else if(key.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			chat.requestFocusInWindow();
+		}
 	}
 
 	/**
