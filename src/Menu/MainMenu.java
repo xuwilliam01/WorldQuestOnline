@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -27,6 +28,7 @@ import Client.Client;
 import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
+import Client.ClientLobby;
 import Imports.Images;
 import START.StartGame;
 import Server.Server;
@@ -58,6 +60,8 @@ public class MainMenu {
 	private static int cloudDirection = 0;
 
 	private static Client client;
+	private static ClientLobby lobby;
+	
 
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -379,10 +383,14 @@ public class MainMenu {
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class GamePanel extends JPanel
+	public static class GamePanel extends JPanel
 	{
-		ClientInventory inventory;
-
+		static ClientInventory inventory;
+		static Socket mySocket = null;
+		static String playerName;
+		static String serverIP;
+		static int port;
+		
 		/**
 		 * Constructor
 		 * @param serverIP the server IP
@@ -391,9 +399,11 @@ public class MainMenu {
 		 */
 		public GamePanel(String serverIP, int port, String playerName)
 		{
+			this.serverIP = serverIP;
+			this.port = port;
 			boolean connected = false;
 			boolean exit = false;
-			Socket mySocket = null;
+			this.playerName = playerName;
 
 			while (!connected)
 			{
@@ -449,37 +459,57 @@ public class MainMenu {
 				mainMenu.revalidate();
 			}
 			else
-			{
-				JLayeredPane pane = new JLayeredPane();
-				pane.setLocation(0,0);
-				pane.setLayout(null);
-				pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
-				pane.setDoubleBuffered(true);
-				mainFrame.add(pane);
-				pane.setVisible(true);
-
-				JButton menu = new JButton("Main Menu");
-				menu.addActionListener(new GameMenuButton());
-				inventory = new ClientInventory(menu);
-				client = new Client(mySocket,inventory,pane,playerName);
-				inventory.setClient(client);
-
-				client.setLocation(0,0);
-				inventory.setLocation(Client.SCREEN_WIDTH,0);
-
-				pane.add(client);
-				mainFrame.add(inventory);
-				client.initialize();
-				client.revalidate();
-				inventory.revalidate();
-				pane.revalidate();
-				pane.setVisible(true);
-				mainFrame.setVisible(true);
-				inventory.repaint();
+			{		
+				lobby = new ClientLobby(mySocket, playerName);
+				lobby.setLocation(0,0);
+				lobby.setLayout(null);
+				lobby.setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
+				lobby.setDoubleBuffered(true);
+				mainFrame.add(lobby);
+				lobby.repaint();
+				
 			}
+		}
+		
+		public static void startGame() throws UnknownHostException, IOException
+		{
+			lobby.setVisible(false);
+			mainFrame.remove(lobby);
+			mainFrame.invalidate();
+			mainFrame.validate();
+			lobby= null;
+			
+			JLayeredPane pane = new JLayeredPane();
+			pane.setLocation(0,0);
+			pane.setLayout(null);
+			pane.setSize(Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+			pane.setDoubleBuffered(true);
+			mainFrame.add(pane);
+			pane.setVisible(true);
+
+			JButton menu = new JButton("Main Menu");
+			menu.addActionListener(new GameMenuButton());
+			inventory = new ClientInventory(menu);
+			mySocket = new Socket(serverIP, port);
+			client = new Client(mySocket,inventory,pane,playerName);
+			inventory.setClient(client);
+
+			client.setLocation(0,0);
+			inventory.setLocation(Client.SCREEN_WIDTH,0);
+
+			pane.add(client);
+			mainFrame.add(inventory);
+			client.initialize();
+			client.revalidate();
+			inventory.revalidate();
+			pane.revalidate();
+			pane.setVisible(true);
+			mainFrame.setVisible(true);
+			inventory.repaint();
 		}
 	}
 
+	
 	/**
 	 * Reacts when the menu button in the creator is pressed
 	 * @author Alex Raita & William Xu
@@ -655,6 +685,7 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
+			
 			gamePanel = new GamePanel(serverIP, port,playerName);
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
@@ -724,15 +755,15 @@ public class MainMenu {
 			while(true)
 			{
 				try{
-					ServerGUI gui = new ServerGUI(server.getEngine().getWorld(), server.getEngine());
+					ServerGUI gui = new ServerGUI(server);
 					ServerFrame myFrame = new ServerFrame();
 					gui.setLocation(0,0);
 					myFrame.add(gui);
 					gui.revalidate();
-					server.getEngine().setGui(gui);
+					server.setGUI(gui);
 					break;
 				}
-				catch(NullPointerException E)
+				catch(Exception E)
 				{
 
 				}

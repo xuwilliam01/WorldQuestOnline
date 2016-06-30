@@ -226,6 +226,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private long joinTime;
 
+	private boolean justJoined = true;
+
 	/**
 	 * Constructor for a player in the server
 	 * @param socket the connection between the client and the server
@@ -241,12 +243,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			int width,
 			int height, double relativeDrawX, double relativeDrawY,
 			double gravity, String skinColour, Socket socket,
-			ServerEngine engine, ServerWorld world)
+			ServerEngine engine, ServerWorld world, BufferedReader input)
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
 				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
+
+		//Set default name of the player
+		setName("Player");
 
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
@@ -309,18 +314,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			e.printStackTrace();
 		}
 
-		// Set up the input
-		try
-		{
-			input = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's input stream");
-			e.printStackTrace();
-		}
-
+		this.input = input;
 		// Send the 2D grid of the world to the client
 		sendMap();
 
@@ -1077,8 +1071,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						continue;
 					}
-					engine.broadcast("JO " + getName().split(" ").length + " "
-							+ getTeam() + getName());
+					//Maybe broadcast name change later
 				}
 				// Adjust the screen width and height for the player
 				else if (command.charAt(0) == 's')
@@ -1986,6 +1979,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setPlayerScreenHeight(int playerScreenHeight)
 	{
 		this.playerScreenHeight = playerScreenHeight;
+	}
+	
+	public void alreadyJoined()
+	{
+		justJoined = false;
 	}
 
 }

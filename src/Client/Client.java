@@ -1,6 +1,6 @@
 package Client;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -236,14 +236,14 @@ MouseMotionListener
 		try
 		{
 			output = new PrintWriter(mySocket.getOutputStream());
+			output.println(playerName);
+			output.flush();
 		}
 		catch (IOException e)
 		{
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
-		output.println("Na " + playerName);
-		output.flush();
 
 		// Import the map from the server
 		importMap();
@@ -570,7 +570,7 @@ MouseMotionListener
 								{
 									int len = Integer.parseInt(tokens[++token]);
 									String name = "";
-									
+
 									for(int i = 0; i < len;i++)
 										name += tokens[++token]+" ";
 									chatQueue.add("JO "+name.trim());
@@ -579,7 +579,7 @@ MouseMotionListener
 								{
 									int len = Integer.parseInt(tokens[++token]);
 									String name = "";
-									
+
 									for(int i = 0; i < len;i++)
 										name += tokens[++token]+" ";
 									chatQueue.add("RO "+name.trim());
@@ -717,7 +717,7 @@ MouseMotionListener
 		System.out.println("Importing the map from the server...");
 
 		// Get the 2D grid from the server
-		String gridSize;
+		String gridSize="";
 
 		try
 		{
@@ -806,62 +806,67 @@ MouseMotionListener
 		// DAY: 9AM - 5PM
 		// DUSK: 5PM - 9PM
 		// NIGHT: 9PM - 5AM
-		String timeOfDay = "DAY";
 
-		if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
+		if(world != null)
 		{
-			timeOfDay = "DAWN";
-		}
-		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
-		{
-			timeOfDay = "NIGHT";
-		}
-		else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
-		{
-			timeOfDay = "DUSK";
-		}
 
-		int hour = (world.getWorldTime() / 60) + 9;
-		if (hour >= 24)
-		{
-			hour -= 24;
+			String timeOfDay = "DAY";
+
+			if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
+			{
+				timeOfDay = "DAWN";
+			}
+			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
+			{
+				timeOfDay = "NIGHT";
+			}
+			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
+			{
+				timeOfDay = "DUSK";
+			}
+
+			int hour = (world.getWorldTime() / 60) + 9;
+			if (hour >= 24)
+			{
+				hour -= 24;
+			}
+			int minute = world.getWorldTime() % 60;
+
+			String amPm = "AM";
+
+			if (hour >= 12)
+			{
+				hour -= 12;
+				amPm = "PM";
+			}
+
+			if (hour == 0)
+			{
+				hour = 12;
+			}
+
+			String hourString = "";
+			String minuteString = "";
+
+			if (hour < 10)
+			{
+				hourString = "0";
+			}
+			if (minute < 10)
+			{
+				minuteString = "0";
+			}
+			hourString += hour;
+			minuteString += minute;
+
+			graphics.drawString(hourString + ":" + minuteString + " " + amPm,
+					SCREEN_WIDTH - 60, 60);
+			graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
 		}
-		int minute = world.getWorldTime() % 60;
-
-		String amPm = "AM";
-
-		if (hour >= 12)
-		{
-			hour -= 12;
-			amPm = "PM";
-		}
-
-		if (hour == 0)
-		{
-			hour = 12;
-		}
-
-		String hourString = "";
-		String minuteString = "";
-
-		if (hour < 10)
-		{
-			hourString = "0";
-		}
-		if (minute < 10)
-		{
-			minuteString = "0";
-		}
-		hourString += hour;
-		minuteString += minute;
-
-		graphics.drawString(hourString + ":" + minuteString + " " + amPm,
-				SCREEN_WIDTH - 60, 60);
-		graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		
+
 		while (true)
 		{
 			try
@@ -934,37 +939,37 @@ MouseMotionListener
 
 						graphics.setColor(Color.ORANGE);
 
-						
+
 						String killWord = "slain";
 						String secondKillWord = "killed";
-						
+
 						//int random = (int) (Math.random() * 5);
 
-//						if (random == 0)
-//						{
-//							killWord = "slain";
-//							secondKillWord = "slayed";
-//						}
-//						else if (random == 1)
-//						{
-//							killWord = "defeated";
-//							secondKillWord = "defeated";
-//						}
-//						else if (random == 2)
-//						{
-//							killWord = "murdered";
-//							secondKillWord = "murdered";
-//						}
-//						else if (random == 3)
-//						{
-//							killWord = "slaughtered";
-//							secondKillWord = "slaughtered";
-//						}
-//						else if (random == 4)
-//						{
-//							killWord = "ended";
-//							secondKillWord = "ended";
-//						}
+						//						if (random == 0)
+						//						{
+						//							killWord = "slain";
+						//							secondKillWord = "slayed";
+						//						}
+						//						else if (random == 1)
+						//						{
+						//							killWord = "defeated";
+						//							secondKillWord = "defeated";
+						//						}
+						//						else if (random == 2)
+						//						{
+						//							killWord = "murdered";
+						//							secondKillWord = "murdered";
+						//						}
+						//						else if (random == 3)
+						//						{
+						//							killWord = "slaughtered";
+						//							secondKillWord = "slaughtered";
+						//						}
+						//						else if (random == 4)
+						//						{
+						//							killWord = "ended";
+						//							secondKillWord = "ended";
+						//						}
 
 						if (str.substring(0, 3).equals("KF1"))
 							graphics.drawString(

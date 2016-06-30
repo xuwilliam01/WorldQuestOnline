@@ -157,7 +157,7 @@ public class ServerEngine implements Runnable, ActionListener
 				player.updateClient();
 				if(endGame)
 					player.setEndGame(true,losingTeam);
-			}
+			} 
 		}
 		catch(ConcurrentModificationException e)
 		{
@@ -194,6 +194,7 @@ public class ServerEngine implements Runnable, ActionListener
 			if(player.getTeam() == team)
 				player.sendMessage(message);
 		}
+		gui.addToChat(message);
 	}
 
 	

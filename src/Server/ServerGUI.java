@@ -51,9 +51,14 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	private ServerEngine engine;
 
 	/**
+	 * Reference to the server
+	 */
+	private Server server;
+
+	/**
 	 * If the map is being shown or not
 	 */
-	boolean visible = true;
+	boolean visible = false;
 
 	//Variables for chat
 	private ArrayList<String> chatQueue = new ArrayList<String>();
@@ -61,7 +66,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	private JButton enter;
 
 	//Button to show/hide map
-	private JButton showHide = new JButton("Hide Map");
+	private JButton showHide = new JButton("Show Map");
 
 	/**
 	 * Grid of all the tiles
@@ -154,8 +159,12 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	private boolean left = false;
 	private boolean right = false;
 
-	public ServerGUI(ServerWorld world, ServerEngine engine)
+	private boolean started = false;
+
+	public ServerGUI(Server server)
 	{
+		this.server = server;
+
 		//Set up chat components
 		chat = new JTextField();
 		chat.setLocation(0, 0);
@@ -175,15 +184,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		setLayout(null);
 		add(chat);
 		add(enter);
-
-
-		//Show/hide map button
-		showHide.setLocation(10,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-75);
-		showHide.setSize(200,30);
-		showHide.setVisible(true);
-		showHide.addActionListener(this);
-
-		add(showHide);
+		addKeyListener(this);
 
 		// Set the scale of objects
 		objectFactor = ServerFrame.FRAME_FACTOR * 8;
@@ -195,7 +196,22 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 		setFocusable(true);
 		requestFocusInWindow();
+	}
 
+	/**
+	 * Start the game
+	 */
+	public void startGame(ServerWorld world, ServerEngine engine)
+	{
+		started = true;
+
+		//Show/hide map button
+		showHide.setLocation(10,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-75);
+		showHide.setSize(200,30);
+		showHide.setVisible(true);
+		showHide.addActionListener(this);
+
+		add(showHide);
 		// Set world, engine and grid
 		this.world = world;
 		this.engine = engine;
@@ -203,12 +219,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		grid = world.getGrid();
 
 		// Add key, mouse wheel listener and repaint timer
-		addKeyListener(this);
 		addMouseWheelListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
-
 	/**
 	 * Draw the world map
 	 */
@@ -219,7 +233,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		graphics.drawImage(background,0,0,null);
 
 		//Draw the map
-		if(visible)
+		if(visible & started)
 		{		
 			// Draw each tile on the screen
 			int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
@@ -453,7 +467,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 			catch (ConcurrentModificationException E)
 			{
-
+				System.out.println("concurrent modification");
 			}
 		}
 
@@ -471,21 +485,38 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		int blueStart = 90;
 		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
 		try{
-			for(ServerPlayer player : ServerEngine.getListOfPlayers())
-			{
-				if(player.getTeam() == ServerCreature.RED_TEAM)
+			if(started)
+				for(ServerPlayer player : ServerEngine.getListOfPlayers())
 				{
-					graphics.setColor(Color.RED);
-					graphics.drawString(player.getName(), redX+5, redStart);
-					redStart+=20;
+					if(player.getTeam() == ServerCreature.RED_TEAM)
+					{
+						graphics.setColor(Color.RED);
+						graphics.drawString(player.getName(), redX+5, redStart);
+						redStart+=20;
+					}
+					else
+					{
+						graphics.setColor(Color.BLUE);
+						graphics.drawString(player.getName(), blueX+5, blueStart);
+						blueStart+=20;
+					}
 				}
-				else
+			else
+				for(ServerLobbyPlayer player : server.getPlayers())
 				{
-					graphics.setColor(Color.BLUE);
-					graphics.drawString(player.getName(), blueX+5, blueStart);
-					blueStart+=20;
+					if(player.getTeam() == ServerCreature.RED_TEAM)
+					{
+						graphics.setColor(Color.RED);
+						graphics.drawString(player.getName(), redX+5, redStart);
+						redStart+=20;
+					}
+					else
+					{
+						graphics.setColor(Color.BLUE);
+						graphics.drawString(player.getName(), blueX+5, blueStart);
+						blueStart+=20;
+					}
 				}
-			}
 		}
 		catch(ConcurrentModificationException E)
 		{
@@ -511,7 +542,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 		if (tokens[token].equals("CH"))
 		{
-			char who = tokens[++token].charAt(0);
+			char who = tokens[++token].charAt(0);		
 			int nameLen = Integer.parseInt(tokens[++token]);
 			String name = tokens[++token];
 
@@ -777,7 +808,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			String message = chat.getText();
 			if (message.length() > 0)
 			{
-				engine.broadcast("CH E 1 "+ServerCreature.NEUTRAL+"Server "+message.split(" ").length+" "+message);
+				if(started)
+					engine.broadcast("CH E 1 "+ServerCreature.NEUTRAL+"Server "+message.split(" ").length+" "+message);
+				else
+					server.broadcast("CH E 1 "+ServerCreature.NEUTRAL+"Server "+message.split(" ").length+" "+message);
 			}
 			chat.setForeground(Color.GRAY);
 			chat.setText("");

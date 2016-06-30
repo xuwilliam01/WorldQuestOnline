@@ -49,18 +49,18 @@ public class StartServer
 		Thread serverThread = new Thread(server);
 		serverThread.start();
 
-		int dialogResult = JOptionPane.showConfirmDialog(null,
-				"Would you like to see a minimap of the entire world?",
-				"Warning", 0);
-		if (dialogResult == JOptionPane.YES_OPTION)
-		{
-			ServerFrame myFrame = new ServerFrame();
-			ServerGUI gui = new ServerGUI(server.getEngine().getWorld(),
-					server.getEngine());
-			gui.setLocation(0, 0);
-			myFrame.add(gui);
-			gui.revalidate();
-			server.getEngine().setGui(gui);
-		}
+//		int dialogResult = JOptionPane.showConfirmDialog(null,
+//				"Would you like to see a minimap of the entire world?",
+//				"Warning", 0);
+//		if (dialogResult == JOptionPane.YES_OPTION)
+//		{
+//			ServerFrame myFrame = new ServerFrame();
+//			ServerGUI gui = new ServerGUI(server.getEngine().getWorld(),
+//					server.getEngine());
+//			gui.setLocation(0, 0);
+//			myFrame.add(gui);
+//			gui.revalidate();
+//			server.getEngine().setGui(gui);
+//		}
 	}
 }
