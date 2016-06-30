@@ -72,7 +72,7 @@ public class ServerChest extends ServerCreature
 	 */
 	public void addItems()
 	{
-		numItems = (int)(Math.random()*(NUM_ITEMS-1))+1;
+		numItems = (int)(Math.random()*(NUM_ITEMS-1))+2;
 		for (int item = 0; item < numItems; item++)
 			addItem(ServerItem.randomItem(getX(), getY()));
 	}

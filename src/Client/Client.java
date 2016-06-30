@@ -1,3 +1,4 @@
+
 package Client;
 
 import java.awt.Color; 
@@ -326,7 +327,6 @@ MouseMotionListener
 		@Override
 		public void run()
 		{
-			setDoubleBuffered(true);
 
 			while (true)
 			{

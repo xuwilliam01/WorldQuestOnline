@@ -27,7 +27,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 @SuppressWarnings("serial")
 /**
  * Displays a scrollable map of the server
@@ -35,7 +34,7 @@ import javax.swing.JTextField;
  *
  */
 public class ServerGUI extends JPanel implements KeyListener,
-MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
+		MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 {
 
 	/**
@@ -58,12 +57,12 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	boolean visible = false;
 
-	//Variables for chat
+	// Variables for chat
 	private ArrayList<String> chatQueue = new ArrayList<String>();
 	private JTextField chat;
 	private JButton enter;
 
-	//Button to show/hide map
+	// Button to show/hide map
 	private JButton showHide = new JButton("Show Map");
 
 	/**
@@ -163,7 +162,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		this.server = server;
 
-		//Set up chat components
+		// Set up chat components
 		chat = new JTextField();
 		chat.setLocation(0, 0);
 		chat.setSize(200, 20);
@@ -190,14 +189,16 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
-		setSize(Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR);
+		setSize(Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR,
+				Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR);
 
 		setFocusable(true);
 		requestFocusInWindow();
 
-		//Show/hide map button
-		showHide.setLocation(10, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR-75);
-		showHide.setSize(200,30);
+		// Show/hide map button
+		showHide.setLocation(10, Client.Client.SCREEN_HEIGHT
+				/ ServerFrame.FRAME_FACTOR - 75);
+		showHide.setSize(200, 30);
 		showHide.setVisible(true);
 		add(showHide);
 	}
@@ -224,6 +225,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
+
 	/**
 	 * Draw the world map
 	 */
@@ -231,11 +233,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		super.paintComponent(graphics);
 
-		graphics.drawImage(background,0,0,null);
+		graphics.drawImage(background, 0, 0, null);
 
-		//Draw the map
-		if(visible & started)
-		{		
+		// Draw the map
+		if (visible & started)
+		{
 			// Draw each tile on the screen
 			int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 			if (startRow < 0)
@@ -261,34 +263,36 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					if(grid[row][column] != ' ')
+					if (grid[row][column] != ' ')
 					{
-						graphics.setColor(ImageReferencePair.getImages()[grid[row][column]].getColor());
+						graphics.setColor(ImageReferencePair.getImages()[grid[row][column]]
+								.getColor());
 						graphics.fillRect(
-								(int) (CENTRE_X + column
+								(int) (CENTRE_X
+										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-										(int) (CENTRE_Y + row
-												* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+								(int) (CENTRE_Y
+										+ row
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 					}
 				}
 			}
 
-
-
 			// Draw each object on the gui if it's inside the screen
 			for (ServerObject object : world.getObjects())
 			{
-				if (object.isMapVisible() &&
+				if (object.isMapVisible()
+						&&
 						((CENTRE_X + object.getX() / objectFactor - posX)
 								+ 1
 								+ (object.getWidth() / objectFactor) + 1) > 0
-								&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
-								&& ((CENTRE_Y + object.getY() / objectFactor - posY)
-										+ 1
-										+ (object.getHeight() / objectFactor) + 1) > 0
-										&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
+						&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
+						&& ((CENTRE_Y + object.getY() / objectFactor - posY)
+								+ 1
+								+ (object.getHeight() / objectFactor) + 1) > 0
+						&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 				{
 					if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
 					{
@@ -318,13 +322,15 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				}
 			}
 		}
-		//	else
-		//{
+		// else
+		// {
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
-		graphics.drawString("The server runs smoother when the map is hidden",250, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR-55);
-		//}
-		//Draw the chat
+		graphics.drawString("The server runs smoother when the map is hidden",
+				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
+						- 55);
+		// }
+		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		while (true)
 		{
@@ -337,7 +343,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 					{
 						String newStr = str.substring(3);
 						int space = newStr.indexOf(':');
-						String coloured = newStr.substring(1, space+1);
+						String coloured = newStr.substring(1, space + 1);
 						String mssg = newStr.substring(space + 2);
 						if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
@@ -351,7 +357,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 								.getFontMetrics().stringWidth(coloured + " "),
 								textY);
 					}
-					else if(str.substring(0,2).equals("JO"))
+					else if (str.substring(0, 2).equals("JO"))
 					{
 						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
@@ -361,9 +367,12 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(str.substring(4) + " ", 10, textY);
 						graphics.setColor(Color.ORANGE);
-						graphics.drawString("joined the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
+						graphics.drawString(
+								"joined the game",
+								10 + graphics.getFontMetrics().stringWidth(
+										str.substring(4) + " "), textY);
 					}
-					else if(str.substring(0,2).equals("RO"))
+					else if (str.substring(0, 2).equals("RO"))
 					{
 						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
@@ -373,9 +382,14 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(str.substring(4) + " ", 10, textY);
 						graphics.setColor(Color.ORANGE);
-						graphics.drawString("left the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
+						graphics.drawString(
+								"left the game",
+								10 + graphics.getFontMetrics().stringWidth(
+										str.substring(4) + " "), textY);
 					}
-					else if(str.length() > 2 && str.substring(0,3).equals("KF1") || str.substring(0,3).equals("KF2"))
+					else if (str.length() > 2
+							&& str.substring(0, 3).equals("KF1")
+							|| str.substring(0, 3).equals("KF2"))
 					{
 						String[] split = str.split(" ");
 						int firstLen = Integer.parseInt(split[1]);
@@ -398,37 +412,36 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 						graphics.setColor(Color.ORANGE);
 
-
 						String killWord = "slain";
 						String secondKillWord = "killed";
 
-						//int random = (int) (Math.random() * 5);
+						// int random = (int) (Math.random() * 5);
 
-						//						if (random == 0)
-						//						{
-						//							killWord = "slain";
-						//							secondKillWord = "slayed";
-						//						}
-						//						else if (random == 1)
-						//						{
-						//							killWord = "defeated";
-						//							secondKillWord = "defeated";
-						//						}
-						//						else if (random == 2)
-						//						{
-						//							killWord = "murdered";
-						//							secondKillWord = "murdered";
-						//						}
-						//						else if (random == 3)
-						//						{
-						//							killWord = "slaughtered";
-						//							secondKillWord = "slaughtered";
-						//						}
-						//						else if (random == 4)
-						//						{
-						//							killWord = "ended";
-						//							secondKillWord = "ended";
-						//						}
+						// if (random == 0)
+						// {
+						// killWord = "slain";
+						// secondKillWord = "slayed";
+						// }
+						// else if (random == 1)
+						// {
+						// killWord = "defeated";
+						// secondKillWord = "defeated";
+						// }
+						// else if (random == 2)
+						// {
+						// killWord = "murdered";
+						// secondKillWord = "murdered";
+						// }
+						// else if (random == 3)
+						// {
+						// killWord = "slaughtered";
+						// secondKillWord = "slaughtered";
+						// }
+						// else if (random == 4)
+						// {
+						// killWord = "ended";
+						// secondKillWord = "ended";
+						// }
 
 						if (str.substring(0, 3).equals("KF1"))
 							graphics.drawString(
@@ -453,13 +466,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-											+ " by a "), textY);
+													+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-											textY);
+									textY);
 					}
 					textY += 20;
 				}
@@ -471,64 +484,75 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 		}
 
-
-		//Write the player names for each team
+		// Write the player names for each team
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR-400;
-		int redX =  Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR-200;
-		graphics.drawString("Blue Team",blueX,50);
+		int blueX = Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR - 400;
+		int redX = Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR - 200;
+		graphics.drawString("Blue Team", blueX, 50);
 		graphics.setColor(Color.RED);
-		graphics.drawString("Red Team",redX,50);
+		graphics.drawString("Red Team", redX, 50);
 		int redStart = 90;
 		int blueStart = 90;
 		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
-		try{
-			if(started)
-				for(ServerPlayer player : ServerEngine.getListOfPlayers())
+		try
+		{
+			if (started)
+				for (ServerPlayer player : ServerEngine.getListOfPlayers())
 				{
-					if(player.getTeam() == ServerCreature.RED_TEAM)
+					if (player.getTeam() == ServerCreature.RED_TEAM)
 					{
 						graphics.setColor(Color.RED);
-						graphics.drawString(player.getName(), redX+5, redStart);
-						redStart+=20;
+						graphics.drawString(player.getName(), redX + 5,
+								redStart);
+						redStart += 20;
 					}
 					else
 					{
 						graphics.setColor(Color.BLUE);
-						graphics.drawString(player.getName(), blueX+5, blueStart);
-						blueStart+=20;
+						graphics.drawString(player.getName(), blueX + 5,
+								blueStart);
+						blueStart += 20;
 					}
 				}
 			else
-				for(ServerLobbyPlayer player : server.getPlayers())
+				for (ServerLobbyPlayer player : server.getPlayers())
 				{
-					if(player.getTeam() == ServerCreature.RED_TEAM)
+					if (player.getTeam() == ServerCreature.RED_TEAM)
 					{
 						graphics.setColor(Color.RED);
-						graphics.drawString(player.getName(), redX+5, redStart);
-						redStart+=20;
+						graphics.drawString(player.getName(), redX + 5,
+								redStart);
+						redStart += 20;
 					}
 					else
 					{
 						graphics.setColor(Color.BLUE);
-						graphics.drawString(player.getName(), blueX+5, blueStart);
-						blueStart+=20;
+						graphics.drawString(player.getName(), blueX + 5,
+								blueStart);
+						blueStart += 20;
 					}
 				}
 		}
-		catch(ConcurrentModificationException E)
+		catch (ConcurrentModificationException E)
 		{
 
 		}
 		// Tell the user to scroll with arrow keys
-		//		graphics.setColor(Color.black);
-		//		graphics.drawString(
-		//				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
-		//				10, 25);
-		//		graphics.drawString(
-		//				"FPS: " + engine.getCurrentFPS(),
-		//				10, 40);
+		graphics.setColor(Color.black);
+//		graphics.drawString(
+//				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
+//				100, 25);
+//		try
+//		{
+//		graphics.drawString(
+//				"Server FPS: " + engine.getCurrentFPS(),
+//				120, 20);
+//		}
+//		catch (NullPointerException E)
+//		{
+//			System.out.println("Cannot get");
+//		}
 	}
 
 	/**
@@ -541,13 +565,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 		if (tokens[token].equals("CH"))
 		{
-			char who = tokens[++token].charAt(0);		
+			char who = tokens[++token].charAt(0);
 			int nameLen = Integer.parseInt(tokens[++token]);
 			String name = tokens[++token];
 
-			for(int i = 1; i < nameLen;i++)
+			for (int i = 1; i < nameLen; i++)
 			{
-				name+=" "+tokens[++token];
+				name += " " + tokens[++token];
 			}
 			int numWords = Integer
 					.parseInt(tokens[++token]);
@@ -586,31 +610,32 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 			chatQueue.add(text.trim());
 		}
-		else if(tokens[token].equals("JO") && !started)
+		else if (tokens[token].equals("JO") && !started)
 		{
 			int len = Integer.parseInt(tokens[++token]);
 			String name = "";
 
-			for(int i = 0; i < len;i++)
-				name += tokens[++token]+" ";
-			chatQueue.add("JO "+name.trim());
+			for (int i = 0; i < len; i++)
+				name += tokens[++token] + " ";
+			chatQueue.add("JO " + name.trim());
 		}
-		else if(tokens[token].equals("RO"))
+		else if (tokens[token].equals("RO"))
 		{
 			int len = Integer.parseInt(tokens[++token]);
 			String name = "";
 
-			for(int i = 0; i < len;i++)
-				name += tokens[++token]+" ";
-			chatQueue.add("RO "+name.trim());
+			for (int i = 0; i < len; i++)
+				name += tokens[++token] + " ";
+			chatQueue.add("RO " + name.trim());
 		}
 	}
+
 	/**
 	 * Scroll the map around
 	 */
 	public void keyPressed(KeyEvent key)
 	{
-		if(visible)
+		if (visible)
 		{
 			if (key.getKeyCode() == KeyEvent.VK_RIGHT)
 			{
@@ -629,7 +654,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				down = true;
 			}
 		}
-		else if(key.getKeyCode() == KeyEvent.VK_ENTER)
+		else if (key.getKeyCode() == KeyEvent.VK_ENTER)
 		{
 			chat.requestFocusInWindow();
 		}
@@ -695,11 +720,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	public void update()
 	{
 		// Move and repaint
-		if(!chat.hasFocus())
+		if (!chat.hasFocus())
 			requestFocusInWindow();
 		movePos();
+		if (world.getWorldCounter() < 10 || world.getWorldCounter()%4==0)
+		{
 		repaint();
-
+		}
 	}
 
 	@Override
@@ -708,7 +735,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	public void mouseWheelMoved(MouseWheelEvent scroll)
 	{
-		if(visible)
+		if (visible)
 		{
 			int notches = scroll.getWheelRotation();
 
@@ -733,7 +760,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				{
 					objectFactor /= (1.1 * (-notches));
 					posX *= 1.1 * -notches;
-					posY *= 1.1 * - notches;
+					posY *= 1.1 * -notches;
 				}
 				else
 				{
@@ -761,19 +788,21 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	public void mouseReleased(MouseEvent arg0)
 	{
 	}
+
 	@Override
 	public void mouseClicked(MouseEvent event)
 	{
 	}
+
 	@Override
 	public void mouseEntered(MouseEvent arg0)
 	{
 	}
+
 	@Override
 	public void mouseExited(MouseEvent arg0)
 	{
 	}
-
 
 	@Override
 	/**
@@ -781,7 +810,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	public void mouseDragged(MouseEvent event)
 	{
-		if(visible)
+		if (visible)
 		{
 			posX -= event.getX() - dragSourceX;
 			posY -= event.getY() - dragSourceY;
@@ -808,32 +837,36 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e)
+	{
 
-		if(e.getSource() == enter)
+		if (e.getSource() == enter)
 		{
 			// Send the message
 			String message = chat.getText();
 			if (message.length() > 0)
 			{
-				if(started)
-					engine.broadcast("CH E 1 "+ServerCreature.NEUTRAL+"Server "+message.split(" ").length+" "+message);
+				if (started)
+					engine.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+							+ "Server " + message.split(" ").length + " "
+							+ message);
 				else
-					server.broadcast("CH E 1 "+ServerCreature.NEUTRAL+"Server "+message.split(" ").length+" "+message);
+					server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+							+ "Server " + message.split(" ").length + " "
+							+ message);
 			}
 			chat.setForeground(Color.GRAY);
 			chat.setText("");
 			requestFocusInWindow();
 		}
-		else if(e.getSource() == showHide)
+		else if (e.getSource() == showHide)
 		{
-			if(showHide.getText().equals("Show Map"))
+			if (showHide.getText().equals("Show Map"))
 				showHide.setText("Hide Map");
 			else
 				showHide.setText("Show Map");
 			visible = !visible;
 		}
-
 
 	}
 

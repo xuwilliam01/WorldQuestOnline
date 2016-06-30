@@ -31,7 +31,6 @@ public class ClientFrame extends JFrame
 	    
 	    System.out.println(dm.getWidth()-ClientInventory.INVENTORY_WIDTH);
 	    System.out.println(dm.getHeight());
-		
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));
 		setResizable(false);
 		setTitle("WorldQuest Online");
