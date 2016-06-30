@@ -9,10 +9,8 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -192,10 +190,16 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		// Create the screen
 		setDoubleBuffered(true);
 		setBackground(Color.white);
-		setSize(Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT);
+		setSize(Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR);
 
 		setFocusable(true);
 		requestFocusInWindow();
+
+		//Show/hide map button
+		showHide.setLocation(10, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR-75);
+		showHide.setSize(200,30);
+		showHide.setVisible(true);
+		add(showHide);
 	}
 
 	/**
@@ -205,13 +209,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		started = true;
 
-		//Show/hide map button
-		showHide.setLocation(10,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-75);
-		showHide.setSize(200,30);
-		showHide.setVisible(true);
+		remove(showHide);
 		showHide.addActionListener(this);
-
 		add(showHide);
+
 		// Set world, engine and grid
 		this.world = world;
 		this.engine = engine;
@@ -321,8 +322,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		//{
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
-		graphics.drawString("The server runs smoother when the map is hidden",(int) ((Toolkit.getDefaultToolkit().getScreenSize().getWidth()-ClientInventory.INVENTORY_WIDTH)/2-graphics
-				.getFontMetrics().stringWidth("The server runs smoother when the map is hidden")/2),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-50);
+		graphics.drawString("The server runs smoother when the map is hidden",250, Client.Client.SCREEN_HEIGHT/ServerFrame.FRAME_FACTOR-55);
 		//}
 		//Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -375,7 +375,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 						graphics.setColor(Color.ORANGE);
 						graphics.drawString("left the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
 					}
-					else
+					else if(str.length() > 2 && str.substring(0,3).equals("KF1") || str.substring(0,3).equals("KF2"))
 					{
 						String[] split = str.split(" ");
 						int firstLen = Integer.parseInt(split[1]);
@@ -475,9 +475,8 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		//Write the player names for each team
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.BLUE);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int blueX = (int)screenSize.getWidth()-400 - ClientInventory.INVENTORY_WIDTH;
-		int redX = (int)screenSize.getWidth()-200 - ClientInventory.INVENTORY_WIDTH;
+		int blueX = Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR-400;
+		int redX =  Client.Client.SCREEN_WIDTH/ServerFrame.FRAME_FACTOR-200;
 		graphics.drawString("Blue Team",blueX,50);
 		graphics.setColor(Color.RED);
 		graphics.drawString("Red Team",redX,50);
@@ -587,7 +586,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 			chatQueue.add(text.trim());
 		}
-		else if(tokens[token].equals("JO"))
+		else if(tokens[token].equals("JO") && !started)
 		{
 			int len = Integer.parseInt(tokens[++token]);
 			String name = "";
@@ -611,21 +610,24 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	public void keyPressed(KeyEvent key)
 	{
-		if (key.getKeyCode() == KeyEvent.VK_RIGHT)
+		if(visible)
 		{
-			right = true;
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_LEFT)
-		{
-			left = true;
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_UP)
-		{
-			up = true;
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_DOWN)
-		{
-			down = true;
+			if (key.getKeyCode() == KeyEvent.VK_RIGHT)
+			{
+				right = true;
+			}
+			else if (key.getKeyCode() == KeyEvent.VK_LEFT)
+			{
+				left = true;
+			}
+			else if (key.getKeyCode() == KeyEvent.VK_UP)
+			{
+				up = true;
+			}
+			else if (key.getKeyCode() == KeyEvent.VK_DOWN)
+			{
+				down = true;
+			}
 		}
 		else if(key.getKeyCode() == KeyEvent.VK_ENTER)
 		{
@@ -706,36 +708,39 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	public void mouseWheelMoved(MouseWheelEvent scroll)
 	{
-		int notches = scroll.getWheelRotation();
+		if(visible)
+		{
+			int notches = scroll.getWheelRotation();
 
-		if (notches > 0)
-		{
-			if (objectFactor * (1.1 * (notches)) < ServerFrame.FRAME_FACTOR * 16)
+			if (notches > 0)
 			{
-				objectFactor *= (1.1 * (notches));
-				posX /= (1.1 * notches);
-				posY /= (1.1 * notches);
+				if (objectFactor * (1.1 * (notches)) < ServerFrame.FRAME_FACTOR * 16)
+				{
+					objectFactor *= (1.1 * (notches));
+					posX /= (1.1 * notches);
+					posY /= (1.1 * notches);
+				}
+				else
+				{
+					posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+					posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
+					objectFactor = ServerFrame.FRAME_FACTOR * 16;
+				}
 			}
-			else
+			else if (notches < 0)
 			{
-				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				objectFactor = ServerFrame.FRAME_FACTOR * 16;
-			}
-		}
-		else if (notches < 0)
-		{
-			if (objectFactor / (1.1 * (-notches)) >= 1)
-			{
-				objectFactor /= (1.1 * (-notches));
-				posX *= 1.1 * -notches;
-				posY *= 1.1 * - notches;
-			}
-			else
-			{
-				posX *= objectFactor;
-				posY *= objectFactor;
-				objectFactor = 1;
+				if (objectFactor / (1.1 * (-notches)) >= 1)
+				{
+					objectFactor /= (1.1 * (-notches));
+					posX *= 1.1 * -notches;
+					posY *= 1.1 * - notches;
+				}
+				else
+				{
+					posX *= objectFactor;
+					posY *= objectFactor;
+					objectFactor = 1;
+				}
 			}
 		}
 	}
@@ -743,7 +748,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	@Override
 	public void mousePressed(MouseEvent event)
 	{
-		if (event.getButton() == MouseEvent.BUTTON1)
+		if (event.getButton() == MouseEvent.BUTTON1 && visible)
 		{
 			dragSourceX = event.getX();
 			dragSourceY = event.getY();
@@ -776,10 +781,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	public void mouseDragged(MouseEvent event)
 	{
-		posX -= event.getX() - dragSourceX;
-		posY -= event.getY() - dragSourceY;
-		dragSourceX = event.getX();
-		dragSourceY = event.getY();
+		if(visible)
+		{
+			posX -= event.getX() - dragSourceX;
+			posY -= event.getY() - dragSourceY;
+			dragSourceX = event.getX();
+			dragSourceY = event.getY();
+		}
 	}
 
 	@Override

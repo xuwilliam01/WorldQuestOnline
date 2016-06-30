@@ -125,7 +125,7 @@ public class Server implements Runnable
 				String name = null;
 				ServerLobbyPlayer playerToRemove = null;
 				BufferedReader input = null;
-				
+
 				for(ServerLobbyPlayer player : lobbyPlayersToAdd)
 				{
 					if(player.getIP().equals(IP))
@@ -178,8 +178,6 @@ public class Server implements Runnable
 				playerThread.start();
 
 				System.out.println("A new client has connected");
-				//if(noOfPlayers == lobbyPlayers.size())
-				//break;
 			}
 			catch (IOException e)
 			{
@@ -217,7 +215,11 @@ public class Server implements Runnable
 			ServerLobbyPlayer.nextTeam = ServerCreature.BLUE_TEAM-1;
 
 		if(player.isLeader())
-			lobbyPlayers.get(0).setLeader();
+		{
+			if(lobbyPlayers.size() > 0)
+				lobbyPlayers.get(0).setLeader();
+			else needLeader = true;
+		}
 		broadcast("RO " + player.getName().split(" ").length + " "
 				+ player.getTeam() + player.getName());
 	}

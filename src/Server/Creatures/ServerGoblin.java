@@ -359,11 +359,18 @@ public class ServerGoblin extends ServerCreature
 				{
 					if (getTeam() == ServerPlayer.BLUE_TEAM && action == null)
 					{
-						setHSpeed(movementSpeed);
+						if(getX() - getWorld().getRedCastleX() < 0)
+							setHSpeed(movementSpeed);
+						else
+							setHSpeed(-movementSpeed);
+							
 					}
 					else if (action == null)
 					{
-						setHSpeed(-movementSpeed);
+						if(getX() - getWorld().getBlueCastleX() < 0)
+							setHSpeed(movementSpeed);
+						else
+							setHSpeed(-movementSpeed);
 					}
 				}
 			}

@@ -4,12 +4,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Imports.Images;
 import Menu.MainMenu.GamePanel;
 import Server.Creatures.ServerCreature;
 import Client.Client.JTextFieldLimit;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -36,7 +38,8 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 	private JButton start;
 	private boolean isLeader = false;
-
+	private Image background = Images.getImage("BACKGROUND.png");
+	
 	public ClientLobby(Socket socket, String playerName)
 	{
 		this.socket = socket;
@@ -166,7 +169,6 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 						socket.close();
 						output.close();
 						input.close();
-						System.out.println("Disconnceted");
 						GamePanel.startGame();
 						
 						break;
@@ -194,6 +196,8 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	{
 		super.paintComponent(graphics);
 
+		
+		graphics.drawImage(background,0,0,Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,null);
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 
