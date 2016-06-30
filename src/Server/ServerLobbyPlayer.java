@@ -31,6 +31,7 @@ public class ServerLobbyPlayer implements Runnable {
 		try
 		{
 			output = new PrintWriter(this.socket.getOutputStream());
+			sendMessage("M "+server.getMap());
 		}
 		catch (IOException e)
 		{

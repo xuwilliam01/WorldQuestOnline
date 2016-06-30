@@ -39,6 +39,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	private JButton start;
 	private boolean isLeader = false;
 	private Image background = Images.getImage("BACKGROUND.png");
+	private String map ="";
 	
 	public ClientLobby(Socket socket, String playerName)
 	{
@@ -177,6 +178,10 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 					{
 						isLeader = true;
 					}
+					else if(tokens[token].equals("M"))
+					{
+						map = tokens[++token].substring(0,tokens[token].length()-4);
+					}
 				}
 				catch(Exception E)
 				{
@@ -260,6 +265,15 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			}
 		}
 
+		//Write the map name in the top right
+		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
+		int sizeName = graphics.getFontMetrics().stringWidth(map);
+		int sizeMap = graphics.getFontMetrics().stringWidth("Map: ");
+		graphics.setColor(Color.GRAY);
+		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-sizeMap-50, 30);
+		graphics.setColor(Color.ORANGE);
+		graphics.drawString(map, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-50, 30);
+		
 		if(!chat.hasFocus())
 			requestFocusInWindow();
 

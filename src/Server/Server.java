@@ -241,7 +241,12 @@ public class Server implements Runnable
 	{
 		start = true;
 	}
-
+	
+	public String getMap()
+	{
+		return map;
+	}
+	
 	private class Close implements Runnable
 	{	
 		public void run() {
