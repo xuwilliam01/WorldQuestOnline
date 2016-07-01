@@ -159,8 +159,10 @@ public class ClientInventory extends JPanel implements ActionListener {
 	 * When an item is confirmed to be sold, get rid of it
 	 */
 	public void removeThis(String type) {
+		ClientItem toRemove = null;
 		for (ClientItem item : removeList) {
 			if (item.getType().equals(type)) {
+				toRemove = item;
 				if (item.getAmount() > 1) {
 					item.decreaseAmount();
 				} else {
@@ -178,6 +180,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 				}
 			}
 		}
+		removeList.remove(toRemove);
 	}
 
 	/**

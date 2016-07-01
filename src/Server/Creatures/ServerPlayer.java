@@ -1644,7 +1644,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			catch (ArrayIndexOutOfBoundsException e)
 			{
 				System.out
-				.println("Stirng builder queue lagged and out of bounds happened");
+				.println("String builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}

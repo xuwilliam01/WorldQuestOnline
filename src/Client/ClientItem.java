@@ -58,7 +58,7 @@ public class ClientItem extends JButton implements MouseListener{
 		setContentAreaFilled(false);
 		setFocusable(false);
 		addMouseListener(this);
-		
+
 		//Add tooltips
 		switch(type)
 		{
@@ -100,64 +100,64 @@ public class ClientItem extends JButton implements MouseListener{
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Dagger (+%d Damage)",ServerWeapon.DADIAMOND_DMG));
-			break;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Dagger (+%d Damage)",ServerWeapon.DAGOLD_DMG));
-			break;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Dagger (+%d Damage)",ServerWeapon.DAIRON_DMG));
-			break;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Dagger (+%d Damage)",ServerWeapon.DASTONE_DMG));
-			break;
+		break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Dagger (+%d Damage)",ServerWeapon.DAWOOD_DMG));
-			break;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Ax (+%d Damage)",ServerWeapon.AXDIAMOND_DMG));
-			break;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Ax (+%d Damage)",ServerWeapon.AXGOLD_DMG));
-			break;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Ax (+%d Damage)",ServerWeapon.AXIRON_DMG));
-			break;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Ax (+%d Damage)",ServerWeapon.AXSTONE_DMG));
-			break;
+		break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Ax (+%d Damage)",ServerWeapon.AXWOOD_DMG));
-			break;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Sword (+%d Damage)",ServerWeapon.SWDIAMOND_DMG));
-			break;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Sword (+%d Damage)",ServerWeapon.SWGOLD_DMG));
-			break;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Sword (+%d Damage)",ServerWeapon.SWIRON_DMG));
-			break;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Sword (+%d Damage)",ServerWeapon.SWSTONE_DMG));
-			break;
+		break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Sword (+%d Damage)",ServerWeapon.SWWOOD_DMG));
-			break;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Halberd (+%d Damage)",ServerWeapon.HADIAMOND_DMG));
-			break;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Halberd (+%d Damage)",ServerWeapon.HAGOLD_DMG));
-			break;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Halberd (+%d Damage)",ServerWeapon.HAIRON_DMG));
-			break;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Halberd (+%d Damage)",ServerWeapon.HASTONE_DMG));
-			break;
+		break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Halberd (+%d Damage)",ServerWeapon.HAWOOD_DMG));
-			break;
+		break;
 		case ServerWorld.SLINGSHOT_TYPE:
 			setToolTipText(String.format("Slingshot (+%d Damage)",ServerWeapon.SLING_DMG));
 			break;
@@ -311,7 +311,7 @@ public class ClientItem extends JButton implements MouseListener{
 				//If this is already equipped remove it
 				if(selected)
 				{
-					
+
 					ClientItem[][] invGrid = inventory.getInventory();
 					for(int row = 0; row < invGrid.length;row++)
 						for(int col = 0;col < invGrid[row].length;col++)
@@ -321,22 +321,24 @@ public class ClientItem extends JButton implements MouseListener{
 								inventory.getClient().printToServer("MI "+equipSlot);
 								setBorder(BorderFactory.createEmptyBorder());
 								selected = false;
-								
+
 								invGrid[row][col] = this;
 								this.row = row;
 								this.col = col;
 								if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2))
 								{
 									inventory.getEquippedWeapons()[equipSlot] = null;
-									equipSlot = ServerPlayer.DEFAULT_WEAPON_SLOT;
-									for(int weapon = 0; weapon < inventory.getEquippedWeapons().length;weapon++)
-									{
-										if(inventory.getEquippedWeapons()[weapon] != null)
+									//If this weapon as selected remove it
+									if(inventory.getClient().getWeaponSelected() == equipSlot)
+										for(int weapon = 0; weapon < inventory.getEquippedWeapons().length;weapon++)
 										{
-											inventory.getClient().setWeaponSelected(weapon);
-											inventory.getEquippedWeapons()[weapon].setBorder(BorderFactory.createLineBorder(Color.white));
+											if(inventory.getEquippedWeapons()[weapon] != null)
+											{
+												inventory.getClient().setWeaponSelected(weapon);
+												inventory.getEquippedWeapons()[weapon].setBorder(BorderFactory.createLineBorder(Color.white));
+											}
 										}
-									}
+									equipSlot = ServerPlayer.DEFAULT_WEAPON_SLOT;
 								}
 								else if(type.charAt(2) == ServerWorld.ARMOUR_TYPE.charAt(2))
 								{
@@ -371,12 +373,23 @@ public class ClientItem extends JButton implements MouseListener{
 					setLocation(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+95,865);
 
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
+
 					//If this is the first item to be equipped, auto select it
-					if(inventory.getClient().getWeaponSelected() == ServerPlayer.DEFAULT_WEAPON_SLOT ||inventory.getEquippedWeapons()[inventory.getClient().getWeaponSelected()] == null )
+					boolean skip = false;
+					for(int i = 0; i < ServerPlayer.MAX_WEAPONS;i++)
+					{
+						if(i != equipSlot && inventory.getEquippedWeapons()[i] != null)
+						{
+							skip = true;
+							break;
+						}
+					}
+					if(!skip)
 					{
 						inventory.getClient().setWeaponSelected(equipSlot);
 						setBorder(BorderFactory.createLineBorder(Color.white));
 					}
+
 
 					repaint();
 				}

@@ -607,7 +607,7 @@ public class ServerGoblin extends ServerCreature
 			{
 				setRowCol(new RowCol(1, 4));
 			}
-			else if (getWorld().getWorldCounter() - deathCounter < 300)
+			else if (getWorld().getWorldCounter() - deathCounter < 100)
 			{
 				setRowCol(new RowCol(1, 6));
 			}

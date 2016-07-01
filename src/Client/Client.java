@@ -420,13 +420,24 @@ MouseMotionListener
 										player.setY(y);
 									}
 									if(tokens[token+4].equals("{"))
+									{
 										world.setObject(id, x, y,
 												tokens[++token], Integer
 												.parseInt(tokens[++token]),
 												tokens[++token], tokens[++token]);
+									}
 									else
 									{
-										int len = Integer.parseInt(tokens[token+4]);
+										int len = 0;
+										try{
+											len = Integer.parseInt(tokens[token+4]);
+										}
+										catch(NumberFormatException E)
+										{
+											System.out.println("Bug with {");
+											token += 4;
+											continue;
+										}
 										String name = "";
 										for(int i = 0; i < len;i++)
 											name+= tokens[token+5+i]+" ";
