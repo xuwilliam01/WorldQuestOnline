@@ -87,8 +87,17 @@ public class ServerLobbyPlayer implements Runnable {
 				}
 				else if(command.equals("S") && isLeader)
 				{
-					started = true;
-					server.start();
+					if(Math.abs(numBlue - numRed) < 2)
+					{
+						started = true;
+						server.start();
+					}
+					else
+					{
+						server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+						+ "Server " + 5 + " "
+						+ "Balance the teams to start");
+					}
 				}
 				else if(command.length() > 2 && command.substring(0,2).equals("Na"))
 				{
@@ -102,14 +111,14 @@ public class ServerLobbyPlayer implements Runnable {
 					}
 					server.broadcast("JO " + getName().split(" ").length + " "
 							+ getTeam() + getName());
-					
+
 					for(ServerLobbyPlayer player : server.getPlayers())
 					{
 						//Send every player to this one and send all other players that this player just joined
 						sendMessage("P true "+player.getTeam()+" "+player.getName());
 						if(player != this)
 							player.sendMessage("P true "+team+" "+name);
-						
+
 						if(player.isLeader())
 							server.broadcast("LE "+player.getTeam()+" "+player.getName());
 					}
@@ -118,22 +127,23 @@ public class ServerLobbyPlayer implements Runnable {
 				{
 					if(team == ServerCreature.RED_TEAM)
 					{
-						if(numRed > numBlue+1)
-						{
-							team = ServerCreature.BLUE_TEAM;
-							numRed--;
-							numBlue++;
-							server.broadcast("P false "+ team+" "+name);
-						}
-					}
-					else if(numBlue > numRed+1)
-						{
-							team = ServerCreature.RED_TEAM;
-							numRed++;
-							numBlue--;
-							server.broadcast("P false"+ team+" "+name);
-						}
+						team = ServerCreature.BLUE_TEAM;
+						numRed--;
+						numBlue++;
+						server.broadcast("P false "+ team+" "+name);
+						if(isLeader)
+							setLeader();
 
+					}
+					else 
+					{
+						team = ServerCreature.RED_TEAM;
+						numRed++;
+						numBlue--;
+						server.broadcast("P false "+ team+" "+name);
+						if(isLeader)
+							setLeader();
+					}
 				}
 			}
 			catch (IOException e)

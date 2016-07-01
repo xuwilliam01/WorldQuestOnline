@@ -72,6 +72,10 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		enter.addActionListener(this);
 
 		start = new JButton("Start Game");
+		start.setForeground(Color.GRAY);
+		start.setBackground(Color.LIGHT_GRAY);
+		start.setOpaque(true);
+		start.setBorderPainted(false);
 		start.setLocation(320,0);
 		start.setSize(200,20);
 		start.setVisible(true);
@@ -223,6 +227,9 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 					else if(tokens[token].equals("L"))
 					{
 						isLeader = true;
+						start.setForeground(Color.BLACK);
+						start.setBackground(Color.GRAY);
+						start.setBorderPainted(true);
 					}
 					else if(tokens[token].equals("LE"))
 					{
