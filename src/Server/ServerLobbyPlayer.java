@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import Server.Creatures.ServerCreature;
+
 public class ServerLobbyPlayer implements Runnable {
 	private Socket socket;
 	private PrintWriter output;
@@ -19,6 +21,9 @@ public class ServerLobbyPlayer implements Runnable {
 	private String name = "Player";
 	private boolean started = false;
 
+	public static int numRed = 0;
+	public static int numBlue = 0;
+
 	public ServerLobbyPlayer(Socket socket, Server server)
 	{
 		this.socket = socket;
@@ -26,6 +31,13 @@ public class ServerLobbyPlayer implements Runnable {
 		this.server = server;
 		this.team = nextTeam%2+1;
 		nextTeam++;
+
+		if(team == ServerCreature.RED_TEAM)
+		{
+			numRed++;
+		}
+		else
+			numBlue++;
 
 		// Set up the output
 		try
@@ -50,7 +62,7 @@ public class ServerLobbyPlayer implements Runnable {
 			System.out.println("Error getting client's input stream");
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -90,6 +102,38 @@ public class ServerLobbyPlayer implements Runnable {
 					}
 					server.broadcast("JO " + getName().split(" ").length + " "
 							+ getTeam() + getName());
+					
+					for(ServerLobbyPlayer player : server.getPlayers())
+					{
+						//Send every player to this one and send all other players that this player just joined
+						sendMessage("P true "+player.getTeam()+" "+player.getName());
+						if(player != this)
+							player.sendMessage("P true "+team+" "+name);
+						
+						if(player.isLeader())
+							server.broadcast("LE "+player.getTeam()+" "+player.getName());
+					}
+				}
+				else if(command.equals("X"))
+				{
+					if(team == ServerCreature.RED_TEAM)
+					{
+						if(numRed > numBlue+1)
+						{
+							team = ServerCreature.BLUE_TEAM;
+							numRed--;
+							numBlue++;
+							server.broadcast("P false "+ team+" "+name);
+						}
+					}
+					else if(numBlue > numRed+1)
+						{
+							team = ServerCreature.RED_TEAM;
+							numRed++;
+							numBlue--;
+							server.broadcast("P false"+ team+" "+name);
+						}
+
 				}
 			}
 			catch (IOException e)
@@ -113,7 +157,7 @@ public class ServerLobbyPlayer implements Runnable {
 			e1.printStackTrace();
 			System.out.println("Error closing buffered reader");
 		}
-		
+
 		if(!started)
 			server.remove(this);
 
@@ -123,6 +167,7 @@ public class ServerLobbyPlayer implements Runnable {
 	{
 		isLeader = true;
 		sendMessage("L");
+		server.broadcast("LE "+team+" "+name);
 	}
 
 	public boolean isLeader()

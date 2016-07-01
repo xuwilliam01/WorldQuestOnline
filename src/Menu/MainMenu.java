@@ -643,7 +643,7 @@ public class MainMenu {
 			String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Server IP (Leave blank for a server on this computer)").trim();
+					.showInputDialog("Server IP (Leave blank for a server on this computer)");
 			if(serverIP == null)
 				return;
 			if (serverIP.equals(""))

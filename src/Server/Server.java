@@ -67,6 +67,7 @@ public class Server implements Runnable
 					needLeader = false;
 				}
 				lobbyPlayers.add(newPlayer);
+				
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
 				System.out.println("A new client has connected");
@@ -210,9 +211,13 @@ public class Server implements Runnable
 		if(player.getTeam() == ServerCreature.RED_TEAM)
 		{
 			ServerLobbyPlayer.nextTeam = ServerCreature.RED_TEAM-1;
+			ServerLobbyPlayer.numRed--;
 		}
 		else
+		{
 			ServerLobbyPlayer.nextTeam = ServerCreature.BLUE_TEAM-1;
+			ServerLobbyPlayer.numBlue--;
+		}
 
 		if(player.isLeader())
 		{

@@ -6,6 +6,7 @@ import javax.swing.JTextField;
 
 import Imports.Images;
 import Menu.MainMenu.GamePanel;
+import Server.ServerFrame;
 import Server.Creatures.ServerCreature;
 import Client.Client.JTextFieldLimit;
 
@@ -37,10 +38,18 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	private ArrayList<String> chatQueue = new ArrayList<String>();
 
 	private JButton start;
+	private JButton switchTeams;
+	
 	private boolean isLeader = false;
+	private int leaderTeam = -1;
+	private String leaderName ="";
+	
 	private Image background = Images.getImage("BACKGROUND.png");
 	private String map ="";
-	
+
+	private ArrayList<String> redTeam = new ArrayList<String>();
+	private ArrayList<String> blueTeam = new ArrayList<String>();
+
 	public ClientLobby(Socket socket, String playerName)
 	{
 		this.socket = socket;
@@ -63,15 +72,22 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		enter.addActionListener(this);
 
 		start = new JButton("Start Game");
-		start.setLocation(400,400);
-		start.setSize(200,40);
+		start.setLocation(320,0);
+		start.setSize(200,20);
 		start.setVisible(true);
 		start.addActionListener(this);
 
+		switchTeams = new JButton("Switch Team");
+		switchTeams.setLocation(580,0);
+		switchTeams.setSize(200,20);
+		switchTeams.setVisible(true);
+		switchTeams.addActionListener(this);
+		
 		setLayout(null);
 		add(chat);
 		add(enter);
 		add(start);
+		add(switchTeams);
 
 		setDoubleBuffered(true);
 		setFocusable(true);
@@ -102,7 +118,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		} 
-		
+
 		ReadServer reader = new ReadServer();
 		Thread startReader = new Thread(reader);
 		startReader.start();
@@ -120,8 +136,31 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 					String message = input.readLine();
 					String[] tokens = message.split(" ");
 					int token = 0;
-					
-					if (tokens[token].equals("CH"))
+
+					//Move a player to the other team
+					if(tokens[token].equals("P"))
+					{
+						boolean isNew = Boolean.parseBoolean(tokens[++token]);
+						int team = Integer.parseInt(tokens[++token]);
+						String name ="";
+						for(int i = 3; i < tokens.length;i++)
+							name += tokens[i]+" ";
+						name = name.trim();
+
+						if(team == ServerCreature.RED_TEAM)
+						{
+							if(!isNew)
+								blueTeam.remove(name);
+							redTeam.add(name);
+						}
+						else
+						{
+							if(!isNew)
+								redTeam.remove(name);
+							blueTeam.add(name);
+						}
+					}
+					else if (tokens[token].equals("CH"))
 					{
 						char who = tokens[++token].charAt(0);
 						int nameLen = Integer.parseInt(tokens[++token]);
@@ -142,8 +181,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 							chatQueue.remove(0);
 
 						chatQueue.add("CH " + name + ": "
-								+ text.trim());
-						repaint();
+								+ text.trim());						
 					}
 					else if(tokens[token].equals("JO"))
 					{
@@ -152,8 +190,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 						for(int i = 0; i < len;i++)
 							name += tokens[++token]+" ";
-						chatQueue.add("JO "+name.trim());
-						repaint();
+						chatQueue.add("JO "+name.trim());						
 					}
 					else if(tokens[token].equals("RO"))
 					{
@@ -162,8 +199,17 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 						for(int i = 0; i < len;i++)
 							name += tokens[++token]+" ";
-						chatQueue.add("RO "+name.trim());
-						repaint();
+						name = name.trim();
+						chatQueue.add("RO "+name);
+						
+						if(name.charAt(0)-'0' == ServerCreature.RED_TEAM)
+						{
+							redTeam.remove(name.substring(1));
+						}
+						else
+						{
+							blueTeam.remove(name.substring(1));									
+						}
 					}
 					else if(tokens[token].equals("Start"))
 					{
@@ -171,17 +217,28 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 						output.close();
 						input.close();
 						GamePanel.startGame();
-						
+
 						break;
 					}
 					else if(tokens[token].equals("L"))
 					{
 						isLeader = true;
 					}
+					else if(tokens[token].equals("LE"))
+					{
+						leaderTeam = Integer.parseInt(tokens[++token]);
+						String name ="";
+						for(int i = 2; i < tokens.length;i++)
+							name+= tokens[i]+" ";
+						name = name.trim();
+						
+						leaderName = name;					
+					}
 					else if(tokens[token].equals("M"))
 					{
 						map = tokens[++token].substring(0,tokens[token].length()-4);
 					}
+					repaint();
 				}
 				catch(Exception E)
 				{
@@ -201,7 +258,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	{
 		super.paintComponent(graphics);
 
-		
+
 		graphics.drawImage(background,0,0,Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,null);
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -270,10 +327,52 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		int sizeName = graphics.getFontMetrics().stringWidth(map);
 		int sizeMap = graphics.getFontMetrics().stringWidth("Map: ");
 		graphics.setColor(Color.GRAY);
-		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-sizeMap-50, 30);
+		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-sizeMap-50, 50);
 		graphics.setColor(Color.ORANGE);
-		graphics.drawString(map, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-50, 30);
-		
+		graphics.drawString(map, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-50, 50);
+
+		//Write the players on each team
+		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
+		graphics.setColor(Color.BLUE);
+		int blueX = Client.SCREEN_WIDTH - 500;
+		int redX = Client.SCREEN_WIDTH - 300;
+		graphics.drawString("Blue Team", blueX, 50);
+		graphics.setColor(Color.RED);
+		graphics.drawString("Red Team", redX, 50);
+		int redStart = 80;
+		int blueStart = 80;
+		graphics.setFont(ClientWorld.NORMAL_FONT);
+
+		graphics.setColor(Color.RED);
+		for(String player : redTeam)
+		{
+			if(leaderTeam == ServerCreature.RED_TEAM && leaderName.equals(player))
+			{
+				graphics.setColor(Color.GREEN);
+				graphics.fillOval(redX-12 , redStart-10, 10, 10);
+				graphics.setColor(Color.RED);
+			}
+				
+			graphics.drawString(player, redX + 5,
+					redStart);
+			redStart += 20;
+		}
+
+		graphics.setColor(Color.BLUE);
+		for(String player : blueTeam)
+		{
+			if(leaderTeam == ServerCreature.BLUE_TEAM && leaderName.equals(player))
+			{
+				graphics.setColor(Color.GREEN);
+				graphics.fillOval(blueX-12 , blueStart-10, 10, 10);
+				graphics.setColor(Color.BLUE);
+			}
+			
+			graphics.drawString(player, blueX + 5,
+					blueStart);
+			blueStart += 20;
+		}
+
 		if(!chat.hasFocus())
 			requestFocusInWindow();
 
@@ -297,6 +396,10 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		else if(e.getSource() == start && isLeader)
 		{
 			printToServer("S");
+		}
+		else if(e.getSource() == switchTeams)
+		{
+			printToServer("X");
 		}
 
 	}

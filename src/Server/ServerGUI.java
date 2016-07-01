@@ -492,8 +492,8 @@ public class ServerGUI extends JPanel implements KeyListener,
 		graphics.drawString("Blue Team", blueX, 50);
 		graphics.setColor(Color.RED);
 		graphics.drawString("Red Team", redX, 50);
-		int redStart = 90;
-		int blueStart = 90;
+		int redStart = 80;
+		int blueStart = 80;
 		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
 		try
 		{
