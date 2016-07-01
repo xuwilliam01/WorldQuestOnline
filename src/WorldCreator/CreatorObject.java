@@ -20,7 +20,7 @@ import Imports.Images;
  */
 public class CreatorObject extends JButton implements MouseListener
 {
-
+	public final static int SCALE = 2;
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
 	private boolean isTile;
@@ -36,12 +36,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public CreatorObject(char ref, String name, boolean isTile,
 			String description, CreatorWorld world)
 	{
-		if (isTile)
-			setIcon(new ImageIcon(Images.getImage(name)));
-		else
-			setIcon(new ImageIcon(Images.getImage(name.substring(0,
-					name.length() - 4)
-					+ "_ICON.png")));
+
+		setIcon(new ImageIcon(Images.getImage(name.substring(0,
+				name.length() - 4)
+				+ "_ICON.png")));
+		setSize(getIcon().getIconWidth(), getIcon().getIconHeight());
+
 
 		imageRef = new ImageReferencePair(ref, name);
 
@@ -54,7 +54,7 @@ public class CreatorObject extends JButton implements MouseListener
 		addMouseListener(this);
 		setToolTipText(description);
 
-		setSize(getIcon().getIconWidth(), getIcon().getIconHeight());
+
 	}
 
 	public String getImageName()
@@ -95,12 +95,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public void setPosition(int row, int col)
 	{
 		if (isTile)
-			setLocation(col * imageRef.getImage().getWidth(null) + (col + 1)
-					* 10, row * imageRef.getImage().getHeight(null) + row * 10
-					+ 50);
+			setLocation(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
+					* 12), SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
+					+ 80);
 		else
-			setLocation(col * getIcon().getIconWidth() + (col + 1) * 10, row
-					* getIcon().getIconHeight() + row * 10 + 300);
+			setLocation(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12), SCALE*(row
+					* getIcon().getIconHeight()/SCALE + row * 10) + 300);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class CreatorObject extends JButton implements MouseListener
 		world.setSelectedTile(imageRef.getReference());
 		setBorder(BorderFactory.createLineBorder(Color.white));
 	}
-	
+
 	// UNUSED BUT REQUIRED METHODS
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -128,12 +128,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public void mouseExited(MouseEvent e)
 	{
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 	}
-	
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////

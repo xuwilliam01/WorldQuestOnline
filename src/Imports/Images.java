@@ -51,34 +51,34 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_3.png"));
-		BufferedImage[][] imageTiles = new BufferedImage[image
-				.getHeight() / 32][image.getWidth() / 32];
-		for (int row = 0; row < imageTiles.length; row++)
-		{
-			for (int column = 0; column < imageTiles[0].length; column++)
-			{
-				imageTiles[row][column] = image.getSubimage(
-						column * 32, row * 32, 32, 32);
-			}
-		}
-
-		image = imageTiles[2][5];
-		
-		double rotationRequired = Math.toRadians(135);
-		AffineTransform tx;
-
-		tx = AffineTransform.getRotateInstance(
-				rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
-
-		AffineTransformOp op = new AffineTransformOp(tx,
-				AffineTransformOp.TYPE_BILINEAR);
-
-		BufferedImage newImage = op
-				.filter(image, null);
-		
-		ImageIO.write(newImage, "PNG", new File(
-				"STEELARROW.png"));
+//		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_3.png"));
+//		BufferedImage[][] imageTiles = new BufferedImage[image
+//				.getHeight() / 32][image.getWidth() / 32];
+//		for (int row = 0; row < imageTiles.length; row++)
+//		{
+//			for (int column = 0; column < imageTiles[0].length; column++)
+//			{
+//				imageTiles[row][column] = image.getSubimage(
+//						column * 32, row * 32, 32, 32);
+//			}
+//		}
+//
+//		image = imageTiles[2][5];
+//		
+//		double rotationRequired = Math.toRadians(135);
+//		AffineTransform tx;
+//
+//		tx = AffineTransform.getRotateInstance(
+//				rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
+//
+//		AffineTransformOp op = new AffineTransformOp(tx,
+//				AffineTransformOp.TYPE_BILINEAR);
+//
+//		BufferedImage newImage = op
+//				.filter(image, null);
+//		
+//		ImageIO.write(newImage, "PNG", new File(
+//				"STEELARROW.png"));
 	}
 
 	/**
@@ -549,29 +549,57 @@ public class Images
 					ServerWorld.TILE_SIZE));
 			images.add(new GameImage("WATERPLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
+			//Icons of tiles
+			images.add(new GameImage("BRICK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("GRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("WATER_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("DIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("DIRTGRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("COBBLESTONE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("STONEBRICKS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("NOTHING_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLACK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BDIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BDIRTPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("PLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("WATERPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 			
-			images.add(new GameImage("SLIME_6_ICON.png", 2*ServerWorld.TILE_SIZE,
-					2*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("RED_CASTLE_ICON.png", 2*ServerWorld.TILE_SIZE,
-					2*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLUE_CASTLE_ICON.png", 2*ServerWorld.TILE_SIZE,
-					2*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("CHEST_ICON.png", 2*ServerWorld.TILE_SIZE,
-					2*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("VENDOR_LEFT_ICON.png", 2*ServerWorld.TILE_SIZE,
-					2*ServerWorld.TILE_SIZE));
+			
+			images.add(new GameImage("SLIME_6_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("RED_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLUE_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("CHEST_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("VENDOR_LEFT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("SLIME_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
-							2*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("SLIME_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("RED_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("RED_GOBLIN_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
-							2*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("RED_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 			images.add(new GameImage("BLUE_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png", 2*ServerWorld.TILE_SIZE,
-							2*ServerWorld.TILE_SIZE));
+			images.add(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 
 			for (int no = 0; no < 6; no++)
 			{
