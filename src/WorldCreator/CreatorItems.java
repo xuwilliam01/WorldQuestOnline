@@ -6,6 +6,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -145,12 +146,18 @@ public class CreatorItems extends JPanel implements ActionListener{
 
 		//Save
 		if(button.getSource() == save)
+
 			try {
 				world.save();
-			} catch (FileNotFoundException e) {
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
 				System.out.println("Was not able to save file");
 				e.printStackTrace();
 			}
+
+
 		//Clear the world
 		else if(button.getSource() == clear)
 		{

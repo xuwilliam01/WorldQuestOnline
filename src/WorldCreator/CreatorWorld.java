@@ -1,6 +1,6 @@
 package WorldCreator;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics;
 import java.awt.IllegalComponentStateException;
 import java.awt.MouseInfo;
@@ -41,9 +41,14 @@ import Server.Creatures.ServerSlime;
 public class CreatorWorld extends JPanel implements KeyListener,
 ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {
+	public final static int FRAME_FACTOR = 1;
 	public final static int SCROLL_SPEED = 13;
 	public final static Color LIGHT_GRAY = Color.LIGHT_GRAY;
-	public final static double MIN_EDIT_ZOOM = ServerFrame.FRAME_FACTOR * 2.5;
+	public final static double MIN_EDIT_ZOOM = FRAME_FACTOR * 2.5;
+	public static final int CENTRE_X = Client.Client.SCREEN_WIDTH
+			/ FRAME_FACTOR / 2;
+	public static final int CENTRE_Y = Client.Client.SCREEN_HEIGHT
+			/ FRAME_FACTOR / 2;
 
 	/**
 	 * The grid of tiles for the creator
@@ -54,7 +59,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 * The position on the creator being viewed
 	 */
 	private int posY = 200;
-	
+
 	/**
 	 * The position of the creator being viewed
 	 */
@@ -123,7 +128,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{	
 		Images.importImages();
 		ImageReferencePair.importReferences();
-		
+
 		setDoubleBuffered(true);
 		setBackground(Color.black);
 
@@ -133,7 +138,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		setSize(Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT);
 
 		// Set the scale of objects
-		objectFactor = ServerFrame.FRAME_FACTOR;
+		objectFactor = FRAME_FACTOR;
 
 		this.fileName = fileName;
 
@@ -179,7 +184,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			System.out.println();
 
 		}
-		
+
 		//Add objects
 		int numObjects = Integer.parseInt(br.readLine());
 		for(int obj = 0; obj < numObjects;obj++)
@@ -187,7 +192,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			tokens = br.readLine().split(" ");
 			int row = Integer.parseInt(tokens[0]);
 			int col = Integer.parseInt(tokens[1]);
-			
+
 			objects.add(new CreatorWorldObject(row,col,tokens[2].charAt(0)));
 		}
 		br.close();
@@ -203,7 +208,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				grid[row][col] = ' ';
 		objects.clear();
 	}
-	
+
 	/**
 	 * Read in the images from the config file and make new objects
 	 */
@@ -249,22 +254,22 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 
 		// Draw tiles
-		int startRow = (int) ((posY - ServerGUI.CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
+		int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startRow < 0)
 		{
 			startRow = 0;
 		}
-		int endRow = (int) ((ServerGUI.CENTRE_Y + posY + 5) / (ServerWorld.TILE_SIZE / objectFactor));
+		int endRow = (int) ((CENTRE_Y + posY + 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (endRow >= grid.length)
 		{
 			endRow = grid.length - 1;
 		}
-		int startColumn = (int) ((posX - ServerGUI.CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
+		int startColumn = (int) ((posX - CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		int endColumn = (int) ((ServerGUI.CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
+		int endColumn = (int) ((CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
 		if (endColumn >= grid[0].length)
 		{
 			endColumn = grid[0].length - 1;
@@ -281,14 +286,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					{
 						graphics.drawImage(
 								tiles[grid[row][column]].getImage(),
-								(int) (ServerGUI.CENTRE_X
+								(int) (CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX + 0.5),
-								(int) (ServerGUI.CENTRE_Y
-										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),(int) (ServerWorld.TILE_SIZE / objectFactor +1),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-								null);
+										(int) (CENTRE_Y
+												+ row
+												* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),(int) (ServerWorld.TILE_SIZE / objectFactor +1),
+												(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+												null);
 					}
 				}
 			}
@@ -305,14 +310,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 						graphics.setColor(tiles[grid[row][column]].getColor());
 
 						graphics.fillRect(
-								(int) (ServerGUI.CENTRE_X
+								(int) (CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX + 0.5),
-								(int) (ServerGUI.CENTRE_Y
-										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
-								(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
+										(int) (CENTRE_Y
+												+ row
+												* (ServerWorld.TILE_SIZE / objectFactor) - posY + 0.5),
+												(int) (ServerWorld.TILE_SIZE / objectFactor + 1),
+												(int) (ServerWorld.TILE_SIZE / objectFactor + 1));
 					}
 
 				}
@@ -323,15 +328,15 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(CreatorWorldObject object : objects)
 		{
 			if(isEditable)
-				graphics.drawImage(object.getImage(), (int) (ServerGUI.CENTRE_X + object.getCol()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+				graphics.drawImage(object.getImage(), (int) (CENTRE_X + object.getCol()
+						* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (CENTRE_Y + object.getRow()
+								* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
 			else
 			{
 				graphics.setColor(tiles[object.getRef()].getColor());
-				graphics.fillRect((int) (ServerGUI.CENTRE_X + object.getCol()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (ServerGUI.CENTRE_Y + object.getRow()
-				* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor));
+				graphics.fillRect((int) (CENTRE_X + object.getCol()
+						* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (CENTRE_Y + object.getRow()
+								* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor));
 			}
 		}
 
@@ -357,9 +362,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			// we need to figure out the starting location and width/height
 			int width = (int) ((selectedBlock[1] - startingBlock[1]) * (ServerWorld.TILE_SIZE / objectFactor));
 			int height = (int) ((selectedBlock[0] - startingBlock[0]) * (ServerWorld.TILE_SIZE / objectFactor));
-			int startX = (int) (ServerGUI.CENTRE_X + startingBlock[1]
+			int startX = (int) (CENTRE_X + startingBlock[1]
 					* (ServerWorld.TILE_SIZE / objectFactor) - posX);
-			int startY = (int) (ServerGUI.CENTRE_Y + startingBlock[0]
+			int startY = (int) (CENTRE_Y + startingBlock[0]
 					* (ServerWorld.TILE_SIZE / objectFactor) - posY);
 
 			// Variables for highlighting
@@ -413,24 +418,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				if(!canFit(selectedBlock[0],selectedBlock[1],1,1,true) && selectedTile >= 'A')
 					graphics.setColor(Color.red);
 
-				graphics.drawRect((int) (ServerGUI.CENTRE_X + selectedBlock[1]
+				graphics.drawRect((int) (CENTRE_X + selectedBlock[1]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posX),
-						(int) (ServerGUI.CENTRE_Y + selectedBlock[0]
+						(int) (CENTRE_Y + selectedBlock[0]
 								* (ServerWorld.TILE_SIZE / objectFactor) - posY),
-						(int) (ServerWorld.TILE_SIZE / objectFactor) ,
-						(int) (ServerWorld.TILE_SIZE / objectFactor) );
+								(int) (ServerWorld.TILE_SIZE / objectFactor) ,
+								(int) (ServerWorld.TILE_SIZE / objectFactor) );
 				canDrawObject = false;
 			}
 			// Draw a box for the object if it can be added to the screen
 			else 
 			{
-				int x = (int) (ServerGUI.CENTRE_X + selectedBlock[1]
+				int x = (int) (CENTRE_X + selectedBlock[1]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posX);
-				int y = (int) (ServerGUI.CENTRE_Y + selectedBlock[0]
+				int y = (int) (CENTRE_Y + selectedBlock[0]
 						* (ServerWorld.TILE_SIZE / objectFactor) - posY);
 				int width = (int) (tiles[selectedTile].getImage().getWidth(null)/ objectFactor) ;
 				int height = (int) (tiles[selectedTile].getImage().getHeight(null)/ objectFactor) ;
-		
+
 				if(canFit(selectedBlock[0],selectedBlock[1],(int)(tiles[selectedTile].getImage().getWidth(null)/ ServerWorld.TILE_SIZE),(int) (tiles[selectedTile].getImage().getHeight(null)/ ServerWorld.TILE_SIZE),false))
 				{
 					canDrawObject = true;
@@ -449,7 +454,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.setColor(Color.white);
 
 		// Draw an outline
-		graphics.drawRect((int) (ServerGUI.CENTRE_X - posX), (int) (ServerGUI.CENTRE_Y  - posY),(int)((grid[0].length)
+		graphics.drawRect((int) (CENTRE_X - posX), (int) (CENTRE_Y  - posY),(int)((grid[0].length)
 				* (ServerWorld.TILE_SIZE / objectFactor)), (int)((grid.length)
 						* (ServerWorld.TILE_SIZE / objectFactor)));
 
@@ -518,18 +523,20 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public int[] getRowCol(int x, int y)
 	{
-		int col = (int) ((x - ServerGUI.CENTRE_X + posX) / (ServerWorld.TILE_SIZE / objectFactor));
-		int row = (int) ((y - ServerGUI.CENTRE_Y + posY) / (ServerWorld.TILE_SIZE / objectFactor));
+		int col = (int) ((x - CENTRE_X + posX) / (ServerWorld.TILE_SIZE / objectFactor));
+		int row = (int) ((y - CENTRE_Y + posY) / (ServerWorld.TILE_SIZE / objectFactor));
 		return new int[] { row, col };
 	}
 
 	/**
 	 * Saves the world
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
-	public void save() throws FileNotFoundException
+	public void save() throws NumberFormatException, IOException
 	{	
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
-		
+
 		// Print the grid
 		output.println(grid.length + " " + grid[0].length);
 		for (int row = 0; row < grid.length; row++)
@@ -538,7 +545,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				output.print(grid[row][col]);
 			output.println();
 		}
-		
+
 		// Print the objects
 		output.println(objects.size());
 		for(CreatorWorldObject object : objects)
@@ -546,6 +553,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			output.printf("%d %d %s%n", object.getRow(),object.getCol(),object.getRef());
 		}
 		output.close();
+
+		BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps.txt")));
+		int numMaps = Integer.parseInt(maps.readLine());
+		ArrayList<String> mapNames = new ArrayList<String>();
+		for(int i =0; i < numMaps;i++)
+			mapNames.add(maps.readLine());
+		maps.close();
+		
+		//If the file doesn't already exist
+		if(!mapNames.contains(fileName))
+		{
+			PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps.txt"));
+			mapWriter.println(numMaps+1);
+			for(String map : mapNames)
+				mapWriter.println(map);
+			mapWriter.println(fileName);
+			mapWriter.close();
+		}
 	}
 
 	/**
@@ -565,7 +590,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				else
 					grid[row][col] = ' ';
 			}
-		
+
 		for(CreatorWorldObject object : objects)
 		{
 			object.setRow(object.getRow()+deltaHeight/2);
@@ -590,14 +615,14 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				else
 					grid[row][col] = ' ';
 			}
-		
+
 		for(CreatorWorldObject object : objects)
 		{
 			object.setCol(object.getCol()+deltaWidth/2);
 			repaint();
 		}
 	}
-	
+
 	/**
 	 * Scroll or start hightlightin
 	 */
@@ -648,12 +673,12 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void actionPerformed(ActionEvent arg0)
 	{
 		try{
-		if (this.hasFocus())
-			selectedBlock = getRowCol(
-					(int) (MouseInfo.getPointerInfo().getLocation().getX() - this
-							.getLocationOnScreen().getX()),
-					(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
-							.getLocationOnScreen().getY()));
+			if (this.hasFocus())
+				selectedBlock = getRowCol(
+						(int) (MouseInfo.getPointerInfo().getLocation().getX() - this
+								.getLocationOnScreen().getX()),
+								(int) (MouseInfo.getPointerInfo().getLocation().getY() - this
+										.getLocationOnScreen().getY()));
 		}
 		catch(IllegalComponentStateException e)
 		{
@@ -797,7 +822,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		if (notches > 0 )
 		{
-			if (objectFactor * (1.1 * (notches))< ServerFrame.FRAME_FACTOR * 16)
+			if (objectFactor * (1.1 * (notches))< FRAME_FACTOR * 16)
 			{
 				objectFactor *= (1.1 * (notches));
 				posX /= (1.1 * notches);
@@ -806,9 +831,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 			else
 			{
-				posX /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				posY /= ServerFrame.FRAME_FACTOR * 16 / objectFactor;
-				objectFactor = ServerFrame.FRAME_FACTOR * 16;
+				posX /= FRAME_FACTOR * 16 / objectFactor;
+				posY /= FRAME_FACTOR * 16 / objectFactor;
+				objectFactor = FRAME_FACTOR * 16;
 			}
 		}
 		else if (notches < 0)
@@ -835,7 +860,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		else
 			isEditable = false;
 	}
-	
+
 
 	public void setNewHeight(int newHeight)
 	{
