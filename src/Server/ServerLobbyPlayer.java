@@ -1,6 +1,8 @@
 package Server;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -23,6 +25,8 @@ public class ServerLobbyPlayer implements Runnable {
 
 	public static int numRed = 0;
 	public static int numBlue = 0;
+	
+	private String allMaps ="";
 
 	public ServerLobbyPlayer(Socket socket, Server server)
 	{
@@ -44,6 +48,14 @@ public class ServerLobbyPlayer implements Runnable {
 		{
 			output = new PrintWriter(this.socket.getOutputStream());
 			sendMessage("M "+server.getMap());
+			
+			allMaps = "";
+			BufferedReader inputMap = new BufferedReader(new FileReader(new File("Resources","Maps.txt")));
+			int numMaps = Integer.parseInt(inputMap.readLine());
+			for(int i = 0; i < numMaps;i++)
+				allMaps+=inputMap.readLine()+" ";
+			allMaps = allMaps.trim();
+			inputMap.close();
 		}
 		catch (IOException e)
 		{
@@ -143,6 +155,16 @@ public class ServerLobbyPlayer implements Runnable {
 						server.broadcast("P false "+ team+" "+name);
 						if(isLeader)
 							setLeader();
+					}
+				}
+				else if(command.length() > 2 && command.charAt(0) =='M')
+				{
+					String map = command.substring(2);
+					if(allMaps.contains(map))
+					{
+						server.broadcast("M "+map);
+						server.setMap(map);
+						System.out.println(map);
 					}
 				}
 			}

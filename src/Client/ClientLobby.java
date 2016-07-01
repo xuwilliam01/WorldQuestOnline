@@ -1,6 +1,7 @@
 package Client;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,6 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -39,18 +43,19 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 	private JButton start;
 	private JButton switchTeams;
-	
+	private JComboBox<String> mapBox = new JComboBox<String>();
+
 	private boolean isLeader = false;
 	private int leaderTeam = -1;
 	private String leaderName ="";
-	
+
 	private Image background = Images.getImage("BACKGROUND.png");
-	private String map ="";
+	private String[] maps;
 
 	private ArrayList<String> redTeam = new ArrayList<String>();
 	private ArrayList<String> blueTeam = new ArrayList<String>();
 
-	public ClientLobby(Socket socket, String playerName)
+	public ClientLobby(Socket socket, String playerName) throws NumberFormatException, IOException
 	{
 		this.socket = socket;
 		name = playerName;
@@ -86,12 +91,32 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		switchTeams.setSize(200,20);
 		switchTeams.setVisible(true);
 		switchTeams.addActionListener(this);
-		
+
+		//Add map selection combo box
+		BufferedReader inputMap= new BufferedReader(new FileReader(new File("Resources","Maps.txt")));
+		int numMaps = Integer.parseInt(inputMap.readLine());
+		maps = new String[numMaps];
+		for(int i = 0; i < numMaps;i++)
+		{
+			maps[i] = inputMap.readLine();
+			maps[i] = maps[i].substring(0,maps[i].length()-4);
+		}
+		inputMap.close();
+
+		mapBox = new JComboBox<String>(maps);
+		mapBox.setSize(200,40);
+		mapBox.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-250, 24);
+		mapBox.addActionListener(this);
+		mapBox.setFocusable(true);
+		mapBox.setVisible(true);
+		mapBox.setEnabled(false);
+
 		setLayout(null);
 		add(chat);
 		add(enter);
 		add(start);
 		add(switchTeams);
+		add(mapBox);
 
 		setDoubleBuffered(true);
 		setFocusable(true);
@@ -205,7 +230,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 							name += tokens[++token]+" ";
 						name = name.trim();
 						chatQueue.add("RO "+name);
-						
+
 						if(name.charAt(0)-'0' == ServerCreature.RED_TEAM)
 						{
 							redTeam.remove(name.substring(1));
@@ -230,6 +255,9 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 						start.setForeground(Color.BLACK);
 						start.setBackground(Color.GRAY);
 						start.setBorderPainted(true);
+
+						mapBox.setEnabled(true);
+						repaint();
 					}
 					else if(tokens[token].equals("LE"))
 					{
@@ -238,12 +266,15 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 						for(int i = 2; i < tokens.length;i++)
 							name+= tokens[i]+" ";
 						name = name.trim();
-						
+
 						leaderName = name;					
 					}
 					else if(tokens[token].equals("M"))
 					{
-						map = tokens[++token].substring(0,tokens[token].length()-4);
+						if(!isLeader && !tokens[++token].equals(mapBox.getSelectedItem()))
+						{
+							mapBox.setSelectedItem(tokens[token].substring(0, tokens[token].length()-4));
+						}
 					}
 					repaint();
 				}
@@ -331,12 +362,9 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 		//Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
-		int sizeName = graphics.getFontMetrics().stringWidth(map);
-		int sizeMap = graphics.getFontMetrics().stringWidth("Map: ");
 		graphics.setColor(Color.GRAY);
-		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-sizeMap-50, 50);
-		graphics.setColor(Color.ORANGE);
-		graphics.drawString(map, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-sizeName-50, 50);
+		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-300, 50);
+
 
 		//Write the players on each team
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
@@ -359,7 +387,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 				graphics.fillOval(redX-12 , redStart-10, 10, 10);
 				graphics.setColor(Color.RED);
 			}
-				
+
 			graphics.drawString(player, redX + 5,
 					redStart);
 			redStart += 20;
@@ -374,15 +402,14 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 				graphics.fillOval(blueX-12 , blueStart-10, 10, 10);
 				graphics.setColor(Color.BLUE);
 			}
-			
+
 			graphics.drawString(player, blueX + 5,
 					blueStart);
 			blueStart += 20;
 		}
-
-		if(!chat.hasFocus())
-			requestFocusInWindow();
-
+		
+		//if(!chat.hasFocus() && !mapBox.hasFocus())
+			//requestFocusInWindow();
 	}
 
 
@@ -407,6 +434,10 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		else if(e.getSource() == switchTeams)
 		{
 			printToServer("X");
+		}
+		else if(e.getSource() == mapBox)
+		{
+			printToServer("M "+mapBox.getItemAt(mapBox.getSelectedIndex())+".txt");
 		}
 
 	}

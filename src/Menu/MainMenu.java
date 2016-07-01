@@ -350,10 +350,13 @@ public class MainMenu {
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
 
-
+			StringBuilder newFileName = new StringBuilder(fileName);
+			while(newFileName.indexOf(" ") >= 0)
+				newFileName.setCharAt(newFileName.indexOf(" "),'_');
+			
 			CreatorWorld world = null;
 			try {
-				world = new CreatorWorld(fileName);
+				world = new CreatorWorld(newFileName.toString());
 			} catch (NumberFormatException e) {
 
 				e.printStackTrace();
@@ -396,8 +399,10 @@ public class MainMenu {
 		 * @param serverIP the server IP
 		 * @param port the port number
 		 * @param playerName the player's name
+		 * @throws IOException 
+		 * @throws NumberFormatException 
 		 */
-		public GamePanel(String serverIP, int port, String playerName)
+		public GamePanel(String serverIP, int port, String playerName) throws NumberFormatException, IOException
 		{
 			this.serverIP = serverIP;
 			this.port = port;
@@ -686,7 +691,15 @@ public class MainMenu {
 			mainMenu = null;
 
 			
-			gamePanel = new GamePanel(serverIP, port,playerName);
+			try {
+				gamePanel = new GamePanel(serverIP, port,playerName);
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
 			gamePanel.revalidate();
@@ -713,7 +726,7 @@ public class MainMenu {
 				if(fileName == null)
 					return;
 				else if(fileName.equals(""))
-					fileName = "world.txt";
+					fileName = "World.txt";
 				else
 					fileName+=".txt";
 

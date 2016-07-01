@@ -38,6 +38,7 @@ public class Server implements Runnable
 	{
 		this.map = map;
 		this.port = port;
+
 		try
 		{
 			this.socket = new ServerSocket(port);
@@ -191,6 +192,7 @@ public class Server implements Runnable
 	public void setGUI (ServerGUI gui)
 	{
 		this.gui=gui;
+		gui.setMap(map);
 	}
 	public ServerEngine getEngine()
 	{
@@ -250,6 +252,12 @@ public class Server implements Runnable
 	public String getMap()
 	{
 		return map;
+	}
+	
+	public void setMap(String map)
+	{
+		this.map = map;
+		gui.setMap(map);
 	}
 	
 	private class Close implements Runnable

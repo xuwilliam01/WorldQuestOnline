@@ -127,6 +127,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	private double objectFactor;
 
 	/**
+	 * The name of the map
+	 */
+	private String map = "";
+	
+	/**
 	 * X-value of the centre of the screen
 	 */
 	public static final int CENTRE_X = Client.Client.SCREEN_WIDTH
@@ -330,8 +335,12 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
 				- 55);
 		// }
-		// Draw the chat
+		// Draw the chat and the map name
 		graphics.setFont(ClientWorld.NORMAL_FONT);
+		graphics.setColor(Color.GRAY);
+		graphics.drawString("Map: ", 270, 15);
+		graphics.setColor(new Color(235,117,0));
+		graphics.drawString(map.substring(0, map.length()-4), 270+graphics.getFontMetrics().stringWidth("Map: "), 15);
 		while (true)
 		{
 			try
@@ -889,5 +898,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 		}
 
+	}
+	
+	public void setMap(String map)
+	{
+		this.map = map;
 	}
 }
