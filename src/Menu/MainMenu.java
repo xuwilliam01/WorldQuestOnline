@@ -156,6 +156,7 @@ public class MainMenu {
 			setDoubleBuffered(true);
 			//setBackground(Color.white);
 
+			setBackground(Color.BLACK);
 			setFocusable(true);
 			setLayout(null);
 			setLocation(0,0);
@@ -498,6 +499,7 @@ public class MainMenu {
 			mySocket = new Socket(serverIP, port);
 			client = new Client(mySocket,inventory,pane,playerName);
 			inventory.setClient(client);
+			inventory.setBackground(Color.BLACK);
 
 			client.setLocation(0,0);
 			inventory.setLocation(Client.SCREEN_WIDTH,0);

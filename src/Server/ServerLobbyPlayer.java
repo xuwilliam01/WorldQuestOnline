@@ -157,7 +157,7 @@ public class ServerLobbyPlayer implements Runnable {
 							setLeader();
 					}
 				}
-				else if(command.length() > 2 && command.charAt(0) =='M')
+				else if(command.length() > 2 && command.charAt(0) =='M' && isLeader)
 				{
 					String map = command.substring(2);
 					if(allMaps.contains(map))

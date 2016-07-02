@@ -1,4 +1,5 @@
 package Client;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
@@ -28,7 +29,7 @@ public class ClientFrame extends JFrame
 	    //Set the window to the size of the screen
 	    Client.SCREEN_WIDTH = dm.getWidth()-ClientInventory.INVENTORY_WIDTH;
 	    Client.SCREEN_HEIGHT = dm.getHeight();
-	    
+	    setBackground(Color.BLACK);
 	    System.out.println(dm.getWidth()-ClientInventory.INVENTORY_WIDTH);
 	    System.out.println(dm.getHeight());
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));

@@ -48,7 +48,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 	 */
 	public ClientInventory(JButton menu) {
 		setDoubleBuffered(true);
-
+		setBackground(Color.BLACK);
 		setFocusable(true);
 		requestFocusInWindow();
 		setLayout(null);

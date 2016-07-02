@@ -171,6 +171,7 @@ MouseMotionListener
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
+		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
 		currentMessage = " ";
@@ -193,6 +194,7 @@ MouseMotionListener
 		enter.setSize(60, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
+		enter.setBackground(new Color(240,240,240));
 
 		setLayout(null);
 		add(chat);
@@ -783,7 +785,7 @@ MouseMotionListener
 		if (weaponSelected != 9)
 			inventory.getEquippedWeapons()[weaponSelected]
 					.setBorder(BorderFactory
-							.createLineBorder(Color.white));
+							.createLineBorder(new Color(240,240,240)));
 		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
@@ -808,7 +810,7 @@ MouseMotionListener
 
 		// Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		graphics.setColor(Color.white);
+		graphics.setColor(new Color(240,240,240));
 		graphics.drawString(pingString, SCREEN_WIDTH - 60, 20);
 		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH - 60, 40);
 

@@ -75,6 +75,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		enter.setSize(60, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
+		enter.setBackground(new Color(240,240,240));
 
 		start = new JButton("Start Game");
 		start.setForeground(Color.GRAY);
@@ -86,11 +87,12 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		start.setVisible(true);
 		start.addActionListener(this);
 
-		switchTeams = new JButton("Switch Team");
+		switchTeams = new JButton("Switch Teams");
 		switchTeams.setLocation(580,0);
 		switchTeams.setSize(200,20);
 		switchTeams.setVisible(true);
 		switchTeams.addActionListener(this);
+		switchTeams.setBackground(new Color(240,240,240));
 
 		//Add map selection combo box
 		BufferedReader inputMap= new BufferedReader(new FileReader(new File("Resources","Maps.txt")));
@@ -123,6 +125,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		requestFocusInWindow();
 		setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
 		addKeyListener(this);
+		this.setBackground(Color.BLACK);
 
 		// Set up the input
 		try
@@ -253,7 +256,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 					{
 						isLeader = true;
 						start.setForeground(Color.BLACK);
-						start.setBackground(Color.GRAY);
+						start.setBackground(new Color(240,240,240));
 						start.setBorderPainted(true);
 
 						mapBox.setEnabled(true);
