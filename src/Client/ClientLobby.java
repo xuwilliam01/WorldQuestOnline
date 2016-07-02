@@ -54,12 +54,15 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 	private ArrayList<String> redTeam = new ArrayList<String>();
 	private ArrayList<String> blueTeam = new ArrayList<String>();
+	
+	private GamePanel panel;
 
-	public ClientLobby(Socket socket, String playerName) throws NumberFormatException, IOException
+	public ClientLobby(Socket socket, String playerName, GamePanel panel) throws NumberFormatException, IOException
 	{
 		this.socket = socket;
 		name = playerName;
-
+		this.panel = panel;
+		
 		chat = new JTextField();
 		chat.setLocation(0, 0);
 		chat.setSize(200, 20);
@@ -248,7 +251,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 						socket.close();
 						output.close();
 						input.close();
-						GamePanel.startGame();
+						panel.startGame();
 
 						break;
 					}

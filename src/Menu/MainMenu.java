@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class MainMenu {
 
 	private static Client client;
 	private static ClientLobby lobby;
-	
+
 
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -354,7 +355,7 @@ public class MainMenu {
 			StringBuilder newFileName = new StringBuilder(fileName);
 			while(newFileName.indexOf(" ") >= 0)
 				newFileName.setCharAt(newFileName.indexOf(" "),'_');
-			
+
 			CreatorWorld world = null;
 			try {
 				world = new CreatorWorld(newFileName.toString());
@@ -391,10 +392,10 @@ public class MainMenu {
 	{
 		static ClientInventory inventory;
 		static Socket mySocket = null;
-		static String playerName;
-		static String serverIP;
-		static int port;
-		
+		String playerName;
+		String serverIP;
+		int port;
+
 		/**
 		 * Constructor
 		 * @param serverIP the server IP
@@ -403,13 +404,13 @@ public class MainMenu {
 		 * @throws IOException 
 		 * @throws NumberFormatException 
 		 */
-		public GamePanel(String serverIP, int port, String playerName) throws NumberFormatException, IOException
+		public GamePanel(String serverIPIn, int portIn, String playerNameIn) throws NumberFormatException, IOException
 		{
-			this.serverIP = serverIP;
-			this.port = port;
+			serverIP = serverIPIn;
+			this.port = portIn;
 			boolean connected = false;
 			boolean exit = false;
-			this.playerName = playerName;
+			this.playerName = playerNameIn;
 
 			while (!connected)
 			{
@@ -439,8 +440,10 @@ public class MainMenu {
 								{
 									port = DEF_PORT;
 								}
-								else
+								else if(Integer.parseInt(portNum) <= 65535)
 									port = Integer.parseInt(portNum);
+								else throw new NumberFormatException();
+								
 								break;
 							}
 							catch(NumberFormatException E)
@@ -460,31 +463,32 @@ public class MainMenu {
 				mainFrame.validate();
 
 				mainMenu = new MainPanel();
+				mainMenu.setVisible(true);
 				mainFrame.add(mainMenu);
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
 			}
 			else
 			{		
-				lobby = new ClientLobby(mySocket, playerName);
+				lobby = new ClientLobby(mySocket, playerName,this);
 				lobby.setLocation(0,0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
 				lobby.setDoubleBuffered(true);
 				mainFrame.add(lobby);
 				lobby.repaint();
-				
+
 			}
 		}
-		
-		public static void startGame() throws UnknownHostException, IOException
+
+		public void startGame() throws UnknownHostException, IOException
 		{
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
 			mainFrame.invalidate();
 			mainFrame.validate();
 			lobby= null;
-			
+
 			JLayeredPane pane = new JLayeredPane();
 			pane.setLocation(0,0);
 			pane.setLayout(null);
@@ -496,6 +500,7 @@ public class MainMenu {
 			JButton menu = new JButton("Main Menu");
 			menu.addActionListener(new GameMenuButton());
 			inventory = new ClientInventory(menu);
+			mySocket.close();
 			mySocket = new Socket(serverIP, port);
 			client = new Client(mySocket,inventory,pane,playerName);
 			inventory.setClient(client);
@@ -516,7 +521,7 @@ public class MainMenu {
 		}
 	}
 
-	
+
 	/**
 	 * Reacts when the menu button in the creator is pressed
 	 * @author Alex Raita & William Xu
@@ -646,7 +651,7 @@ public class MainMenu {
 
 			//Get user info. If it invalid, then ask for it again or exit back to the main menu
 			String serverIP;
-			int port;
+			int port = DEF_PORT;
 			String playerName;
 
 			serverIP = JOptionPane
@@ -668,7 +673,9 @@ public class MainMenu {
 						return;
 					else if(portNum.equals(""))
 						portNum = ""+DEF_PORT;
-					port = Integer.parseInt(portNum);
+					else if(Integer.parseInt(portNum) <= 65535)
+						port = Integer.parseInt(portNum);
+					else throw new NumberFormatException();
 
 					playerName = JOptionPane
 							.showInputDialog("Please enter your name (max 20 characters)").trim();
@@ -692,7 +699,7 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
-			
+
 			try {
 				gamePanel = new GamePanel(serverIP, port,playerName);
 			} catch (NumberFormatException e1) {
