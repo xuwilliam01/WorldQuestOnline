@@ -152,4 +152,9 @@ public class GameImage implements Comparable<GameImage>
 	{
 		this.color = centreColor;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -38,6 +39,12 @@ public class Images
 	 * Array list of the game images
 	 */
 	public static BinaryTree<GameImage> images = null;
+	
+	private static GameImage[] imageArray;
+	
+	private static int noOfImages = 0; 
+	
+
 
 	/**
 	 * Determines whether images were already imported or not
@@ -87,6 +94,8 @@ public class Images
 	 */
 	public static void importImages()
 	{
+		imageArray = new GameImage[10000];
+		
 		if(imported)
 			return;
 		
@@ -110,7 +119,7 @@ public class Images
 					
 					for (int no = 0; no < 9; no++)
 					{
-						images.add(new GameImage(slimeSheets[sheetNo] + "_" + no + IMAGE_FORMAT,
+						addtoImageArray(new GameImage(slimeSheets[sheetNo] + "_" + no + IMAGE_FORMAT,
 								image.getSubimage(no * 19, 0, 19, 17), 38, 34));
 					}
 				}
@@ -120,7 +129,7 @@ public class Images
 				
 				for (int no = 0; no < 9; no++)
 				{
-					images.add(new GameImage("GIANTSLIME" + "_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("GIANTSLIME" + "_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 19, 0, 19, 17), 144, 102));
 				}
 				
@@ -129,7 +138,7 @@ public class Images
 				
 				for (int no = 0; no < 9; no++)
 				{
-					images.add(new GameImage("DARKSLIME" + "_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("DARKSLIME" + "_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 19, 0, 19, 17), 19, 17));
 				}
 
@@ -138,7 +147,7 @@ public class Images
 						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/32; no++)
 				{
-					images.add(new GameImage("EXPLOSION0_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION0_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
 				
@@ -146,12 +155,12 @@ public class Images
 						"EXPLOSION1_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/160; no++)
 				{
-					images.add(new GameImage("EXPLOSION1_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION1_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 160, 0, 160, 160),100,100));
 				}
 				for (int no = 0; no < image.getWidth()/160; no++)
 				{
-					images.add(new GameImage("EXPLOSION1_" + (no+5) + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION1_" + (no+5) + IMAGE_FORMAT,
 							image.getSubimage(no * 160, 160, 160, 160),100,100));
 				}
 				
@@ -159,7 +168,7 @@ public class Images
 						"EXPLOSION2_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/64; no++)
 				{
-					images.add(new GameImage("EXPLOSION2_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION2_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 64, 0, 64, 64)));
 				}
 				
@@ -167,7 +176,7 @@ public class Images
 						"EXPLOSION3_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/82; no++)
 				{
-					images.add(new GameImage("EXPLOSION3_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION3_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
@@ -175,7 +184,7 @@ public class Images
 						"EXPLOSION4_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/82; no++)
 				{
-					images.add(new GameImage("EXPLOSION4_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("EXPLOSION4_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
@@ -183,7 +192,7 @@ public class Images
 						"STAR0.png"));
 				for (int no = 0; no < image.getWidth()/24; no++)
 				{
-					images.add(new GameImage("STAR0_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("STAR0_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 24, 0, 24, 24)));
 				}
 				
@@ -191,7 +200,7 @@ public class Images
 						"STAR1.png"));
 				for (int no = 0; no < image.getWidth()/24; no++)
 				{
-					images.add(new GameImage("STAR1_" + no + IMAGE_FORMAT,
+					addtoImageArray(new GameImage("STAR1_" + no + IMAGE_FORMAT,
 							image.getSubimage(no * 24, 0, 24, 24)));
 				}
 				
@@ -216,7 +225,7 @@ public class Images
 									column * 32, row * 64, 32, 64);
 
 							// Add a right version of this image
-							images.add(new GameImage(playerSheets[no]
+							addtoImageArray(new GameImage(playerSheets[no]
 									+ "_RIGHT_" + row + "_" + column + ".png",
 									currentImage, 64, 128));
 
@@ -227,7 +236,7 @@ public class Images
 									AffineTransformOp.TYPE_BILINEAR);
 
 							// Add a left version of this image
-							images.add(new GameImage(playerSheets[no]
+							addtoImageArray(new GameImage(playerSheets[no]
 									+ "_LEFT_" + row + "_" + column + ".png",
 									op.filter(currentImage, null).getSubimage(
 											0, 0,
@@ -242,7 +251,7 @@ public class Images
 							32, 64);
 
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_RIGHT_" + 5
 							+ "_" + 1 + ".png", currentImage, 64, 128));
 
 					AffineTransform tx;
@@ -252,7 +261,7 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_LEFT_" + 5
 							+ "_" + 1 + ".png", op.filter(currentImage, null)
 							.getSubimage(0, 0,
 									currentImage.getWidth(),
@@ -260,7 +269,7 @@ public class Images
 
 					currentImage = image.getSubimage(2 * 32, 5 * 64, 40, 64);
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_RIGHT_" + 5
 							+ "_" + 2 + ".png", currentImage, 80, 128));
 
 					AffineTransform tx2;
@@ -270,7 +279,7 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_LEFT_" + 5
 							+ "_" + 2 + ".png", op2.filter(currentImage, null)
 							.getSubimage(0, 0,
 									currentImage.getWidth(),
@@ -278,7 +287,7 @@ public class Images
 
 					currentImage = image.getSubimage(4 * 32, 5 * 64, 52, 64);
 					// Add a right version of this image
-					images.add(new GameImage(playerSheets[no] + "_RIGHT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_RIGHT_" + 5
 							+ "_" + 4 + ".png", currentImage, 104, 128));
 
 					AffineTransform tx3;
@@ -288,7 +297,7 @@ public class Images
 							AffineTransformOp.TYPE_BILINEAR);
 
 					// Add a left version of this image
-					images.add(new GameImage(playerSheets[no] + "_LEFT_" + 5
+					addtoImageArray(new GameImage(playerSheets[no] + "_LEFT_" + 5
 							+ "_" + 4 + ".png", op3.filter(currentImage, null)
 							.getSubimage(0, 0,
 									currentImage.getWidth(),
@@ -325,7 +334,7 @@ public class Images
 									column * 32, row * 64, 32, 64);
 
 							// Add a right version of this image
-							images.add(new GameImage(goblinSheets[no]
+							addtoImageArray(new GameImage(goblinSheets[no]
 									+ "_RIGHT_" + row + "_" + column + ".png",
 									currentImage, (int)(64*size + 0.5), (int)(128*size + 0.5)));
 
@@ -336,7 +345,7 @@ public class Images
 									AffineTransformOp.TYPE_BILINEAR);
 
 							// Add a left version of this image
-							images.add(new GameImage(goblinSheets[no]
+							addtoImageArray(new GameImage(goblinSheets[no]
 									+ "_LEFT_" + row + "_" + column + ".png",
 									op.filter(currentImage, null).getSubimage(
 											0, 0,
@@ -349,7 +358,7 @@ public class Images
 								32, 64);
 						
 						// Add a right version of this image
-						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
+						addtoImageArray(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
 								+ "_" + 4 + ".png", currentImage, (int)(64*size + 0.5), (int)(128*size + 0.5)));
 
 						AffineTransform tx;
@@ -359,7 +368,7 @@ public class Images
 								AffineTransformOp.TYPE_BILINEAR);
 
 						// Add a left version of this image
-						images.add(new GameImage(goblinSheets[no] + "_LEFT_" + 1
+						addtoImageArray(new GameImage(goblinSheets[no] + "_LEFT_" + 1
 								+ "_" + 4 + ".png", op.filter(currentImage, null)
 								.getSubimage(0, 0,
 										currentImage.getWidth(),
@@ -369,7 +378,7 @@ public class Images
 								42, 64);
 						
 						// Add a right version of this image
-						images.add(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
+						addtoImageArray(new GameImage(goblinSheets[no] + "_RIGHT_" + 1
 								+ "_" + 6 + ".png", currentImage, (int)(84*size + 0.5), (int)(128*size + 0.5)));
 
 						tx = AffineTransform.getScaleInstance(-1, 1);
@@ -378,7 +387,7 @@ public class Images
 								AffineTransformOp.TYPE_BILINEAR);
 
 						// Add a left version of this image
-						images.add(new GameImage(goblinSheets[no] + "_LEFT_" + 1
+						addtoImageArray(new GameImage(goblinSheets[no] + "_LEFT_" + 1
 								+ "_" + 6 + ".png", op.filter(currentImage, null)
 								.getSubimage(0, 0,
 										currentImage.getWidth(),
@@ -387,10 +396,10 @@ public class Images
 				}
 				
 				
-				images.add(new GameImage("OUTFITARMOR_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITARMOR_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJARED_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
 				String[] weapons = { "DAWOOD", "DASTONE", "DAIRON",
 						"DAGOLD", "DADIAMOND", "AXWOOD", "AXSTONE", "AXIRON",
@@ -401,7 +410,7 @@ public class Images
 				for (int no = 0; no < weapons.length; no++)
 				{
 					//Add the icon image to the game also
-					images.add(new GameImage(weapons[no]+"_ICON.png"));
+					addtoImageArray(new GameImage(weapons[no]+"_ICON.png"));
 					
 					image = ImageIO.read(new File(
 							weapons[no] + ".png"));
@@ -425,13 +434,13 @@ public class Images
 
 						if (weapons[no].contains("HA"))
 						{
-							images.add(new GameImage(
+							addtoImageArray(new GameImage(
 									weapons[no] + "_" + angle + ".png",
 									newImage));
 						}
 						else
 						{
-						images.add(new GameImage(
+						addtoImageArray(new GameImage(
 								weapons[no] + "_" + angle + ".png",
 								newImage));
 						}
@@ -439,12 +448,12 @@ public class Images
 					}
 				}
 				
-				images.add(new GameImage("OUTFITARMOR_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJARED_ICON.png",32,32));
-				images.add(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITARMOR_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJABLUE_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJARED_ICON.png",32,32));
+				addtoImageArray(new GameImage("OUTFITNINJAGREY_ICON.png",32,32));
 
-				images.add(new GameImage("BULLET_0.png"));
+				addtoImageArray(new GameImage("BULLET_0.png"));
 				
 				String[] projectiles = {"WOODARROW","STEELARROW","MEGAARROW", "FIREBALL_0", "FIREBALL_1", "ICEBALL_0", "ICEBALL_1", "DARKBALL_0", "DARKBALL_1"};
 
@@ -509,7 +518,7 @@ public class Images
 						}
 						
 						
-						images.add(new GameImage(
+						addtoImageArray(new GameImage(
 								projectiles[no] + "_" + (angle) + ".png",
 								newImage,width,height));
 					}
@@ -523,172 +532,222 @@ public class Images
 			}
 
 			// Add the rest of the images normally
-			images.add(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("GRASS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("WATER.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("WATER.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("DIRT.png", ServerWorld.TILE_SIZE,
+			GameImage dirt = new GameImage("DIRT.jpg", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE);
+			
+			dirt.setName("DIRT.png");
+			addtoImageArray(dirt);
+			
+			addtoImageArray(new GameImage("DIRTGRASS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("DIRTGRASS.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("COBBLESTONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("COBBLESTONE.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("STONEBRICKS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("STONEBRICKS.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLACK.png", ServerWorld.TILE_SIZE,
+			
+			dirt = new GameImage("BDIRT.jpg", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE);
+			
+			dirt.setName("BDIRT.png");
+			addtoImageArray(dirt);
+			
+			addtoImageArray(new GameImage("BDIRTPLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BDIRT.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("PLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BDIRTPLAT.png", ServerWorld.TILE_SIZE,
-					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("PLAT.png", ServerWorld.TILE_SIZE,
-					ServerWorld.TILE_SIZE));
-			images.add(new GameImage("WATERPLAT.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("WATERPLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			//Icons of tiles
-			images.add(new GameImage("BRICK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BRICK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("GRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("GRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("WATER_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("WATER_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("DIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("DIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("DIRTGRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("DIRTGRASS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("COBBLESTONE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("COBBLESTONE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("STONEBRICKS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("STONEBRICKS_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("NOTHING_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("NOTHING_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLACK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BLACK_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BDIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BDIRT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BDIRTPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BDIRTPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("PLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("PLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("WATERPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("WATERPLAT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 			
 			
-			images.add(new GameImage("SLIME_6_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("SLIME_6_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("RED_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("RED_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLUE_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BLUE_CASTLE_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("CHEST_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("CHEST_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("VENDOR_LEFT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("VENDOR_LEFT_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("SLIME_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("SLIME_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("SLIME_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("RED_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("RED_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLUE_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));	
-			images.add(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 							CreatorObject.SCALE*ServerWorld.TILE_SIZE));
 
 			for (int no = 0; no < 6; no++)
 			{
-				images.add(new GameImage("CLOUD_" + no + ".png"));
+				addtoImageArray(new GameImage("CLOUD_" + no + ".png"));
 
 			}
 
-			images.add(new GameImage("VENDOR_RIGHT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("VENDOR_LEFT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("VENDOR_RIGHT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("VENDOR_LEFT.png", 4*ServerWorld.TILE_SIZE, 5*ServerWorld.TILE_SIZE));
 			
-			images.add(new GameImage("FIREWAND_RIGHT.png"));
-			images.add(new GameImage("FIREWAND_LEFT.png"));
-			images.add(new GameImage("FIREWAND_ICON.png"));
+			addtoImageArray(new GameImage("FIREWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("FIREWAND_LEFT.png"));
+			addtoImageArray(new GameImage("FIREWAND_ICON.png"));
 			
-			images.add(new GameImage("ICEWAND_RIGHT.png"));
-			images.add(new GameImage("ICEWAND_LEFT.png"));
-			images.add(new GameImage("ICEWAND_ICON.png"));
+			addtoImageArray(new GameImage("ICEWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("ICEWAND_LEFT.png"));
+			addtoImageArray(new GameImage("ICEWAND_ICON.png"));
 			
-			images.add(new GameImage("DARKWAND_RIGHT.png"));
-			images.add(new GameImage("DARKWAND_LEFT.png"));
-			images.add(new GameImage("DARKWAND_ICON.png"));
+			addtoImageArray(new GameImage("DARKWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("DARKWAND_LEFT.png"));
+			addtoImageArray(new GameImage("DARKWAND_ICON.png"));
 			
-			images.add(new GameImage("SLINGSHOT_RIGHT.png"));
-			images.add(new GameImage("SLINGSHOT_LEFT.png"));
-			images.add(new GameImage("SLINGSHOT_ICON.png"));
+			addtoImageArray(new GameImage("SLINGSHOT_RIGHT.png"));
+			addtoImageArray(new GameImage("SLINGSHOT_LEFT.png"));
+			addtoImageArray(new GameImage("SLINGSHOT_ICON.png"));
 			
-			images.add(new GameImage("WOODBOW_RIGHT.png"));
-			images.add(new GameImage("WOODBOW_LEFT.png"));
-			images.add(new GameImage("WOODBOW_ICON.png"));
+			addtoImageArray(new GameImage("WOODBOW_RIGHT.png"));
+			addtoImageArray(new GameImage("WOODBOW_LEFT.png"));
+			addtoImageArray(new GameImage("WOODBOW_ICON.png"));
 			
-			images.add(new GameImage("STEELBOW_RIGHT.png"));
-			images.add(new GameImage("STEELBOW_LEFT.png"));
-			images.add(new GameImage("STEELBOW_ICON.png"));
+			addtoImageArray(new GameImage("STEELBOW_RIGHT.png"));
+			addtoImageArray(new GameImage("STEELBOW_LEFT.png"));
+			addtoImageArray(new GameImage("STEELBOW_ICON.png"));
 			
-			images.add(new GameImage("MEGABOW_RIGHT.png"));
-			images.add(new GameImage("MEGABOW_LEFT.png"));
-			images.add(new GameImage("MEGABOW_ICON.png"));
+			addtoImageArray(new GameImage("MEGABOW_RIGHT.png"));
+			addtoImageArray(new GameImage("MEGABOW_LEFT.png"));
+			addtoImageArray(new GameImage("MEGABOW_ICON.png"));
 			
-			images.add(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
-			images.add(new GameImage("COIN.png",10,10));
-			images.add(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("HP_POTION_ICON.png",
+			addtoImageArray(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("COIN.png",10,10));
+			addtoImageArray(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("HP_POTION_ICON.png",
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MAX_HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MAX_MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("DMG_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("SPEED_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("JUMP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MONEY.png", INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
-			images.add(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("MAX_HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("MAX_MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("DMG_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("SPEED_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("JUMP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("MONEY.png", INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
+			addtoImageArray(new GameImage("MONEY_ICON.png",INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
-			images.add(new GameImage("BACKGROUND.png",
+			addtoImageArray(new GameImage("BACKGROUND.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
-			images.add(new GameImage("PLAINBLACK.png",
+			addtoImageArray(new GameImage("PLAINBLACK.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 			
-			images.add(new GameImage("FindAGame.png",
+			addtoImageArray(new GameImage("FindAGame.png",
 					300,100));
-			images.add(new GameImage("FindAGameClicked.png",
+			addtoImageArray(new GameImage("FindAGameClicked.png",
 					300,100));
-			images.add(new GameImage("CreateAServer.png",
+			addtoImageArray(new GameImage("CreateAServer.png",
 					400,100));
-			images.add(new GameImage("CreateAServerClicked.png",
+			addtoImageArray(new GameImage("CreateAServerClicked.png",
 					400,100));
-			images.add(new GameImage("CreateAMap.png",
+			addtoImageArray(new GameImage("CreateAMap.png",
 					300,100));
-			images.add(new GameImage("CreateAMapClicked.png",
+			addtoImageArray(new GameImage("CreateAMapClicked.png",
 					300,100));
-			images.add(new GameImage("WorldQuestOnline.png"));
-			images.add(new GameImage("Instructions.png",
+			addtoImageArray(new GameImage("WorldQuestOnline.png"));
+			addtoImageArray(new GameImage("Instructions.png",
 					300,100));
-			images.add(new GameImage("InstructionsClicked.png",
+			addtoImageArray(new GameImage("InstructionsClicked.png",
 					300,100));
 			
-			images.add(new GameImage("Inventory.png",300,1080));
+			addtoImageArray(new GameImage("Inventory.png",300,1080));
 			
-			images.add(new GameImage("Objective.png"));
-			images.add(new GameImage("Controls.png"));
-			images.add(new GameImage("Stats.png"));
+			addtoImageArray(new GameImage("Objective.png"));
+			addtoImageArray(new GameImage("Controls.png"));
+			addtoImageArray(new GameImage("Stats.png"));
 			
-			images.add(new GameImage("Next.png"));
+			addtoImageArray(new GameImage("Next.png"));
 			
-			images.add(new GameImage("Shop.png",ClientShop.SHOP_WIDTH,ClientShop.SHOP_HEIGHT));
+			addtoImageArray(new GameImage("Shop.png",ClientShop.SHOP_WIDTH,ClientShop.SHOP_HEIGHT));
 			
+			// Create a correctly sized array of the game images
+			GameImage[] clone = imageArray;
+			imageArray = new GameImage[noOfImages];
+			for (int no = 0; no < noOfImages; no++)
+			{
+				imageArray[no] = clone[no];
+			}
+			
+			Arrays.sort(imageArray);
+			
+			createBalancedTree(0,noOfImages);
+			imageArray = null;
+			clone = null;
 			
 		}
+	}
+
+	/**
+	 * Add a game image to the imageArray
+	 * @param image
+	 */
+	private static void addtoImageArray(GameImage gameImage) {
+		imageArray[noOfImages]=gameImage;
+		noOfImages++;
+		
+	}
+	
+	/**
+	 * Create the balanced tree of images
+	 * @param low
+	 * @param high
+	 */
+	private static void createBalancedTree(int low, int high){
+
+	    if(low == high)
+	        return;
+
+	    int midpoint = (low + high)/2;
+
+	    images.add(imageArray[midpoint]);
+
+	    createBalancedTree(midpoint+1, high);
+	    createBalancedTree(low, midpoint);  
 	}
 
 	/**

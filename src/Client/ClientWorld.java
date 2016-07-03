@@ -36,7 +36,23 @@ public class ClientWorld
 	 * The grid of tiles
 	 */
 	private char[][] grid;
-
+	
+	/**
+	 * Grid of light of tiles (0 = full dark, 10 = full light)
+	 */
+	private int [][] lightGrid;
+	
+	/**
+	 * Grid of original light sources
+	 */
+	private int [][] sourceGrid;
+	
+	/**
+	 * Grid of sun-exposed tiles;
+	 */
+	private boolean [][] exposedGrid;
+	
+	
 	/**
 	 * Array of client objects, where the index of the object in the array is
 	 * its ID
@@ -154,7 +170,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 12; no++)
+		for (int no = 0; no < 0; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -297,6 +313,8 @@ public class ClientWorld
 
 		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
 		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+		
+		
 		
 		// Add stars when dusk begins
 		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3 && worldTime < ServerWorld.DAY_COUNTERS / 2)
@@ -635,6 +653,15 @@ public class ClientWorld
 									.getBlueCastleMoney(),
 							ServerGoblin.GOBLIN_TIER_PRICE[client
 									.getBlueCastleTier()]), 100, 975);
+		
+//		for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
+//		{
+//			for (int column = 0; column < Client.SCREEN_WIDTH*2/16; column++)
+//			{
+//				graphics.setColor(new Color(0, 0, 0, (float)(1f *0.5)));
+//				graphics.fillRect(row*16, column*16, 16,16);
+//			}
+//		}
 	}
 
 	public void clear()

@@ -163,6 +163,9 @@ MouseMotionListener
 	 */
 	private String playerName;
 
+	/**
+	 * A timer for the start
+	 */
 	private long startTimer = 0;
 
 	/**
