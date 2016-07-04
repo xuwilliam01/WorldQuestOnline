@@ -290,18 +290,17 @@ MouseMotionListener
 
 		System.out.println("Game started");
 
-		// Add listeners AT THE END
-		addKeyListener(this);
-		addMouseListener(this);
-		addMouseMotionListener(this);
-
 		direction = 'R';
 
 		printToServer("s " + SCREEN_WIDTH + " " + SCREEN_HEIGHT);
 
 		// Get the ping
 		printToServer("P");
-
+		
+		// Add listeners AT THE END
+		ClientFrame.canvas.addKeyListener(this);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 	/**
@@ -893,6 +892,7 @@ MouseMotionListener
 				&& !currentMessage.equals("!R"))
 		{
 			currentMessage = "!R";
+			System.out.println("Leave right");
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("!L"))
@@ -938,6 +938,8 @@ MouseMotionListener
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
 			printToServer(currentMessage);
+			
+			System.out.println("Pressed");
 		}
 		else if (event.getButton() == MouseEvent.BUTTON3
 				&& currentMessage.charAt(0) != 'a')

@@ -8,13 +8,13 @@ import java.util.ConcurrentModificationException;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 
+
 public class ClientCanvas extends Canvas
 {
 	private Client client;
 	
 	public ClientCanvas()
 	{
-		
 	}
 
 	public void paint(Graphics graphics)
@@ -275,4 +275,5 @@ public class ClientCanvas extends Canvas
 	{
 		this.client= client;
 	}
+
 }
