@@ -16,7 +16,11 @@ import javax.swing.JFrame;
  */
 public class ClientFrame extends JFrame
 {
-
+	/**
+	 * Canvas
+	 */
+	public static ClientCanvas canvas = new ClientCanvas();
+	
 	/**
 	 * Constructor for the game frame
 	 */
@@ -50,6 +54,8 @@ public class ClientFrame extends JFrame
 		setLayout(null);
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		
+		getContentPane().add(canvas);
 		setVisible(true);
 	}
 }

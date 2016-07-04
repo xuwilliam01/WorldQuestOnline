@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
+import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 
@@ -29,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
@@ -176,7 +178,7 @@ MouseMotionListener
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
-		
+		ClientFrame.canvas.addClient(this);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
@@ -345,8 +347,6 @@ MouseMotionListener
 					if (message != null)
 					{
 						String[] tokens = message.split(" ");
-
-						long receiveTime = Long.parseLong(tokens[0]);
 						
 						for (int token = 1; token < tokens.length; token++)
 						{
@@ -402,10 +402,7 @@ MouseMotionListener
 								}
 								else if (tokens[token].equals("U"))
 								{
-									if (System.currentTimeMillis()-receiveTime<(1000/currentFPS*1.5))
-									{
 									repaint();
-									}
 
 									// Update the FPS counter
 									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
@@ -684,7 +681,7 @@ MouseMotionListener
 					
 					lines.add(message);
 
-					// Update the ping after 1 second
+					// Update the ping after half a second
 					if (startTimer >= 0
 							&& System.currentTimeMillis() - startTimer >= 500)
 					{
@@ -811,259 +808,7 @@ MouseMotionListener
 	{
 		super.paintComponent(graphics);
 		
-
-		// Update the map
-		try
-		{
-			world.update(graphics, player);
-		}
-		catch (NullPointerException e)
-		{
-
-		}
-
-		// Draw the ping and the FPS
-		graphics.setFont(ClientWorld.NORMAL_FONT);
-		graphics.setColor(new Color(240,240,240));
-		graphics.drawString(pingString, SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + currentFPS, SCREEN_WIDTH - 60, 40);
-
-		// Set the time of day to be displayed
-		// DAWN: 5AM - 9AM
-		// DAY: 9AM - 5PM
-		// DUSK: 5PM - 9PM
-		// NIGHT: 9PM - 5AM
-
-		if(world != null)
-		{
-
-			String timeOfDay = "DAY";
-
-			if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
-			{
-				timeOfDay = "DAWN";
-			}
-			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
-			{
-				timeOfDay = "NIGHT";
-			}
-			else if (world.getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
-			{
-				timeOfDay = "DUSK";
-			}
-
-			int hour = (world.getWorldTime() / 60) + 9;
-			if (hour >= 24)
-			{
-				hour -= 24;
-			}
-			int minute = world.getWorldTime() % 60;
-
-			String amPm = "AM";
-
-			if (hour >= 12)
-			{
-				hour -= 12;
-				amPm = "PM";
-			}
-
-			if (hour == 0)
-			{
-				hour = 12;
-			}
-
-			String hourString = "";
-			String minuteString = "";
-
-			if (hour < 10)
-			{
-				hourString = "0";
-			}
-			if (minute < 10)
-			{
-				minuteString = "0";
-			}
-			hourString += hour;
-			minuteString += minute;
-
-			graphics.drawString(hourString + ":" + minuteString + " " + amPm,
-					SCREEN_WIDTH - 60, 60);
-			graphics.drawString(timeOfDay, SCREEN_WIDTH - 60, 80);
-		}
-
-		// Draw the chat
-		graphics.setFont(ClientWorld.NORMAL_FONT);
-
-		while (true)
-		{
-			try
-			{
-				int textY = 40;
-				for (String str : chatQueue)
-				{
-					if (str.substring(0, 2).equals("CH"))
-					{
-						String newStr = str.substring(3);
-						int space = newStr.indexOf(':');
-						String coloured = newStr.substring(1, space+1);
-						String mssg = newStr.substring(space + 2);
-						if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (newStr.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(coloured + " ", 10, textY);
-						graphics.setColor(Color.YELLOW);
-						graphics.drawString(mssg, 10 + graphics
-								.getFontMetrics().stringWidth(coloured + " "),
-								textY);
-					}
-					else if(str.substring(0,2).equals("JO"))
-					{
-						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(str.substring(4) + " ", 10, textY);
-						graphics.setColor(Color.ORANGE);
-						graphics.drawString("joined the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
-					}
-					else if(str.substring(0,2).equals("RO"))
-					{
-						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(str.substring(4) + " ", 10, textY);
-						graphics.setColor(Color.ORANGE);
-						graphics.drawString("left the game", 10+graphics.getFontMetrics().stringWidth(str.substring(4)+" "), textY);
-					}
-					else
-					{
-						String[] split = str.split(" ");
-						int firstLen = Integer.parseInt(split[1]);
-						String firstName = "";
-						for (int i = 0; i < firstLen; i++)
-							firstName += split[i + 2] + " ";
-
-						int secondLen = Integer.parseInt(split[firstLen + 2]);
-						String lastName = "";
-						for (int i = 0; i < secondLen; i++)
-							lastName += split[firstLen + 3 + i] + " ";
-
-						if (firstName.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (firstName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.DARK_GRAY);
-						graphics.drawString(firstName.substring(1), 10, textY);
-
-						graphics.setColor(Color.ORANGE);
-
-
-						String killWord = "slain";
-						String secondKillWord = "killed";
-
-						//int random = (int) (Math.random() * 5);
-
-						//						if (random == 0)
-						//						{
-						//							killWord = "slain";
-						//							secondKillWord = "slayed";
-						//						}
-						//						else if (random == 1)
-						//						{
-						//							killWord = "defeated";
-						//							secondKillWord = "defeated";
-						//						}
-						//						else if (random == 2)
-						//						{
-						//							killWord = "murdered";
-						//							secondKillWord = "murdered";
-						//						}
-						//						else if (random == 3)
-						//						{
-						//							killWord = "slaughtered";
-						//							secondKillWord = "slaughtered";
-						//						}
-						//						else if (random == 4)
-						//						{
-						//							killWord = "ended";
-						//							secondKillWord = "ended";
-						//						}
-
-						if (str.substring(0, 3).equals("KF1"))
-							graphics.drawString(
-									"was " + killWord + " by a ",
-									5 + graphics.getFontMetrics().stringWidth(
-											firstName), textY);
-						else
-							graphics.drawString(
-									secondKillWord + " ",
-									5 + graphics.getFontMetrics().stringWidth(
-											firstName), textY);
-
-						if (lastName.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (lastName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GREEN);
-
-						if (str.substring(0, 3).equals("KF1"))
-							graphics.drawString(
-									lastName.substring(1),
-									8 + graphics.getFontMetrics().stringWidth(
-											firstName + "was " + killWord
-											+ " by a "), textY);
-						else
-							graphics.drawString(
-									lastName.substring(1),
-									8 + graphics.getFontMetrics().stringWidth(
-											firstName + secondKillWord + " "),
-											textY);
-					}
-					textY += 20;
-				}
-				break;
-			}
-			catch (ConcurrentModificationException E)
-			{
-
-			}
-		}
-
-		if (HP > 0)
-		{
-			justDied = true;
-		}
-		else
-		{
-			if (justDied)
-			{
-				inventory.clear();
-				justDied = false;
-			}
-			graphics.setColor(Color.black);
-			graphics.setFont(ClientWorld.MESSAGE_FONT);
-			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
-		}
-
-		
-		
-		// Repaint the inventory
-		inventory.repaint();
-		if (!chat.hasFocus())
-			requestFocusInWindow();
-		
-		
+		ClientFrame.canvas.paint(graphics);
 	}
 
 	@Override
@@ -1076,6 +821,7 @@ MouseMotionListener
 			// R for right
 			currentMessage = "R";
 			printToServer(currentMessage);
+			System.out.println("Go right");
 		}
 		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
 				&& !currentMessage.equals("L"))
@@ -1506,4 +1252,245 @@ MouseMotionListener
 
 	}
 
+	public Socket getMySocket()
+	{
+		return mySocket;
+	}
+
+	public void setMySocket(Socket mySocket)
+	{
+		this.mySocket = mySocket;
+	}
+
+	public Thread getGameThread()
+	{
+		return gameThread;
+	}
+
+	public void setGameThread(Thread gameThread)
+	{
+		this.gameThread = gameThread;
+	}
+
+	public long getPing()
+	{
+		return ping;
+	}
+
+	public void setPing(long ping)
+	{
+		this.ping = ping;
+	}
+
+	public String getPingString()
+	{
+		return pingString;
+	}
+
+	public void setPingString(String pingString)
+	{
+		this.pingString = pingString;
+	}
+
+	public String getCurrentMessage()
+	{
+		return currentMessage;
+	}
+
+	public void setCurrentMessage(String currentMessage)
+	{
+		this.currentMessage = currentMessage;
+	}
+
+	public ClientObject getPlayer()
+	{
+		return player;
+	}
+
+	public void setPlayer(ClientObject player)
+	{
+		this.player = player;
+	}
+
+	public ClientWorld getWorld()
+	{
+		return world;
+	}
+
+	public void setWorld(ClientWorld world)
+	{
+		this.world = world;
+	}
+
+	public JTextField getChat()
+	{
+		return chat;
+	}
+
+	public void setChat(JTextField chat)
+	{
+		this.chat = chat;
+	}
+
+	public JButton getEnter()
+	{
+		return enter;
+	}
+
+	public void setEnter(JButton enter)
+	{
+		this.enter = enter;
+	}
+
+	public ArrayList<String> getChatQueue()
+	{
+		return chatQueue;
+	}
+
+	public void setChatQueue(ArrayList<String> chatQueue)
+	{
+		this.chatQueue = chatQueue;
+	}
+
+	public ClientInventory getInventory()
+	{
+		return inventory;
+	}
+
+	public void setInventory(ClientInventory inventory)
+	{
+		this.inventory = inventory;
+	}
+
+	public boolean isJustDied()
+	{
+		return justDied;
+	}
+
+	public void setJustDied(boolean justDied)
+	{
+		this.justDied = justDied;
+	}
+
+	public char getDirection()
+	{
+		return direction;
+	}
+
+	public void setDirection(char direction)
+	{
+		this.direction = direction;
+	}
+
+	public long getStartTime()
+	{
+		return startTime;
+	}
+
+	public void setStartTime(long startTime)
+	{
+		this.startTime = startTime;
+	}
+
+	public int getFPScounter()
+	{
+		return FPScounter;
+	}
+
+	public void setFPScounter(int fPScounter)
+	{
+		FPScounter = fPScounter;
+	}
+
+	public JLayeredPane getFrame()
+	{
+		return frame;
+	}
+
+	public void setFrame(JLayeredPane frame)
+	{
+		this.frame = frame;
+	}
+
+	public ArrayList<String> getLines()
+	{
+		return lines;
+	}
+
+	public void setLines(ArrayList<String> lines)
+	{
+		this.lines = lines;
+	}
+
+	public String getPlayerName()
+	{
+		return playerName;
+	}
+
+	public void setPlayerName(String playerName)
+	{
+		this.playerName = playerName;
+	}
+
+	public long getStartTimer()
+	{
+		return startTimer;
+	}
+
+	public void setStartTimer(long startTimer)
+	{
+		this.startTimer = startTimer;
+	}
+
+	public void setOutput(PrintWriter output)
+	{
+		this.output = output;
+	}
+
+	public void setInput(BufferedReader input)
+	{
+		this.input = input;
+	}
+
+	public void setSpeed(int speed)
+	{
+		this.speed = speed;
+	}
+
+	public void setJump(int jump)
+	{
+		this.jump = jump;
+	}
+
+	public void setArmour(double armour)
+	{
+		this.armour = armour;
+	}
+
+	public void setDamage(int damage)
+	{
+		this.damage = damage;
+	}
+
+	public void setBaseDamage(int baseDamage)
+	{
+		this.baseDamage = baseDamage;
+	}
+
+	public void setRedCastleHP(int redCastleHP)
+	{
+		this.redCastleHP = redCastleHP;
+	}
+
+	public void setBlueCastleHP(int blueCastleHP)
+	{
+		this.blueCastleHP = blueCastleHP;
+	}
+
+	public void setShop(ClientShop shop)
+	{
+		this.shop = shop;
+	}
+
+	
 }
