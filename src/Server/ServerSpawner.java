@@ -37,7 +37,7 @@ public class ServerSpawner extends ServerObject
 			ServerWorld world)
 	{
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE,
-				ServerWorld.GRAVITY, "NOTHING.png", ServerWorld.SPAWN_TYPE);
+				ServerWorld.GRAVITY, "NOTHING", ServerWorld.SPAWN_TYPE);
 		this.creature = creatureType;
 		this.world = world;
 		makeExist();
@@ -47,16 +47,16 @@ public class ServerSpawner extends ServerObject
 		if (creature.getType().contains(ServerWorld.GOBLIN_TYPE))
 		{
 			if (creature.getTeam() == ServerPlayer.RED_TEAM)
-				setImage("RED_GOBLIN_SPAWN.png");
+				setImage("RED_GOBLIN_SPAWN");
 			else
-				setImage("BLUE_GOBLIN_SPAWN.png");
+				setImage("BLUE_GOBLIN_SPAWN");
 			delay = 2000;
 		}
 		else
 			switch (creature.getType())
 			{
 			case ServerWorld.SLIME_TYPE:
-				setImage("SLIME_SPAWN.png");
+				setImage("SLIME_SPAWN");
 				delay = 2000;
 				break;
 			}

@@ -157,7 +157,7 @@ public class ClientWorld
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 
-		backgroundColour = Images.getImage("BACKGROUND.png");
+		backgroundColour = Images.getImage("BACKGROUND");
 
 		// Generate clouds
 		if ((int) (Math.random() * 2) == 0)
@@ -188,7 +188,7 @@ public class ClientWorld
 				imageNo -= 6;
 			}
 
-			String image = "CLOUD_" + imageNo + ".png";
+			String image = "CLOUD_" + imageNo + "";
 
 			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}

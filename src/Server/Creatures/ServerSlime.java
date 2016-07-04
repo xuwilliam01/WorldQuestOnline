@@ -51,7 +51,7 @@ public class ServerSlime extends ServerEnemy
 
 	public ServerSlime(double x, double y, ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0.png",
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0",
 				SLIME_HP,
 				ServerWorld.SLIME_TYPE, world, ServerPlayer.NEUTRAL);
 
@@ -76,27 +76,27 @@ public class ServerSlime extends ServerEnemy
 
 		if (slimeType < 15)
 		{
-			setImage("GREENSLIME_6.png");
+			setImage("GREENSLIME_6");
 			setName("Green Slime");
 		}
 		else if (slimeType <= 18)
 		{
-			setImage("BLUESLIME_6.png");
+			setImage("BLUESLIME_6");
 			setName("Blue Slime");
 		}
 		else if (slimeType <= 22)
 		{
-			setImage("REDSLIME_6.png");
+			setImage("REDSLIME_6");
 			setName("Red Slime");
 		}
 		else if (slimeType <= 26)
 		{
-			setImage("YELLOWSLIME_6.png");
+			setImage("YELLOWSLIME_6");
 			setName("Yellow Slime");
 		}
 		else if (slimeType <= 29)
 		{
-			setImage("GIANTSLIME_6.png");
+			setImage("GIANTSLIME_6");
 			setDamage(15);
 			setHP(150);
 			setWidth(-1);
@@ -106,7 +106,7 @@ public class ServerSlime extends ServerEnemy
 		}
 		else if (slimeType <= 30)
 		{
-			setImage("DARKSLIME_6.png");
+			setImage("DARKSLIME_6");
 			setWidth(-1);
 			setHeight(-1);
 			setDamage(30);
@@ -182,7 +182,7 @@ public class ServerSlime extends ServerEnemy
 			{
 				landCounter = getCounter();
 
-				setImage(getBaseImage() + "_6.png");
+				setImage(getBaseImage() + "_6");
 
 				landed = true;
 			}
@@ -190,24 +190,24 @@ public class ServerSlime extends ServerEnemy
 			{
 				if (getCounter() - landCounter > 10)
 				{
-					setImage(getBaseImage() + "_7.png");
+					setImage(getBaseImage() + "_7");
 				}
 			}
 			else if (getCounter() - landCounter <= 25)
 			{
-				setImage(getBaseImage() + "_0.png");
+				setImage(getBaseImage() + "_0");
 			}
 			else if (getCounter() - landCounter <= 45)
 			{
-				setImage(getBaseImage() + "_1.png");
+				setImage(getBaseImage() + "_1");
 			}
 			else if (getCounter() - landCounter <= 65)
 			{
-				setImage(getBaseImage() + "_0.png");
+				setImage(getBaseImage() + "_0");
 			}
 			else if (getCounter() - landCounter <= 85)
 			{
-				setImage(getBaseImage() + "_1.png");
+				setImage(getBaseImage() + "_1");
 			}
 			else
 			{
@@ -218,7 +218,7 @@ public class ServerSlime extends ServerEnemy
 				lastX = getX();
 				setVSpeed(-jumpHeight);
 				setOnSurface(false);
-				setImage(getBaseImage() + "_2.png");
+				setImage(getBaseImage() + "_2");
 			}
 		}
 		else
@@ -226,11 +226,11 @@ public class ServerSlime extends ServerEnemy
 			landed = false;
 			if (Math.abs(getVSpeed()) < 8)
 			{
-				setImage(getBaseImage() + "_4.png");
+				setImage(getBaseImage() + "_4");
 			}
 			else
 			{
-				setImage(getBaseImage() + "_2.png");
+				setImage(getBaseImage() + "_2");
 			}
 		}
 

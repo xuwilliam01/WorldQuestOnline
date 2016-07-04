@@ -178,8 +178,8 @@ public class ServerWorld
 			new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
 			new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
 			new ServerChest(0, 0, this),
-			new ServerVendor(0, 0, this, "VENDOR_RIGHT.png"),
-			new ServerVendor(0, 0, this, "VENDOR_LEFT.png"),
+			new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
+			new ServerVendor(0, 0, this, "VENDOR_LEFT"),
 			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this),
 			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
 					ServerPlayer.RED_TEAM, 1), this),
@@ -382,12 +382,12 @@ public class ServerWorld
 						}
 					}
 					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
-							&& obj.getImage().equals("RED_GOBLIN_SPAWN.png"))
+							&& obj.getImage().equals("RED_GOBLIN_SPAWN"))
 					{
 						redSpawners.add((ServerSpawner) newObject);
 					}
 					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
-							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN.png"))
+							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN"))
 					{
 						blueSpawners.add((ServerSpawner) newObject);
 					}

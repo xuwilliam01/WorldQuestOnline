@@ -98,7 +98,7 @@ public class MainMenu {
 				imageNo -= 6;
 			}
 
-			String image = "CLOUD_" + imageNo + ".png";
+			String image = "CLOUD_" + imageNo + "";
 
 			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
@@ -128,24 +128,24 @@ public class MainMenu {
 	private static class MainPanel extends JPanel implements ActionListener, MouseListener
 	{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH)/2;
-		Image titleImage = Images.getImage("WorldQuestOnline.png");
-		Image background = Images.getImage("BACKGROUND.png");
+		Image titleImage = Images.getImage("WorldQuestOnline");
+		Image background = Images.getImage("BACKGROUND");
 		JButton playGame;
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
 
-		Image createMapImage = Images.getImage("CreateAMap.png");
-		Image createMapOver = Images.getImage("CreateAMapClicked.png");
+		Image createMapImage = Images.getImage("CreateAMap");
+		Image createMapOver = Images.getImage("CreateAMapClicked");
 
-		Image instructionsImage = Images.getImage("Instructions.png");
-		Image instructionsOver = Images.getImage("InstructionsClicked.png");
+		Image instructionsImage = Images.getImage("Instructions");
+		Image instructionsOver = Images.getImage("InstructionsClicked");
 
-		Image playGameImage = Images.getImage("FindAGame.png");
-		Image playGameOver = Images.getImage("FindAGameClicked.png");
+		Image playGameImage = Images.getImage("FindAGame");
+		Image playGameOver = Images.getImage("FindAGameClicked");
 
-		Image createServerImage = Images.getImage("CreateAServer.png");
-		Image createServerOver = Images.getImage("CreateAServerClicked.png");
+		Image createServerImage = Images.getImage("CreateAServer");
+		Image createServerOver = Images.getImage("CreateAServerClicked");
 
 		private Timer repaintTimer = new Timer(15,this);
 
@@ -555,9 +555,9 @@ public class MainMenu {
 		JButton next;
 		JButton previous;
 
-		Image objective = Images.getImage("Objective.png");
-		Image controls = Images.getImage("Controls.png");
-		Image stats = Images.getImage("Stats.png");
+		Image objective = Images.getImage("Objective");
+		Image controls = Images.getImage("Controls");
+		Image stats = Images.getImage("Stats");
 
 		/**
 		 * Constructor
@@ -572,7 +572,7 @@ public class MainMenu {
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
 
-			Image nextImage = Images.getImage("Next.png");
+			Image nextImage = Images.getImage("Next");
 			next = new JButton(new ImageIcon(nextImage));
 			next.setSize(nextImage.getWidth(null),nextImage.getHeight(null));
 			next.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-350,Client.SCREEN_HEIGHT-200);

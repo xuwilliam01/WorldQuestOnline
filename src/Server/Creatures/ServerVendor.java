@@ -30,12 +30,12 @@ public class ServerVendor extends ServerCreature
 	 */
 	public ServerVendor(double x, double y, ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "VENDOR_RIGHT.png",
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "VENDOR_RIGHT",
 				ServerWorld.VENDOR_TYPE, Integer.MAX_VALUE, world, false);
 
 		if ((int) (Math.random() * 2) == 1)
 		{
-			setImage("VENDOR_LEFT.png");
+			setImage("VENDOR_LEFT");
 		}
 
 		makeShop();

@@ -49,7 +49,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	private int leaderTeam = -1;
 	private String leaderName ="";
 
-	private Image background = Images.getImage("BACKGROUND.png");
+	private Image background = Images.getImage("BACKGROUND");
 	private String[] maps;
 
 	private ArrayList<String> redTeam = new ArrayList<String>();

@@ -50,7 +50,7 @@ public class GameImage implements Comparable<GameImage>
 	 */
 	public GameImage(String name)
 	{
-		this.name = name;
+		
 		try
 		{
 			bufferedImage = ImageIO.read(new File(name));
@@ -60,7 +60,7 @@ public class GameImage implements Comparable<GameImage>
 			System.out.println("Error loading image: " + name);
 			e.printStackTrace();
 		}
-		
+		this.name = name.substring(0,name.indexOf('.'));
 		image = bufferedImage;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
@@ -73,7 +73,7 @@ public class GameImage implements Comparable<GameImage>
 	 */
 	public GameImage(String name, int width, int height)
 	{
-		this.name = name;
+		
 		try
 		{
 			bufferedImage = ImageIO.read(new File(name));
@@ -83,12 +83,19 @@ public class GameImage implements Comparable<GameImage>
 			System.out.println("Error loading image: " + name);
 			e.printStackTrace();
 		}
-
+		this.name = name.substring(0,name.indexOf('.'));
 		image = bufferedImage.getScaledInstance(width,
 				height, 0);
 		this.width = width;
 		this.height = height;
+		if (bufferedImage.getWidth(null) >= 3)
+		{
 		color = new Color(bufferedImage.getRGB(width / 3, height / 3));
+		}
+		else
+		{
+			color = Color.white;
+		}
 	}
 
 	/**
@@ -97,7 +104,7 @@ public class GameImage implements Comparable<GameImage>
 	 */
 	public GameImage(String name, BufferedImage image)
 	{
-		this.name = name;
+		this.name = name.substring(0,name.indexOf('.'));
 		this.image = image;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
@@ -110,7 +117,7 @@ public class GameImage implements Comparable<GameImage>
 	 */
 	public GameImage(String name, BufferedImage image, int width, int height)
 	{
-		this.name = name;
+		this.name = name.substring(0,name.indexOf('.'));
 		this.image = image.getScaledInstance(width,
 				height, 0);
 		this.width = width;

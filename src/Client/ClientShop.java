@@ -24,8 +24,8 @@ public class ClientShop extends JPanel{
 
 	private ClientShopItem[][] shopItems = new ClientShopItem[HEIGHT][WIDTH];
 	private Client client;
-	private Image coinImage = Images.getImage("COIN.png");
-	private Image shopImage = Images.getImage("Shop.png");
+	private Image coinImage = Images.getImage("COIN");
+	private Image shopImage = Images.getImage("Shop");
 
 	/**
 	 * Constructor

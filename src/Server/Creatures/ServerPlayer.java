@@ -247,7 +247,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
-				+ "_RIGHT_0_0.png", ServerWorld.PLAYER_TYPE,
+				+ "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
 				PLAYER_START_HP, world, true);
 
 		//Set default name of the player
@@ -321,7 +321,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send the player's information
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
-				+ "BASE_" + skinColour + "_RIGHT_0_0.png " + getTeam());
+				+ "BASE_" + skinColour + "_RIGHT_0_0 " + getTeam());
 
 		baseImage = "BASE_" + skinColour;
 
@@ -590,7 +590,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					+ getRowCol().getRow()
 					+ "_"
 					+ getRowCol().getColumn()
-					+ ".png");
+					+ "");
 			if (getHead() != null)
 			{
 				getHead().update(
@@ -1393,11 +1393,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					if (getDirection().equals("LEFT"))
 					{
 
-						image += "_LEFT.png";
+						image += "_LEFT";
 					}
 					else
 					{
-						image += "_RIGHT.png";
+						image += "_RIGHT";
 					}
 
 					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,

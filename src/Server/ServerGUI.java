@@ -153,7 +153,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	private int dragSourceY;
 
-	private Image background = Images.getImage("BACKGROUND.png");
+	private Image background = Images.getImage("BACKGROUND");
 
 	// Movement booleans
 	private boolean up = false;

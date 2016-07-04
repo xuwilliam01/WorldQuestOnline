@@ -157,7 +157,7 @@ public class ServerWeaponSwing extends ServerObject
 						/ 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
-		setImage(getBaseImage() + "_" + currentAngle + ".png");
+		setImage(getBaseImage() + "_" + currentAngle + "");
 
 	}
 
@@ -191,7 +191,7 @@ public class ServerWeaponSwing extends ServerObject
 					currentAngle = 180 - (-180 - currentAngle);
 				}
 			}
-			setImage(getBaseImage() + "_" + currentAngle + ".png");
+			setImage(getBaseImage() + "_" + currentAngle + "");
 		}
 
 		// Lock the weapon onto the player

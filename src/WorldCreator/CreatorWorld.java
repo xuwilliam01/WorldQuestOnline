@@ -238,7 +238,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		super.paintComponent(graphics);
 
 		// Draw the background
-		graphics.drawImage(Images.getImage("BACKGROUND.png"), 0, 0, null);
+		graphics.drawImage(Images.getImage("BACKGROUND"), 0, 0, null);
 
 		// Create new height and width if necessary
 		if (isNewHeight)

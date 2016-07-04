@@ -105,11 +105,11 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.NINJASTAR_TYPE:
 			if (Math.toDegrees(angle) >= 90 && Math.toDegrees(angle) < 90)
 			{
-				setImage("STAR0_0.png");
+				setImage("STAR0_0");
 			}
 			else
 			{
-				setImage("STAR1_0.png");
+				setImage("STAR1_0");
 			}
 			setGravity(0);
 			setDamage(ServerWeapon.STAR_DMG);
@@ -119,7 +119,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = false;
 			break;
 		case ServerWorld.WOODARROW_TYPE:
-			setImage("WOODARROW_0.png");
+			setImage("WOODARROW_0");
 			setGravity(0.25);
 			setDamage((int)Math.ceil(ServerWeapon.WOODBOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(20);
@@ -127,7 +127,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		case ServerWorld.STEELARROW_TYPE:
-			setImage("STEELARROW_0.png");
+			setImage("STEELARROW_0");
 			setGravity(0.25);
 			setDamage((int)Math.ceil(ServerWeapon.STEELBOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(20);
@@ -135,7 +135,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		case ServerWorld.MEGAARROW_TYPE:
-			setImage("MEGAARROW_0.png");
+			setImage("MEGAARROW_0");
 			setGravity(0);
 			setDamage((int)Math.ceil(ServerWeapon.MEGABOW_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(30);
@@ -143,7 +143,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		case ServerWorld.BULLET_TYPE:
-			setImage("BULLET_0.png");
+			setImage("BULLET_0");
 			setGravity(0.4);
 			setDamage((int)Math.ceil(ServerWeapon.SLING_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(15);
@@ -151,7 +151,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = false;
 			break;
 		case ServerWorld.FIREBALL_TYPE:
-			setImage("FIREBALL_0_0.png");
+			setImage("FIREBALL_0_0");
 			setGravity(0);
 			setDamage((int)Math.ceil(ServerWeapon.FIREWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(15);
@@ -159,7 +159,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		case ServerWorld.ICEBALL_TYPE:
-			setImage("ICEBALL_0_0.png");
+			setImage("ICEBALL_0_0");
 			setGravity(0);
 			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(6);
@@ -167,7 +167,7 @@ public class ServerProjectile extends ServerFlyingObject
 			faceAngle = true;
 			break;
 		case ServerWorld.DARKBALL_TYPE:
-			setImage("DARKBALL_0_0.png");
+			setImage("DARKBALL_0_0");
 			setGravity(0);
 			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(12);
@@ -249,18 +249,18 @@ public class ServerProjectile extends ServerFlyingObject
 			if (faceAngle)
 			{
 				setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
-						+ ".png");
+						+ "");
 			}
 			else
 			{
-				setImage(getBaseImage() + "_" + imageNo + ".png");
+				setImage(getBaseImage() + "_" + imageNo + "");
 			}
 		}
 		else
 		{
 			if (faceAngle)
 			{
-				setImage(getBaseImage() + "_" + imageAngle + ".png");
+				setImage(getBaseImage() + "_" + imageAngle + "");
 			}
 		}
 		
@@ -333,7 +333,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setHeight(32);
 			setX(getX() - 16);
 			setY(getY() - 16);
-			setImage("EXPLOSION0_0.png");
+			setImage("EXPLOSION0_0");
 			noOfExplosionFrames = 7;
 		}
 		else if (getType() == ServerWorld.FIREBALL_TYPE)
@@ -347,7 +347,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setHeight(64);
 			setX(getX() - 32);
 			setY(getY() - 32);
-			setImage("EXPLOSION2_0.png");
+			setImage("EXPLOSION2_0");
 			noOfExplosionFrames = 5;
 		}
 		else if (getType() == ServerWorld.ICEBALL_TYPE)
@@ -361,7 +361,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setHeight(82);
 			setX(getX() - 41);
 			setY(getY() - 41);
-			setImage("EXPLOSION3_0.png");
+			setImage("EXPLOSION3_0");
 			noOfExplosionFrames = 4;
 		}
 		else if (getType() == ServerWorld.MEGAARROW_TYPE)
@@ -375,7 +375,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setHeight(82);
 			setX(getX() - 41);
 			setY(getY() - 41);
-			setImage("EXPLOSION4_0.png");
+			setImage("EXPLOSION4_0");
 			noOfExplosionFrames = 4;
 		}
 		else if (getType() == ServerWorld.DARKBALL_TYPE)
@@ -389,7 +389,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setHeight(100);
 			setX(getX() - 50);
 			setY(getY() - 50);
-			setImage("EXPLOSION1_0.png");
+			setImage("EXPLOSION1_0");
 			noOfExplosionFrames = 10;
 		}
 		else
@@ -406,39 +406,39 @@ public class ServerProjectile extends ServerFlyingObject
 		// Update the explosion animation
 		if (counter <= 4)
 		{
-			setImage(getBaseImage() + "_1.png");
+			setImage(getBaseImage() + "_1");
 		}
 		else if (counter <= 6 && noOfExplosionFrames >= 3)
 		{
-			setImage(getBaseImage() + "_2.png");
+			setImage(getBaseImage() + "_2");
 		}
 		else if (counter <= 8 && noOfExplosionFrames >= 4)
 		{
-			setImage(getBaseImage() + "_3.png");
+			setImage(getBaseImage() + "_3");
 		}
 		else if (counter <= 10 && noOfExplosionFrames >= 5)
 		{
-			setImage(getBaseImage() + "_4.png");
+			setImage(getBaseImage() + "_4");
 		}
 		else if (counter <= 12 && noOfExplosionFrames >= 6)
 		{
-			setImage(getBaseImage() + "_5.png");
+			setImage(getBaseImage() + "_5");
 		}
 		else if (counter <= 14 && noOfExplosionFrames >= 7)
 		{
-			setImage(getBaseImage() + "_6.png");
+			setImage(getBaseImage() + "_6");
 		}
 		else if (counter <= 16 && noOfExplosionFrames >= 8)
 		{
-			setImage(getBaseImage() + "_7.png");
+			setImage(getBaseImage() + "_7");
 		}
 		else if (counter <= 18 && noOfExplosionFrames >= 9)
 		{
-			setImage(getBaseImage() + "_8.png");
+			setImage(getBaseImage() + "_8");
 		}
 		else if (counter <= 20 && noOfExplosionFrames >= 10)
 		{
-			setImage(getBaseImage() + "_9.png");
+			setImage(getBaseImage() + "_9");
 		}
 		else
 		{

@@ -45,7 +45,7 @@ public class ServerObject
 	private int height;
 
 	/**
-	 * The image name for the object (ex. pie.png)
+	 * The image name for the object (ex. pie)
 	 */
 	private String image;
 
@@ -131,7 +131,7 @@ public class ServerObject
 	}
 
 	/**
-	 * Get the base image for the object (ex. the base name for player right.png
+	 * Get the base image for the object (ex. the base name for player right
 	 * is player) This is useful for changing the direction/animation of the
 	 * object but not the image itself
 	 * @return the base image

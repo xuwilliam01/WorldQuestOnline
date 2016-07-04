@@ -339,7 +339,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		// Background
-		graphics.drawImage(Images.getImage("Inventory.png"), 0, 0, null);
+		graphics.drawImage(Images.getImage("Inventory"), 0, 0, null);
 
 		// Draw stats
 		graphics.setFont(ClientWorld.STATS_FONT);

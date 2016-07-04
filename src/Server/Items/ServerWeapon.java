@@ -106,121 +106,121 @@ public class ServerWeapon extends ServerItem
 		{
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = DADIAMOND_DMG;
-			actionImage = "DADIAMOND_0.png";
+			actionImage = "DADIAMOND_0";
 			actionDelay = DAGGER_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			damage = DAGOLD_DMG;
-			actionImage = "DAGOLD_0.png";
+			actionImage = "DAGOLD_0";
 			actionDelay = DAGGER_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			damage = DAIRON_DMG;
-			actionImage = "DAIRON_0.png";
+			actionImage = "DAIRON_0";
 			actionDelay = DAGGER_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			damage = DASTONE_DMG;
-			actionImage = "DASTONE_0.png";
+			actionImage = "DASTONE_0";
 			actionDelay = DAGGER_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			damage = DAWOOD_DMG;
-			actionImage = "DAWOOD_0.png";
+			actionImage = "DAWOOD_0";
 			actionDelay = DAGGER_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = AXDIAMOND_DMG;
-			actionImage = "AXDIAMOND_0.png";
+			actionImage = "AXDIAMOND_0";
 			actionDelay = AX_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			damage = AXGOLD_DMG;
-			actionImage = "AXGOLD_0.png";
+			actionImage = "AXGOLD_0";
 			actionDelay = AX_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			damage = AXIRON_DMG;
-			actionImage = "AXIRON_0.png";
+			actionImage = "AXIRON_0";
 			actionDelay = AX_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			damage = AXSTONE_DMG;
-			actionImage = "AXSTONE_0.png";
+			actionImage = "AXSTONE_0";
 			actionDelay = AX_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			damage = AXWOOD_DMG;
-			actionImage = "AXWOOD_0.png";
+			actionImage = "AXWOOD_0";
 			actionDelay = AX_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = SWDIAMOND_DMG;
-			actionImage = "SWDIAMOND_0.png";
+			actionImage = "SWDIAMOND_0";
 			actionDelay = SWORD_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			damage = SWGOLD_DMG;
-			actionImage = "SWGOLD_0.png";
+			actionImage = "SWGOLD_0";
 			actionDelay = SWORD_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			damage = SWIRON_DMG;
-			actionImage = "SWIRON_0.png";
+			actionImage = "SWIRON_0";
 			actionDelay = SWORD_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			damage = SWSTONE_DMG;
-			actionImage = "SWSTONE_0.png";
+			actionImage = "SWSTONE_0";
 			actionDelay = SWORD_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			damage = SWWOOD_DMG;
-			actionImage = "SWWOOD_0.png";
+			actionImage = "SWWOOD_0";
 			actionDelay = SWORD_DELAY;
 			actionSpeed = SWING_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			damage = HADIAMOND_DMG;
-			actionImage = "HADIAMOND_0.png";
+			actionImage = "HADIAMOND_0";
 			actionDelay = HALBERD_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			damage = HAGOLD_DMG;
-			actionImage = "HAGOLD_0.png";
+			actionImage = "HAGOLD_0";
 			actionDelay = HALBERD_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			damage = HAIRON_DMG;
-			actionImage = "HAIRON_0.png";
+			actionImage = "HAIRON_0";
 			actionDelay = HALBERD_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			damage = HASTONE_DMG;
-			actionImage = "HASTONE_0.png";
+			actionImage = "HASTONE_0";
 			actionDelay = HALBERD_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			damage = HAWOOD_DMG;
-			actionImage = "HAWOOD_0.png";
+			actionImage = "HAWOOD_0";
 			actionDelay = HALBERD_DELAY;
 			actionSpeed = STAB_SPEED;
 			break;

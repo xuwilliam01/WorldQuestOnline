@@ -46,7 +46,7 @@ public class ServerChest extends ServerCreature
 	public ServerChest(double x, double y, int numItems,
 			ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST.png",
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST",
 				ServerWorld.CHEST_TYPE, CHEST_HP, world, true);
 		this.numItems = numItems;
 		addItems();
@@ -61,7 +61,7 @@ public class ServerChest extends ServerCreature
 	public ServerChest(double x, double y,
 			ServerWorld world)
 	{
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST.png",
+		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "CHEST",
 				ServerWorld.CHEST_TYPE, CHEST_HP, world, true);
 		addItems();
 		setName("Chest");

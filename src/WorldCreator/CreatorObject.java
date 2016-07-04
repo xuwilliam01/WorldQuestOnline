@@ -39,7 +39,7 @@ public class CreatorObject extends JButton implements MouseListener
 
 		setIcon(new ImageIcon(Images.getImage(name.substring(0,
 				name.length() - 4)
-				+ "_ICON.png")));
+				+ "_ICON")));
 		setSize(getIcon().getIconWidth(), getIcon().getIconHeight());
 
 
