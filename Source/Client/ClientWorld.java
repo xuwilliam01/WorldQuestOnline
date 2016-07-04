@@ -33,31 +33,30 @@ public class ClientWorld
 	public final static Color GREEN_TEXT = new Color(0, 153, 0);
 	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
 	public final static Color GRAY_TEXT = Color.gray;
-	
+
 	public final static int NO_OF_CLOUDS = 0;
 	public final static int MAX_NO_OF_STARS = 0;
-	
+
 	/**
 	 * The grid of tiles
 	 */
 	private char[][] grid;
-	
+
 	/**
 	 * Grid of light of tiles (0 = full dark, 10 = full light)
 	 */
-	private int [][] lightGrid;
-	
+	private int[][] lightGrid;
+
 	/**
 	 * Grid of original light sources
 	 */
-	private int [][] sourceGrid;
-	
+	private int[][] sourceGrid;
+
 	/**
 	 * Grid of sun-exposed tiles;
 	 */
-	private boolean [][] exposedGrid;
-	
-	
+	private boolean[][] exposedGrid;
+
 	/**
 	 * Array of client objects, where the index of the object in the array is
 	 * its ID
@@ -131,11 +130,15 @@ public class ClientWorld
 	 */
 	private int worldTime;
 
+	// Center of the screen
+	int centreX;
+	int centreY;
+
 	/**
 	 * Adjusts the alpha of the darkness
 	 */
 	private double alphaMultiplier;
-	
+
 	private ArrayList<ClientStar> stars;
 
 	private Client client;
@@ -197,8 +200,13 @@ public class ClientWorld
 
 			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
-		
+
 		stars = new ArrayList<ClientStar>();
+
+		centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
+		centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT
+				/ 2;
+
 	}
 
 	/**
@@ -303,48 +311,51 @@ public class ClientWorld
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
-			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)*0.95
+			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
+					* 0.95
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		}
-		else if (worldTime >= ServerWorld.DAY_COUNTERS / 2 && worldTime < ServerWorld.DAY_COUNTERS / 6 * 5)
+		else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
+				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
 			alphaMultiplier = 0.95;
 		}
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
-			alphaMultiplier = 0.95 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)*0.95
+			alphaMultiplier = 0.95
+					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
+					* 0.95
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
 		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
 		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
-		
-		
-		
+
 		// Add stars when dusk begins
-		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3 && worldTime < ServerWorld.DAY_COUNTERS / 2)
+		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3
+				&& worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
-			
-			int noOfStars = (int)(Math.random()*MAX_NO_OF_STARS);
-			for (int no= 0; no < noOfStars; no++)
+
+			int noOfStars = (int) (Math.random() * MAX_NO_OF_STARS);
+			for (int no = 0; no < noOfStars; no++)
 			{
 				stars.add(new ClientStar());
 			}
 		}
-		
+
 		ArrayList<ClientStar> removeStars = new ArrayList<ClientStar>();
-		
-		
-		
-		for (ClientStar star:stars)
+
+		for (ClientStar star : stars)
 		{
 			if (star.exists())
 			{
-				if (star.getAlpha()>0)
+				if (star.getAlpha() > 0)
 				{
-					
-					graphics.setColor(new Color(1f, 1f, 1f,(float)( 1f * star.getAlpha())));
-					graphics.fillRect(star.getX(), star.getY(), star.getSize(), star.getSize());
+
+					graphics.setColor(new Color(1f, 1f, 1f, (float) (1f * star
+							.getAlpha())));
+					graphics.fillRect(star.getX(), star.getY(), star.getSize(),
+							star.getSize());
 				}
 				star.update();
 			}
@@ -353,13 +364,12 @@ public class ClientWorld
 				removeStars.add(star);
 			}
 		}
-	
-		
+
 		for (ClientStar star : removeStars)
 		{
 			stars.remove(star);
 		}
-		
+
 		// Draw and move the clouds
 		for (ClientCloud cloud : clouds)
 		{
@@ -392,11 +402,6 @@ public class ClientWorld
 
 			// System.out.println(cloud.getX());
 		}
-
-		// Center of the screen
-		int centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
-		int centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT
-				/ 2;
 
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((player.getY() - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
@@ -658,15 +663,15 @@ public class ClientWorld
 									.getBlueCastleMoney(),
 							ServerGoblin.GOBLIN_TIER_PRICE[client
 									.getBlueCastleTier()]), 100, 975);
-		
-//		for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
-//		{
-//			for (int column = 0; column < Client.SCREEN_WIDTH*2/16; column++)
-//			{
-//				graphics.setColor(new Color(0, 0, 0, (float)(1f *0.5)));
-//				graphics.fillRect(row*16, column*16, 16,16);
-//			}
-//		}
+
+		// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
+		// {
+		// for (int column = 0; column < Client.SCREEN_WIDTH*2/16; column++)
+		// {
+		// graphics.setColor(new Color(0, 0, 0, (float)(1f *0.5)));
+		// graphics.fillRect(row*16, column*16, 16,16);
+		// }
+		// }
 
 	}
 
@@ -679,6 +684,7 @@ public class ClientWorld
 	{
 		return objects;
 	}
+
 	public char[][] getGrid()
 	{
 		return grid;
