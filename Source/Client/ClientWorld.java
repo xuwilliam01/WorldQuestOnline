@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.io.IOException;
@@ -32,6 +33,10 @@ public class ClientWorld
 	public final static Color GREEN_TEXT = new Color(0, 153, 0);
 	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
 	public final static Color GRAY_TEXT = Color.gray;
+	
+	public final static int NO_OF_CLOUDS = 0;
+	public final static int MAX_NO_OF_STARS = 0;
+	
 	/**
 	 * The grid of tiles
 	 */
@@ -170,7 +175,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 12; no++)
+		for (int no = 0; no < NO_OF_CLOUDS; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -320,7 +325,7 @@ public class ClientWorld
 		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3 && worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
 			
-			int noOfStars = (int)(Math.random()*1000);
+			int noOfStars = (int)(Math.random()*MAX_NO_OF_STARS);
 			for (int no= 0; no < noOfStars; no++)
 			{
 				stars.add(new ClientStar());
@@ -662,6 +667,7 @@ public class ClientWorld
 //				graphics.fillRect(row*16, column*16, 16,16);
 //			}
 //		}
+
 	}
 
 	public void clear()

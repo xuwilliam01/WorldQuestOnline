@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,7 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
@@ -174,6 +174,7 @@ MouseMotionListener
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
+		
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
@@ -800,8 +801,9 @@ MouseMotionListener
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		
 
-		// Updat the map
+		// Update the map
 		try
 		{
 			world.update(graphics, player);
@@ -1045,10 +1047,14 @@ MouseMotionListener
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
 
+		
+		
 		// Repaint the inventory
 		inventory.repaint();
 		if (!chat.hasFocus())
 			requestFocusInWindow();
+		
+		
 	}
 
 	@Override
