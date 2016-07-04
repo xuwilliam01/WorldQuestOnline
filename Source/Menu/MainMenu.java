@@ -57,7 +57,7 @@ public class MainMenu {
 
 	//Cloud variables
 	private static ArrayList<ClientCloud> clouds;
-	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 2;
+	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 3;
 	private static int cloudDirection = 0;
 
 	private static Client client;
@@ -80,11 +80,11 @@ public class MainMenu {
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 20; no++)
+		for (int no = 0; no < 25; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
-			double y = Math.random() * (Client.SCREEN_HEIGHT)
+			double y = Math.random() * (Client.SCREEN_HEIGHT*1.5)
 					- (2 * Client.SCREEN_HEIGHT / 3);
 
 			double hSpeed = 0;
@@ -222,11 +222,14 @@ public class MainMenu {
 			super.paintComponent(graphics);
 			graphics.drawImage(background,0, 0, Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT,null);
 
+			
+			
+			
 			// Draw and move the clouds
 			for (ClientCloud cloud : clouds)
 			{
 				if (cloud.getX() <= Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH
-						&& cloud.getX() + cloud.getWidth() >= 0
+						&& cloud.getX() + cloud.getWidth() >= -64
 						&& cloud.getY() <= Client.SCREEN_HEIGHT
 						&& cloud.getY() + cloud.getHeight() >= 0)
 				{

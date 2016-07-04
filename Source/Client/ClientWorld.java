@@ -170,7 +170,7 @@ public class ClientWorld
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 0; no++)
+		for (int no = 0; no < 12; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -298,16 +298,16 @@ public class ClientWorld
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2)
 		{
-			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)*0.95
+			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)*0.9
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		}
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 2 && worldTime < ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
-			alphaMultiplier = 0.95;
+			alphaMultiplier = 0.9;
 		}
 		else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5)
 		{
-			alphaMultiplier = 0.95 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)*0.95
+			alphaMultiplier = 0.9 - (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)*0.9
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 

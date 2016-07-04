@@ -51,13 +51,13 @@ public class Images
 	 */
 	private static boolean imported = false;
 	
-	/**
-	 * Modify images using java and write them to the file
-	 * @param args
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws IOException
-	{
+//	/**
+//	 * Modify images using java and write them to the file
+//	 * @param args
+//	 * @throws IOException
+//	 */
+//	public static void main(String[] args) throws IOException
+//	{
 //		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_3.png"));
 //		BufferedImage[][] imageTiles = new BufferedImage[image
 //				.getHeight() / 32][image.getWidth() / 32];
@@ -86,7 +86,7 @@ public class Images
 //		
 //		ImageIO.write(newImage, "PNG", new File(
 //				"STEELARROW.png"));
-	}
+//	}
 
 	/**
 	 * Import the images from the folder
@@ -246,7 +246,6 @@ public class Images
 					}
 
 					// Load death images (they are different sizes)
-
 					BufferedImage currentImage = image.getSubimage(32, 5 * 64,
 							32, 64);
 
@@ -689,11 +688,8 @@ public class Images
 			addtoImageArray(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
-			addtoImageArray(new GameImage("COIN.png",10,10));
 			addtoImageArray(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
-			addtoImageArray(new GameImage("HP_POTION_ICON.png",
-					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("MAX_HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("MAX_MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("DMG_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));

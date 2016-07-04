@@ -99,7 +99,8 @@ public class ServerSlime extends ServerEnemy
 			setImage("GIANTSLIME_6");
 			setDamage(15);
 			setHP(150);
-			setWidth(-1);
+			setWidth(106);
+			setRelativeDrawX(-24);
 			setHeight(-1);
 			setName("Giant Slime");
 				addItem(ServerItem.randomItem(getX(), getY()));

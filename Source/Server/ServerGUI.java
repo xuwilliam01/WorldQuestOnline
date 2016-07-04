@@ -238,7 +238,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		super.paintComponent(graphics);
 
-		graphics.drawImage(background, 0, 0, null);
+		graphics.drawImage(background, 0, -500, null);
 
 		// Draw the map
 		if (visible & started)
