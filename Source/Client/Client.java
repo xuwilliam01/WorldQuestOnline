@@ -402,10 +402,7 @@ MouseMotionListener
 								}
 								else if (tokens[token].equals("U"))
 								{
-									if (System.currentTimeMillis()-receiveTime<(1000/currentFPS*1.5))
-									{
 									repaint();
-									}
 
 									// Update the FPS counter
 									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
