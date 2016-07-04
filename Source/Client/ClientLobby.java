@@ -304,6 +304,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 
 
 		graphics.drawImage(background,0,0,Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,null);
+		
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 
