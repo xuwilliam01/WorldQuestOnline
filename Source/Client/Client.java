@@ -157,6 +157,8 @@ MouseMotionListener
 	 * All the leftover lines to read in to the client
 	 */
 	private ArrayList<String> lines = new ArrayList<String>();
+	
+	
 
 	/**
 	 * The name of the player
@@ -344,7 +346,9 @@ MouseMotionListener
 					{
 						String[] tokens = message.split(" ");
 
-						for (int token = 0; token < tokens.length; token++)
+						long receiveTime = Long.parseLong(tokens[0]);
+						
+						for (int token = 1; token < tokens.length; token++)
 						{
 							try
 							{
@@ -398,7 +402,10 @@ MouseMotionListener
 								}
 								else if (tokens[token].equals("U"))
 								{
+									if (System.currentTimeMillis()-receiveTime<(1000/currentFPS*1.5))
+									{
 									repaint();
+									}
 
 									// Update the FPS counter
 									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
@@ -671,8 +678,10 @@ MouseMotionListener
 
 				while (true)
 				{
-					String message = input.readLine();
+					String message = System.currentTimeMillis()+" " + input.readLine();
 
+					
+					
 					lines.add(message);
 
 					// Update the ping after 1 second
