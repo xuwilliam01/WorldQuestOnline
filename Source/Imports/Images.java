@@ -114,7 +114,7 @@ public class Images
 				String[] slimeSheets = { "GREENSLIME","REDSLIME", "BLUESLIME", "YELLOWSLIME"};
 				for (int sheetNo = 0; sheetNo < slimeSheets.length; sheetNo++)
 				{
-					image = ImageIO.read(new File(
+					image = ImageIO.read(new File("Images//"+
 							slimeSheets[sheetNo] + ".png"));
 					
 					for (int no = 0; no < 9; no++)
@@ -124,7 +124,7 @@ public class Images
 					}
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"GREENSLIME.png"));
 				
 				for (int no = 0; no < 9; no++)
@@ -133,7 +133,7 @@ public class Images
 							image.getSubimage(no * 19, 0, 19, 17), 144, 102));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"DARKSLIME.png"));
 				
 				for (int no = 0; no < 9; no++)
@@ -143,7 +143,7 @@ public class Images
 				}
 
 
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/32; no++)
 				{
@@ -151,7 +151,7 @@ public class Images
 							image.getSubimage(no * 32, 0, 32, 32)));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"EXPLOSION1_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/160; no++)
 				{
@@ -164,7 +164,7 @@ public class Images
 							image.getSubimage(no * 160, 160, 160, 160),100,100));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"EXPLOSION2_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/64; no++)
 				{
@@ -172,7 +172,7 @@ public class Images
 							image.getSubimage(no * 64, 0, 64, 64)));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"EXPLOSION3_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/82; no++)
 				{
@@ -180,7 +180,7 @@ public class Images
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"EXPLOSION4_SHEET.png"));
 				for (int no = 0; no < image.getWidth()/82; no++)
 				{
@@ -188,7 +188,7 @@ public class Images
 							image.getSubimage(no * 82, 0, 82, 82)));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"STAR0.png"));
 				for (int no = 0; no < image.getWidth()/24; no++)
 				{
@@ -196,7 +196,7 @@ public class Images
 							image.getSubimage(no * 24, 0, 24, 24)));
 				}
 				
-				image = ImageIO.read(new File(
+				image = ImageIO.read(new File("Images//"+
 						"STAR1.png"));
 				for (int no = 0; no < image.getWidth()/24; no++)
 				{
@@ -214,7 +214,7 @@ public class Images
 						"OUTFITNINJAGREY", "OUTFITNINJARED" };
 				for (int no = 0; no < playerSheets.length; no++)
 				{
-					image = ImageIO.read(new File(playerSheets[no] + ".png"));
+					image = ImageIO.read(new File("Images//"+playerSheets[no] + ".png"));
 					BufferedImage[][] imageTiles = new BufferedImage[5][image
 							.getWidth() / 32];
 					for (int row = 0; row < imageTiles.length; row++)
@@ -314,11 +314,11 @@ public class Images
 					double size = 1;
 					if (!goblinSheets[no].equals("GOBGIANT"))
 					{
-					image = ImageIO.read(new File(goblinSheets[no] + ".png"));
+					image = ImageIO.read(new File("Images//"+goblinSheets[no] + ".png"));
 					}
 					else
 					{
-						image = ImageIO.read(new File("GOB.png"));
+						image = ImageIO.read(new File("Images//"+"GOB.png"));
 						size = 2;
 					}
 					BufferedImage[][] imageTiles = new BufferedImage[image.getHeight()/64][image.getWidth() / 32];
@@ -413,7 +413,7 @@ public class Images
 					addtoImageArray(new GameImage(weapons[no]+"_ICON.png"));
 					
 					image = ImageIO.read(new File(
-							weapons[no] + ".png"));
+							"Images//"+weapons[no] + ".png"));
 					double locationX = image.getWidth() / 2;
 					double locationY = image.getHeight() / 2;
 
@@ -460,7 +460,7 @@ public class Images
 				for (int no = 0; no < projectiles.length; no++)
 				{
 					image = ImageIO.read(new File(
-							projectiles[no] + ".png"));
+							"Images//"+projectiles[no] + ".png"));
 					double locationX = image.getWidth() / 2;
 					double locationY = image.getHeight() / 2;
 

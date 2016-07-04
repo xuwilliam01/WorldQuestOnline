@@ -53,7 +53,7 @@ public class GameImage implements Comparable<GameImage>
 		
 		try
 		{
-			bufferedImage = ImageIO.read(new File(name));
+			bufferedImage = ImageIO.read(new File("Images//"+name));
 		}
 		catch (IOException e)
 		{
@@ -76,7 +76,7 @@ public class GameImage implements Comparable<GameImage>
 		
 		try
 		{
-			bufferedImage = ImageIO.read(new File(name));
+			bufferedImage = ImageIO.read(new File("Images//"+name));
 		}
 		catch (IOException e)
 		{
