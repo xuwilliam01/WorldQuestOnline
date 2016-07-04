@@ -688,6 +688,7 @@ public class Images
 			addtoImageArray(new GameImage("CHEST.png",5*ServerWorld.TILE_SIZE,3*ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("RED_CASTLE.png", 26*ServerWorld.TILE_SIZE, 52*ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png", 26*ServerWorld.TILE_SIZE,52*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("COIN.png",10,10));
 			addtoImageArray(new GameImage("HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("MANA_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
 			addtoImageArray(new GameImage("MAX_HP_POTION.png", Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH));
@@ -730,6 +731,7 @@ public class Images
 			addtoImageArray(new GameImage("Next.png"));
 			
 			addtoImageArray(new GameImage("Shop.png",ClientShop.SHOP_WIDTH,ClientShop.SHOP_HEIGHT));
+			
 			
 			// Create a correctly sized array of the game images
 			GameImage[] clone = imageArray;

@@ -71,7 +71,7 @@ public class ClientShopItem extends JButton implements ActionListener{
 			setToolTipText(String.format("Max Mana +%d",ServerPotion.MAX_MANA_INCREASE));
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
-			setToolTipText(String.format("+%d Base Damage",ServerPotion.DMG_AMOUNT));
+			setToolTipText(String.format("+%d%% Base Damage",ServerPotion.DMG_AMOUNT));
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setToolTipText(String.format("+%d Speed",ServerPotion.SPEED_AMOUNT));
