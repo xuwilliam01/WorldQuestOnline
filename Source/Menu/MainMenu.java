@@ -702,7 +702,6 @@ public class MainMenu {
 			mainFrame.validate();
 			mainMenu = null;
 
-
 			try {
 				gamePanel = new GamePanel(serverIP, port,playerName);
 			} catch (NumberFormatException e1) {
@@ -730,23 +729,23 @@ public class MainMenu {
 	{
 		public void actionPerformed(ActionEvent e) {
 			//Get info for the server and exit if it is invalid
-			String fileName;
-			while(true)
-			{
-				fileName = JOptionPane
-						.showInputDialog("Map name (Default: WORLD)");
-				if(fileName == null)
-					return;
-				else if(fileName.equals(""))
-					fileName = "World.txt";
-				else
-					fileName+=".txt";
-
-				File f = new File("Resources",fileName);
-				if(f.exists() && !f.isDirectory()) { 
-					break;
-				}
-			}
+			String fileName = "World.txt";
+//			while(true)
+//			{
+//				fileName = JOptionPane
+//						.showInputDialog("Map name (Default: WORLD)");
+//				if(fileName == null)
+//					return;
+//				else if(fileName.equals(""))
+//					fileName = "World.txt";
+//				else
+//					fileName+=".txt";
+//
+//				File f = new File("Resources",fileName);
+//				if(f.exists() && !f.isDirectory()) { 
+//					break;
+//				}
+//			}
 
 			int portNum;
 			while(true)
@@ -769,7 +768,7 @@ public class MainMenu {
 			}
 
 
-			//Starts the server
+			// Starts the server
 			Server server = new Server(fileName,portNum);
 
 			Thread serverThread = new Thread(server);

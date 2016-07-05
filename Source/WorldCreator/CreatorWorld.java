@@ -535,6 +535,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public void save() throws NumberFormatException, IOException
 	{	
+		
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 
 		// Print the grid
@@ -558,11 +559,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		int numMaps = Integer.parseInt(maps.readLine());
 		ArrayList<String> mapNames = new ArrayList<String>();
 		for(int i =0; i < numMaps;i++)
-			mapNames.add(maps.readLine());
+		{
+			mapNames.add(maps.readLine().toLowerCase());
+		}
 		maps.close();
 		
 		//If the file doesn't already exist
-		if(!mapNames.contains(fileName))
+		if(!mapNames.contains(fileName.toLowerCase()))
 		{
 			PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps.txt"));
 			mapWriter.println(numMaps+1);

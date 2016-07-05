@@ -80,7 +80,7 @@ public class Server implements Runnable
 			}
 		}
 
-		System.out.println("exited the lobby");
+		System.out.println("Exited the lobby");
 		try {
 			socket = new ServerSocket(port);
 		} catch (IOException e2) {
@@ -153,8 +153,8 @@ public class Server implements Runnable
 				}
 				lobbyPlayersToAdd.remove(playerToRemove);
 
-				int x = 2000;
-				int y = 2000;
+				int x;
+				int y;
 				if(team == ServerPlayer.RED_TEAM)
 				{
 					x = engine.getWorld().getRedCastleX();
