@@ -100,7 +100,7 @@ public class CreatorObject extends JButton implements MouseListener
 					+ 80);
 		else
 			setLocation(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12), SCALE*(row
-					* getIcon().getIconHeight()/SCALE + row * 10) + 300);
+					* getIcon().getIconHeight()/SCALE + row * 10) + 500);
 	}
 
 	@Override

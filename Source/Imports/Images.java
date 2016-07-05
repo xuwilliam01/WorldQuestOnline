@@ -51,27 +51,27 @@ public class Images
 	 */
 	private static boolean imported = false;
 	
-//	/**
-//	 * Modify images using java and write them to the file
-//	 * @param args
-//	 * @throws IOException
-//	 */
-//	public static void main(String[] args) throws IOException
-//	{
-//		BufferedImage image = ImageIO.read(new File("RESOURCE_SHEET_3.png"));
-//		BufferedImage[][] imageTiles = new BufferedImage[image
-//				.getHeight() / 32][image.getWidth() / 32];
-//		for (int row = 0; row < imageTiles.length; row++)
-//		{
-//			for (int column = 0; column < imageTiles[0].length; column++)
-//			{
-//				imageTiles[row][column] = image.getSubimage(
-//						column * 32, row * 32, 32, 32);
-//			}
-//		}
-//
-//		image = imageTiles[2][5];
-//		
+	/**
+	 * Modify images using java and write them to the file
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main(String[] args) throws IOException
+	{
+		BufferedImage image = ImageIO.read(new File("Images//"+"RESOURCE_SHEET_5.png"));
+		BufferedImage[][] imageTiles = new BufferedImage[image
+				.getHeight() / 32][image.getWidth() / 32];
+		for (int row = 0; row < imageTiles.length; row++)
+		{
+			for (int column = 0; column < imageTiles[0].length; column++)
+			{
+				imageTiles[row][column] = image.getSubimage(
+						column * 32, row * 32, 32, 32);
+			}
+		}
+
+		image = imageTiles[2][6];
+		
 //		double rotationRequired = Math.toRadians(135);
 //		AffineTransform tx;
 //
@@ -83,10 +83,10 @@ public class Images
 //
 //		BufferedImage newImage = op
 //				.filter(image, null);
-//		
-//		ImageIO.write(newImage, "PNG", new File(
-//				"STEELARROW.png"));
-//	}
+		
+		ImageIO.write(image, "PNG", new File(
+				"Images//"+"STONEBRICKS.png"));
+	}
 
 	/**
 	 * Import the images from the folder
@@ -663,6 +663,20 @@ public class Images
 			newImage =new GameImage("PLANKS.jpg", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE);
 			newImage.setName("PLANKS_ICON");
+			addtoImageArray(newImage);
+			
+			addtoImageArray(new GameImage("STONE.jpg", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			newImage =new GameImage("STONE.jpg", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE);
+			newImage.setName("STONE_ICON");
+			addtoImageArray(newImage);
+			
+			addtoImageArray(new GameImage("SANDSTONE.jpg", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			newImage =new GameImage("SANDSTONE.jpg", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE);
+			newImage.setName("SANDSTONE_ICON");
 			addtoImageArray(newImage);
 			
 			// Rest of the icons
