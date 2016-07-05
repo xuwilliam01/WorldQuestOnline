@@ -658,6 +658,13 @@ public class Images
 			newImage.setName("BSTONEPLAT_ICON");
 			addtoImageArray(newImage);
 			
+			addtoImageArray(new GameImage("PLANKS.jpg", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			newImage =new GameImage("PLANKS.jpg", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE*ServerWorld.TILE_SIZE);
+			newImage.setName("PLANKS_ICON");
+			addtoImageArray(newImage);
+			
 			// Rest of the icons
 			addtoImageArray(new GameImage("SLIME_6_ICON.png", CreatorObject.SCALE*ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE*ServerWorld.TILE_SIZE));
