@@ -17,6 +17,9 @@ public class ServerSlime extends ServerEnemy
 	 */
 	public final static int SLIME_HP = 50;
 
+	/**
+	 * Horizontal speed of the slime
+	 */
 	private int speed;
 
 	/**

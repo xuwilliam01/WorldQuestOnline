@@ -136,7 +136,7 @@ public class ServerWorld
 	/**
 	 * Map name
 	 */
-	private String mapFile = "World.txt";
+	private String mapFile = "World";
 
 	private int redCastleX;
 	private int blueCastleX;

@@ -555,7 +555,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 		output.close();
 
-		BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps.txt")));
+		BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
 		int numMaps = Integer.parseInt(maps.readLine());
 		ArrayList<String> mapNames = new ArrayList<String>();
 		for(int i =0; i < numMaps;i++)
@@ -567,7 +567,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		//If the file doesn't already exist
 		if(!mapNames.contains(fileName.toLowerCase()))
 		{
-			PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps.txt"));
+			PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps"));
 			mapWriter.println(numMaps+1);
 			for(String map : mapNames)
 				mapWriter.println(map);

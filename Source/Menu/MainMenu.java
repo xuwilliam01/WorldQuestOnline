@@ -729,7 +729,7 @@ public class MainMenu {
 	{
 		public void actionPerformed(ActionEvent e) {
 			//Get info for the server and exit if it is invalid
-			String fileName = "World.txt";
+			String fileName = "World";
 //			while(true)
 //			{
 //				fileName = JOptionPane
@@ -813,7 +813,7 @@ public class MainMenu {
 				fileName = (String)JOptionPane.showInputDialog("File name (new or existing) (default: WORLD)").trim();
 				if(fileName != null && !fileName.isEmpty())
 				{
-					fileName+=".txt";
+					//fileName+=".txt";
 					break;
 				}
 			}
