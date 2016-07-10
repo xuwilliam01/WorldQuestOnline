@@ -59,7 +59,7 @@ public class ClientItem extends JButton implements MouseListener{
 		setFocusable(false);
 		addMouseListener(this);
 
-		//Add tooltips
+		// Add tooltips
 		switch(type)
 		{
 		case ServerWorld.HP_POTION_TYPE:

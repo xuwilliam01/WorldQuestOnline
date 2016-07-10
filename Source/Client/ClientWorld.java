@@ -34,8 +34,8 @@ public class ClientWorld
 	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
 	public final static Color GRAY_TEXT = Color.gray;
 
-	public final static int NO_OF_CLOUDS = 12;
-	public final static int MAX_NO_OF_STARS = 500;
+	public static int NO_OF_CLOUDS = 12;
+	public static int MAX_NO_OF_STARS = 500;
 
 	/**
 	 * The grid of tiles

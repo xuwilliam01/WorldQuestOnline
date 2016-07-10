@@ -33,6 +33,7 @@ import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
+import Client.ClientWorld;
 import Imports.Images;
 import START.StartGame;
 import Server.Server;
@@ -68,6 +69,8 @@ public class MainMenu {
 
 	private static Client client;
 	private static ClientLobby lobby;
+	
+	private static String playerName;
 
 
 	/**
@@ -169,9 +172,39 @@ public class MainMenu {
 			setLocation(0,0);
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,Client.SCREEN_HEIGHT);
+			
+			while(true)
+			{
+				try
+				{
+					playerName = JOptionPane
+							.showInputDialog("Please enter your name (max 20 characters)").trim();
+					if(playerName == null)
+						return;
+					else if(playerName.equals(""))
+						playerName = "Player";
+					else if(playerName.length()>20)
+						playerName = playerName.substring(0, 20);
+					
+					int enableCloudsAndStars = 
+							JOptionPane.showConfirmDialog(null,"","Would you like to enable in-game clouds and stars? (May lag slightly on shitty computers)",JOptionPane.YES_NO_OPTION);
+					if(enableCloudsAndStars != JOptionPane.YES_OPTION)
+					{
+						ClientWorld.NO_OF_CLOUDS=0;
+						ClientWorld.MAX_NO_OF_STARS=0;
+					}
+					
+					break;
+				}
+				catch(NumberFormatException E)
+				{
+
+				}
+
+			}
+			
+			
 			repaintTimer.start();
-
-
 
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),playGameImage.getHeight(null));
@@ -401,7 +434,7 @@ public class MainMenu {
 	{
 		static ClientInventory inventory;
 		static Socket mySocket = null;
-		String playerName;
+		
 		String serverIP;
 		int port;
 
@@ -413,13 +446,12 @@ public class MainMenu {
 		 * @throws IOException 
 		 * @throws NumberFormatException 
 		 */
-		public GamePanel(String serverIPIn, int portIn, String playerNameIn) throws NumberFormatException, IOException
+		public GamePanel(String serverIPIn, int portIn) throws NumberFormatException, IOException
 		{
 			serverIP = serverIPIn;
 			this.port = portIn;
 			boolean connected = false;
 			boolean exit = false;
-			this.playerName = playerNameIn;
 
 			while (!connected)
 			{
@@ -431,7 +463,7 @@ public class MainMenu {
 				catch (IOException e)
 				{
 					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please enter a new IP");
+							.showInputDialog("Connection Failed. Please try again.");
 					if(serverIP == null)
 						exit = true;
 					else
@@ -686,14 +718,6 @@ public class MainMenu {
 						port = Integer.parseInt(portNum);
 					else throw new NumberFormatException();
 
-					playerName = JOptionPane
-							.showInputDialog("Please enter your name (max 20 characters)").trim();
-					if(playerName == null)
-						return;
-					else if(playerName.equals(""))
-						playerName = "Player";
-					else if(playerName.length()>20)
-						playerName = playerName.substring(0, 20);
 					break;
 				}
 				catch(NumberFormatException E)
@@ -709,7 +733,7 @@ public class MainMenu {
 			mainMenu = null;
 
 			try {
-				gamePanel = new GamePanel(serverIP, port,playerName);
+				gamePanel = new GamePanel(serverIP, port);
 			} catch (NumberFormatException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
