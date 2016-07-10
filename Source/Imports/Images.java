@@ -606,7 +606,14 @@ public class Images
 				e.printStackTrace();
 			}
 
-			// Add the rest of the images normally
+			/*
+			 * (Implement later)
+			 * Add the rest of the images through the text file First token
+			 * protocol: 
+			 * 0-Just the image name
+			 * 1-Name + scale
+			 * 2-Name + alias
+			 */
 			addtoImageArray(new GameImage("BRICK.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			GameImage newImage = new GameImage("BRICK.jpg", CreatorObject.SCALE
@@ -923,6 +930,9 @@ public class Images
 
 			addtoImageArray(new GameImage("Shop.png", ClientShop.SHOP_WIDTH,
 					ClientShop.SHOP_HEIGHT));
+			
+			addtoImageArray(new GameImage("Cursor.png"));
+			addtoImageArray(new GameImage("Cursorclick.png"));
 
 			// Create a correctly sized array of the game images
 			GameImage[] clone = imageArray;

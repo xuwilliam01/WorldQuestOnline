@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
@@ -109,6 +111,15 @@ MouseMotionListener
 	private JTextField chat;
 	private JButton enter;
 	private ArrayList<String> chatQueue = new ArrayList<String>();
+	
+	/**
+	 * Mouse's x coordinate
+	 */
+	private int mouseX=0;
+	/**
+	 * Mouse's y coordinate
+	 */
+	private int mouseY=0;
 
 	/**
 	 * The player's inventory
@@ -221,6 +232,14 @@ MouseMotionListener
 	 */
 	public void initialize()
 	{
+		
+		// Set the cursor transparent
+//		Toolkit toolkit = Toolkit.getDefaultToolkit();
+//		Cursor cursor = toolkit.createCustomCursor(Images.getImage("NOTHING"), new Point(
+//				getX(), getY()), "img");
+//		setCursor(cursor);
+		
+		
 		setDoubleBuffered(true);
 		setFocusable(true);
 		requestFocusInWindow();
@@ -1013,6 +1032,9 @@ MouseMotionListener
 				if (!getChat().hasFocus()) {
 					requestFocusInWindow();
 				}
+				
+				//graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
+				
 	}
 
 	@Override
@@ -1202,6 +1224,8 @@ MouseMotionListener
 	@Override
 	public void mouseDragged(MouseEvent event)
 	{
+		mouseX = event.getX();
+		mouseY = event.getY();
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
 				&& direction != 'R')
@@ -1222,6 +1246,8 @@ MouseMotionListener
 	@Override
 	public void mouseMoved(MouseEvent event)
 	{
+		mouseX = event.getX();
+		mouseY = event.getY();
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
 				&& direction != 'R')

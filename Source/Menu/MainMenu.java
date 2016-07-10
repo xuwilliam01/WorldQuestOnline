@@ -1,8 +1,11 @@
 package Menu;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -46,8 +49,11 @@ import WorldCreator.CreatorWorld;
  */
 public class MainMenu {
 
-	//Default port number
+	/**
+	 * Default port number
+	 */
 	final private static int DEF_PORT = 9988;
+	
 	//All the panels
 	private static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
