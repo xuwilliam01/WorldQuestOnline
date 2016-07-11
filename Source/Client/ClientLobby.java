@@ -97,14 +97,13 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		switchTeams.addActionListener(this);
 		switchTeams.setBackground(new Color(240,240,240));
 
-		//Add map selection combo box
+		// Add map selection combo box
 		BufferedReader inputMap= new BufferedReader(new FileReader(new File("Resources","Maps")));
 		int numMaps = Integer.parseInt(inputMap.readLine());
 		maps = new String[numMaps];
 		for(int i = 0; i < numMaps;i++)
 		{
 			maps[i] = inputMap.readLine();
-			maps[i] = maps[i].substring(0,maps[i].length()-4);
 		}
 		inputMap.close();
 

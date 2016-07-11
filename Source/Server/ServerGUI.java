@@ -340,7 +340,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		graphics.setColor(Color.GRAY);
 		graphics.drawString("Map: ", 270, 15);
 		graphics.setColor(new Color(235,117,0));
-		graphics.drawString(map.substring(0, map.length()-4), 270+graphics.getFontMetrics().stringWidth("Map: "), 15);
+		graphics.drawString(map, 270+graphics.getFontMetrics().stringWidth("Map: "), 15);
 		while (true)
 		{
 			try
