@@ -57,7 +57,7 @@ public class MainMenu
 	final private static int DEF_PORT = 9988;
 
 	// All the panels
-	private static ClientFrame mainFrame;
+	public static ClientFrame mainFrame;
 	private static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
@@ -783,7 +783,7 @@ public class MainMenu
 			mainFrame.add(gamePanel);
 			mainFrame.setVisible(true);
 			gamePanel.revalidate();
-
+			
 		}
 
 	}
@@ -877,15 +877,14 @@ public class MainMenu
 		public void actionPerformed(ActionEvent e)
 		{
 
-			// Get filename. If it invalid, exit
+			// Get filename. If it is invalid, exit
 			String fileName = "";
 			while (true)
 			{
 				fileName = (String) JOptionPane.showInputDialog(
-						"File name (new or existing) (default: WORLD)").trim();
+						"File name (new or existing) (ex: WORLD)").trim();
 				if (fileName != null && !fileName.isEmpty())
 				{
-					// fileName+=".txt";
 					break;
 				}
 			}
@@ -924,7 +923,6 @@ public class MainMenu
 			instructionPanel.repaint();
 
 		}
-
 	}
 
 }

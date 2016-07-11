@@ -43,8 +43,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 	/**
 	 * Constructor
 	 * 
-	 * @param menu
-	 *            the button that will take the player back to the main menu
+	 * @param menu  the button that will take the player back to the main menu
 	 */
 	public ClientInventory(JButton menu) {
 		setDoubleBuffered(true);

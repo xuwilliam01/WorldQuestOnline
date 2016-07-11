@@ -2,6 +2,7 @@ package Client;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -97,30 +98,11 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		switchTeams.addActionListener(this);
 		switchTeams.setBackground(new Color(240,240,240));
 
-		// Add map selection combo box
-		BufferedReader inputMap= new BufferedReader(new FileReader(new File("Resources","Maps")));
-		int numMaps = Integer.parseInt(inputMap.readLine());
-		maps = new String[numMaps];
-		for(int i = 0; i < numMaps;i++)
-		{
-			maps[i] = inputMap.readLine();
-		}
-		inputMap.close();
-
-		mapBox = new JComboBox<String>(maps);
-		mapBox.setSize(200,40);
-		mapBox.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-250, 24);
-		mapBox.addActionListener(this);
-		mapBox.setFocusable(true);
-		mapBox.setVisible(true);
-		mapBox.setEnabled(false);
-
 		setLayout(null);
 		add(chat);
 		add(enter);
 		add(start);
 		add(switchTeams);
-		add(mapBox);
 
 		setDoubleBuffered(true);
 		setFocusable(true);
@@ -140,7 +122,29 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			// System.out.println("Error creating buffered reader");
 			e.printStackTrace();
 		}
+		
+		
+		// Add maps on server (first thing read)
+		String [] readMaps = input.readLine().split(" ");
+		maps = new String[readMaps.length];
+		for(int i = 0; i < readMaps.length;i++)
+		{
+			maps[i] = Character.toUpperCase(readMaps[i].charAt(0))+readMaps[i].substring(1);
+			System.out.println(Character.toUpperCase(readMaps[i].charAt(0))+readMaps[i].substring(1));
+		}
 
+		// Create the map box
+		mapBox = new JComboBox<String>(maps);
+		mapBox.setSize(230,25);
+		mapBox.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-250, 32);
+		mapBox.addActionListener(this);
+		mapBox.setFocusable(true);
+		mapBox.setVisible(true);
+		mapBox.setEnabled(false);
+		
+		
+		add(mapBox);
+		
 		// Set up the output
 		try
 		{
@@ -276,9 +280,21 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 					}
 					else if(tokens[token].equals("M"))
 					{
-						if(!isLeader && !tokens[++token].equals(mapBox.getSelectedItem()))
+						if(!isLeader)
 						{
-							mapBox.setSelectedItem(tokens[token].substring(0, tokens[token].length()-4));
+							String map= "";
+							token++;
+							for (int no=0; no < maps.length; no++)
+							{
+								if (maps[no].equalsIgnoreCase(Character.toUpperCase(tokens[token].charAt(0))+tokens[token].substring(1)))
+								{
+									map = maps[no];
+									break;
+								}
+							}
+							
+							mapBox.setSelectedItem(map);
+							System.out.println(map);
 						}
 					}
 					repaint();
@@ -286,7 +302,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 				catch(Exception E)
 				{
 					System.out.println("Lost connection to server");
-					E.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Lost connection to the Server", "Uh-oh", JOptionPane.ERROR_MESSAGE);
 					break;
 				}
 			}
@@ -443,7 +459,8 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		}
 		else if(e.getSource() == mapBox)
 		{
-			printToServer("M "+mapBox.getItemAt(mapBox.getSelectedIndex())+".txt");
+			printToServer("M "+maps[mapBox.getSelectedIndex()]);
+			System.out.println("M "+maps[mapBox.getSelectedIndex()]);
 		}
 
 	}

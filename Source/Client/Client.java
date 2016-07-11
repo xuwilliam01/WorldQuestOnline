@@ -404,7 +404,9 @@ MouseMotionListener
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)
+									{
 										inventory.getMenuButton().doClick();
+									}
 									break;
 
 								}

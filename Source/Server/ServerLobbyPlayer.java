@@ -10,7 +10,8 @@ import java.net.Socket;
 
 import Server.Creatures.ServerCreature;
 
-public class ServerLobbyPlayer implements Runnable {
+public class ServerLobbyPlayer implements Runnable
+{
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
@@ -25,18 +26,18 @@ public class ServerLobbyPlayer implements Runnable {
 
 	public static int numRed = 0;
 	public static int numBlue = 0;
-	
-	private String allMaps ="";
+
+	private String allMaps = "";
 
 	public ServerLobbyPlayer(Socket socket, Server server)
 	{
 		this.socket = socket;
 		this.IP = socket.getInetAddress().toString();
 		this.server = server;
-		this.team = nextTeam%2+1;
+		this.team = nextTeam % 2 + 1;
 		nextTeam++;
 
-		if(team == ServerCreature.RED_TEAM)
+		if (team == ServerCreature.RED_TEAM)
 		{
 			numRed++;
 		}
@@ -47,13 +48,15 @@ public class ServerLobbyPlayer implements Runnable {
 		try
 		{
 			output = new PrintWriter(this.socket.getOutputStream());
-			sendMessage("M "+server.getMap());
-			
+
 			allMaps = "";
-			BufferedReader inputMap = new BufferedReader(new FileReader(new File("Resources","Maps.txt")));
+			BufferedReader inputMap = new BufferedReader(new FileReader(
+					new File("Resources", "Maps")));
 			int numMaps = Integer.parseInt(inputMap.readLine());
-			for(int i = 0; i < numMaps;i++)
-				allMaps+=inputMap.readLine()+" ";
+			for (int i = 0; i < numMaps; i++)
+			{
+				allMaps += inputMap.readLine() + " ";
+			}
 			allMaps = allMaps.trim();
 			inputMap.close();
 		}
@@ -62,6 +65,12 @@ public class ServerLobbyPlayer implements Runnable {
 			System.out.println("Error getting client's output stream");
 			e.printStackTrace();
 		}
+
+		// Send the maps to the client lobby
+		sendMessage(allMaps);
+
+		// Send the current map
+		sendMessage("M " + server.getMap());
 
 		// Set up the input
 		try
@@ -80,7 +89,8 @@ public class ServerLobbyPlayer implements Runnable {
 	/**
 	 * Input thread
 	 */
-	public void run() {
+	public void run()
+	{
 		while (true)
 		{
 			try
@@ -88,18 +98,19 @@ public class ServerLobbyPlayer implements Runnable {
 				// Read the next line the player sent in
 				String command = input.readLine();
 
-				if(command.length() >= 3 && command.charAt(0) == 'C')
+				if (command.length() >= 3 && command.charAt(0) == 'C')
 				{
 					String message = command.substring(2);
 					String[] tokens = message.split(" ");
 
-					server.broadcast("CH " + "E "+(getTeam() + getName()).split(" ").length
+					server.broadcast("CH " + "E "
+							+ (getTeam() + getName()).split(" ").length
 							+ " " + getTeam() + getName() + " "
 							+ tokens.length + " " + message);
 				}
-				else if(command.equals("S") && isLeader)
+				else if (command.equals("S") && isLeader)
 				{
-					if(Math.abs(numBlue - numRed) < 2)
+					if (Math.abs(numBlue - numRed) < 2)
 					{
 						started = true;
 						server.start();
@@ -107,65 +118,67 @@ public class ServerLobbyPlayer implements Runnable {
 					else
 					{
 						server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
-						+ "Server " + 5 + " "
-						+ "Balance the teams to start");
+								+ "Server " + 5 + " "
+								+ "Balance the teams to start");
 					}
 				}
-				else if(command.length() > 2 && command.substring(0,2).equals("Na"))
+				else if (command.length() > 2
+						&& command.substring(0, 2).equals("Na"))
 				{
 					try
 					{
 						name = command.substring(3);
 					}
-					catch(Exception E)
+					catch (Exception E)
 					{
 						continue;
 					}
 					server.broadcast("JO " + getName().split(" ").length + " "
 							+ getTeam() + getName());
 
-					for(ServerLobbyPlayer player : server.getPlayers())
+					for (ServerLobbyPlayer player : server.getPlayers())
 					{
-						//Send every player to this one and send all other players that this player just joined
-						sendMessage("P true "+player.getTeam()+" "+player.getName());
-						if(player != this)
-							player.sendMessage("P true "+team+" "+name);
+						// Send every player to this one and send all other
+						// players that this player just joined
+						sendMessage("P true " + player.getTeam() + " "
+								+ player.getName());
+						if (player != this)
+							player.sendMessage("P true " + team + " " + name);
 
-						if(player.isLeader())
-							server.broadcast("LE "+player.getTeam()+" "+player.getName());
+						if (player.isLeader())
+							server.broadcast("LE " + player.getTeam() + " "
+									+ player.getName());
 					}
 				}
-				else if(command.equals("X"))
+				else if (command.equals("X"))
 				{
-					if(team == ServerCreature.RED_TEAM)
+					if (team == ServerCreature.RED_TEAM)
 					{
 						team = ServerCreature.BLUE_TEAM;
 						numRed--;
 						numBlue++;
-						server.broadcast("P false "+ team+" "+name);
-						if(isLeader)
+						server.broadcast("P false " + team + " " + name);
+						if (isLeader)
 							setLeader();
 
 					}
-					else 
+					else
 					{
 						team = ServerCreature.RED_TEAM;
 						numRed++;
 						numBlue--;
-						server.broadcast("P false "+ team+" "+name);
-						if(isLeader)
+						server.broadcast("P false " + team + " " + name);
+						if (isLeader)
 							setLeader();
 					}
 				}
-				else if(command.length() > 2 && command.charAt(0) =='M' && isLeader)
+				else if (command.length() > 2 && command.charAt(0) == 'M'
+						&& isLeader)
 				{
 					String map = command.substring(2);
-					if(allMaps.contains(map))
-					{
-						server.broadcast("M "+map);
-						server.setMap(map);
-						System.out.println(map);
-					}
+					server.broadcast("M " + map);
+					server.setMap(map);
+					System.out.println(map);
 				}
 			}
 			catch (IOException e)
@@ -190,7 +203,7 @@ public class ServerLobbyPlayer implements Runnable {
 			System.out.println("Error closing buffered reader");
 		}
 
-		if(!started)
+		if (!started)
 			server.remove(this);
 
 	}
@@ -199,7 +212,7 @@ public class ServerLobbyPlayer implements Runnable {
 	{
 		isLeader = true;
 		sendMessage("L");
-		server.broadcast("LE "+team+" "+name);
+		server.broadcast("LE " + team + " " + name);
 	}
 
 	public boolean isLeader()
