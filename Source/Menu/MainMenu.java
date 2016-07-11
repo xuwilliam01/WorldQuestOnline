@@ -75,6 +75,8 @@ public class MainMenu
 	private static ClientLobby lobby;
 
 	private static String playerName;
+	
+	private boolean imagesLoaded = false;
 
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -121,6 +123,8 @@ public class MainMenu
 	 */
 	public MainMenu()
 	{
+		Thread loadImages = new Thread(new LoadImages());
+		loadImages.start();
 		
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -142,18 +146,75 @@ public class MainMenu
 	    System.out.println(dm.getWidth());
 	    System.out.println(dm.getHeight());
 		
-		Images.importImages();
-		generateClouds();
 		mainFrame = new ClientFrame();
+		
+		while (playerName == null)
+		{
+			try
+			{
+				
+				playerName = JOptionPane
+						.showInputDialog(null,
+								"Please enter your name (max 25 characters)","Identification",JOptionPane.QUESTION_MESSAGE);
+				if (playerName == null || playerName.equals("") || playerName.length() > 25)
+				{
+					playerName = null;
+					continue;
+				}
+				
+				playerName = playerName.trim();
+
+				int enableCloudsAndStars =
+						JOptionPane
+								.showConfirmDialog(
+										null,
+										"Would you like to enable in-game clouds and stars? (May lag slightly on shitty computers)",
+										"Select Game Quality",
+										JOptionPane.YES_NO_OPTION);
+				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
+				{
+					ClientWorld.NO_OF_CLOUDS = 0;
+					ClientWorld.MAX_NO_OF_STARS = 0;
+				}
+
+				break;
+			}
+			catch (NumberFormatException E)
+			{
+
+			}
+		}
+		
+		while (!imagesLoaded)
+		{
+			try
+			{
+				Thread.sleep(10);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		mainFrame.setLayout(null);
 		mainMenu = new MainPanel();
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
 		
-		
-		
 		mainMenu.repaint();
+		generateClouds();
+	}
+	
+	private class LoadImages implements Runnable
+	{
+
+		@Override
+		public void run()
+		{
+			Images.importImages();
+			imagesLoaded = true;
+		}
 	}
 
 	/**
@@ -205,39 +266,7 @@ public class MainMenu
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
 					Client.SCREEN_HEIGHT);
 
-			while (playerName == null || playerName.equals(""))
-			{
-				try
-				{
-					playerName = JOptionPane
-							.showInputDialog(
-									"Please enter your name (max 20 characters)")
-							.trim();
-					if (playerName == null || playerName.equals(""))
-						continue;
-					else if (playerName.length() > 20)
-						playerName = playerName.substring(0, 20);
-
-					int enableCloudsAndStars =
-							JOptionPane
-									.showConfirmDialog(
-											null,
-											"Would you like to enable in-game clouds and stars? (May lag slightly on shitty computers)",
-											"Select Game Quality",
-											JOptionPane.YES_NO_OPTION);
-					if (enableCloudsAndStars != JOptionPane.YES_OPTION)
-					{
-						ClientWorld.NO_OF_CLOUDS = 0;
-						ClientWorld.MAX_NO_OF_STARS = 0;
-					}
-
-					break;
-				}
-				catch (NumberFormatException E)
-				{
-
-				}
-			}
+			
 
 			repaintTimer.start();
 
@@ -941,16 +970,18 @@ public class MainMenu
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			mainFrame.remove(mainMenu);
-			mainFrame.invalidate();
-			mainFrame.validate();
-			mainMenu = null;
-
-			instructionPanel = new InstructionPanel();
-			mainFrame.add(instructionPanel);
-			mainFrame.setVisible(true);
-			instructionPanel.revalidate();
-			instructionPanel.repaint();
+			JOptionPane.showMessageDialog(null, "Instructions unavailable at the moment.", "Sorry", JOptionPane.ERROR_MESSAGE);
+			
+//			mainFrame.remove(mainMenu);
+//			mainFrame.invalidate();
+//			mainFrame.validate();
+//			mainMenu = null;
+//
+//			instructionPanel = new InstructionPanel();
+//			mainFrame.add(instructionPanel);
+//			mainFrame.setVisible(true);
+//			instructionPanel.revalidate();
+//			instructionPanel.repaint();
 
 		}
 	}
