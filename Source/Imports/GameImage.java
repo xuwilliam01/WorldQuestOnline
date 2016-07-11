@@ -130,6 +130,10 @@ public class GameImage implements Comparable<GameImage>
 		this.image = image.getScaledInstance(width,
 				height, 0);
 		}
+		else
+		{
+			this.image = image;
+		}
 		this.width = width;
 		this.height = height;
 		color = new Color(image.getRGB(image.getWidth() / 2,

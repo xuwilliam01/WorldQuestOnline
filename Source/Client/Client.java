@@ -450,6 +450,11 @@ MouseMotionListener
 									}
 									if(tokens[token+4].equals("{"))
 									{
+										if (tokens[token+1].contains("ODARROW"))
+										{
+											System.out.println(tokens[token+1]);
+										}
+										
 										world.setObject(id, x, y,
 												tokens[++token], Integer
 												.parseInt(tokens[++token]),

@@ -707,6 +707,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ " " + y + " " + object.getImage()
 											+ " " + team + " "
 											+ object.getType() + " " + "{");
+									
+									
 								}
 							}
 							else
