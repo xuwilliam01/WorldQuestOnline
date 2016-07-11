@@ -50,7 +50,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	private int leaderTeam = -1;
 	private String leaderName ="";
 
-	private Image background = Images.getImage("BACKGROUND");
+	private Image background = Images.getImage("Lobby");
 	private String[] maps;
 
 	private ArrayList<String> redTeam = new ArrayList<String>();
@@ -136,7 +136,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		// Create the map box
 		mapBox = new JComboBox<String>(maps);
 		mapBox.setSize(230,25);
-		mapBox.setLocation(Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-250, 32);
+		mapBox.setLocation((int)(470*(Client.SCREEN_WIDTH/1620.0)), (int)(60 * Client.SCREEN_HEIGHT/1080.0));
 		mapBox.addActionListener(this);
 		mapBox.setFocusable(true);
 		mapBox.setVisible(true);
@@ -385,20 +385,22 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		//Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
-		graphics.drawString("Map:", Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH-300, 50);
+		graphics.drawString("Map:", (int)(420*(Client.SCREEN_WIDTH/1620.0)), (int)(85 * Client.SCREEN_HEIGHT/1080.0));
 
 
 		//Write the players on each team
-		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
+		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = Client.SCREEN_WIDTH - 500;
-		int redX = Client.SCREEN_WIDTH - 300;
-		graphics.drawString("Blue Team", blueX, 50);
+		int blueX = (int)(890 * (Client.SCREEN_WIDTH /1620.0));
+		int blueY = (int)(100 * (Client.SCREEN_HEIGHT /1080.0));
+		int redX =(int)(1450 * (Client.SCREEN_WIDTH /1620.0));
+		int redY = (int)(100 * (Client.SCREEN_HEIGHT /1080.0));
+		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
-		graphics.drawString("Red Team", redX, 50);
-		int redStart = 80;
-		int blueStart = 80;
-		graphics.setFont(ClientWorld.NORMAL_FONT);
+		graphics.drawString("Red Team", redX, redY);
+		int redStart = redY + 60;
+		int blueStart = blueY + 60;
+		graphics.setFont(ClientWorld.PLAYER_NAME_FONT);
 
 		graphics.setColor(Color.RED);
 		for(String player : redTeam)
@@ -406,13 +408,13 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			if(leaderTeam == ServerCreature.RED_TEAM && leaderName.equals(player))
 			{
 				graphics.setColor(Color.GREEN);
-				graphics.fillOval(redX-12 , redStart-10, 10, 10);
+				graphics.fillOval(redX-35 , redStart-20, 20, 20);
 				graphics.setColor(Color.RED);
 			}
 
-			graphics.drawString(player, redX + 5,
+			graphics.drawString(player, redX - 5,
 					redStart);
-			redStart += 20;
+			redStart += 40;
 		}
 
 		graphics.setColor(Color.BLUE);
@@ -421,13 +423,13 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			if(leaderTeam == ServerCreature.BLUE_TEAM && leaderName.equals(player))
 			{
 				graphics.setColor(Color.GREEN);
-				graphics.fillOval(blueX-12 , blueStart-10, 10, 10);
+				graphics.fillOval(blueX-35 , blueStart-20, 20, 20);
 				graphics.setColor(Color.BLUE);
 			}
 
-			graphics.drawString(player, blueX + 5,
+			graphics.drawString(player, blueX - 5,
 					blueStart);
-			blueStart += 20;
+			blueStart += 40;
 		}
 		
 		//if(!chat.hasFocus() && !mapBox.hasFocus())

@@ -56,35 +56,35 @@ public class Images
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		BufferedImage image = ImageIO.read(new File("Images//"
-				+ "RESOURCE_SHEET_5.png"));
-		BufferedImage[][] imageTiles = new BufferedImage[image
-				.getHeight() / 32][image.getWidth() / 32];
-		for (int row = 0; row < imageTiles.length; row++)
-		{
-			for (int column = 0; column < imageTiles[0].length; column++)
-			{
-				imageTiles[row][column] = image.getSubimage(
-						column * 32, row * 32, 32, 32);
-			}
-		}
-
-		image = imageTiles[2][6];
-
-		// double rotationRequired = Math.toRadians(135);
-		// AffineTransform tx;
-		//
-		// tx = AffineTransform.getRotateInstance(
-		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
-		//
-		// AffineTransformOp op = new AffineTransformOp(tx,
-		// AffineTransformOp.TYPE_BILINEAR);
-		//
-		// BufferedImage newImage = op
-		// .filter(image, null);
-
-		ImageIO.write(image, "PNG", new File(
-				"Images//" + "STONEBRICKS.png"));
+//		BufferedImage image = ImageIO.read(new File("Images//"
+//				+ "RESOURCE_SHEET_5.png"));
+//		BufferedImage[][] imageTiles = new BufferedImage[image
+//				.getHeight() / 32][image.getWidth() / 32];
+//		for (int row = 0; row < imageTiles.length; row++)
+//		{
+//			for (int column = 0; column < imageTiles[0].length; column++)
+//			{
+//				imageTiles[row][column] = image.getSubimage(
+//						column * 32, row * 32, 32, 32);
+//			}
+//		}
+//
+//		image = imageTiles[2][6];
+//
+//		// double rotationRequired = Math.toRadians(135);
+//		// AffineTransform tx;
+//		//
+//		// tx = AffineTransform.getRotateInstance(
+//		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
+//		//
+//		// AffineTransformOp op = new AffineTransformOp(tx,
+//		// AffineTransformOp.TYPE_BILINEAR);
+//		//
+//		// BufferedImage newImage = op
+//		// .filter(image, null);
+//
+//		ImageIO.write(image, "PNG", new File(
+//				"Images//" + "STONEBRICKS.png"));
 	}
 
 	/**
@@ -898,7 +898,11 @@ public class Images
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 			addtoImageArray(new GameImage("BACKGROUND.png",
+					Client.Client.SCREEN_WIDTH + Client.ClientInventory.INVENTORY_WIDTH, Client.Client.SCREEN_HEIGHT));
+			
+			addtoImageArray(new GameImage("Lobby.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
+			
 			addtoImageArray(new GameImage("PLAINBLACK.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 

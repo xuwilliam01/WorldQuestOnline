@@ -2,7 +2,10 @@ package Menu;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.DisplayMode;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -118,6 +121,26 @@ public class MainMenu
 	 */
 	public MainMenu()
 	{
+		// Set up the dimensions of the screen
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gs = ge.getDefaultScreenDevice();
+	    DisplayMode dm = gs.getDisplayMode();
+	    
+	    Client.SCREEN_WIDTH = dm.getWidth()-ClientInventory.INVENTORY_WIDTH;
+	    if (Client.SCREEN_WIDTH > 1920-ClientInventory.INVENTORY_WIDTH)
+	    {
+	    	Client.SCREEN_WIDTH = 1920-ClientInventory.INVENTORY_WIDTH;
+	    }  
+	    Client.SCREEN_HEIGHT = dm.getHeight();
+	    if (Client.SCREEN_HEIGHT > 1080)
+	    {
+	    	Client.SCREEN_HEIGHT=1080;
+	    }
+	    
+	    // Display results
+	    System.out.println(dm.getWidth());
+	    System.out.println(dm.getHeight());
+		
 		Images.importImages();
 		generateClouds();
 		mainFrame = new ClientFrame();

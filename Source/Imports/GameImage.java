@@ -64,7 +64,7 @@ public class GameImage implements Comparable<GameImage>
 		image = bufferedImage;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
-		color = new Color(bufferedImage.getRGB(bufferedImage.getWidth()/3, bufferedImage.getHeight()/3));
+		color = new Color(bufferedImage.getRGB(bufferedImage.getWidth()/2, bufferedImage.getHeight()/2));
 	}
 
 	/**
@@ -84,13 +84,20 @@ public class GameImage implements Comparable<GameImage>
 			e.printStackTrace();
 		}
 		this.name = name.substring(0,name.indexOf('.'));
+		if (bufferedImage.getWidth()!= width || bufferedImage.getHeight()!= height)
+		{
 		image = bufferedImage.getScaledInstance(width,
 				height, 0);
+		}
+		else
+		{
+			image = bufferedImage;
+		}
 		this.width = width;
 		this.height = height;
 		if (bufferedImage.getWidth(null) >= 3)
 		{
-		color = new Color(bufferedImage.getRGB(width / 3, height / 3));
+		color = new Color(bufferedImage.getRGB(bufferedImage.getWidth() / 2, bufferedImage.getHeight()/ 2));
 		}
 		else
 		{
@@ -108,7 +115,7 @@ public class GameImage implements Comparable<GameImage>
 		this.image = image;
 		width = image.getWidth(null);
 		height = image.getHeight(null);
-		color = new Color(image.getRGB(width / 3, height / 3));
+		color = new Color(image.getRGB(width / 2, height / 2));
 	}
 
 	/**
@@ -118,12 +125,15 @@ public class GameImage implements Comparable<GameImage>
 	public GameImage(String name, BufferedImage image, int width, int height)
 	{
 		this.name = name.substring(0,name.indexOf('.'));
+		if (image.getWidth(null)!= width || image.getHeight(null)!= height)
+		{
 		this.image = image.getScaledInstance(width,
 				height, 0);
+		}
 		this.width = width;
 		this.height = height;
-		color = new Color(image.getRGB(image.getWidth() / 3,
-				image.getHeight() / 3));
+		color = new Color(image.getRGB(image.getWidth() / 2,
+				image.getHeight() / 2));
 	}
 
 	

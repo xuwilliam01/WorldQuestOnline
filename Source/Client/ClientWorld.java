@@ -98,7 +98,20 @@ public class ClientWorld
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
 
+	/**
+	 * Bigger normal font
+	 */
 	public final static Font BIG_NORMAL_FONT = new Font("Arial", Font.PLAIN, 20);
+	
+	/**
+	 * Team Title normal font
+	 */
+	public final static Font TEAM_TITLE_FONT = new Font("Arial", Font.BOLD, 36);
+	
+	/**
+	 * Player name font
+	 */
+	public final static Font PLAYER_NAME_FONT = new Font("Arial", Font.PLAIN, 20);
 
 	/**
 	 * Font for displaying stats
