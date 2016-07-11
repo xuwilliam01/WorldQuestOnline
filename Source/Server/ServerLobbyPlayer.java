@@ -56,6 +56,10 @@ public class ServerLobbyPlayer implements Runnable
 			for (int i = 0; i < numMaps; i++)
 			{
 				allMaps += inputMap.readLine() + " ";
+				if (Server.defaultMap==null && i==0)
+				{
+					Server.defaultMap = allMaps.trim();
+				}
 			}
 			allMaps = allMaps.trim();
 			inputMap.close();

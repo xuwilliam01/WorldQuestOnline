@@ -25,6 +25,8 @@ public class Server implements Runnable
 	private String map;
 	private ServerGUI gui;
 	private boolean start = false;
+	
+	public static String defaultMap;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
 
@@ -34,9 +36,8 @@ public class Server implements Runnable
 
 	int noOfPlayers = 0;
 
-	public Server(String map, int port)
+	public Server(int port)
 	{
-		this.map = map;
 		this.port = port;
 
 		try
@@ -86,20 +87,25 @@ public class Server implements Runnable
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
+		if (map ==null)
+		{
+			map = defaultMap;
+		}
+		
 		// Construct the new world
 		System.out.println("Creating world...");
 		try
 		{
-			if(map.equals(""))
-				engine = new ServerEngine();
-			else
-				engine = new ServerEngine(map);
+			engine = new ServerEngine(map);
+			gui.setMap(map);
 		}
 		catch (IOException e1)
 		{
 			System.out.println("Error with Creating World and/or Engine");
 		}
 
+		
 		engine.setGui(gui);
 		gui.startGame(engine.getWorld(),engine);
 

@@ -877,8 +877,6 @@ public class MainMenu
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// Get info for the server and exit if it is invalid
-			String fileName = "World";
 			// while(true)
 			// {
 			// fileName = JOptionPane
@@ -919,7 +917,7 @@ public class MainMenu
 			}
 
 			// Starts the server
-			Server server = new Server(fileName, portNum);
+			Server server = new Server(portNum);
 
 			Thread serverThread = new Thread(server);
 

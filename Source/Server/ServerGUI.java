@@ -238,7 +238,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		super.paintComponent(graphics);
 
-		graphics.drawImage(background, 0, -300, null);
+		//graphics.drawImage(background, 0, -300, null);
 
 		// Draw the map
 		if (visible & started)
@@ -340,7 +340,10 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		graphics.setColor(Color.GRAY);
 		graphics.drawString("Map: ", 270, 15);
 		graphics.setColor(new Color(235,117,0));
+		if (map!=null)
+		{
 		graphics.drawString(map, 270+graphics.getFontMetrics().stringWidth("Map: "), 15);
+		}
 		while (true)
 		{
 			try
