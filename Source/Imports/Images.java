@@ -606,6 +606,8 @@ public class Images
 				e.printStackTrace();
 			}
 
+			
+			
 			/*
 			 * (Implement later)
 			 * Add the rest of the images through the text file First token
@@ -939,6 +941,9 @@ public class Images
 			addtoImageArray(new GameImage("Cursorclick.png"));
 			
 			addtoImageArray(new GameImage("WorldQuestIcon.png"));
+		}
+		
+	
 
 			// Create a correctly sized array of the game images
 			GameImage[] clone = imageArray;
@@ -953,8 +958,6 @@ public class Images
 			createBalancedTree(0, noOfImages);
 			imageArray = null;
 			clone = null;
-
-		}
 	}
 
 	/**

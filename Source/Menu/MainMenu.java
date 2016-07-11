@@ -77,6 +77,11 @@ public class MainMenu
 	private static String playerName;
 	
 	private boolean imagesLoaded = false;
+	
+	/**
+	 * Whether or not image loading has failed
+	 */
+	public static boolean imageLoadFailed = false;
 
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -152,12 +157,17 @@ public class MainMenu
 		{
 			try
 			{
-				
 				playerName = JOptionPane
 						.showInputDialog(null,
 								"Please enter your name (max 25 characters)","Identification",JOptionPane.QUESTION_MESSAGE);
-				if (playerName == null || playerName.equals("") || playerName.length() > 25)
+				if (playerName == null)
 				{
+					System.exit(0);
+					break;
+				}
+				else if (playerName.equals("") || playerName.length() > 25)
+				{
+					
 					playerName = null;
 					continue;
 				}
@@ -184,12 +194,18 @@ public class MainMenu
 
 			}
 		}
-		
+
 		while (!imagesLoaded)
 		{
 			try
 			{
 				Thread.sleep(10);
+				if (imageLoadFailed )
+				{
+					JOptionPane.showMessageDialog(null, "Failed to load images. Perhaps you are running the jar directly from Eclipse?", "Error", JOptionPane.ERROR_MESSAGE);
+					System.exit(0);
+					break;
+				}
 			}
 			catch (InterruptedException e)
 			{

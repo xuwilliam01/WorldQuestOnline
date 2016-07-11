@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Menu.MainMenu;
+
 /**
  * Object that stores images with strings to identify them
  * @author William Xu && Alex Raita
@@ -58,6 +60,7 @@ public class GameImage implements Comparable<GameImage>
 		catch (IOException e)
 		{
 			System.out.println("Error loading image: " + name);
+			MainMenu.imageLoadFailed=true;
 			e.printStackTrace();
 		}
 		this.name = name.substring(0,name.indexOf('.'));
@@ -81,6 +84,7 @@ public class GameImage implements Comparable<GameImage>
 		catch (IOException e)
 		{
 			System.out.println("Error loading image: " + name);
+			MainMenu.imageLoadFailed=true;
 			e.printStackTrace();
 		}
 		this.name = name.substring(0,name.indexOf('.'));
