@@ -2,6 +2,7 @@ package Client;
 
 import java.awt.Image;
 
+import Imports.GameImage;
 import Imports.Images;
 import Server.ServerWorld;
 
@@ -79,9 +80,10 @@ public class ClientObject implements Comparable<ClientObject> {
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
 		if (image.charAt(0) != 't') {
-			this.image = Images.getImage(image);
-			height = this.image.getHeight(null);
-			width = this.image.getWidth(null);
+			GameImage gameImage = Images.getGameImage(image);
+			this.image = gameImage.getImage();
+			height = gameImage.getHeight();
+			width = gameImage.getWidth();
 		} else {
 			height = 0;
 			width = 0;
@@ -117,9 +119,10 @@ public class ClientObject implements Comparable<ClientObject> {
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
 		if (image.charAt(0) != 't') {
-			this.image = Images.getImage(image);
-			height = this.image.getHeight(null);
-			width = this.image.getWidth(null);
+			GameImage gameImage = Images.getGameImage(image);
+			this.image = gameImage.getImage();
+			height = gameImage.getHeight();
+			width = gameImage.getWidth();
 		} else {
 			height = 0;
 			width = 0;
@@ -164,9 +167,10 @@ public class ClientObject implements Comparable<ClientObject> {
 
 			// If the image of the object is text, don't import an image
 			if (image.charAt(0) != 't') {
-				this.image = Images.getImage(image);
-				height = this.image.getHeight(null);
-				width = this.image.getWidth(null);
+				GameImage gameImage = Images.getGameImage(image);
+				this.image = gameImage.getImage();
+				height = gameImage.getHeight();
+				width = gameImage.getWidth();
 			}
 		}
 	}

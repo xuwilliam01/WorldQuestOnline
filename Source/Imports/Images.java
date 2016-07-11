@@ -898,31 +898,31 @@ public class Images
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH));
 
 			addtoImageArray(new GameImage("BACKGROUND.png",
-					Client.Client.SCREEN_WIDTH + Client.ClientInventory.INVENTORY_WIDTH, Client.Client.SCREEN_HEIGHT));
+					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 			
 			addtoImageArray(new GameImage("Lobby.png",
-					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
+					Client.Client.SCREEN_WIDTH + Client.ClientInventory.INVENTORY_WIDTH, Client.Client.SCREEN_HEIGHT));
 			
 			addtoImageArray(new GameImage("PLAINBLACK.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 
 			addtoImageArray(new GameImage("FindAGame.png",
-					300, 100));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
-					300, 100));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("CreateAServer.png",
-					400, 100));
+					(int)(400 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("CreateAServerClicked.png",
-					400, 100));
+					(int)(400 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("CreateAMap.png",
-					300, 100));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
-					300, 100));
-			addtoImageArray(new GameImage("WorldQuestOnline.png"));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(1238 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(248*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("Instructions.png",
-					300, 100));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					300, 100));
+					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
 
 			addtoImageArray(new GameImage("Inventory.png", 300, 1080));
 

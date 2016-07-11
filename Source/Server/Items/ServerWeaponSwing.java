@@ -143,11 +143,11 @@ public class ServerWeaponSwing extends ServerObject
 				getX()
 						+ width
 						/ 2
-						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
+						+ ((width / 8) * Math.cos(Math.toRadians(currentAngle))),
 				getY()
 						+ height
 						/ 2
-						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
+						+ ((width / 8) * Math.sin(Math.toRadians(currentAngle))),
 				getX()
 						+ width
 						/ 2
@@ -201,9 +201,9 @@ public class ServerWeaponSwing extends ServerObject
 		// Rotate the hitbox for the weapon
 		hitbox.setLine(
 				getX() + width / 2
-						+ ((width / 6) * Math.cos(Math.toRadians(currentAngle))),
+						+ ((width / 8) * Math.cos(Math.toRadians(currentAngle))),
 				getY() + height / 2
-						+ ((width / 6) * Math.sin(Math.toRadians(currentAngle))),
+						+ ((width / 8) * Math.sin(Math.toRadians(currentAngle))),
 				getX() + width / 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
 				getY() + height / 2

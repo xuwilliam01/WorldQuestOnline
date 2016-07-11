@@ -237,7 +237,7 @@ public class MainMenu
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),
 					playGameImage.getHeight(null));
-			playGame.setLocation(middle - playGameImage.getWidth(null) / 2, 375);
+			playGame.setLocation(middle - playGameImage.getWidth(null) / 2, (int)(375*(Client.SCREEN_HEIGHT/1080.0)));
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
@@ -249,7 +249,7 @@ public class MainMenu
 			createServer.setSize(createServerImage.getWidth(null),
 					createServerImage.getHeight(null));
 			createServer.setLocation(middle - createServerImage.getWidth(null)
-					/ 2, 525);
+					/ 2, (int)(525*(Client.SCREEN_HEIGHT/1080.0)));
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
@@ -261,7 +261,7 @@ public class MainMenu
 			createMap.setSize(createMapImage.getWidth(null),
 					createMapImage.getHeight(null));
 			createMap.setLocation(middle - createMapImage.getWidth(null) / 2,
-					675);
+					(int)(675*(Client.SCREEN_HEIGHT/1080.0)));
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
@@ -273,7 +273,7 @@ public class MainMenu
 			instructions.setSize(instructionsImage.getWidth(null),
 					instructionsImage.getHeight(null));
 			instructions.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2, 825);
+					/ 2, (int)(825*(Client.SCREEN_HEIGHT/1080.0)));
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
@@ -332,10 +332,10 @@ public class MainMenu
 
 			// Draw the title image
 			graphics.drawImage(titleImage, middle - titleImage.getWidth(null)
-					/ 2 - 20, 75, null);
+					/ 2 - 20, (int)(75*(Client.SCREEN_HEIGHT/1080.0)), null);
 
-			graphics.drawString("William Xu and Alex Raita", 20,
-					Client.SCREEN_HEIGHT - 30);
+			graphics.drawString("William Xu and Alex Raita", 15,
+					20);
 		}
 
 		@Override

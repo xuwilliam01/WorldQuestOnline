@@ -86,14 +86,14 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		start.setBackground(Color.LIGHT_GRAY);
 		start.setOpaque(true);
 		start.setBorderPainted(false);
-		start.setLocation(320,0);
-		start.setSize(200,20);
+		start.setLocation((int)(427*(Client.SCREEN_WIDTH/1620.0)),(int)(280 * Client.SCREEN_HEIGHT/1080.0));
+		start.setSize(270,20);
 		start.setVisible(true);
 		start.addActionListener(this);
 
 		switchTeams = new JButton("Switch Teams");
-		switchTeams.setLocation(580,0);
-		switchTeams.setSize(200,20);
+		switchTeams.setLocation((int)(427*(Client.SCREEN_WIDTH/1620.0)),(int)(240 * Client.SCREEN_HEIGHT/1080.0));
+		switchTeams.setSize(270,20);
 		switchTeams.setVisible(true);
 		switchTeams.addActionListener(this);
 		switchTeams.setBackground(new Color(240,240,240));
@@ -136,7 +136,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		// Create the map box
 		mapBox = new JComboBox<String>(maps);
 		mapBox.setSize(230,25);
-		mapBox.setLocation((int)(470*(Client.SCREEN_WIDTH/1620.0)), (int)(60 * Client.SCREEN_HEIGHT/1080.0));
+		mapBox.setLocation((int)(480*(Client.SCREEN_WIDTH/1620.0)), (int)(160 * Client.SCREEN_HEIGHT/1080.0));
 		mapBox.addActionListener(this);
 		mapBox.setFocusable(true);
 		mapBox.setVisible(true);
@@ -317,8 +317,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 	{
 		super.paintComponent(graphics);
 
-
-		graphics.drawImage(background,0,0,Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,null);
+		graphics.drawImage(background,0,0,null);
 		
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -385,16 +384,16 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		//Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
-		graphics.drawString("Map:", (int)(420*(Client.SCREEN_WIDTH/1620.0)), (int)(85 * Client.SCREEN_HEIGHT/1080.0));
+		graphics.drawString("Map:", (int)(420*(Client.SCREEN_WIDTH/1620.0)), (int)(180 * Client.SCREEN_HEIGHT/1080.0));
 
 
 		//Write the players on each team
 		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = (int)(890 * (Client.SCREEN_WIDTH /1620.0));
-		int blueY = (int)(100 * (Client.SCREEN_HEIGHT /1080.0));
-		int redX =(int)(1450 * (Client.SCREEN_WIDTH /1620.0));
-		int redY = (int)(100 * (Client.SCREEN_HEIGHT /1080.0));
+		int blueX = (int)(930 * (Client.SCREEN_WIDTH /1620.0));
+		int blueY = (int)(120 * (Client.SCREEN_HEIGHT /1080.0));
+		int redX =(int)(1480 * (Client.SCREEN_WIDTH /1620.0));
+		int redY = (int)(120 * (Client.SCREEN_HEIGHT /1080.0));
 		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
 		graphics.drawString("Red Team", redX, redY);
@@ -408,11 +407,11 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			if(leaderTeam == ServerCreature.RED_TEAM && leaderName.equals(player))
 			{
 				graphics.setColor(Color.GREEN);
-				graphics.fillOval(redX-35 , redStart-20, 20, 20);
+				graphics.fillOval(redX-30 , redStart-20, 20, 20);
 				graphics.setColor(Color.RED);
 			}
 
-			graphics.drawString(player, redX - 5,
+			graphics.drawString(player, redX + 5,
 					redStart);
 			redStart += 40;
 		}
@@ -423,11 +422,11 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 			if(leaderTeam == ServerCreature.BLUE_TEAM && leaderName.equals(player))
 			{
 				graphics.setColor(Color.GREEN);
-				graphics.fillOval(blueX-35 , blueStart-20, 20, 20);
+				graphics.fillOval(blueX-30 , blueStart-20, 20, 20);
 				graphics.setColor(Color.BLUE);
 			}
 
-			graphics.drawString(player, blueX - 5,
+			graphics.drawString(player, blueX + 5,
 					blueStart);
 			blueStart += 40;
 		}

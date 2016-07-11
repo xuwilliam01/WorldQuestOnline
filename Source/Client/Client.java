@@ -469,7 +469,9 @@ MouseMotionListener
 										}
 										String name = "";
 										for(int i = 0; i < len;i++)
+										{
 											name+= tokens[token+5+i]+" ";
+										}
 										world.setObject(id, x, y,
 												tokens[++token], Integer
 												.parseInt(tokens[++token]),
