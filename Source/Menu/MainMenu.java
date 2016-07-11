@@ -121,6 +121,7 @@ public class MainMenu
 	 */
 	public MainMenu()
 	{
+		
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -149,6 +150,9 @@ public class MainMenu
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
+		
+		
+		
 		mainMenu.repaint();
 	}
 
@@ -187,6 +191,9 @@ public class MainMenu
 		 */
 		public MainPanel()
 		{
+			// Set the Icon
+			mainFrame.setIconImage(Images.getImage("WorldQuestIcon"));
+			
 			setDoubleBuffered(true);
 			// setBackground(Color.white);
 

@@ -937,6 +937,8 @@ public class Images
 			
 			addtoImageArray(new GameImage("Cursor.png"));
 			addtoImageArray(new GameImage("Cursorclick.png"));
+			
+			addtoImageArray(new GameImage("WorldQuestIcon.png"));
 
 			// Create a correctly sized array of the game images
 			GameImage[] clone = imageArray;

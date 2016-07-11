@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 
 import Imports.Images;
 import Server.ServerWorld;
@@ -46,6 +47,7 @@ public class ClientInventory extends JPanel implements ActionListener {
 	 * @param menu  the button that will take the player back to the main menu
 	 */
 	public ClientInventory(JButton menu) {
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 		setDoubleBuffered(true);
 		setBackground(Color.BLACK);
 		setFocusable(true);

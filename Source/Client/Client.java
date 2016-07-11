@@ -847,6 +847,12 @@ MouseMotionListener
 				graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
 				graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 60, 40);
 
+				if (getWorld().getWorldTime()%60==0)
+				{
+					requestFocusInWindow();
+				}
+					
+				
 				// Set the time of day to be displayed
 				// DAWN: 5AM - 9AM
 				// DAY: 9AM - 5PM
