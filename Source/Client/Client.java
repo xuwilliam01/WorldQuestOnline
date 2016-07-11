@@ -845,7 +845,7 @@ MouseMotionListener
 				graphics.setFont(ClientWorld.NORMAL_FONT);
 				graphics.setColor(new Color(240, 240, 240));
 				graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-				graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 60, 40);
+				graphics.drawString("FPS: " + Math.min(getCurrentFPS(),60), Client.SCREEN_WIDTH - 60, 40);
 
 				if (getWorld().getWorldTime()%60==0)
 				{
