@@ -1,6 +1,7 @@
 package Client;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -26,6 +27,8 @@ public class ClientShop extends JPanel{
 	private Client client;
 	private Image coinImage = Images.getImage("COIN");
 	private Image shopImage = Images.getImage("Shop");
+	
+	private Font shopFont;
 
 	/**
 	 * Constructor
@@ -40,8 +43,10 @@ public class ClientShop extends JPanel{
 		setFocusable(true);
 		requestFocusInWindow();
 		setLayout(null);
-		setSize(SHOP_WIDTH, SHOP_HEIGHT);
+		setSize(ClientFrame.getScaledWidth(SHOP_WIDTH), ClientFrame.getScaledHeight(SHOP_HEIGHT));
 		setLocation(Client.SCREEN_WIDTH - SHOP_WIDTH - 50,25);
+		
+		shopFont = new Font("Courier",Font.PLAIN,ClientFrame.getScaledWidth(16));
 	}
 
 	/**
@@ -122,17 +127,22 @@ public class ClientShop extends JPanel{
 
 		//For each item write the price under it
 		graphics.setColor(new Color(218,165,32));
+		
+		graphics.setFont(shopFont);
+		
 		for(int row = 0; row < shopItems.length;row++)
 			for(int col = 0; col < shopItems[0].length;col++)
 			{
 				if(shopItems[row][col] != null)
 				{
 					if(shopItems[row][col].getCost() > 9)
-						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX(), shopItems[row][col].getY()+15+Images.INVENTORY_IMAGE_SIDELENGTH);
+						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX(), shopItems[row][col].getY()+ClientFrame.getScaledHeight(15+Images.INVENTORY_IMAGE_SIDELENGTH));
 					else
-						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX()+3, shopItems[row][col].getY()+15+Images.INVENTORY_IMAGE_SIDELENGTH);
-					graphics.drawImage(coinImage, shopItems[row][col].getX()+18, shopItems[row][col].getY()+5+Images.INVENTORY_IMAGE_SIDELENGTH,this);
+						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX()+ClientFrame.getScaledWidth(7), shopItems[row][col].getY()+ClientFrame.getScaledHeight(15+Images.INVENTORY_IMAGE_SIDELENGTH));
+					graphics.drawImage(coinImage, shopItems[row][col].getX()+ClientFrame.getScaledWidth(18),  shopItems[row][col].getY()+ClientFrame.getScaledHeight(5+Images.INVENTORY_IMAGE_SIDELENGTH),this);
 				}
 			}
 	}
+	
+	
 }

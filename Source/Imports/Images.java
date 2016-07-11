@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientShop;
 import Server.ServerWorld;
@@ -872,7 +873,7 @@ public class Images
 					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
 					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE));
-			addtoImageArray(new GameImage("COIN.png", 10, 10));
+			addtoImageArray(new GameImage("COIN.png", ClientFrame.getScaledWidth(10), ClientFrame.getScaledHeight(10)));
 			addtoImageArray(new GameImage("HP_POTION.png",
 					Images.INVENTORY_IMAGE_SIDELENGTH,
 					Images.INVENTORY_IMAGE_SIDELENGTH));
@@ -909,24 +910,24 @@ public class Images
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 
 			addtoImageArray(new GameImage("FindAGame.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAServer.png",
-					(int)(400 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(400)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAServerClicked.png",
-					(int)(400 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(400)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAMap.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
-			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(1238 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(248*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(ClientFrame.getScaledWidth(1238)),(int)(ClientFrame.getScaledHeight(248))));
 			addtoImageArray(new GameImage("Instructions.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					(int)(300 * (Client.Client.SCREEN_WIDTH/1620.0)),(int)(100*(Client.Client.SCREEN_HEIGHT/1080.0))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 
-			addtoImageArray(new GameImage("Inventory.png", 300, 1080));
+			addtoImageArray(new GameImage("Inventory.png", (int)(ClientFrame.getScaledWidth(300)), Client.Client.SCREEN_HEIGHT));
 
 			addtoImageArray(new GameImage("Objective.png"));
 			addtoImageArray(new GameImage("Controls.png"));
@@ -934,8 +935,8 @@ public class Images
 
 			addtoImageArray(new GameImage("Next.png"));
 
-			addtoImageArray(new GameImage("Shop.png", ClientShop.SHOP_WIDTH,
-					ClientShop.SHOP_HEIGHT));
+			addtoImageArray(new GameImage("Shop.png", (int)(ClientFrame.getScaledWidth(ClientShop.SHOP_WIDTH)),
+					(int)(ClientFrame.getScaledHeight(ClientShop.SHOP_HEIGHT))));
 			
 			addtoImageArray(new GameImage("Cursor.png"));
 			addtoImageArray(new GameImage("Cursorclick.png"));

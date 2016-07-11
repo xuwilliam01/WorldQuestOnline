@@ -136,6 +136,8 @@ public class MainMenu
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 	    DisplayMode dm = gs.getDisplayMode();
 	    
+	    ClientInventory.INVENTORY_WIDTH = (int)(300 * (dm.getWidth()/1920.0));
+	    
 	    Client.SCREEN_WIDTH = dm.getWidth()-ClientInventory.INVENTORY_WIDTH;
 	    if (Client.SCREEN_WIDTH > 1920-ClientInventory.INVENTORY_WIDTH)
 	    {

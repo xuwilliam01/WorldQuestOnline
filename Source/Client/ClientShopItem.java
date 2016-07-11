@@ -30,16 +30,15 @@ public class ClientShopItem extends JButton implements ActionListener{
 	private int row;
 	private int col;
 	private ClientShop inventory;
-	private Image image;
+	//private Image image;
 
 	/**
 	 * Constructor
 	 */
 	public ClientShopItem(String imageName, String type,int amount,int cost,int row, int col, ClientShop inventory)
 	{
-		super(new ImageIcon(Images.getImage(imageName)));
+		super(new ImageIcon(Images.getImage(imageName).getScaledInstance(ClientFrame.getScaledWidth(Images.INVENTORY_IMAGE_SIDELENGTH), ClientFrame.getScaledHeight(Images.INVENTORY_IMAGE_SIDELENGTH), 0)));
 		this.imageName = imageName;
-		image = Images.getImage(imageName);
 		this.type = type;
 		this.amount = amount;
 		this.cost = cost;
@@ -47,8 +46,8 @@ public class ClientShopItem extends JButton implements ActionListener{
 		this.col = col;
 		this.inventory = inventory;
 
-		setSize(Images.INVENTORY_IMAGE_SIDELENGTH,Images.INVENTORY_IMAGE_SIDELENGTH);
-		setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20+20,60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+40);
+		setSize(ClientFrame.getScaledWidth(Images.INVENTORY_IMAGE_SIDELENGTH),ClientFrame.getScaledHeight(Images.INVENTORY_IMAGE_SIDELENGTH));
+		setLocation(ClientFrame.getScaledWidth(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20+20),ClientFrame.getScaledHeight(60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+40));
 		setVisible(true);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);

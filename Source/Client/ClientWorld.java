@@ -101,22 +101,22 @@ public class ClientWorld
 	/**
 	 * Bigger normal font
 	 */
-	public final static Font BIG_NORMAL_FONT = new Font("Arial", Font.PLAIN, 20);
+	public final static Font BIG_NORMAL_FONT = new Font("Arial", Font.PLAIN, ClientFrame.getScaledWidth(20));
 	
 	/**
 	 * Team Title normal font
 	 */
-	public final static Font TEAM_TITLE_FONT = new Font("Arial", Font.BOLD, 36);
+	public final static Font TEAM_TITLE_FONT = new Font("Arial", Font.BOLD, ClientFrame.getScaledWidth(36));
 	
 	/**
 	 * Player name font
 	 */
-	public final static Font PLAYER_NAME_FONT = new Font("Arial", Font.PLAIN, 20);
+	public final static Font PLAYER_NAME_FONT = new Font("Arial", Font.PLAIN, ClientFrame.getScaledWidth(20));
 
 	/**
 	 * Font for displaying stats
 	 */
-	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN, 15);
+	public final static Font STATS_FONT = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
 
 	/**
 	 * Object for figuring out size of font
@@ -635,23 +635,23 @@ public class ClientWorld
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.CYAN);
-		graphics.fillRect(100, 980,
-				(int) (500.0 * client.getBlueCastleHP() / (client
-						.getBlueCastleMaxHP())), 20);
+		graphics.fillRect(ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(980),
+				ClientFrame.getScaledWidth((int) (500.0 * client.getBlueCastleHP() / (client
+						.getBlueCastleMaxHP()))), ClientFrame.getScaledHeight(20));
 		graphics.setColor(Color.PINK);
-		graphics.fillRect(1050, 980,
-				(int) (500.0 * client.getRedCastleHP() / (client
-						.getRedCastleMaxHP())), 20);
+		graphics.fillRect(ClientFrame.getScaledWidth(1050), ClientFrame.getScaledHeight(980),
+				ClientFrame.getScaledWidth((int) (500.0 * client.getRedCastleHP() / (client
+						.getRedCastleMaxHP()))), ClientFrame.getScaledHeight(20));
 
 		graphics.setColor(PURPLE_TEXT);
-		graphics.drawRect(100, 980, 500, 20);
+		graphics.drawRect(ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(980), ClientFrame.getScaledWidth(500), ClientFrame.getScaledHeight(20));
 		graphics.drawString(
 				String.format("%d/%d", client.getBlueCastleHP(),
-						client.getBlueCastleMaxHP()), 325, 995);
-		graphics.drawRect(1050, 980, 500, 20);
+						client.getBlueCastleMaxHP()),ClientFrame.getScaledWidth(325), ClientFrame.getScaledHeight(995));
+		graphics.drawRect(ClientFrame.getScaledWidth(1050),ClientFrame.getScaledHeight(980), ClientFrame.getScaledWidth(500), ClientFrame.getScaledHeight(20));
 		graphics.drawString(
 				String.format("%d/%d", client.getRedCastleHP(),
-						client.getRedCastleMaxHP()), 1275, 995);
+						client.getRedCastleMaxHP()), ClientFrame.getScaledWidth(1275), ClientFrame.getScaledHeight(995));
 
 		graphics.setFont(BIG_NORMAL_FONT);
 
@@ -659,19 +659,19 @@ public class ClientWorld
 		if (client.getRedCastleTier() == 5)
 			graphics.drawString(
 					String.format("Red Castle Tier %d (Max)",
-							client.getRedCastleTier() + 1), 1050, 975);
+							client.getRedCastleTier() + 1), ClientFrame.getScaledWidth(1050), ClientFrame.getScaledHeight(975));
 		else
 			graphics.drawString(String.format(
 					"Red Castle Tier %d (Money For Next Tier  %d/%d)",
 					client.getRedCastleTier() + 1, client.getRedCastleMoney(),
 					ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),
-					1050, 975);
+					ClientFrame.getScaledWidth(1050), ClientFrame.getScaledHeight(975));
 
 		graphics.setColor(Color.blue);
 		if (client.getBlueCastleTier() == 5)
 			graphics.drawString(
 					String.format("Blue Castle Tier %d (Max)",
-							client.getBlueCastleTier() + 1), 100, 975);
+							client.getBlueCastleTier() + 1), ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(975));
 		else
 			graphics.drawString(
 					String.format(
@@ -679,7 +679,7 @@ public class ClientWorld
 							client.getBlueCastleTier() + 1, client
 									.getBlueCastleMoney(),
 							ServerGoblin.GOBLIN_TIER_PRICE[client
-									.getBlueCastleTier()]), 100, 975);
+									.getBlueCastleTier()]), ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(975));
 
 		// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
 		// {

@@ -86,13 +86,13 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		start.setBackground(Color.LIGHT_GRAY);
 		start.setOpaque(true);
 		start.setBorderPainted(false);
-		start.setLocation((int)(427*(Client.SCREEN_WIDTH/1620.0)),(int)(280 * Client.SCREEN_HEIGHT/1080.0));
+		start.setLocation((int)(ClientFrame.getScaledWidth(427)),(int)(ClientFrame.getScaledHeight(280)));
 		start.setSize(270,20);
 		start.setVisible(true);
 		start.addActionListener(this);
 
 		switchTeams = new JButton("Switch Teams");
-		switchTeams.setLocation((int)(427*(Client.SCREEN_WIDTH/1620.0)),(int)(240 * Client.SCREEN_HEIGHT/1080.0));
+		switchTeams.setLocation((int)(ClientFrame.getScaledWidth(427)),(int)(ClientFrame.getScaledHeight(240)));
 		switchTeams.setSize(270,20);
 		switchTeams.setVisible(true);
 		switchTeams.addActionListener(this);
@@ -136,7 +136,7 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		// Create the map box
 		mapBox = new JComboBox<String>(maps);
 		mapBox.setSize(230,25);
-		mapBox.setLocation((int)(480*(Client.SCREEN_WIDTH/1620.0)), (int)(160 * Client.SCREEN_HEIGHT/1080.0));
+		mapBox.setLocation((int)(ClientFrame.getScaledWidth(480)), (int)(ClientFrame.getScaledHeight(160)));
 		mapBox.addActionListener(this);
 		mapBox.setFocusable(true);
 		mapBox.setVisible(true);
@@ -384,16 +384,16 @@ public class ClientLobby extends JPanel implements ActionListener,KeyListener{
 		//Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
-		graphics.drawString("Map:", (int)(420*(Client.SCREEN_WIDTH/1620.0)), (int)(180 * Client.SCREEN_HEIGHT/1080.0));
+		graphics.drawString("Map:", (int)(ClientFrame.getScaledWidth(420)), (int)(ClientFrame.getScaledHeight(180)));
 
 
 		//Write the players on each team
 		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = (int)(930 * (Client.SCREEN_WIDTH /1620.0));
-		int blueY = (int)(120 * (Client.SCREEN_HEIGHT /1080.0));
-		int redX =(int)(1480 * (Client.SCREEN_WIDTH /1620.0));
-		int redY = (int)(120 * (Client.SCREEN_HEIGHT /1080.0));
+		int blueX = (int)(ClientFrame.getScaledWidth(930));
+		int blueY = (int)(ClientFrame.getScaledHeight(120));
+		int redX =(int)(ClientFrame.getScaledWidth(1480));
+		int redY = (int)( ClientFrame.getScaledHeight(120));
 		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
 		graphics.drawString("Red Team", redX, redY);

@@ -49,4 +49,24 @@ public class ClientFrame extends JFrame
 		
 		
 	}
+	
+	/**
+	 * Scale a number based on the screen width
+	 * @param number
+	 * @return
+	 */
+	public static int getScaledWidth(int number)
+	{
+		return (int)(number*(Client.SCREEN_WIDTH /(1920.0-ClientInventory.INVENTORY_WIDTH)));
+	}
+	
+	/**
+	 * Scale a number based on the screen height
+	 * @param number
+	 * @return
+	 */
+	public static int getScaledHeight(int number)
+	{
+		return (int)(number*(Client.SCREEN_HEIGHT /1080.0));
+	}
 }
