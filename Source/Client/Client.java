@@ -182,6 +182,8 @@ MouseMotionListener
 	 * A timer for the start
 	 */
 	private long startTimer = 0;
+	
+	private boolean checkFPS = true;
 
 	/**
 	 * Constructor for the client
@@ -433,6 +435,14 @@ MouseMotionListener
 										startTime = System.currentTimeMillis();
 									}
 
+//									if (checkFPS && currentFPS < 40 && System.currentTimeMillis()>20000)
+//									{
+//										checkFPS = false;
+//										System.out.println("LAG!!!!");
+//										System.out.println("Number of objects: " + world.getObjects().length);
+//										
+//									}
+									
 									FPScounter++;
 								}
 								// If there is a player to be updated
