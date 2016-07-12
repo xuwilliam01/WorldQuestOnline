@@ -989,7 +989,7 @@ public class MainMenu
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			JOptionPane.showMessageDialog(null, "Instructions unavailable at the moment.", "Sorry", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "We are updating the instructions! The controls are shown in the lobby.", "Sorry", JOptionPane.ERROR_MESSAGE);
 			
 //			mainFrame.remove(mainMenu);
 //			mainFrame.invalidate();
