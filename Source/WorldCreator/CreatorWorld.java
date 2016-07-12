@@ -799,8 +799,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public void mouseDragged(MouseEvent event)
 	{
-		if ((ctrlPressed || !isEditable || selectedTile =='-')
-				&& leftClick)
+		if (ctrlPressed && leftClick)
 		{
 			// System.out.println(event.+" "+MouseEvent.BUTTON3);
 			posX -= event.getX() - dragSourceX;
