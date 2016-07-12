@@ -43,6 +43,11 @@ public class ServerCastle extends ServerCreature
 	 * The type of arrows the castle shoots
 	 */
 	private String arrowType = ServerWorld.WOODARROW_TYPE;
+	
+	/**
+	 * The team of the castle
+	 */
+	private int team;
 
 	/**
 	 * Constructor
@@ -59,7 +64,8 @@ public class ServerCastle extends ServerCreature
 		{
 			setImage("RED_CASTLE");
 		}
-		setTeam(team);
+		this.team=team;
+		
 		if(team == RED_TEAM)
 			setName("Red Team's Castle");
 		else
@@ -180,4 +186,15 @@ public class ServerCastle extends ServerCreature
 	{
 		return money;
 	}
+
+	public int getTeam()
+	{
+		return team;
+	}
+
+	public void setTeam(int team)
+	{
+		this.team = team;
+	}
+	
 }

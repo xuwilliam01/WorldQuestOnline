@@ -355,9 +355,9 @@ public class ServerGoblin extends ServerCreature
 					setTarget(findTarget());
 				}
 
-				if (getTarget() == null)
+				if (getTarget() == null && action == null)
 				{
-					if (getTeam() == ServerPlayer.BLUE_TEAM && action == null)
+					if (getTeam() == ServerPlayer.BLUE_TEAM)
 					{
 						if(getX() - getWorld().getRedCastleX() < 0)
 							setHSpeed(movementSpeed);
@@ -365,7 +365,7 @@ public class ServerGoblin extends ServerCreature
 							setHSpeed(-movementSpeed);
 							
 					}
-					else if (action == null)
+					else if (getTeam() == ServerPlayer.RED_TEAM)
 					{
 						if(getX() - getWorld().getBlueCastleX() < 0)
 							setHSpeed(movementSpeed);
@@ -403,6 +403,7 @@ public class ServerGoblin extends ServerCreature
 				// Attack the target with the weapon the goblin uses.
 				if (quickInRange(getTarget(), fightingRange))
 				{
+//					System.out.println(getTarget().getImage() + " " + getTarget().getX());
 					onTarget = true;
 					if (action == null
 							&& getWorld().getWorldCounter() % 30 == 0)

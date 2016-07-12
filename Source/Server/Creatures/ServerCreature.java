@@ -153,10 +153,19 @@ public abstract class ServerCreature extends ServerObject
 		if (team == ServerPlayer.BLUE_TEAM)
 		{
 			world.addToBlue(this);
+			
+			if (getType().equals(ServerWorld.CASTLE_TYPE))
+			{
+				System.out.println("BlueCastle " + getX());
+			}
 		}
 		else if (team == ServerPlayer.RED_TEAM)
 		{
 			world.addToRed(this);
+			if (getType().equals(ServerWorld.CASTLE_TYPE))
+			{
+				System.out.println("RedCastle " + getX());
+			}
 		}
 	}
 

@@ -364,10 +364,11 @@ public class ServerWorld
 					ServerObject newObject = ServerObject.copy(obj);
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
-					add(newObject);
+					
 
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
+						((ServerCastle)newObject).setTeam(((ServerCastle)newObject).getTeam());
 						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
 						{
 							redCastleX = (int) newObject.getX() + 50;
@@ -396,6 +397,7 @@ public class ServerWorld
 					// // Chests don't spawn immediately
 					// newObject.destroy();
 					// }
+					add(newObject);
 				}
 		}
 		worldInput.close();
@@ -769,8 +771,7 @@ public class ServerWorld
 							{
 								for (int column = startColumn; column <= endColumn; column++)
 								{
-									if (((tileGrid[row][column] >= 'A' || ((tileGrid[row][column] == '*'
-											|| tileGrid[row][column] == '+' || tileGrid[row][column] == '/') && !((((object
+									if (((tileGrid[row][column] >= 'A' || ((tileGrid[row][column] > ' ' && tileGrid[row][column] <= '/') && !((((object
 											.getType().equals(PLAYER_TYPE) && ((ServerPlayer) object)
 											.isDropping()) || object.getType()
 											.charAt(0) == PROJECTILE_TYPE)))))

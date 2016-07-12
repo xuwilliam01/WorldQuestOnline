@@ -180,10 +180,10 @@ public class MainMenu
 						JOptionPane
 								.showConfirmDialog(
 										null,
-										"Would you like to disable extra graphical features? (May slightly reduce lag on shitty computers)",
+										"Would you like to enable extra graphical features? (May slightly lag on shitty computers)",
 										"Select Game Quality",
 										JOptionPane.YES_NO_OPTION);
-				if (enableCloudsAndStars == JOptionPane.YES_OPTION)
+				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
 				{
 					ClientWorld.NO_OF_CLOUDS = 0;
 					ClientWorld.MAX_NO_OF_STARS = 0;
