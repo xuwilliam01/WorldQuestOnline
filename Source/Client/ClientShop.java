@@ -46,7 +46,7 @@ public class ClientShop extends JPanel{
 		setSize(ClientFrame.getScaledWidth(SHOP_WIDTH), ClientFrame.getScaledHeight(SHOP_HEIGHT));
 		setLocation(Client.SCREEN_WIDTH - SHOP_WIDTH - 50,25);
 		
-		shopFont = new Font("Courier",Font.PLAIN,ClientFrame.getScaledWidth(16));
+		shopFont = new Font("Arial",Font.PLAIN,ClientFrame.getScaledWidth(14));
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class ClientShop extends JPanel{
 				if(shopItems[row][col] != null)
 				{
 					if(shopItems[row][col].getCost() > 9)
-						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX(), shopItems[row][col].getY()+ClientFrame.getScaledHeight(15+Images.INVENTORY_IMAGE_SIDELENGTH));
+						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX()-ClientFrame.getScaledWidth(2), shopItems[row][col].getY()+ClientFrame.getScaledHeight(15+Images.INVENTORY_IMAGE_SIDELENGTH));
 					else
 						graphics.drawString(shopItems[row][col].getCost()+"", shopItems[row][col].getX()+ClientFrame.getScaledWidth(7), shopItems[row][col].getY()+ClientFrame.getScaledHeight(15+Images.INVENTORY_IMAGE_SIDELENGTH));
 					graphics.drawImage(coinImage, shopItems[row][col].getX()+ClientFrame.getScaledWidth(18),  shopItems[row][col].getY()+ClientFrame.getScaledHeight(5+Images.INVENTORY_IMAGE_SIDELENGTH),this);
