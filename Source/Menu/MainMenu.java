@@ -411,7 +411,6 @@ public class MainMenu
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
-			requestFocusInWindow();
 		}
 
 		@Override
