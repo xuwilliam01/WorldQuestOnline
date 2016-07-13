@@ -318,8 +318,38 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		Thread repaintThread = new Thread(new Repaint());
+		repaintThread.start();
 	}
+	
 
+	
+	private class Repaint implements Runnable
+	{
+
+		@Override
+		public void run()
+		{
+			while(true)
+			{
+			try
+			{
+				Thread.sleep(15);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			{
+				repaint();
+			}
+			}
+		}
+		
+	}
+	
+	
 	/**
 	 * Gets the amount of money the client has
 	 */
