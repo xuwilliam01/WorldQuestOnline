@@ -159,6 +159,8 @@ public class Server implements Runnable
 					PrintWriter output = new PrintWriter(newClient.getOutputStream());
 					output.println("Start");
 					output.flush();
+					input.close();
+					
 
 					//Close input and socket
 					continue;

@@ -58,66 +58,12 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private ArrayList<String> blueTeam = new ArrayList<String>();
 
 	private GamePanel panel;
-	
+
 	private ClientLobby lobby = this;
 
 	public ClientLobby(Socket socket, String playerName, GamePanel panel)
 			throws NumberFormatException, IOException
 	{
-		this.socket = socket;
-		name = playerName;
-		this.panel = panel;
-
-		chat = new JTextField();
-		chat.setLocation(1, 0);
-		chat.setSize(200, 20);
-		chat.addKeyListener(new JTextFieldEnter());
-		chat.setVisible(true);
-		chat.setFocusable(true);
-		chat.setDocument(new JTextFieldLimit(Client.MAX_CHARACTERS));
-		chat.setForeground(Color.GRAY);
-		chat.setToolTipText("Press 'enter' as a shortcut to chat");
-
-		enter = new JButton("Chat");
-		enter.setLocation(200, 0);
-		enter.setSize(60, 20);
-		enter.setVisible(true);
-		enter.addActionListener(this);
-		enter.setBackground(new Color(240, 240, 240));
-
-		start = new JButton("Start Game");
-		start.setForeground(Color.GRAY);
-		start.setBackground(Color.LIGHT_GRAY);
-		start.setOpaque(true);
-		start.setBorderPainted(false);
-		start.setLocation((int) (ClientFrame.getScaledWidth(427)),
-				(int) (ClientFrame.getScaledHeight(280)));
-		start.setSize(270, 20);
-		start.setVisible(true);
-		start.addActionListener(this);
-
-		switchTeams = new JButton("Switch Teams");
-		switchTeams.setLocation((int) (ClientFrame.getScaledWidth(427)),
-				(int) (ClientFrame.getScaledHeight(240)));
-		switchTeams.setSize(270, 20);
-		switchTeams.setVisible(true);
-		switchTeams.addActionListener(this);
-		switchTeams.setBackground(new Color(240, 240, 240));
-
-		setLayout(null);
-		add(chat);
-		add(enter);
-		add(start);
-		add(switchTeams);
-
-		setDoubleBuffered(true);
-		setFocusable(true);
-		requestFocusInWindow();
-		setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
-				Client.SCREEN_HEIGHT);
-		addKeyListener(this);
-		this.setBackground(Color.BLACK);
-
 		// Set up the input
 		try
 		{
@@ -135,7 +81,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		{
 			output = new PrintWriter(socket.getOutputStream());
 			printToServer("Lobby");
-			
+
 		}
 		catch (IOException e)
 		{
@@ -153,7 +99,60 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		}
 		else
 		{
-			
+			this.socket = socket;
+			name = playerName;
+			this.panel = panel;
+
+			chat = new JTextField();
+			chat.setLocation(1, 0);
+			chat.setSize(200, 20);
+			chat.addKeyListener(new JTextFieldEnter());
+			chat.setVisible(true);
+			chat.setFocusable(true);
+			chat.setDocument(new JTextFieldLimit(Client.MAX_CHARACTERS));
+			chat.setForeground(Color.GRAY);
+			chat.setToolTipText("Press 'enter' as a shortcut to chat");
+
+			enter = new JButton("Chat");
+			enter.setLocation(200, 0);
+			enter.setSize(60, 20);
+			enter.setVisible(true);
+			enter.addActionListener(this);
+			enter.setBackground(new Color(240, 240, 240));
+
+			start = new JButton("Start Game");
+			start.setForeground(Color.GRAY);
+			start.setBackground(Color.LIGHT_GRAY);
+			start.setOpaque(true);
+			start.setBorderPainted(false);
+			start.setLocation((int) (ClientFrame.getScaledWidth(427)),
+					(int) (ClientFrame.getScaledHeight(280)));
+			start.setSize(270, 20);
+			start.setVisible(true);
+			start.addActionListener(this);
+
+			switchTeams = new JButton("Switch Teams");
+			switchTeams.setLocation((int) (ClientFrame.getScaledWidth(427)),
+					(int) (ClientFrame.getScaledHeight(240)));
+			switchTeams.setSize(270, 20);
+			switchTeams.setVisible(true);
+			switchTeams.addActionListener(this);
+			switchTeams.setBackground(new Color(240, 240, 240));
+
+			setLayout(null);
+			add(chat);
+			add(enter);
+			add(start);
+			add(switchTeams);
+
+			setDoubleBuffered(true);
+			setFocusable(true);
+			requestFocusInWindow();
+			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
+					Client.SCREEN_HEIGHT);
+			addKeyListener(this);
+			this.setBackground(Color.BLACK);
+
 			// Add maps on server (first thing read)
 			String[] readMaps = input.readLine().split(" ");
 			maps = new String[readMaps.length];
@@ -180,7 +179,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			ReadServer reader = new ReadServer();
 			Thread startReader = new Thread(reader);
 			startReader.start();
-			
+
 			printToServer("Na " + name);
 		}
 
