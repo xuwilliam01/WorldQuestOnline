@@ -29,7 +29,7 @@ public class ServerLobbyPlayer implements Runnable
 
 	private String allMaps = "";
 
-	public ServerLobbyPlayer(Socket socket, Server server)
+	public ServerLobbyPlayer(Socket socket, BufferedReader input, Server server)
 	{
 		this.socket = socket;
 		this.IP = socket.getInetAddress().toString();
@@ -49,6 +49,8 @@ public class ServerLobbyPlayer implements Runnable
 		{
 			output = new PrintWriter(this.socket.getOutputStream());
 
+			sendMessage("Good to go");
+			
 			allMaps = "";
 			BufferedReader inputMap = new BufferedReader(new FileReader(
 					new File("Resources", "Maps")));
@@ -56,7 +58,7 @@ public class ServerLobbyPlayer implements Runnable
 			for (int i = 0; i < numMaps; i++)
 			{
 				allMaps += inputMap.readLine() + " ";
-				if (Server.defaultMap==null && i==0)
+				if (Server.defaultMap == null && i == 0)
 				{
 					Server.defaultMap = allMaps.trim();
 				}
@@ -70,23 +72,15 @@ public class ServerLobbyPlayer implements Runnable
 			e.printStackTrace();
 		}
 
+		
+		
 		// Send the maps to the client lobby
 		sendMessage(allMaps);
 
 		// Send the current map
 		sendMessage("M " + server.getMap());
 
-		// Set up the input
-		try
-		{
-			input = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's input stream");
-			e.printStackTrace();
-		}
+		this.input = input;
 
 	}
 

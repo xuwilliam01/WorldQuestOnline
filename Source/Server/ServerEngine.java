@@ -280,6 +280,41 @@ public class ServerEngine implements Runnable, ActionListener
 			gui.update();
 		}
 	}
+	
+	/**
+	 * Get the emptiest team
+	 * @return
+	 */
+	public int getNextTeam()
+	{
+		int noOfBlue=0;
+		int noOfRed = 0;
+		for (ServerPlayer player:listOfPlayers)
+		{
+			if (player.getTeam()==ServerCreature.RED_TEAM)
+			{
+				noOfRed++;
+			}
+			else
+			{
+				noOfBlue++;
+			}
+		}
+		
+		if (noOfBlue == noOfRed)
+		{
+			if (Math.random()<0.5)
+			{
+			return ServerCreature.BLUE_TEAM;
+			}
+			return ServerCreature.RED_TEAM;
+		}
+		else if (noOfBlue > noOfRed)
+		{
+			return ServerCreature.RED_TEAM;
+		}
+		return ServerCreature.BLUE_TEAM;
+	}
 
 	/////////////////////////
 	// GETTERS AND SETTERS //

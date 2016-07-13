@@ -627,7 +627,7 @@ public class MainMenu
 			}
 		}
 
-		public void startGame() throws UnknownHostException, IOException
+		public void startGame(ClientLobby lobby) throws UnknownHostException, IOException
 		{
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
