@@ -462,13 +462,13 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.drawString(String.format("Map can only be edited when zoomed in %d%% or more (Current: %d%%)", (int)( 100/MIN_EDIT_ZOOM),(int)( 100/objectFactor)), 10,
 				20);
 		graphics.drawString("Select an object using the mouse", 10, 35);
-		graphics.drawString("Place objects using right click", 10, 50);
+		graphics.drawString("Place objects using left click", 10, 50);
 		graphics.drawString("Delete objects using ctrl+right click", 10, 65);
 		graphics.drawString(
-				"Use the W A S D keys to scroll or ctrl + left click to drag the map",
+				"Use arrow keys to scroll or ctrl + left click to drag the map",
 				10, 80);
 		graphics.drawString(
-				"Highlight and fill areas of the map with tiles using left click",
+				"Highlight and fill areas of the map with tiles using right click",
 				10, 95);
 //		graphics.drawString(
 //				"Tip: Scroll in one direction and hold mouse down to create long straight lines and boxes",
@@ -749,7 +749,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			dragSourceX = event.getX();
 			dragSourceY = event.getY();
 		}
-		else if (rightClick && selectedTile != '-' && !ctrlPressed
+		else if (leftClick && selectedTile != '-' && !ctrlPressed
 				&& isEditable)
 		{
 			if(tiles[selectedTile].isTile())
@@ -766,7 +766,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		{		
 			removingTile = true;
 		}
-		else if (leftClick && isEditable
+		else if (rightClick && isEditable
 				&& !ctrlPressed && selectedTile != '-' && tiles[selectedTile].isTile() && selectedBlock[0] >= 0
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
@@ -799,7 +799,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public void mouseDragged(MouseEvent event)
 	{
-		if (ctrlPressed && leftClick)
+		if ((ctrlPressed || !isEditable || selectedTile =='-')
+				&& leftClick)
 		{
 			// System.out.println(event.+" "+MouseEvent.BUTTON3);
 			posX -= event.getX() - dragSourceX;
