@@ -197,7 +197,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.frame = frame;
 
 		chat = new JTextField();
-		chat.setLocation(0, 0);
+		chat.setLocation(1, 0);
 		chat.setSize(200, 20);
 		chat.addKeyListener(new JTextFieldEnter());
 		chat.setVisible(true);
