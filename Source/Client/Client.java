@@ -318,38 +318,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		
-		Thread repaintThread = new Thread(new Repaint());
-		repaintThread.start();
 	}
-	
 
-	
-	private class Repaint implements Runnable
-	{
-
-		@Override
-		public void run()
-		{
-			while(true)
-			{
-			try
-			{
-				Thread.sleep(15);
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-			{
-				repaint();
-			}
-			}
-		}
-		
-	}
-	
-	
 	/**
 	 * Gets the amount of money the client has
 	 */
@@ -450,7 +420,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								}
 								else if (tokens[token].equals("U"))
 								{
-									repaint();
+//									repaint();
 									// Update the FPS counter
 									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
 									{
