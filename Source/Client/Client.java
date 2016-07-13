@@ -226,6 +226,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private void serverClosed()
 	{
 		System.out.println("Server was closed");
+		JOptionPane.showMessageDialog(null, "Server was closed", "Server", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**

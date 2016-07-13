@@ -193,7 +193,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 
 		// Create the screen
 		setDoubleBuffered(true);
-		setBackground(Color.white);
+		setBackground(Color.CYAN);
 		setSize(Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR,
 				Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR);
 
