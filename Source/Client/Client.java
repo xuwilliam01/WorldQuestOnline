@@ -1106,12 +1106,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		getInventory().repaint();
 		if (!getChat().hasFocus())
 		{
-			requestFocusInWindow();
+			chat.requestFocus();
+			//requestFocusInWindow();
 		}
 
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
-
-		graphics.dispose();
 	}
 
 	@Override
