@@ -359,18 +359,34 @@ public class ServerGoblin extends ServerCreature
 				{
 					if (getTeam() == ServerPlayer.BLUE_TEAM)
 					{
-						if(getX() - getWorld().getRedCastleX() < 0)
+						if (quickInRange(getWorld().getRedCastle(),(double)targetRange))
+						{
+							setTarget(getWorld().getRedCastle());
+						}
+						else if(getX() - getWorld().getRedCastleX() < 0)
+						{
 							setHSpeed(movementSpeed);
-						else
+						}
+						else if (getX() - getWorld().getRedCastleX() > 0)
+						{
 							setHSpeed(-movementSpeed);
+						}
 							
 					}
 					else if (getTeam() == ServerPlayer.RED_TEAM)
 					{
-						if(getX() - getWorld().getBlueCastleX() < 0)
+						if (quickInRange(getWorld().getBlueCastle(),(double)targetRange))
+						{
+							setTarget(getWorld().getBlueCastle());
+						}
+						else if(getX() - getWorld().getBlueCastleX() < 0)
+						{
 							setHSpeed(movementSpeed);
+						}
 						else
+						{
 							setHSpeed(-movementSpeed);
+						}
 					}
 				}
 			}
