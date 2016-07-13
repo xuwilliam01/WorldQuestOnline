@@ -91,13 +91,24 @@ public class ClientWorld
 	/**
 	 * The font for messages
 	 */
-	public final static Font MESSAGE_FONT = new Font("Arial", Font.PLAIN, 16);
+	public final static Font MESSAGE_FONT = new Font("Arial", Font.BOLD, 16);
+	
+//	/**
+//	 * The font for messages
+//	 */
+//	public final static Font BOLD_MESSAGE_FONT = new Font("Arial", Font.BOLD, 16);
 
 	/**
 	 * The normal font for text
 	 */
 	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
-
+	
+	/**
+	 * The bold normal font for text
+	 */
+	public final static Font BOLD_NORMAL_FONT = new Font("Arial", Font.BOLD, 12);
+	
+	
 	/**
 	 * Bigger normal font
 	 */
