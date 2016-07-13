@@ -1111,6 +1111,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
 
+		graphics.dispose();
 	}
 
 	@Override
