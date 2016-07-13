@@ -1110,11 +1110,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		if (!writingMessage)
 		{
 			requestFocusInWindow();
+			
 		}
 		else
 		{
 			chat.requestFocus();
 		}
+
+
 
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
 	}
@@ -1195,7 +1198,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				writingMessage = true;
 			}
 			
-			if (writingMessage)
+			else if (writingMessage)
 			{
 				requestFocusInWindow();
 				writingMessage = false;
