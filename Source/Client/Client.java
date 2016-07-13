@@ -420,7 +420,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								}
 								else if (tokens[token].equals("U"))
 								{
-//									repaint();
+									repaint();
 									// Update the FPS counter
 									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
 									{
