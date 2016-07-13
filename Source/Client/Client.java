@@ -1272,6 +1272,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 			printToServer(currentMessage);
 		}
+		
+		if (!writingMessage)
+		{
+			requestFocusInWindow();
+		}
 	}
 
 	@Override
