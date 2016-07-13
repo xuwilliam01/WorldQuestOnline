@@ -180,7 +180,7 @@ public class MainMenu
 						JOptionPane
 								.showConfirmDialog(
 										null,
-										"Would you like to enable extra graphical features? (May slightly lag on shitty computers)",
+										"Would you like to enable extra graphical features? (Highly recommended)",
 										"Select Game Quality",
 										JOptionPane.YES_NO_OPTION);
 				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
