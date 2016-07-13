@@ -182,6 +182,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 	private boolean checkFPS = true;
 
+	private boolean writingMessage = false;
+
 	/**
 	 * Constructor for the client
 	 */
@@ -204,7 +206,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		chat.setFocusable(true);
 		chat.setDocument(new JTextFieldLimit(MAX_CHARACTERS));
 		chat.setForeground(Color.GRAY);
-		chat.setToolTipText("Press 'enter' as a shortcut to chat. Type '/t ' before a message to send it only to your team");
+		chat.setToolTipText("Press 'enter' to chat. Type '/t ' before a message to send it only to your team");
 
 		enter = new JButton("Chat");
 		enter.setLocation(200, 0);
@@ -1104,10 +1106,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		// Repaint the inventory
 		getInventory().repaint();
-		if (!getChat().hasFocus())
+
+		if (!writingMessage)
+		{
+			requestFocusInWindow();
+		}
+		else
 		{
 			chat.requestFocus();
-			//requestFocusInWindow();
 		}
 
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
@@ -1183,7 +1189,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		else if (key.getKeyCode() == KeyEvent.VK_ENTER)
 		{
-			chat.requestFocus();
+			if (!writingMessage)
+			{
+				requestFocusInWindow();
+				writingMessage = true;
+			}
 		}
 	}
 
@@ -1521,6 +1531,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 	}
 
+	/**
+	 * When sending a message
+	 */
 	public void actionPerformed(ActionEvent e)
 	{
 		// Send the message
@@ -1531,6 +1544,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		chat.setForeground(Color.GRAY);
 		chat.setText("");
+		writingMessage = false;
 		requestFocusInWindow();
 
 	}
@@ -1548,7 +1562,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		public void keyPressed(KeyEvent e)
 		{
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+			{
 				enter.doClick();
+				
+			}
 
 		}
 
