@@ -1194,8 +1194,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				chat.requestFocus();
 				writingMessage = true;
 			}
-			
-			if (writingMessage)
+			else if (writingMessage)
 			{
 				requestFocusInWindow();
 				writingMessage = false;
