@@ -784,6 +784,7 @@ public class MainMenu
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			client.leaveGame=true;
 			client.getOutput().close();
 			StartGame.restart(mainFrame);
 		}
