@@ -34,7 +34,7 @@ public class ClientWorld
 	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
 	public final static Color GRAY_TEXT = Color.gray;
 
-	public static int NO_OF_CLOUDS = 12;
+	public static int NO_OF_CLOUDS = 6;
 	public static int MAX_NO_OF_STARS = 500;
 
 	/**

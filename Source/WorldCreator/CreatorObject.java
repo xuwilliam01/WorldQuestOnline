@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import Client.ClientFrame;
 import Imports.GameImage;
 import Imports.ImageReferencePair;
 import Imports.Images;
@@ -40,7 +41,7 @@ public class CreatorObject extends JButton implements MouseListener
 		setIcon(new ImageIcon(Images.getImage(name.substring(0,
 				name.length())
 				+ "_ICON")));
-		setSize(getIcon().getIconWidth(), getIcon().getIconHeight());
+		setSize(ClientFrame.getScaledWidth(getIcon().getIconWidth()), ClientFrame.getScaledHeight(getIcon().getIconHeight()));
 
 
 		imageRef = new ImageReferencePair(ref, name);
@@ -71,6 +72,7 @@ public class CreatorObject extends JButton implements MouseListener
 	{
 		imageRef.setReference(reference);
 	}
+	
 
 	public Image getImage()
 	{
@@ -95,12 +97,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public void setPosition(int row, int col)
 	{
 		if (isTile)
-			setLocation(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
-					* 12), SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
-					+ 80);
+			setLocation(ClientFrame.getScaledWidth(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
+					* 12)),ClientFrame.getScaledHeight(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
+					+ 80));
 		else
-			setLocation(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12), SCALE*(row
-					* getIcon().getIconHeight()/SCALE + row * 10) + 500);
+			setLocation(ClientFrame.getScaledWidth(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12)), ClientFrame.getScaledHeight(SCALE*(row
+					* getIcon().getIconHeight()/SCALE + row * 10) + 500));
 	}
 
 	@Override

@@ -180,7 +180,7 @@ public class MainMenu
 						JOptionPane
 								.showConfirmDialog(
 										null,
-										"Would you like to enable extra graphical features? (Highly recommended)",
+										"Would you like to enable extra graphical features? (May reduce performance)",
 										"Select Game Quality",
 										JOptionPane.YES_NO_OPTION);
 				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
@@ -481,7 +481,7 @@ public class MainMenu
 		public CreatorPanel(String fileName)
 		{
 			setDoubleBuffered(true);
-			setBackground(Color.red);
+			setBackground(Color.black);
 			setFocusable(true);
 			setLayout(null);
 			setLocation(0, 0);
@@ -959,7 +959,7 @@ public class MainMenu
 			while (true)
 			{
 				fileName = (String) JOptionPane.showInputDialog(
-						"File name (new or existing) (ex: WORLD)").trim();
+						"File name (new or existing) (ex: Tunnels)").trim();
 				if (fileName != null && !fileName.isEmpty())
 				{
 					break;

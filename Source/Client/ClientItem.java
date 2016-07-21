@@ -61,6 +61,7 @@ public class ClientItem extends JButton implements MouseListener{
 		setFocusable(false);
 		addMouseListener(this);
 
+		
 		// Add tooltips
 		switch(type)
 		{
