@@ -206,6 +206,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		chat.setFocusable(true);
 		chat.setDocument(new JTextFieldLimit(MAX_CHARACTERS));
 		chat.setForeground(Color.GRAY);
+		chat.setText("Press enter to chat");
 		chat.setToolTipText("Press 'enter' to chat. Type '/t ' before a message to send it only to your team");
 
 		enter = new JButton("Chat");
@@ -1198,11 +1199,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			{
 				chat.requestFocus();
 				writingMessage = true;
+				chat.setText("");
+				chat.setForeground(Color.black);
 			}
 			else if (writingMessage)
 			{
 				requestFocusInWindow();
 				writingMessage = false;
+
 			}
 		}
 	}
@@ -1558,7 +1562,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			printToServer("C " + message);
 		}
 		chat.setForeground(Color.GRAY);
-		chat.setText("");
+		chat.setText("Press Enter to chat");
 		writingMessage = false;
 		requestFocusInWindow();
 
