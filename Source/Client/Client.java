@@ -183,6 +183,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private boolean checkFPS = true;
 
 	private boolean writingMessage = false;
+	
+	
+	public boolean leaveGame;
 
 	/**
 	 * Constructor for the client
@@ -197,6 +200,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.playerName = playerName;
 		this.inventory = inventory;
 		this.frame = frame;
+		
+		leaveGame = false;
 
 		chat = new JTextField();
 		chat.setLocation(1, 0);
@@ -226,9 +231,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	private void serverClosed()
 	{
+		if (!leaveGame)
+		{
 		System.out.println("Server was closed");
 		JOptionPane.showMessageDialog(null, "Server was closed", "Server", JOptionPane.ERROR_MESSAGE);
 		inventory.getMenuButton().doClick();
+		}
 	}
 
 	/**
@@ -405,6 +413,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 													String.format(
 															"The %s castle has been destroyed, the winner is the %s!",
 															loser, winner));
+									leaveGame = true;
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)
