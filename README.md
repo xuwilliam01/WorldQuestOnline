@@ -12,7 +12,8 @@ Press 'enter' to chat.
 
 Further controls are shown in the lobby!
 
-Join or host a server to play. When hosting a server for clients outside of your network, make sure to port-forward your router!
+Join or host a server to play. When hosting a server for clients outside of your network, make sure to port-forward your router! 
+(Port is 9988)
 
 [Features]
 - Online multiplayer
@@ -28,25 +29,25 @@ Join or host a server to play. When hosting a server for clients outside of your
 - Castle and goblin upgrades
 
 [Content]
-- Four sets of armours
+- Sets of armours
 	- Grey ninja
 	- Blue ninja
 	- Red ninja
 	- Steel armour
-- Twenty melee weapons (4 weapon types x 5 tiers)
+- 20 melee weapons (4 weapon types x 5 tiers)
 	- Dagger, Sword, Ax, Halberd
 	- Wooden, Stone, Iron, Gold, Diamond
-- Five projectile weapons (4 + 1 NPC-use only)
+- Projectile weapons (4 + 1 NPC-use only)
 	- Slingshot
 	- Wooden bow
 	- Steel bow
 	- Mega bow
 	- Shuriken (Ninja goblin only)
-- Three magic weapons
+- Magic weapons
 	- Ice wand
 	- Fire wand
 	- Dark wand
-- Seven potions
+- Potions
 	- Damage potion
 	- Speed potion
 	- Jump potion
@@ -55,7 +56,7 @@ Join or host a server to play. When hosting a server for clients outside of your
 	- Mana potion
 	- HP potion
 
-- Twelve types of goblins
+- Types of goblins
 	- Naked goblin
 	- Goblin peasant
 	- Goblin soldier
@@ -69,11 +70,8 @@ Join or host a server to play. When hosting a server for clients outside of your
 	- Goblin general
 	- Goblin king
 	
-- Six types of slimes
-	- Green slime
-	- Blue slime
-	- Red slime
-	- Yellow slime
+- Types of slimes
+	- Green, blue, red, yellow slime
 	- Giant slime
 	- Dark slime
 	

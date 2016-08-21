@@ -46,7 +46,7 @@ public class ServerWeapon extends ServerItem
 
 	public final static int FIREWAND_DMG = 30;
 	public final static int ICEWAND_DMG = 40;
-	public final static int DARKWAND_DMG = 60;
+	public final static int DARKWAND_DMG = 65;
 
 	public final static int FIREWAND_MANA = 7;
 	public final static int ICEWAND_MANA = 10;

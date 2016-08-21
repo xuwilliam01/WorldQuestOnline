@@ -815,31 +815,33 @@ public class MainMenu
 				serverIP = "127.0.0.1";
 			}
 
-			while (true)
-			{
-				try
-				{
-					String portNum = JOptionPane
-							.showInputDialog(
-									"Please enter the port of the server (Default: "
-											+ DEF_PORT + ")").trim();
-					if (portNum == null)
-						return;
-					else if (portNum.equals(""))
-						portNum = "" + DEF_PORT;
-					else if (Integer.parseInt(portNum) <= 65535)
-						port = Integer.parseInt(portNum);
-					else
-						throw new NumberFormatException();
-
-					break;
-				}
-				catch (NumberFormatException E)
-				{
-
-				}
-
-			}
+			port = DEF_PORT;
+			
+//			while (true)
+//			{
+//				try
+//				{
+//					String portNum = JOptionPane
+//							.showInputDialog(
+//									"Please enter the port of the server (Default: "
+//											+ DEF_PORT + ")").trim();
+//					if (portNum == null)
+//						return;
+//					else if (portNum.equals(""))
+//						portNum = "" + DEF_PORT;
+//					else if (Integer.parseInt(portNum) <= 65535)
+//						port = Integer.parseInt(portNum);
+//					else
+//						throw new NumberFormatException();
+//
+//					break;
+//				}
+//				catch (NumberFormatException E)
+//				{
+//
+//				}
+//
+//			}
 
 			mainFrame.remove(mainMenu);
 			mainFrame.invalidate();
@@ -894,27 +896,27 @@ public class MainMenu
 			// }
 			// }
 
-			int portNum;
-			while (true)
-			{
-				String port = JOptionPane
-						.showInputDialog("Please enter the port you want to use for the server (Default "
-								+ DEF_PORT + ")");
-				if (port == null)
-					return;
-				else if (port.equals(""))
-				{
-					port = "" + DEF_PORT;
-				}
-				try
-				{
-					portNum = Integer.parseInt(port);
-					break;
-				}
-				catch (NumberFormatException E)
-				{
-				}
-			}
+			int portNum = DEF_PORT;
+//			while (true)
+//			{
+//				String port = JOptionPane
+//						.showInputDialog("Please enter the port you want to use for the server (Default "
+//								+ DEF_PORT + ")");
+//				if (port == null)
+//					return;
+//				else if (port.equals(""))
+//				{
+//					port = "" + DEF_PORT;
+//				}
+//				try
+//				{
+//					portNum = Integer.parseInt(port);
+//					break;
+//				}
+//				catch (NumberFormatException E)
+//				{
+//				}
+//			}
 
 			// Starts the server
 			Server server = new Server(portNum);

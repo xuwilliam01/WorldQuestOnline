@@ -169,7 +169,7 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0");
 			setGravity(0);
-			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int)Math.ceil(ServerWeapon.DARKWAND_DMG * (1+owner.getBaseDamage()/100.0)));
 			setSpeed(12);
 			animated = true;
 			faceAngle = true;

@@ -106,7 +106,7 @@ public class ServerSlime extends ServerEnemy
 			setRelativeDrawX(-24);
 			setHeight(-1);
 			setName("Giant Slime");
-				addItem(ServerItem.randomItem(getX(), getY()));
+			addItem(ServerItem.randomItem(getX(), getY()));
 		}
 		else if (slimeType <= 30)
 		{
@@ -114,9 +114,8 @@ public class ServerSlime extends ServerEnemy
 			setWidth(-1);
 			setHeight(-1);
 			setDamage(30);
-			setHP(150);
+			setHP(100);
 			setName("Dark Slime");
-			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
 			jumpHeight = (int) (Math.random() * 3 + 20);
