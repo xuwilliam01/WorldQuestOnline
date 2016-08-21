@@ -281,29 +281,54 @@ public class ServerEngine implements Runnable, ActionListener
 		{
 			gui.update();
 		}
-
+//		if (checkObjects)
+//		{
+//			int noOfObjects = 0;
+//			
+//			// Clear the object grid
+//			for (int row = 0; row < world.getObjectGrid().length; row++)
+//			{
+//				for (int column = 0; column < world.getObjectGrid()[0].length; column++)
+//				{
+//					noOfObjects += world.getObjectGrid()[row][column].size();
+//					world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
+//				}
+//			}
+//			System.out.println("Number of objects without lag: " + noOfObjects);
+//			checkObjects = false;
+//		}
+		
 		// Parameters to fix the lag spike
-		if (!lagSpike && world.getWorldCounter() > 1000 && getCurrentFPS() < 50)
+		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike)
 		{
-			lagSpike = true;
 			System.out.println("~LAGSPIKE~");
-			
-			// Clear the object grid
-			for (int row = 0; row < world.getObjectGrid().length; row++)
-			{
-				for (int column = 0; column < world.getObjectGrid()[0].length; column++)
-				{
-					world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
-				}
-			}
+//			
+//			int noOfObjects = 0;
+//			
+//			
+//			// Clear the object grid
+//			for (int row = 0; row < world.getObjectGrid().length; row++)
+//			{
+//				for (int column = 0; column < world.getObjectGrid()[0].length; column++)
+//				{
+//					noOfObjects += world.getObjectGrid()[row][column].size();
+//					world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
+//				}
+//			}
+//			System.out.println("Number of objects during lag: " + noOfObjects);
+//			checkObjects = true;
+			lagSpike = true;
 		}
 		
+		if (world.getWorldCounter() % 500==0)
+		{
+			lagSpike =false;
+		}
 		
 
 	}
-
 	boolean lagSpike = false;
-
+	boolean checkObjects = false;
 	/**
 	 * Get the emptiest team
 	 * @return

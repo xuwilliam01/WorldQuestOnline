@@ -1015,6 +1015,7 @@ public class ServerWorld
 		// Increase the world counter by 1 after this game tick
 		worldCounter++;
 
+		// Update game time
 		if (worldCounter % COUNTER_TIME == 0)
 		{
 			worldTime++;

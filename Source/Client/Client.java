@@ -1275,7 +1275,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 			printToServer(currentMessage);
 
-			System.out.println("Pressed");
+			//System.out.println("Pressed");
 		}
 		else if (event.getButton() == MouseEvent.BUTTON3
 				&& currentMessage.charAt(0) != 'a')
