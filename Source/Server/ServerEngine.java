@@ -86,7 +86,7 @@ public class ServerEngine implements Runnable, ActionListener
 
 	private boolean endGame = false;
 	private int losingTeam;
-	
+
 	/**
 	 * Constructor for the engine
 	 */
@@ -99,10 +99,10 @@ public class ServerEngine implements Runnable, ActionListener
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		objectIDs = new boolean[NUMBER_OF_IDS];
-		world = new ServerWorld(this,map);
+		world = new ServerWorld(this, map);
 
 	}
-	
+
 	/**
 	 * Constructor for the engine
 	 */
@@ -118,7 +118,6 @@ public class ServerEngine implements Runnable, ActionListener
 		world = new ServerWorld(this);
 
 	}
-	
 
 	/**
 	 * Set the gui
@@ -145,21 +144,22 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public synchronized void updateClients()
 	{
-		if(!toRemove.isEmpty())
+		if (!toRemove.isEmpty())
 		{
-			for(ServerPlayer player : toRemove)
+			for (ServerPlayer player : toRemove)
 				listOfPlayers.remove(player);
 			toRemove.clear();
 		}
-		try{
+		try
+		{
 			for (ServerPlayer player : listOfPlayers)
 			{
 				player.updateClient();
-				if(endGame)
-					player.setEndGame(true,losingTeam);
-			} 
+				if (endGame)
+					player.setEndGame(true, losingTeam);
+			}
 		}
-		catch(ConcurrentModificationException e)
+		catch (ConcurrentModificationException e)
 		{
 			System.out.println("Concurrent modification occured");
 			e.printStackTrace();
@@ -171,7 +171,7 @@ public class ServerEngine implements Runnable, ActionListener
 		endGame = true;
 		this.losingTeam = losingTeam;
 	}
-	
+
 	/**
 	 * Send an instant message to all clients
 	 */
@@ -183,7 +183,7 @@ public class ServerEngine implements Runnable, ActionListener
 		}
 		gui.addToChat(message);
 	}
-	
+
 	/**
 	 * Sends a message to the given team
 	 */
@@ -191,13 +191,12 @@ public class ServerEngine implements Runnable, ActionListener
 	{
 		for (ServerPlayer player : listOfPlayers)
 		{
-			if(player.getTeam() == team)
+			if (player.getTeam() == team)
 				player.sendMessage(message);
 		}
 		gui.addToChat(message);
 	}
 
-	
 	/**
 	 * Remove a player from the array list
 	 * @param remove
@@ -209,7 +208,8 @@ public class ServerEngine implements Runnable, ActionListener
 		listOfPlayers.remove(remove);
 		world.remove(remove);
 		broadcast("R " + remove.getID());
-		broadcast("RO " + remove.getName().split(" ").length+" "+remove.getTeam()+remove.getName());
+		broadcast("RO " + remove.getName().split(" ").length + " "
+				+ remove.getTeam() + remove.getName());
 	}
 
 	/**
@@ -246,13 +246,15 @@ public class ServerEngine implements Runnable, ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		// Update the FPS counter on the server gui
-		if (FPScounter >= (1000.0/UPDATE_RATE + 0.5))
+		if (FPScounter >= (1000.0 / UPDATE_RATE + 0.5))
 		{
 			FPScounter = 0;
-			currentFPS = (int)((1000.0/(System.currentTimeMillis()-startTime) * (1000.0/UPDATE_RATE)+0.5)); 
+			currentFPS = (int) ((1000.0
+					/ (System.currentTimeMillis() - startTime)
+					* (1000.0 / UPDATE_RATE) + 0.5));
 			startTime = System.currentTimeMillis();
 		}
-		FPScounter ++;
+		FPScounter++;
 
 		// Remove disconnected players
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
@@ -279,19 +281,40 @@ public class ServerEngine implements Runnable, ActionListener
 		{
 			gui.update();
 		}
+
+		// Parameters to fix the lag spike
+		if (!lagSpike && world.getWorldCounter() > 1000 && getCurrentFPS() < 50)
+		{
+			lagSpike = true;
+			System.out.println("~LAGSPIKE~");
+			
+			// Clear the object grid
+			for (int row = 0; row < world.getObjectGrid().length; row++)
+			{
+				for (int column = 0; column < world.getObjectGrid()[0].length; column++)
+				{
+					world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
+				}
+			}
+		}
+		
+		
+
 	}
-	
+
+	boolean lagSpike = false;
+
 	/**
 	 * Get the emptiest team
 	 * @return
 	 */
 	public int getNextTeam()
 	{
-		int noOfBlue=0;
+		int noOfBlue = 0;
 		int noOfRed = 0;
-		for (ServerPlayer player:listOfPlayers)
+		for (ServerPlayer player : listOfPlayers)
 		{
-			if (player.getTeam()==ServerCreature.RED_TEAM)
+			if (player.getTeam() == ServerCreature.RED_TEAM)
 			{
 				noOfRed++;
 			}
@@ -300,12 +323,12 @@ public class ServerEngine implements Runnable, ActionListener
 				noOfBlue++;
 			}
 		}
-		
+
 		if (noOfBlue == noOfRed)
 		{
-			if (Math.random()<0.5)
+			if (Math.random() < 0.5)
 			{
-			return ServerCreature.BLUE_TEAM;
+				return ServerCreature.BLUE_TEAM;
 			}
 			return ServerCreature.RED_TEAM;
 		}
@@ -316,29 +339,34 @@ public class ServerEngine implements Runnable, ActionListener
 		return ServerCreature.BLUE_TEAM;
 	}
 
-	/////////////////////////
+	// ///////////////////////
 	// GETTERS AND SETTERS //
-	/////////////////////////
+	// ///////////////////////
 	public int getCurrentFPS()
 	{
 		return currentFPS;
 	}
+
 	public void setCurrentFPS(int currentFPS)
 	{
 		this.currentFPS = currentFPS;
 	}
+
 	public int nextTeam()
 	{
 		return ++lastTeam;
 	}
+
 	public ServerWorld getWorld()
 	{
 		return world;
 	}
+
 	public static ArrayList<ServerPlayer> getListOfPlayers()
 	{
 		return listOfPlayers;
 	}
+
 	public static void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers)
 	{
 		listOfPlayers = newListOfPlayers;

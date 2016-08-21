@@ -2,6 +2,7 @@
 By William Xu and Alex Raita
 
 [Instructions]
+
 Destroy the enemy castle
 
 Press 'e' at a merchant to open the shop.
