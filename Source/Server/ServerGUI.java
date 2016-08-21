@@ -34,7 +34,7 @@ import javax.swing.JTextField;
  *
  */
 public class ServerGUI extends JPanel implements KeyListener,
-MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
+		MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 {
 
 	/**
@@ -130,7 +130,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 * The name of the map
 	 */
 	private String map = "";
-	
+
 	/**
 	 * X-value of the centre of the screen
 	 */
@@ -238,7 +238,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	{
 		super.paintComponent(graphics);
 
-		//graphics.drawImage(background, 0, -300, null);
+		// graphics.drawImage(background, 0, -300, null);
 
 		// Draw the map
 		if (visible & started)
@@ -276,11 +276,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 								(int) (CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-										(int) (CENTRE_Y
-												+ row
-												* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+								(int) (CENTRE_Y
+										+ row
+										* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 					}
 				}
 			}
@@ -293,11 +293,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 						((CENTRE_X + object.getX() / objectFactor - posX)
 								+ 1
 								+ (object.getWidth() / objectFactor) + 1) > 0
-								&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
-								&& ((CENTRE_Y + object.getY() / objectFactor - posY)
-										+ 1
-										+ (object.getHeight() / objectFactor) + 1) > 0
-										&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
+						&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
+						&& ((CENTRE_Y + object.getY() / objectFactor - posY)
+								+ 1
+								+ (object.getHeight() / objectFactor) + 1) > 0
+						&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 				{
 					if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
 					{
@@ -331,18 +331,19 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		// {
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
-		graphics.drawString("The server runs smoother when the map is hidden",
+		graphics.drawString("The server runs faster when the map is hidden",
 				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
-				- 55);
+						- 55);
 		// }
 		// Draw the chat and the map name
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
 		graphics.drawString("Map: ", 270, 15);
-		graphics.setColor(new Color(235,117,0));
-		if (map!=null)
+		graphics.setColor(new Color(235, 117, 0));
+		if (map != null)
 		{
-		graphics.drawString(map, 270+graphics.getFontMetrics().stringWidth("Map: "), 15);
+			graphics.drawString(map, 270 + graphics.getFontMetrics()
+					.stringWidth("Map: "), 15);
 		}
 		while (true)
 		{
@@ -478,13 +479,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-											+ " by a "), textY);
+													+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-											textY);
+									textY);
 					}
 					textY += 20;
 				}
@@ -494,6 +495,15 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			{
 				System.out.println("concurrent modification");
 			}
+		}
+		graphics.setColor(Color.gray);
+		// Show the fps
+		try
+		{
+			graphics.drawString("FPS: " + engine.getCurrentFPS(), 270, 35);
+		}
+		catch (NullPointerException e)
+		{
 		}
 
 		// Write the player names for each team
@@ -552,19 +562,19 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		}
 		// Tell the user to scroll with arrow keys
 		graphics.setColor(Color.black);
-		//		graphics.drawString(
-		//				"Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
-		//				100, 25);
-		//		try
-		//		{
-		//		graphics.drawString(
-		//				"Server FPS: " + engine.getCurrentFPS(),
-		//				120, 20);
-		//		}
-		//		catch (NullPointerException E)
-		//		{
-		//			System.out.println("Cannot get");
-		//		}
+		// graphics.drawString(
+		// "Use mouse or arrows keys to move around the map, zoom with the mouse wheel",
+		// 100, 25);
+		// try
+		// {
+		// graphics.drawString(
+		// "Server FPS: " + engine.getCurrentFPS(),
+		// 120, 20);
+		// }
+		// catch (NullPointerException E)
+		// {
+		// System.out.println("Cannot get");
+		// }
 	}
 
 	/**
@@ -735,7 +745,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		if (!chat.hasFocus())
 			requestFocusInWindow();
 		movePos();
-		if (world.getWorldCounter() < 10 || world.getWorldCounter()%4==0)
+		if (world.getWorldCounter() < 10 || world.getWorldCounter() % 4 == 0)
 		{
 			repaint();
 		}
@@ -902,7 +912,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		}
 
 	}
-	
+
 	public void setMap(String map)
 	{
 		this.map = map;
