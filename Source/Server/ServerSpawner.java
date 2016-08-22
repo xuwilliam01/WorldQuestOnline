@@ -1,6 +1,7 @@
 package Server;
 
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
 
 /**
@@ -25,6 +26,13 @@ public class ServerSpawner extends ServerObject
 	 * A reference to the main world
 	 */
 	private ServerWorld world;
+	
+	/**
+	 * Number of slimes spawned by this spawner
+	 */
+	private int slimeCount = 0;
+	
+	public final static int maxSlimes = 7;
 
 	/**
 	 * Constructor
@@ -67,21 +75,31 @@ public class ServerSpawner extends ServerObject
 		if (worldCounter % (delay) == 0)
 		{
 			if (!creature.getType().equals(ServerWorld.SLIME_TYPE)
-					|| ServerWorld.slimeCount < ServerWorld.maxSlimes)
+					|| slimeCount < maxSlimes)
 			{
-				ServerObject newCreature = ServerObject.copy(creature);
+				ServerCreature newCreature = (ServerCreature) ServerObject.copy(creature);
 				newCreature.setX(getX());
 				newCreature.setY(getY() - getHeight() - ServerWorld.TILE_SIZE);
 				world.add(newCreature);
+				
 
 				if (creature.getType().equals(ServerWorld.SLIME_TYPE))
 				{
-					ServerWorld.slimeCount++;
+					((ServerEnemy)newCreature).setSpawner(this);
+					slimeCount++;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Subtract one from the slime count of this spawner
+	 */
+	public void removeSlime()
+	{
+		slimeCount--;
+	}
+	
 	public int getDelay()
 	{
 		return delay;
@@ -96,5 +114,5 @@ public class ServerSpawner extends ServerObject
 	{
 		return world;
 	}
-
+	
 }

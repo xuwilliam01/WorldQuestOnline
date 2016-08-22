@@ -1,5 +1,6 @@
 package Server.Creatures;
 
+import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
@@ -52,6 +53,13 @@ public class ServerSlime extends ServerEnemy
 	 */
 	private double lastX;
 
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param world
+	 */
 	public ServerSlime(double x, double y, ServerWorld world)
 	{
 		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "GREENSLIME_0",

@@ -254,11 +254,6 @@ public class ServerWorld
 	 */
 	public static int slimeCount = 0;
 
-	/**
-	 * Max number of slimes in the world at once
-	 */
-	public final static int maxSlimes = 30;
-
 	private ServerEngine engine;
 
 	private ServerCastle blueCastle;

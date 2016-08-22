@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import Server.ServerEngine;
+import Server.ServerSpawner;
 import Server.ServerWorld;
 
 /**
@@ -32,6 +33,11 @@ public abstract class ServerEnemy extends ServerCreature implements
 	 * The damage the enemy inflicts
 	 */
 	private int damage;
+	
+	/**
+	 * Spawner for this creature
+	 */
+	private ServerSpawner spawner;
 
 	/**
 	 * Constructor
@@ -77,7 +83,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 		super.destroy();
 		if (getType().contains(ServerWorld.SLIME_TYPE))
 		{
-			ServerWorld.slimeCount--;
+			spawner.removeSlime();
 		}
 	}
 	
@@ -120,4 +126,15 @@ public abstract class ServerEnemy extends ServerCreature implements
 	{
 		this.damage = damage;
 	}
+
+	public ServerSpawner getSpawner()
+	{
+		return spawner;
+	}
+
+	public void setSpawner(ServerSpawner spawner)
+	{
+		this.spawner = spawner;
+	}
+	
 }
