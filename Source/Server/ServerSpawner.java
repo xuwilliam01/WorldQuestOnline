@@ -32,6 +32,9 @@ public class ServerSpawner extends ServerObject
 	 */
 	private int slimeCount = 0;
 	
+	/**
+	 * Max number of slimes per slime spawner
+	 */
 	public final static int maxSlimes = 7;
 
 	/**

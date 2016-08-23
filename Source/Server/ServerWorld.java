@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.StringTokenizer;
 
-import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
@@ -16,6 +15,7 @@ import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
+import Server.Effects.ServerDamageIndicator;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;

@@ -2,9 +2,9 @@ package Server.Creatures;
 
 import java.util.ArrayList;
 
-import Effects.ServerDamageIndicator;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Effects.ServerDamageIndicator;
 import Server.Items.ServerItem;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;

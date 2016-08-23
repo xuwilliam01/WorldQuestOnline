@@ -8,10 +8,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
-import Effects.ServerDamageIndicator;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Effects.ServerDamageIndicator;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
 import Server.Items.ServerItem;

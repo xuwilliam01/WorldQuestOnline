@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
-import Effects.ServerDamageIndicator;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
@@ -23,6 +22,7 @@ import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
+import Server.Effects.ServerDamageIndicator;
 
 public class ClientWorld
 {

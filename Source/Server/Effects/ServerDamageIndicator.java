@@ -1,4 +1,4 @@
-package Effects;
+package Server.Effects;
 
 import Server.ServerWorld;
 
