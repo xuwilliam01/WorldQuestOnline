@@ -948,6 +948,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					sendMessage("P");
 				}
+				
+				// Player uses the chat
 				else if (command.length() >= 3 && command.charAt(0) == 'C')
 				{
 					String message = command.substring(2);
@@ -960,10 +962,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								+ tokens.length + " " + message, getTeam());
 					}
 					else
+					{
 						engine.broadcast("CH " + "E "
 								+ (getTeam() + getName()).split(" ").length
 								+ " " + getTeam() + getName() + " "
 								+ tokens.length + " " + message);
+						
+					}
+					
 				}
 				else if (command.length() >= 2
 						&& command.substring(0, 2).equals("Dr"))

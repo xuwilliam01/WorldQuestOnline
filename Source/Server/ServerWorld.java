@@ -56,7 +56,9 @@ public class ServerWorld
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
+	public final static String BAT_TYPE = NPC_TYPE + "B";
 
+	
 	public final static String GOBLIN_TYPE = NPC_TYPE + "G";
 
 	public final static String NAKED_GOBLIN_TYPE = GOBLIN_TYPE + "N";

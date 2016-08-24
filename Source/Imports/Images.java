@@ -215,7 +215,10 @@ public class Images
 				}
 
 				// Bats
-				String[] batSheets = { "GBAT", "BBAT" };
+				// BATG = Grey bat
+				// BATB = Brown bat
+				// BATD = Dark bat
+				String[] batSheets = { "BATG", "BATB", "BATD" };
 				for (int sheetNo = 0; sheetNo < batSheets.length; sheetNo++)
 				{
 					image = ImageIO.read(new File("Images//" +
