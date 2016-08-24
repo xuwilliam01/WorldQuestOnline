@@ -2,7 +2,7 @@ package Server.Effects;
 
 import Server.ServerObject;
 
-public class ServerText extends ServerObject
+public abstract class ServerText extends ServerObject
 {
 	/**
 	 * Constructor for a piece of text

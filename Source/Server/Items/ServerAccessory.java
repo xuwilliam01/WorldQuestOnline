@@ -51,4 +51,11 @@ public class ServerAccessory extends ServerObject
 				+ rowCol.getColumn()
 				+ "");
 	}
+
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

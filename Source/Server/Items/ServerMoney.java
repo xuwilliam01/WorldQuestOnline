@@ -26,4 +26,11 @@ public class ServerMoney extends ServerItem{
 	public ServerMoney(double x, double y) {
 		super(x, y, ServerWorld.MONEY_TYPE);
 	}
+
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

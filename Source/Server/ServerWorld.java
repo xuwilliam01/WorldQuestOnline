@@ -21,6 +21,8 @@ import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeaponSwing;
+import Server.Spawners.ServerGoblinSpawner;
+import Server.Spawners.ServerSlimeSpawner;
 import Server.Spawners.ServerSpawner;
 import Tools.RowCol;
 
@@ -126,9 +128,9 @@ public class ServerWorld
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 
 	public final static char SPAWN_TYPE = 'S';
-	public final static String GOBLIN_SPAWN_TYPE = "G"+SPAWN_TYPE;
-	public final static String SLIME_SPAWN_TYPE = "S"+SPAWN_TYPE;
-	
+	public final static String GOBLIN_SPAWN_TYPE = "G" + SPAWN_TYPE;
+	public final static String SLIME_SPAWN_TYPE = "S" + SPAWN_TYPE;
+
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
@@ -185,11 +187,10 @@ public class ServerWorld
 			new ServerChest(0, 0, this),
 			new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
 			new ServerVendor(0, 0, this, "VENDOR_LEFT"),
-			new ServerSpawner(0, 0, new ServerSlime(0, 0, this), this),
-			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-					ServerPlayer.RED_TEAM, 1), this),
-			new ServerSpawner(0, 0, new ServerGoblin(0, 0, this,
-					ServerPlayer.BLUE_TEAM, 1), this) };
+			new ServerSlimeSpawner(0, 0, this),
+			new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
+			new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM)
+	};
 
 	// Store the goblin spawners so the castles can access them and change their
 	// settings
@@ -436,7 +437,9 @@ public class ServerWorld
 		{
 			ServerObject newObject = objectsToAdd.poll();
 			if (newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE)
+			{
 				((ServerItem) newObject).setDropTime(worldCounter);
+			}
 			objects.add(newObject);
 		}
 
@@ -452,13 +455,6 @@ public class ServerWorld
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
 				{
-
-					if (object.getType().charAt(0) == ITEM_TYPE
-							&& object.isOnSurface())
-					{
-						object.setHSpeed(0);
-						((ServerItem) object).update(worldCounter);
-					}
 
 					// Add the object to all the object tiles that it collides
 					// with
@@ -485,8 +481,12 @@ public class ServerWorld
 
 					if (object.getType().equals(SPAWN_TYPE))
 					{
-						((ServerSpawner) object).update(worldCounter);
+						object.update();
 						continue;
+					}
+					else if (object.getType().charAt(0)==ITEM_TYPE)
+					{
+						((ServerItem)object).update(worldCounter);
 					}
 
 					// Store the objects that the tile has already collided with
@@ -683,7 +683,7 @@ public class ServerWorld
 											&& !((ServerMoney) otherObject)
 													.hasCoolDown()
 											&& ((ServerCastle) object)
-													.getCurrentGoblinTier() < 5)
+													.getTier() < 5)
 									{
 										((ServerCastle) object)
 												.addMoney(((ServerMoney) otherObject)
@@ -945,31 +945,11 @@ public class ServerWorld
 						object.setY(object.getY() + object.getVSpeed());
 					}
 
-					// Update this object based on its type
-					if (object.getType().equals(DAMAGE_INDICATOR_TYPE))
-					{
-						((ServerDamageIndicator) object).update();
-					}
-					else if (object.getType().charAt(0) == PROJECTILE_TYPE)
+					if (object.getType().charAt(0) == PROJECTILE_TYPE)
 					{
 						if ((!moveHorizontal || !moveVertical))
 						{
-							((ServerProjectile) object).destroy();
-						}
-						else
-						{
-							((ServerProjectile) object).update();
-						}
-					}
-					else if (object.getType().charAt(0) == ANIMATION_TYPE)
-					{
-						if (object.getType().equals(WEAPON_SWING_TYPE))
-						{
-							((ServerWeaponSwing) object).update();
-						}
-						else if (object.getType().equals(EXPLOSION_TYPE))
-						{
-							((ServerProjectile) object).updateExplosion();
+							object.destroy();
 						}
 					}
 					else if (object.getType().charAt(0) == CREATURE_TYPE)
@@ -984,19 +964,6 @@ public class ServerWorld
 								((ServerPlayer) object)
 										.setPerformingAction(false);
 							}
-							((ServerPlayer) object).updatePlayer();
-						}
-						else if (object.getType().equals(SLIME_TYPE))
-						{
-							((ServerSlime) object).update();
-						}
-						else if (object.getType().contains(GOBLIN_TYPE))
-						{
-							((ServerGoblin) object).update();
-						}
-						else if (object.getType().equals(CASTLE_TYPE))
-						{
-							((ServerCastle) object).update();
 						}
 					}
 
@@ -1008,10 +975,8 @@ public class ServerWorld
 				{
 					objectsToRemove.add(object);
 				}
-				else if (object.getType().equals(CHEST_TYPE))
-				{
-					((ServerChest) object).update();
-				}
+
+				object.update();
 			}
 
 		}

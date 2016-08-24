@@ -94,4 +94,12 @@ public class ServerArmour extends ServerItem {
 		this.armourImage = armourImage;
 	}
 
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

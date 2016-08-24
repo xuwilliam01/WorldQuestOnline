@@ -9,6 +9,8 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
+import Server.Spawners.ServerGoblinSpawner;
+import Server.Spawners.ServerSlimeSpawner;
 import Server.Spawners.ServerSpawner;
 import Tools.RowCol;
 
@@ -18,7 +20,7 @@ import Tools.RowCol;
  * @author William Xu & Alex Raita
  *
  */
-public class ServerObject
+public abstract class ServerObject
 {
 	/**
 	 * Unique identifier for the object
@@ -152,6 +154,7 @@ public class ServerObject
 		solid = true;
 		mapVisible = true;
 		this.type = type;
+
 		exists = true;
 		onSurface = false;
 		this.visible = false;
@@ -318,23 +321,33 @@ public class ServerObject
 		case ServerWorld.VENDOR_TYPE:
 			ServerVendor newVendor = (ServerVendor)original;
 			return new ServerVendor(newVendor.getX(),newVendor.getY(),newVendor.getWorld());
-		case ServerWorld.SPAWN_TYPE:
-			ServerSpawner newSpawner = (ServerSpawner)original;
-			return new ServerSpawner(newSpawner.getX(),newSpawner.getY(),newSpawner.getCreature(),newSpawner.getWorld());
-		case ServerWorld.SLIME_TYPE:
-			ServerSlime newSlime = (ServerSlime)original;
-			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld());
+		case ServerWorld.GOBLIN_SPAWN_TYPE:
+			ServerGoblinSpawner newSpawner = (ServerGoblinSpawner)original;
+			return new ServerGoblinSpawner(original.getX(), original.getY(), newSpawner.getWorld(), newSpawner.getTeam());
+		case ServerWorld.SLIME_SPAWN_TYPE:
+			ServerSlimeSpawner newSlimeSpawner = (ServerSlimeSpawner)original;
+			return new ServerSlimeSpawner(original.getX(), original.getY(), newSlimeSpawner.getWorld());
 		}
 		
-		//Special case if we have a goblin type
-		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
-		{
-			ServerGoblin newGoblin = (ServerGoblin)original;
-			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam(),newGoblin.getMaxGoblinLevel());
-		}
+//		case ServerWorld.SLIME_TYPE:
+//			ServerSlime newSlime = (ServerSlime)original;
+//			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld());
+//		}
+//		
+//		//Special case if we have a goblin type
+//		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
+//		{
+//			ServerGoblin newGoblin = (ServerGoblin)original;
+//			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam());
+//		}
 		
 		return null;
 	}
+	
+	/**
+	 * For overriding
+	 */
+	public abstract void update();
 	
 	/////////////////////////
 	// GETTERS AND SETTERS //

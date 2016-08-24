@@ -31,15 +31,18 @@ public class ServerSlimeSpawner extends ServerSpawner
 	public ServerSlimeSpawner(double x, double y, ServerWorld world)
 	{
 		super(x, y, world, ServerWorld.SLIME_SPAWN_TYPE);
-
+		setImage("SLIME_SPAWN");
+		setDelay(2000);
 	}
 
 	/**
 	 * Update the spawner
 	 * @param worldCounter
 	 */
-	public void update(long worldCounter)
+	@Override
+	public void update()
 	{
+		long worldCounter = getWorld().getWorldCounter();
 		if (worldCounter % getDelay() == 0 && slimeCount < maxSlimes)
 		{
 

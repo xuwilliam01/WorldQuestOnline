@@ -55,4 +55,11 @@ public class ServerPotion extends ServerItem
 		return null;
 	}
 
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

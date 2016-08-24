@@ -302,6 +302,7 @@ public abstract class ServerItem extends ServerObject
 	{
 		hasCoolDown = true;
 		coolDownStart = start;
+		dropTime = start;
 	}
 
 	/**
@@ -314,11 +315,16 @@ public abstract class ServerItem extends ServerObject
 		{
 			hasCoolDown = false;
 		}
-		else if(currentTime - dropTime > 1800)
+		else if(currentTime - dropTime > 1800 && isOnSurface())
 		{
 			destroy();
 		}
+		if (isOnSurface())
+		{
+			setHSpeed(0);
+		}
 	}
+	
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////

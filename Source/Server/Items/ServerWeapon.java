@@ -466,4 +466,11 @@ public class ServerWeapon extends ServerItem
 		this.actionDelay = actionDelay;
 	}
 
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -5,7 +5,7 @@ package Server;
  * @author William Xu && Alex Raita
  *
  */
-public class ServerFlyingObject extends ServerObject
+public abstract class ServerFlyingObject extends ServerObject
 {
 	/**
 	 * Absolute speed of the object in pixels per frame

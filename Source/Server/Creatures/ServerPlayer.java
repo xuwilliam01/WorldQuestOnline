@@ -380,7 +380,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * Update the player after each tick
 	 */
-	public void updatePlayer()
+	@Override
+	public void update()
 	{
 		if (exists())
 		{
@@ -1186,7 +1187,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				+ getHeight() / 2, amount);
 		newMoney.makeExist();
 		if (vendor != null)
+		{
 			newMoney.setSource(vendor);
+		}
 		newMoney.startCoolDown(world.getWorldCounter());
 		world.add(newMoney);
 	}
@@ -1406,10 +1409,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						image += "_RIGHT";
 					}
 
-					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
-					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
+//					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
+//							ServerWorld.WEAPON_HOLD_TYPE);
+//					heldWeapon.setSolid(false);
+//					world.add(heldWeapon);
 				}
 				else
 				{

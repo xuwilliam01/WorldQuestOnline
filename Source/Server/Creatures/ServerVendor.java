@@ -128,4 +128,11 @@ public class ServerVendor extends ServerCreature
 	{
 		this.isBusy = isBusy;
 	}
+
+	@Override
+	public void update()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

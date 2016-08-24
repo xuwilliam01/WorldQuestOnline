@@ -117,7 +117,7 @@ public class ServerGoblin extends ServerCreature
 	public ServerGoblin(double x, double y, ServerWorld world, int team)
 	{
 		super(x, y, 20, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0",
-				"", GOBLIN_HP, world, true);
+				ServerWorld.NAKED_GOBLIN_TYPE, GOBLIN_HP, world, true);
 
 		int castleTier = world.getRedCastle().getTier();
 		
@@ -127,7 +127,7 @@ public class ServerGoblin extends ServerCreature
 		}
 		
 		int numTypes = (int) (Math.random()
-				* Math.min(NUM_TYPES,  (castleTier+1)* 2));
+				* Math.min(NUM_TYPES,  (castleTier+1)* 2)+1);
 
 
 		switch (numTypes)
@@ -318,9 +318,7 @@ public class ServerGoblin extends ServerCreature
 			int maxGoblinLevel, String type)
 	{
 		super(x, y, 20, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0",
-				"", GOBLIN_HP, world, true);
-
-		setType(type);
+				type, GOBLIN_HP, world, true);
 
 		switch (type)
 		{

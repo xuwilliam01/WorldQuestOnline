@@ -279,6 +279,10 @@ public abstract class ServerCreature extends ServerObject
 		inventory.add(item);
 	}
 
+	/**
+	 * Drop an item from inventory
+	 * @param item
+	 */
 	public void dropItem(ServerItem item)
 	{
 

@@ -7,7 +7,7 @@ import Server.ServerWorld;
  * @author William Xu && Alex Raita
  *
  */
-public class ServerFlyingCreature extends ServerCreature
+public abstract class ServerFlyingCreature extends ServerCreature
 {
 	/**
 	 * Absolute speed of the object in pixels per frame
@@ -90,5 +90,6 @@ public class ServerFlyingCreature extends ServerCreature
 			setVSpeed((speed * Math.sin(angle)));
 		}
 	}
+
 
 }

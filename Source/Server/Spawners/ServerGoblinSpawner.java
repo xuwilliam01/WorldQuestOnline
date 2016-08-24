@@ -29,9 +29,9 @@ public class ServerGoblinSpawner extends ServerSpawner
 	 * @param world the world the creature will be added in
 	 */
 	public ServerGoblinSpawner(double x, double y,
-			ServerWorld world, String type, int team)
+			ServerWorld world, int team)
 	{
-		super(x, y, world, type);
+		super(x, y, world, ServerWorld.GOBLIN_SPAWN_TYPE);
 		this.team = team;
 
 		if (team == ServerPlayer.RED_TEAM)
@@ -49,10 +49,10 @@ public class ServerGoblinSpawner extends ServerSpawner
 	/**
 	 * Update the spawner
 	 */
-	public void update(int worldCounter)
+	public void update()
 	{
 
-		if (worldCounter % getDelay() == 0)
+		if (getWorld().getWorldCounter() % getDelay() == 0)
 		{
 			getWorld().add(
 					new ServerGoblin(getX(), getY()
@@ -61,4 +61,15 @@ public class ServerGoblinSpawner extends ServerSpawner
 		}
 
 	}
+
+	public int getTeam()
+	{
+		return team;
+	}
+
+	public void setTeam(int team)
+	{
+		this.team = team;
+	}
+	
 }

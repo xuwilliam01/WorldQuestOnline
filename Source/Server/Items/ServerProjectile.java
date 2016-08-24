@@ -121,7 +121,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0");
 			setGravity(0.25);
-			setDamage((int)Math.ceil(ServerWeapon.WOODBOW_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.WOODBOW_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -129,7 +130,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0");
 			setGravity(0.25);
-			setDamage((int)Math.ceil(ServerWeapon.STEELBOW_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.STEELBOW_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(20);
 			animated = false;
 			faceAngle = true;
@@ -137,7 +139,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.MEGAARROW_TYPE:
 			setImage("MEGAARROW_0");
 			setGravity(0);
-			setDamage((int)Math.ceil(ServerWeapon.MEGABOW_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.MEGABOW_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(30);
 			animated = false;
 			faceAngle = true;
@@ -145,7 +148,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.BULLET_TYPE:
 			setImage("BULLET_0");
 			setGravity(0.4);
-			setDamage((int)Math.ceil(ServerWeapon.SLING_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.SLING_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(15);
 			animated = false;
 			faceAngle = false;
@@ -153,7 +157,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0");
 			setGravity(0);
-			setDamage((int)Math.ceil(ServerWeapon.FIREWAND_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.FIREWAND_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(15);
 			animated = true;
 			faceAngle = true;
@@ -161,7 +166,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.ICEBALL_TYPE:
 			setImage("ICEBALL_0_0");
 			setGravity(0);
-			setDamage((int)Math.ceil(ServerWeapon.ICEWAND_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.ICEWAND_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(6);
 			animated = true;
 			faceAngle = true;
@@ -169,7 +175,8 @@ public class ServerProjectile extends ServerFlyingObject
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0");
 			setGravity(0);
-			setDamage((int)Math.ceil(ServerWeapon.DARKWAND_DMG * (1+owner.getBaseDamage()/100.0)));
+			setDamage((int) Math.ceil(ServerWeapon.DARKWAND_DMG
+					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(12);
 			animated = true;
 			faceAngle = true;
@@ -187,88 +194,96 @@ public class ServerProjectile extends ServerFlyingObject
 	/**
 	 * Update the projectile every game tick
 	 */
+	@Override
 	public void update()
 	{
-		int imageAngle = 0;
-		if (faceAngle)
-
+		if (getType().equals(ServerWorld.EXPLOSION_TYPE))
 		{
-			setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
-
-			hitbox.setLine(getX(), getY(),
-					getX() + ((length / 2) * Math.cos(getAngle())), getY()
-							+ ((length / 2) * Math.sin(getAngle())));
-
-			imageAngle = (int) (Math
-					.round(Math.toDegrees(getAngle()) / 15.0) * 15);
-
-			if (imageAngle <= -180)
-			{
-				imageAngle = 180 - (-180 - imageAngle);
-			}
-		}
-
-		if (animated)
-		{
-			animationCounter++;
-
-			int imageNo = 0;
-
-			if (animationFrames == 2)
-			{
-				if (animationCounter >= 10)
-				{
-					animationCounter = 0;
-				}
-
-				if (animationCounter >= 5)
-				{
-					imageNo = 1;
-				}
-			}
-			else if (animationFrames ==4)
-			{
-				if (animationCounter >= 12)
-				{
-					animationCounter = 0;
-				}
-
-				if (animationCounter < 3)
-				{
-					imageNo = 1;
-				}
-				else if (animationCounter<6)
-				{
-					imageNo = 2;
-				}
-				else if (animationCounter <9)
-				{
-					imageNo = 3;
-				}
-			}
-			if (faceAngle)
-			{
-				setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
-						+ "");
-			}
-			else
-			{
-				setImage(getBaseImage() + "_" + imageNo + "");
-			}
+			updateExplosion();
 		}
 		else
 		{
+			int imageAngle = 0;
 			if (faceAngle)
+
 			{
-				setImage(getBaseImage() + "_" + imageAngle + "");
+				setAngle(Math.atan2(getVSpeed(), getHSpeed()), false);
+
+				hitbox.setLine(getX(), getY(),
+						getX() + ((length / 2) * Math.cos(getAngle())), getY()
+								+ ((length / 2) * Math.sin(getAngle())));
+
+				imageAngle = (int) (Math
+						.round(Math.toDegrees(getAngle()) / 15.0) * 15);
+
+				if (imageAngle <= -180)
+				{
+					imageAngle = 180 - (-180 - imageAngle);
+				}
 			}
-		}
-		
-		// Update the projectile's counter
-		counter++;
-		if (counter >= (2400/getSpeed()))
-		{
-			destroy();
+
+			if (animated)
+			{
+				animationCounter++;
+
+				int imageNo = 0;
+
+				if (animationFrames == 2)
+				{
+					if (animationCounter >= 10)
+					{
+						animationCounter = 0;
+					}
+
+					if (animationCounter >= 5)
+					{
+						imageNo = 1;
+					}
+				}
+				else if (animationFrames == 4)
+				{
+					if (animationCounter >= 12)
+					{
+						animationCounter = 0;
+					}
+
+					if (animationCounter < 3)
+					{
+						imageNo = 1;
+					}
+					else if (animationCounter < 6)
+					{
+						imageNo = 2;
+					}
+					else if (animationCounter < 9)
+					{
+						imageNo = 3;
+					}
+				}
+				if (faceAngle)
+				{
+					setImage(getBaseImage() + "_" + imageNo + "_" + imageAngle
+							+ "");
+				}
+				else
+				{
+					setImage(getBaseImage() + "_" + imageNo + "");
+				}
+			}
+			else
+			{
+				if (faceAngle)
+				{
+					setImage(getBaseImage() + "_" + imageAngle + "");
+				}
+			}
+
+			// Update the projectile's counter
+			counter++;
+			if (counter >= (2400 / getSpeed()))
+			{
+				destroy();
+			}
 		}
 	}
 
@@ -306,7 +321,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void addCollided(ServerObject other)
 	{
-		if (objectsCollided.size()<3)
+		if (objectsCollided.size() < 3)
 		{
 			objectsCollided.add(other.getID());
 		}
@@ -401,7 +416,7 @@ public class ServerProjectile extends ServerFlyingObject
 	/**
 	 * World timer keeps calling this method after exploding
 	 */
-	public void updateExplosion()
+	private void updateExplosion()
 	{
 		// Update the explosion animation
 		if (counter <= 4)
@@ -449,45 +464,54 @@ public class ServerProjectile extends ServerFlyingObject
 
 	}
 
-	/////////////////////////
+	// ///////////////////////
 	// GETTERS AND SETTERS //
-	/////////////////////////
+	// ///////////////////////
 	public int getDrawX()
 	{
 		return (int) (getX() - length / 2);
 	}
+
 	public int getDrawY()
 	{
 		return (int) (getY() - length / 2);
 	}
+
 	public int getDamage()
 	{
 		return damage;
 	}
+
 	public void setDamage(int damage)
 	{
 		this.damage = damage;
 	}
+
 	public ServerCreature getOwner()
 	{
 		return owner;
 	}
+
 	public void setOwner(ServerCreature owner)
 	{
 		this.owner = owner;
 	}
+
 	public int getOwnerID()
 	{
 		return ownerID;
 	}
+
 	public void setOwnerID(int ownerID)
 	{
 		this.ownerID = ownerID;
 	}
+
 	public double getKnockBack()
 	{
 		return knockBack;
 	}
+
 	public void setKnockBack(double knockBack)
 	{
 		this.knockBack = knockBack;

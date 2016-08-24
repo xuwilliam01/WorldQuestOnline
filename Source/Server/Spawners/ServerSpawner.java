@@ -11,7 +11,7 @@ import Server.Creatures.ServerPlayer;
  * @author Alex Raita & William Xu
  *
  */
-public class ServerSpawner extends ServerObject
+public abstract class ServerSpawner extends ServerObject
 {
 
 	/**
@@ -35,7 +35,7 @@ public class ServerSpawner extends ServerObject
 	public ServerSpawner(double x, double y, ServerWorld world, String type)
 	{
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE,
-				0, "NOTHING", type);
+				0, type);
 		this.world = world;
 		makeExist();
 		setSolid(false);
