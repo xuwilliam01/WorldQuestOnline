@@ -428,7 +428,6 @@ public class ServerWorld
 		{
 			removeFromObjectTiles(object);
 			objects.remove(object);
-
 		}
 		objectsToRemove.clear();
 

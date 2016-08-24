@@ -183,8 +183,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private boolean checkFPS = true;
 
 	private boolean writingMessage = false;
-	
-	
+
 	public boolean leaveGame;
 
 	/**
@@ -200,7 +199,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.playerName = playerName;
 		this.inventory = inventory;
 		this.frame = frame;
-		
+
 		leaveGame = false;
 
 		chat = new JTextField();
@@ -233,9 +232,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		if (!leaveGame)
 		{
-		System.out.println("Server was closed");
-		JOptionPane.showMessageDialog(null, "Server was closed", "Server", JOptionPane.ERROR_MESSAGE);
-		inventory.getMenuButton().doClick();
+			System.out.println("Server was closed");
+			JOptionPane.showMessageDialog(null, "Server was closed", "Server",
+					JOptionPane.ERROR_MESSAGE);
+			inventory.getMenuButton().doClick();
 		}
 	}
 
@@ -1122,14 +1122,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		if (!writingMessage)
 		{
 			requestFocusInWindow();
-			
+
 		}
 		else
 		{
 			chat.requestFocus();
 		}
-
-
 
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
 	}
@@ -1275,7 +1273,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 			printToServer(currentMessage);
 
-			//System.out.println("Pressed");
+			// System.out.println("Pressed");
 		}
 		else if (event.getButton() == MouseEvent.BUTTON3
 				&& currentMessage.charAt(0) != 'a')
@@ -1285,7 +1283,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 			printToServer(currentMessage);
 		}
-		
+
 		if (!writingMessage)
 		{
 			requestFocusInWindow();
@@ -1592,7 +1590,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
 			{
 				enter.doClick();
-				
+
 			}
 
 		}

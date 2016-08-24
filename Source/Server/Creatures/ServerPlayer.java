@@ -764,7 +764,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				int weaponNo = weaponSelected - '0';
 				if (weaponNo != DEFAULT_WEAPON_SLOT
 						&& equippedWeapons[weaponNo] != null)
+				{
 					currentDamage = equippedWeapons[weaponNo].getDamage();
+				}
 				queueMessage("D " + currentDamage + " " + getBaseDamage());
 
 				while (message.length() < 4000)

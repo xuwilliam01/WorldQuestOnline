@@ -62,6 +62,11 @@ public class ClientWorld
 	 * its ID
 	 */
 	private ClientObject[] objects;
+	
+	/**
+	 * Number of objects in the client
+	 */
+	private int noOfObjects;
 
 	/**
 	 * Arraylist of clouds on the client side
@@ -239,26 +244,7 @@ public class ClientWorld
 	 */
 	public ClientObject get(int id)
 	{
-		try
-		{
-			for (ClientObject object : objects)
-			{
-				if (object == null)
-				{
-					continue;
-				}
-				if (object.getID() == id)
-				{
-					return object;
-				}
-			}
-		}
-		catch (ConcurrentModificationException e)
-		{
-			System.out.println("Concurrent modification occured");
-			e.printStackTrace();
-		}
-		return null;
+		return objects[id];
 	}
 
 	/**
@@ -273,10 +259,15 @@ public class ClientWorld
 		if (objects[id] == null)
 		{
 			if (name.equals("{"))
+			{
 				objects[id] = new ClientObject(id, x, y, image, team, type);
+			}
 			else
+			{
 				objects[id] = new ClientObject(id, x, y, image, team, type,
 						name);
+			}
+			noOfObjects++;
 		}
 		else
 		{
@@ -294,7 +285,12 @@ public class ClientWorld
 	 */
 	public void setObject(ClientObject object)
 	{
+		if (objects[object.getID()]!=null)
+		{
+			noOfObjects++;
+		}
 		objects[object.getID()] = object;
+		
 	}
 
 	/**
@@ -304,6 +300,7 @@ public class ClientWorld
 	public void remove(int id)
 	{
 		objects[id] = null;
+		noOfObjects--;
 	}
 
 	/**
@@ -480,6 +477,8 @@ public class ClientWorld
 		// The text to display to the player in the centre of the screen
 		String displayedText = null;
 
+		int objectNo =0;
+		
 		// Go through each object in the world and draw it relative to the
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
@@ -487,10 +486,16 @@ public class ClientWorld
 		{
 			for (ClientObject object : objects)
 			{
+				if (objectNo==noOfObjects)
+				{
+					break;
+				}
 				if (object == null)
 				{
 					continue;
 				}
+				objectNo++;
+				
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
 
