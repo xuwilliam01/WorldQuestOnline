@@ -10,6 +10,7 @@ import java.util.ConcurrentModificationException;
 
 import Server.ServerEngine;
 import Server.ServerObject;
+import Server.ServerObjectShown;
 import Server.ServerWorld;
 import Server.Effects.ServerDamageIndicator;
 import Server.Items.ServerAccessory;
@@ -661,7 +662,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-							if (object.isVisible())
+							if (object.exists() && object.isVisible())
 							{
 								int x = (int) (object.getX() + 0.5);
 								int y = (int) (object.getY() + 0.5);
@@ -1409,10 +1410,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						image += "_RIGHT";
 					}
 
-//					heldWeapon = new ServerObject(x, y, 0, 0, 0, image,
-//							ServerWorld.WEAPON_HOLD_TYPE);
-//					heldWeapon.setSolid(false);
-//					world.add(heldWeapon);
+					heldWeapon = new ServerObjectShown(x, y, 0, 0, 0, image,
+							ServerWorld.WEAPON_HOLD_TYPE);
+					heldWeapon.setSolid(false);
+					world.add(heldWeapon);
 				}
 				else
 				{

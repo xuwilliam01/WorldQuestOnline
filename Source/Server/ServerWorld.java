@@ -484,9 +484,10 @@ public class ServerWorld
 						object.update();
 						continue;
 					}
-					else if (object.getType().charAt(0)==ITEM_TYPE)
+					else if (object.getType().charAt(0)==ITEM_TYPE && object.isOnSurface())
 					{
 						((ServerItem)object).update(worldCounter);
+						object.setHSpeed(0);
 					}
 
 					// Store the objects that the tile has already collided with
@@ -968,6 +969,7 @@ public class ServerWorld
 					}
 
 				}
+				
 				// Remove this object from the game if its 'exists' variable is
 				// false, unless it's a castle or a chest
 				else if (!object.getType().equals(CASTLE_TYPE)
@@ -975,8 +977,8 @@ public class ServerWorld
 				{
 					objectsToRemove.add(object);
 				}
-
 				object.update();
+				
 			}
 
 		}

@@ -15,7 +15,7 @@ public class ServerChest extends ServerCreature
 	 * The default HP of a chest
 	 */
 	public final static int CHEST_HP = 200;
-	
+
 	/**
 	 * Max items a chest can have
 	 */
@@ -25,12 +25,12 @@ public class ServerChest extends ServerCreature
 	 * The default number of items the chest will store, subject to change later
 	 */
 	private int numItems = NUM_ITEMS;
-	
+
 	/**
 	 * When this chest was destroyed
 	 */
 	private long destroyTime;
-	
+
 	/**
 	 * How long the chest waits to respawn
 	 */
@@ -72,25 +72,28 @@ public class ServerChest extends ServerCreature
 	 */
 	public void addItems()
 	{
-		numItems = (int)(Math.random()*(NUM_ITEMS-1))+2;
+		numItems = (int) (Math.random() * (NUM_ITEMS - 1)) + 2;
 		for (int item = 0; item < numItems; item++)
 			addItem(ServerItem.randomItem(getX(), getY()));
 	}
-	
+
 	public void destroy()
 	{
 		super.destroy();
 		destroyTime = getWorld().getWorldCounter();
-		respawnTime = (int) (Math.random() * 18000 +10800);
+		respawnTime = (int) (Math.random() * 18000 + 10800);
 	}
-	
+
 	public void update()
 	{
-		if(getWorld().getWorldCounter() - destroyTime > respawnTime)
+		if (!exists())
 		{
-			makeExist();
-			setHP(CHEST_HP);
-			addItems();
+			if (getWorld().getWorldCounter() - destroyTime > respawnTime)
+			{
+				makeExist();
+				setHP(CHEST_HP);
+				addItems();
+			}
 		}
 	}
 }
