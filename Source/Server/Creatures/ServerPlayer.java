@@ -660,9 +660,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						for (ServerObject object : world.getObjectGrid()[row][column])
 						{
-							if (object.exists()
-									&& !object.getType().equals(
-											ServerWorld.SPAWN_TYPE))
+							if (object.isVisible())
 							{
 								int x = (int) (object.getX() + 0.5);
 								int y = (int) (object.getY() + 0.5);
@@ -746,11 +744,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					queueMessage("J " + verticalMovement);
 				}
 				queueMessage("XB " + world.getBlueCastle().getHP() + " "
-						+ world.getBlueCastle().getCurrentGoblinTier() + " "
+						+ world.getBlueCastle().getTier() + " "
 						+ world.getBlueCastle().getMoney() + " "
 						+ world.getBlueCastle().getMaxHP());
 				queueMessage("XR " + world.getRedCastle().getHP() + " "
-						+ world.getRedCastle().getCurrentGoblinTier() + " "
+						+ world.getRedCastle().getTier() + " "
 						+ world.getRedCastle().getMoney() + " "
 						+ world.getRedCastle().getMaxHP());
 				if (equippedArmour != null)

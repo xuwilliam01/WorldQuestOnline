@@ -3,7 +3,7 @@ package Server.Creatures;
 import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
-import Server.Spawners.ServerSpawner;
+import Server.Spawners.ServerSlimeSpawner;
 
 /**
  * A slime enemy
@@ -52,7 +52,6 @@ public class ServerSlime extends ServerEnemy
 	 * The x-coordinate of the last landing position the slime was in
 	 */
 	private double lastX;
-
 
 	/**
 	 * 
@@ -154,12 +153,12 @@ public class ServerSlime extends ServerEnemy
 				}
 				setHSpeed(direction * speed);
 			}
-			
-//			if (getWorld().getWorldCounter() % 10 == 0)
-//			{
-				findTarget();
-			//}
-			
+
+			// if (getWorld().getWorldCounter() % 10 == 0)
+			// {
+			findTarget();
+			// }
+
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
 				|| !quickInRange(getTarget(), getTargetRange()))
@@ -267,6 +266,6 @@ public class ServerSlime extends ServerEnemy
 	public void destroy()
 	{
 		super.destroy();
-			getSpawner().removeSlime();
+		((ServerSlimeSpawner) (getSpawner())).removeSlime();
 	}
 }

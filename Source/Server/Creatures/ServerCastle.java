@@ -20,30 +20,31 @@ public class ServerCastle extends ServerCreature
 	public final static int CASTLE_HP = 5000;
 
 	/**
-	 * The number of pixels for a target to be in range for the castle to fire at it
+	 * The number of pixels for a target to be in range for the castle to fire
+	 * at it
 	 */
 	private int targetRange = 1000;
-	
+
 	/**
 	 * The money invested in upgrading the castle
 	 */
 	private int money = 0;
-	
+
 	/**
 	 * The current tier of the castle
 	 */
-	private int currentGoblinTier = 0;
+	private int tier = 0;
 
 	/**
 	 * The target for the castle to attack
 	 */
 	private ServerCreature target;
-	
+
 	/**
 	 * The type of arrows the castle shoots
 	 */
 	private String arrowType = ServerWorld.WOODARROW_TYPE;
-	
+
 	/**
 	 * The team of the castle
 	 */
@@ -64,9 +65,9 @@ public class ServerCastle extends ServerCreature
 		{
 			setImage("RED_CASTLE");
 		}
-		this.team=team;
-		
-		if(team == RED_TEAM)
+		this.team = team;
+
+		if (team == RED_TEAM)
 			setName("Red Team's Castle");
 		else
 			setName("Blue Team's Castle");
@@ -78,26 +79,22 @@ public class ServerCastle extends ServerCreature
 	public void update()
 	{
 		// Try to purchase the next tier of goblin
-		if(currentGoblinTier < 5 && money >= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier])
+		if (tier < 5
+				&& money >= ServerGoblin.GOBLIN_TIER_PRICE[tier])
 		{
-			money -= ServerGoblin.GOBLIN_TIER_PRICE[currentGoblinTier];
-			setMaxHP(getMaxHP()+5000);
-			setHP(getHP()+5000);
-			currentGoblinTier++;
-			
-			if (currentGoblinTier == 3)
+			money -= ServerGoblin.GOBLIN_TIER_PRICE[tier];
+			setMaxHP(getMaxHP() + 5000);
+			setHP(getHP() + 5000);
+			tier++;
+
+			if (tier == 2)
 			{
 				arrowType = ServerWorld.STEELARROW_TYPE;
 			}
-			
-			ArrayList<ServerSpawner> teamSpawners;
-			if(getTeam() == RED_TEAM)
-				teamSpawners = getWorld().getRedSpawners();
-			else teamSpawners = getWorld().getBlueSpawners();
-
-			if(teamSpawners.size() > 0)
-				((ServerGoblin)teamSpawners.get(0).getCreature()).increaseMaxGoblinLevel();
-
+			else if (tier == 4)
+			{
+				arrowType = ServerWorld.MEGAARROW_TYPE;
+			}
 		}
 
 		// Attack a target
@@ -115,7 +112,8 @@ public class ServerCastle extends ServerCreature
 		}
 		else
 		{
-			// Every second and a half calculate the angle to shoot the target from and launch a projectile at it
+			// Every second and a half calculate the angle to shoot the target
+			// from and launch a projectile at it
 			if (getWorld().getWorldCounter() % 90 == 0)
 			{
 				int xDist = (int) (getTarget().getX()
@@ -139,7 +137,8 @@ public class ServerCastle extends ServerCreature
 	}
 
 	/**
-	 * Find the nearest enemy creature and attack it (in this case any creature from the enemy team)
+	 * Find the nearest enemy creature and attack it (in this case any creature
+	 * from the enemy team)
 	 */
 	public ServerCreature findTarget()
 	{
@@ -155,7 +154,8 @@ public class ServerCastle extends ServerCreature
 		}
 		for (ServerCreature enemy : enemyTeam)
 		{
-			if (enemy.isAlive() && quickInRange(enemy, targetRange) && !enemy.getType().equals(ServerWorld.CASTLE_TYPE))
+			if (enemy.isAlive() && quickInRange(enemy, targetRange)
+					&& !enemy.getType().equals(ServerWorld.CASTLE_TYPE))
 			{
 				return enemy;
 			}
@@ -163,25 +163,24 @@ public class ServerCastle extends ServerCreature
 		return null;
 	}
 
-	/////////////////////////
+	// ///////////////////////
 	// GETTERS AND SETTERS //
-	/////////////////////////
+	// ///////////////////////
 	public ServerCreature getTarget()
 	{
 		return target;
 	}
+
 	public void setTarget(ServerCreature target)
 	{
 		this.target = target;
 	}
+
 	public void addMoney(int money)
 	{
 		this.money += money;
 	}
-	public int getCurrentGoblinTier()
-	{
-		return currentGoblinTier;
-	}
+
 	public int getMoney()
 	{
 		return money;
@@ -196,5 +195,16 @@ public class ServerCastle extends ServerCreature
 	{
 		this.team = team;
 	}
+
+	public int getTier()
+	{
+		return tier;
+	}
+
+	public void setTier(int tier)
+	{
+		this.tier = tier;
+	}
+
 	
 }

@@ -95,6 +95,11 @@ public class ServerObject
 	 * object is inside
 	 */
 	private ArrayList<RowCol> objectTiles;
+	
+	/**
+	 * Whether the object is visible in the game
+	 */
+	private boolean visible;
 
 	/**
 	 * Constructor for an object
@@ -113,11 +118,47 @@ public class ServerObject
 		this.type = type;
 		exists = true;
 		onSurface = false;
+		this.visible = true;
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
 		this.id = ServerEngine.useNextID();
 		this.image = image;
+		
+		if (width == -1)
+		{
+			this.width = Images.getGameImage(image).getWidth();
+			this.height = Images.getGameImage(image).getHeight();
+		}
+		else
+		{
+			this.width = width;
+			this.height = height;
+		}
+	}
+	
+	/**
+	 * Constructor for an object
+	 * @param x
+	 * @param y
+	 * @param height
+	 * @param width
+	 * @param ID
+	 */
+	public ServerObject(double x, double y, int width, int height,
+			double gravity, String type)
+	{
+		objectTiles = new ArrayList<RowCol>();
+		solid = true;
+		mapVisible = true;
+		this.type = type;
+		exists = true;
+		onSurface = false;
+		this.visible = false;
+		this.gravity = gravity;
+		this.x = x;
+		this.y = y;
+		this.id = ServerEngine.useNextID();
 		
 		if (width == -1)
 		{
@@ -317,6 +358,7 @@ public class ServerObject
 	public void destroy()
 	{
 		exists = false;
+		visible = false;
 	}
 
 	public double getGravity()
@@ -463,4 +505,15 @@ public class ServerObject
 		this.solid = solid;
 	}
 
+	public boolean isVisible()
+	{
+		return visible;
+	}
+
+	public void setVisible(boolean visible)
+	{
+		this.visible = visible;
+	}
+
+	
 }

@@ -39,69 +39,25 @@ public class ServerSpawner extends ServerObject
 		this.world = world;
 		makeExist();
 		setSolid(false);
-
-		// Since there are many types of goblins, they have special cases
-		if (creature.getType().contains(ServerWorld.GOBLIN_TYPE))
-		{
-			if (creature.getTeam() == ServerPlayer.RED_TEAM)
-				setImage("RED_GOBLIN_SPAWN");
-			else
-				setImage("BLUE_GOBLIN_SPAWN");
-			delay = 2000;
-		}
-		else
-			switch (creature.getType())
-			{
-			case ServerWorld.SLIME_TYPE:
-				setImage("SLIME_SPAWN");
-				delay = 2000;
-				break;
-			}
+		setMapVisible(false);
 	}
 
-	public void update(long worldCounter)
-	{
-		if (worldCounter % (delay) == 0)
-		{
-			if (!creature.getType().equals(ServerWorld.SLIME_TYPE)
-					|| slimeCount < maxSlimes)
-			{
-				ServerCreature newCreature = (ServerCreature) ServerObject.copy(creature);
-				newCreature.setX(getX());
-				newCreature.setY(getY() - getHeight() - ServerWorld.TILE_SIZE);
-				world.add(newCreature);
-				
-
-				if (creature.getType().equals(ServerWorld.SLIME_TYPE))
-				{
-					((ServerEnemy)newCreature).setSpawner(this);
-					slimeCount++;
-				}
-			}
-		}
-	}
-
-	/**
-	 * Subtract one from the slime count of this spawner
-	 */
-	public void removeSlime()
-	{
-		slimeCount--;
-	}
 	
 	public int getDelay()
 	{
 		return delay;
 	}
 
-	public ServerCreature getCreature()
+
+	public void setDelay(int delay)
 	{
-		return creature;
+		this.delay = delay;
 	}
 
 	public ServerWorld getWorld()
 	{
 		return world;
 	}
+
 	
 }

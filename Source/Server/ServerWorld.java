@@ -59,7 +59,6 @@ public class ServerWorld
 	public final static String SLIME_TYPE = NPC_TYPE + "S";
 	public final static String BAT_TYPE = NPC_TYPE + "B";
 
-	
 	public final static String GOBLIN_TYPE = NPC_TYPE + "G";
 
 	public final static String NAKED_GOBLIN_TYPE = GOBLIN_TYPE + "N";
@@ -69,7 +68,7 @@ public class ServerWorld
 	public final static String GOBLIN_KING_TYPE = GOBLIN_TYPE + "K";
 	public final static String GOBLIN_KNIGHT_TYPE = GOBLIN_TYPE + "k";
 	public final static String GOBLIN_LORD_TYPE = GOBLIN_TYPE + "L";
-	public final static String GOBLIN_NINJA_TYPE = GOBLIN_TYPE + "N";
+	public final static String GOBLIN_NINJA_TYPE = GOBLIN_TYPE + "n";
 	public final static String GOBLIN_PEASANT_TYPE = GOBLIN_TYPE + "P";
 	public final static String GOBLIN_SOLDIER_TYPE = GOBLIN_TYPE + "S";
 	public final static String GOBLIN_WIZARD_TYPE = GOBLIN_TYPE + "W";
@@ -126,7 +125,10 @@ public class ServerWorld
 
 	public final static String MONEY_TYPE = STACK_TYPE + "M";
 
-	public final static String SPAWN_TYPE = "S";
+	public final static char SPAWN_TYPE = 'S';
+	public final static String GOBLIN_SPAWN_TYPE = "G"+SPAWN_TYPE;
+	public final static String SLIME_SPAWN_TYPE = "S"+SPAWN_TYPE;
+	
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
 	public final static String ACCESSORY_TYPE = ANIMATION_TYPE + "A";
@@ -259,7 +261,14 @@ public class ServerWorld
 
 	private ServerEngine engine;
 
+	/**
+	 * The blue team castle
+	 */
 	private ServerCastle blueCastle;
+
+	/**
+	 * The red team castle
+	 */
 	private ServerCastle redCastle;
 
 	/**
@@ -308,7 +317,7 @@ public class ServerWorld
 				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
 				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
 
-		// Initialize each arraylist of objects in the objectGrid
+		// Initialize each arraylist of objects in the objectGridWo
 		for (int row = 0; row < objectGrid.length; row++)
 		{
 			for (int column = 0; column < objectGrid[0].length; column++)
@@ -362,11 +371,11 @@ public class ServerWorld
 					ServerObject newObject = ServerObject.copy(obj);
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
-					
 
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
-						((ServerCastle)newObject).setTeam(((ServerCastle)newObject).getTeam());
+						((ServerCastle) newObject)
+								.setTeam(((ServerCastle) newObject).getTeam());
 						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
 						{
 							redCastleX = (int) newObject.getX() + 50;
@@ -400,7 +409,8 @@ public class ServerWorld
 		}
 		worldInput.close();
 
-		worldTime= DAY_COUNTERS / 12 * 11 + (int) (Math.random() * (DAY_COUNTERS / 6));
+		worldTime = DAY_COUNTERS / 12 * 11
+				+ (int) (Math.random() * (DAY_COUNTERS / 6));
 		if (worldTime >= DAY_COUNTERS)
 		{
 			worldTime -= DAY_COUNTERS;
