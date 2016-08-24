@@ -1,5 +1,7 @@
-package Server;
+package Server.Spawners;
 
+import Server.ServerObject;
+import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerEnemy;
 import Server.Creatures.ServerPlayer;
@@ -9,23 +11,14 @@ import Server.Creatures.ServerPlayer;
  * @author Alex Raita & William Xu
  *
  */
-public class ServerSpawner extends ServerObject
+public class ServerSlimeSpawner extends ServerObject
 {
 
 	/**
 	 * The creature to spawn
 	 */
-	private ServerCreature creature;
+	private ServerCreature slimeType;
 	
-	/**
-	 * The delay between spawning creatures
-	 */
-	private int delay;
-	
-	/**
-	 * A reference to the main world
-	 */
-	private ServerWorld world;
 	
 	/**
 	 * Number of slimes spawned by this spawner
@@ -44,7 +37,7 @@ public class ServerSpawner extends ServerObject
 	 * @param creatureType the type of creature that will be spawned
 	 * @param world the world the creature will be added in
 	 */
-	public ServerSpawner(double x, double y, ServerCreature creatureType,
+	public ServerSlimeSpawner(double x, double y, ServerCreature creatureType,
 			ServerWorld world)
 	{
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE,

@@ -117,7 +117,7 @@ public class ServerGoblin extends ServerCreature
 	private int maxGoblinLevel;
 
 	/**
-	 * Constructor
+	 * Constructor for a random goblin type
 	 */
 	public ServerGoblin(double x, double y, ServerWorld world, int team,
 			int maxGoblinLevel)

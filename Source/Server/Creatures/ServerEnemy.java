@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import Server.ServerEngine;
-import Server.ServerSpawner;
 import Server.ServerWorld;
+import Server.Spawners.ServerSpawner;
 
 /**
  * Class to control enemy AIs
@@ -74,18 +74,6 @@ public abstract class ServerEnemy extends ServerCreature implements
 		}
 	}
 
-	/**
-	 * Destroy the slime
-	 */
-	@Override
-	public void destroy()
-	{
-		super.destroy();
-		if (getType().contains(ServerWorld.SLIME_TYPE))
-		{
-			spawner.removeSlime();
-		}
-	}
 	
 	/////////////////////////
 	// GETTERS AND SETTERS //

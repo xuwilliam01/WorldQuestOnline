@@ -9,6 +9,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
+import Server.Spawners.ServerSpawner;
 import Tools.RowCol;
 
 /**

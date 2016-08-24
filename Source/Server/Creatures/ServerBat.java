@@ -1,9 +1,9 @@
 package Server.Creatures;
 
-import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
+import Server.Spawners.ServerSpawner;
 
 /**
  * A slime enemy
@@ -19,7 +19,7 @@ public class ServerBat extends ServerEnemy
 	public final static int BAT_HP = 35;
 
 	/**
-	 * Horizontal speed of the slime
+	 * Flying speed of the bat
 	 */
 	private int speed;
 

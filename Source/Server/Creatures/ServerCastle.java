@@ -2,9 +2,9 @@ package Server.Creatures;
 
 import java.util.ArrayList;
 
-import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerProjectile;
+import Server.Spawners.ServerSpawner;
 
 /**
  * A castle for a given team

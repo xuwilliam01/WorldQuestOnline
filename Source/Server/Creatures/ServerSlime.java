@@ -1,9 +1,9 @@
 package Server.Creatures;
 
-import Server.ServerSpawner;
 import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
+import Server.Spawners.ServerSpawner;
 
 /**
  * A slime enemy
@@ -260,4 +260,13 @@ public class ServerSlime extends ServerEnemy
 		}
 	}
 
+	/**
+	 * Destroy the slime
+	 */
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+			getSpawner().removeSlime();
+	}
 }
