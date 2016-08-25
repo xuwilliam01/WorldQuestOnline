@@ -46,7 +46,8 @@ import WorldCreator.CreatorWorld;
  */
 public class MainMenu implements KeyListener
 {
-
+	static MainMenu main;
+	
 	/**
 	 * Default port number
 	 */
@@ -121,6 +122,7 @@ public class MainMenu implements KeyListener
 	 */
 	public MainMenu()
 	{
+		main = this;
 		Thread loadImages = new Thread(new LoadImages());
 		loadImages.start();
 		
@@ -148,6 +150,8 @@ public class MainMenu implements KeyListener
 	    System.out.println(dm.getHeight());
 		
 		mainFrame = new ClientFrame();
+		mainFrame.addKeyListener(this);
+		mainFrame.requestFocus();
 		
 		while (playerName == null)
 		{
@@ -213,8 +217,6 @@ public class MainMenu implements KeyListener
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
-		mainFrame.addKeyListener(this);
-		
 		mainMenu.repaint();
 		generateClouds();
 	}
@@ -390,6 +392,8 @@ public class MainMenu implements KeyListener
 			
 			graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
 					20);
+			
+			
 		}
 
 		@Override
@@ -580,6 +584,7 @@ public class MainMenu implements KeyListener
 				mainMenu = new MainPanel();
 				mainMenu.setVisible(true);
 				mainFrame.add(mainMenu);
+				
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
 			}
@@ -633,6 +638,7 @@ public class MainMenu implements KeyListener
 			pane.revalidate();
 			pane.setVisible(true);
 			mainFrame.setVisible(true);
+			
 			inventory.repaint();
 		}
 	}
@@ -655,6 +661,7 @@ public class MainMenu implements KeyListener
 			mainMenu = new MainPanel();
 			mainFrame.add(mainMenu);
 			mainFrame.setVisible(true);
+			
 			mainMenu.revalidate();
 		}
 	}
@@ -746,6 +753,8 @@ public class MainMenu implements KeyListener
 		}
 	}
 
+	static boolean addedKeyListener = false;
+	
 	/**
 	 * Reacts when the menu button in game is pressed
 	 * @author Alex Raita & William Xu
@@ -758,6 +767,8 @@ public class MainMenu implements KeyListener
 			client.leaveGame=true;
 			client.getOutput().close();
 			StartGame.restart(mainFrame);
+			addedKeyListener = false;
+			
 		}
 	}
 

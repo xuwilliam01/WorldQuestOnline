@@ -26,6 +26,7 @@ public class StartGame {
 	{	
 		oldFrame.setVisible(false);
 		oldFrame.dispose();
+		oldFrame.removeAll();
 		MainMenu menu = new MainMenu();
 	}
 }

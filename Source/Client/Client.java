@@ -1224,6 +1224,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void keyReleased(KeyEvent key)
 	{
 
+		if (key.getKeyCode() == KeyEvent.VK_ESCAPE)
+		{
+			inventory.getMenuButton().doClick();
+		}
+		else
+		{
 		if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
 				&& !currentMessage.equals("!R"))
 		{
@@ -1247,8 +1253,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			currentMessage = "!D";
 		}
-		printToServer(currentMessage);
 
+		printToServer(currentMessage);
+		}
 	}
 
 	@Override
