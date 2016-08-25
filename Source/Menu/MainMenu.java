@@ -178,7 +178,7 @@ public class MainMenu implements KeyListener
 						JOptionPane
 								.showConfirmDialog(
 										null,
-										"Would you like to enable extra graphical features? (May reduce performance)",
+										"Would you like to enable in-game clouds and stars? (May reduce performance on low-end machines)",
 										"Select Game Quality",
 										JOptionPane.YES_NO_OPTION);
 				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
