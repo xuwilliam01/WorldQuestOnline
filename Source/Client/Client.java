@@ -204,7 +204,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		leaveGame = false;
 
 		chat = new JTextField();
-		chat.setLocation(3, 3);
+		chat.setLocation(1, 1);
 		chat.setSize(200, 20);
 		chat.addKeyListener(new JTextFieldEnter());
 		chat.setVisible(true);
@@ -215,7 +215,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		chat.setToolTipText("Press 'enter' to chat. Type '/t ' before a message to send it only to your team");
 
 		enter = new JButton("Chat");
-		enter.setLocation(203, 3);
+		enter.setLocation(201, 1);
 		enter.setSize(60, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
