@@ -8,6 +8,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -42,7 +44,7 @@ import WorldCreator.CreatorWorld;
  * @author Alex Raita & William Xu
  *
  */
-public class MainMenu
+public class MainMenu implements KeyListener
 {
 
 	/**
@@ -140,6 +142,7 @@ public class MainMenu
 	    	Client.SCREEN_HEIGHT=1080;
 	    }
 	    
+	    
 	    // Display results
 	    System.out.println(dm.getWidth());
 	    System.out.println(dm.getHeight());
@@ -210,6 +213,7 @@ public class MainMenu
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
+		mainFrame.addKeyListener(this);
 		
 		mainMenu.repaint();
 		generateClouds();
@@ -267,13 +271,15 @@ public class MainMenu
 			setDoubleBuffered(true);
 			// setBackground(Color.white);
 
-			setBackground(Color.BLACK);
+			//setBackground(Color.BLACK);
 			setFocusable(true);
 			setLayout(null);
 			setLocation(0, 0);
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
 					Client.SCREEN_HEIGHT);
+			
+			
 
 			
 			repaintTimer.start();
@@ -325,6 +331,7 @@ public class MainMenu
 			instructions.addMouseListener(this);
 			add(instructions);
 
+			
 			setVisible(true);
 			repaint();
 		}
@@ -379,6 +386,9 @@ public class MainMenu
 					/ 2 - 20, (int)(75*(Client.SCREEN_HEIGHT/1080.0)), null);
 
 			graphics.drawString("William Xu and Alex Raita", 15,
+					20);
+			
+			graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
 					20);
 		}
 
@@ -451,6 +461,7 @@ public class MainMenu
 				createServer.setIcon(new ImageIcon(createServerImage));
 			}
 		}
+
 
 	}
 
@@ -764,7 +775,7 @@ public class MainMenu
 			// to the main menu
 			String serverIP;
 			int port = DEF_PORT;
-			String playerName;
+			//String playerName;
 
 			serverIP = JOptionPane
 					.showInputDialog("Server IP (Leave blank for a server on this computer)");
@@ -965,6 +976,30 @@ public class MainMenu
 //			instructionPanel.repaint();
 
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event)
+	{
+		if (event.getKeyCode()==KeyEvent.VK_ESCAPE)
+		{
+			System.exit(0);
+		}
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

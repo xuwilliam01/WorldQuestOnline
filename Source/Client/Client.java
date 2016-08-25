@@ -192,6 +192,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
+		
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
@@ -203,7 +204,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		leaveGame = false;
 
 		chat = new JTextField();
-		chat.setLocation(1, 0);
+		chat.setLocation(3, 3);
 		chat.setSize(200, 20);
 		chat.addKeyListener(new JTextFieldEnter());
 		chat.setVisible(true);
@@ -214,7 +215,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		chat.setToolTipText("Press 'enter' to chat. Type '/t ' before a message to send it only to your team");
 
 		enter = new JButton("Chat");
-		enter.setLocation(200, 0);
+		enter.setLocation(203, 3);
 		enter.setSize(60, 20);
 		enter.setVisible(true);
 		enter.addActionListener(this);
@@ -223,6 +224,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setLayout(null);
 		add(chat);
 		add(enter);
+		
 	}
 
 	/**

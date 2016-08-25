@@ -179,9 +179,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			for (int col = 0; col < grid[0].length; col++)
 			{
 				grid[row][col] = line.charAt(col);
-				System.out.print(grid[row][col]);
+				//System.out.print(grid[row][col]);
 			}
-			System.out.println();
+			//System.out.println();
 
 		}
 
@@ -546,6 +546,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				output.print(grid[row][col]);
 			output.println();
 		}
+		
 
 		// Print the objects
 		output.println(objects.size());

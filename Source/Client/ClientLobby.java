@@ -490,6 +490,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			}
 		}
 
+		graphics.setColor(Color.black);
+		// Inform the player on how to quit
+		graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
+				20);
+		
 		// Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
@@ -624,12 +629,16 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			chat.requestFocus();
 		}
 
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		// TODO Auto-generated method stub
+		if (e.getKeyCode()==KeyEvent.VK_ESCAPE)
+		{
+			System.exit(0);
+		}
 
 	}
 }
