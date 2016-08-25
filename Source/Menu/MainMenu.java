@@ -90,7 +90,7 @@ public class MainMenu
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < ClientWorld.NO_OF_CLOUDS*2; no++)
+		for (int no = 0; no < 15; no++)
 		{
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
@@ -276,10 +276,6 @@ public class MainMenu
 					Client.SCREEN_HEIGHT);
 
 			
-			if (ClientWorld.NO_OF_CLOUDS==0)
-			{
-				repaintTimer.setDelay(999999999);
-			}
 			repaintTimer.start();
 
 			playGame = new JButton(new ImageIcon(playGameImage));
@@ -555,36 +551,9 @@ public class MainMenu
 				catch (IOException e)
 				{
 					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please try again.");
+							.showInputDialog("Connection Failed. Please re-enter the IP.");
 					if (serverIP == null)
 						exit = true;
-					else
-						while (true)
-						{
-							try
-							{
-								String portNum = JOptionPane
-										.showInputDialog("Please enter the port of the server (Default: "
-												+ DEF_PORT + ")");
-								if (portNum == null)
-								{
-									exit = true;
-								}
-								else if (portNum.equals(""))
-								{
-									port = DEF_PORT;
-								}
-								else if (Integer.parseInt(portNum) <= 65535)
-									port = Integer.parseInt(portNum);
-								else
-									throw new NumberFormatException();
-
-								break;
-							}
-							catch (NumberFormatException E)
-							{
-							}
-						}
 				}
 				if (exit)
 					break;

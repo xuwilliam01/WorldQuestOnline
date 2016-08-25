@@ -193,7 +193,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 
 		// Create the screen
 		setDoubleBuffered(true);
-		setBackground(Color.CYAN);
+		setBackground(new Color(152,227,250));
 		setSize(Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR,
 				Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR);
 
