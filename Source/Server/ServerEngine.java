@@ -245,6 +245,9 @@ public class ServerEngine implements Runnable, ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
+		// Check how long a game loop takes
+		long checkStart = System.currentTimeMillis();
+		
 		// Update the FPS counter on the server gui
 		if (FPScounter >= (1000.0 / UPDATE_RATE + 0.5))
 		{
@@ -325,7 +328,11 @@ public class ServerEngine implements Runnable, ActionListener
 			lagSpike =false;
 		}
 		
-
+		// Check how long a game loop took
+		long loopTime = System.currentTimeMillis()-checkStart;
+		
+		// If the game lags a little, make the delay shorter
+		updateTimer.setDelay((int)(Math.max(1, UPDATE_RATE-loopTime)));
 	}
 	boolean lagSpike = false;
 	boolean checkObjects = false;
