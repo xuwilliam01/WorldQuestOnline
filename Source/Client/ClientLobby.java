@@ -5,8 +5,10 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import Imports.Images;
+import Menu.MainMenu;
 import Menu.MainMenu.GamePanel;
 import Server.ServerFrame;
 import Server.Creatures.ServerCreature;
@@ -51,7 +53,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private int leaderTeam = -1;
 	private String leaderName = "";
 
-	private Image background = Images.getImage("Lobby");
+	private Image lobbyImage;
+	private Image background;
+
 	private String[] maps;
 
 	private ArrayList<String> redTeam = new ArrayList<String>();
@@ -61,9 +65,32 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	private ClientLobby lobby = this;
 
-	public ClientLobby(Socket socket, String playerName, GamePanel panel)
+	/**
+	 * The clouds flying in the background
+	 */
+	private ArrayList<ClientCloud> clouds;
+
+	private int middle;
+
+	/**
+	 * 
+	 * @param socket
+	 * @param playerName
+	 * @param panel
+	 * @param clouds
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 */
+	public ClientLobby(Socket socket, String playerName, GamePanel panel,
+			ArrayList<ClientCloud> clouds)
 			throws NumberFormatException, IOException
 	{
+		lobbyImage = Images.getImage("Lobby");
+		background = Images.getImage("BACKGROUND");
+		middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
+
+		this.clouds = clouds;
+
 		// Set up the input
 		try
 		{
@@ -181,10 +208,19 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			startReader.start();
 
 			printToServer("Na " + name);
+
+			Timer repaintTimer = new Timer(15, this);
+			repaintTimer.start();
+
 		}
 
 	}
 
+	/**
+	 * 
+	 * @author William
+	 *
+	 */
 	private class ReadServer implements Runnable
 	{
 
@@ -346,7 +382,45 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	{
 		super.paintComponent(graphics);
 
-		graphics.drawImage(background, 0, 0, null);
+		graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH
+				+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT, null);
+
+		// Draw and move the clouds
+		for (ClientCloud cloud : clouds)
+		{
+			if (cloud.getX() <= Client.SCREEN_WIDTH
+					+ ClientInventory.INVENTORY_WIDTH
+					&& cloud.getX() + cloud.getWidth() >= -64
+					&& cloud.getY() <= Client.SCREEN_HEIGHT
+					&& cloud.getY() + cloud.getHeight() >= 0)
+			{
+				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
+						(int) cloud.getY(), null);
+			}
+
+			if (cloud.getX() < middle - MainMenu.CLOUD_DISTANCE / 2)
+			{
+				cloud.setX(middle + MainMenu.CLOUD_DISTANCE / 2);
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (2 * Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2)
+						* MainMenu.cloudDirection);
+
+			}
+			else if (cloud.getX() > middle + MainMenu.CLOUD_DISTANCE
+					/ 2)
+			{
+				cloud.setX(middle - MainMenu.CLOUD_DISTANCE / 2);
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (2 * Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2)
+						* MainMenu.cloudDirection);
+			}
+			cloud.setX(cloud.getX() + cloud.gethSpeed());
+
+		}
+
+		graphics.drawImage(lobbyImage, 0, 0, null);
 
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -499,6 +573,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			printToServer("M " + maps[mapBox.getSelectedIndex()]);
 			System.out.println("M " + maps[mapBox.getSelectedIndex()]);
 		}
+		repaint();
 
 	}
 

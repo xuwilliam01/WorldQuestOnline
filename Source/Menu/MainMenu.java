@@ -1,23 +1,16 @@
 package Menu;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.DisplayMode;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -25,7 +18,6 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,7 +34,6 @@ import START.StartGame;
 import Server.Server;
 import Server.ServerFrame;
 import Server.ServerGUI;
-import WorldCreator.CreatorFrame;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;
 
@@ -69,7 +60,7 @@ public class MainMenu
 	// Cloud variables
 	private static ArrayList<ClientCloud> clouds;
 	public final static int CLOUD_DISTANCE = Client.SCREEN_WIDTH * 3;
-	private static int cloudDirection = 0;
+	public static int cloudDirection = 0;
 
 	private static Client client;
 	private static ClientLobby lobby;
@@ -614,7 +605,7 @@ public class MainMenu
 			}
 			else
 			{
-				lobby = new ClientLobby(mySocket, playerName, this);
+				lobby = new ClientLobby(mySocket, playerName, this,clouds);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH
