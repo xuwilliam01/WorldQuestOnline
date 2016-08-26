@@ -29,7 +29,7 @@ public class ServerBat extends ServerEnemy
 	/**
 	 * The minimum amount of time before the bat needs rest again
 	 */
-	public final static int BAT_NEXT_REST_TIME = 1800;
+	public final static int BAT_NEXT_REST_TIME = 0;
 
 	/**
 	 * The minimum amount of time the bat will rest
@@ -56,7 +56,7 @@ public class ServerBat extends ServerEnemy
 	 * The counter keeping track of when the next available rest time is or when
 	 * to stop resting
 	 */
-	private int restCounter = 600;
+	private int restCounter = 100;
 
 	/**
 	 * Whether the bat is at rest
@@ -71,12 +71,17 @@ public class ServerBat extends ServerEnemy
 	/**
 	 * The last x-coordinate the object was in
 	 */
-	private int lastX = -999;
+	private double lastX = -999;
 
 	/**
 	 * The last y-coordinate the object was in
 	 */
-	private int lastY = -999;
+	private double lastY = -999;
+	
+	/**
+	 * The last vSpeed the object had
+	 */
+	private double lastVSpeed = 999;
 
 	/**
 	 * 
@@ -148,7 +153,6 @@ public class ServerBat extends ServerEnemy
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			speed = maxSpeed/1.5;
 			
 			// Change image direction
 			if (getHSpeed() > 0)
@@ -171,19 +175,25 @@ public class ServerBat extends ServerEnemy
 					restCounter = (int) (getCounter() + (Math.random() + 1)
 							* BAT_NEXT_REST_TIME);
 				}
+				setVSpeed(0);
+				setHSpeed(0);
+				speed = 0;
 			}
 			else
 			{
-				if (getY() == lastY && getVSpeed() < 0
+				speed = maxSpeed/1.5;
+				
+				// Try to rest
+				if (getY() == lastY && (lastVSpeed<0)
 						&& getCounter() >= restCounter)
 				{
 					atRest = true;
 					restCounter = (int) (getCounter() + (Math.random() * 2 + 1)
 							* BAT_REST_TIME);
+					
 				}
-
 				// Determine if and which direction to change to
-				if (getCounter() >= changeDirectionCounter
+				else if (getCounter() >= changeDirectionCounter
 						|| (getX() == lastX && getY() == lastY))
 				{
 					 int newDirection = (int) (Math.random() *6);
@@ -214,10 +224,12 @@ public class ServerBat extends ServerEnemy
 					changeDirectionCounter = (int) (getCounter() + (Math
 							.random() * 5 + 1) * BAT_CHANGE_DIRECTION_TIME);
 				}
-
+				
+				// Only look for target if not at rest
+				findTarget();
 			}
 
-			findTarget();
+			
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
 				|| !quickInRange(getTarget(), getTargetRange()))
@@ -276,13 +288,12 @@ public class ServerBat extends ServerEnemy
 		else
 		{
 			setImage(getBaseImage() + "_" + getDirection() + "_5");
-			setRelativeDrawX(0);
 		}
 
 		setCounter(getCounter() + 1);
-		lastX = (int) getX();
-		lastY = (int) getY();
-
+		lastX = getX();
+		lastY = getY();
+		lastVSpeed = getVSpeed();
 	}
 
 	@Override
