@@ -53,8 +53,7 @@ public class ServerCastle extends ServerCreature
 	/**
 	 * To prices to advance from each tier
 	 */
-//	public final static int[] CASTLE_TIER_PRICE = { 10, 25, 50, 75, 100 };
-	public final static int[] CASTLE_TIER_PRICE = { 2, 2, 2, 2, 100 };
+	public final static int[] CASTLE_TIER_PRICE = { 15, 25, 50, 75, 125 };
 
 	/**
 	 * Constructor
