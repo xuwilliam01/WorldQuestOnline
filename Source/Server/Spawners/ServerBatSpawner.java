@@ -19,7 +19,7 @@ public class ServerBatSpawner extends ServerSpawner
 	/**
 	 * Max number of bats per bat spawner
 	 */
-	public final static int maxBats = 70;
+	public final static int maxBats = 5;
 
 	/**
 	 * Constructor
@@ -32,7 +32,7 @@ public class ServerBatSpawner extends ServerSpawner
 	{
 		super(x, y, world, ServerWorld.BAT_SPAWN_TYPE);
 		setImage("BAT_SPAWN");
-		setDelay(10000);
+		setDelay(3000);
 	}
 
 	/**

@@ -133,6 +133,7 @@ public class ServerBat extends ServerEnemy
 		else if (getHSpeed() < 0)
 		{
 			setDirection("LEFT");
+			setRelativeDrawX(0);
 		}
 		}
 		else
@@ -145,6 +146,7 @@ public class ServerBat extends ServerEnemy
 			else
 			{
 				setDirection("LEFT");
+				setRelativeDrawX(0);
 			}
 		}
 
