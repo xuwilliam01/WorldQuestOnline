@@ -357,7 +357,7 @@ public class Images
 				// Add all the pics from the player sprite sheets
 				String[] goblinSheets = { "GOB", "GOBGENERAL", "GOBGUARD",
 						"GOBKING", "GOBKNIGHT", "GOBLORD", "GOBNINJA",
-						"GOBPEASANT", "GOBSOLDIER", "GOBWIZARD", "GOBWORKER",
+						"GOBARCHER", "GOBSOLDIER", "GOBWIZARD", "GOBWORKER",
 						"GOBGIANT" };
 
 				for (int no = 0; no < goblinSheets.length; no++)

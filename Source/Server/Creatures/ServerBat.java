@@ -24,7 +24,7 @@ public class ServerBat extends ServerEnemy
 	/**
 	 * The minimum amount of time before the bat manually changes direction
 	 */
-	public final static int BAT_CHANGE_DIRECTION_TIME = 300;
+	public final static int BAT_CHANGE_DIRECTION_TIME = 60;
 
 	/**
 	 * The minimum amount of time before the bat needs rest again
@@ -36,12 +36,11 @@ public class ServerBat extends ServerEnemy
 	 */
 	public final static int BAT_REST_TIME = 3600;
 
-
 	/**
 	 * Flying speed of the bat
 	 */
 	private double speed;
-	
+
 	/**
 	 * The maximum speed of the bat
 	 */
@@ -77,7 +76,7 @@ public class ServerBat extends ServerEnemy
 	 * The last y-coordinate the object was in
 	 */
 	private double lastY = -999;
-	
+
 	/**
 	 * The last vSpeed the object had
 	 */
@@ -106,8 +105,8 @@ public class ServerBat extends ServerEnemy
 		}
 
 		setDamage((int) (Math.random() * 2) + 2);
-		maxSpeed =(int) (Math.random() * 3 + 4);
-		
+		maxSpeed = (int) (Math.random() * 3 + 4);
+
 		setTargetRange(500);
 
 		int batType = (int) (Math.random() * 31);
@@ -130,7 +129,7 @@ public class ServerBat extends ServerEnemy
 			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
 
-			maxSpeed =(int) (Math.random() * 3 + 8);
+			maxSpeed = (int) (Math.random() * 3 + 8);
 		}
 
 		if (Math.random() < 0.75)
@@ -141,7 +140,7 @@ public class ServerBat extends ServerEnemy
 		// Set the actual bounds of the creature
 		setHeight(46);
 		setWidth(28);
-		
+
 		speed = maxSpeed;
 	}
 
@@ -153,7 +152,7 @@ public class ServerBat extends ServerEnemy
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			
+
 			// Change image direction
 			if (getHSpeed() > 0)
 			{
@@ -172,7 +171,7 @@ public class ServerBat extends ServerEnemy
 				if (getCounter() >= restCounter)
 				{
 					atRest = false;
-					restCounter = (int) (getCounter() + (Math.random()*3 + 3)
+					restCounter = (int) (getCounter() + (Math.random() * 3 + 3)
 							* BAT_NEXT_REST_TIME);
 				}
 				setVSpeed(0);
@@ -181,38 +180,31 @@ public class ServerBat extends ServerEnemy
 			}
 			else
 			{
-				speed = maxSpeed/1.5;
-				
+				speed = maxSpeed / 1.5;
+
 				// Try to rest
-				if (getY() == lastY && (lastVSpeed<0)
-						&& getCounter() >= restCounter && getY() > ServerWorld.TILE_SIZE*5)
+				if (getY() == lastY && (lastVSpeed < 0)
+						&& getCounter() >= restCounter
+						&& getY() > ServerWorld.TILE_SIZE * 5)
 				{
 					atRest = true;
 					restCounter = (int) (getCounter() + (Math.random() * 2 + 1)
 							* BAT_REST_TIME);
-					
+
 				}
 				// Determine if and which direction to change to
 				else if (getCounter() >= changeDirectionCounter
 						|| (getX() == lastX && getY() == lastY))
 				{
-					double moveDirection;
+					moveInRandomDirection();
 					
-					do
-					{
-					moveDirection =((int)(Math.random()*16))*(Math.PI/8);
-					}
-					while(moveDirection== Math.PI/2 || moveDirection==Math.PI/2*3);
-					
-					moveInDirection(moveDirection);
-
 					changeDirectionCounter = (int) (getCounter() + (Math
-							.random() * 5 + 1) * BAT_CHANGE_DIRECTION_TIME);
+							.random() * 30 + 1) * BAT_CHANGE_DIRECTION_TIME);
 				}
-				
+
 			}
 			findTarget();
-			
+
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
 				|| !quickInRange(getTarget(), getTargetRange()))
@@ -228,7 +220,8 @@ public class ServerBat extends ServerEnemy
 				restCounter = (int) (getCounter() + (Math.random())
 						* BAT_NEXT_REST_TIME);
 			}
-
+			
+			
 			setMovement(getTarget());
 
 			// Change image direction
@@ -327,7 +320,9 @@ public class ServerBat extends ServerEnemy
 	{
 
 		// If the bat collides with 1/3 or more of the player
-		if (collidesWith(other) && (getX()+getWidth()>=other.getX()+other.getWidth()/4 && getX() <= other.getX()+other.getWidth()/4*3))
+		if (collidesWith(other)
+				&& (getX() + getWidth() >= other.getX() + other.getWidth() / 4 && getX() <= other
+						.getX() + other.getWidth() / 4 * 3))
 		{
 			setHSpeed(0);
 			setVSpeed(0);
@@ -346,7 +341,7 @@ public class ServerBat extends ServerEnemy
 			double yDiff = Math.min(Math.abs(yDiffOne), Math.abs(yDiffTwo))
 					* (yDiffOne / Math.abs(yDiffOne));
 
-			this.angle = Math.round(Math.atan2(yDiff, xDiff)*100)/100.0;
+			this.angle = Math.round(Math.atan2(yDiff, xDiff) * 100) / 100.0;
 
 			setHSpeed((speed * Math.cos(angle)));
 			setVSpeed((speed * Math.sin(angle)));
@@ -362,6 +357,24 @@ public class ServerBat extends ServerEnemy
 		this.angle = angle;
 		setHSpeed((speed * Math.cos(angle)));
 		setVSpeed((speed * Math.sin(angle)));
+	}
+	
+	/**
+	 * Move in a random direction (Other than straight vertically)
+	 */
+	public void moveInRandomDirection()
+	{
+		double moveDirection;
+
+		do
+		{
+			moveDirection = ((int) (Math.random() * 16))
+					* (Math.PI / 8);
+		}
+		while (moveDirection == Math.PI / 2
+				|| moveDirection == Math.PI / 2 * 3);
+
+		moveInDirection(moveDirection);
 	}
 
 	/**

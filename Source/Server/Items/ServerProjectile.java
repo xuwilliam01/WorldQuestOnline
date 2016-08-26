@@ -20,6 +20,16 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The default damage for a bullet
 	 */
 	public static final int BULLET_DAMAGE = 5;
+	
+	/**
+	 * The default damage for an arrow
+	 */
+	public static final int ARROW_SPEED = 20;
+	
+	/**
+	 * The default gravity for an arrow
+	 */
+	public static final double ARROW_GRAVITY = 0.25;
 
 	/**
 	 * Counter
@@ -113,26 +123,26 @@ public class ServerProjectile extends ServerFlyingObject
 			}
 			setGravity(0);
 			setDamage(ServerWeapon.STAR_DMG);
-			setSpeed(7);
+			setSpeed(13);
 			animated = true;
 			animationFrames = 4;
 			faceAngle = false;
 			break;
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0");
-			setGravity(0.25);
+			setGravity(ARROW_GRAVITY);
 			setDamage((int) Math.ceil(ServerWeapon.WOODBOW_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(20);
+			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
 			break;
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0");
-			setGravity(0.25);
+			setGravity(ARROW_GRAVITY);
 			setDamage((int) Math.ceil(ServerWeapon.STEELBOW_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(20);
+			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
 			break;

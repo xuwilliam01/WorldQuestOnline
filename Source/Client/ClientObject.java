@@ -192,7 +192,14 @@ public class ClientObject implements Comparable<ClientObject>
 			if (image.charAt(0) != 't')
 			{
 				GameImage gameImage = Images.getGameImage(image);
+				try{
 				this.image = gameImage.getImage();
+				}
+				catch(NullPointerException e)
+				{
+					e.printStackTrace();
+					System.out.println(image);
+				}
 				height = gameImage.getHeight();
 				width = gameImage.getWidth();
 			}

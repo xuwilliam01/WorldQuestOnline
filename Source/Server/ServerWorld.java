@@ -72,7 +72,7 @@ public class ServerWorld
 	public final static String GOBLIN_KNIGHT_TYPE = GOBLIN_TYPE + "k";
 	public final static String GOBLIN_LORD_TYPE = GOBLIN_TYPE + "L";
 	public final static String GOBLIN_NINJA_TYPE = GOBLIN_TYPE + "n";
-	public final static String GOBLIN_PEASANT_TYPE = GOBLIN_TYPE + "P";
+	public final static String GOBLIN_ARCHER_TYPE = GOBLIN_TYPE + "A";
 	public final static String GOBLIN_SOLDIER_TYPE = GOBLIN_TYPE + "S";
 	public final static String GOBLIN_WIZARD_TYPE = GOBLIN_TYPE + "W";
 	public final static String GOBLIN_WORKER_TYPE = GOBLIN_TYPE + "w";
