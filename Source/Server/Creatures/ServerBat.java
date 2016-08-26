@@ -24,17 +24,17 @@ public class ServerBat extends ServerEnemy
 	/**
 	 * The minimum amount of time before the bat manually changes direction
 	 */
-	public final static int BAT_CHANGE_DIRECTION_TIME = 600;
+	public final static int BAT_CHANGE_DIRECTION_TIME = 300;
 
 	/**
 	 * The minimum amount of time before the bat needs rest again
 	 */
-	public final static int BAT_NEXT_REST_TIME = 0;
+	public final static int BAT_NEXT_REST_TIME = 600;
 
 	/**
 	 * The minimum amount of time the bat will rest
 	 */
-	public final static int BAT_REST_TIME = 3600 * 3;
+	public final static int BAT_REST_TIME = 3600;
 
 
 	/**
@@ -172,7 +172,7 @@ public class ServerBat extends ServerEnemy
 				if (getCounter() >= restCounter)
 				{
 					atRest = false;
-					restCounter = (int) (getCounter() + (Math.random() + 1)
+					restCounter = (int) (getCounter() + (Math.random() + 3)
 							* BAT_NEXT_REST_TIME);
 				}
 				setVSpeed(0);
@@ -185,7 +185,7 @@ public class ServerBat extends ServerEnemy
 				
 				// Try to rest
 				if (getY() == lastY && (lastVSpeed<0)
-						&& getCounter() >= restCounter)
+						&& getCounter() >= restCounter && getY() > ServerWorld.TILE_SIZE*5)
 				{
 					atRest = true;
 					restCounter = (int) (getCounter() + (Math.random() * 2 + 1)
@@ -225,10 +225,8 @@ public class ServerBat extends ServerEnemy
 							.random() * 5 + 1) * BAT_CHANGE_DIRECTION_TIME);
 				}
 				
-				// Only look for target if not at rest
-				findTarget();
 			}
-
+			findTarget();
 			
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
