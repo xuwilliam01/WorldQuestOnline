@@ -80,9 +80,11 @@ public class ServerVendor extends ServerCreature
 			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
 		}
 		
-		int noOfWeapons = (int)(Math.random()*10 + 20);
+		int noOfWeapons = (int)(Math.random()*10 + 35);
 		for (int weapon = 0; weapon < noOfWeapons; weapon++)
+		{
 			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
+		}
 
 		// Add a rare weapon
 		int randWeapon = (int) (Math.random() * 6 + 1);
