@@ -224,7 +224,7 @@ public class Images
 					image = ImageIO.read(new File("Images//" +
 							batSheets[sheetNo] + ".png"));
 
-					for (int no = 0; no < 5; no++)
+					for (int no = 0; no < 6; no++)
 					{
 						BufferedImage currentImage = image.getSubimage(
 								no * 32, 0, 32, 32);
