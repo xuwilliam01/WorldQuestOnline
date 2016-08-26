@@ -114,19 +114,19 @@ public class ServerBat extends ServerEnemy
 
 		if (batType < 10)
 		{
-			setName("Grey bat");
+			setName("Grey Bat");
 		}
 		else if (batType < 20)
 		{
 			setImage("BATB_RIGHT_0");
-			setName("Brown bat");
+			setName("Brown Bat");
 		}
 		else if (batType == 20)
 		{
 			setImage("BATD_RIGHT_0");
 			setDamage(15);
 			setHP(100);
-			setName("Dark bat");
+			setName("Dark Bat");
 			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
 
@@ -172,7 +172,7 @@ public class ServerBat extends ServerEnemy
 				if (getCounter() >= restCounter)
 				{
 					atRest = false;
-					restCounter = (int) (getCounter() + (Math.random() + 3)
+					restCounter = (int) (getCounter() + (Math.random()*3 + 3)
 							* BAT_NEXT_REST_TIME);
 				}
 				setVSpeed(0);
@@ -196,30 +196,15 @@ public class ServerBat extends ServerEnemy
 				else if (getCounter() >= changeDirectionCounter
 						|| (getX() == lastX && getY() == lastY))
 				{
-					 int newDirection = (int) (Math.random() *6);
-					 switch (newDirection)
-					 {
-					 case 0:
-					 moveInDirection(0);
-					 break;
-					 case 1:
-					 moveInDirection(Math.PI/4);
-					 break;
-					 case 2:
-					 moveInDirection(Math.PI/4*3);
-					 break;
-					 case 3:
-					 moveInDirection(Math.PI);
-					 break;
-					 case 4:
-					 moveInDirection(Math.PI/4*5);
-					 break;
-					 case 5:
-					 moveInDirection(Math.PI/4*7);
-					 break;
-					 }
-
-					//moveInDirection(Math.round(Math.random() * (Math.PI * 2)*10)/10.0);
+					double moveDirection;
+					
+					do
+					{
+					moveDirection =((int)(Math.random()*16))*(Math.PI/8);
+					}
+					while(moveDirection== Math.PI/2 || moveDirection==Math.PI/2*3);
+					
+					moveInDirection(moveDirection);
 
 					changeDirectionCounter = (int) (getCounter() + (Math
 							.random() * 5 + 1) * BAT_CHANGE_DIRECTION_TIME);
@@ -341,7 +326,8 @@ public class ServerBat extends ServerEnemy
 	public void setMovement(ServerObject other)
 	{
 
-		if (collidesWith(other))
+		// If the bat collides with 1/3 or more of the player
+		if (collidesWith(other) && (getX()+getWidth()>=other.getX()+other.getWidth()/4 && getX() <= other.getX()+other.getWidth()/4*3))
 		{
 			setHSpeed(0);
 			setVSpeed(0);
@@ -360,7 +346,7 @@ public class ServerBat extends ServerEnemy
 			double yDiff = Math.min(Math.abs(yDiffOne), Math.abs(yDiffTwo))
 					* (yDiffOne / Math.abs(yDiffOne));
 
-			this.angle = Math.round(Math.atan2(yDiff, xDiff)*360)/360.0;
+			this.angle = Math.round(Math.atan2(yDiff, xDiff)*100)/100.0;
 
 			setHSpeed((speed * Math.cos(angle)));
 			setVSpeed((speed * Math.sin(angle)));
