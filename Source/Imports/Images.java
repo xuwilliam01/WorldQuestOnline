@@ -229,8 +229,8 @@ public class Images
 						BufferedImage currentImage = image.getSubimage(
 								no * 32, 0, 32, 32);
 						addtoImageArray(new GameImage(batSheets[sheetNo]
-								+ "_RIGHT_" + no + IMAGE_FORMAT,
-								currentImage));
+								+ "_LEFT_" + no + IMAGE_FORMAT,
+								currentImage,64,64));
 
 						AffineTransform tx;
 						tx = AffineTransform.getScaleInstance(-1, 1);
@@ -240,11 +240,11 @@ public class Images
 
 						// Add a left version of this image
 						addtoImageArray(new GameImage(batSheets[sheetNo]
-								+ "_LEFT_" + no + IMAGE_FORMAT,
+								+ "_RIGHT_" + no + IMAGE_FORMAT,
 								op.filter(currentImage, null).getSubimage(
 										0, 0,
 										currentImage.getWidth(),
-										currentImage.getHeight())));
+										currentImage.getHeight()),64,64));
 					}
 				}
 
@@ -816,6 +816,12 @@ public class Images
 					ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("SLIME_SPAWN_ICON.png",
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("BAT_SPAWN.png",
+					ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("BAT_SPAWN_ICON.png",
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN.png",

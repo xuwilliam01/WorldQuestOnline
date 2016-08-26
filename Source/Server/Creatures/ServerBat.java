@@ -1,12 +1,15 @@
 package Server.Creatures;
 
+import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
+import Server.Spawners.ServerBatSpawner;
+import Server.Spawners.ServerSlimeSpawner;
 import Server.Spawners.ServerSpawner;
 
 /**
- * A slime enemy
+ * A bat enemy
  * @author Alex Raita & William Xu
  *
  */
@@ -14,45 +17,29 @@ public class ServerBat extends ServerEnemy
 {
 
 	/**
-	 * The default HP of a slime
+	 * The default HP of a bat
 	 */
 	public final static int BAT_HP = 35;
 
 	/**
 	 * Flying speed of the bat
 	 */
-	private int speed;
+	private double speed;
 
 	/**
-	 * The point in time when the slime lands
-	 */
-	private int landCounter = 0;
-
-	/**
-	 * The counter keeping track of when the slime will next change direction
+	 * The counter keeping track of when the bat will next change direction
 	 */
 	private int changeDirectionCounter = 0;
 
 	/**
-	 * The direction the slime intends to go (1 means right, -1 means left)
+	 * Angle in RADIANS
 	 */
-	int direction = 1;
+	private double angle;
 
 	/**
-	 * The jump height
+	 * 
 	 */
-	int jumpHeight;
-
-	/**
-	 * Whether or not the slime has landed, for purposes of changing the image
-	 */
-	private boolean landed;
-
-	/**
-	 * The x-coordinate of the last landing position the slime was in
-	 */
-	private double lastX;
-
+	private boolean atRest = false;
 
 	/**
 	 * 
@@ -66,186 +53,125 @@ public class ServerBat extends ServerEnemy
 				BAT_HP,
 				ServerWorld.BAT_TYPE, world, ServerPlayer.NEUTRAL);
 
-		lastX = 0;
-
-		// Set a random counter to start so not every slime does the exact same
+		// Set a random counter to start so not every bat does the exact same
 		// thing
 		setCounter((int) (Math.random() * 200));
 
 		// Set a random direction
 		if ((int) (Math.random() * 2) == 0)
 		{
-			direction *= -1;
+			setDirection("RIGHT");
 		}
-		landCounter = 0;
 
-		setDamage((int) (Math.random() * 3) + 2);
-		jumpHeight = (int) (Math.random() * 3 + 14);
+		setDamage((int) (Math.random() * 2) + 2);
 		speed = (int) (Math.random() * 3 + 4);
+		setTargetRange(2000);
+		
+		int batType = (int) (Math.random() * 31);
 
-		int slimeType = (int) (Math.random() * 31);
-
-		if (slimeType < 15)
+		if (batType < 10)
 		{
-			setImage("GREENSLIME_6");
-			setName("Green Slime");
+			setName("Grey bat");
 		}
-		else if (slimeType <= 18)
+		else if (batType < 20)
 		{
-			setImage("BLUESLIME_6");
-			setName("Blue Slime");
+			setImage("BATB_RIGHT_0");
+			setName("Brown bat");
 		}
-		else if (slimeType <= 22)
+		else if (batType == 20)
 		{
-			setImage("REDSLIME_6");
-			setName("Red Slime");
-		}
-		else if (slimeType <= 26)
-		{
-			setImage("YELLOWSLIME_6");
-			setName("Yellow Slime");
-		}
-		else if (slimeType <= 29)
-		{
-			setImage("GIANTSLIME_6");
+			setImage("BATD_RIGHT_0");
 			setDamage(15);
-			setHP(150);
-			setWidth(106);
-			setRelativeDrawX(-24);
-			setHeight(-1);
-			setName("Giant Slime");
-			addItem(ServerItem.randomItem(getX(), getY()));
-		}
-		else if (slimeType <= 30)
-		{
-			setImage("DARKSLIME_6");
-			setWidth(-1);
-			setHeight(-1);
-			setDamage(30);
 			setHP(100);
-			setName("Dark Slime");
+			setName("Dark bat");
 			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
-			jumpHeight = (int) (Math.random() * 3 + 20);
+
 			speed = (int) (Math.random() * 3 + 8);
 		}
-		landed = true;
+
 		if (Math.random() < 0.75)
 		{
 			addItem(ServerItem.randomItem(getX(), getY()));
 		}
+		
+		setHeight(46);
+		setWidth(28);
 	}
 
 	/**
-	 * Move the slime according to its A.I.
+	 * Move the bat according to its A.I.
 	 */
 	public void update()
 	{
 		// Targeting and following the player
 		if (getTarget() == null)
 		{
-			if (!isOnSurface() && getHSpeed() == 0)
-			{
-				if (getCounter() >= changeDirectionCounter)
-				{
-					direction *= -1;
-					changeDirectionCounter = getCounter()
-							+ (int) (Math.random() * 6000);
-				}
-				setHSpeed(direction * speed);
-			}
-			
-//			if (getWorld().getWorldCounter() % 10 == 0)
-//			{
-				findTarget();
-			//}
-			
+			findTarget();
+
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()
 				|| !quickInRange(getTarget(), getTargetRange()))
 		{
 			setTarget(null);
-		}
-		else
-		{
-			if ((getX() + getWidth())
-					- (getTarget().getX() + getTarget().getWidth() / 2) < 0
-					&& !isOnSurface())
-			{
-				setHSpeed(speed);
-			}
-			else if (getX() - (getTarget().getX() + getTarget().getWidth() / 2) > 0
-					&& !isOnSurface())
-			{
-				setHSpeed(-speed);
-			}
-			else
-			{
-				setHSpeed(0);
-			}
-		}
 
-		// Base the A.I. around the moment the slime lands
-		if (isOnSurface())
-		{
 			setHSpeed(0);
-			if (!landed)
-			{
-				landCounter = getCounter();
-
-				setImage(getBaseImage() + "_6");
-
-				landed = true;
-			}
-			else if (getCounter() - landCounter <= 15)
-			{
-				if (getCounter() - landCounter > 10)
-				{
-					setImage(getBaseImage() + "_7");
-				}
-			}
-			else if (getCounter() - landCounter <= 25)
-			{
-				setImage(getBaseImage() + "_0");
-			}
-			else if (getCounter() - landCounter <= 45)
-			{
-				setImage(getBaseImage() + "_1");
-			}
-			else if (getCounter() - landCounter <= 65)
-			{
-				setImage(getBaseImage() + "_0");
-			}
-			else if (getCounter() - landCounter <= 85)
-			{
-				setImage(getBaseImage() + "_1");
-			}
-			else
-			{
-				if (Math.abs(getX() - lastX) < 1)
-				{
-					direction *= -1;
-				}
-				lastX = getX();
-				setVSpeed(-jumpHeight);
-				setOnSurface(false);
-				setImage(getBaseImage() + "_2");
-			}
+			setVSpeed(0);
 		}
 		else
 		{
-			landed = false;
-			if (Math.abs(getVSpeed()) < 8)
+			setMovement(getTarget());
+		}
+
+		if (getTarget()==null)
+		{
+		if (getHSpeed() > 0)
+		{
+			setDirection("RIGHT");
+			setRelativeDrawX(-36);
+		}
+		else if (getHSpeed() < 0)
+		{
+			setDirection("LEFT");
+		}
+		}
+		else
+		{
+			if (getX()+getWidth()/2 < getTarget().getX()+getWidth()/2)
 			{
-				setImage(getBaseImage() + "_4");
+				setDirection("RIGHT");
+				setRelativeDrawX(-36);
 			}
 			else
 			{
-				setImage(getBaseImage() + "_2");
+				setDirection("LEFT");
 			}
+		}
+
+		int imageCounter = getCounter() % 35;
+		if (imageCounter < 5)
+		{
+			setImage(getBaseImage() + "_" + getDirection() + "_0");
+		}
+		else if (imageCounter < 10)
+		{
+			setImage(getBaseImage() + "_" + getDirection() + "_1");
+		}
+		else if (imageCounter < 15)
+		{
+			setImage(getBaseImage() + "_" + getDirection() + "_2");
+		}
+		else if (imageCounter < 25)
+		{
+			setImage(getBaseImage() + "_" + getDirection() + "_3");
+		}
+		else if (imageCounter < 35)
+		{
+			setImage(getBaseImage() + "_" + getDirection() + "_4");
 		}
 
 		setCounter(getCounter() + 1);
+		System.out.println("x:" + getX() + " y:" + getY());
 
 	}
 
@@ -258,6 +184,87 @@ public class ServerBat extends ServerEnemy
 		{
 			setTarget((ServerPlayer) source);
 		}
+	}
+
+	/**
+	 * Get the absolute speed of the flying object
+	 * @return
+	 */
+	public double getSpeed()
+	{
+		return speed;
+	}
+
+	/**
+	 * Set the speed of the object and update the horizontal and vertical speeds
+	 * @param speed
+	 */
+	public void setSpeed(double speed)
+	{
+		this.speed = speed;
+		setHSpeed((speed * Math.cos(angle)));
+		setVSpeed((speed * Math.sin(angle)));
+	}
+
+	/**
+	 * Get the angle in radians of the object
+	 * @return
+	 */
+	public double getAngle()
+	{
+		return angle;
+	}
+
+	/**
+	 * Set the angle of the object and update the horizontal and vertical speeds
+	 * @param angle
+	 */
+	public void setMovement(ServerObject other)
+	{
+
+		if (collidesWith(other))
+		{
+			setHSpeed(0);
+			setVSpeed(0);
+		}
+		else
+		{
+			double xDiffOne = (other.getX() + other.getWidth() / 2)
+					- (getX() + getWidth());
+			double xDiffTwo = (other.getX() + other.getWidth() / 2) - getX();
+			double xDiff = Math.min(Math.abs(xDiffOne), Math.abs(xDiffTwo))
+					* (xDiffOne / Math.abs(xDiffOne));
+
+			double yDiffOne = (other.getY() + other.getHeight() / 2)
+					- (getY() + getHeight());
+			double yDiffTwo = (other.getY() + other.getHeight() / 2) - getY();
+			double yDiff = Math.min(Math.abs(yDiffOne), Math.abs(yDiffTwo))
+					* (yDiffOne / Math.abs(yDiffOne));
+
+			this.angle = Math.atan2(yDiff, xDiff);
+
+			setHSpeed((speed * Math.cos(angle)));
+
+//			while (!(getHSpeed() <= speed && getHSpeed() >= -speed))
+//			{
+//				angle += 0.0001;
+//				setHSpeed((speed * Math.cos(angle)));
+//			}
+
+			setVSpeed((speed * Math.sin(angle)));
+		}
+
+	}
+
+	/**
+	 * Destroy the bat
+	 */
+	@Override
+	public void destroy()
+	{
+		System.out.println("Destroyed");
+		super.destroy();
+		((ServerBatSpawner) (getSpawner())).removeBat();
 	}
 
 }

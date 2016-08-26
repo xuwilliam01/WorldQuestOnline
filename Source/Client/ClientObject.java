@@ -11,7 +11,8 @@ import Server.ServerWorld;
  * 
  * @author Alex Raita & William Xu
  */
-public class ClientObject implements Comparable<ClientObject> {
+public class ClientObject implements Comparable<ClientObject>
+{
 
 	/**
 	 * The team of the object Objects with neutral teams won't have number
@@ -63,13 +64,15 @@ public class ClientObject implements Comparable<ClientObject> {
 	 * The hint that will be displayed when a player is over this object
 	 */
 	private String hint = "";
-	
+
 	private String name = "";
 
 	/**
 	 * Constructor
 	 */
-	public ClientObject(int id, int x, int y, String image, int team, String type) {
+	public ClientObject(int id, int x, int y, String image, int team,
+			String type)
+	{
 		this.team = team;
 		this.x = x;
 		this.y = y;
@@ -77,20 +80,31 @@ public class ClientObject implements Comparable<ClientObject> {
 		this.imageName = image;
 		this.type = type;
 
-		// All objects that are just text have lower case names
-		// Don't import an actual image if it is just text
-		if (image.charAt(0) != 't') {
-			GameImage gameImage = Images.getGameImage(image);
-			this.image = gameImage.getImage();
-			height = gameImage.getHeight();
-			width = gameImage.getWidth();
-		} else {
-			height = 0;
-			width = 0;
+		try
+		{
+			// All objects that are just text have lower case names
+			// Don't import an actual image if it is just text
+			if (image.charAt(0) != 't')
+			{
+				GameImage gameImage = Images.getGameImage(image);
+				this.image = gameImage.getImage();
+				height = gameImage.getHeight();
+				width = gameImage.getWidth();
+			}
+			else
+			{
+				height = 0;
+				width = 0;
+			}
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("Image: " + image);
 		}
 
 		// Select a hint for this object, if it has one
-		switch (type) 
+		switch (type)
 		{
 		case ServerWorld.VENDOR_TYPE:
 			hint = "Press 'E' to open/close the shop";
@@ -103,11 +117,13 @@ public class ClientObject implements Comparable<ClientObject> {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Constructor
 	 */
-	public ClientObject(int id, int x, int y, String image, int team, String type, String name) {
+	public ClientObject(int id, int x, int y, String image, int team,
+			String type, String name)
+	{
 		this.team = team;
 		this.x = x;
 		this.y = y;
@@ -118,18 +134,21 @@ public class ClientObject implements Comparable<ClientObject> {
 
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
-		if (image.charAt(0) != 't') {
+		if (image.charAt(0) != 't')
+		{
 			GameImage gameImage = Images.getGameImage(image);
 			this.image = gameImage.getImage();
 			height = gameImage.getHeight();
 			width = gameImage.getWidth();
-		} else {
+		}
+		else
+		{
 			height = 0;
 			width = 0;
 		}
 
 		// Select a hint for this object, if it has one
-		switch (type) 
+		switch (type)
 		{
 		case ServerWorld.VENDOR_TYPE:
 			hint = "Press 'E' to open/close the shop";
@@ -142,17 +161,19 @@ public class ClientObject implements Comparable<ClientObject> {
 			break;
 		}
 	}
-	
 
-	public int getTeam() {
+	public int getTeam()
+	{
 		return team;
 	}
 
-	public void setTeam(int team) {
+	public void setTeam(int team)
+	{
 		this.team = team;
 	}
 
-	public Image getImage() {
+	public Image getImage()
+	{
 		return image;
 	}
 
@@ -161,12 +182,15 @@ public class ClientObject implements Comparable<ClientObject> {
 	 * 
 	 * @param image
 	 */
-	public void setImage(String image) {
-		if (!image.equals(imageName)) {
+	public void setImage(String image)
+	{
+		if (!image.equals(imageName))
+		{
 			imageName = image;
 
 			// If the image of the object is text, don't import an image
-			if (image.charAt(0) != 't') {
+			if (image.charAt(0) != 't')
+			{
 				GameImage gameImage = Images.getGameImage(image);
 				this.image = gameImage.getImage();
 				height = gameImage.getHeight();
@@ -175,67 +199,83 @@ public class ClientObject implements Comparable<ClientObject> {
 		}
 	}
 
-	public boolean collidesWith(ClientObject other) {
-		if (x <= other.getX() + other.getWidth() && (x + width) >= other.getX() && y <= other.getY() + other.getHeight()
-		&& (y + height) >= other.getY()) {
+	public boolean collidesWith(ClientObject other)
+	{
+		if (x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
+				&& y <= other.getY() + other.getHeight()
+				&& (y + height) >= other.getY())
+		{
 			return true;
 		}
 		return false;
 	}
 
-	public int getID() {
+	public int getID()
+	{
 		return id;
 	}
 
-	public int getX() {
+	public int getX()
+	{
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(int x)
+	{
 		this.x = x;
 	}
 
-	public int getY() {
+	public int getY()
+	{
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(int y)
+	{
 		this.y = y;
 	}
 
-	public int getHeight() {
+	public int getHeight()
+	{
 		return height;
 	}
 
-	public int getWidth() {
+	public int getWidth()
+	{
 		return width;
 	}
 
 	@Override
-	public int compareTo(ClientObject other) {
+	public int compareTo(ClientObject other)
+	{
 		return id - other.getID();
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(int width)
+	{
 		this.width = width;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(int height)
+	{
 		this.height = height;
 	}
 
-	public String getImageName() {
+	public String getImageName()
+	{
 		return imageName;
 	}
 
-	public void setImageName(String imageName) {
+	public void setImageName(String imageName)
+	{
 		this.imageName = imageName;
 	}
 
-	public String getHint() {
+	public String getHint()
+	{
 		return hint;
 	}
-	
+
 	public String getName()
 	{
 		return name.trim();

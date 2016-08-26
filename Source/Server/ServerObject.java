@@ -9,6 +9,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
+import Server.Spawners.ServerBatSpawner;
 import Server.Spawners.ServerGoblinSpawner;
 import Server.Spawners.ServerSlimeSpawner;
 import Server.Spawners.ServerSpawner;
@@ -327,6 +328,9 @@ public abstract class ServerObject
 		case ServerWorld.SLIME_SPAWN_TYPE:
 			ServerSlimeSpawner newSlimeSpawner = (ServerSlimeSpawner)original;
 			return new ServerSlimeSpawner(original.getX(), original.getY(), newSlimeSpawner.getWorld());
+		case ServerWorld.BAT_SPAWN_TYPE:
+			ServerBatSpawner newBatSpawner = (ServerBatSpawner)original;
+			return new ServerBatSpawner(original.getX(), original.getY(), newBatSpawner.getWorld());
 		}
 		
 //		case ServerWorld.SLIME_TYPE:

@@ -21,6 +21,7 @@ import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeaponSwing;
+import Server.Spawners.ServerBatSpawner;
 import Server.Spawners.ServerGoblinSpawner;
 import Server.Spawners.ServerSlimeSpawner;
 import Server.Spawners.ServerSpawner;
@@ -130,6 +131,7 @@ public class ServerWorld
 	public final static char SPAWN_TYPE = 'S';
 	public final static String GOBLIN_SPAWN_TYPE = "G" + SPAWN_TYPE;
 	public final static String SLIME_SPAWN_TYPE = "S" + SPAWN_TYPE;
+	public final static String BAT_SPAWN_TYPE = "B" + SPAWN_TYPE;
 
 	public final static char ANIMATION_TYPE = 'A';
 	public final static String WEAPON_SWING_TYPE = ANIMATION_TYPE + "S";
@@ -188,6 +190,7 @@ public class ServerWorld
 			new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
 			new ServerVendor(0, 0, this, "VENDOR_LEFT"),
 			new ServerSlimeSpawner(0, 0, this),
+			new ServerBatSpawner(0, 0, this),
 			new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
 			new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM)
 	};
@@ -572,8 +575,9 @@ public class ServerWorld
 
 										}
 									}
-									else if (object.getType()
-											.equals(SLIME_TYPE)
+									else if ((object.getType()
+											.equals(SLIME_TYPE) || object.getType()
+											.equals(BAT_TYPE))
 											&& otherObject.getType().equals(
 													PLAYER_TYPE)
 											&& object.collidesWith(otherObject)
@@ -582,7 +586,7 @@ public class ServerWorld
 
 										((ServerCreature) otherObject)
 												.inflictDamage(
-														((ServerSlime) object)
+														((ServerEnemy) object)
 																.getDamage(),
 														(ServerCreature) object);
 
@@ -782,7 +786,7 @@ public class ServerWorld
 									if (((tileGrid[row][column] >= 'A' || ((tileGrid[row][column] > ' ' && tileGrid[row][column] <= '/') && !((((object
 											.getType().equals(PLAYER_TYPE) && ((ServerPlayer) object)
 											.isDropping()) || object.getType()
-											.charAt(0) == PROJECTILE_TYPE)))))
+											.charAt(0) == PROJECTILE_TYPE || object.getType().equals(BAT_TYPE))))))
 											&& column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1))
 									{

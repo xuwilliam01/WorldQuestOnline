@@ -305,7 +305,7 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		startTime = System.currentTimeMillis();
 
-		System.out.println(updateTimer.getDelay());
+		//System.out.println(updateTimer.getDelay());
 	}
 
 	boolean lagSpike = false;

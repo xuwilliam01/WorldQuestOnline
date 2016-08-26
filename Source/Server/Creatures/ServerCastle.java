@@ -49,6 +49,12 @@ public class ServerCastle extends ServerCreature
 	 * The team of the castle
 	 */
 	private int team;
+	
+	/**
+	 * To prices to advance from each tier
+	 */
+//	public final static int[] CASTLE_TIER_PRICE = { 10, 25, 50, 75, 100 };
+	public final static int[] CASTLE_TIER_PRICE = { 2, 2, 2, 2, 100 };
 
 	/**
 	 * Constructor
@@ -80,9 +86,9 @@ public class ServerCastle extends ServerCreature
 	{
 		// Try to purchase the next tier of goblin
 		if (tier < 5
-				&& money >= ServerGoblin.GOBLIN_TIER_PRICE[tier])
+				&& money >= ServerCastle.CASTLE_TIER_PRICE[tier])
 		{
-			money -= ServerGoblin.GOBLIN_TIER_PRICE[tier];
+			money -= ServerCastle.CASTLE_TIER_PRICE[tier];
 			setMaxHP(getMaxHP() + 5000);
 			setHP(getHP() + 5000);
 			tier++;

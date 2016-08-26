@@ -680,7 +680,7 @@ public class ClientWorld
 			graphics.drawString(String.format(
 					"Red Castle Tier %d (Money For Next Tier  %d/%d)",
 					client.getRedCastleTier() + 1, client.getRedCastleMoney(),
-					ServerGoblin.GOBLIN_TIER_PRICE[client.getRedCastleTier()]),
+					ServerCastle.CASTLE_TIER_PRICE[client.getRedCastleTier()]),
 					ClientFrame.getScaledWidth(1050), ClientFrame.getScaledHeight(975));
 
 		graphics.setColor(Color.blue);
@@ -694,7 +694,7 @@ public class ClientWorld
 							"Blue Castle Tier %d (Money For Next Tier  %d/%d)",
 							client.getBlueCastleTier() + 1, client
 									.getBlueCastleMoney(),
-							ServerGoblin.GOBLIN_TIER_PRICE[client
+									ServerCastle.CASTLE_TIER_PRICE[client
 									.getBlueCastleTier()]), ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(975));
 
 		// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
