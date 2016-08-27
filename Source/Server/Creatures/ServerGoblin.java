@@ -144,7 +144,7 @@ public class ServerGoblin extends ServerCreature
 		case 2:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
-			fightingRange = 1500;
+			fightingRange = 900;
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_ARCHER_HP);
 			setHP(GOBLIN_ARCHER_HP);
@@ -501,40 +501,34 @@ public class ServerGoblin extends ServerCreature
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE))
 								{
 
-									yDist = (int) (getY() + getHeight() / 3 -(getTarget().getY()
-											+ getTarget().getHeight() / 5));
+									yDist = (int) ((getTarget().getY()
+											+ getTarget().getHeight() / 5.0)-(getY() + getHeight() / 3.0));
 
-									double determinant = ServerProjectile.ARROW_GRAVITY
-											* (ServerProjectile.ARROW_GRAVITY
-													* xDist * xDist + 2 * yDist
-													* ServerProjectile.ARROW_SPEED
-													* ServerProjectile.ARROW_SPEED);
 									
-									if (yDist <0)
-									{
-										determinant*=-1;
-									}
+									
+									int sign = -1;
 
+									
 									angle = Math.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED)
-													- Math.sqrt(Math
+													+ sign * Math.sqrt(Math
 													.pow(ServerProjectile.ARROW_SPEED,4)
-													+ determinant))
+													- ServerProjectile.ARROW_GRAVITY
+													* (ServerProjectile.ARROW_GRAVITY
+															* xDist * xDist + 2 * yDist
+															* ServerProjectile.ARROW_SPEED
+															* ServerProjectile.ARROW_SPEED)))
 													/ (ServerProjectile.ARROW_GRAVITY * xDist));
-									if (xDist < 0)
+									if (Math.random()<0.1)
 									{
-										if (angle > Math.PI)
-										{
-											angle = Math.PI
-													+ (Math.PI * 2 - angle);
-										}
-										else if (angle < 0)
-										{
-											angle = Math.PI + angle;
-										}
-										else
-										{
-											angle = Math.PI - angle;
-										}
+									System.out.println(angle);
+									}
+									if (xDist <= 0)
+									{
+										angle = Math.PI - angle;
+									}
+									else
+									{
+										angle *=-1;
 									}
 								}
 								else

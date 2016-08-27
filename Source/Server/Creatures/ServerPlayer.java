@@ -642,7 +642,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					startRow = 0;
 				}
-				else if (endRow > world.getObjectGrid().length - 1)
+				if (endRow > world.getObjectGrid().length - 1)
 				{
 					endRow = world.getObjectGrid().length - 1;
 				}
@@ -650,7 +650,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					startColumn = 0;
 				}
-				else if (endColumn > world.getObjectGrid()[0].length - 1)
+				if (endColumn > world.getObjectGrid()[0].length - 1)
 				{
 					endColumn = world.getObjectGrid()[0].length - 1;
 				}

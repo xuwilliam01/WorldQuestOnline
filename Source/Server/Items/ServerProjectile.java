@@ -290,7 +290,7 @@ public class ServerProjectile extends ServerFlyingObject
 
 			// Update the projectile's counter
 			counter++;
-			if (counter >= (2400 / getSpeed()))
+			if (counter >= (3600 / getSpeed()))
 			{
 				destroy();
 			}
