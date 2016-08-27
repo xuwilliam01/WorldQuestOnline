@@ -127,7 +127,7 @@ public class ServerGoblin extends ServerCreature
 		int numTypes = (int) (Math.random()
 				* Math.min(NUM_TYPES, (castleTier + 1) * 2) + 1);
 
-		switch (2)
+		switch (numTypes)
 		{
 		case 1:
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
@@ -144,7 +144,7 @@ public class ServerGoblin extends ServerCreature
 		case 2:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
-			fightingRange = 2500;
+			fightingRange = 1500;
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_ARCHER_HP);
 			setHP(GOBLIN_ARCHER_HP);
@@ -501,9 +501,8 @@ public class ServerGoblin extends ServerCreature
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE))
 								{
 
-									yDist = (int) (getTarget().getY()
-											+ getTarget().getHeight() / 5
-											- (getY() + getHeight() / 3));
+									yDist = (int) (getY() + getHeight() / 3 -(getTarget().getY()
+											+ getTarget().getHeight() / 5));
 
 									double determinant = ServerProjectile.ARROW_GRAVITY
 											* (ServerProjectile.ARROW_GRAVITY
@@ -516,8 +515,7 @@ public class ServerGoblin extends ServerCreature
 										determinant*=-1;
 									}
 
-									angle = Math
-											.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED)
+									angle = Math.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED)
 													- Math.sqrt(Math
 													.pow(ServerProjectile.ARROW_SPEED,4)
 													+ determinant))
