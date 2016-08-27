@@ -920,6 +920,7 @@ public class MainMenu implements KeyListener
 				try
 				{
 					ServerGUI gui = new ServerGUI(server);
+					mainFrame.dispose();
 					ServerFrame myFrame = new ServerFrame();
 					gui.setLocation(0, 0);
 					myFrame.add(gui);

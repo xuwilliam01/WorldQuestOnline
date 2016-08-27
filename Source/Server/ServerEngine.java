@@ -249,45 +249,11 @@ public class ServerEngine implements Runnable, ActionListener {
 		if (gui != null) {
 			gui.update();
 		}
-		// if (checkObjects)
-		// {
-		// int noOfObjects = 0;
-		//
-		// // Clear the object grid
-		// for (int row = 0; row < world.getObjectGrid().length; row++)
-		// {
-		// for (int column = 0; column < world.getObjectGrid()[0].length;
-		// column++)
-		// {
-		// noOfObjects += world.getObjectGrid()[row][column].size();
-		// world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
-		// }
-		// }
-		// System.out.println("Number of objects without lag: " + noOfObjects);
-		// checkObjects = false;
-		// }
 
 		// Parameters to fix the lag spike
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
 			System.out.println("~LAGSPIKE~");
-			//
-			// int noOfObjects = 0;
-			//
-			//
-			// // Clear the object grid
-			// for (int row = 0; row < world.getObjectGrid().length; row++)
-			// {
-			// for (int column = 0; column < world.getObjectGrid()[0].length;
-			// column++)
-			// {
-			// noOfObjects += world.getObjectGrid()[row][column].size();
-			// world.getObjectGrid()[row][column] = new
-			// ArrayList<ServerObject>();
-			// }
-			// }
-			// System.out.println("Number of objects during lag: " +
-			// noOfObjects);
-			// checkObjects = true;
+
 			lagSpike = true;
 		}
 
