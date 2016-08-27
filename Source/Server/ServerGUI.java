@@ -862,7 +862,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public void actionPerformed(ActionEvent e)
 	{
 
-		if (e.getSource() == enter)
+		if (e.getSource() == enter && started)
 		{
 			// Send the message
 			String message = chat.getText();
