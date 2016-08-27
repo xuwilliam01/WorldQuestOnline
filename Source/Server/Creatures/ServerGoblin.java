@@ -13,11 +13,11 @@ import Tools.RowCol;
 
 /**
  * A goblin class
+ * 
  * @author alex
  *
  */
-public class ServerGoblin extends ServerCreature
-{
+public class ServerGoblin extends ServerCreature {
 
 	// Types of goblins
 	public final static int NUM_TYPES = 12;
@@ -112,23 +112,20 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * Constructor for a random goblin type
 	 */
-	public ServerGoblin(double x, double y, ServerWorld world, int team)
-	{
+	public ServerGoblin(double x, double y, ServerWorld world, int team) {
 		super(x, y, 20, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0",
 				ServerWorld.NAKED_GOBLIN_TYPE, GOBLIN_HP, world, true);
 
 		int castleTier = world.getRedCastle().getTier();
 
-		if (team == ServerPlayer.BLUE_TEAM)
-		{
+		if (team == ServerPlayer.BLUE_TEAM) {
 			castleTier = world.getBlueCastle().getTier();
 		}
 
 		int numTypes = (int) (Math.random()
 				* Math.min(NUM_TYPES, (castleTier + 1) * 2) + 1);
 
-		switch (numTypes)
-		{
+		switch (numTypes) {
 		case 1:
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0");
@@ -248,8 +245,7 @@ public class ServerGoblin extends ServerCreature
 			int weaponChoice = (int) (Math.random() * 5);
 			weapon = ServerWorld.ICEBALL_TYPE;
 			actionDelay = 240;
-			if (weaponChoice == 4)
-			{
+			if (weaponChoice == 4) {
 				weapon = ServerWorld.FIREBALL_TYPE;
 				actionDelay = 180;
 			}
@@ -313,79 +309,53 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * Update the goblin behavior every game tick
 	 */
-	public void update()
-	{
-		if (isAlive())
-		{
+	public void update() {
+		if (isAlive()) {
 			// Update the goblin's direction or try to jump over tiles
-			if (getHSpeed() > 0)
-			{
+			if (getHSpeed() > 0) {
 				setDirection("RIGHT");
-			}
-			else if (getHSpeed() < 0)
-			{
+			} else if (getHSpeed() < 0) {
 				setDirection("LEFT");
 			}
 
-			if (Math.abs(getHSpeed()) <= 1
-					&& isOnSurface() && !onTarget)
-			{
+			if (Math.abs(getHSpeed()) <= 1 && isOnSurface() && !onTarget) {
 				setVSpeed(-jumpSpeed);
 				setOnSurface(false);
 			}
 
 			// Update the action counter for the goblin
-			if (action != null && actionCounter < actionDelay)
-			{
+			if (action != null && actionCounter < actionDelay) {
 				actionCounter++;
-			}
-			else
-			{
+			} else {
 				action = null;
 				actionCounter = -1;
 			}
 
 			// Have the goblin move towards the enemy base when it has no target
-			if (getTarget() == null)
-			{
+			if (getTarget() == null) {
 				onTarget = false;
-				if (getWorld().getWorldCounter() % 15 == 0)
-				{
+				if (getWorld().getWorldCounter() % 15 == 0) {
 					setTarget(findTarget());
 				}
 
-				if (getTarget() == null && action == null)
-				{
-					if (getTeam() == ServerPlayer.BLUE_TEAM)
-					{
+				if (getTarget() == null && action == null) {
+					if (getTeam() == ServerPlayer.BLUE_TEAM) {
 						if (quickInRange(getWorld().getRedCastle(),
-								(double) targetRange))
-						{
+								(double) targetRange)) {
 							setTarget(getWorld().getRedCastle());
-						}
-						else if (getX() - getWorld().getRedCastleX() < 0)
-						{
+						} else if (getX() - getWorld().getRedCastleX() < 0) {
 							setHSpeed(movementSpeed);
-						}
-						else if (getX() - getWorld().getRedCastleX() > 0)
-						{
+						} else if (getX() - getWorld().getRedCastleX() > 0) {
 							setHSpeed(-movementSpeed);
 						}
 
-					}
-					else if (getTeam() == ServerPlayer.RED_TEAM)
-					{
+					} else if (getTeam() == ServerPlayer.RED_TEAM) {
 						if (quickInRange(getWorld().getBlueCastle(),
-								(double) targetRange))
-						{
+								(double) targetRange)) {
 							setTarget(getWorld().getBlueCastle());
-						}
-						else if (getX() - getWorld().getBlueCastleX() < 0)
-						{
+						} else if (getX() - getWorld().getBlueCastleX() < 0) {
 							setHSpeed(movementSpeed);
-						}
-						else
-						{
+						} else {
 							setHSpeed(-movementSpeed);
 						}
 					}
@@ -393,149 +363,141 @@ public class ServerGoblin extends ServerCreature
 			}
 			// Remove the target when it is out of range or dies
 			else if (!getTarget().isAlive() || !getTarget().exists()
-					|| !quickInRange(getTarget(), targetRange))
-			{
+					|| !quickInRange(getTarget(), targetRange)) {
 				setTarget(null);
 			}
 
 			// Follow and attack the target
-			else
-			{
-				if ((getX() + getWidth() / 2 < getTarget().getX())
-						&& !onTarget && action == null)
-				{
+			else {
+				if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
+					if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
+						fightingRange = 200;
+					} else {
+						fightingRange = 1200;
+					}
+				}
+				if ((getX() + getWidth() / 2 < getTarget().getX()) && !onTarget
+						&& action == null) {
 					setHSpeed(movementSpeed);
-				}
-				else if ((getX() + getWidth() / 2 > getTarget().getX()
+				} else if ((getX() + getWidth() / 2 > getTarget().getX()
 						+ getTarget().getWidth())
-						&& !onTarget && action == null)
-				{
+						&& !onTarget && action == null) {
 					setHSpeed(-movementSpeed);
-				}
-				else
-				{
+				} else {
 					setHSpeed(0);
 				}
 
 				// Attack the target with the weapon the goblin uses.
-				if (quickInRange(getTarget(), fightingRange))
-				{
+				if (quickInRange(getTarget(), fightingRange)) {
 					// System.out.println(getTarget().getImage() + " " +
 					// getTarget().getX());
 					onTarget = true;
 					if (action == null
-							&& getWorld().getWorldCounter() % 30 == 0)
-					{
+							&& getWorld().getWorldCounter() % 30 == 0) {
 						int actionChoice = (int) (Math.random() * 12);
 
 						// Jump occasionally
-						if (actionChoice == 0)
-						{
+						if (actionChoice == 0) {
 							setTarget(null);
 							setVSpeed(-jumpSpeed);
 							setOnSurface(false);
-							if (getDirection().equals("RIGHT"))
-							{
+							if (getDirection().equals("RIGHT")) {
 								setHSpeed(movementSpeed);
-							}
-							else
-							{
+							} else {
 								setHSpeed(-movementSpeed);
 							}
 						}
 						// Block occasionally
-						else if (actionChoice == 1 || actionChoice == 2)
-						{
+						else if (actionChoice == 1 || actionChoice == 2) {
 							action = "BLOCK";
 							actionDelay = 55;
-						}
-						else
-						{
-							if (isMelee)
-							{
+						} else {
+							if (isMelee) {
 								if (getType().equals(
-										ServerWorld.GOBLIN_GIANT_TYPE))
-								{
+										ServerWorld.GOBLIN_GIANT_TYPE)) {
 									action = "PUNCH";
 									setHasPunched(false);
 									actionDelay = 60;
-								}
-								else
-								{
+								} else {
 									action = "SWING";
 									actionDelay = 16;
 
 									int angle = 180;
-									if (getDirection().equals("RIGHT"))
-									{
+									if (getDirection().equals("RIGHT")) {
 										angle = 0;
 									}
 
 									getWorld().add(
 											new ServerWeaponSwing(this, 0, -25,
-													weapon, angle,
-													actionDelay, damage));
+													weapon, angle, actionDelay,
+													damage));
 								}
-							}
-							else
-							{
+							} else {
 								action = "SHOOT";
 								actionDelay = 60;
 
 								int xDist = (int) (getTarget().getX()
-										+ getTarget().getWidth() / 2
-										- (getX() + getWidth() / 2));
+										+ getTarget().getWidth() / 2 - (getX() + getWidth() / 2));
 
-								if (xDist > 0)
-								{
+								if (xDist > 0) {
 									setDirection("RIGHT");
-								}
-								else if (xDist < 0)
-								{
+								} else if (xDist < 0) {
 									setDirection("LEFT");
 								}
 
 								int yDist;
 
 								double angle = 0;
-								if (weapon.equals(ServerWorld.WOODARROW_TYPE))
-								{
+								if (weapon.equals(ServerWorld.WOODARROW_TYPE)) {
 
-									yDist = (int) ((getTarget().getY()
-											+ getTarget().getHeight() / 5.0)-(getY() + getHeight() / 3.0));
+									yDist = (int) ((getY() + getHeight() / 3.0) - (getTarget()
+											.getY() + getTarget().getHeight() / 5.0));
 
-									
-									
 									int sign = -1;
 
-									
-									angle = Math.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED)
-													+ sign * Math.sqrt(Math
-													.pow(ServerProjectile.ARROW_SPEED,4)
-													- ServerProjectile.ARROW_GRAVITY
-													* (ServerProjectile.ARROW_GRAVITY
-															* xDist * xDist + 2 * yDist
-															* ServerProjectile.ARROW_SPEED
-															* ServerProjectile.ARROW_SPEED)))
+									angle = Math
+											.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
+													* Math.sqrt(Math
+															.pow(ServerProjectile.ARROW_SPEED,
+																	4)
+															- ServerProjectile.ARROW_GRAVITY
+															* (ServerProjectile.ARROW_GRAVITY
+																	* xDist
+																	* xDist + 2
+																	* yDist
+																	* ServerProjectile.ARROW_SPEED
+																	* ServerProjectile.ARROW_SPEED)))
 													/ (ServerProjectile.ARROW_GRAVITY * xDist));
-									if (Math.random()<0.1)
-									{
-									System.out.println(angle);
+
+									if (!(angle <= Math.PI && angle >= -Math.PI)) {
+										sign = 1;
+										angle = Math
+												.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
+														* Math.sqrt(Math
+																.pow(ServerProjectile.ARROW_SPEED,
+																		4)
+																- ServerProjectile.ARROW_GRAVITY
+																* (ServerProjectile.ARROW_GRAVITY
+																		* xDist
+																		* xDist + 2
+																		* yDist
+																		* ServerProjectile.ARROW_SPEED
+																		* ServerProjectile.ARROW_SPEED)))
+														/ (ServerProjectile.ARROW_GRAVITY * xDist));
+										if (!(angle <= Math.PI && angle >= -Math.PI)) {
+											System.out.println("sdfADFASDF");
+										}
 									}
-									if (xDist <= 0)
-									{
+
+									if (xDist <= 0) {
 										angle = Math.PI - angle;
+									} else {
+										angle *= -1;
 									}
-									else
-									{
-										angle *=-1;
-									}
-								}
-								else
-								{
+
+								} else {
 									yDist = (int) (getTarget().getY()
-											+ getTarget().getHeight() / 2
-											- (getY() + getHeight() / 3));
+											+ getTarget().getHeight() / 2 - (getY() + getHeight() / 3));
 									angle = Math.atan2(yDist, xDist);
 								}
 
@@ -548,9 +510,7 @@ public class ServerGoblin extends ServerCreature
 							}
 						}
 					}
-				}
-				else
-				{
+				} else {
 					onTarget = false;
 				}
 			}
@@ -558,164 +518,99 @@ public class ServerGoblin extends ServerCreature
 
 		// Update the animation of the goblin
 		setRowCol(new RowCol(0, 0));
-		if (actionCounter >= 0)
-		{
-			if (action.equals("SWING"))
-			{
-				if (actionCounter < 1.0 * actionDelay / 4.0)
-				{
+		if (actionCounter >= 0) {
+			if (action.equals("SWING")) {
+				if (actionCounter < 1.0 * actionDelay / 4.0) {
 					setRowCol(new RowCol(2, 0));
-				}
-				else if (actionCounter < 1.0 * actionDelay / 2.0)
-				{
+				} else if (actionCounter < 1.0 * actionDelay / 2.0) {
 					setRowCol(new RowCol(2, 1));
-				}
-				else if (actionCounter < 1.0 * actionDelay / 4.0 * 3)
-				{
+				} else if (actionCounter < 1.0 * actionDelay / 4.0 * 3) {
 					setRowCol(new RowCol(2, 2));
-				}
-				else if (actionCounter < actionDelay)
-				{
+				} else if (actionCounter < actionDelay) {
 					setRowCol(new RowCol(2, 3));
 				}
 			}
 
-			else if (action.equals("SHOOT"))
-			{
-				if (getType().equals(ServerWorld.GOBLIN_NINJA_TYPE))
-				{
-					if (actionCounter < 4)
-					{
+			else if (action.equals("SHOOT")) {
+				if (getType().equals(ServerWorld.GOBLIN_NINJA_TYPE)) {
+					if (actionCounter < 4) {
 						setRowCol(new RowCol(2, 4));
-					}
-					else if (actionCounter < 8)
-					{
+					} else if (actionCounter < 8) {
 						setRowCol(new RowCol(2, 5));
-					}
-					else if (actionCounter < 2 * actionDelay / 3)
-					{
+					} else if (actionCounter < 2 * actionDelay / 3) {
 						setRowCol(new RowCol(2, 6));
-					}
-					else
-					{
+					} else {
 						setRowCol(new RowCol(0, 0));
 					}
-				}
-				else
-				{
+				} else {
 					setRowCol(new RowCol(2, 7));
 				}
-			}
-			else if (action.equals("BLOCK"))
-			{
+			} else if (action.equals("BLOCK")) {
 				setRowCol(new RowCol(2, 9));
-			}
-			else if (action.equals("PUNCH"))
-			{
-				if (actionCounter < 10)
-				{
+			} else if (action.equals("PUNCH")) {
+				if (actionCounter < 10) {
 					setRowCol(new RowCol(2, 7));
-				}
-				else if (actionCounter < 30)
-				{
+				} else if (actionCounter < 30) {
 					setRowCol(new RowCol(2, 8));
 
-					if (!isHasPunched())
-					{
+					if (!isHasPunched()) {
 						punch(damage);
 						setHasPunched(true);
 					}
 				}
 			}
-		}
-		else if (getHSpeed() != 0 && isOnSurface())
-		{
+		} else if (getHSpeed() != 0 && isOnSurface()) {
 			int checkFrame = (int) (getWorld().getWorldCounter() % 30);
-			if (checkFrame < 5)
-			{
+			if (checkFrame < 5) {
 				setRowCol(new RowCol(0, 1));
-			}
-			else if (checkFrame < 10)
-			{
+			} else if (checkFrame < 10) {
 				setRowCol(new RowCol(0, 2));
-			}
-			else if (checkFrame < 15)
-			{
+			} else if (checkFrame < 15) {
 				setRowCol(new RowCol(0, 3));
-			}
-			else if (checkFrame < 20)
-			{
+			} else if (checkFrame < 20) {
 				setRowCol(new RowCol(0, 4));
-			}
-			else if (checkFrame < 25)
-			{
+			} else if (checkFrame < 25) {
 				setRowCol(new RowCol(0, 5));
-			}
-			else
-			{
+			} else {
 				setRowCol(new RowCol(0, 6));
 			}
-		}
-		else if (!isAlive())
-		{
-			if (deathCounter < 0)
-			{
+		} else if (!isAlive()) {
+			if (deathCounter < 0) {
 				deathCounter = getWorld().getWorldCounter();
 				setRowCol(new RowCol(1, 2));
-			}
-			else if (getWorld().getWorldCounter() - deathCounter < 15)
-			{
+			} else if (getWorld().getWorldCounter() - deathCounter < 15) {
 				setRowCol(new RowCol(1, 3));
-			}
-			else if (getWorld().getWorldCounter() - deathCounter < 30)
-			{
+			} else if (getWorld().getWorldCounter() - deathCounter < 30) {
 				setRowCol(new RowCol(1, 4));
-			}
-			else if (getWorld().getWorldCounter() - deathCounter < 100)
-			{
+			} else if (getWorld().getWorldCounter() - deathCounter < 100) {
 				setRowCol(new RowCol(1, 6));
-			}
-			else
-			{
+			} else {
 				destroy();
 			}
-		}
-		else if (Math.abs(getVSpeed()) < 4 && !isOnSurface())
-		{
+		} else if (Math.abs(getVSpeed()) < 4 && !isOnSurface()) {
 			setRowCol(new RowCol(0, 8));
-		}
-		else if (getVSpeed() < 0)
-		{
+		} else if (getVSpeed() < 0) {
 			setRowCol(new RowCol(0, 9));
-		}
-		else if (getVSpeed() > 0)
-		{
+		} else if (getVSpeed() > 0) {
 			setRowCol(new RowCol(0, 7));
 		}
 		setImage(getBaseImage() + "_" + getDirection() + "_"
-				+ getRowCol().getRow()
-				+ "_"
-				+ getRowCol().getColumn()
-				+ "");
+				+ getRowCol().getRow() + "_" + getRowCol().getColumn() + "");
 	}
 
 	/**
 	 * Find the nearest enemy creature and attack it, in this case something
 	 * from the other team
 	 */
-	public ServerCreature findTarget()
-	{
+	public ServerCreature findTarget() {
 		ArrayList<ServerCreature> enemyTeam = getWorld().getBlueTeam();
 
-		if (getTeam() == ServerPlayer.BLUE_TEAM)
-		{
+		if (getTeam() == ServerPlayer.BLUE_TEAM) {
 			enemyTeam = getWorld().getRedTeam();
 		}
 
-		for (ServerCreature enemy : enemyTeam)
-		{
-			if (enemy.isAlive() && quickInRange(enemy, targetRange))
-			{
+		for (ServerCreature enemy : enemyTeam) {
+			if (enemy.isAlive() && quickInRange(enemy, targetRange)) {
 				return enemy;
 			}
 		}
@@ -726,22 +621,18 @@ public class ServerGoblin extends ServerCreature
 	/**
 	 * Inflict damage to the goblin, with specific behavior (such as armour or blocking)
 	 */
-	public void inflictDamage(int amount, ServerCreature source)
-	{
-		if (!onTarget && source != getTarget())
-		{
+	public void inflictDamage(int amount, ServerCreature source) {
+		if (!onTarget && source != getTarget()) {
 			setTarget(source);
 		}
 
 		amount -= amount * armour;
 
-		if (amount <= 0)
-		{
+		if (amount <= 0) {
 			amount = 1;
 		}
 
-		if (action == "BLOCK")
-		{
+		if (action == "BLOCK") {
 			amount = 0;
 		}
 
@@ -756,8 +647,7 @@ public class ServerGoblin extends ServerCreature
 						getWorld()));
 
 		// Play the death animation for a goblin when it dies
-		if (getHP() <= 0 && isAlive())
-		{
+		if (getHP() <= 0 && isAlive()) {
 			setAlive(false);
 
 			dropInventory();
@@ -774,13 +664,11 @@ public class ServerGoblin extends ServerCreature
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
-	public ServerCreature getTarget()
-	{
+	public ServerCreature getTarget() {
 		return target;
 	}
 
-	public void setTarget(ServerCreature target)
-	{
+	public void setTarget(ServerCreature target) {
 		this.target = target;
 	}
 }
