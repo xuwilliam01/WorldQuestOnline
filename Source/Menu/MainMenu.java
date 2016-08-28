@@ -594,7 +594,10 @@ public class MainMenu implements KeyListener
 			}
 			else
 			{
-				lobby = new ClientLobby(mySocket, playerName, this, clouds);
+				JButton menu = new JButton("Main Menu");
+				menu.addActionListener(new LobbyMenuButton());
+				
+				lobby = new ClientLobby(mySocket, playerName, this, clouds,menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH
@@ -671,6 +674,34 @@ public class MainMenu implements KeyListener
 		}
 	}
 
+	/**
+	 * Reacts when the menu button in the lobby is pressed
+	 * @author Alex Raita & William Xu
+	 */
+	private static class LobbyMenuButton implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("went to menu from lobby");
+			lobby.setVisible(false);
+			lobby.close();
+			mainFrame.remove(lobby);
+			mainFrame.invalidate();
+			mainFrame.validate();
+			lobby = null;
+			
+			mainMenu = new MainPanel();
+			mainFrame.add(mainMenu);
+			mainFrame.setVisible(true);
+			mainFrame.requestFocus();
+			mainMenu.revalidate();
+			
+			
+			
+			
+		}
+		
+		
+	}
 	/**
 	 * The instruction menu
 	 * @author Alex Raita & William Xu

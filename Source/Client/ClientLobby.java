@@ -62,6 +62,8 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private ArrayList<String> blueTeam = new ArrayList<String>();
 
 	private GamePanel panel;
+	private JButton menu;
+	private boolean goToMenu = false;
 
 	private ClientLobby lobby = this;
 
@@ -82,12 +84,14 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	 * @throws IOException
 	 */
 	public ClientLobby(Socket socket, String playerName, GamePanel panel,
-			ArrayList<ClientCloud> clouds)
-			throws NumberFormatException, IOException
+			ArrayList<ClientCloud> clouds, JButton menu)
+					throws NumberFormatException, IOException
 	{
 		lobbyImage = Images.getImage("Lobby");
 		background = Images.getImage("BACKGROUND");
 		middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
+
+		this.menu = menu;
 
 		this.clouds = clouds;
 
@@ -130,6 +134,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			name = playerName;
 			this.panel = panel;
 
+			menu.setLocation((int) (ClientFrame.getScaledWidth(337)),
+					(int) (ClientFrame.getScaledHeight(320)));
+			menu.setSize(270,20);
+			menu.setVisible(true);
+
 			chat = new JTextField();
 			chat.setLocation(1, 0);
 			chat.setSize(200, 20);
@@ -171,6 +180,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			add(enter);
 			add(start);
 			add(switchTeams);
+			add(menu);
 
 			setDoubleBuffered(true);
 			setFocusable(true);
@@ -227,7 +237,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		@Override
 		public void run()
 		{
-			while (true)
+			while (!goToMenu)
 			{
 				try
 				{
@@ -363,10 +373,14 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				}
 				catch (Exception E)
 				{
-					System.out.println("Lost connection to server");
-					JOptionPane.showMessageDialog(null,
-							"Lost connection to the Server", "Uh-oh",
-							JOptionPane.ERROR_MESSAGE);
+					if(!goToMenu)
+					{
+						System.out.println("Lost connection to server");
+						JOptionPane.showMessageDialog(null,
+								"Lost connection to the Server", "Uh-oh",
+								JOptionPane.ERROR_MESSAGE);
+						menu.doClick();					
+					}
 					break;
 				}
 			}
@@ -494,7 +508,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		// Inform the player on how to quit
 		graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
 				20);
-		
+
 		// Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		graphics.setColor(Color.GRAY);
@@ -640,5 +654,19 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			System.exit(0);
 		}
 
+	}
+
+	public void close()
+	{
+		try{
+			goToMenu = true;
+			socket.close();
+			input.close();
+			output.close();
+		}
+		catch(Exception E)
+		{
+			E.printStackTrace();
+		}
 	}
 }
