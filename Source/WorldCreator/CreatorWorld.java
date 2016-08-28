@@ -50,6 +50,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public static final int CENTRE_Y = Client.Client.SCREEN_HEIGHT
 			/ FRAME_FACTOR / 2;
 
+	private boolean justSaved = true;
+	
 	/**
 	 * The grid of tiles for the creator
 	 */
@@ -533,9 +535,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 * @throws IOException 
 	 * @throws NumberFormatException 
 	 */
-	public void save() throws NumberFormatException, IOException
+	public void save() throws IOException
 	{	
-		
+		justSaved = true;
 		PrintWriter output = new PrintWriter(new File("Resources", fileName));
 
 		// Print the grid
@@ -693,7 +695,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				&& selectedBlock[0] < grid.length && selectedBlock[1] >= 0
 				&& selectedBlock[1] < grid[0].length)
 			if (addingTile && !ctrlPressed && (canFit(selectedBlock[0],selectedBlock[1],1,1,true) || selectedTile < 'A'))
+			{
 				grid[selectedBlock[0]][selectedBlock[1]] = selectedTile;
+				justSaved = false;
+			}
 			else if (removingTile && ctrlPressed)
 			{
 				CreatorWorldObject toRemove = null;
@@ -712,6 +717,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 					return;
 				}
 				grid[selectedBlock[0]][selectedBlock[1]] = ' ';
+				justSaved = false;
 			}
 
 		update();
@@ -760,6 +766,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			else if(canDrawObject)
 			{
 				objects.add(new CreatorWorldObject(selectedBlock[0],selectedBlock[1],tiles[selectedTile].getReference()));
+				justSaved = false;
 			}
 		}
 		else if (rightClick && isEditable
@@ -914,5 +921,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void setGrid(char[][] grid)
 	{
 		this.grid = grid;
+	}
+	
+	public boolean justSaved()
+	{
+		return justSaved;
 	}
 }

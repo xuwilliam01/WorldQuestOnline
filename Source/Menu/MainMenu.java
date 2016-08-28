@@ -177,11 +177,11 @@ public class MainMenu implements KeyListener
 
 				int enableCloudsAndStars =
 						JOptionPane
-								.showConfirmDialog(
-										null,
-										"Would you like to enable in-game clouds and stars? (May reduce performance on low-end machines)",
-										"Select Game Quality",
-										JOptionPane.YES_NO_OPTION);
+						.showConfirmDialog(
+								null,
+								"Would you like to enable in-game clouds and stars? (May reduce performance on low-end machines)",
+								"Select Game Quality",
+								JOptionPane.YES_NO_OPTION);
 				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
 				{
 					ClientWorld.NO_OF_CLOUDS = 0;
@@ -204,10 +204,10 @@ public class MainMenu implements KeyListener
 				if (imageLoadFailed)
 				{
 					JOptionPane
-							.showMessageDialog(
-									null,
-									"Failed to load images. Perhaps you are running the jar directly from Eclipse?",
-									"Error", JOptionPane.ERROR_MESSAGE);
+					.showMessageDialog(
+							null,
+							"Failed to load images. Perhaps you are running the jar directly from Eclipse?",
+							"Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
 					break;
 				}
@@ -243,7 +243,7 @@ public class MainMenu implements KeyListener
 	 *
 	 */
 	private static class MainPanel extends JPanel implements ActionListener,
-			MouseListener
+	MouseListener
 	{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
@@ -516,7 +516,7 @@ public class MainMenu implements KeyListener
 			}
 
 			JButton menu = new JButton("Main Menu");
-			menu.addActionListener(new CreatorMenuButton());
+			menu.addActionListener(new CreatorMenuButton(world));
 			CreatorItems items = new CreatorItems(world, menu);
 			world.setLocation(0, 0);
 			items.setLocation(Client.SCREEN_WIDTH, 0);
@@ -596,7 +596,7 @@ public class MainMenu implements KeyListener
 			{
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
-				
+
 				lobby = new ClientLobby(mySocket, playerName, this, clouds,menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
@@ -610,7 +610,7 @@ public class MainMenu implements KeyListener
 		}
 
 		public void startGame(ClientLobby lobby) throws UnknownHostException,
-				IOException
+		IOException
 		{
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
@@ -658,19 +658,39 @@ public class MainMenu implements KeyListener
 	 */
 	private static class CreatorMenuButton implements ActionListener
 	{
+		private CreatorWorld creator;
+
+		public CreatorMenuButton (CreatorWorld creator)
+		{
+			this.creator = creator;
+		}
+
 		public void actionPerformed(ActionEvent e)
 		{
-			creatorPanel.setVisible(false);
-			mainFrame.remove(creatorPanel);
-			mainFrame.invalidate();
-			mainFrame.validate();
-			creatorPanel = null;
+			int dialogResult = JOptionPane.NO_OPTION;
+			if(!creator.justSaved())
+				dialogResult = JOptionPane.showConfirmDialog (null, "Do you want to save your map?","Warning",JOptionPane.YES_NO_CANCEL_OPTION);
+			if( dialogResult == JOptionPane.YES_OPTION)
+				try {
+					creator.save();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			if(dialogResult != JOptionPane.CANCEL_OPTION)
+			{	
+				creatorPanel.setVisible(false);
+				mainFrame.remove(creatorPanel);
+				mainFrame.invalidate();
+				mainFrame.validate();
+				creatorPanel = null;
 
-			mainMenu = new MainPanel();
-			mainFrame.add(mainMenu);
-			mainFrame.setVisible(true);
-			mainFrame.requestFocus();
-			mainMenu.revalidate();
+				mainMenu = new MainPanel();
+				mainFrame.add(mainMenu);
+				mainFrame.setVisible(true);
+				mainFrame.requestFocus();
+				mainMenu.revalidate();
+			}
 		}
 	}
 
@@ -688,19 +708,19 @@ public class MainMenu implements KeyListener
 			mainFrame.invalidate();
 			mainFrame.validate();
 			lobby = null;
-			
+
 			mainMenu = new MainPanel();
 			mainFrame.add(mainMenu);
 			mainFrame.setVisible(true);
 			mainFrame.requestFocus();
 			mainMenu.revalidate();
-			
-			
-			
-			
+
+
+
+
 		}
-		
-		
+
+
 	}
 	/**
 	 * The instruction menu
@@ -708,7 +728,7 @@ public class MainMenu implements KeyListener
 	 *
 	 */
 	private static class InstructionPanel extends JPanel implements
-			ActionListener
+	ActionListener
 	{
 		int currentPanel = 0;
 		JButton next;
@@ -1022,10 +1042,10 @@ public class MainMenu implements KeyListener
 		public void actionPerformed(ActionEvent e)
 		{
 			JOptionPane
-					.showMessageDialog(
-							null,
-							"We are updating the instructions! The controls are shown in the lobby.",
-							"Sorry", JOptionPane.ERROR_MESSAGE);
+			.showMessageDialog(
+					null,
+					"We are updating the instructions! The controls are shown in the lobby.",
+					"Sorry", JOptionPane.ERROR_MESSAGE);
 
 			// mainFrame.remove(mainMenu);
 			// mainFrame.invalidate();
