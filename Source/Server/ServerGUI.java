@@ -34,7 +34,7 @@ import javax.swing.JTextField;
  *
  */
 public class ServerGUI extends JPanel implements KeyListener,
-		MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
+MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 {
 
 	/**
@@ -276,11 +276,11 @@ public class ServerGUI extends JPanel implements KeyListener,
 								(int) (CENTRE_X
 										+ column
 										* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-								(int) (CENTRE_Y
-										+ row
-										* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-								(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+										(int) (CENTRE_Y
+												+ row
+												* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
+												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
 					}
 				}
 			}
@@ -293,11 +293,11 @@ public class ServerGUI extends JPanel implements KeyListener,
 						((CENTRE_X + object.getX() / objectFactor - posX)
 								+ 1
 								+ (object.getWidth() / objectFactor) + 1) > 0
-						&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
-						&& ((CENTRE_Y + object.getY() / objectFactor - posY)
-								+ 1
-								+ (object.getHeight() / objectFactor) + 1) > 0
-						&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
+								&& ((CENTRE_X + object.getX() / objectFactor - posX) + 1) < Client.Client.SCREEN_WIDTH
+								&& ((CENTRE_Y + object.getY() / objectFactor - posY)
+										+ 1
+										+ (object.getHeight() / objectFactor) + 1) > 0
+										&& ((CENTRE_Y + object.getY() / objectFactor - posY) + 1) < Client.Client.SCREEN_HEIGHT)
 				{
 					if (object.getType().charAt(0) == ServerWorld.PROJECTILE_TYPE)
 					{
@@ -333,7 +333,7 @@ public class ServerGUI extends JPanel implements KeyListener,
 		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
 		graphics.drawString("The server runs faster when the map is hidden",
 				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
-						- 55);
+				- 55);
 		// }
 		// Draw the chat and the map name
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -479,13 +479,13 @@ public class ServerGUI extends JPanel implements KeyListener,
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-													+ " by a "), textY);
+											+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-									textY);
+											textY);
 					}
 					textY += 20;
 				}
@@ -862,15 +862,20 @@ public class ServerGUI extends JPanel implements KeyListener,
 	public void actionPerformed(ActionEvent e)
 	{
 
-		if (e.getSource() == enter && started)
+		if (e.getSource() == enter)
 		{
 			// Send the message
 			String message = chat.getText();
 			if (message.length() > 0)
 			{
-				engine.broadcast("CH E 1 " + ServerCreature.NEUTRAL
-						+ "Server " + message.split(" ").length + " "
-						+ message);
+				if(engine!= null)
+					engine.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+							+ "Server " + message.split(" ").length + " "
+							+ message);
+				else
+					server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+							+ "Server " + message.split(" ").length + " "
+							+ message);
 			}
 			chat.setForeground(Color.GRAY);
 			chat.setText("");
