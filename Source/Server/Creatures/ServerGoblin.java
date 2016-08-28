@@ -25,13 +25,13 @@ public class ServerGoblin extends ServerCreature {
 	/**
 	 * The default HP of a goblin of a certain type
 	 */
-	public final static int GOBLIN_HP = 50;
+	public final static int GOBLIN_HP = 60;
 	public final static int GOBLIN_ARCHER_HP = 40;
 	public final static int ARCHER_FIGHTING_RANGE = 1000;
 	
 	
 	public final static int GOBLIN_WIZARD_HP = 60;
-	public final static int GOBLIN_WORKER_HP = 70;
+	public final static int GOBLIN_WORKER_HP = 65;
 	public final static int GOBLIN_NINJA_HP = 60;
 	public final static int GOBLIN_LORD_HP = 150;
 	public final static int GOBLIN_SOLDIER_HP = 80;
@@ -111,6 +111,11 @@ public class ServerGoblin extends ServerCreature {
 	 * The weapon the goblin uses
 	 */
 	private String weapon;
+	
+	/**
+	 * The fighting range of this goblin
+	 */
+	private int privateFightingRange;
 
 	/**
 	 * Constructor for a random goblin type
@@ -137,14 +142,15 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_HP);
 			setHP(GOBLIN_HP);
 
-			weapon = "DASTONE_0";
-			damage = 3;
+			weapon = "DAIRON_0";
+			damage = 4;
 			setName("A Goblin");
 			break;
 		case 1:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
-			fightingRange = ARCHER_FIGHTING_RANGE+(int)(Math.random()*400-200);
+			privateFightingRange = ARCHER_FIGHTING_RANGE+(int)(Math.random()*400-200);
+			fightingRange = privateFightingRange;
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_ARCHER_HP);
 			setHP(GOBLIN_ARCHER_HP);
@@ -166,7 +172,7 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_SOLDIER_HP);
 			setHP(GOBLIN_SOLDIER_HP);
 
-			armour = 0.4;
+			armour = 0.2;
 			weapon = "AXIRON_0";
 			damage = 6;
 			setName("A Goblin Soldier");
@@ -194,11 +200,11 @@ public class ServerGoblin extends ServerCreature {
 			setHP(GOBLIN_WORKER_HP);
 
 			armour = 0.1;
-			damage = 7;
+			damage = 9;
 			movementSpeed = 4;
 			jumpSpeed = 14;
 			weapon = "HAIRON_0";
-			setName("A Goblin Warrior");
+			setName("A Goblin Samurai");
 			break;
 		case 5:
 			setType(ServerWorld.GOBLIN_GUARD_TYPE);
@@ -370,6 +376,7 @@ public class ServerGoblin extends ServerCreature {
 			else if (!getTarget().isAlive() || !getTarget().exists()
 					|| !quickInRange(getTarget(), targetRange)) {
 				setTarget(null);
+				fightingRange = privateFightingRange;
 			}
 
 			// Follow and attack the target
@@ -480,29 +487,10 @@ public class ServerGoblin extends ServerCreature {
 																	* ServerProjectile.ARROW_SPEED)))
 													/ (ServerProjectile.ARROW_GRAVITY * xDist));
 
-									// if (!(angle <= Math.PI && angle >=
-									// -Math.PI)) {
-									// sign = 1;
-									// angle = Math
-									// .atan(((ServerProjectile.ARROW_SPEED *
-									// ServerProjectile.ARROW_SPEED) + sign
-									// * Math.sqrt(Math
-									// .pow(ServerProjectile.ARROW_SPEED,
-									// 4)
-									// - ServerProjectile.ARROW_GRAVITY
-									// * (ServerProjectile.ARROW_GRAVITY
-									// * xDist
-									// * xDist + 2
-									// * yDist
-									// * ServerProjectile.ARROW_SPEED
-									// * ServerProjectile.ARROW_SPEED)))
-									// / (ServerProjectile.ARROW_GRAVITY *
-									// xDist));
-									// if (!(angle <= Math.PI && angle >=
-									// -Math.PI)) {
-									// System.out.println("sdfADFASDF");
-									// }
-									// }
+									if (!(angle<=Math.PI && angle >= -Math.PI))
+									{
+										fightingRange = (int)(privateFightingRange/1.5);
+									}
 
 									if (xDist <= 0) {
 										angle = Math.PI - angle;
