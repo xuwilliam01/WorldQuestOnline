@@ -526,4 +526,5 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		this.knockBack = knockBack;
 	}
+	
 }

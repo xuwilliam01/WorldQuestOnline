@@ -53,7 +53,7 @@ public class ServerCastle extends ServerCreature
 	/**
 	 * To prices to advance from each tier
 	 */
-	public final static int[] CASTLE_TIER_PRICE = { 15, 25, 50, 75, 125 };
+	public final static int[] CASTLE_TIER_PRICE = { 15, 25, 50, 75, 100, 125 };
 
 	/**
 	 * Constructor
@@ -92,11 +92,11 @@ public class ServerCastle extends ServerCreature
 			setHP(getHP() + 5000);
 			tier++;
 
-			if (tier == 2)
+			if (tier == 3)
 			{
 				arrowType = ServerWorld.STEELARROW_TYPE;
 			}
-			else if (tier == 4)
+			else if (tier == 5)
 			{
 				arrowType = ServerWorld.MEGAARROW_TYPE;
 			}
@@ -125,16 +125,34 @@ public class ServerCastle extends ServerCreature
 						+ getTarget().getWidth() / 2
 						- (getX() + 270));
 
-				int yDist = (int) (getTarget().getY()
-						+ getTarget().getHeight() / 2
-						- (getY() + 232));
+				int yDist = (int) ((getY() + 232)-(getTarget().getY()
+						+ getTarget().getHeight() / 2));
+				
+				int sign = -1;
 
-				double angle = Math.atan2(yDist, xDist);
+				double angle = Math.atan(((ServerProjectile.ARROW_SPEED 
+						* ServerProjectile.ARROW_SPEED) + sign
+								* Math.sqrt(Math
+										.pow(ServerProjectile.ARROW_SPEED,
+												4)
+										- ServerProjectile.ARROW_GRAVITY
+										* (ServerProjectile.ARROW_GRAVITY
+												* xDist
+												* xDist + 2
+												* yDist
+												* ServerProjectile.ARROW_SPEED
+												* ServerProjectile.ARROW_SPEED)))
+								/ (ServerProjectile.ARROW_GRAVITY * xDist));
+
+				if (xDist <= 0) {
+					angle = Math.PI - angle;
+				} else {
+					angle *= -1;
+				}
 
 				ServerProjectile arrow = new ServerProjectile(getX()
 						+ 270, getY()
 						+ 232, this, angle, arrowType);
-				arrow.setGravity(0);
 
 				getWorld().add(arrow);
 			}

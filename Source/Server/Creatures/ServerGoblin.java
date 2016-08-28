@@ -26,7 +26,7 @@ public class ServerGoblin extends ServerCreature {
 	 * The default HP of a goblin of a certain type
 	 */
 	public final static int GOBLIN_HP = 50;
-	public final static int GOBLIN_ARCHER_HP = 50;
+	public final static int GOBLIN_ARCHER_HP = 40;
 	public final static int ARCHER_FIGHTING_RANGE = 1000;
 	
 	
@@ -125,11 +125,11 @@ public class ServerGoblin extends ServerCreature {
 			castleTier = world.getBlueCastle().getTier();
 		}
 
-		int numTypes = (int) (Math.random()
-				* Math.min(NUM_TYPES, (castleTier + 1) * 2) + 1);
+		int numTypes = (int) Math.ceil((Math.random()
+				* Math.min(NUM_TYPES-1, (castleTier) * 2)));
 
 		switch (numTypes) {
-		case 1:
+		case 0:
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -137,11 +137,11 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_HP);
 			setHP(GOBLIN_HP);
 
-			weapon = "DAWOOD_0";
+			weapon = "DASTONE_0";
 			damage = 3;
-			setName("A Naked Goblin");
+			setName("A Goblin");
 			break;
-		case 2:
+		case 1:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
 			fightingRange = ARCHER_FIGHTING_RANGE+(int)(Math.random()*400-200);
@@ -151,12 +151,13 @@ public class ServerGoblin extends ServerCreature {
 
 			armour = 0.1;
 			weapon = ServerWorld.WOODARROW_TYPE;
+			damage = 6;
 			isMelee = false;
 
 			setName("A Goblin Archer");
 
 			break;
-		case 3:
+		case 2:
 			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
 			setImage("GOBSOLDIER_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -170,7 +171,7 @@ public class ServerGoblin extends ServerCreature {
 			damage = 6;
 			setName("A Goblin Soldier");
 			break;
-		case 4:
+		case 3:
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
 			setImage("GOBNINJA_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 100 + 250);
@@ -178,12 +179,13 @@ public class ServerGoblin extends ServerCreature {
 			setHP(GOBLIN_NINJA_HP);
 
 			weapon = ServerWorld.NINJASTAR_TYPE;
+			damage = ServerWeapon.STAR_DMG;
 			isMelee = false;
 			movementSpeed = 5;
 			jumpSpeed = 16;
 			setName("A Ninja Goblin");
 			break;
-		case 5:
+		case 4:
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
 			setImage("GOBWORKER_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -198,7 +200,7 @@ public class ServerGoblin extends ServerCreature {
 			weapon = "HAIRON_0";
 			setName("A Goblin Warrior");
 			break;
-		case 6:
+		case 5:
 			setType(ServerWorld.GOBLIN_GUARD_TYPE);
 			setImage("GOBGUARD_RIGHT_0_0");
 			setMaxHP(GOBLIN_GUARD_HP);
@@ -211,7 +213,7 @@ public class ServerGoblin extends ServerCreature {
 			weapon = "SWIRON_0";
 			setName("A Goblin Guard");
 			break;
-		case 7:
+		case 6:
 			setType(ServerWorld.GOBLIN_KNIGHT_TYPE);
 			setImage("GOBKNIGHT_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -224,7 +226,7 @@ public class ServerGoblin extends ServerCreature {
 			damage = 8;
 			setName("A Goblin Knight");
 			break;
-		case 8:
+		case 7:
 			setType(ServerWorld.GOBLIN_LORD_TYPE);
 			setImage("GOBLORD_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -237,7 +239,7 @@ public class ServerGoblin extends ServerCreature {
 			damage = 12;
 			setName("A Goblin Lord");
 			break;
-		case 9:
+		case 8:
 			setType(ServerWorld.GOBLIN_WIZARD_TYPE);
 			setImage("GOBWIZARD_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 250 + 250);
@@ -255,7 +257,7 @@ public class ServerGoblin extends ServerCreature {
 			isMelee = false;
 			setName("A Goblin Wizard");
 			break;
-		case 10:
+		case 9:
 			setType(ServerWorld.GOBLIN_GIANT_TYPE);
 			setImage("GOBGIANT_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 16 + 4);
@@ -271,7 +273,7 @@ public class ServerGoblin extends ServerCreature {
 			setRelativeDrawY(getRelativeDrawY() * 2);
 			setName("A Goblin Giant");
 			break;
-		case 11:
+		case 10:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -284,7 +286,7 @@ public class ServerGoblin extends ServerCreature {
 			damage = 16;
 			setName("A Goblin General");
 			break;
-		case 12:
+		case 11:
 			setType(ServerWorld.GOBLIN_KING_TYPE);
 			setImage("GOBKING_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
@@ -292,7 +294,7 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_KING_HP);
 			setHP(GOBLIN_KING_HP);
 
-			armour = 0.5;
+			armour = 0.6;
 			weapon = "AXDIAMOND_0";
 			damage = 20;
 			setName("A Goblin King");
@@ -513,17 +515,18 @@ public class ServerGoblin extends ServerCreature {
 											+ getTarget().getHeight() / 2 - (getY() + getHeight() / 3));
 									angle = Math.atan2(yDist, xDist);
 								}
-								double random = Math.random() * 4;
+								double random = Math.random() * 6;
 
 								if (random < 2) {
-									angle += (Math.PI / 6) * (random - 1);
+									angle += (Math.PI / 8) * (random - 1);
 								}
 
-								getWorld().add(
-										new ServerProjectile(getX()
-												+ getWidth() / 2, getY()
-												+ getHeight() / 3, this, angle,
-												weapon));
+								ServerProjectile projectile = new ServerProjectile(getX()
+										+ getWidth() / 2, getY()
+										+ getHeight() / 3, this, angle,
+										weapon);
+								projectile.setDamage(damage);
+								getWorld().add(projectile);
 
 							}
 						}
