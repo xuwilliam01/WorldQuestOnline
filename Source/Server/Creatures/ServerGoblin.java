@@ -27,6 +27,9 @@ public class ServerGoblin extends ServerCreature {
 	 */
 	public final static int GOBLIN_HP = 50;
 	public final static int GOBLIN_ARCHER_HP = 50;
+	public final static int ARCHER_FIGHTING_RANGE = 1000;
+	
+	
 	public final static int GOBLIN_WIZARD_HP = 60;
 	public final static int GOBLIN_WORKER_HP = 70;
 	public final static int GOBLIN_NINJA_HP = 60;
@@ -141,7 +144,7 @@ public class ServerGoblin extends ServerCreature {
 		case 2:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
-			fightingRange = 900;
+			fightingRange = ARCHER_FIGHTING_RANGE+(int)(Math.random()*400-200);
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_ARCHER_HP);
 			setHP(GOBLIN_ARCHER_HP);
@@ -369,13 +372,13 @@ public class ServerGoblin extends ServerCreature {
 
 			// Follow and attack the target
 			else {
-				if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
-					if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
-						fightingRange = 200;
-					} else {
-						fightingRange = 1200;
-					}
-				}
+//				if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
+//					if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
+//						fightingRange = 200;
+//					} else {
+//						fightingRange = 1200;
+//					}
+//				}
 				if ((getX() + getWidth() / 2 < getTarget().getX()) && !onTarget
 						&& action == null) {
 					setHSpeed(movementSpeed);
@@ -450,13 +453,19 @@ public class ServerGoblin extends ServerCreature {
 								double angle = 0;
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE)) {
 
+									double targetHeightFactor = 5;
+									if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE))
+									{
+										targetHeightFactor = 1.3;
+									}
+									
 									yDist = (int) ((getY() + getHeight() / 3.0) - (getTarget()
-											.getY() + getTarget().getHeight() / 5.0));
+											.getY() + getTarget().getHeight() / targetHeightFactor));
 
 									int sign = -1;
 
-									angle = Math
-											.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
+									angle = Math.atan(((ServerProjectile.ARROW_SPEED 
+											* ServerProjectile.ARROW_SPEED) + sign
 													* Math.sqrt(Math
 															.pow(ServerProjectile.ARROW_SPEED,
 																	4)
@@ -469,25 +478,29 @@ public class ServerGoblin extends ServerCreature {
 																	* ServerProjectile.ARROW_SPEED)))
 													/ (ServerProjectile.ARROW_GRAVITY * xDist));
 
-									if (!(angle <= Math.PI && angle >= -Math.PI)) {
-										sign = 1;
-										angle = Math
-												.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
-														* Math.sqrt(Math
-																.pow(ServerProjectile.ARROW_SPEED,
-																		4)
-																- ServerProjectile.ARROW_GRAVITY
-																* (ServerProjectile.ARROW_GRAVITY
-																		* xDist
-																		* xDist + 2
-																		* yDist
-																		* ServerProjectile.ARROW_SPEED
-																		* ServerProjectile.ARROW_SPEED)))
-														/ (ServerProjectile.ARROW_GRAVITY * xDist));
-										if (!(angle <= Math.PI && angle >= -Math.PI)) {
-											System.out.println("sdfADFASDF");
-										}
-									}
+									// if (!(angle <= Math.PI && angle >=
+									// -Math.PI)) {
+									// sign = 1;
+									// angle = Math
+									// .atan(((ServerProjectile.ARROW_SPEED *
+									// ServerProjectile.ARROW_SPEED) + sign
+									// * Math.sqrt(Math
+									// .pow(ServerProjectile.ARROW_SPEED,
+									// 4)
+									// - ServerProjectile.ARROW_GRAVITY
+									// * (ServerProjectile.ARROW_GRAVITY
+									// * xDist
+									// * xDist + 2
+									// * yDist
+									// * ServerProjectile.ARROW_SPEED
+									// * ServerProjectile.ARROW_SPEED)))
+									// / (ServerProjectile.ARROW_GRAVITY *
+									// xDist));
+									// if (!(angle <= Math.PI && angle >=
+									// -Math.PI)) {
+									// System.out.println("sdfADFASDF");
+									// }
+									// }
 
 									if (xDist <= 0) {
 										angle = Math.PI - angle;
@@ -499,6 +512,11 @@ public class ServerGoblin extends ServerCreature {
 									yDist = (int) (getTarget().getY()
 											+ getTarget().getHeight() / 2 - (getY() + getHeight() / 3));
 									angle = Math.atan2(yDist, xDist);
+								}
+								double random = Math.random() * 4;
+
+								if (random < 2) {
+									angle += (Math.PI / 6) * (random - 1);
 								}
 
 								getWorld().add(
