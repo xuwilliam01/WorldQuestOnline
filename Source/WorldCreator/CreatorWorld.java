@@ -114,7 +114,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	private int dragSourceY;
 
 	// File
-	String fileName;
+	private String fileName;
 
 	/**
 	 * Table to reference objects by character
@@ -926,5 +926,21 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public boolean justSaved()
 	{
 		return justSaved;
+	}
+	
+	public void setJustSaved(boolean bool)
+	{
+		justSaved = bool;
+	}
+	
+	public void setFileName(String name)
+	{
+		fileName = name;
+		justSaved = false;
+	}
+	
+	public String getFileName()
+	{
+		return fileName;
 	}
 }

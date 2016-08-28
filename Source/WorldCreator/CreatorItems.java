@@ -5,8 +5,14 @@ import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -43,6 +49,8 @@ public class CreatorItems extends JPanel implements ActionListener {
 	private JButton updateWidth;
 	private JButton updateHeight;
 	private JButton mainMenu;
+	private JButton rename;
+	private JButton delete;
 
 	private Timer paintTimer = new Timer(10, this);
 
@@ -93,9 +101,22 @@ public class CreatorItems extends JPanel implements ActionListener {
 		{
 			mainMenu = menu;
 			mainMenu.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
-			mainMenu.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(280));
+			mainMenu.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(340));
 			add(mainMenu);
 		}
+
+		rename = new JButton("Rename");
+		rename.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
+		rename.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(280));
+		rename.addActionListener(this);
+		add(rename);
+
+		delete = new JButton("Delete");
+		delete.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
+		delete.setLocation(WIDTH-ClientFrame.getScaledWidth(125),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(280));
+		delete.addActionListener(this);
+		add(delete);
+
 
 		paintTimer.start();
 	}
@@ -133,7 +154,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 		graphics.setColor(Color.BLACK);
 		//graphics.fillRect(Client.Client.SCREEN_WIDTH, 0, Client.ClientInventory.INVENTORY_WIDTH, Client.Client.SCREEN_HEIGHT);
 		graphics.drawString("TILES", ClientFrame.getScaledWidth(140), ClientFrame.getScaledHeight(20));
-		
+
 		repaint();
 	}
 
@@ -185,6 +206,92 @@ public class CreatorItems extends JPanel implements ActionListener {
 		// Repaint this
 		else if (button.getSource() == paintTimer) {
 			repaint();
+		}
+		// Get a name
+		else if(button.getSource() == rename)
+		{
+			String newName = JOptionPane.showInputDialog(world, "Please enter a new name");
+			if(newName != null)
+			{
+				try {
+					Files.deleteIfExists(new File("Resources",world.getFileName()).toPath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				try{
+					BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
+					int numMaps = Integer.parseInt(maps.readLine());
+					ArrayList<String> mapNames = new ArrayList<String>();
+					for(int i =0; i < numMaps;i++)
+					{
+						String mapName = maps.readLine().toLowerCase();
+						if(!mapName.equals(world.getFileName()))
+							mapNames.add(mapName);
+						else
+							mapNames.add(newName);
+					}
+					maps.close();
+
+					//If the file doesn't already exist	
+					PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps"));
+					mapWriter.println(numMaps);
+					for(String map : mapNames)
+						mapWriter.println(map);
+					mapWriter.close();
+				}
+				catch(Exception E)
+				{
+					E.printStackTrace();
+				}
+
+				world.setFileName(newName);
+				try {
+					world.save();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		else if(button.getSource() == delete)
+		{
+			int result = JOptionPane.showConfirmDialog(null, "Do you want to delete this map?","Warning",JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION)
+			{
+				world.setJustSaved(true);
+				try {
+					Files.deleteIfExists(new File("Resources",world.getFileName()).toPath());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				try{
+					BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
+					int numMaps = Integer.parseInt(maps.readLine());
+					ArrayList<String> mapNames = new ArrayList<String>();
+					for(int i =0; i < numMaps;i++)
+					{
+						String mapName = maps.readLine().toLowerCase();
+						if(!mapName.equals(world.getFileName()))
+							mapNames.add(mapName);
+					}
+					maps.close();
+
+					PrintWriter mapWriter = new PrintWriter(new File("Resources","Maps"));
+					mapWriter.println(numMaps-1);
+					for(String map : mapNames)
+						mapWriter.println(map);
+					mapWriter.close();
+				}
+				catch(Exception E)
+				{
+					E.printStackTrace();
+				}
+				mainMenu.doClick();
+			}
 		}
 		// Update the height
 		else {
