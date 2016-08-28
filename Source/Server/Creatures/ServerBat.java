@@ -111,25 +111,25 @@ public class ServerBat extends ServerEnemy
 
 		int batType = (int) (Math.random() * 31);
 
-		if (batType < 10)
+		if (batType < 15)
 		{
 			setName("Grey Bat");
 		}
-		else if (batType < 20)
+		else if (batType < 30)
 		{
 			setImage("BATB_RIGHT_0");
 			setName("Brown Bat");
 		}
-		else if (batType == 20)
+		else if (batType == 30)
 		{
 			setImage("BATD_RIGHT_0");
-			setDamage(15);
-			setHP(100);
+			setDamage((int) (Math.random() * 2) + 13);
+			setHP(80);
 			setName("Dark Bat");
 			addItem(ServerItem.randomItem(getX(), getY()));
 			addItem(ServerItem.randomItem(getX(), getY()));
 
-			maxSpeed = (int) (Math.random() * 3 + 8);
+			maxSpeed = (int) (Math.random() * 3 + 6);
 		}
 
 		if (Math.random() < 0.75)

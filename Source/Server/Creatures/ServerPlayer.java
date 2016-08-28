@@ -13,6 +13,8 @@ import Server.ServerObject;
 import Server.ServerObjectShown;
 import Server.ServerWorld;
 import Server.Effects.ServerDamageIndicator;
+import Server.Effects.ServerPlayerText;
+import Server.Effects.ServerText;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
 import Server.Items.ServerItem;
@@ -227,7 +229,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	private long joinTime;
 
-	private boolean justJoined = true;
+	/**
+	 * The current text floating on top of the player
+	 */
+	private ServerPlayerText currentText;
+	
+	
 
 	/**
 	 * Constructor for a player in the server
@@ -971,6 +978,23 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								+ tokens.length + " " + message);
 						
 					}
+					
+					if (currentText!=null)
+					{
+						currentText.destroy();
+					}
+					
+					String text = "";
+					for (int no = 0; no < message.length(); no++) {
+						if (message.charAt(no) == ' ') {
+							text += '_';
+						} else {
+							text += message.charAt(no);
+						}
+					}
+					
+					currentText = new ServerPlayerText(getX(), getY(), text, ServerText.YELLOW_TEXT, world, this);
+					world.add(currentText);
 					
 				}
 				else if (command.length() >= 2
@@ -1991,11 +2015,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void setPlayerScreenHeight(int playerScreenHeight)
 	{
 		this.playerScreenHeight = playerScreenHeight;
-	}
-	
-	public void alreadyJoined()
-	{
-		justJoined = false;
 	}
 
 }
