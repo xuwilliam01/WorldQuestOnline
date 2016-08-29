@@ -32,7 +32,7 @@ public class ServerSlimeSpawner extends ServerSpawner
 	{
 		super(x, y, world, ServerWorld.SLIME_SPAWN_TYPE);
 		setImage("SLIME_SPAWN");
-		setDelay(300);
+		setDelay(60);
 	}
 
 	/**

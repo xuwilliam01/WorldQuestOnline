@@ -32,7 +32,7 @@ public class ServerBatSpawner extends ServerSpawner
 	{
 		super(x, y, world, ServerWorld.BAT_SPAWN_TYPE);
 		setImage("BAT_SPAWN");
-		setDelay(300);
+		setDelay(60);
 	}
 
 	/**
