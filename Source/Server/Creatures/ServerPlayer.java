@@ -46,18 +46,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
 
 	// The starting mana and hp for the player
-	public final static int PLAYER_START_HP = 1000;
-	public final static int PLAYER_START_MANA = 1000;
+	public final static int PLAYER_START_HP = 100;
+	public final static int PLAYER_START_MANA = 100;
 
 	// Initial jump and move speeds of the player
-	public final static int MOVE_SPEED = 7;
-	public final static int JUMP_SPEED = 22;
+	public final static int MOVE_SPEED = 5;
+	public final static int JUMP_SPEED = 20;
 
 	public final static int MAX_HSPEED = 8;
 	public final static int MAX_VSPEED = 24;
 	public final static int MAX_DMGADD = 50;
-	public final static int PLAYER_MAX_HP = 1000;
-	public final static int PLAYER_MAX_MANA = 1000;
+	public final static int PLAYER_MAX_HP = 250;
+	public final static int PLAYER_MAX_MANA = 250;
 
 	private StringBuilder message = new StringBuilder();
 
@@ -352,7 +352,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 250));
+		addItem(new ServerMoney(0, 0, 10));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself

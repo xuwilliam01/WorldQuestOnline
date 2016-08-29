@@ -33,7 +33,7 @@ public class ServerCastle extends ServerCreature {
 	/**
 	 * The current tier of the castle
 	 */
-	private int tier = 6;
+	private int tier = 0;
 
 	/**
 	 * The target for the castle to attack
@@ -53,7 +53,7 @@ public class ServerCastle extends ServerCreature {
 	/**
 	 * To prices to advance from each tier
 	 */
-	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 ,300};
+	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 };
 
 	/**
 	 * Constructor
