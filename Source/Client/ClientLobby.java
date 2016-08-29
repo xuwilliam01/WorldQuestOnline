@@ -137,6 +137,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			menu.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(320)));
 			menu.setSize(270,20);
+			menu.setBackground(new Color(240, 240, 240));
 			menu.setVisible(true);
 
 			chat = new JTextField();
