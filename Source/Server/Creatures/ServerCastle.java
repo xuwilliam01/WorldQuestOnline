@@ -33,7 +33,7 @@ public class ServerCastle extends ServerCreature {
 	/**
 	 * The current tier of the castle
 	 */
-	private int tier = 7;
+	private int tier = 6;
 
 	/**
 	 * The target for the castle to attack
