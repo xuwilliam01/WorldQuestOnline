@@ -25,12 +25,14 @@ Join or host a server to play. When hosting a server for clients outside of your
 - Inventory and equipment
 - Shop and currency system
 - Melee, projectile and magic combat
-- Goblin minions for both teams
-- Neutral slimes
+- 12 types of Goblin minions for both teams
+- Neutral slimes and bats
 - Castle and goblin upgrades
+- Fast-paced and dynamic physics
+- 60 fps!
 
 [Content]
-- Sets of armours
+- Sets of armours (4)
 	- Grey ninja
 	- Blue ninja
 	- Red ninja
@@ -44,11 +46,11 @@ Join or host a server to play. When hosting a server for clients outside of your
 	- Steel bow
 	- Mega bow
 	- Shuriken (Ninja goblin only)
-- Magic weapons
+- Magic weapons (3)
 	- Ice wand
 	- Fire wand
 	- Dark wand
-- Potions
+- Potions (7)
 	- Damage potion
 	- Speed potion
 	- Jump potion
@@ -57,9 +59,9 @@ Join or host a server to play. When hosting a server for clients outside of your
 	- Mana potion
 	- HP potion
 
-- Types of goblins
+- Types of goblins (12)
 	- Naked goblin
-	- Goblin peasant
+	- Goblin archer
 	- Goblin soldier
 	- Goblin ninja
 	- Goblin warrior
@@ -71,14 +73,57 @@ Join or host a server to play. When hosting a server for clients outside of your
 	- Goblin general
 	- Goblin king
 	
-- Types of slimes
+- Types of slimes (6)
 	- Green, blue, red, yellow slime
 	- Giant slime
 	- Dark slime
 	
+- Types of bats (3)
+	- Grey, brown bat
+	- Dark bat
+	
 [Future Plans]
-- Day/Night cycles will actually have a purpose
+- Day/Night cycle will actually have a purpose
 - Hired mercenaries
-- New hostile NPC: Bats
-- RPG creator through the map creator to create a co-op campaign
+- RPG creator through the map creator to create a single player / co-op campaign
+- Dedicated matchmaking servers and matchmaking ranks
 
+[Credits]
+- Creators
+	- William Xu
+	- Alex Raita
+
+- Beta testers
+	- Peter Shi
+	- Michael Huo
+	- Brian Zhang
+	- Sarth Frey
+	- Shivansh Dhar
+	- Jonathan Sun
+	- Tiger Zhao
+	- Clive Chan
+	- Lawrence Pan
+	- Kashish Goel
+	- Akshay Pall
+	- Allen Han
+	- Eric Chee
+	- Barbara Guo
+	- Patrick Liu
+	- Alexander Shah
+(Contact me if you beta-tested and your name is missing from this list!)
+
+[Sources]
+- Steam Greenlight Trailer Royalty-free background music
+	Bensound: http://www.bensound.com
+- Slimes
+	Garakh: http://opengameart.org/users/garakh
+- Ice ball, Fire ball, and Dark ball spell effects
+	Little Fighter 2: http://lf2.net
+- Melee and projectile weapons
+	Dokucraft texture packs: https://www.dokucraft.co.uk
+- Player, bat, and goblin sprites
+	Moikmellah: http://opengameart.org/users/moikmellah
+- Merchant sprite
+	Pseudolonewolf: http://pseudolonewolf.deviantart.com/
+- WorldQuest Icon
+	Iconka.com (Denis): http://findicons.com/pack/375/solar_system
