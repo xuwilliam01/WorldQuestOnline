@@ -306,7 +306,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		
 		long delay = Math.min(UPDATE_RATE, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE));
 		
-		updateTimer.setDelay((int)Math.max(1,delay));
+		//updateTimer.setDelay((int)Math.max(1,delay));
 
 		startTime = System.nanoTime();
 
