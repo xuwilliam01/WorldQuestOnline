@@ -70,14 +70,18 @@ public class ClientInventory extends JPanel implements ActionListener
 		{
 			mainMenu = menu;
 			mainMenu.setSize(ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(50));
-			mainMenu.setLocation(ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(1080- 100));
+			mainMenu.setLocation(ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(1080- 90));
+			mainMenu.setBackground(new Color(240, 240, 240));
+			mainMenu.setForeground(Color.black);
 			add(mainMenu);
 		}
 
 		switchTeams = new JButton("Switch Teams");
 		switchTeams.setSize(ClientFrame.getScaledWidth(150), ClientFrame.getScaledHeight(50));
-		switchTeams.setLocation(ClientFrame.getScaledWidth(135), ClientFrame.getScaledHeight(1080 - 100));
+		switchTeams.setLocation(ClientFrame.getScaledWidth(135), ClientFrame.getScaledHeight(1080 - 90));
 		switchTeams.addActionListener(this);
+		switchTeams.setBackground(new Color(240, 240, 240));
+		switchTeams.setForeground(Color.black);
 		add(switchTeams);
 
 		inventoryImage = Images.getImage("Inventory");

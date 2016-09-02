@@ -228,6 +228,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Update the game after every game tick (15 milliseconds)
 	 */
 	public void actionPerformed(ActionEvent e) {
+		
 		// Remove disconnected players
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 		for (ServerPlayer player : listOfPlayers) {
@@ -296,14 +297,16 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 
 		// Check how long a game loop took
-		long loopTime = System.currentTimeMillis() - startTime;
+		long loopTime = System.nanoTime() - startTime;
 
 		if (world.getWorldCounter() % 60 == 0) 
 		{
-			currentFPS = Math.min(60, (int) ((1000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
+			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
 		}
+		
+		updateTimer.setDelay((int)(Math.max(1, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE))));
 
-		startTime = System.currentTimeMillis();
+		startTime = System.nanoTime();
 
 		//System.out.println(updateTimer.getDelay());
 	}
