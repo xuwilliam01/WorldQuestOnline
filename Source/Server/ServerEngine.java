@@ -304,7 +304,9 @@ public class ServerEngine implements Runnable, ActionListener {
 			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
 		}
 		
-		updateTimer.setDelay((int)(Math.max(1, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE))));
+		long delay = Math.min(UPDATE_RATE, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE));
+		
+		updateTimer.setDelay((int)Math.max(1,delay));
 
 		startTime = System.nanoTime();
 
