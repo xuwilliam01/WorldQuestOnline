@@ -136,12 +136,14 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 			menu.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(320)));
-			menu.setSize(270,20);
+			menu.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
+			menu.setBackground(new Color(240, 240, 240));
+			menu.setForeground(Color.black);
 			menu.setVisible(true);
 
 			chat = new JTextField();
 			chat.setLocation(1, 0);
-			chat.setSize(200, 20);
+			chat.setSize(ClientFrame.getScaledWidth(200), ClientFrame.getScaledHeight(20));
 			chat.addKeyListener(new JTextFieldEnter());
 			chat.setVisible(true);
 			chat.setFocusable(true);
@@ -150,11 +152,12 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			chat.setToolTipText("Press 'enter' as a shortcut to chat");
 
 			enter = new JButton("Chat");
-			enter.setLocation(200, 0);
+			enter.setLocation(ClientFrame.getScaledWidth(200), 0);
 			enter.setSize(60, 20);
 			enter.setVisible(true);
 			enter.addActionListener(this);
 			enter.setBackground(new Color(240, 240, 240));
+			enter.setForeground(Color.black);
 
 			start = new JButton("Start Game");
 			start.setForeground(Color.GRAY);
@@ -163,16 +166,17 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			start.setBorderPainted(false);
 			start.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(280)));
-			start.setSize(270, 20);
+			start.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
 			start.setVisible(true);
 			start.addActionListener(this);
 
 			switchTeams = new JButton("Switch Teams");
 			switchTeams.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(240)));
-			switchTeams.setSize(270, 20);
+			switchTeams.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
 			switchTeams.setVisible(true);
 			switchTeams.addActionListener(this);
+			switchTeams.setForeground(Color.black);
 			switchTeams.setBackground(new Color(240, 240, 240));
 
 			setLayout(null);

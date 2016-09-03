@@ -213,7 +213,7 @@ public class MainMenu implements KeyListener
 					JOptionPane
 					.showMessageDialog(
 							null,
-							"Failed to load images. Perhaps you are running the jar directly from Eclipse?",
+							"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
 							"Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
 					break;
