@@ -569,7 +569,7 @@ public class MainMenu implements KeyListener
 			boolean exit = false;
 			boolean full = false;
 			BufferedReader input = null;
-			
+
 			while (!connected)
 			{
 				try
@@ -607,7 +607,7 @@ public class MainMenu implements KeyListener
 			{
 				if(full)
 					JOptionPane.showMessageDialog(null, "All Rooms are full. Please try again later");
-				
+
 				setVisible(false);
 				mainFrame.remove(this);
 				mainFrame.invalidate();
@@ -944,22 +944,24 @@ public class MainMenu implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// while(true)
-			// {
-			// fileName = JOptionPane
-			// .showInputDialog("Map name (Default: WORLD)");
-			// if(fileName == null)
-			// return;
-			// else if(fileName.equals(""))
-			// fileName = "World.txt";
-			// else
-			// fileName+=".txt";
-			//
-			// File f = new File("Resources",fileName);
-			// if(f.exists() && !f.isDirectory()) {
-			// break;
-			// }
-			// }
+			int maxRooms;
+			while(true)
+			{
+				try{
+					String maxRoomsStr=JOptionPane
+					.showInputDialog("What is the maximum number of gamerooms you would like?");
+					if(maxRoomsStr == null)
+						return;
+					maxRooms = Integer.parseInt(maxRoomsStr);
+					if(maxRooms < 1)
+						maxRooms = 1;
+					break;
+				}
+				catch(Exception E)
+				{
+
+				}
+			}
 
 			int portNum = DEF_PORT;
 			// while (true)
@@ -984,7 +986,8 @@ public class MainMenu implements KeyListener
 			// }
 
 			// Starts the server
-			ServerManager server = new ServerManager(portNum, 1,mainFrame);
+			System.out.println("rooms "+maxRooms);
+			ServerManager server = new ServerManager(portNum, maxRooms,mainFrame);
 
 			Thread serverThread = new Thread(server);
 

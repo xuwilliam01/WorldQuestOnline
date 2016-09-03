@@ -320,7 +320,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						output.close();
 						input.close();
 						panel.startGame(lobby);
-
+						System.out.println("Break");
 						break;
 					}
 					else if (tokens[token].equals("L"))
@@ -370,6 +370,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				{
 					if(!goToMenu)
 					{
+						E.printStackTrace();
 						System.out.println("Lost connection to server");
 						JOptionPane.showMessageDialog(null,
 								"Lost connection to the Server", "Uh-oh",

@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
@@ -29,8 +30,8 @@ public class Server implements Runnable
 
 	private PrintWriter output = null;
 
-	private Socket newPlayerWaiting = null;
-
+	private ArrayList<Socket> newPlayerWaiting = new ArrayList<Socket>();
+	private int sizeIndex = 0;
 	public static String defaultMap;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
@@ -59,16 +60,25 @@ public class Server implements Runnable
 	{
 		return start;
 	}
-	
+
 	public void addClient(Socket newClient,PrintWriter output)
 	{
-		newPlayerWaiting = newClient;
-		this.output = output;
+		while(true)
+		{
+			try{
+				newPlayerWaiting.add(newClient);
+				break;
+			}
+			catch(ConcurrentModificationException E)
+			{
+				System.out.println("Concurrnet modification adding players to game");
+			}
+		}
 	}
 
 	public Socket nextClient() throws Exception
 	{
-		while(newPlayerWaiting == null)
+		while(newPlayerWaiting.size() == sizeIndex)
 		{
 			try {
 				Thread.sleep(200);
@@ -82,12 +92,13 @@ public class Server implements Runnable
 				throw new Exception();
 			}
 		}
-		return newPlayerWaiting;
+		sizeIndex++;
+		return newPlayerWaiting.get(sizeIndex-1);
 	}
-	
+
 	public Socket nextGameClient() 
 	{
-		while(newPlayerWaiting == null)
+		while(newPlayerWaiting.size() == sizeIndex)
 		{
 			try {
 				Thread.sleep(200);
@@ -96,9 +107,11 @@ public class Server implements Runnable
 				e.printStackTrace();
 			}
 		}
-		return newPlayerWaiting;
+		System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(), sizeIndex);
+		sizeIndex++;
+		return newPlayerWaiting.get(sizeIndex-1);
 	}
-	
+
 
 	@Override
 	public void run()
@@ -108,7 +121,7 @@ public class Server implements Runnable
 			try
 			{
 				Socket newClient = nextClient();
-				newPlayerWaiting = null;
+				output = new PrintWriter(newClient.getOutputStream());
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(
 								newClient.getInputStream()));
@@ -134,6 +147,8 @@ public class Server implements Runnable
 			catch (Exception E)
 			{
 				System.out.println("Exited the lobby");
+				newPlayerWaiting.clear();
+				sizeIndex = 0;
 				break;
 			}
 		}
@@ -169,24 +184,25 @@ public class Server implements Runnable
 		{
 			lobbyPlayersToAdd.add(player);
 		}
-
 		while (true)
 		{
 			try
 			{
 				Socket newClient = nextGameClient();
+				output = new PrintWriter(newClient.getOutputStream());
+				noOfPlayers++;
+
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(
 								newClient.getInputStream()));
-				newPlayerWaiting = null;
-				noOfPlayers++;
+
 
 				String IP = newClient.getInetAddress().toString();
 				int team = -1;
 				String name = null;
 				ServerLobbyPlayer playerToRemove = null;
-			
-				
+
+
 				String message = input.readLine();
 				String nameCheck;
 
@@ -199,7 +215,7 @@ public class Server implements Runnable
 					output.close();
 					input.close();
 					noOfPlayers--;
-					
+
 					//Close input and socket
 					continue;
 				}
@@ -266,7 +282,7 @@ public class Server implements Runnable
 						ServerPlayer.DEFAULT_WIDTH,
 						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
 						ServerWorld.GRAVITY, playerColours[characterSelection],
-						newClient, engine, engine.getWorld(), input);
+						newClient, engine, engine.getWorld(), input,output);
 
 				newPlayer.setName(name);
 				newPlayer.setTeam(team);

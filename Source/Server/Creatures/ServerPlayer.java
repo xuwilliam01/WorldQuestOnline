@@ -251,7 +251,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			int width,
 			int height, double relativeDrawX, double relativeDrawY,
 			double gravity, String skinColour, Socket socket,
-			ServerEngine engine, ServerWorld world, BufferedReader input)
+			ServerEngine engine, ServerWorld world, BufferedReader input, PrintWriter output)
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
@@ -260,7 +260,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		//Set default name of the player
 		setName("Player");
-
+		
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
 		int randomHair = (int) (Math.random() * 8);
@@ -311,17 +311,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		yUpdated = true;
 		this.joinTime = world.getWorldCounter();
 
-		// Set up the output
-		try
-		{
-			output = new PrintWriter(this.socket.getOutputStream());
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's output stream");
-			e.printStackTrace();
-		}
-
+		this.output = output;
 		this.input = input;
 		// Send the 2D grid of the world to the client
 		sendMap();

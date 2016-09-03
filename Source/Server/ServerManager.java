@@ -48,11 +48,13 @@ public class ServerManager implements Runnable{
 							if(room.started())
 							{
 								output.println("CONNECTED");
+								System.out.println("CONNECTED GAME STARTED");
 								output.flush();
 								room.addClient(newClient,output);
 							}
 							else{
 								output.println("CONNECTED");
+								System.out.println("CONNECTED TO LOBBY");
 								output.flush();
 								room.addClient(newClient,output);
 							}
@@ -63,6 +65,7 @@ public class ServerManager implements Runnable{
 					if(rooms.size() < maxRooms)
 					{
 						output.println("CONNECTED");
+						System.out.println("CONNECTED NEW ROOM");
 						output.flush();
 						addNewRoom();
 						rooms.get(rooms.size()-1).addClient(newClient,output);
