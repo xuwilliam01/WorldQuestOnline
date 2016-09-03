@@ -8,10 +8,15 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -714,10 +720,6 @@ public class MainMenu implements KeyListener
 			mainFrame.setVisible(true);
 			mainFrame.requestFocus();
 			mainMenu.revalidate();
-
-
-
-
 		}
 
 
@@ -1000,12 +1002,39 @@ public class MainMenu implements KeyListener
 		{
 			// Get filename. If it is invalid, exit
 			String fileName = "";
+			String[] mapNames = null;
+			try{
+				BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
+				int numMaps = Integer.parseInt(maps.readLine());
+				mapNames = new String[numMaps+1];
+				mapNames[0] = "NewMap";
+				for(int i =0; i < numMaps;i++)
+				{
+					mapNames[i+1] = maps.readLine().toLowerCase();
+				}
+				maps.close();
+			}
+			catch(Exception E)
+			{
+				E.printStackTrace();
+			}
+
 			while (true)
 			{
 				try
 				{
-					fileName = (String) JOptionPane.showInputDialog(
-							"File name (new or existing) (ex: Tunnels)").trim();
+					final JComboBox<String> jcb = new JComboBox<String>(mapNames);
+	                jcb.setEditable(true);
+	                jcb.addItemListener(new ItemListener() {
+	                    @Override
+	                    public void itemStateChanged(ItemEvent e) {
+	                        String selectedItem = (String) jcb.getSelectedItem();
+	                        boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("NewMap");
+	                        jcb.setEditable(editable);
+	                    }
+	                });
+	                JOptionPane.showMessageDialog(null, jcb);                
+					fileName = ((String)jcb.getSelectedItem()).trim();				
 				}
 				catch (NullPointerException e2)
 				{
