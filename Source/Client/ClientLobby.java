@@ -83,7 +83,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public ClientLobby(Socket socket, String playerName, GamePanel panel,
+	public ClientLobby(Socket socket, BufferedReader input, String playerName, GamePanel panel,
 			ArrayList<ClientCloud> clouds, JButton menu)
 					throws NumberFormatException, IOException
 	{
@@ -95,17 +95,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 		this.clouds = clouds;
 
-		// Set up the input
-		try
-		{
-			input = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-		}
-		catch (IOException e)
-		{
-			// System.out.println("Error creating buffered reader");
-			e.printStackTrace();
-		}
+		this.input = input;
 
 		// Set up the output
 		try
@@ -325,6 +315,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("Start"))
 					{
+						System.out.println("Started");
 						socket.close();
 						output.close();
 						input.close();

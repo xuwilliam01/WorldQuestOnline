@@ -86,14 +86,15 @@ public class ServerEngine implements Runnable, ActionListener {
 
 	private boolean endGame = false;
 	private int losingTeam;
-
+	private Server server;
 	/**
 	 * Constructor for the engine
 	 */
-	public ServerEngine(String map) throws IOException {
+	public ServerEngine(String map, Server server) throws IOException {
 		// Start importing the images from the file (place in a loading screen
 		// or something later)
 		Images.importImages();
+		this.server = server;
 		ImageReferencePair.importReferences();
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
@@ -193,6 +194,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		lastTeam--;
 		listOfPlayers.remove(remove);
 		world.remove(remove);
+		server.decreaseNumPlayer();
 		broadcast("R " + remove.getID());
 		broadcast("RO " + remove.getName().split(" ").length + " " + remove.getTeam() + remove.getName());
 	}

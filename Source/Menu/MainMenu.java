@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -566,12 +567,29 @@ public class MainMenu implements KeyListener
 			this.port = portIn;
 			boolean connected = false;
 			boolean exit = false;
-
+			boolean full = false;
+			BufferedReader input = null;
+			
 			while (!connected)
 			{
 				try
 				{
 					mySocket = new Socket(serverIP, port);
+					input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+					String line = null;
+					while(line == null)
+					{
+						line = input.readLine();
+					}
+					if(line.equals("FULL"))
+					{
+						System.out.println("ROOMS ARE FULL MESSAGE RECEIVED");
+						exit = true;
+						full = true;
+						input.close();
+						mySocket.close();
+					}
+
 					connected = true;
 				}
 				catch (IOException e)
@@ -587,6 +605,9 @@ public class MainMenu implements KeyListener
 
 			if (exit)
 			{
+				if(full)
+					JOptionPane.showMessageDialog(null, "All Rooms are full. Please try again later");
+				
 				setVisible(false);
 				mainFrame.remove(this);
 				mainFrame.invalidate();
@@ -604,7 +625,7 @@ public class MainMenu implements KeyListener
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
 
-				lobby = new ClientLobby(mySocket, playerName, this, clouds,menu);
+				lobby = new ClientLobby(mySocket, input, playerName, this, clouds,menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH
@@ -963,7 +984,7 @@ public class MainMenu implements KeyListener
 			// }
 
 			// Starts the server
-			ServerManager server = new ServerManager(portNum, 5,mainFrame);
+			ServerManager server = new ServerManager(portNum, 1,mainFrame);
 
 			Thread serverThread = new Thread(server);
 
@@ -972,7 +993,7 @@ public class MainMenu implements KeyListener
 		}
 
 	}
-	
+
 	/**
 	 * Starts the creator when this button is pressed
 	 * @author Alex Raita & William Xu
@@ -1006,16 +1027,16 @@ public class MainMenu implements KeyListener
 				try
 				{
 					final JComboBox<String> jcb = new JComboBox<String>(mapNames);
-	                jcb.setEditable(true);
-	                jcb.addItemListener(new ItemListener() {
-	                    @Override
-	                    public void itemStateChanged(ItemEvent e) {
-	                        String selectedItem = (String) jcb.getSelectedItem();
-	                        boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("NewMap");
-	                        jcb.setEditable(editable);
-	                    }
-	                });
-	                JOptionPane.showMessageDialog(null, jcb);                
+					jcb.setEditable(true);
+					jcb.addItemListener(new ItemListener() {
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+							String selectedItem = (String) jcb.getSelectedItem();
+							boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("NewMap");
+							jcb.setEditable(editable);
+						}
+					});
+					JOptionPane.showMessageDialog(null, jcb);                
 					fileName = ((String)jcb.getSelectedItem()).trim();				
 				}
 				catch (NullPointerException e2)

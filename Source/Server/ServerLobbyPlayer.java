@@ -29,7 +29,7 @@ public class ServerLobbyPlayer implements Runnable
 
 	private String allMaps = "";
 
-	public ServerLobbyPlayer(Socket socket, BufferedReader input, Server server)
+	public ServerLobbyPlayer(Socket socket, BufferedReader input, PrintWriter output, Server server)
 	{
 		this.socket = socket;
 		this.IP = socket.getInetAddress().toString();
@@ -47,7 +47,7 @@ public class ServerLobbyPlayer implements Runnable
 		// Set up the output
 		try
 		{
-			output = new PrintWriter(this.socket.getOutputStream());
+			this.output = output;
 
 			sendMessage("Good to go");
 			

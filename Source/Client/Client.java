@@ -268,6 +268,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			input = new BufferedReader(new InputStreamReader(
 					mySocket.getInputStream()));
+			input.readLine();
 		}
 		catch (IOException e)
 		{
@@ -386,6 +387,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								// If our player has moved
 								if (tokens[token].equals("L"))
 								{
+									//System.out.println(tokens[token]+" "+tokens[token+1]+" "+tokens[token+2]+" "+tokens[token+3]+" "+tokens[token+4]);
 									HP = Integer.parseInt(tokens[++token]);
 								}
 								else if (tokens[token].equals("M"))
