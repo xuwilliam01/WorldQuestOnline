@@ -42,6 +42,7 @@ import START.StartGame;
 import Server.Server;
 import Server.ServerFrame;
 import Server.ServerGUI;
+import Server.ServerManager;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;
 
@@ -962,35 +963,16 @@ public class MainMenu implements KeyListener
 			// }
 
 			// Starts the server
-			Server server = new Server(portNum);
+			ServerManager server = new ServerManager(portNum, 5,mainFrame);
 
 			Thread serverThread = new Thread(server);
 
 			serverThread.start();
 
-			while (true)
-			{
-				try
-				{
-					ServerGUI gui = new ServerGUI(server);
-					mainFrame.dispose();
-					ServerFrame myFrame = new ServerFrame();
-					gui.setLocation(0, 0);
-					myFrame.add(gui);
-					gui.revalidate();
-					server.setGUI(gui);
-					break;
-				}
-				catch (Exception E)
-				{
-
-				}
-			}
-
 		}
 
 	}
-
+	
 	/**
 	 * Starts the creator when this button is pressed
 	 * @author Alex Raita & William Xu

@@ -19,6 +19,8 @@ import Server.Creatures.ServerPlayer;
  */
 public class Server implements Runnable
 {
+	public final static int MAX_PLAYERS = 1;
+
 	private ServerSocket socket;
 	private ServerEngine engine;
 	private int port;
@@ -26,6 +28,8 @@ public class Server implements Runnable
 	private ServerGUI gui;
 	private boolean start = false;
 
+	private Socket newPlayerWaiting = null;
+	
 	public static String defaultMap;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
@@ -35,22 +39,31 @@ public class Server implements Runnable
 	private ArrayList<ServerLobbyPlayer> lobbyPlayers = new ArrayList<ServerLobbyPlayer>();
 
 	int noOfPlayers = 0;
-
-	public Server(int port)
+	
+	public boolean isFull()
 	{
-		this.port = port;
-
-		try
-		{
-			this.socket = new ServerSocket(port);
-		}
-		catch (IOException e)
-		{
-			System.out.println("Server cannot be created with given port");
-			e.printStackTrace();
-		}
+		return noOfPlayers + lobbyPlayers.size() >= MAX_PLAYERS;
 	}
-
+	
+	public void addClient(Socket newClient)
+	{
+		newPlayerWaiting = newClient;
+	}
+	
+	public Socket nextClient()
+	{
+		while(newPlayerWaiting == null)
+		{
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return newPlayerWaiting;
+	}
+	
 	@Override
 	public void run()
 	{
@@ -62,7 +75,9 @@ public class Server implements Runnable
 		{
 			try
 			{
-				Socket newClient = socket.accept();
+				Socket newClient = nextClient();
+				newPlayerWaiting = null;
+				
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(
 								newClient.getInputStream()));
