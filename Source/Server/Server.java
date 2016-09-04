@@ -20,7 +20,7 @@ import Server.Creatures.ServerPlayer;
  */
 public class Server implements Runnable
 {
-	public final static int MAX_PLAYERS = 2;
+	public final static int MAX_PLAYERS = 1;
 
 	private ServerEngine engine;
 	private int port;
@@ -107,7 +107,7 @@ public class Server implements Runnable
 				e.printStackTrace();
 			}
 		}
-		System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(), sizeIndex);
+		//System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(), sizeIndex);
 		sizeIndex++;
 		return newPlayerWaiting.get(sizeIndex-1);
 	}

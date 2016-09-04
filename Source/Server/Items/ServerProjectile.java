@@ -100,9 +100,9 @@ public class ServerProjectile extends ServerFlyingObject
 	 * Constructor for a projectile
 	 */
 	public ServerProjectile(double x, double y, ServerCreature owner,
-			double angle, String type)
+			double angle, String type, ServerWorld world)
 	{
-		super(x, y, 0, 0, 0, "", 0, angle, type);
+		super(x, y, 0, 0, 0, "", 0, angle, type,world.getEngine());
 		this.owner = owner;
 		ownerID = owner.getID();
 

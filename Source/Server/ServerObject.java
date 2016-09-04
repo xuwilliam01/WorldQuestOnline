@@ -113,7 +113,7 @@ public abstract class ServerObject
 	 * @param ID
 	 */
 	public ServerObject(double x, double y, int width, int height,
-			double gravity, String image, String type)
+			double gravity, String image, String type,ServerEngine engine)
 	{
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
@@ -125,7 +125,7 @@ public abstract class ServerObject
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-		this.id = ServerEngine.useNextID();
+		this.id = engine.useNextID();
 		this.image = image;
 		
 		if (width == -1)
@@ -149,7 +149,7 @@ public abstract class ServerObject
 	 * @param ID
 	 */
 	public ServerObject(double x, double y, int width, int height,
-			double gravity, String type)
+			double gravity, String type, ServerEngine engine)
 	{
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
@@ -162,7 +162,7 @@ public abstract class ServerObject
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-		this.id = ServerEngine.useNextID();
+		this.id = engine.useNextID();
 		
 		if (width == -1)
 		{

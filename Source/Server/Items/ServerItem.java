@@ -45,12 +45,15 @@ public abstract class ServerItem extends ServerObject
 	 */
 	private long coolDownStart;
 
+	private ServerWorld world;
+	
 	/**
 	 * Constructor that assigns and image and a value to every item
 	 */
-	public ServerItem(double x, double y, String type)
+	public ServerItem(double x, double y, String type, ServerWorld world)
 	{
-		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type);
+		super(x, y, 0, 0, ServerWorld.GRAVITY, "SERVERITEM", type,world.getEngine());
+		this.world = world;
 		switch (type)
 		{
 		case ServerWorld.HP_POTION_TYPE:
@@ -218,18 +221,18 @@ public abstract class ServerItem extends ServerObject
 	/**
 	 * Creates a random item
 	 */
-	public static ServerItem randomItem(double x, double y)
+	public static ServerItem randomItem(double x, double y, ServerWorld world)
 	{
 		int randType = (int) (Math.random() * 13 + 1);
 
 		if (randType <= 7)
-			return new ServerMoney(x, y);
+			return new ServerMoney(x, y,world);
 		if (randType <= 8)
-			return ServerArmour.randomArmour(x, y);
+			return ServerArmour.randomArmour(x, y,world);
 		if (randType <= 10)
-			return ServerPotion.randomPotion(x, y);
+			return ServerPotion.randomPotion(x, y,world);
 		if (randType <= 13)
-			return ServerWeapon.randomWeapon(x, y);
+			return ServerWeapon.randomWeapon(x, y,world);
 
 		// This won't happen
 		return null;
@@ -241,7 +244,7 @@ public abstract class ServerItem extends ServerObject
 	 * @param item the item to be copied
 	 * @return a copy of the item
 	 */
-	public static ServerItem copy(ServerItem item)
+	public static ServerItem copy(ServerItem item, ServerWorld world)
 	{
 		switch (item.getType())
 		{
@@ -252,14 +255,14 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.DMG_POTION_TYPE:
 		case ServerWorld.SPEED_POTION_TYPE:
 		case ServerWorld.JUMP_POTION_TYPE:
-			return new ServerPotion(item.getX(), item.getY(), item.getType());
+			return new ServerPotion(item.getX(), item.getY(), item.getType(),world);
 		case ServerWorld.MONEY_TYPE:
-			return new ServerMoney(item.getX(), item.getY());
+			return new ServerMoney(item.getX(), item.getY(),world);
 		case ServerWorld.STEEL_ARMOUR:
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 		case ServerWorld.RED_NINJA_ARMOUR:
 		case ServerWorld.GREY_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), item.getType());
+			return new ServerArmour(item.getX(), item.getY(), item.getType(),world);
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
@@ -287,7 +290,7 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.FIREWAND_TYPE:
 		case ServerWorld.ICEWAND_TYPE:
 		case ServerWorld.DARKWAND_TYPE:
-			return new ServerWeapon(item.getX(), item.getY(), item.getType());
+			return new ServerWeapon(item.getX(), item.getY(), item.getType(),world);
 
 		}
 		return null;
@@ -305,6 +308,11 @@ public abstract class ServerItem extends ServerObject
 		dropTime = start;
 	}
 
+	public ServerWorld getWorld()
+	{
+		return world;
+	}
+	
 	/**
 	 * Checks if the item has a cooldown and if it should be destroyed
 	 * @param currentTime the current world time

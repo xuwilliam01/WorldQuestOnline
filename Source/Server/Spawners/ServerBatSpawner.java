@@ -19,7 +19,7 @@ public class ServerBatSpawner extends ServerSpawner
 	/**
 	 * Max number of bats per bat spawner
 	 */
-	public final static int maxBats = 5;
+	public final static int MAX_BATS = 5;
 
 	/**
 	 * Constructor
@@ -43,7 +43,7 @@ public class ServerBatSpawner extends ServerSpawner
 	public void update()
 	{
 		long worldCounter = getWorld().getWorldCounter();
-		if (worldCounter % getDelay() == 0 && batCount < maxBats)
+		if (worldCounter % getDelay() == 0 && batCount < MAX_BATS)
 		{
 
 			ServerBat newbat = new ServerBat(getX(), getY()

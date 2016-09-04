@@ -313,7 +313,7 @@ public class ServerGoblin extends ServerCreature {
 				+ movementSpeed * 3.0 / 4;
 
 		if (Math.random() < 0.1)
-			addItem(ServerItem.randomItem(getX(), getY()));
+			addItem(ServerItem.randomItem(getX(), getY(),world));
 		setTeam(team);
 	}
 
@@ -512,7 +512,7 @@ public class ServerGoblin extends ServerCreature {
 								ServerProjectile projectile = new ServerProjectile(getX()
 										+ getWidth() / 2, getY()
 										+ getHeight() / 3, this, angle,
-										weapon);
+										weapon,getWorld());
 								projectile.setDamage(damage);
 								getWorld().add(projectile);
 

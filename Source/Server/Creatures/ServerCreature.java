@@ -118,7 +118,7 @@ public abstract class ServerCreature extends ServerObject
 			double gravity, String image, String type, int maxHP,
 			ServerWorld world, boolean attackable)
 	{
-		super(x, y, width, height, gravity, image, type);
+		super(x, y, width, height, gravity, image, type,world.getEngine());
 
 		this.attackable = attackable;
 		this.relativeDrawX = relativeDrawX;
@@ -368,7 +368,7 @@ public abstract class ServerCreature extends ServerObject
 			{
 				toRemove = sItem;
 				if (toRemove.getAmount() > 1)
-					dropItem(ServerItem.copy(sItem));
+					dropItem(ServerItem.copy(sItem,world));
 				else
 					dropItem(sItem);
 				break;

@@ -184,16 +184,7 @@ public class ServerWorld {
 	 * 
 	 * (MAKE SURE TO SET WORLD WHEN CREATING CREATURES)
 	 */
-	public final ServerObject[] objectTypes = {
-			new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
-			new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
-			new ServerChest(0, 0, this),
-			new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
-			new ServerVendor(0, 0, this, "VENDOR_LEFT"),
-			new ServerSlimeSpawner(0, 0, this),
-			new ServerBatSpawner(0, 0, this),
-			new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
-			new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
+	public ServerObject[] objectTypes;
 
 	// Store the goblin spawners so the castles can access them and change their
 	// settings
@@ -261,7 +252,7 @@ public class ServerWorld {
 	/**
 	 * The number of slimes in the world
 	 */
-	public static int slimeCount = 0;
+	public int slimeCount = 0;
 
 	private ServerEngine engine;
 
@@ -292,6 +283,16 @@ public class ServerWorld {
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
+		objectTypes = new ServerObject[]{
+				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
+				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
+				new ServerChest(0, 0, this),
+				new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
+				new ServerVendor(0, 0, this, "VENDOR_LEFT"),
+				new ServerSlimeSpawner(0, 0, this),
+				new ServerBatSpawner(0, 0, this),
+				new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
+				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
 		newWorld();
 	}
 
@@ -305,6 +306,16 @@ public class ServerWorld {
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
+		objectTypes = new ServerObject[]{
+				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
+				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
+				new ServerChest(0, 0, this),
+				new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
+				new ServerVendor(0, 0, this, "VENDOR_LEFT"),
+				new ServerSlimeSpawner(0, 0, this),
+				new ServerBatSpawner(0, 0, this),
+				new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
+				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
 		newWorld();
 	}
 
@@ -1151,6 +1162,11 @@ public class ServerWorld {
 
 	public void setWorldCounter(long worldCounter) {
 		this.worldCounter = worldCounter;
+	}
+	
+	public ServerEngine getEngine()
+	{
+		return engine;
 	}
 
 }

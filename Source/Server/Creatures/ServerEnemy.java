@@ -64,7 +64,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	 */
 	public void findTarget()
 	{
-		for (ServerPlayer player : ServerEngine.getListOfPlayers())
+		for (ServerPlayer player : getWorld().getEngine().getListOfPlayers())
 		{
 			if (player.isAlive() && quickInRange(player, targetRange))
 			{

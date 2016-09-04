@@ -30,9 +30,9 @@ public abstract class ServerFlyingObject extends ServerObject
 	 */
 	public ServerFlyingObject(double x, double y, int width, int height,
 			double gravity, String image, double speed, double angle,
-			String type)
+			String type, ServerEngine engine)
 	{
-		super(x, y, width, height, gravity, image, type);
+		super(x, y, width, height, gravity, image, type, engine);
 		setHSpeed((Math.round(speed * Math.cos(angle) * 100)) / 100);
 		setVSpeed((Math.round(speed * Math.sin(angle) * 100)) / 100);
 	}

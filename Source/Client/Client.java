@@ -192,7 +192,7 @@ MouseMotionListener
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
-
+		System.out.println("PlayerName: "+playerName);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
