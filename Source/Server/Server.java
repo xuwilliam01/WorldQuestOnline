@@ -20,7 +20,7 @@ import Server.Creatures.ServerPlayer;
  */
 public class Server implements Runnable
 {
-	public final static int MAX_PLAYERS = 1;
+	public final static int MAX_PLAYERS = 2;
 
 	private ServerEngine engine;
 	private int port;
