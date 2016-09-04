@@ -502,8 +502,8 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 		graphics.setColor(Color.black);
 		// Inform the player on how to quit
-		graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
-				20);
+		//graphics.drawString("Press 'ESC' to quit", ClientFrame.getScaledWidth(1920)-120,
+		//		20);
 
 		// Write the map name in the top right
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
