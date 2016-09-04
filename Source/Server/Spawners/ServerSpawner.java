@@ -35,7 +35,7 @@ public abstract class ServerSpawner extends ServerObject
 	public ServerSpawner(double x, double y, ServerWorld world, String type)
 	{
 		super(x, y, ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE,
-				0, type);
+				0, type,world.getEngine());
 		this.world = world;
 		makeExist();
 		setSolid(false);

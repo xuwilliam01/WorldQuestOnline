@@ -40,7 +40,7 @@ public abstract class ServerText extends ServerObject {
 	 */
 	public ServerText(double x, double y, double gravity, String text,
 			char colour, String type, ServerWorld world, int framesAlive) {
-		super(x, y, 20, 20, gravity, "t" + colour + text, type);
+		super(x, y, 20, 20, gravity, "t" + colour + text, type,world.getEngine());
 		setSolid(false);
 		this.world = world;
 		startCounter = world.getWorldCounter();

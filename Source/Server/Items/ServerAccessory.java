@@ -28,10 +28,10 @@ public class ServerAccessory extends ServerObject
 	 * @param wielder
 	 * @param image
 	 */
-	public ServerAccessory(ServerCreature wielder, String baseImage, double armourPercentage)
+	public ServerAccessory(ServerCreature wielder, String baseImage, double armourPercentage,ServerWorld world)
 	{
 		super(wielder.getDrawX(), wielder.getDrawY(), wielder.getWidth(), wielder.getHeight(), 0,
-				baseImage + "_RIGHT_0_0", ServerWorld.ACCESSORY_TYPE);
+				baseImage + "_RIGHT_0_0", ServerWorld.ACCESSORY_TYPE,world.getEngine());
 		this.baseImage = baseImage;
 		this.wielder = wielder;
 		setSolid(false);

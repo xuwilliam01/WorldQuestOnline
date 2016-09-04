@@ -251,7 +251,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			int width,
 			int height, double relativeDrawX, double relativeDrawY,
 			double gravity, String skinColour, Socket socket,
-			ServerEngine engine, ServerWorld world, BufferedReader input)
+			ServerEngine engine, ServerWorld world, BufferedReader input, PrintWriter output)
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour
@@ -260,7 +260,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		//Set default name of the player
 		setName("Player");
-
+		
 		// Set a random hair style for the player
 		String hair = "HAIR0BEIGE";
 		int randomHair = (int) (Math.random() * 8);
@@ -288,7 +288,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			hair = "HAIR1GREY";
 			break;
 		}
-		ServerAccessory newHair = new ServerAccessory(this, hair, 0);
+		ServerAccessory newHair = new ServerAccessory(this, hair, 0,world);
 		setHead(newHair);
 		world.add(newHair);
 
@@ -311,17 +311,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		yUpdated = true;
 		this.joinTime = world.getWorldCounter();
 
-		// Set up the output
-		try
-		{
-			output = new PrintWriter(this.socket.getOutputStream());
-		}
-		catch (IOException e)
-		{
-			System.out.println("Error getting client's output stream");
-			e.printStackTrace();
-		}
-
+		this.output = output;
 		this.input = input;
 		// Send the 2D grid of the world to the client
 		sendMap();
@@ -340,19 +330,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 		case 0:
 			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-					+ ServerWorld.STONE_TIER));
+					+ ServerWorld.STONE_TIER,world));
 			break;
 		case 1:
 			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-					+ ServerWorld.STONE_TIER));
+					+ ServerWorld.STONE_TIER,world));
 			break;
 		case 2:
-			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE));
+			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE,world));
 			break;
 		}
 
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 10));
+		addItem(new ServerMoney(0, 0, 10,world));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -545,15 +535,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-								+ ServerWorld.STONE_TIER));
+								+ ServerWorld.STONE_TIER,world));
 						break;
 					case 1:
 						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-								+ ServerWorld.STONE_TIER));
+								+ ServerWorld.STONE_TIER,world));
 						break;
 					case 2:
 						addItem(new ServerWeapon(0, 0,
-								ServerWorld.SLINGSHOT_TYPE));
+								ServerWorld.SLINGSHOT_TYPE,world));
 						break;
 					}
 
@@ -1182,7 +1172,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				if (item.getAmount() > 1)
 				{
 					item.decreaseAmount();
-					vendor.addItem(ServerItem.copy(item));
+					vendor.addItem(ServerItem.copy(item,world));
 				}
 				else
 				{
@@ -1211,7 +1201,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void increaseMoney(int amount)
 	{
 		ServerMoney newMoney = new ServerMoney(getX() + getWidth() / 2, getY()
-				+ getHeight() / 2, amount);
+				+ getHeight() / 2, amount,world);
 		newMoney.makeExist();
 		if (vendor != null)
 		{
@@ -1424,7 +1414,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					world.add(new ServerProjectile(getX() + getWidth() / 2,
 							getY() + getHeight() / 3, this, angle,
-							arrowType));
+							arrowType,world));
 
 					if (getDirection().equals("LEFT"))
 					{
@@ -1437,7 +1427,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 
 					heldWeapon = new ServerObjectShown(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE);
+							ServerWorld.WEAPON_HOLD_TYPE,world.getEngine());
 					heldWeapon.setSolid(false);
 					world.add(heldWeapon);
 				}
@@ -1804,7 +1794,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		equippedArmour = (ServerArmour) toRemove;
 
 		ServerAccessory newArmour = new ServerAccessory(this,
-				equippedArmour.getArmourImage(), equippedArmour.getArmour());
+				equippedArmour.getArmourImage(), equippedArmour.getArmour(),world);
 		if (getBody() != null)
 		{
 			getBody().destroy();

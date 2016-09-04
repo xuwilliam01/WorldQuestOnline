@@ -45,8 +45,8 @@ import Server.Creatures.ServerPlayer;
  *
  */
 public class Client extends JPanel implements KeyListener, MouseListener,
-		ActionListener,
-		MouseMotionListener
+ActionListener,
+MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
@@ -192,7 +192,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
 			String playerName)
 	{
-		
+		System.out.println("PlayerName: "+playerName);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
@@ -224,7 +224,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setLayout(null);
 		add(chat);
 		add(enter);
-		
+
 	}
 
 	/**
@@ -268,6 +268,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			input = new BufferedReader(new InputStreamReader(
 					mySocket.getInputStream()));
+			System.out.println("Skipped: "+input.readLine());
 		}
 		catch (IOException e)
 		{
@@ -386,6 +387,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								// If our player has moved
 								if (tokens[token].equals("L"))
 								{
+									//System.out.println(tokens[token]+" "+tokens[token+1]+" "+tokens[token+2]+" "+tokens[token+3]+" "+tokens[token+4]);
 									HP = Integer.parseInt(tokens[++token]);
 								}
 								else if (tokens[token].equals("M"))
@@ -410,11 +412,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 
 									JOptionPane
-											.showMessageDialog(
-													Client.this,
-													String.format(
-															"The %s castle has been destroyed, the winner is the %s!",
-															loser, winner));
+									.showMessageDialog(
+											Client.this,
+											String.format(
+													"The %s castle has been destroyed, the winner is the %s!",
+													loser, winner));
 									leaveGame = true;
 									input.close();
 									output.close();
@@ -481,7 +483,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												y,
 												tokens[++token],
 												Integer
-														.parseInt(tokens[++token]),
+												.parseInt(tokens[++token]),
 												tokens[++token],
 												tokens[++token]);
 									}
@@ -510,7 +512,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												y,
 												tokens[++token],
 												Integer
-														.parseInt(tokens[++token]),
+												.parseInt(tokens[++token]),
 												tokens[++token], name.trim());
 										token += len;
 									}
@@ -797,11 +799,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		System.out.println("Importing the map from the server...");
 
 		// Get the 2D grid from the server
-		String gridSize = "";
+		String gridSize = null;
 
 		try
 		{
-			gridSize = input.readLine();
+			while(gridSize == null)
+			{
+				gridSize = input.readLine();
+			}
+			System.out.println("gridside "+gridSize);
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
 			int width = Integer.parseInt(dimensions[1]);
@@ -1082,14 +1088,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-													+ " by a "),
-									textY);
+											+ " by a "),
+											textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-									textY);
+											textY);
 					}
 					textY += 20;
 				}
@@ -1230,31 +1236,31 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		else
 		{
-		if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
-				&& !currentMessage.equals("!R"))
-		{
-			currentMessage = "!R";
-			System.out.println("Leave right");
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
-				&& !currentMessage.equals("!L"))
-		{
-			currentMessage = "!L";
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_W
-				|| key.getKeyCode() == KeyEvent.VK_UP
-				|| key.getKeyCode() == KeyEvent.VK_SPACE)
-				&& !currentMessage.equals("!U"))
-		{
-			currentMessage = "!U";
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
-				&& !currentMessage.equals("!D"))
-		{
-			currentMessage = "!D";
-		}
+			if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
+					&& !currentMessage.equals("!R"))
+			{
+				currentMessage = "!R";
+				System.out.println("Leave right");
+			}
+			else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
+					&& !currentMessage.equals("!L"))
+			{
+				currentMessage = "!L";
+			}
+			else if ((key.getKeyCode() == KeyEvent.VK_W
+					|| key.getKeyCode() == KeyEvent.VK_UP
+					|| key.getKeyCode() == KeyEvent.VK_SPACE)
+					&& !currentMessage.equals("!U"))
+			{
+				currentMessage = "!U";
+			}
+			else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
+					&& !currentMessage.equals("!D"))
+			{
+				currentMessage = "!D";
+			}
 
-		printToServer(currentMessage);
+			printToServer(currentMessage);
 		}
 	}
 

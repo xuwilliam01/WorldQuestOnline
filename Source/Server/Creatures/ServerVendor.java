@@ -65,25 +65,25 @@ public class ServerVendor extends ServerCreature
 	{
 		for (int potion = 0; potion < 10; potion++)
 		{
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.HP_POTION_TYPE));
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.MANA_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.HP_POTION_TYPE,getWorld()));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MANA_POTION_TYPE,getWorld()));
 		}
 		for (int potion = 0; potion < 5; potion++)
 		{
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_HP_TYPE));
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_MANA_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_HP_TYPE,getWorld()));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.MAX_MANA_TYPE,getWorld()));
 		}
 		for (int potion = 0; potion < 3; potion++)
 		{
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE));
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE));
-			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.JUMP_POTION_TYPE,getWorld()));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.SPEED_POTION_TYPE,getWorld()));
+			addItem(new ServerPotion(getX(), getY(), ServerWorld.DMG_POTION_TYPE,getWorld()));
 		}
 		
 		int noOfWeapons = (int)(Math.random()*10 + 35);
 		for (int weapon = 0; weapon < noOfWeapons; weapon++)
 		{
-			addItem(ServerWeapon.randomShopWeapon(getX(), getY()));
+			addItem(ServerWeapon.randomShopWeapon(getX(), getY(),getWorld()));
 		}
 
 		// Add a rare weapon
@@ -91,31 +91,31 @@ public class ServerVendor extends ServerCreature
 		switch (randWeapon)
 		{
 		case 1:
-			addItem(new ServerWeapon(getX(), getY(), ServerWorld.DARKWAND_TYPE));
+			addItem(new ServerWeapon(getX(), getY(), ServerWorld.DARKWAND_TYPE,getWorld()));
 			break;
 		case 2:
-			addItem(new ServerWeapon(getX(), getY(), ServerWorld.MEGABOW_TYPE));
+			addItem(new ServerWeapon(getX(), getY(), ServerWorld.MEGABOW_TYPE,getWorld()));
 			break;
 		case 3:
 			addItem(new ServerWeapon(getX(), getY(), ServerWorld.SWORD_TYPE
-					+ ServerWorld.DIAMOND_TIER));
+					+ ServerWorld.DIAMOND_TIER,getWorld()));
 			break;
 		case 4:
 			addItem(new ServerWeapon(getX(), getY(), ServerWorld.HALBERD_TYPE
-					+ ServerWorld.DIAMOND_TIER));
+					+ ServerWorld.DIAMOND_TIER,getWorld()));
 			break;
 		case 5:
-			addItem(new ServerWeapon(getX(), getY(), ServerWorld.FIREWAND_TYPE));
+			addItem(new ServerWeapon(getX(), getY(), ServerWorld.FIREWAND_TYPE,getWorld()));
 		case 6:
-			addItem(new ServerWeapon(getX(), getY(), ServerWorld.STEELBOW_TYPE));
+			addItem(new ServerWeapon(getX(), getY(), ServerWorld.STEELBOW_TYPE,getWorld()));
 			break;
 		}
 
 		for (int armour = 0; armour < 8; armour++)
-			addItem(ServerArmour.randomArmour(getX(), getY()));
+			addItem(ServerArmour.randomArmour(getX(), getY(),getWorld()));
 
 		// Always have the steel armour
-		addItem(new ServerArmour(getX(), getY(), ServerWorld.STEEL_ARMOUR));
+		addItem(new ServerArmour(getX(), getY(), ServerWorld.STEEL_ARMOUR,getWorld()));
 
 	}
 

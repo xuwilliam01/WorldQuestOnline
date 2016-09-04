@@ -102,7 +102,7 @@ public class ServerWeaponSwing extends ServerObject
 			int timeInFrames, int damage)
 	{
 		super(owner.getX(), owner.getY(), -1, -1, 0, image,
-				ServerWorld.WEAPON_SWING_TYPE);
+				ServerWorld.WEAPON_SWING_TYPE,owner.getWorld().getEngine());
 
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;

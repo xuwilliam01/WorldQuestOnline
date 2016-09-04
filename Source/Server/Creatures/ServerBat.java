@@ -126,15 +126,15 @@ public class ServerBat extends ServerEnemy
 			setDamage((int) (Math.random() * 2) + 13);
 			setHP(80);
 			setName("Dark Bat");
-			addItem(ServerItem.randomItem(getX(), getY()));
-			addItem(ServerItem.randomItem(getX(), getY()));
+			addItem(ServerItem.randomItem(getX(), getY(),world));
+			addItem(ServerItem.randomItem(getX(), getY(),world));
 
 			maxSpeed = (int) (Math.random() * 3 + 6);
 		}
 
 		if (Math.random() < 0.75)
 		{
-			addItem(ServerItem.randomItem(getX(), getY()));
+			addItem(ServerItem.randomItem(getX(), getY(),world));
 		}
 
 		// Set the actual bounds of the creature

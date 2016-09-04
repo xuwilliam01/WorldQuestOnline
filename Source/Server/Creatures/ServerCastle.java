@@ -138,7 +138,7 @@ public class ServerCastle extends ServerCreature {
 				}
 
 				ServerProjectile arrow = new ServerProjectile(getX() + 270,
-						getY() + 232, this, angle, arrowType);
+						getY() + 232, this, angle, arrowType,getWorld());
 
 				getWorld().add(arrow);
 			}

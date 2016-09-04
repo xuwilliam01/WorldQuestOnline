@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
@@ -19,13 +20,18 @@ import Server.Creatures.ServerPlayer;
  */
 public class Server implements Runnable
 {
-	private ServerSocket socket;
+	public final static int MAX_PLAYERS = 2;
+
 	private ServerEngine engine;
 	private int port;
 	private String map;
 	private ServerGUI gui;
 	private boolean start = false;
 
+	private PrintWriter output = null;
+
+	private ArrayList<Socket> newPlayerWaiting = new ArrayList<Socket>();
+	private int sizeIndex = 0;
 	public static String defaultMap;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
@@ -36,38 +42,91 @@ public class Server implements Runnable
 
 	int noOfPlayers = 0;
 
-	public Server(int port)
+	public boolean isFull()
 	{
-		this.port = port;
-
-		try
+		if(!start)
 		{
-			this.socket = new ServerSocket(port);
+			return lobbyPlayers.size() >= MAX_PLAYERS;
 		}
-		catch (IOException e)
+		else
+			return noOfPlayers>= MAX_PLAYERS;
+	}
+
+	public void decreaseNumPlayer()
+	{
+		noOfPlayers--;
+	}
+	public boolean started()
+	{
+		return start;
+	}
+
+	public void addClient(Socket newClient,PrintWriter output)
+	{
+		while(true)
 		{
-			System.out.println("Server cannot be created with given port");
-			e.printStackTrace();
+			try{
+				newPlayerWaiting.add(newClient);
+				break;
+			}
+			catch(ConcurrentModificationException E)
+			{
+				System.out.println("Concurrnet modification adding players to game");
+			}
 		}
 	}
+
+	public Socket nextClient() throws Exception
+	{
+		while(newPlayerWaiting.size() == sizeIndex)
+		{
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if(start)
+			{
+				throw new Exception();
+			}
+		}
+		sizeIndex++;
+		return newPlayerWaiting.get(sizeIndex-1);
+	}
+
+	public Socket nextGameClient() 
+	{
+		while(newPlayerWaiting.size() == sizeIndex)
+		{
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(), sizeIndex);
+		sizeIndex++;
+		return newPlayerWaiting.get(sizeIndex-1);
+	}
+
 
 	@Override
 	public void run()
 	{
-		Close closeSocket = new Close();
-		Thread closeThead = new Thread(closeSocket);
-		closeThead.start();
-
 		while (true)
 		{
 			try
 			{
-				Socket newClient = socket.accept();
+				Socket newClient = nextClient();
+				output = new PrintWriter(newClient.getOutputStream());
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(
 								newClient.getInputStream()));
 
-				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,input,
+				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,input,output,
 						this);
 
 
@@ -87,18 +146,11 @@ public class Server implements Runnable
 			}
 			catch (Exception E)
 			{
+				System.out.println("Exited the lobby");
+				newPlayerWaiting.clear();
+				sizeIndex = 0;
 				break;
 			}
-		}
-
-		System.out.println("Exited the lobby");
-		try
-		{
-			socket = new ServerSocket(port);
-		}
-		catch (IOException e2)
-		{
-			e2.printStackTrace();
 		}
 
 		if (map == null)
@@ -110,7 +162,7 @@ public class Server implements Runnable
 		System.out.println("Creating world...");
 		try
 		{
-			engine = new ServerEngine(map);
+			engine = new ServerEngine(map,this);
 			gui.setMap(map);
 		}
 		catch (IOException e1)
@@ -132,35 +184,37 @@ public class Server implements Runnable
 		{
 			lobbyPlayersToAdd.add(player);
 		}
-
 		while (true)
 		{
 			try
 			{
-				Socket newClient = socket.accept();
+				Socket newClient = nextGameClient();
+				output = new PrintWriter(newClient.getOutputStream());
 				noOfPlayers++;
+
+				BufferedReader input = new BufferedReader(
+						new InputStreamReader(
+								newClient.getInputStream()));
+
 
 				String IP = newClient.getInetAddress().toString();
 				int team = -1;
 				String name = null;
 				ServerLobbyPlayer playerToRemove = null;
-				BufferedReader input = new BufferedReader(
-						new InputStreamReader(
-								newClient.getInputStream()));
+
 
 				String message = input.readLine();
 				String nameCheck;
-				
+
 				// If someone connects late, get them to start the client
 				if (message.equals("Lobby"))
 				{
-					
 					System.out.println("Checkpoint 2");
-					PrintWriter output = new PrintWriter(newClient.getOutputStream());
 					output.println("Start");
 					output.flush();
+					output.close();
 					input.close();
-					
+					noOfPlayers--;
 
 					//Close input and socket
 					continue;
@@ -170,7 +224,7 @@ public class Server implements Runnable
 					nameCheck = message;
 				}
 
-				
+
 				boolean inServer = false;
 				for (ServerLobbyPlayer player : lobbyPlayersToAdd)
 				{
@@ -189,7 +243,7 @@ public class Server implements Runnable
 						}
 					}
 				}
-				
+
 				if (!inServer)
 				{
 					team = engine.getNextTeam();
@@ -198,7 +252,7 @@ public class Server implements Runnable
 							+ name.split(" ").length + " "
 							+ team + name);
 				}
-				
+
 				if (team == -1)
 				{
 					newClient.close();
@@ -228,7 +282,7 @@ public class Server implements Runnable
 						ServerPlayer.DEFAULT_WIDTH,
 						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
 						ServerWorld.GRAVITY, playerColours[characterSelection],
-						newClient, engine, engine.getWorld(), input);
+						newClient, engine, engine.getWorld(), input,output);
 
 				newPlayer.setName(name);
 				newPlayer.setTeam(team);
@@ -242,6 +296,10 @@ public class Server implements Runnable
 			{
 				System.out.println("Error connecting to client");
 				e.printStackTrace();
+			}
+			catch(NullPointerException e)
+			{
+				System.out.println("Client has disconnected");
 			}
 		}
 	}
@@ -319,35 +377,4 @@ public class Server implements Runnable
 		gui.setMap(map);
 	}
 
-	private class Close implements Runnable
-	{
-		public void run()
-		{
-			while (true)
-			{
-				if (start)
-					try
-					{
-						socket.close();
-						break;
-					}
-					catch (IOException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				try
-				{
-					Thread.sleep(200);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	}
 }

@@ -13,8 +13,8 @@ public class ServerMoney extends ServerItem{
 	 * Constructor for money
 	 * @param amount the amount of money
 	 */
-	public ServerMoney(double x, double y, int amount) {
-		super(x, y, ServerWorld.MONEY_TYPE);
+	public ServerMoney(double x, double y, int amount, ServerWorld world) {
+		super(x, y, ServerWorld.MONEY_TYPE,world);
 		setAmount(amount);
 	}
 
@@ -23,8 +23,8 @@ public class ServerMoney extends ServerItem{
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
-	public ServerMoney(double x, double y) {
-		super(x, y, ServerWorld.MONEY_TYPE);
+	public ServerMoney(double x, double y, ServerWorld world) {
+		super(x, y, ServerWorld.MONEY_TYPE,world);
 	}
 
 	@Override

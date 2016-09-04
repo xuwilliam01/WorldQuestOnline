@@ -22,9 +22,9 @@ public class ServerPotion extends ServerItem
 	/**
 	 * Constructor
 	 */
-	public ServerPotion(double x, double y, String type)
+	public ServerPotion(double x, double y, String type, ServerWorld world)
 	{
-		super(x, y, type);
+		super(x, y, type,world);
 	}
 
 	/**
@@ -32,24 +32,24 @@ public class ServerPotion extends ServerItem
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
-	public static ServerPotion randomPotion(double x, double y)
+	public static ServerPotion randomPotion(double x, double y, ServerWorld world)
 	{
 		int randType = (int) (Math.random() * 21 + 1);
 
 		if (randType <= 1)
-			return new ServerPotion(x, y, ServerWorld.DMG_POTION_TYPE);
+			return new ServerPotion(x, y, ServerWorld.DMG_POTION_TYPE,world);
 		if (randType <= 3)
-			return new ServerPotion(x, y, ServerWorld.SPEED_POTION_TYPE);
+			return new ServerPotion(x, y, ServerWorld.SPEED_POTION_TYPE,world);
 		if (randType <= 5)
-			return new ServerPotion(x, y, ServerWorld.JUMP_POTION_TYPE);
+			return new ServerPotion(x, y, ServerWorld.JUMP_POTION_TYPE,world);
 		if (randType <= 7)
-			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE);
+			return new ServerPotion(x, y, ServerWorld.MAX_MANA_TYPE,world);
 		if (randType <= 9)
-			return new ServerPotion(x, y, ServerWorld.MAX_HP_TYPE);
+			return new ServerPotion(x, y, ServerWorld.MAX_HP_TYPE,world);
 		if (randType <= 15)
-			return new ServerPotion(x, y, ServerWorld.HP_POTION_TYPE);
+			return new ServerPotion(x, y, ServerWorld.HP_POTION_TYPE,world);
 		if (randType <= 21)
-			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE);
+			return new ServerPotion(x, y, ServerWorld.MANA_POTION_TYPE,world);
 
 		// This won't happen
 		return null;

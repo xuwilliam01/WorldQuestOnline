@@ -8,11 +8,17 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -20,6 +26,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,6 +43,7 @@ import START.StartGame;
 import Server.Server;
 import Server.ServerFrame;
 import Server.ServerGUI;
+import Server.ServerManager;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;
 
@@ -559,12 +567,29 @@ public class MainMenu implements KeyListener
 			this.port = portIn;
 			boolean connected = false;
 			boolean exit = false;
+			boolean full = false;
+			BufferedReader input = null;
 
 			while (!connected)
 			{
 				try
 				{
 					mySocket = new Socket(serverIP, port);
+					input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+					String line = null;
+					while(line == null)
+					{
+						line = input.readLine();
+					}
+					if(line.equals("FULL"))
+					{
+						System.out.println("ROOMS ARE FULL MESSAGE RECEIVED");
+						exit = true;
+						full = true;
+						input.close();
+						mySocket.close();
+					}
+
 					connected = true;
 				}
 				catch (IOException e)
@@ -580,6 +605,9 @@ public class MainMenu implements KeyListener
 
 			if (exit)
 			{
+				if(full)
+					JOptionPane.showMessageDialog(null, "All Rooms are full. Please try again later");
+
 				setVisible(false);
 				mainFrame.remove(this);
 				mainFrame.invalidate();
@@ -597,7 +625,7 @@ public class MainMenu implements KeyListener
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
 
-				lobby = new ClientLobby(mySocket, playerName, this, clouds,menu);
+				lobby = new ClientLobby(mySocket, input, playerName, this, clouds,menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH
@@ -714,10 +742,6 @@ public class MainMenu implements KeyListener
 			mainFrame.setVisible(true);
 			mainFrame.requestFocus();
 			mainMenu.revalidate();
-
-
-
-
 		}
 
 
@@ -920,22 +944,24 @@ public class MainMenu implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// while(true)
-			// {
-			// fileName = JOptionPane
-			// .showInputDialog("Map name (Default: WORLD)");
-			// if(fileName == null)
-			// return;
-			// else if(fileName.equals(""))
-			// fileName = "World.txt";
-			// else
-			// fileName+=".txt";
-			//
-			// File f = new File("Resources",fileName);
-			// if(f.exists() && !f.isDirectory()) {
-			// break;
-			// }
-			// }
+			int maxRooms;
+			while(true)
+			{
+				try{
+					String maxRoomsStr=JOptionPane
+					.showInputDialog("What is the maximum number of gamerooms you would like?");
+					if(maxRoomsStr == null)
+						return;
+					maxRooms = Integer.parseInt(maxRoomsStr);
+					if(maxRooms < 1)
+						maxRooms = 1;
+					break;
+				}
+				catch(Exception E)
+				{
+
+				}
+			}
 
 			int portNum = DEF_PORT;
 			// while (true)
@@ -960,30 +986,12 @@ public class MainMenu implements KeyListener
 			// }
 
 			// Starts the server
-			Server server = new Server(portNum);
+			System.out.println("rooms "+maxRooms);
+			ServerManager server = new ServerManager(portNum, maxRooms,mainFrame);
 
 			Thread serverThread = new Thread(server);
 
 			serverThread.start();
-
-			while (true)
-			{
-				try
-				{
-					ServerGUI gui = new ServerGUI(server);
-					mainFrame.dispose();
-					ServerFrame myFrame = new ServerFrame();
-					gui.setLocation(0, 0);
-					myFrame.add(gui);
-					gui.revalidate();
-					server.setGUI(gui);
-					break;
-				}
-				catch (Exception E)
-				{
-
-				}
-			}
 
 		}
 
@@ -1000,12 +1008,39 @@ public class MainMenu implements KeyListener
 		{
 			// Get filename. If it is invalid, exit
 			String fileName = "";
+			String[] mapNames = null;
+			try{
+				BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
+				int numMaps = Integer.parseInt(maps.readLine());
+				mapNames = new String[numMaps+1];
+				mapNames[0] = "NewMap";
+				for(int i =0; i < numMaps;i++)
+				{
+					mapNames[i+1] = maps.readLine().toLowerCase();
+				}
+				maps.close();
+			}
+			catch(Exception E)
+			{
+				E.printStackTrace();
+			}
+
 			while (true)
 			{
 				try
 				{
-					fileName = (String) JOptionPane.showInputDialog(
-							"File name (new or existing) (ex: Tunnels)").trim();
+					final JComboBox<String> jcb = new JComboBox<String>(mapNames);
+					jcb.setEditable(true);
+					jcb.addItemListener(new ItemListener() {
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+							String selectedItem = (String) jcb.getSelectedItem();
+							boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("NewMap");
+							jcb.setEditable(editable);
+						}
+					});
+					JOptionPane.showMessageDialog(null, jcb);                
+					fileName = ((String)jcb.getSelectedItem()).trim();				
 				}
 				catch (NullPointerException e2)
 				{

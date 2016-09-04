@@ -520,7 +520,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		try
 		{
 			if (started)
-				for (ServerPlayer player : ServerEngine.getListOfPlayers())
+				for (ServerPlayer player : engine.getListOfPlayers())
 				{
 					if (player.getTeam() == ServerCreature.RED_TEAM)
 					{

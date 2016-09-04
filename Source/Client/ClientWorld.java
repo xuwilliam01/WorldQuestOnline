@@ -533,6 +533,12 @@ public class ClientWorld {
 						String text = imageName
 								.substring(2, imageName.length());
 
+						char first = text.charAt(0);
+						if (first=='/')
+						{
+							continue;
+						}
+						
 						if (!Character.isLetter(text.charAt(0))) {
 							if (text.equals("!M")) {
 								text = "NOT ENOUGH MANA";

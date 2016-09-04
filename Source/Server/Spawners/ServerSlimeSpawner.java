@@ -19,7 +19,7 @@ public class ServerSlimeSpawner extends ServerSpawner
 	/**
 	 * Max number of slimes per slime spawner
 	 */
-	public final static int maxSlimes = 7;
+	public final static int MAX_SLIMES = 7;
 
 	/**
 	 * Constructor
@@ -43,7 +43,7 @@ public class ServerSlimeSpawner extends ServerSpawner
 	public void update()
 	{
 		long worldCounter = getWorld().getWorldCounter();
-		if (worldCounter % getDelay() == 0 && slimeCount < maxSlimes)
+		if (worldCounter % getDelay() == 0 && slimeCount < MAX_SLIMES)
 		{
 
 			ServerSlime newSlime = new ServerSlime(getX(), getY()

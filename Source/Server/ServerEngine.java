@@ -24,7 +24,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	/**
 	 * A list of all the players in the server
 	 */
-	private static ArrayList<ServerPlayer> listOfPlayers;
+	private ArrayList<ServerPlayer> listOfPlayers;
 
 	/**
 	 * Player to remove
@@ -36,7 +36,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * used, false means unused). Note that IDs can be freed when the object is
 	 * deleted and re-assigned to another object
 	 */
-	private static boolean[] objectIDs;
+	private boolean[] objectIDs;
 
 	/**
 	 * The number of possible ID's for any objects. The number of objects
@@ -86,14 +86,15 @@ public class ServerEngine implements Runnable, ActionListener {
 
 	private boolean endGame = false;
 	private int losingTeam;
-
+	private Server server;
 	/**
 	 * Constructor for the engine
 	 */
-	public ServerEngine(String map) throws IOException {
+	public ServerEngine(String map, Server server) throws IOException {
 		// Start importing the images from the file (place in a loading screen
 		// or something later)
 		Images.importImages();
+		this.server = server;
 		ImageReferencePair.importReferences();
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
@@ -193,6 +194,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		lastTeam--;
 		listOfPlayers.remove(remove);
 		world.remove(remove);
+		server.decreaseNumPlayer();
 		broadcast("R " + remove.getID());
 		broadcast("RO " + remove.getName().split(" ").length + " " + remove.getTeam() + remove.getName());
 	}
@@ -213,7 +215,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * 
 	 * @return the id
 	 */
-	public static int useNextID() {
+	public int useNextID() {
 		for (int id = 0; id < objectIDs.length; id++) {
 			if (!objectIDs[id]) {
 				objectIDs[id] = true;
@@ -362,11 +364,11 @@ public class ServerEngine implements Runnable, ActionListener {
 		return world;
 	}
 
-	public static ArrayList<ServerPlayer> getListOfPlayers() {
+	public ArrayList<ServerPlayer> getListOfPlayers() {
 		return listOfPlayers;
 	}
 
-	public static void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
+	public void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
 	}
 }
