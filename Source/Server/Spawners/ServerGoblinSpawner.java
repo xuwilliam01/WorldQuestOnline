@@ -42,7 +42,7 @@ public class ServerGoblinSpawner extends ServerSpawner
 		{
 			setImage("BLUE_GOBLIN_SPAWN");
 		}
-		setDelay(3000);
+		setDelay(500);
 
 	}
 
