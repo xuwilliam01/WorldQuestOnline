@@ -716,8 +716,9 @@ public class MainMenu implements KeyListener
 				mainMenu = new MainPanel();
 				mainFrame.add(mainMenu);
 				mainFrame.setVisible(true);
-				mainFrame.requestFocus();
 				mainMenu.revalidate();
+				mainFrame.requestFocus();
+				
 			}
 		}
 	}
@@ -1013,10 +1014,10 @@ public class MainMenu implements KeyListener
 				BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
 				int numMaps = Integer.parseInt(maps.readLine());
 				mapNames = new String[numMaps+1];
-				mapNames[0] = "NewMap";
+				mapNames[0] = "CREATE NEW MAP";
 				for(int i =0; i < numMaps;i++)
 				{
-					mapNames[i+1] = maps.readLine().toLowerCase();
+					mapNames[i+1] = maps.readLine();
 				}
 				maps.close();
 			}

@@ -14,7 +14,7 @@ import Tools.RowCol;
 /**
  * A goblin class
  * 
- * @author alex
+ * @author William Xu and Alex Raita
  *
  */
 public class ServerGoblin extends ServerCreature {
@@ -26,15 +26,15 @@ public class ServerGoblin extends ServerCreature {
 	 * The default HP of a goblin of a certain type
 	 */
 	public final static int GOBLIN_HP = 60;
-	public final static int GOBLIN_ARCHER_HP = 40;
-	public final static int ARCHER_FIGHTING_RANGE = 1000;
+	public final static int GOBLIN_ARCHER_HP = 35;
+	public final static int ARCHER_FIGHTING_RANGE = 700;
 	
-	
+	public final static int GOBLIN_SOLDIER_HP = 70;
 	public final static int GOBLIN_WIZARD_HP = 60;
-	public final static int GOBLIN_WORKER_HP = 65;
+	public final static int GOBLIN_WORKER_HP = 80;
 	public final static int GOBLIN_NINJA_HP = 60;
 	public final static int GOBLIN_LORD_HP = 150;
-	public final static int GOBLIN_SOLDIER_HP = 80;
+	
 	public final static int GOBLIN_GUARD_HP = 90;
 	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_GIANT_HP = 500;
@@ -157,7 +157,7 @@ public class ServerGoblin extends ServerCreature {
 
 			armour = 0.1;
 			weapon = ServerWorld.WOODARROW_TYPE;
-			damage = 6;
+			damage = 7;
 			isMelee = false;
 
 			setName("A Goblin Archer");

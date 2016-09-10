@@ -78,23 +78,31 @@ public class CreatorItems extends JPanel implements ActionListener {
 		save.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
 		save.setLocation(WIDTH-ClientFrame.getScaledWidth(125),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(100));
 		save.addActionListener(this);
+		save.setBackground(new Color(240, 240, 240));
+		save.setForeground(Color.black);
 		add(save);
 
 		clear.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
 		clear.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(100));
 		clear.addActionListener(this);
+		clear.setBackground(new Color(240, 240, 240));
+		clear.setForeground(Color.black);
 		add(clear);
 
 		updateWidth = new JButton("Change Width "+"(Current: "+world.getGrid()[0].length+")");
 		updateWidth.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
 		updateWidth.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(160));
 		updateWidth.addActionListener(this);
+		updateWidth.setBackground(new Color(240, 240, 240));
+		updateWidth.setForeground(Color.black);
 		add(updateWidth);
 
 		updateHeight = new JButton("Change Height "+"(Current: "+world.getGrid().length+")");
 		updateHeight.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
 		updateHeight.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(220));
 		updateHeight.addActionListener(this);
+		updateHeight.setBackground(new Color(240, 240, 240));
+		updateHeight.setForeground(Color.black);
 		add(updateHeight);
 
 		if(menu != null)
@@ -102,6 +110,8 @@ public class CreatorItems extends JPanel implements ActionListener {
 			mainMenu = menu;
 			mainMenu.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
 			mainMenu.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(340));
+			mainMenu.setBackground(new Color(240, 240, 240));
+			mainMenu.setForeground(Color.black);
 			add(mainMenu);
 		}
 
@@ -109,12 +119,16 @@ public class CreatorItems extends JPanel implements ActionListener {
 		rename.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
 		rename.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(280));
 		rename.addActionListener(this);
+		rename.setBackground(new Color(240, 240, 240));
+		rename.setForeground(Color.black);
 		add(rename);
 
 		delete = new JButton("Delete");
 		delete.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
 		delete.setLocation(WIDTH-ClientFrame.getScaledWidth(125),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(280));
 		delete.addActionListener(this);
+		delete.setBackground(new Color(240, 240, 240));
+		delete.setForeground(Color.black);
 		add(delete);
 
 
