@@ -19,7 +19,7 @@ public class ServerSlimeSpawner extends ServerSpawner
 	/**
 	 * Max number of slimes per slime spawner
 	 */
-	public final static int MAX_SLIMES = 7;
+	public final static int MAX_SLIMES = 5;
 
 	/**
 	 * Constructor

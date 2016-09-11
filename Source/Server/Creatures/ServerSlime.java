@@ -265,7 +265,7 @@ public class ServerSlime extends ServerEnemy
 	@Override
 	public void destroy()
 	{
-		super.destroy();
 		((ServerSlimeSpawner) (getSpawner())).removeSlime();
+		super.destroy();
 	}
 }
