@@ -1014,7 +1014,7 @@ public class MainMenu implements KeyListener
 				BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
 				int numMaps = Integer.parseInt(maps.readLine());
 				mapNames = new String[numMaps+1];
-				mapNames[0] = "CREATE NEW MAP";
+				mapNames[0] = "New Map Name";
 				for(int i =0; i < numMaps;i++)
 				{
 					mapNames[i+1] = maps.readLine();
@@ -1036,11 +1036,13 @@ public class MainMenu implements KeyListener
 						@Override
 						public void itemStateChanged(ItemEvent e) {
 							String selectedItem = (String) jcb.getSelectedItem();
-							boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("NewMap");
+							boolean editable = selectedItem instanceof String && ((String)selectedItem).equals("New Map Name");
 							jcb.setEditable(editable);
 						}
 					});
-					JOptionPane.showMessageDialog(null, jcb);                
+					int result = JOptionPane.showOptionDialog(null, jcb, "Choose A Map To Edit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Next","Cancel"},null);
+					if(result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION)
+						throw new NullPointerException();
 					fileName = ((String)jcb.getSelectedItem()).trim();				
 				}
 				catch (NullPointerException e2)
