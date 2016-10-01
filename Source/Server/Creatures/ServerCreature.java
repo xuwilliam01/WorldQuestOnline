@@ -295,7 +295,7 @@ public abstract class ServerCreature extends ServerObject
 		item.setOnSurface(false);
 		item.setVSpeed(-Math.random() * 10 - 5);
 
-		if (HP <= 0)
+		if (HP <= 0 && !item.getType().equals(ServerWorld.MONEY_TYPE))
 		{
 			int direction = Math.random() < 0.5 ? -1 : 1;
 			item.setHSpeed(direction * (Math.random() * 5 + 3));

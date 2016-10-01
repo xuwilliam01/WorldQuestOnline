@@ -227,6 +227,9 @@ public class ClientInventory extends JPanel implements ActionListener
 	 */
 	public void removeItem(ClientItem item, int pos)
 	{
+		if(client.getHP() <= 0)
+			return;
+		
 		// Drop 1 item at a time and tell the server
 		if (item.getAmount() > 1)
 		{
