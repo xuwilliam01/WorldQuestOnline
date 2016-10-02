@@ -931,24 +931,25 @@ public class Images
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 
 			addtoImageArray(new GameImage("ButtonTray.png",
-					(int)(ClientFrame.getScaledWidth(500)),(int)(ClientFrame.getScaledHeight(650))));
+					(int)(ClientFrame.getScaledWidth(360)),(int)(ClientFrame.getScaledHeight(400))));
 			addtoImageArray(new GameImage("FindAGame.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("CreateAServer.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("CreateAServerClicked.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("CreateAMap.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
-			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(ClientFrame.getScaledWidth(1000)),(int)(ClientFrame.getScaledHeight(250))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("Instructions.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(240)),(int)(ClientFrame.getScaledHeight(77))));
+			addtoImageArray(new GameImage("WorldQuestOnline.png",
+					(int)(ClientFrame.getScaledWidth(1000)),(int)(ClientFrame.getScaledHeight(250))));
 
 			addtoImageArray(new GameImage("Inventory.png", (int)(ClientFrame.getScaledWidth(300)), Client.Client.SCREEN_HEIGHT));
 

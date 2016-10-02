@@ -306,7 +306,7 @@ public class MainMenu implements KeyListener
 			playGame.setSize(playGameImage.getWidth(null),
 					playGameImage.getHeight(null));
 			playGame.setLocation(middle - playGameImage.getWidth(null) / 2,
-					(int) (375 * (Client.SCREEN_HEIGHT / 1080.0)));
+					(int) (630 * (Client.SCREEN_HEIGHT / 1080.0)));
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
@@ -318,7 +318,7 @@ public class MainMenu implements KeyListener
 			createServer.setSize(createServerImage.getWidth(null),
 					createServerImage.getHeight(null));
 			createServer.setLocation(middle - createServerImage.getWidth(null)
-					/ 2, (int) (525 * (Client.SCREEN_HEIGHT / 1080.0)));
+					/ 2, (int) (720 * (Client.SCREEN_HEIGHT / 1080.0)));
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
@@ -330,7 +330,7 @@ public class MainMenu implements KeyListener
 			createMap.setSize(createMapImage.getWidth(null),
 					createMapImage.getHeight(null));
 			createMap.setLocation(middle - createMapImage.getWidth(null) / 2,
-					(int) (675 * (Client.SCREEN_HEIGHT / 1080.0)));
+					(int) (810 * (Client.SCREEN_HEIGHT / 1080.0)));
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
@@ -342,7 +342,7 @@ public class MainMenu implements KeyListener
 			instructions.setSize(instructionsImage.getWidth(null),
 					instructionsImage.getHeight(null));
 			instructions.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2, (int) (825 * (Client.SCREEN_HEIGHT / 1080.0)));
+					/ 2, (int) (900 * (Client.SCREEN_HEIGHT / 1080.0)));
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
@@ -410,7 +410,7 @@ public class MainMenu implements KeyListener
 			graphics.drawString("Press 'ESC' to quit",
 					ClientFrame.getScaledWidth(1920) - 120,
 					20);
-			graphics.drawImage(buttonTrayImage, middle-buttonTrayImage.getWidth(null)/2, (int) (350 * (Client.SCREEN_HEIGHT / 1080.0)), null);
+			graphics.drawImage(buttonTrayImage, middle-buttonTrayImage.getWidth(null)/2, (int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 
