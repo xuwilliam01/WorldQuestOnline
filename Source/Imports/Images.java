@@ -947,7 +947,7 @@ public class Images
 			addtoImageArray(new GameImage("Instructions.png",
 					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					(int)(ClientFrame.getScaledWidth(240)),(int)(ClientFrame.getScaledHeight(77))));
+					(int)(ClientFrame.getScaledWidth(268)),(int)(ClientFrame.getScaledHeight(77))));
 			addtoImageArray(new GameImage("WorldQuestOnline.png",
 					(int)(ClientFrame.getScaledWidth(1000)),(int)(ClientFrame.getScaledHeight(250))));
 
