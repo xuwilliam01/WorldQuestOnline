@@ -944,7 +944,7 @@ public class Images
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
-			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(ClientFrame.getScaledWidth(1238)),(int)(ClientFrame.getScaledHeight(248))));
+			addtoImageArray(new GameImage("WorldQuestOnline.png",(int)(ClientFrame.getScaledWidth(1000)),(int)(ClientFrame.getScaledHeight(250))));
 			addtoImageArray(new GameImage("Instructions.png",
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
