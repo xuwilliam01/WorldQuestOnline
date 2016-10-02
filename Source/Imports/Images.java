@@ -937,9 +937,9 @@ public class Images
 			addtoImageArray(new GameImage("FindAGameClicked.png",
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAServer.png",
-					(int)(ClientFrame.getScaledWidth(400)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAServerClicked.png",
-					(int)(ClientFrame.getScaledWidth(400)),(int)(ClientFrame.getScaledHeight(100))));
+					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAMap.png",
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
