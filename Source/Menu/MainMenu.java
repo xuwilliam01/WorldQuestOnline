@@ -253,6 +253,7 @@ public class MainMenu implements KeyListener
 	private static class MainPanel extends JPanel implements ActionListener,
 	MouseListener
 	{
+		
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
 		Image background = Images.getImage("BACKGROUND");
@@ -261,6 +262,9 @@ public class MainMenu implements KeyListener
 		JButton createMap;
 		JButton instructions;
 
+		
+		Image buttonTrayImage = Images.getImage("ButtonTray");
+		
 		Image createMapImage = Images.getImage("CreateAMap");
 		Image createMapOver = Images.getImage("CreateAMapClicked");
 
@@ -406,6 +410,7 @@ public class MainMenu implements KeyListener
 			graphics.drawString("Press 'ESC' to quit",
 					ClientFrame.getScaledWidth(1920) - 120,
 					20);
+			graphics.drawImage(buttonTrayImage, middle-buttonTrayImage.getWidth(null)/2, (int) (350 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 

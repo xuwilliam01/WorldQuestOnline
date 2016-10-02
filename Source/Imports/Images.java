@@ -146,14 +146,26 @@ public class Images
 							image.getSubimage(no * 19, 0, 19, 17), 19, 17));
 				}
 
+				
+				
 				image = ImageIO.read(new File("Images//" +
+						"fulldustsidebig.png"));
+				for (int no = 0; no < image.getHeight() / 128; no++)
+				{
+					addtoImageArray(new GameImage("EXPLOSION0_" + no
+							+ IMAGE_FORMAT,
+							image.getSubimage(1, no * 128, 126, 126)));
+				}
+				
+				
+				/*image = ImageIO.read(new File("Images//" +
 						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < image.getWidth() / 32; no++)
 				{
 					addtoImageArray(new GameImage("EXPLOSION0_" + no
 							+ IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
-				}
+				}*/
 
 				image = ImageIO.read(new File("Images//" +
 						"EXPLOSION1_SHEET.png"));
@@ -918,6 +930,8 @@ public class Images
 			addtoImageArray(new GameImage("PLAINBLACK.png",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT));
 
+			addtoImageArray(new GameImage("ButtonTray.png",
+					(int)(ClientFrame.getScaledWidth(500)),(int)(ClientFrame.getScaledHeight(650))));
 			addtoImageArray(new GameImage("FindAGame.png",
 					(int)(ClientFrame.getScaledWidth(300)),(int)(ClientFrame.getScaledHeight(100))));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
@@ -1059,4 +1073,5 @@ public class Images
 			return null;
 		}
 	}
+	
 }

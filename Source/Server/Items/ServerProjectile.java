@@ -354,12 +354,12 @@ public class ServerProjectile extends ServerFlyingObject
 			setSolid(false);
 			setMapVisible(false);
 			counter = 0;
-			setWidth(32);
-			setHeight(32);
-			setX(getX() - 16);
-			setY(getY() - 16);
+			setWidth(128);
+			setHeight(128);
+			setX(getX() - 64);
+			setY(getY() - 80);
 			setImage("EXPLOSION0_0");
-			noOfExplosionFrames = 7;
+			noOfExplosionFrames = 6;
 		}
 		else if (getType() == ServerWorld.FIREBALL_TYPE)
 		{
