@@ -12,7 +12,7 @@ public class StartServer {
 	public static void main(String[] args) {
 		Images.importImages();
 		
-		ServerManager server = new ServerManager(MainMenu.DEF_PORT, MAX_ROOMS, new ClientFrame());
+		ServerManager server = new ServerManager(MainMenu.DEF_PORT, MAX_ROOMS);
 
 		Thread serverThread = new Thread(server);
 

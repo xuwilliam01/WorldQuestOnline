@@ -17,13 +17,13 @@ public class ServerManager implements Runnable {
 	private ArrayList<Server> rooms = new ArrayList<Server>();
 	private int maxRooms;
 	private ClientFrame mainFrame;
+	public static boolean HAS_FRAME = true;
 
 	/**
 	 * 
 	 * @param port
 	 * @param maxRooms
 	 * @param mainFrame
-	 * @param hasFrame Whether or not to really run the gui
 	 */
 	public ServerManager(int port, int maxRooms, ClientFrame mainFrame) {
 		this.maxRooms = maxRooms;
@@ -37,6 +37,24 @@ public class ServerManager implements Runnable {
 		}
 	}
 
+	/**
+	 * 
+	 * @param port
+	 * @param maxRooms
+	 * @param mainFrame
+	 */
+	public ServerManager(int port, int maxRooms) {
+		this.maxRooms = maxRooms;
+		HAS_FRAME = false;
+		addNewRoom();
+		try {
+			this.socket = new ServerSocket(port);
+		} catch (IOException e) {
+			System.out.println("Server cannot be created with given port");
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void run() {
 		outerloop: while (true) {
@@ -90,7 +108,8 @@ public class ServerManager implements Runnable {
 		Thread serverThread = new Thread(newServer);
 		serverThread.start();
 
-
+		if (HAS_FRAME)
+		{
 			ServerGUI gui = new ServerGUI(newServer);
 			mainFrame.dispose();
 			ServerFrame myFrame = new ServerFrame();
@@ -98,7 +117,7 @@ public class ServerManager implements Runnable {
 			myFrame.add(gui);
 			gui.revalidate();
 			newServer.setGUI(gui);
-		
+		}
 	}
 
 }

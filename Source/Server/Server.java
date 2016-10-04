@@ -121,8 +121,9 @@ public class Server implements Runnable {
 				playerThread.start();
 				System.out.println("A new client has connected");
 
+				if (ServerManager.HAS_FRAME) {
 					gui.repaint();
-				
+				}
 			} catch (Exception E) {
 				System.out.println("Exited the lobby");
 				newPlayerWaiting.clear();
@@ -143,10 +144,11 @@ public class Server implements Runnable {
 			System.out.println("Error with Creating World and/or Engine");
 		}
 
+		if (ServerManager.HAS_FRAME) {
 			gui.setMap(map);
 			engine.setGui(gui);
 			gui.startGame(engine.getWorld(), engine);
-		
+		}
 
 		Thread newEngine = new Thread(engine);
 		newEngine.start();
@@ -298,8 +300,10 @@ public class Server implements Runnable {
 		for (ServerLobbyPlayer player : lobbyPlayers) {
 			player.sendMessage(message);
 		}
-			gui.addToChat(message);
-			gui.repaint();
+		if (ServerManager.HAS_FRAME) {
+		gui.addToChat(message);
+		gui.repaint();
+		}
 	}
 
 	public void start() {
