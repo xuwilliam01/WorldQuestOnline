@@ -17,9 +17,8 @@ import Server.Creatures.ServerPlayer;
  * @author William Xu & Alex Raita
  * 
  */
-public class Server implements Runnable
-{
-	public final static int MAX_PLAYERS = 2;
+public class Server implements Runnable {
+	public final static int MAX_PLAYERS = 10;
 
 	private ServerEngine engine;
 	private int port;
@@ -41,44 +40,35 @@ public class Server implements Runnable
 
 	int noOfPlayers = 0;
 
-	public boolean isFull()
-	{
-		if(!start)
-		{
+	public boolean isFull() {
+		if (!start) {
 			return lobbyPlayers.size() >= MAX_PLAYERS;
-		}
-		else
-			return noOfPlayers>= MAX_PLAYERS;
+		} else
+			return noOfPlayers >= MAX_PLAYERS;
 	}
 
-	public void decreaseNumPlayer()
-	{
+	public void decreaseNumPlayer() {
 		noOfPlayers--;
 	}
-	public boolean started()
-	{
+
+	public boolean started() {
 		return start;
 	}
 
-	public void addClient(Socket newClient,PrintWriter output)
-	{
-		while(true)
-		{
-			try{
+	public void addClient(Socket newClient, PrintWriter output) {
+		while (true) {
+			try {
 				newPlayerWaiting.add(newClient);
 				break;
-			}
-			catch(ConcurrentModificationException E)
-			{
-				System.out.println("Concurrnet modification adding players to game");
+			} catch (ConcurrentModificationException E) {
+				System.out
+						.println("Concurrnet modification adding players to game");
 			}
 		}
 	}
 
-	public Socket nextClient() throws Exception
-	{
-		while(newPlayerWaiting.size() == sizeIndex)
-		{
+	public Socket nextClient() throws Exception {
+		while (newPlayerWaiting.size() == sizeIndex) {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -86,19 +76,16 @@ public class Server implements Runnable
 				e.printStackTrace();
 			}
 
-			if(start)
-			{
+			if (start) {
 				throw new Exception();
 			}
 		}
 		sizeIndex++;
-		return newPlayerWaiting.get(sizeIndex-1);
+		return newPlayerWaiting.get(sizeIndex - 1);
 	}
 
-	public Socket nextGameClient() 
-	{
-		while(newPlayerWaiting.size() == sizeIndex)
-		{
+	public Socket nextGameClient() {
+		while (newPlayerWaiting.size() == sizeIndex) {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -106,33 +93,25 @@ public class Server implements Runnable
 				e.printStackTrace();
 			}
 		}
-		//System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(), sizeIndex);
+		// System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(),
+		// sizeIndex);
 		sizeIndex++;
-		return newPlayerWaiting.get(sizeIndex-1);
+		return newPlayerWaiting.get(sizeIndex - 1);
 	}
 
-
 	@Override
-	public void run()
-	{
-		while (true)
-		{
-			try
-			{
+	public void run() {
+		while (true) {
+			try {
 				Socket newClient = nextClient();
 				output = new PrintWriter(newClient.getOutputStream());
 				BufferedReader input = new BufferedReader(
-						new InputStreamReader(
-								newClient.getInputStream()));
+						new InputStreamReader(newClient.getInputStream()));
 
-				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,input,output,
-						this);
+				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,
+						input, output, this);
 
-
-
-
-				if (needLeader)
-				{
+				if (needLeader) {
 					newPlayer.setLeader();
 					needLeader = false;
 				}
@@ -141,10 +120,10 @@ public class Server implements Runnable
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
 				System.out.println("A new client has connected");
-				gui.repaint();
-			}
-			catch (Exception E)
-			{
+
+					gui.repaint();
+				
+			} catch (Exception E) {
 				System.out.println("Exited the lobby");
 				newPlayerWaiting.clear();
 				sizeIndex = 0;
@@ -152,25 +131,22 @@ public class Server implements Runnable
 			}
 		}
 
-		if (map == null)
-		{
+		if (map == null) {
 			map = defaultMap;
 		}
 
 		// Construct the new world
 		System.out.println("Creating world...");
-		try
-		{
-			engine = new ServerEngine(map,this);
-			gui.setMap(map);
-		}
-		catch (IOException e1)
-		{
+		try {
+			engine = new ServerEngine(map, this);
+		} catch (IOException e1) {
 			System.out.println("Error with Creating World and/or Engine");
 		}
 
-		engine.setGui(gui);
-		gui.startGame(engine.getWorld(), engine);
+			gui.setMap(map);
+			engine.setGui(gui);
+			gui.startGame(engine.getWorld(), engine);
+		
 
 		Thread newEngine = new Thread(engine);
 		newEngine.start();
@@ -179,35 +155,28 @@ public class Server implements Runnable
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
 		ArrayList<ServerLobbyPlayer> lobbyPlayersToAdd = new ArrayList<ServerLobbyPlayer>();
-		for (ServerLobbyPlayer player : lobbyPlayers)
-		{
+		for (ServerLobbyPlayer player : lobbyPlayers) {
 			lobbyPlayersToAdd.add(player);
 		}
-		while (true)
-		{
-			try
-			{
+		while (true) {
+			try {
 				Socket newClient = nextGameClient();
 				output = new PrintWriter(newClient.getOutputStream());
 				noOfPlayers++;
 
 				BufferedReader input = new BufferedReader(
-						new InputStreamReader(
-								newClient.getInputStream()));
-
+						new InputStreamReader(newClient.getInputStream()));
 
 				String IP = newClient.getInetAddress().toString();
 				int team = -1;
 				String name = null;
 				ServerLobbyPlayer playerToRemove = null;
 
-
 				String message = input.readLine();
 				String nameCheck;
 
 				// If someone connects late, get them to start the client
-				if (message.equals("Lobby"))
-				{
+				if (message.equals("Lobby")) {
 					System.out.println("Checkpoint 2");
 					output.println("Start");
 					output.flush();
@@ -215,22 +184,16 @@ public class Server implements Runnable
 					input.close();
 					noOfPlayers--;
 
-					//Close input and socket
+					// Close input and socket
 					continue;
-				}
-				else
-				{
+				} else {
 					nameCheck = message;
 				}
 
-
 				boolean inServer = false;
-				for (ServerLobbyPlayer player : lobbyPlayersToAdd)
-				{
-					if (player.getIP().equals(IP))
-					{
-						if (nameCheck.equals(player.getName()))
-						{
+				for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
+					if (player.getIP().equals(IP)) {
+						if (nameCheck.equals(player.getName())) {
 							team = player.getTeam();
 							name = player.getName();
 							engine.broadcast("JO "
@@ -243,35 +206,28 @@ public class Server implements Runnable
 					}
 				}
 
-				if (!inServer)
-				{
+				if (!inServer) {
 					team = engine.getNextTeam();
 					name = nameCheck;
-					engine.broadcast("JO "
-							+ name.split(" ").length + " "
+					engine.broadcast("JO " + name.split(" ").length + " "
 							+ team + name);
 				}
 
-				if (team == -1)
-				{
+				if (team == -1) {
 					newClient.close();
 					continue;
 
 				}
-				if (playerToRemove != null)
-				{
+				if (playerToRemove != null) {
 					lobbyPlayersToAdd.remove(playerToRemove);
 				}
 
 				int x;
 				int y;
-				if (team == ServerPlayer.RED_TEAM)
-				{
+				if (team == ServerPlayer.RED_TEAM) {
 					x = engine.getWorld().getRedCastleX();
 					y = engine.getWorld().getRedCastleY();
-				}
-				else
-				{
+				} else {
 					x = engine.getWorld().getBlueCastleX();
 					y = engine.getWorld().getBlueCastleY();
 				}
@@ -281,7 +237,7 @@ public class Server implements Runnable
 						ServerPlayer.DEFAULT_WIDTH,
 						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
 						ServerWorld.GRAVITY, playerColours[characterSelection],
-						newClient, engine, engine.getWorld(), input,output);
+						newClient, engine, engine.getWorld(), input, output);
 
 				newPlayer.setName(name);
 				newPlayer.setTeam(team);
@@ -290,54 +246,42 @@ public class Server implements Runnable
 				playerThread.start();
 
 				System.out.println("A new client has connected");
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				System.out.println("Error connecting to client");
 				e.printStackTrace();
-			}
-			catch(NullPointerException e)
-			{
+			} catch (NullPointerException e) {
 				System.out.println("Client has disconnected");
 			}
 		}
 	}
 
-	public void setGUI(ServerGUI gui)
-	{
+	public void setGUI(ServerGUI gui) {
 		this.gui = gui;
 		gui.setMap(map);
 	}
 
-	public ServerEngine getEngine()
-	{
+	public ServerEngine getEngine() {
 		return engine;
 	}
 
-	public ArrayList<ServerLobbyPlayer> getPlayers()
-	{
+	public ArrayList<ServerLobbyPlayer> getPlayers() {
 		return lobbyPlayers;
 	}
 
 	/**
 	 * Remove a player from the lobby and update info
 	 */
-	public void remove(ServerLobbyPlayer player)
-	{
+	public void remove(ServerLobbyPlayer player) {
 		lobbyPlayers.remove(player);
-		if (player.getTeam() == ServerCreature.RED_TEAM)
-		{
+		if (player.getTeam() == ServerCreature.RED_TEAM) {
 			ServerLobbyPlayer.nextTeam = ServerCreature.RED_TEAM - 1;
 			ServerLobbyPlayer.numRed--;
-		}
-		else
-		{
+		} else {
 			ServerLobbyPlayer.nextTeam = ServerCreature.BLUE_TEAM - 1;
 			ServerLobbyPlayer.numBlue--;
 		}
 
-		if (player.isLeader())
-		{
+		if (player.isLeader()) {
 			if (lobbyPlayers.size() > 0)
 				lobbyPlayers.get(0).setLeader();
 			else
@@ -350,28 +294,23 @@ public class Server implements Runnable
 	/**
 	 * Send an instant message to all clients
 	 */
-	public void broadcast(String message)
-	{
-		for (ServerLobbyPlayer player : lobbyPlayers)
-		{
+	public void broadcast(String message) {
+		for (ServerLobbyPlayer player : lobbyPlayers) {
 			player.sendMessage(message);
 		}
-		gui.addToChat(message);
-		gui.repaint();
+			gui.addToChat(message);
+			gui.repaint();
 	}
 
-	public void start()
-	{
+	public void start() {
 		start = true;
 	}
 
-	public String getMap()
-	{
+	public String getMap() {
 		return map;
 	}
 
-	public void setMap(String map)
-	{
+	public void setMap(String map) {
 		this.map = map;
 		gui.setMap(map);
 	}

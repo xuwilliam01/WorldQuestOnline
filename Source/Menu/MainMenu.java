@@ -59,7 +59,7 @@ public class MainMenu implements KeyListener
 	/**
 	 * Default port number
 	 */
-	final private static int DEF_PORT = 9988;
+	public final static int DEF_PORT = 9988;
 
 	// All the panels
 	public static ClientFrame mainFrame;
