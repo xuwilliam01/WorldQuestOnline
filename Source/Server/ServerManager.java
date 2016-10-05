@@ -1,20 +1,15 @@
 package Server;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
 import Client.ClientFrame;
-import Menu.MainMenu;
 
 public class ServerManager implements Runnable {
 
 	private ServerSocket socket;
-	private ArrayList<Server> rooms = new ArrayList<Server>();
+	private static ArrayList<Server> rooms = new ArrayList<Server>();
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
@@ -118,6 +113,11 @@ public class ServerManager implements Runnable {
 			gui.revalidate();
 			newServer.setGUI(gui);
 		}
+	}
+	
+	public static void removeRoom(Server remove)
+	{
+		rooms.remove(remove);
 	}
 
 }

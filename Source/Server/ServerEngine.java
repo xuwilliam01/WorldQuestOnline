@@ -150,8 +150,15 @@ public class ServerEngine implements Runnable, ActionListener {
 			for (ServerPlayer player : listOfPlayers) {
 				player.updateClient();
 				if (endGame)
+				{
 					player.setEndGame(true, losingTeam);
+				}
 			}
+			if (endGame)
+			{
+				ServerManager.removeRoom(server);
+			}
+			
 		} catch (ConcurrentModificationException e) {
 			System.out.println("Concurrent modification occured");
 			e.printStackTrace();
