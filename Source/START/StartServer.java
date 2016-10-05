@@ -24,6 +24,7 @@ public class StartServer {
 
 		while (true) {
 			if (scan.nextLine().equalsIgnoreCase("exit")) {
+				System.out.println("Server closed");
 				System.exit(0);
 			}
 		}

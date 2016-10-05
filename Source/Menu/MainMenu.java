@@ -875,15 +875,19 @@ public class MainMenu implements KeyListener
 			// String playerName;
 
 			serverIP = JOptionPane
-					.showInputDialog("Server IP (Leave blank for a server on this computer)");
+					.showInputDialog("Server IP (Or 0 for this comp, 1 for online servers)");
 			if (serverIP == null)
 			{
 				mainFrame.requestFocus();
 				return;
 			}
-			if (serverIP.equals(""))
+			else if (serverIP.equals("0"))
 			{
 				serverIP = "127.0.0.1";
+			}
+			else if (serverIP.equals("1"))
+			{
+				serverIP = "159.203.18.245";
 			}
 
 			port = DEF_PORT;
