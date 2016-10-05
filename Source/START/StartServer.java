@@ -7,7 +7,7 @@ import Server.ServerManager;
 
 public class StartServer {
 
-	final static int MAX_ROOMS = 3;
+	final static int MAX_ROOMS = 100;
 	
 	public static void main(String[] args) {
 		Images.importImages();
