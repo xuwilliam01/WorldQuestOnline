@@ -301,8 +301,8 @@ public class Server implements Runnable {
 			player.sendMessage(message);
 		}
 		if (ServerManager.HAS_FRAME) {
-		gui.addToChat(message);
-		gui.repaint();
+			gui.addToChat(message);
+			gui.repaint();
 		}
 	}
 
@@ -316,7 +316,9 @@ public class Server implements Runnable {
 
 	public void setMap(String map) {
 		this.map = map;
-		gui.setMap(map);
+		if (ServerManager.HAS_FRAME) {
+			gui.setMap(map);
+		}
 	}
 
 }

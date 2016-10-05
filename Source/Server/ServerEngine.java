@@ -170,7 +170,10 @@ public class ServerEngine implements Runnable, ActionListener {
 		for (ServerPlayer player : listOfPlayers) {
 			player.sendMessage(message);
 		}
+		if (ServerManager.HAS_FRAME)
+		{
 		gui.addToChat(message);
+		}
 	}
 
 	/**
@@ -181,7 +184,10 @@ public class ServerEngine implements Runnable, ActionListener {
 			if (player.getTeam() == team)
 				player.sendMessage(message);
 		}
+		if (ServerManager.HAS_FRAME)
+		{
 		gui.addToChat(message);
+		}
 	}
 
 	/**
@@ -249,8 +255,11 @@ public class ServerEngine implements Runnable, ActionListener {
 		updateClients();
 
 		// Update the gui
+		if (ServerManager.HAS_FRAME)
+		{
 		if (gui != null) {
 			gui.update();
+		}
 		}
 		// if (checkObjects)
 		// {
