@@ -133,12 +133,9 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Constantly update the game
 	 */
 	public void run() {
-		while(!end)
-		{
-			updateTimer = new Timer(UPDATE_RATE, this);
-			startTime = System.currentTimeMillis();
-			updateTimer.start();
-		}
+		updateTimer = new Timer(UPDATE_RATE, this);
+		startTime = System.currentTimeMillis();
+		updateTimer.start();
 	}
 
 	/**
@@ -175,7 +172,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		endGame = true;
 		this.losingTeam = losingTeam;
 	}
-	
+
 	public void close()
 	{
 		end = true;

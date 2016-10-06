@@ -80,6 +80,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * Whether the game is over or not
 	 */
 	private boolean endGame = false;
+	private boolean closeWriter = false;
 	private int losingTeam;
 
 	/**
@@ -791,7 +792,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		@Override
 		public void run()
 		{
-			while (!endGame)
+			while (!closeWriter)
 			{
 				if (flushWriterNow)
 				{
@@ -1710,6 +1711,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				e.printStackTrace();
 			}
+			closeWriter = true;
 			
 		}
 		message = new StringBuilder("Z");
