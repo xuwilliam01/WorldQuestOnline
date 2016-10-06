@@ -1168,5 +1168,24 @@ public class ServerWorld {
 	{
 		return engine;
 	}
+	
+	/**
+	 * Closes everything in the world
+	 */
+	public void close()
+	{
+		objectGrid = null;
+		redTeam.clear();
+		blueTeam.clear();
+		objectTypes = null;
+		redSpawners.clear();
+		blueSpawners.clear();
+		objects.clear();
+		objectsToAdd.clear();
+		engine = null;
+		blueCastle = null;
+		redCastle = null;
+		
+	}
 
 }

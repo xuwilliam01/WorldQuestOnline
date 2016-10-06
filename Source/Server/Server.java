@@ -40,6 +40,8 @@ public class Server implements Runnable {
 
 	int noOfPlayers = 0;
 
+	private boolean closeServer = false;
+	
 	public boolean isFull() {
 		if (!start) {
 			return lobbyPlayers.size() >= MAX_PLAYERS;
@@ -85,7 +87,7 @@ public class Server implements Runnable {
 	}
 
 	public Socket nextGameClient() {
-		while (newPlayerWaiting.size() == sizeIndex) {
+		while (newPlayerWaiting.size() == sizeIndex && !closeServer) {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -95,6 +97,9 @@ public class Server implements Runnable {
 		}
 		// System.out.printf("%s %d %d", "New player", newPlayerWaiting.size(),
 		// sizeIndex);
+		if(closeServer)
+			return null;
+		
 		sizeIndex++;
 		return newPlayerWaiting.get(sizeIndex - 1);
 	}
@@ -163,6 +168,10 @@ public class Server implements Runnable {
 		while (true) {
 			try {
 				Socket newClient = nextGameClient();
+				
+				if(closeServer)
+					return;
+				
 				output = new PrintWriter(newClient.getOutputStream());
 				noOfPlayers++;
 
@@ -320,5 +329,9 @@ public class Server implements Runnable {
 			gui.setMap(map);
 		}
 	}
-
+	
+	public void close()
+	{
+		closeServer = true;
+	}
 }

@@ -791,7 +791,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		@Override
 		public void run()
 		{
-			while (true)
+			while (!endGame)
 			{
 				if (flushWriterNow)
 				{
@@ -817,7 +817,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void run()
 	{
-		while (true)
+		while (!endGame)
 		{
 			try
 			{
@@ -1121,7 +1121,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				break;
 			}
 		}
-
+		
+		if(endGame)
+			return;
+		
 		// If the buffered reader breaks, the player has disconnected
 		if (vendor != null)
 		{
@@ -1705,9 +1708,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 		message = new StringBuilder("Z");
 	}

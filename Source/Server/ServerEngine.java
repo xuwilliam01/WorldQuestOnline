@@ -85,6 +85,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	private ServerGUI gui = null;
 
 	private boolean endGame = false;
+	private boolean end = false;
 	private int losingTeam;
 	private Server server;
 	/**
@@ -132,9 +133,12 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Constantly update the game
 	 */
 	public void run() {
-		updateTimer = new Timer(UPDATE_RATE, this);
-		startTime = System.currentTimeMillis();
-		updateTimer.start();
+		while(!end)
+		{
+			updateTimer = new Timer(UPDATE_RATE, this);
+			startTime = System.currentTimeMillis();
+			updateTimer.start();
+		}
 	}
 
 	/**
@@ -157,8 +161,10 @@ public class ServerEngine implements Runnable, ActionListener {
 			if (endGame)
 			{
 				ServerManager.removeRoom(server);
+				close();
+				server.close();
 			}
-			
+
 		} catch (ConcurrentModificationException e) {
 			System.out.println("Concurrent modification occured");
 			e.printStackTrace();
@@ -168,6 +174,16 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void endGame(int losingTeam) {
 		endGame = true;
 		this.losingTeam = losingTeam;
+	}
+	
+	public void close()
+	{
+		end = true;
+		updateTimer.stop();
+		listOfPlayers.clear();
+		toRemove.clear();
+		//gui.close();
+		world.close();
 	}
 
 	/**
@@ -179,7 +195,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 		if (ServerManager.HAS_FRAME)
 		{
-		gui.addToChat(message);
+			gui.addToChat(message);
 		}
 	}
 
@@ -193,7 +209,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 		if (ServerManager.HAS_FRAME)
 		{
-		gui.addToChat(message);
+			gui.addToChat(message);
 		}
 	}
 
@@ -243,7 +259,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Update the game after every game tick (15 milliseconds)
 	 */
 	public void actionPerformed(ActionEvent e) {
-		
+
 		// Remove disconnected players
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 		for (ServerPlayer player : listOfPlayers) {
@@ -264,9 +280,9 @@ public class ServerEngine implements Runnable, ActionListener {
 		// Update the gui
 		if (ServerManager.HAS_FRAME)
 		{
-		if (gui != null) {
-			gui.update();
-		}
+			if (gui != null) {
+				gui.update();
+			}
 		}
 		// if (checkObjects)
 		// {
@@ -321,9 +337,9 @@ public class ServerEngine implements Runnable, ActionListener {
 		{
 			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
 		}
-		
+
 		long delay = Math.min(UPDATE_RATE, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE));
-		
+
 		//updateTimer.setDelay((int)Math.max(1,delay));
 
 		startTime = System.nanoTime();
