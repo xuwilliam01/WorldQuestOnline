@@ -375,6 +375,7 @@ public abstract class ServerObject
 	public void destroy()
 	{
 		exists = false;
+		
 	}
 
 	public double getGravity()

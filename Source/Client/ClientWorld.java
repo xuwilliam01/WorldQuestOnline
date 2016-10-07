@@ -268,6 +268,7 @@ public class ClientWorld {
 	 */
 	public void setObject(int id, int x, int y, String image, int team,
 			String type, String name) {
+		try{
 		if (objects[id] == null) {
 			if (name.equals("{")) {
 				objects[id] = new ClientObject(id, x, y, image, team, type);
@@ -281,6 +282,12 @@ public class ClientWorld {
 			objects[id].setY(y);
 			objects[id].setTeam(team);
 			objects[id].setImage(image);
+		}
+		}
+		catch(ArrayIndexOutOfBoundsException e)
+		{
+			e.printStackTrace();
+			System.out.println(name + " " + type + " " + image);
 		}
 	}
 

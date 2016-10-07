@@ -180,10 +180,7 @@ MouseMotionListener
 	 */
 	private long startTimer = 0;
 
-	/**
-	 * Whether or not the screen is currently being painted over
-	 */
-	private boolean currentlyPainting = false;
+	private boolean startPainting = false;
 
 	private boolean writingMessage = false;
 
@@ -443,31 +440,10 @@ MouseMotionListener
 									String type = tokens[++token];
 									inventory.removeThis(type);
 								}
-//								else if (tokens[token].equals("U"))
-//								{
-//									repaint();
-//									// Update the FPS counter
-//									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
-//									{
-//										FPScounter = 0;
-//										currentFPS = (int) ((1000.0
-//												/ (System.currentTimeMillis() - startTime)
-//												* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
-//										startTime = System.currentTimeMillis();
-//									}
-//
-//									// if (checkFPS && currentFPS < 40 &&
-//									// System.currentTimeMillis()>20000)
-//									// {
-//									// checkFPS = false;
-//									// System.out.println("LAG!!!!");
-//									// System.out.println("Number of objects: "
-//									// + world.getObjects().length);
-//									//
-//									// }
-//
-//									FPScounter++;
-//								}
+								else if (tokens[token].equals("U"))
+								{
+									startPainting = true;
+								}
 								// If there is a player to be updated
 								else if (tokens[token].equals("O"))
 								{
@@ -881,14 +857,15 @@ MouseMotionListener
 
 		@Override
 		public void run() {
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			while (true)
 			{
 				repaint();
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		}

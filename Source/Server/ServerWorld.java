@@ -431,6 +431,7 @@ public class ServerWorld {
 		for (ServerObject object : objectsToRemove) {
 			removeFromObjectTiles(object);
 			objects.remove(object);
+			engine.removeID(object.getID());
 		}
 		objectsToRemove.clear();
 

@@ -42,7 +42,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * The number of possible ID's for any objects. The number of objects
 	 * existing the game (aside from tiles) cannot exceed this limit
 	 */
-	public static final int NUMBER_OF_IDS = 100000;
+	public static final int NUMBER_OF_IDS = 1000000;
 
 	/**
 	 * The world the engine works with
@@ -249,6 +249,15 @@ public class ServerEngine implements Runnable, ActionListener {
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * Remove an object's id after it is destroyed
+	 * @return
+	 */
+	public void removeID(int id)
+	{
+		objectIDs[id] = false;
 	}
 
 	@Override
