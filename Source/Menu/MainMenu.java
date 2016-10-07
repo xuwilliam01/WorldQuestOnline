@@ -1095,6 +1095,7 @@ public class MainMenu implements KeyListener
 					"We are updating the instructions! The controls are shown in the lobby.",
 					"Sorry", JOptionPane.ERROR_MESSAGE);
 
+			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
 			// mainFrame.invalidate();
 			// mainFrame.validate();

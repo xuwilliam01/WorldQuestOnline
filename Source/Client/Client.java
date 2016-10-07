@@ -180,7 +180,10 @@ MouseMotionListener
 	 */
 	private long startTimer = 0;
 
-	private boolean checkFPS = true;
+	/**
+	 * Whether or not the screen is currently being painted over
+	 */
+	private boolean currentlyPainting = false;
 
 	private boolean writingMessage = false;
 
@@ -317,8 +320,10 @@ MouseMotionListener
 		gameThread = new Thread(new RunGame());
 		gameThread.start();
 
-		// Start the actual game
 		gameThread = new Thread(new ReadServer());
+		gameThread.start();
+		
+		gameThread = new Thread(new updateScreen());
 		gameThread.start();
 
 		System.out.println("Game started");
@@ -357,6 +362,8 @@ MouseMotionListener
 		output.println(message);
 		output.flush();
 	}
+	
+	
 
 	/**
 	 * Thread for running the actual game
@@ -436,31 +443,31 @@ MouseMotionListener
 									String type = tokens[++token];
 									inventory.removeThis(type);
 								}
-								else if (tokens[token].equals("U"))
-								{
-									repaint();
-									// Update the FPS counter
-									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
-									{
-										FPScounter = 0;
-										currentFPS = (int) ((1000.0
-												/ (System.currentTimeMillis() - startTime)
-												* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
-										startTime = System.currentTimeMillis();
-									}
-
-									// if (checkFPS && currentFPS < 40 &&
-									// System.currentTimeMillis()>20000)
-									// {
-									// checkFPS = false;
-									// System.out.println("LAG!!!!");
-									// System.out.println("Number of objects: "
-									// + world.getObjects().length);
-									//
-									// }
-
-									FPScounter++;
-								}
+//								else if (tokens[token].equals("U"))
+//								{
+//									repaint();
+//									// Update the FPS counter
+//									if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
+//									{
+//										FPScounter = 0;
+//										currentFPS = (int) ((1000.0
+//												/ (System.currentTimeMillis() - startTime)
+//												* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
+//										startTime = System.currentTimeMillis();
+//									}
+//
+//									// if (checkFPS && currentFPS < 40 &&
+//									// System.currentTimeMillis()>20000)
+//									// {
+//									// checkFPS = false;
+//									// System.out.println("LAG!!!!");
+//									// System.out.println("Number of objects: "
+//									// + world.getObjects().length);
+//									//
+//									// }
+//
+//									FPScounter++;
+//								}
 								// If there is a player to be updated
 								else if (tokens[token].equals("O"))
 								{
@@ -863,6 +870,30 @@ MouseMotionListener
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
+	
+	/**
+	 * Keep calling the paint component independent of the server
+	 * @author William Xu
+	 *
+	 */
+	class updateScreen implements Runnable
+	{
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			while (true)
+			{
+				repaint();
+			}
+			
+		}
+		
+	}
 
 	/**
 	 * Draw everything
@@ -886,7 +917,7 @@ MouseMotionListener
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(getCurrentFPS(), 60),
+		graphics.drawString("FPS: " + getCurrentFPS(),
 				Client.SCREEN_WIDTH - 60, 40);
 
 		// Set the time of day to be displayed
@@ -1137,6 +1168,17 @@ MouseMotionListener
 			chat.requestFocus();
 		}
 
+		// Update the FPS counter
+		if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
+		{
+			FPScounter = 0;
+			currentFPS = (int) ((1000.0
+					/ (System.currentTimeMillis() - startTime)
+					* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
+			startTime = System.currentTimeMillis();
+		}
+
+		FPScounter++;
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
 	}
 
