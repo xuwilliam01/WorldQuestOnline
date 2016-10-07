@@ -106,6 +106,7 @@ public class Images
 			images = new BinaryTree<GameImage>();
 			BufferedImage image;
 
+			
 			// Import sprite sheets to create images with
 			try
 			{
@@ -148,24 +149,24 @@ public class Images
 
 				
 				
+//				image = ImageIO.read(new File("Images//" +
+//						"fulldustsidebig.png"));
+//				for (int no = 0; no < image.getHeight() / 128; no++)
+//				{
+//					addtoImageArray(new GameImage("EXPLOSION0_" + no
+//							+ IMAGE_FORMAT,
+//							image.getSubimage(1, no * 128, 126, 126),126,126));
+//				}
+				
+				
 				image = ImageIO.read(new File("Images//" +
-						"fulldustsidebig.png"));
-				for (int no = 0; no < image.getHeight() / 128; no++)
-				{
-					addtoImageArray(new GameImage("EXPLOSION0_" + no
-							+ IMAGE_FORMAT,
-							image.getSubimage(1, no * 128, 126, 126)));
-				}
-				
-				
-				/*image = ImageIO.read(new File("Images//" +
 						"EXPLOSION0_SHEET.png"));
 				for (int no = 0; no < image.getWidth() / 32; no++)
 				{
 					addtoImageArray(new GameImage("EXPLOSION0_" + no
 							+ IMAGE_FORMAT,
 							image.getSubimage(no * 32, 0, 32, 32)));
-				}*/
+				}
 
 				image = ImageIO.read(new File("Images//" +
 						"EXPLOSION1_SHEET.png"));
@@ -189,7 +190,7 @@ public class Images
 				{
 					addtoImageArray(new GameImage("EXPLOSION2_" + no
 							+ IMAGE_FORMAT,
-							image.getSubimage(no * 64, 0, 64, 64)));
+							image.getSubimage(no * 64, 0, 64, 64),64,64));
 				}
 
 				image = ImageIO.read(new File("Images//" +
@@ -198,7 +199,7 @@ public class Images
 				{
 					addtoImageArray(new GameImage("EXPLOSION3_" + no
 							+ IMAGE_FORMAT,
-							image.getSubimage(no * 82, 0, 82, 82)));
+							image.getSubimage(no * 82, 0, 82, 82),82,82));
 				}
 
 				image = ImageIO.read(new File("Images//" +
@@ -207,7 +208,7 @@ public class Images
 				{
 					addtoImageArray(new GameImage("EXPLOSION4_" + no
 							+ IMAGE_FORMAT,
-							image.getSubimage(no * 82, 0, 82, 82)));
+							image.getSubimage(no * 82, 0, 82, 82),82,82));
 				}
 
 				image = ImageIO.read(new File("Images//" +
@@ -215,7 +216,7 @@ public class Images
 				for (int no = 0; no < image.getWidth() / 24; no++)
 				{
 					addtoImageArray(new GameImage("STAR0_" + no + IMAGE_FORMAT,
-							image.getSubimage(no * 24, 0, 24, 24)));
+							image.getSubimage(no * 24, 0, 24, 24),24,24));
 				}
 
 				image = ImageIO.read(new File("Images//" +
@@ -223,7 +224,7 @@ public class Images
 				for (int no = 0; no < image.getWidth() / 24; no++)
 				{
 					addtoImageArray(new GameImage("STAR1_" + no + IMAGE_FORMAT,
-							image.getSubimage(no * 24, 0, 24, 24)));
+							image.getSubimage(no * 24, 0, 24, 24),24,24));
 				}
 
 				// Bats
@@ -498,6 +499,9 @@ public class Images
 
 					image = ImageIO.read(new File(
 							"Images//" + weapons[no] + ".png"));
+					int width = image.getWidth();
+					int height = image.getHeight();
+					
 					double locationX = image.getWidth() / 2;
 					double locationY = image.getHeight() / 2;
 
@@ -514,19 +518,19 @@ public class Images
 
 						BufferedImage newImage = op
 								.filter(image, null).getSubimage(0, 0,
-										image.getWidth(), image.getHeight());
+										width, height);
 
 						if (weapons[no].contains("HA"))
 						{
 							addtoImageArray(new GameImage(
 									weapons[no] + "_" + angle + ".png",
-									newImage));
+									newImage,width,height));
 						}
 						else
 						{
 							addtoImageArray(new GameImage(
 									weapons[no] + "_" + angle + ".png",
-									newImage));
+									newImage,width,height));
 						}
 
 					}
@@ -621,7 +625,6 @@ public class Images
 				System.out.println("Error loading sprite sheets");
 				e.printStackTrace();
 			}
-
 			
 			
 			/*
@@ -632,6 +635,51 @@ public class Images
 			 * 1-Name + scale
 			 * 2-Name + alias
 			 */
+			
+			for (int no = 0; no < 6; no++)
+			{
+				addtoImageArray(new GameImage("CLOUD_" + no + ".png"));
+
+			}
+			addtoImageArray(new GameImage("FIREWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("FIREWAND_LEFT.png"));
+			addtoImageArray(new GameImage("FIREWAND_ICON.png"));
+
+			addtoImageArray(new GameImage("ICEWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("ICEWAND_LEFT.png"));
+			addtoImageArray(new GameImage("ICEWAND_ICON.png"));
+
+			addtoImageArray(new GameImage("DARKWAND_RIGHT.png"));
+			addtoImageArray(new GameImage("DARKWAND_LEFT.png"));
+			addtoImageArray(new GameImage("DARKWAND_ICON.png"));
+
+			addtoImageArray(new GameImage("SLINGSHOT_RIGHT.png"));
+			addtoImageArray(new GameImage("SLINGSHOT_LEFT.png"));
+			addtoImageArray(new GameImage("SLINGSHOT_ICON.png"));
+
+			addtoImageArray(new GameImage("WOODBOW_RIGHT.png"));
+			addtoImageArray(new GameImage("WOODBOW_LEFT.png"));
+			addtoImageArray(new GameImage("WOODBOW_ICON.png"));
+
+			addtoImageArray(new GameImage("STEELBOW_RIGHT.png"));
+			addtoImageArray(new GameImage("STEELBOW_LEFT.png"));
+			addtoImageArray(new GameImage("STEELBOW_ICON.png"));
+
+			addtoImageArray(new GameImage("MEGABOW_RIGHT.png"));
+			addtoImageArray(new GameImage("MEGABOW_LEFT.png"));
+			addtoImageArray(new GameImage("MEGABOW_ICON.png"));
+			
+			addtoImageArray(new GameImage("Objective.png"));
+			addtoImageArray(new GameImage("Controls.png"));
+			addtoImageArray(new GameImage("Stats.png"));
+
+			addtoImageArray(new GameImage("Next.png"));
+
+			addtoImageArray(new GameImage("Cursor.png"));
+			addtoImageArray(new GameImage("Cursorclick.png"));
+			
+			addtoImageArray(new GameImage("WorldQuestIcon.png"));
+			
 			addtoImageArray(new GameImage("BRICK.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE));
 			GameImage newImage = new GameImage("BRICK.jpg", CreatorObject.SCALE
@@ -849,44 +897,15 @@ public class Images
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 
-			for (int no = 0; no < 6; no++)
-			{
-				addtoImageArray(new GameImage("CLOUD_" + no + ".png"));
 
-			}
+			
 
 			addtoImageArray(new GameImage("VENDOR_RIGHT.png",
 					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("VENDOR_LEFT.png",
 					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE));
 
-			addtoImageArray(new GameImage("FIREWAND_RIGHT.png"));
-			addtoImageArray(new GameImage("FIREWAND_LEFT.png"));
-			addtoImageArray(new GameImage("FIREWAND_ICON.png"));
 
-			addtoImageArray(new GameImage("ICEWAND_RIGHT.png"));
-			addtoImageArray(new GameImage("ICEWAND_LEFT.png"));
-			addtoImageArray(new GameImage("ICEWAND_ICON.png"));
-
-			addtoImageArray(new GameImage("DARKWAND_RIGHT.png"));
-			addtoImageArray(new GameImage("DARKWAND_LEFT.png"));
-			addtoImageArray(new GameImage("DARKWAND_ICON.png"));
-
-			addtoImageArray(new GameImage("SLINGSHOT_RIGHT.png"));
-			addtoImageArray(new GameImage("SLINGSHOT_LEFT.png"));
-			addtoImageArray(new GameImage("SLINGSHOT_ICON.png"));
-
-			addtoImageArray(new GameImage("WOODBOW_RIGHT.png"));
-			addtoImageArray(new GameImage("WOODBOW_LEFT.png"));
-			addtoImageArray(new GameImage("WOODBOW_ICON.png"));
-
-			addtoImageArray(new GameImage("STEELBOW_RIGHT.png"));
-			addtoImageArray(new GameImage("STEELBOW_LEFT.png"));
-			addtoImageArray(new GameImage("STEELBOW_ICON.png"));
-
-			addtoImageArray(new GameImage("MEGABOW_RIGHT.png"));
-			addtoImageArray(new GameImage("MEGABOW_LEFT.png"));
-			addtoImageArray(new GameImage("MEGABOW_ICON.png"));
 
 			addtoImageArray(new GameImage("CHEST.png",
 					5 * ServerWorld.TILE_SIZE, 3 * ServerWorld.TILE_SIZE));
@@ -953,19 +972,12 @@ public class Images
 
 			addtoImageArray(new GameImage("Inventory.png", (int)(ClientFrame.getScaledWidth(300)), Client.Client.SCREEN_HEIGHT));
 
-			addtoImageArray(new GameImage("Objective.png"));
-			addtoImageArray(new GameImage("Controls.png"));
-			addtoImageArray(new GameImage("Stats.png"));
-
-			addtoImageArray(new GameImage("Next.png"));
-
 			addtoImageArray(new GameImage("Shop.png", (int)(ClientFrame.getScaledWidth(ClientShop.SHOP_WIDTH)),
 					(int)(ClientFrame.getScaledHeight(ClientShop.SHOP_HEIGHT))));
 			
-			addtoImageArray(new GameImage("Cursor.png"));
-			addtoImageArray(new GameImage("Cursorclick.png"));
+
 			
-			addtoImageArray(new GameImage("WorldQuestIcon.png"));
+			image = null;
 		}
 		
 	

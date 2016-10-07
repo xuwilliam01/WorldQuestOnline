@@ -32,6 +32,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import com.sun.corba.se.spi.activation.Server;
+
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
@@ -859,11 +861,12 @@ MouseMotionListener
 		public void run() {
 			while (true)
 			{
+				long time = System.currentTimeMillis();
 				repaint();
 				try {
-					Thread.sleep(1);
+					Thread.sleep(ServerEngine.UPDATE_RATE);
+					
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
