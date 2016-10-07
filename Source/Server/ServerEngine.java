@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Queue;
+import java.util.Stack;
 
 import javax.swing.Timer;
 
@@ -32,17 +34,20 @@ public class ServerEngine implements Runnable, ActionListener {
 	private ArrayList<ServerPlayer> toRemove = new ArrayList<ServerPlayer>();
 
 	/**
-	 * A list of IDs currently used in the game (index is the ID, true means
-	 * used, false means unused). Note that IDs can be freed when the object is
-	 * deleted and re-assigned to another object
-	 */
-	private boolean[] objectIDs;
-
-	/**
 	 * The number of possible ID's for any objects. The number of objects
 	 * existing the game (aside from tiles) cannot exceed this limit
 	 */
 	public static final int NUMBER_OF_IDS = 1000000;
+	
+	/**
+	 * The highest ID not used yet for objects
+	 */
+	private int nextID = -1;
+	
+	/**
+	 * Stack of freeIDs to use
+	 */
+	private Stack <Integer> freeIDs = new Stack <Integer>();
 
 	/**
 	 * The world the engine works with
@@ -99,7 +104,6 @@ public class ServerEngine implements Runnable, ActionListener {
 		ImageReferencePair.importReferences();
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
-		objectIDs = new boolean[NUMBER_OF_IDS];
 		world = new ServerWorld(this, map);
 
 	}
@@ -112,9 +116,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		// or something later)
 		Images.importImages();
 		ImageReferencePair.importReferences();
-
 		listOfPlayers = new ArrayList<ServerPlayer>();
-		objectIDs = new boolean[NUMBER_OF_IDS];
 		world = new ServerWorld(this);
 
 	}
@@ -242,13 +244,11 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * @return the id
 	 */
 	public int useNextID() {
-		for (int id = 0; id < objectIDs.length; id++) {
-			if (!objectIDs[id]) {
-				objectIDs[id] = true;
-				return id;
-			}
+		if (!freeIDs.isEmpty())
+		{
+			return freeIDs.pop();
 		}
-		return -1;
+		return ++nextID;
 	}
 	
 	/**
@@ -257,7 +257,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void removeID(int id)
 	{
-		objectIDs[id] = false;
+		freeIDs.push(id);
 	}
 
 	@Override
