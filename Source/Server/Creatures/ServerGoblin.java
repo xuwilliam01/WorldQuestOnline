@@ -28,13 +28,13 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_HP = 60;
 	public final static int GOBLIN_ARCHER_HP = 35;
 	public final static int ARCHER_FIGHTING_RANGE = 700;
-	
+
 	public final static int GOBLIN_SOLDIER_HP = 70;
 	public final static int GOBLIN_WIZARD_HP = 60;
 	public final static int GOBLIN_WORKER_HP = 80;
 	public final static int GOBLIN_NINJA_HP = 60;
 	public final static int GOBLIN_LORD_HP = 150;
-	
+
 	public final static int GOBLIN_GUARD_HP = 90;
 	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_GIANT_HP = 500;
@@ -111,7 +111,7 @@ public class ServerGoblin extends ServerCreature {
 	 * The weapon the goblin uses
 	 */
 	private String weapon;
-	
+
 	/**
 	 * The fighting range of this goblin
 	 */
@@ -130,8 +130,8 @@ public class ServerGoblin extends ServerCreature {
 			castleTier = world.getBlueCastle().getTier();
 		}
 
-		int numTypes = (int) Math.ceil((Math.random()
-				* Math.min(NUM_TYPES-1, (castleTier) * 2)));
+		int numTypes = (int) Math.ceil((Math.random() * Math.min(NUM_TYPES - 1,
+				(castleTier) * 2)));
 
 		switch (numTypes) {
 		case 0:
@@ -149,7 +149,8 @@ public class ServerGoblin extends ServerCreature {
 		case 1:
 			setType(ServerWorld.GOBLIN_ARCHER_TYPE);
 			setImage("GOBARCHER_RIGHT_0_0");
-			privateFightingRange = ARCHER_FIGHTING_RANGE+(int)(Math.random()*400-200);
+			privateFightingRange = ARCHER_FIGHTING_RANGE
+					+ (int) (Math.random() * 400 - 200);
 			fightingRange = privateFightingRange;
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_ARCHER_HP);
@@ -181,6 +182,7 @@ public class ServerGoblin extends ServerCreature {
 			setType(ServerWorld.GOBLIN_NINJA_TYPE);
 			setImage("GOBNINJA_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 100 + 250);
+			targetRange = fightingRange;
 			setMaxHP(GOBLIN_NINJA_HP);
 			setHP(GOBLIN_NINJA_HP);
 
@@ -313,7 +315,7 @@ public class ServerGoblin extends ServerCreature {
 				+ movementSpeed * 3.0 / 4;
 
 		if (Math.random() < 0.1)
-			addItem(ServerItem.randomItem(getX(), getY(),world));
+			addItem(ServerItem.randomItem(getX(), getY(), world));
 		setTeam(team);
 	}
 
@@ -329,7 +331,7 @@ public class ServerGoblin extends ServerCreature {
 				setDirection("LEFT");
 			}
 
-			if (Math.abs(getHSpeed()) <= 1 && isOnSurface() && !onTarget) {
+			if (Math.abs(getHSpeed()) <= 1 && isOnSurface() && !onTarget && action==null) {
 				setVSpeed(-jumpSpeed);
 				setOnSurface(false);
 			}
@@ -381,13 +383,13 @@ public class ServerGoblin extends ServerCreature {
 
 			// Follow and attack the target
 			else {
-//				if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
-//					if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
-//						fightingRange = 200;
-//					} else {
-//						fightingRange = 1200;
-//					}
-//				}
+				// if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
+				// if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
+				// fightingRange = 200;
+				// } else {
+				// fightingRange = 1200;
+				// }
+				// }
 				if ((getX() + getWidth() / 2 < getTarget().getX()) && !onTarget
 						&& action == null) {
 					setHSpeed(movementSpeed);
@@ -463,18 +465,19 @@ public class ServerGoblin extends ServerCreature {
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE)) {
 
 									double targetHeightFactor = 5;
-									if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE))
-									{
+									if (getTarget().getType().equals(
+											ServerWorld.CASTLE_TYPE)) {
 										targetHeightFactor = 1.3;
 									}
-									
+
 									yDist = (int) ((getY() + getHeight() / 3.0) - (getTarget()
-											.getY() + getTarget().getHeight() / targetHeightFactor));
+											.getY() + getTarget().getHeight()
+											/ targetHeightFactor));
 
 									int sign = -1;
 
-									angle = Math.atan(((ServerProjectile.ARROW_SPEED 
-											* ServerProjectile.ARROW_SPEED) + sign
+									angle = Math
+											.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
 													* Math.sqrt(Math
 															.pow(ServerProjectile.ARROW_SPEED,
 																	4)
@@ -487,9 +490,8 @@ public class ServerGoblin extends ServerCreature {
 																	* ServerProjectile.ARROW_SPEED)))
 													/ (ServerProjectile.ARROW_GRAVITY * xDist));
 
-									if (!(angle<=Math.PI && angle >= -Math.PI))
-									{
-										fightingRange = (int)(privateFightingRange/1.5);
+									if (!(angle <= Math.PI && angle >= -Math.PI)) {
+										fightingRange = (int) (privateFightingRange / 1.5);
 									}
 
 									if (xDist <= 0) {
@@ -509,10 +511,10 @@ public class ServerGoblin extends ServerCreature {
 									angle += (Math.PI / 8) * (random - 1);
 								}
 
-								ServerProjectile projectile = new ServerProjectile(getX()
-										+ getWidth() / 2, getY()
-										+ getHeight() / 3, this, angle,
-										weapon,getWorld());
+								ServerProjectile projectile = new ServerProjectile(
+										getX() + getWidth() / 2, getY()
+												+ getHeight() / 3, this, angle,
+										weapon, getWorld());
 								projectile.setDamage(damage);
 								getWorld().add(projectile);
 
