@@ -23,10 +23,13 @@ public class StartServer {
 		serverThread.start();
 
 		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("Done loading");
 
 		while (true) {
 			if (scan.nextLine().equalsIgnoreCase("exit")) {
 				System.out.println("Server closed");
+				scan.close();
 				System.exit(0);
 			}
 		}
