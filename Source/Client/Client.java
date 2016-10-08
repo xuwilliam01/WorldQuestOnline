@@ -865,19 +865,10 @@ MouseMotionListener
 
 		@Override
 		public void run() {
-			long repaintDelay = ServerEngine.UPDATE_RATE/2;
+			long repaintDelay = ServerEngine.UPDATE_RATE;
 			while (!leaveGame)
 			{
 				repaint();
-				
-				if (currentFPS < 100 && repaintDelay > ServerEngine.UPDATE_RATE)
-				{
-					repaintDelay--;
-				}
-				else if (currentFPS > 130)
-				{
-					repaintDelay ++;
-				}
 				
 				try {
 					Thread.sleep(repaintDelay);
