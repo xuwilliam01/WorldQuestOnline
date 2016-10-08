@@ -861,10 +861,9 @@ MouseMotionListener
 		public void run() {
 			while (true)
 			{
-				long time = System.currentTimeMillis();
 				repaint();
 				try {
-					Thread.sleep(ServerEngine.UPDATE_RATE);
+					Thread.sleep(ServerEngine.UPDATE_RATE/2);
 					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -1152,9 +1151,9 @@ MouseMotionListener
 		if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
 		{
 			FPScounter = 0;
-			currentFPS = (int) ((1000.0
+			currentFPS = Math.min((int) ((1000.0
 					/ (System.currentTimeMillis() - startTime)
-					* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5));
+					* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5)),120);
 			startTime = System.currentTimeMillis();
 		}
 

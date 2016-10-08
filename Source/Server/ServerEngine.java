@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -47,7 +48,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	/**
 	 * Stack of freeIDs to use
 	 */
-	private Stack <Integer> freeIDs = new Stack <Integer>();
+	private PriorityQueue <Integer> freeIDs = new PriorityQueue <Integer>();
 
 	/**
 	 * The world the engine works with
@@ -246,7 +247,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	public int useNextID() {
 		if (!freeIDs.isEmpty())
 		{
-			return freeIDs.pop();
+			return freeIDs.poll();
 		}
 		return ++nextID;
 	}
@@ -257,7 +258,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void removeID(int id)
 	{
-		freeIDs.push(id);
+		freeIDs.add(id);
 	}
 
 	@Override
@@ -310,25 +311,9 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		// Parameters to fix the lag spike
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
-			System.out.println("~LAGSPIKE~");
-			//
-			// int noOfObjects = 0;
-			//
-			//
-			// // Clear the object grid
-			// for (int row = 0; row < world.getObjectGrid().length; row++)
-			// {
-			// for (int column = 0; column < world.getObjectGrid()[0].length;
-			// column++)
-			// {
-			// noOfObjects += world.getObjectGrid()[row][column].size();
-			// world.getObjectGrid()[row][column] = new
-			// ArrayList<ServerObject>();
-			// }
-			// }
-			// System.out.println("Number of objects during lag: " +
-			// noOfObjects);
-			// checkObjects = true;
+			System.out.println("~LAG DETECTED~");
+			System.out.println("CURRENT SERVER FPS: " + getCurrentFPS());
+			System.out.println("Number of objects in this world: " + world.getObjects().size());
 			lagSpike = true;
 		}
 
