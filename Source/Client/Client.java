@@ -341,6 +341,34 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.println(message);
 		output.flush();
 	}
+	
+	
+
+	// FOR LATER USE!!!!
+	
+//	/**
+//	 * Converts a string back to an int
+//	 * @param number
+//	 * @return
+//	 */
+//	public int stringToInt(String message)
+//	{
+//		int number = 0;
+//		int messageLength = message.length();
+//		int multiplier = 1;
+//		for (int no = 1; no < messageLength; no++)
+//		{
+//			number+=message.charAt(no)*multiplier;
+//			multiplier *=128;
+//		}
+//		if (message.charAt(0)=='-')
+//		{
+//			number*=-1;
+//		}
+//		
+//		return number;
+//	}
+	
 
 	/**
 	 * Thread for running the actual game
