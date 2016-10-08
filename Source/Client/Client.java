@@ -47,9 +47,7 @@ import Server.Creatures.ServerPlayer;
  *
  */
 public class Client extends JPanel implements KeyListener, MouseListener,
-ActionListener,
-MouseMotionListener
-{
+		ActionListener, MouseMotionListener {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
 	public static int SCREEN_HEIGHT = 1080;
@@ -192,9 +190,8 @@ MouseMotionListener
 	 * Constructor for the client
 	 */
 	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
-			String playerName)
-	{
-		System.out.println("PlayerName: "+playerName);
+			String playerName) {
+		System.out.println("PlayerName: " + playerName);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		mySocket = socket;
@@ -232,10 +229,8 @@ MouseMotionListener
 	/**
 	 * Call when the server closes (Add more later)
 	 */
-	private void serverClosed()
-	{
-		if (!leaveGame)
-		{
+	private void serverClosed() {
+		if (!leaveGame) {
 			System.out.println("Server was closed");
 			JOptionPane.showMessageDialog(null, "Server was closed", "Server",
 					JOptionPane.ERROR_MESSAGE);
@@ -247,8 +242,7 @@ MouseMotionListener
 	/**
 	 * Start the client
 	 */
-	public void initialize()
-	{
+	public void initialize() {
 
 		// Set the cursor transparent
 		// Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -267,27 +261,21 @@ MouseMotionListener
 		maxMana = mana;
 
 		// Set up the input
-		try
-		{
+		try {
 			input = new BufferedReader(new InputStreamReader(
 					mySocket.getInputStream()));
-			System.out.println("Skipped: "+input.readLine());
-		}
-		catch (IOException e)
-		{
+			System.out.println("Skipped: " + input.readLine());
+		} catch (IOException e) {
 			// System.out.println("Error creating buffered reader");
 			e.printStackTrace();
 		}
 
 		// Set up the output
-		try
-		{
+		try {
 			output = new PrintWriter(mySocket.getOutputStream());
 			output.println(playerName);
 			output.flush();
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			// System.out.println("Error creating print writer");
 			e.printStackTrace();
 		}
@@ -296,8 +284,7 @@ MouseMotionListener
 		importMap();
 
 		// Get the user's player
-		try
-		{
+		try {
 			String message = input.readLine();
 			String[] tokens = message.split(" ");
 
@@ -309,9 +296,7 @@ MouseMotionListener
 
 			player = new ClientObject(id, x, y, image, team,
 					ServerWorld.PLAYER_TYPE);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			System.out.println("Error getting player from server");
 			e.printStackTrace();
 		}
@@ -322,7 +307,6 @@ MouseMotionListener
 
 		gameThread = new Thread(new ReadServer());
 		gameThread.start();
-
 
 		System.out.println("Game started");
 
@@ -342,26 +326,21 @@ MouseMotionListener
 	/**
 	 * Gets the amount of money the client has
 	 */
-	public int getMoney()
-	{
+	public int getMoney() {
 		return inventory.getMoney();
 	}
 
-	public void decreaseMoney(int amount)
-	{
+	public void decreaseMoney(int amount) {
 		inventory.decreaseMoney(amount);
 	}
 
 	/**
 	 * Print to the server
 	 */
-	public void printToServer(String message)
-	{
+	public void printToServer(String message) {
 		output.println(message);
 		output.flush();
 	}
-	
-	
 
 	/**
 	 * Thread for running the actual game
@@ -369,132 +348,95 @@ MouseMotionListener
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class ReadServer implements Runnable
-	{
+	class ReadServer implements Runnable {
 		@Override
-		public void run()
-		{
+		public void run() {
 
-			while (!leaveGame)
-			{
-				while (!lines.isEmpty())
-				{
+			while (!leaveGame) {
+				while (!lines.isEmpty()) {
 					String message = lines.remove(0);
 
-					if (message != null)
-					{
+					if (message != null) {
 						String[] tokens = message.split(" ");
 
-						for (int token = 1; token < tokens.length; token++)
-						{
-							try
-							{
-								// If our player has moved
-								if (tokens[token].equals("L"))
-								{
-									//System.out.println(tokens[token]+" "+tokens[token+1]+" "+tokens[token+2]+" "+tokens[token+3]+" "+tokens[token+4]);
+						for (int token = 1; token < tokens.length && !leaveGame; token++) {
+							try {
+								switch (tokens[token]) {
+								case "L":
 									HP = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("M"))
-								{
+									break;
+								case "M":
 									maxHP = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("Q"))
-								{
+									break;
+								case "Q":
 									mana = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("B"))
-								{
+									break;
+								case "K":
+									maxMana = Integer.parseInt(tokens[++token]);
+									break;
+								case "B":
 									// End the game
 									int team = Integer
 											.parseInt(tokens[++token]);
 									String winner = "Red Team";
 									String loser = "Blue Team";
-									if (team == ServerPlayer.RED_TEAM)
-									{
+									if (team == ServerPlayer.RED_TEAM) {
 										winner = "Blue Team";
 										loser = "Red Team";
 									}
 
 									JOptionPane
-									.showMessageDialog(
-											Client.this,
-											String.format(
-													"The %s castle has been destroyed, the winner is the %s!",
-													loser, winner));
+											.showMessageDialog(
+													Client.this,
+													String.format(
+															"The %s castle has been destroyed, the winner is the %s!",
+															loser, winner));
 									leaveGame = true;
 									input.close();
 									output.close();
-									if (inventory.getMenuButton() != null)
-									{
+									if (inventory.getMenuButton() != null) {
 										inventory.getMenuButton().doClick();
 									}
 									break;
-
-								}
-								else if (tokens[token].equals("K"))
-								{
-									maxMana = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("SI"))
-								{
-									String type = tokens[++token];
-									inventory.removeThis(type);
-								}
-								else if (tokens[token].equals("U"))
-								{
-									if (!startPainting)
-									{
-										gameThread = new Thread(new updateScreen());
+								case "U":
+									if (!startPainting) {
+										gameThread = new Thread(
+												new updateScreen());
 										gameThread.start();
 									}
 									startPainting = true;
 									repaint();
-									
-								}
-								// If there is a player to be updated
-								else if (tokens[token].equals("O"))
-								{
+									break;
+								case "O":
 									int id = Integer.parseInt(tokens[++token]);
-									int x = Integer
-											.parseInt(tokens[++token]);
-									int y = Integer
-											.parseInt(tokens[++token]);
-									if (id == player.getID())
-									{
+									int x = Integer.parseInt(tokens[++token]);
+									int y = Integer.parseInt(tokens[++token]);
+									if (id == player.getID()) {
 										player.setX(x);
 										player.setY(y);
 									}
-									if (tokens[token + 4].equals("{"))
-									{
+									if (tokens[token + 4].equals("{")) {
 
 										world.setObject(
 												id,
 												x,
 												y,
 												tokens[++token],
-												Integer
-												.parseInt(tokens[++token]),
+												Integer.parseInt(tokens[++token]),
 												tokens[++token],
 												tokens[++token]);
-									}
-									else
-									{
+									} else {
 										int len = 0;
-										try
-										{
+										try {
 											len = Integer
 													.parseInt(tokens[token + 4]);
-										}
-										catch (NumberFormatException E)
-										{
+										} catch (NumberFormatException E) {
 											System.out.println("Bug with {");
 											token += 4;
 											continue;
 										}
 										String name = "";
-										for (int i = 0; i < len; i++)
-										{
+										for (int i = 0; i < len; i++) {
 											name += tokens[token + 5 + i] + " ";
 										}
 										world.setObject(
@@ -502,62 +444,43 @@ MouseMotionListener
 												x,
 												y,
 												tokens[++token],
-												Integer
-												.parseInt(tokens[++token]),
+												Integer.parseInt(tokens[++token]),
 												tokens[++token], name.trim());
 										token += len;
 									}
-
-								}
-								else if (tokens[token].equals("P"))
-								{
+									break;
+								case "P":
 									pingString = "Ping: "
 											+ (System.currentTimeMillis() - ping);
 									startTimer = System.currentTimeMillis();
-								}
-
-								// Remove an object after
-								// disconnection/destruction
-								else if (tokens[token].equals("R"))
-								{
+									break;
+								case "R":
 									int ID = Integer.parseInt(tokens[++token]);
 									world.remove(ID);
-								}
-								else if (tokens[token].equals("I"))
-								{
+									break;
+								case "I":
 									System.out.println("Received an item");
 									inventory.addItem(tokens[++token],
 											tokens[++token],
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 									inventory.repaint();
-								}
-								else if (tokens[token].equals("D"))
-								{
+									break;
+								case "D":
 									damage = Integer.parseInt(tokens[++token]);
 									baseDamage = Integer
 											.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("S"))
-								{
+									break;
+								case "S":
 									speed = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("J"))
-								{
+									break;
+								case "J":
 									jump = Integer.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("A"))
-								{
-									armour = Double
-											.parseDouble(tokens[++token]);
-								}
-								else if (tokens[token].equals("V"))
-								{
+									break;
+								case "V":
 									if (Character.isDigit(tokens[token + 1]
-											.charAt(0)))
-									{
-										if (shop != null)
-										{
+											.charAt(0))) {
+										if (shop != null) {
 											shop.setVisible(false);
 											frame.remove(shop);
 											frame.invalidate();
@@ -576,36 +499,38 @@ MouseMotionListener
 												JLayeredPane.PALETTE_LAYER);
 										shop.revalidate();
 										frame.setVisible(true);
-									}
-									else if (shop != null)
+									} else if (shop != null)
 										shop.addItem(
 												tokens[++token],
 												tokens[++token],
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));
-
-								}
-								else if (tokens[token].equals("C"))
-								{
+									break;
+								case "C":
 									if (shop != null)
 										closeShop();
-								}
-								else if (tokens[token].equals("CH"))
-								{
+									break;
+								case "T":
+									world.setWorldTime(Integer
+											.parseInt(tokens[++token]));
+									break;
+								case "SI":
+									String type = tokens[++token];
+									inventory.removeThis(type);
+									break;
+								case "CH":
 									char who = tokens[++token].charAt(0);
 									int nameLen = Integer
 											.parseInt(tokens[++token]);
 									String name = tokens[++token];
 
-									for (int i = 1; i < nameLen; i++)
-									{
+									for (int i = 1; i < nameLen; i++) {
 										name += " " + tokens[++token];
 									}
 									int numWords = Integer
 											.parseInt(tokens[++token]);
 									String text = "";
-									for (int i = 0; i < numWords; i++)
-									{
+									for (int i = 0; i < numWords; i++) {
 										text += tokens[++token] + " ";
 									}
 									if (chatQueue.size() >= MAX_MESSAGES)
@@ -617,47 +542,42 @@ MouseMotionListener
 										chatQueue.add("CH " + name + "[TEAM]: "
 												+ text.substring(2).trim());
 
-								}
-								else if (tokens[token].equals("KF1")
-										|| tokens[token].equals("KF2"))
-								{
+									break;
+								case "KF1":
+								case "KF2":
 									if (chatQueue.size() >= MAX_MESSAGES)
 										chatQueue.remove(0);
-									String text = "";
+									String text2 = "";
 									int amount = Integer
 											.parseInt(tokens[token + 1]) + 2;
-									for (int i = 0; i < amount; i++, token++)
-									{
-										text += tokens[token] + " ";
+									for (int i = 0; i < amount; i++, token++) {
+										text2 += tokens[token] + " ";
 									}
 
 									amount = Integer.parseInt(tokens[token]) + 1;
-									for (int i = 0; i < amount; i++, token++)
-									{
-										text += tokens[token] + " ";
+									for (int i = 0; i < amount; i++, token++) {
+										text2 += tokens[token] + " ";
 									}
-									chatQueue.add(text.trim());
-								}
-								else if (tokens[token].equals("JO"))
-								{
+									chatQueue.add(text2.trim());
+									break;
+								case "JO":
 									int len = Integer.parseInt(tokens[++token]);
-									String name = "";
+									String name2 = "";
 
 									for (int i = 0; i < len; i++)
-										name += tokens[++token] + " ";
-									chatQueue.add("JO " + name.trim());
-								}
-								else if (tokens[token].equals("RO"))
-								{
-									int len = Integer.parseInt(tokens[++token]);
-									String name = "";
+										name2 += tokens[++token] + " ";
+									chatQueue.add("JO " + name2.trim());
+									break;
+								case "RO":
+									int len2 = Integer
+											.parseInt(tokens[++token]);
+									String name3 = "";
 
-									for (int i = 0; i < len; i++)
-										name += tokens[++token] + " ";
-									chatQueue.add("RO " + name.trim());
-								}
-								else if (tokens[token].equals("XR"))
-								{
+									for (int i = 0; i < len2; i++)
+										name3 += tokens[++token] + " ";
+									chatQueue.add("RO " + name3.trim());
+									break;
+								case "XR":
 									redCastleHP = Integer
 											.parseInt(tokens[++token]);
 									redCastleTier = Integer
@@ -666,9 +586,8 @@ MouseMotionListener
 											.parseInt(tokens[++token]);
 									redCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
-								}
-								else if (tokens[token].equals("XB"))
-								{
+									break;
+								case "XB":
 									blueCastleHP = Integer
 											.parseInt(tokens[++token]);
 									blueCastleTier = Integer
@@ -677,32 +596,23 @@ MouseMotionListener
 											.parseInt(tokens[++token]);
 									blueCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
+									break;
+
 								}
-								else if (tokens[token].equals("T"))
-								{
-									world.setWorldTime(Integer
-											.parseInt(tokens[++token]));
-								}
-							}
-							catch (NumberFormatException e)
-							{
+
+							} catch (NumberFormatException e) {
 								System.out.println("Java can't parse integers");
 								e.printStackTrace();
-							}
-							catch (IOException e)
-							{
+							} catch (IOException e) {
 								e.printStackTrace();
 							}
 
 						}
 					}
 				}
-				try
-				{
+				try {
 					Thread.sleep(1);
-				}
-				catch (InterruptedException e)
-				{
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -715,17 +625,13 @@ MouseMotionListener
 	 * @author William Xu && Alex Raita
 	 *
 	 */
-	class RunGame implements Runnable
-	{
+	class RunGame implements Runnable {
 		@Override
-		public void run()
-		{
-			try
-			{
+		public void run() {
+			try {
 				startTime = System.currentTimeMillis();
 
-				while (!leaveGame)
-				{
+				while (!leaveGame) {
 					String message = System.currentTimeMillis() + " "
 							+ input.readLine();
 
@@ -733,30 +639,22 @@ MouseMotionListener
 
 					// Update the ping after half a second
 					if (startTimer >= 0
-							&& System.currentTimeMillis() - startTimer >= 500)
-					{
+							&& System.currentTimeMillis() - startTimer >= 500) {
 						ping = System.currentTimeMillis();
 						printToServer("P");
 						startTimer = -1;
 					}
 
-					try
-					{
+					try {
 						Thread.sleep(1);
-					}
-					catch (InterruptedException e)
-					{
+					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
 
-			}
-			catch (NumberFormatException e1)
-			{
+			} catch (NumberFormatException e1) {
 				e1.printStackTrace();
-			}
-			catch (IOException e2)
-			{
+			} catch (IOException e2) {
 				serverClosed();
 			}
 
@@ -766,8 +664,7 @@ MouseMotionListener
 	/**
 	 * Close the shop
 	 */
-	public void closeShop()
-	{
+	public void closeShop() {
 		shop.setVisible(false);
 		frame.remove(shop);
 		frame.invalidate();
@@ -777,28 +674,24 @@ MouseMotionListener
 	/**
 	 * Get the shop
 	 */
-	public ClientShop getShop()
-	{
+	public ClientShop getShop() {
 		return shop;
 	}
 
 	/**
 	 * Import the map
 	 */
-	private void importMap()
-	{
+	private void importMap() {
 		System.out.println("Importing the map from the server...");
 
 		// Get the 2D grid from the server
 		String gridSize = null;
 
-		try
-		{
-			while(gridSize == null)
-			{
+		try {
+			while (gridSize == null) {
 				gridSize = input.readLine();
 			}
-			System.out.println("gridside "+gridSize);
+			System.out.println("gridside " + gridSize);
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
 			int width = Integer.parseInt(dimensions[1]);
@@ -806,41 +699,35 @@ MouseMotionListener
 
 			char grid[][] = new char[height][width];
 
-			for (int row = 0; row < height; row++)
-			{
+			for (int row = 0; row < height; row++) {
 				String gridRow = input.readLine();
-				for (int column = 0; column < width; column++)
-				{
+				for (int column = 0; column < width; column++) {
 					grid[row][column] = gridRow.charAt(column);
 				}
 			}
 
 			world = new ClientWorld(grid, tileSize, this);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			serverClosed();
 		}
 
 		System.out.println("Map import has finished");
 	}
 
-	public int getWeaponSelected()
-	{
+	public int getWeaponSelected() {
 		return weaponSelected;
 	}
 
-	public boolean isShopOpen()
-	{
+	public boolean isShopOpen() {
 		return shop != null;
 	}
 
 	/**
 	 * Sets the weapon selected
+	 * 
 	 * @param weaponSelected
 	 */
-	public void setWeaponSelected(int weaponSelected)
-	{
+	public void setWeaponSelected(int weaponSelected) {
 		if (this.weaponSelected != 9
 				&& inventory.getEquippedWeapons()[this.weaponSelected] != null)
 			inventory.getEquippedWeapons()[this.weaponSelected]
@@ -848,54 +735,51 @@ MouseMotionListener
 
 		if (weaponSelected != 9)
 			inventory.getEquippedWeapons()[weaponSelected]
-					.setBorder(BorderFactory
-							.createLineBorder(new Color(240, 240, 240)));
+					.setBorder(BorderFactory.createLineBorder(new Color(240,
+							240, 240)));
 		output.println("W" + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
-	
+
 	/**
-	 * Keep calling the paint component independent of the server (on top of the server repaint call) up to 120 fps
+	 * Keep calling the paint component independent of the server (on top of the
+	 * server repaint call) up to 120 fps
+	 * 
 	 * @author William Xu
 	 *
 	 */
-	class updateScreen implements Runnable
-	{
+	class updateScreen implements Runnable {
 
 		@Override
 		public void run() {
-//			long repaintDelay = ServerEngine.UPDATE_RATE;
-//			while (!leaveGame)
-//			{
-//				repaint();
-//				
-//				try {
-//					Thread.sleep(repaintDelay);
-//					
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
-			
+			// long repaintDelay = ServerEngine.UPDATE_RATE;
+			// while (!leaveGame)
+			// {
+			// repaint();
+			//
+			// try {
+			// Thread.sleep(repaintDelay);
+			//
+			// } catch (InterruptedException e) {
+			// e.printStackTrace();
+			// }
+			// }
+
 		}
-		
+
 	}
 
 	/**
 	 * Draw everything
 	 */
-	public void paintComponent(Graphics graphics)
-	{
+	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 
 		// Update the map
-		try
-		{
+		try {
 			getWorld().update(graphics, getPlayer());
-		}
-		catch (NullPointerException e)
-		{
+		} catch (NullPointerException e) {
 			// System.out.println("Null Pointer Exception for world.update");
 			// e.printStackTrace();
 		}
@@ -913,53 +797,42 @@ MouseMotionListener
 		// DUSK: 5PM - 9PM
 		// NIGHT: 9PM - 5AM
 
-		if (getWorld() != null)
-		{
+		if (getWorld() != null) {
 
 			String timeOfDay = "DAY";
 
-			if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5)
-			{
+			if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5) {
 				timeOfDay = "DAWN";
-			}
-			else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 2)
-			{
+			} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 2) {
 				timeOfDay = "NIGHT";
-			}
-			else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 3)
-			{
+			} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 3) {
 				timeOfDay = "DUSK";
 			}
 
 			int hour = (getWorld().getWorldTime() / 60) + 9;
-			if (hour >= 24)
-			{
+			if (hour >= 24) {
 				hour -= 24;
 			}
 			int minute = getWorld().getWorldTime() % 60;
 
 			String amPm = "AM";
 
-			if (hour >= 12)
-			{
+			if (hour >= 12) {
 				hour -= 12;
 				amPm = "PM";
 			}
 
-			if (hour == 0)
-			{
+			if (hour == 0) {
 				hour = 12;
 			}
 
 			String hourString = "";
 			String minuteString = "";
 
-			if (hour < 10)
-			{
+			if (hour < 10) {
 				hourString = "0";
 			}
-			if (minute < 10)
-			{
+			if (minute < 10) {
 				minuteString = "0";
 			}
 			hourString += hour;
@@ -973,15 +846,11 @@ MouseMotionListener
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 
-		while (!leaveGame)
-		{
-			try
-			{
+		while (!leaveGame) {
+			try {
 				int textY = 40;
-				for (String str : getChatQueue())
-				{
-					if (str.substring(0, 2).equals("CH"))
-					{
+				for (String str : getChatQueue()) {
+					if (str.substring(0, 2).equals("CH")) {
 						String newStr = str.substring(3);
 						int space = newStr.indexOf(':');
 						String coloured = newStr.substring(1, space + 1);
@@ -997,9 +866,7 @@ MouseMotionListener
 						graphics.drawString(mssg, 10 + graphics
 								.getFontMetrics().stringWidth(coloured + " "),
 								textY);
-					}
-					else if (str.substring(0, 2).equals("JO"))
-					{
+					} else if (str.substring(0, 2).equals("JO")) {
 						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
 						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
@@ -1012,9 +879,7 @@ MouseMotionListener
 								"joined the game",
 								10 + graphics.getFontMetrics().stringWidth(
 										str.substring(4) + " "), textY);
-					}
-					else if (str.substring(0, 2).equals("RO"))
-					{
+					} else if (str.substring(0, 2).equals("RO")) {
 						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
 							graphics.setColor(Color.RED);
 						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
@@ -1027,9 +892,7 @@ MouseMotionListener
 								"left the game",
 								10 + graphics.getFontMetrics().stringWidth(
 										str.substring(4) + " "), textY);
-					}
-					else
-					{
+					} else {
 						String[] split = str.split(" ");
 						int firstLen = Integer.parseInt(split[1]);
 						String firstName = "";
@@ -1106,33 +969,26 @@ MouseMotionListener
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-											+ " by a "),
-											textY);
+													+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + secondKillWord + " "),
-											textY);
+									textY);
 					}
 					textY += 20;
 				}
 				break;
-			}
-			catch (ConcurrentModificationException E)
-			{
+			} catch (ConcurrentModificationException E) {
 
 			}
 		}
 
-		if (getHP() > 0)
-		{
+		if (getHP() > 0) {
 			setJustDied(true);
-		}
-		else
-		{
-			if (isJustDied())
-			{
+		} else {
+			if (isJustDied()) {
 				getInventory().clear();
 				setJustDied(false);
 			}
@@ -1145,23 +1001,19 @@ MouseMotionListener
 		// Repaint the inventory
 		getInventory().repaint();
 
-		if (!writingMessage)
-		{
+		if (!writingMessage) {
 			requestFocusInWindow();
 
-		}
-		else
-		{
+		} else {
 			chat.requestFocus();
 		}
 
 		// Update the FPS counter
-		if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
-		{
+		if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5)) {
 			FPScounter = 0;
 			currentFPS = Math.min((int) ((1000.0
 					/ (System.currentTimeMillis() - startTime)
-					* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5)),120);
+					* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5)), 120);
 			startTime = System.currentTimeMillis();
 		}
 
@@ -1170,84 +1022,60 @@ MouseMotionListener
 	}
 
 	@Override
-	public void keyPressed(KeyEvent key)
-	{
+	public void keyPressed(KeyEvent key) {
 
 		if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
-				&& !currentMessage.equals("R"))
-		{
+				&& !currentMessage.equals("R")) {
 			// R for right
 			currentMessage = "R";
 			printToServer(currentMessage);
 			System.out.println("Go right");
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
-				&& !currentMessage.equals("L"))
-		{
+		} else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
+				&& !currentMessage.equals("L")) {
 			// L for left
 			currentMessage = "L";
 			printToServer(currentMessage);
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_W
-				|| key.getKeyCode() == KeyEvent.VK_UP
-				|| key.getKeyCode() == KeyEvent.VK_SPACE)
-				&& !currentMessage.equals("U"))
-		{
+		} else if ((key.getKeyCode() == KeyEvent.VK_W
+				|| key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_SPACE)
+				&& !currentMessage.equals("U")) {
 			// U for up
 			currentMessage = "U";
 			printToServer(currentMessage);
-		}
-		else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
-				&& !currentMessage.equals("D"))
-		{
+		} else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
+				&& !currentMessage.equals("D")) {
 			// D for down
 			currentMessage = "D";
 			printToServer(currentMessage);
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_1
+		} else if (key.getKeyCode() == KeyEvent.VK_1
 				&& !currentMessage.equals("W0")
-				&& inventory.getEquippedWeapons()[0] != null)
-		{
+				&& inventory.getEquippedWeapons()[0] != null) {
 			setWeaponSelected(0);
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_2
+		} else if (key.getKeyCode() == KeyEvent.VK_2
 				&& !currentMessage.equals("W1")
-				&& inventory.getEquippedWeapons()[1] != null)
-		{
+				&& inventory.getEquippedWeapons()[1] != null) {
 			setWeaponSelected(1);
 		}
 		// Use these later
 		else if (key.getKeyCode() == KeyEvent.VK_3
 				&& !currentMessage.equals("W1")
-				&& inventory.getEquippedWeapons()[2] != null)
-		{
+				&& inventory.getEquippedWeapons()[2] != null) {
 			setWeaponSelected(2);
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_4
+		} else if (key.getKeyCode() == KeyEvent.VK_4
 				&& !currentMessage.equals("W1")
-				&& inventory.getEquippedWeapons()[3] != null)
-		{
+				&& inventory.getEquippedWeapons()[3] != null) {
 			setWeaponSelected(3);
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_E)
-		{
+		} else if (key.getKeyCode() == KeyEvent.VK_E) {
 			printToServer("E");
-			if (shop != null)
-			{
+			if (shop != null) {
 				closeShop();
 			}
-		}
-		else if (key.getKeyCode() == KeyEvent.VK_ENTER)
-		{
-			if (!writingMessage)
-			{
+		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (!writingMessage) {
 				chat.requestFocus();
 				writingMessage = true;
 				chat.setText("");
 				chat.setForeground(Color.black);
-			}
-			else if (writingMessage)
-			{
+			} else if (writingMessage) {
 				requestFocusInWindow();
 				writingMessage = false;
 
@@ -1256,36 +1084,24 @@ MouseMotionListener
 	}
 
 	@Override
-	public void keyReleased(KeyEvent key)
-	{
+	public void keyReleased(KeyEvent key) {
 
-		if (key.getKeyCode() == KeyEvent.VK_ESCAPE)
-		{
+		if (key.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			inventory.getMenuButton().doClick();
-		}
-		else
-		{
+		} else {
 			if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
-					&& !currentMessage.equals("!R"))
-			{
+					&& !currentMessage.equals("!R")) {
 				currentMessage = "!R";
 				System.out.println("Leave right");
-			}
-			else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
-					&& !currentMessage.equals("!L"))
-			{
+			} else if ((key.getKeyCode() == KeyEvent.VK_A || key.getKeyCode() == KeyEvent.VK_LEFT)
+					&& !currentMessage.equals("!L")) {
 				currentMessage = "!L";
-			}
-			else if ((key.getKeyCode() == KeyEvent.VK_W
-					|| key.getKeyCode() == KeyEvent.VK_UP
-					|| key.getKeyCode() == KeyEvent.VK_SPACE)
-					&& !currentMessage.equals("!U"))
-			{
+			} else if ((key.getKeyCode() == KeyEvent.VK_W
+					|| key.getKeyCode() == KeyEvent.VK_UP || key.getKeyCode() == KeyEvent.VK_SPACE)
+					&& !currentMessage.equals("!U")) {
 				currentMessage = "!U";
-			}
-			else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
-					&& !currentMessage.equals("!D"))
-			{
+			} else if ((key.getKeyCode() == KeyEvent.VK_S || key.getKeyCode() == KeyEvent.VK_DOWN)
+					&& !currentMessage.equals("!D")) {
 				currentMessage = "!D";
 			}
 
@@ -1294,59 +1110,47 @@ MouseMotionListener
 	}
 
 	@Override
-	public void mousePressed(MouseEvent event)
-	{
+	public void mousePressed(MouseEvent event) {
 		// Make sure the player changes direction
-		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT / 2)
-		{
+		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT / 2) {
 			printToServer("DR");
 			direction = 'R';
-		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
-				/ 2)
-		{
+		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+				/ 2) {
 			printToServer("DL");
 			direction = 'L';
 		}
 
 		if (event.getButton() == MouseEvent.BUTTON1
-				&& currentMessage.charAt(0) != 'A')
-		{
+				&& currentMessage.charAt(0) != 'A') {
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY();
 
 			printToServer(currentMessage);
 
 			// System.out.println("Pressed");
-		}
-		else if (event.getButton() == MouseEvent.BUTTON3
-				&& currentMessage.charAt(0) != 'a')
-		{
+		} else if (event.getButton() == MouseEvent.BUTTON3
+				&& currentMessage.charAt(0) != 'a') {
 			// A for action
 			currentMessage = "a " + event.getX() + " " + event.getY();
 
 			printToServer(currentMessage);
 		}
 
-		if (!writingMessage)
-		{
+		if (!writingMessage) {
 			requestFocusInWindow();
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent event)
-	{
+	public void mouseReleased(MouseEvent event) {
 		if (event.getButton() == MouseEvent.BUTTON1
-				&& !currentMessage.equals("!A"))
-		{
+				&& !currentMessage.equals("!A")) {
 			currentMessage = "!A";
 
 			printToServer(currentMessage);
-		}
-		else if (event.getButton() == MouseEvent.BUTTON3
-				&& !currentMessage.equals("!a"))
-		{
+		} else if (event.getButton() == MouseEvent.BUTTON3
+				&& !currentMessage.equals("!a")) {
 			currentMessage = "!a";
 
 			printToServer(currentMessage);
@@ -1354,45 +1158,37 @@ MouseMotionListener
 	}
 
 	@Override
-	public void keyTyped(KeyEvent key)
-	{
+	public void keyTyped(KeyEvent key) {
 
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0)
-	{
+	public void mouseClicked(MouseEvent arg0) {
 
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0)
-	{
+	public void mouseEntered(MouseEvent arg0) {
 
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0)
-	{
+	public void mouseExited(MouseEvent arg0) {
 
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent event)
-	{
+	public void mouseDragged(MouseEvent event) {
 		mouseX = event.getX();
 		mouseY = event.getY();
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
-				&& direction != 'R')
-		{
+				&& direction != 'R') {
 			printToServer("DR");
 			direction = 'R';
-		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
 				/ 2
-				&& direction != 'L')
-		{
+				&& direction != 'L') {
 			printToServer("DL");
 			direction = 'L';
 		}
@@ -1400,202 +1196,163 @@ MouseMotionListener
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent event)
-	{
+	public void mouseMoved(MouseEvent event) {
 		mouseX = event.getX();
 		mouseY = event.getY();
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2
-				&& direction != 'R')
-		{
+				&& direction != 'R') {
 			printToServer("DR");
 			direction = 'R';
-		}
-		else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
+		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH
 				/ 2
-				&& direction != 'L')
-		{
+				&& direction != 'L') {
 			printToServer("DL");
 			direction = 'L';
 		}
 	}
 
-	public int getCurrentFPS()
-	{
+	public int getCurrentFPS() {
 		return currentFPS;
 	}
 
-	public void setCurrentFPS(int currentFPS)
-	{
+	public void setCurrentFPS(int currentFPS) {
 		this.currentFPS = currentFPS;
 	}
 
-	public int getHP()
-	{
+	public int getHP() {
 		return HP;
 	}
 
-	public void setHP(int hP)
-	{
+	public void setHP(int hP) {
 		HP = hP;
 	}
 
-	public int getMaxHP()
-	{
+	public int getMaxHP() {
 		return maxHP;
 	}
 
-	public void setMaxHP(int maxHP)
-	{
+	public void setMaxHP(int maxHP) {
 		this.maxHP = maxHP;
 	}
 
-	public int getMana()
-	{
+	public int getMana() {
 		return mana;
 	}
 
-	public void setMana(int mana)
-	{
+	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
-	public int getMaxMana()
-	{
+	public int getMaxMana() {
 		return maxMana;
 	}
 
-	public void setMaxMana(int maxMana)
-	{
+	public void setMaxMana(int maxMana) {
 		this.maxMana = maxMana;
 	}
 
-	public int getSpeed()
-	{
+	public int getSpeed() {
 		return speed;
 	}
 
-	public int getJump()
-	{
+	public int getJump() {
 		return jump;
 	}
 
-	public BufferedReader getInput()
-	{
+	public BufferedReader getInput() {
 		return input;
 	}
 
-	public PrintWriter getOutput()
-	{
+	public PrintWriter getOutput() {
 		return output;
 	}
 
-	public int getDamage()
-	{
+	public int getDamage() {
 		return damage;
 	}
 
-	public int getBaseDamage()
-	{
+	public int getBaseDamage() {
 		return baseDamage;
 	}
 
-	public double getArmour()
-	{
+	public double getArmour() {
 		return armour;
 	}
 
-	public int getRedCastleHP()
-	{
+	public int getRedCastleHP() {
 		return redCastleHP;
 	}
 
-	public int getBlueCastleHP()
-	{
+	public int getBlueCastleHP() {
 		return blueCastleHP;
 	}
 
-	public int getRedCastleTier()
-	{
+	public int getRedCastleTier() {
 		return redCastleTier;
 	}
 
-	public void setRedCastleTier(int redCastleTier)
-	{
+	public void setRedCastleTier(int redCastleTier) {
 		this.redCastleTier = redCastleTier;
 	}
 
-	public int getRedCastleMoney()
-	{
+	public int getRedCastleMoney() {
 		return redCastleMoney;
 	}
 
-	public void setRedCastleMoney(int redCastleMoney)
-	{
+	public void setRedCastleMoney(int redCastleMoney) {
 		this.redCastleMoney = redCastleMoney;
 	}
 
-	public int getBlueCastleTier()
-	{
+	public int getBlueCastleTier() {
 		return blueCastleTier;
 	}
 
-	public void setBlueCastleTier(int blueCastleTier)
-	{
+	public void setBlueCastleTier(int blueCastleTier) {
 		this.blueCastleTier = blueCastleTier;
 	}
 
-	public int getBlueCastleMoney()
-	{
+	public int getBlueCastleMoney() {
 		return blueCastleMoney;
 	}
 
-	public void setBlueCastleMoney(int blueCastleMoney)
-	{
+	public void setBlueCastleMoney(int blueCastleMoney) {
 		this.blueCastleMoney = blueCastleMoney;
 	}
 
-	public int getRedCastleMaxHP()
-	{
+	public int getRedCastleMaxHP() {
 		return redCastleMaxHP;
 	}
 
-	public void setRedCastleMaxHP(int redCastleMaxHP)
-	{
+	public void setRedCastleMaxHP(int redCastleMaxHP) {
 		this.redCastleMaxHP = redCastleMaxHP;
 	}
 
-	public int getBlueCastleMaxHP()
-	{
+	public int getBlueCastleMaxHP() {
 		return blueCastleMaxHP;
 	}
 
-	public void setBlueCastleMaxHP(int blueCastleMaxHP)
-	{
+	public void setBlueCastleMaxHP(int blueCastleMaxHP) {
 		this.blueCastleMaxHP = blueCastleMaxHP;
 	}
 
 	/**
 	 * Class to limit the number of characters in a JTextField
 	 */
-	public static class JTextFieldLimit extends PlainDocument
-	{
+	public static class JTextFieldLimit extends PlainDocument {
 		private int limit;
 
-		public JTextFieldLimit(int limit)
-		{
+		public JTextFieldLimit(int limit) {
 			super();
 			this.limit = limit;
 		}
 
 		public void insertString(int offset, String str, AttributeSet attr)
-				throws BadLocationException
-		{
+				throws BadLocationException {
 			if (str == null)
 				return;
 
-			if ((getLength() + str.length()) <= limit)
-			{
+			if ((getLength() + str.length()) <= limit) {
 				super.insertString(offset, str, attr);
 			}
 		}
@@ -1604,12 +1361,10 @@ MouseMotionListener
 	/**
 	 * When sending a message
 	 */
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		// Send the message
 		String message = chat.getText();
-		if (message.length() > 0)
-		{
+		if (message.length() > 0) {
 			printToServer("C " + message);
 		}
 		chat.setForeground(Color.GRAY);
@@ -1619,20 +1374,16 @@ MouseMotionListener
 
 	}
 
-	private class JTextFieldEnter implements KeyListener
-	{
+	private class JTextFieldEnter implements KeyListener {
 		@Override
-		public void keyTyped(KeyEvent e)
-		{
+		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
 		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			if (e.getKeyCode() == KeyEvent.VK_ENTER)
-			{
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				enter.doClick();
 
 			}
@@ -1640,251 +1391,202 @@ MouseMotionListener
 		}
 
 		@Override
-		public void keyReleased(KeyEvent e)
-		{
+		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
 	}
 
-	public Socket getMySocket()
-	{
+	public Socket getMySocket() {
 		return mySocket;
 	}
 
-	public void setMySocket(Socket mySocket)
-	{
+	public void setMySocket(Socket mySocket) {
 		this.mySocket = mySocket;
 	}
 
-	public Thread getGameThread()
-	{
+	public Thread getGameThread() {
 		return gameThread;
 	}
 
-	public void setGameThread(Thread gameThread)
-	{
+	public void setGameThread(Thread gameThread) {
 		this.gameThread = gameThread;
 	}
 
-	public long getPing()
-	{
+	public long getPing() {
 		return ping;
 	}
 
-	public void setPing(long ping)
-	{
+	public void setPing(long ping) {
 		this.ping = ping;
 	}
 
-	public String getPingString()
-	{
+	public String getPingString() {
 		return pingString;
 	}
 
-	public void setPingString(String pingString)
-	{
+	public void setPingString(String pingString) {
 		this.pingString = pingString;
 	}
 
-	public String getCurrentMessage()
-	{
+	public String getCurrentMessage() {
 		return currentMessage;
 	}
 
-	public void setCurrentMessage(String currentMessage)
-	{
+	public void setCurrentMessage(String currentMessage) {
 		this.currentMessage = currentMessage;
 	}
 
-	public ClientObject getPlayer()
-	{
+	public ClientObject getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(ClientObject player)
-	{
+	public void setPlayer(ClientObject player) {
 		this.player = player;
 	}
 
-	public ClientWorld getWorld()
-	{
+	public ClientWorld getWorld() {
 		return world;
 	}
 
-	public void setWorld(ClientWorld world)
-	{
+	public void setWorld(ClientWorld world) {
 		this.world = world;
 	}
 
-	public JTextField getChat()
-	{
+	public JTextField getChat() {
 		return chat;
 	}
 
-	public void setChat(JTextField chat)
-	{
+	public void setChat(JTextField chat) {
 		this.chat = chat;
 	}
 
-	public JButton getEnter()
-	{
+	public JButton getEnter() {
 		return enter;
 	}
 
-	public void setEnter(JButton enter)
-	{
+	public void setEnter(JButton enter) {
 		this.enter = enter;
 	}
 
-	public ArrayList<String> getChatQueue()
-	{
+	public ArrayList<String> getChatQueue() {
 		return chatQueue;
 	}
 
-	public void setChatQueue(ArrayList<String> chatQueue)
-	{
+	public void setChatQueue(ArrayList<String> chatQueue) {
 		this.chatQueue = chatQueue;
 	}
 
-	public ClientInventory getInventory()
-	{
+	public ClientInventory getInventory() {
 		return inventory;
 	}
 
-	public void setInventory(ClientInventory inventory)
-	{
+	public void setInventory(ClientInventory inventory) {
 		this.inventory = inventory;
 	}
 
-	public boolean isJustDied()
-	{
+	public boolean isJustDied() {
 		return justDied;
 	}
 
-	public void setJustDied(boolean justDied)
-	{
+	public void setJustDied(boolean justDied) {
 		this.justDied = justDied;
 	}
 
-	public char getDirection()
-	{
+	public char getDirection() {
 		return direction;
 	}
 
-	public void setDirection(char direction)
-	{
+	public void setDirection(char direction) {
 		this.direction = direction;
 	}
 
-	public long getStartTime()
-	{
+	public long getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(long startTime)
-	{
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
-	public int getFPScounter()
-	{
+	public int getFPScounter() {
 		return FPScounter;
 	}
 
-	public void setFPScounter(int fPScounter)
-	{
+	public void setFPScounter(int fPScounter) {
 		FPScounter = fPScounter;
 	}
 
-	public JLayeredPane getFrame()
-	{
+	public JLayeredPane getFrame() {
 		return frame;
 	}
 
-	public void setFrame(JLayeredPane frame)
-	{
+	public void setFrame(JLayeredPane frame) {
 		this.frame = frame;
 	}
 
-	public ArrayList<String> getLines()
-	{
+	public ArrayList<String> getLines() {
 		return lines;
 	}
 
-	public void setLines(ArrayList<String> lines)
-	{
+	public void setLines(ArrayList<String> lines) {
 		this.lines = lines;
 	}
 
-	public String getPlayerName()
-	{
+	public String getPlayerName() {
 		return playerName;
 	}
 
-	public void setPlayerName(String playerName)
-	{
+	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
 
-	public long getStartTimer()
-	{
+	public long getStartTimer() {
 		return startTimer;
 	}
 
-	public void setStartTimer(long startTimer)
-	{
+	public void setStartTimer(long startTimer) {
 		this.startTimer = startTimer;
 	}
 
-	public void setOutput(PrintWriter output)
-	{
+	public void setOutput(PrintWriter output) {
 		this.output = output;
 	}
 
-	public void setInput(BufferedReader input)
-	{
+	public void setInput(BufferedReader input) {
 		this.input = input;
 	}
 
-	public void setSpeed(int speed)
-	{
+	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
 
-	public void setJump(int jump)
-	{
+	public void setJump(int jump) {
 		this.jump = jump;
 	}
 
-	public void setArmour(double armour)
-	{
+	public void setArmour(double armour) {
 		this.armour = armour;
 	}
 
-	public void setDamage(int damage)
-	{
+	public void setDamage(int damage) {
 		this.damage = damage;
 	}
 
-	public void setBaseDamage(int baseDamage)
-	{
+	public void setBaseDamage(int baseDamage) {
 		this.baseDamage = baseDamage;
 	}
 
-	public void setRedCastleHP(int redCastleHP)
-	{
+	public void setRedCastleHP(int redCastleHP) {
 		this.redCastleHP = redCastleHP;
 	}
 
-	public void setBlueCastleHP(int blueCastleHP)
-	{
+	public void setBlueCastleHP(int blueCastleHP) {
 		this.blueCastleHP = blueCastleHP;
 	}
 
-	public void setShop(ClientShop shop)
-	{
+	public void setShop(ClientShop shop) {
 		this.shop = shop;
 	}
 
