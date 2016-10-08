@@ -39,21 +39,26 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * existing the game (aside from tiles) cannot exceed this limit
 	 */
 	public static final int NUMBER_OF_IDS = 1000000;
-	
+
 	/**
 	 * The highest ID not used yet for objects
 	 */
 	private int nextID = -1;
-	
+
+	/**
+	 * Free IDs two rounds from now
+	 */
+	private ArrayList<Integer> IDsToAdd2 = new ArrayList<Integer>();
+
 	/**
 	 * Free IDs to add next round
 	 */
-	private ArrayList <Integer> IDsToAdd = new ArrayList<Integer>();
-	
+	private ArrayList<Integer> IDsToAdd = new ArrayList<Integer>();
+
 	/**
 	 * Stack of freeIDs to use
 	 */
-	private PriorityQueue <Integer> freeIDs = new PriorityQueue <Integer>();
+	private PriorityQueue<Integer> freeIDs = new PriorityQueue<Integer>();
 
 	/**
 	 * The world the engine works with
@@ -81,11 +86,6 @@ public class ServerEngine implements Runnable, ActionListener {
 	private int lastTeam = 1;
 
 	/**
-	 * A counter updating every repaint and reseting at the expected FPS
-	 */
-	private int FPScounter = 0;
-
-	/**
 	 * The game loop timer
 	 */
 	private Timer updateTimer;
@@ -99,6 +99,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	private boolean end = false;
 	private int losingTeam;
 	private Server server;
+
 	/**
 	 * Constructor for the engine
 	 */
@@ -158,13 +159,11 @@ public class ServerEngine implements Runnable, ActionListener {
 		try {
 			for (ServerPlayer player : listOfPlayers) {
 				player.updateClient();
-				if (endGame)
-				{
+				if (endGame) {
 					player.setEndGame(true, losingTeam);
 				}
 			}
-			if (endGame)
-			{
+			if (endGame) {
 				ServerManager.removeRoom(server);
 				close();
 				server.close();
@@ -181,13 +180,12 @@ public class ServerEngine implements Runnable, ActionListener {
 		this.losingTeam = losingTeam;
 	}
 
-	public void close()
-	{
+	public void close() {
 		end = true;
 		updateTimer.stop();
 		listOfPlayers.clear();
 		toRemove.clear();
-		//gui.close();
+		// gui.close();
 		world.close();
 	}
 
@@ -198,8 +196,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		for (ServerPlayer player : listOfPlayers) {
 			player.sendMessage(message);
 		}
-		if (ServerManager.HAS_FRAME)
-		{
+		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
 		}
 	}
@@ -212,8 +209,7 @@ public class ServerEngine implements Runnable, ActionListener {
 			if (player.getTeam() == team)
 				player.sendMessage(message);
 		}
-		if (ServerManager.HAS_FRAME)
-		{
+		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
 		}
 	}
@@ -230,7 +226,8 @@ public class ServerEngine implements Runnable, ActionListener {
 		world.remove(remove);
 		server.decreaseNumPlayer();
 		broadcast("R " + remove.getID());
-		broadcast("RO " + remove.getName().split(" ").length + " " + remove.getTeam() + remove.getName());
+		broadcast("RO " + remove.getName().split(" ").length + " "
+				+ remove.getTeam() + remove.getName());
 	}
 
 	/**
@@ -250,20 +247,19 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * @return the id
 	 */
 	public int useNextID() {
-		if (!freeIDs.isEmpty())
-		{
+		if (!freeIDs.isEmpty()) {
 			return freeIDs.poll();
 		}
 		return ++nextID;
 	}
-	
+
 	/**
 	 * Remove an object's id after it is destroyed
+	 * 
 	 * @return
 	 */
-	public void removeID(int id)
-	{
-		IDsToAdd.add(id);
+	public void removeID(int id) {
+		IDsToAdd2.add(id);
 	}
 
 	@Override
@@ -290,8 +286,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		updateClients();
 
 		// Update the gui
-		if (ServerManager.HAS_FRAME)
-		{
+		if (ServerManager.HAS_FRAME) {
 			if (gui != null) {
 				gui.update();
 			}
@@ -318,7 +313,8 @@ public class ServerEngine implements Runnable, ActionListener {
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
 			System.out.println("~LAG DETECTED~");
 			System.out.println("CURRENT SERVER FPS: " + getCurrentFPS());
-			System.out.println("Number of objects in this world: " + world.getObjects().size());
+			System.out.println("Number of objects in this world: "
+					+ world.getObjects().size());
 			lagSpike = true;
 		}
 
@@ -329,20 +325,24 @@ public class ServerEngine implements Runnable, ActionListener {
 		// Check how long a game loop took
 		long loopTime = System.nanoTime() - startTime;
 
-		if (world.getWorldCounter() % 60 == 0) 
-		{
-			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
+		if (world.getWorldCounter() % 60 == 0) {
+			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime)
+					/ (1000.0 / UPDATE_RATE) * 60 + 0.5));
 		}
 
 		startTime = System.nanoTime();
-		
-		
+
 		// Add free IDs to free ID list
-		for (int ID: IDsToAdd)
-		{
+		for (int ID : IDsToAdd) {
 			freeIDs.add(ID);
 		}
 		IDsToAdd.clear();
+
+		// Second rounds of adding
+		for (int ID : IDsToAdd2) {
+			IDsToAdd.add(ID);
+		}
+		IDsToAdd2.clear();
 	}
 
 	boolean lagSpike = false;
