@@ -49,11 +49,11 @@ import WorldCreator.CreatorWorld;
 
 /**
  * The main menu for the game
+ * 
  * @author Alex Raita & William Xu
  *
  */
-public class MainMenu implements KeyListener
-{
+public class MainMenu implements KeyListener {
 	static MainMenu main;
 
 	/**
@@ -88,21 +88,16 @@ public class MainMenu implements KeyListener
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
-	public void generateClouds()
-	{
+	public void generateClouds() {
 		// Generate clouds
-		if ((int) (Math.random() * 2) == 0)
-		{
+		if ((int) (Math.random() * 2) == 0) {
 			cloudDirection = 1;
-		}
-		else
-		{
+		} else {
 			cloudDirection = -1;
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 24; no++)
-		{
+		for (int no = 0; no < 24; no++) {
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
 			double y = Math.random() * (Client.SCREEN_HEIGHT * 1.5)
@@ -114,8 +109,7 @@ public class MainMenu implements KeyListener
 
 			int imageNo = no;
 
-			while (imageNo >= 6)
-			{
+			while (imageNo >= 6) {
 				imageNo -= 6;
 			}
 
@@ -128,8 +122,7 @@ public class MainMenu implements KeyListener
 	/**
 	 * Constructor
 	 */
-	public MainMenu()
-	{
+	public MainMenu() {
 		main = this;
 		Thread loadImages = new Thread(new LoadImages());
 		loadImages.start();
@@ -143,13 +136,11 @@ public class MainMenu implements KeyListener
 		ClientInventory.INVENTORY_WIDTH = (int) (300 * (dm.getWidth() / 1920.0));
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
-		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH)
-		{
+		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
 			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
 		}
 		Client.SCREEN_HEIGHT = dm.getHeight();
-		if (Client.SCREEN_HEIGHT > 1080)
-		{
+		if (Client.SCREEN_HEIGHT > 1080) {
 			Client.SCREEN_HEIGHT = 1080;
 		}
 
@@ -161,21 +152,15 @@ public class MainMenu implements KeyListener
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 
-		while (playerName == null)
-		{
-			try
-			{
-				playerName = JOptionPane
-						.showInputDialog(null,
-								"Please enter your name (max 25 characters)",
-								"Identification", JOptionPane.QUESTION_MESSAGE);
-				if (playerName == null)
-				{
+		while (playerName == null) {
+			try {
+				playerName = JOptionPane.showInputDialog(null,
+						"Please enter your name (max 25 characters)",
+						"Identification", JOptionPane.QUESTION_MESSAGE);
+				if (playerName == null) {
 					System.exit(0);
 					break;
-				}
-				else if (playerName.equals("") || playerName.length() > 25)
-				{
+				} else if (playerName.equals("") || playerName.length() > 25) {
 
 					playerName = null;
 					continue;
@@ -183,45 +168,36 @@ public class MainMenu implements KeyListener
 
 				playerName = playerName.trim();
 
-				int enableCloudsAndStars =
-						JOptionPane
+				int enableCloudsAndStars = JOptionPane
 						.showConfirmDialog(
 								null,
 								"Would you like to enable in-game clouds and stars? (May reduce performance on low-end machines)",
 								"Select Game Quality",
 								JOptionPane.YES_NO_OPTION);
-				if (enableCloudsAndStars != JOptionPane.YES_OPTION)
-				{
+				if (enableCloudsAndStars != JOptionPane.YES_OPTION) {
 					ClientWorld.NO_OF_CLOUDS = 0;
 					ClientWorld.MAX_NO_OF_STARS = 0;
 				}
 
 				break;
-			}
-			catch (NumberFormatException E)
-			{
+			} catch (NumberFormatException E) {
 
 			}
 		}
 
-		while (!imagesLoaded)
-		{
-			try
-			{
+		while (!imagesLoaded) {
+			try {
 				Thread.sleep(10);
-				if (imageLoadFailed)
-				{
+				if (imageLoadFailed) {
 					JOptionPane
-					.showMessageDialog(
-							null,
-							"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							.showMessageDialog(
+									null,
+									"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
+									"Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
 					break;
 				}
-			}
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -234,12 +210,10 @@ public class MainMenu implements KeyListener
 		generateClouds();
 	}
 
-	private class LoadImages implements Runnable
-	{
+	private class LoadImages implements Runnable {
 
 		@Override
-		public void run()
-		{
+		public void run() {
 			Images.importImages();
 			imagesLoaded = true;
 		}
@@ -247,13 +221,13 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * The main JPanel
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
 	private static class MainPanel extends JPanel implements ActionListener,
-	MouseListener
-	{
-		
+			MouseListener {
+
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
 		Image background = Images.getImage("BACKGROUND");
@@ -262,9 +236,8 @@ public class MainMenu implements KeyListener
 		JButton createMap;
 		JButton instructions;
 
-		
 		Image buttonTrayImage = Images.getImage("ButtonTray");
-		
+
 		Image createMapImage = Images.getImage("CreateAMap");
 		Image createMapOver = Images.getImage("CreateAMapClicked");
 
@@ -282,8 +255,7 @@ public class MainMenu implements KeyListener
 		/**
 		 * Constructor
 		 */
-		public MainPanel()
-		{
+		public MainPanel() {
 			// Set the Icon
 			mainFrame.setIconImage(Images.getImage("WorldQuestIcon"));
 
@@ -357,38 +329,31 @@ public class MainMenu implements KeyListener
 		/**
 		 * Draw the clouds
 		 */
-		public void paintComponent(Graphics graphics)
-		{
+		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
 			graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH
 					+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,
 					null);
 
 			// Draw and move the clouds
-			for (ClientCloud cloud : clouds)
-			{
+			for (ClientCloud cloud : clouds) {
 				if (cloud.getX() <= Client.SCREEN_WIDTH
 						+ ClientInventory.INVENTORY_WIDTH
 						&& cloud.getX() + cloud.getWidth() >= -64
 						&& cloud.getY() <= Client.SCREEN_HEIGHT
-						&& cloud.getY() + cloud.getHeight() >= 0)
-				{
+						&& cloud.getY() + cloud.getHeight() >= 0) {
 					graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
 							(int) cloud.getY(), null);
 				}
 
-				if (cloud.getX() < middle - CLOUD_DISTANCE / 2)
-				{
+				if (cloud.getX() < middle - CLOUD_DISTANCE / 2) {
 					cloud.setX(middle + CLOUD_DISTANCE / 2);
 					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
 							- (2 * Client.SCREEN_HEIGHT / 3));
 					cloud.sethSpeed((Math.random() * 0.8 + 0.2)
 							* cloudDirection);
 
-				}
-				else if (cloud.getX() > middle + CLOUD_DISTANCE
-						/ 2)
-				{
+				} else if (cloud.getX() > middle + CLOUD_DISTANCE / 2) {
 					cloud.setX(middle - CLOUD_DISTANCE / 2);
 					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
 							- (2 * Client.SCREEN_HEIGHT / 3));
@@ -404,37 +369,33 @@ public class MainMenu implements KeyListener
 					/ 2 - 20, (int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
 					null);
 
-			graphics.drawString("William Xu and Alex Raita", 15,
-					20);
+			graphics.drawString("William Xu and Alex Raita", 15, 20);
 
 			graphics.drawString("Press 'ESC' to quit",
-					ClientFrame.getScaledWidth(1920) - 120,
-					20);
-			graphics.drawImage(buttonTrayImage, middle-buttonTrayImage.getWidth(null)/2, (int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
+					ClientFrame.getScaledWidth(1920) - 120, 20);
+			graphics.drawImage(buttonTrayImage,
+					middle - buttonTrayImage.getWidth(null) / 2,
+					(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			repaint();
 
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e)
-		{
+		public void mouseClicked(MouseEvent e) {
 
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
+		public void mousePressed(MouseEvent e) {
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e)
-		{
+		public void mouseReleased(MouseEvent e) {
 
 		}
 
@@ -442,44 +403,28 @@ public class MainMenu implements KeyListener
 		/**
 		 * When mouse hovers over a button, change the colour
 		 */
-		public void mouseEntered(MouseEvent e)
-		{
-			if (e.getSource() == createMap)
-			{
+		public void mouseEntered(MouseEvent e) {
+			if (e.getSource() == createMap) {
 				createMap.setIcon(new ImageIcon(createMapOver));
-			}
-			else if (e.getSource() == instructions)
-			{
+			} else if (e.getSource() == instructions) {
 				instructions.setIcon(new ImageIcon(instructionsOver));
-			}
-			else if (e.getSource() == playGame)
-			{
+			} else if (e.getSource() == playGame) {
 				playGame.setIcon(new ImageIcon(playGameOver));
-			}
-			else if (e.getSource() == createServer)
-			{
+			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerOver));
 			}
 
 		}
 
 		@Override
-		public void mouseExited(MouseEvent e)
-		{
-			if (e.getSource() == createMap)
-			{
+		public void mouseExited(MouseEvent e) {
+			if (e.getSource() == createMap) {
 				createMap.setIcon(new ImageIcon(createMapImage));
-			}
-			else if (e.getSource() == instructions)
-			{
+			} else if (e.getSource() == instructions) {
 				instructions.setIcon(new ImageIcon(instructionsImage));
-			}
-			else if (e.getSource() == playGame)
-			{
+			} else if (e.getSource() == playGame) {
 				playGame.setIcon(new ImageIcon(playGameImage));
-			}
-			else if (e.getSource() == createServer)
-			{
+			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerImage));
 			}
 		}
@@ -488,17 +433,18 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * The Panel that displays the map creator
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class CreatorPanel extends JPanel
-	{
+	private static class CreatorPanel extends JPanel {
 		/**
 		 * Constructor
-		 * @param fileName the file to be used
+		 * 
+		 * @param fileName
+		 *            the file to be used
 		 */
-		public CreatorPanel(String fileName)
-		{
+		public CreatorPanel(String fileName) {
 			setDoubleBuffered(true);
 			setBackground(Color.black);
 			setFocusable(true);
@@ -513,17 +459,12 @@ public class MainMenu implements KeyListener
 				newFileName.setCharAt(newFileName.indexOf(" "), '_');
 
 			CreatorWorld world = null;
-			try
-			{
+			try {
 				world = new CreatorWorld(newFileName.toString());
-			}
-			catch (NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 
 				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 
 				e.printStackTrace();
 			}
@@ -546,11 +487,11 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * The panel to run the actual game
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	public static class GamePanel extends JPanel
-	{
+	public static class GamePanel extends JPanel {
 		static ClientInventory inventory;
 		static Socket mySocket = null;
 
@@ -559,15 +500,18 @@ public class MainMenu implements KeyListener
 
 		/**
 		 * Constructor
-		 * @param serverIP the server IP
-		 * @param port the port number
-		 * @param playerName the player's name
+		 * 
+		 * @param serverIP
+		 *            the server IP
+		 * @param port
+		 *            the port number
+		 * @param playerName
+		 *            the player's name
 		 * @throws IOException
 		 * @throws NumberFormatException
 		 */
 		public GamePanel(String serverIPIn, int portIn)
-				throws NumberFormatException, IOException
-		{
+				throws NumberFormatException, IOException {
 			serverIP = serverIPIn;
 			this.port = portIn;
 			boolean connected = false;
@@ -575,19 +519,16 @@ public class MainMenu implements KeyListener
 			boolean full = false;
 			BufferedReader input = null;
 
-			while (!connected)
-			{
-				try
-				{
+			while (!connected) {
+				try {
 					mySocket = new Socket(serverIP, port);
-					input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+					input = new BufferedReader(new InputStreamReader(
+							mySocket.getInputStream()));
 					String line = null;
-					while(line == null)
-					{
+					while (line == null) {
 						line = input.readLine();
 					}
-					if(line.equals("FULL"))
-					{
+					if (line.equals("FULL")) {
 						System.out.println("ROOMS ARE FULL MESSAGE RECEIVED");
 						exit = true;
 						full = true;
@@ -596,9 +537,7 @@ public class MainMenu implements KeyListener
 					}
 
 					connected = true;
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					serverIP = JOptionPane
 							.showInputDialog("Connection Failed. Please re-enter the IP.");
 					if (serverIP == null)
@@ -608,10 +547,10 @@ public class MainMenu implements KeyListener
 					break;
 			}
 
-			if (exit)
-			{
-				if(full)
-					JOptionPane.showMessageDialog(null, "All Rooms are full. Please try again later");
+			if (exit) {
+				if (full)
+					JOptionPane.showMessageDialog(null,
+							"All Rooms are full. Please try again later");
 
 				setVisible(false);
 				mainFrame.remove(this);
@@ -624,13 +563,12 @@ public class MainMenu implements KeyListener
 
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
-			}
-			else
-			{
+			} else {
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
 
-				lobby = new ClientLobby(mySocket, input, playerName, this, clouds,menu);
+				lobby = new ClientLobby(mySocket, input, playerName, this,
+						clouds, menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
 				lobby.setSize(Client.SCREEN_WIDTH
@@ -643,8 +581,7 @@ public class MainMenu implements KeyListener
 		}
 
 		public void startGame(ClientLobby lobby) throws UnknownHostException,
-		IOException
-		{
+				IOException {
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
 			mainFrame.invalidate();
@@ -686,32 +623,31 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Reacts when the menu button in the creator is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class CreatorMenuButton implements ActionListener
-	{
+	private static class CreatorMenuButton implements ActionListener {
 		private CreatorWorld creator;
 
-		public CreatorMenuButton (CreatorWorld creator)
-		{
+		public CreatorMenuButton(CreatorWorld creator) {
 			this.creator = creator;
 		}
 
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			int dialogResult = JOptionPane.NO_OPTION;
-			if(!creator.justSaved())
-				dialogResult = JOptionPane.showConfirmDialog (null, "Do you want to save your map?","Warning",JOptionPane.YES_NO_CANCEL_OPTION);
-			if( dialogResult == JOptionPane.YES_OPTION)
+			if (!creator.justSaved())
+				dialogResult = JOptionPane.showConfirmDialog(null,
+						"Do you want to save your map?", "Warning",
+						JOptionPane.YES_NO_CANCEL_OPTION);
+			if (dialogResult == JOptionPane.YES_OPTION)
 				try {
 					creator.save();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			if(dialogResult != JOptionPane.CANCEL_OPTION)
-			{	
+			if (dialogResult != JOptionPane.CANCEL_OPTION) {
 				creatorPanel.setVisible(false);
 				mainFrame.remove(creatorPanel);
 				mainFrame.invalidate();
@@ -723,17 +659,17 @@ public class MainMenu implements KeyListener
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
 				mainFrame.requestFocus();
-				
+
 			}
 		}
 	}
 
 	/**
 	 * Reacts when the menu button in the lobby is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 */
-	private static class LobbyMenuButton implements ActionListener
-	{
+	private static class LobbyMenuButton implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("went to menu from lobby");
 			lobby.setVisible(false);
@@ -750,16 +686,16 @@ public class MainMenu implements KeyListener
 			mainMenu.revalidate();
 		}
 
-
 	}
+
 	/**
 	 * The instruction menu
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
 	private static class InstructionPanel extends JPanel implements
-	ActionListener
-	{
+			ActionListener {
 		int currentPanel = 0;
 		JButton next;
 		JButton previous;
@@ -771,8 +707,7 @@ public class MainMenu implements KeyListener
 		/**
 		 * Constructor
 		 */
-		public InstructionPanel()
-		{
+		public InstructionPanel() {
 			setDoubleBuffered(true);
 			setBackground(Color.red);
 			setFocusable(true);
@@ -802,8 +737,7 @@ public class MainMenu implements KeyListener
 		/**
 		 * Paints an image depending on the screen the user is on
 		 */
-		public void paintComponent(Graphics graphics)
-		{
+		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
 
 			if (currentPanel == 0)
@@ -818,12 +752,10 @@ public class MainMenu implements KeyListener
 		/**
 		 * Increase the currentPanel until it reaches the main menu again
 		 */
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			currentPanel++;
 
-			if (currentPanel == 3)
-			{
+			if (currentPanel == 3) {
 				setVisible(false);
 				mainFrame.remove(this);
 				mainFrame.invalidate();
@@ -843,13 +775,12 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Reacts when the menu button in game is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class GameMenuButton implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
+	private static class GameMenuButton implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			client.leaveGame = true;
 			client.getOutput().close();
 			StartGame.restart(mainFrame);
@@ -860,13 +791,12 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Starts the game when this button is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class GameStart implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
+	private static class GameStart implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 
 			// Get user info. If it invalid, then ask for it again or exit back
 			// to the main menu
@@ -874,66 +804,35 @@ public class MainMenu implements KeyListener
 			int port = DEF_PORT;
 			// String playerName;
 
-			serverIP = JOptionPane
-					.showInputDialog("Server IP (Or 0 for this comp, 1 for online servers)");
-			if (serverIP == null)
-			{
-				mainFrame.requestFocus();
-				return;
-			}
-			else if (serverIP.equals("0"))
-			{
-				serverIP = "127.0.0.1";
-			}
-			else if (serverIP.equals("1"))
-			{
+			if (JOptionPane.showConfirmDialog(null,
+					"Would you like to play on official servers?","Join a Game",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				serverIP = "159.203.18.245";
 			}
 
-			port = DEF_PORT;
+			else {
+				serverIP = JOptionPane
+						.showInputDialog("Enter the server IP or leave blank for a server on this machine");
+				if (serverIP == null) {
+					mainFrame.requestFocus();
+					return;
+				} else if ((serverIP.trim()).equals("")) {
+					serverIP = "127.0.0.1";
+				}
+			}
 
-			// while (true)
-			// {
-			// try
-			// {
-			// String portNum = JOptionPane
-			// .showInputDialog(
-			// "Please enter the port of the server (Default: "
-			// + DEF_PORT + ")").trim();
-			// if (portNum == null)
-			// return;
-			// else if (portNum.equals(""))
-			// portNum = "" + DEF_PORT;
-			// else if (Integer.parseInt(portNum) <= 65535)
-			// port = Integer.parseInt(portNum);
-			// else
-			// throw new NumberFormatException();
-			//
-			// break;
-			// }
-			// catch (NumberFormatException E)
-			// {
-			//
-			// }
-			//
-			// }
+			port = DEF_PORT;
 
 			mainFrame.remove(mainMenu);
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
 
-			try
-			{
+			try {
 				gamePanel = new GamePanel(serverIP, port);
-			}
-			catch (NumberFormatException e1)
-			{
+			} catch (NumberFormatException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-			catch (IOException e1)
-			{
+			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -947,28 +846,24 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Starts the server when this button is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class StartServer implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
+	private static class StartServer implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			int maxRooms;
-			while(true)
-			{
-				try{
-					String maxRoomsStr=JOptionPane
-					.showInputDialog("What is the maximum number of gamerooms you would like?");
-					if(maxRoomsStr == null)
+			while (true) {
+				try {
+					String maxRoomsStr = JOptionPane
+							.showInputDialog("What is the maximum number of gamerooms you would like?");
+					if (maxRoomsStr == null)
 						return;
 					maxRooms = Integer.parseInt(maxRoomsStr);
-					if(maxRooms < 1)
+					if (maxRooms < 1)
 						maxRooms = 1;
 					break;
-				}
-				catch(Exception E)
-				{
+				} catch (Exception E) {
 
 				}
 			}
@@ -996,8 +891,9 @@ public class MainMenu implements KeyListener
 			// }
 
 			// Starts the server
-			System.out.println("rooms "+maxRooms);
-			ServerManager server = new ServerManager(portNum, maxRooms,mainFrame);
+			System.out.println("rooms " + maxRooms);
+			ServerManager server = new ServerManager(portNum, maxRooms,
+					mainFrame);
 
 			Thread serverThread = new Thread(server);
 
@@ -1009,60 +905,60 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Starts the creator when this button is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class StartCreator implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
+	private static class StartCreator implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			// Get filename. If it is invalid, exit
 			String fileName = "";
 			String[] mapNames = null;
 			String defaultMapName = "New Map Name";
-			try{
-				BufferedReader maps = new BufferedReader (new FileReader(new File("Resources","Maps")));
+			try {
+				BufferedReader maps = new BufferedReader(new FileReader(
+						new File("Resources", "Maps")));
 				int numMaps = Integer.parseInt(maps.readLine());
-				mapNames = new String[numMaps+1];
+				mapNames = new String[numMaps + 1];
 				mapNames[0] = defaultMapName;
-				for(int i =0; i < numMaps;i++)
-				{
-					mapNames[i+1] = maps.readLine();
+				for (int i = 0; i < numMaps; i++) {
+					mapNames[i + 1] = maps.readLine();
 				}
 				maps.close();
-			}
-			catch(Exception E)
-			{
+			} catch (Exception E) {
 				E.printStackTrace();
 			}
 
-			while (true)
-			{
-				try
-				{
-					final JComboBox<String> jcb = new JComboBox<String>(mapNames);
+			while (true) {
+				try {
+					final JComboBox<String> jcb = new JComboBox<String>(
+							mapNames);
 					jcb.setEditable(true);
 					jcb.addItemListener(new ItemListener() {
 						@Override
 						public void itemStateChanged(ItemEvent e) {
-							String selectedItem = (String) jcb.getSelectedItem();
-							boolean editable = selectedItem instanceof String && ((String)selectedItem).equals(defaultMapName);
+							String selectedItem = (String) jcb
+									.getSelectedItem();
+							boolean editable = selectedItem instanceof String
+									&& ((String) selectedItem)
+											.equals(defaultMapName);
 							jcb.setEditable(editable);
 						}
 					});
-					int result = JOptionPane.showOptionDialog(null, jcb, "Choose A Map To Edit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Next","Cancel"},null);
-					if(result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION)
+					int result = JOptionPane.showOptionDialog(null, jcb,
+							"Choose A Map To Edit", JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, new String[] {
+									"Next", "Cancel" }, null);
+					if (result == JOptionPane.NO_OPTION
+							|| result == JOptionPane.CLOSED_OPTION)
 						throw new NullPointerException();
-					fileName = ((String)jcb.getSelectedItem()).trim();				
-				}
-				catch (NullPointerException e2)
-				{
+					fileName = ((String) jcb.getSelectedItem()).trim();
+				} catch (NullPointerException e2) {
 					mainFrame.requestFocus();
 					return;
 				}
 
-				if (fileName != null && !fileName.isEmpty())
-				{
+				if (fileName != null && !fileName.isEmpty()) {
 					break;
 				}
 			}
@@ -1082,18 +978,17 @@ public class MainMenu implements KeyListener
 
 	/**
 	 * Open the instructions when this button is pressed
+	 * 
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class OpenInstructions implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
+	private static class OpenInstructions implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
 			JOptionPane
-			.showMessageDialog(
-					null,
-					"We are updating the instructions! The controls are shown in the lobby.",
-					"Sorry", JOptionPane.ERROR_MESSAGE);
+					.showMessageDialog(
+							null,
+							"We are updating the instructions! The controls are shown in the lobby.",
+							"Sorry", JOptionPane.ERROR_MESSAGE);
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
@@ -1111,25 +1006,21 @@ public class MainMenu implements KeyListener
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0)
-	{
+	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void keyReleased(KeyEvent event)
-	{
-		if (event.getKeyCode() == KeyEvent.VK_ESCAPE)
-		{
+	public void keyReleased(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			System.exit(0);
 		}
 
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0)
-	{
+	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}

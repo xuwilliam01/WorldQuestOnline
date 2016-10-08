@@ -46,6 +46,11 @@ public class ServerEngine implements Runnable, ActionListener {
 	private int nextID = -1;
 	
 	/**
+	 * Free IDs to add next round
+	 */
+	private ArrayList <Integer> IDsToAdd = new ArrayList<Integer>();
+	
+	/**
 	 * Stack of freeIDs to use
 	 */
 	private PriorityQueue <Integer> freeIDs = new PriorityQueue <Integer>();
@@ -258,7 +263,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void removeID(int id)
 	{
-		freeIDs.add(id);
+		IDsToAdd.add(id);
 	}
 
 	@Override
@@ -329,13 +334,15 @@ public class ServerEngine implements Runnable, ActionListener {
 			currentFPS = Math.min(60, (int) ((1000000000.0 / loopTime) / (1000.0 / UPDATE_RATE) * 60 + 0.5));
 		}
 
-		long delay = Math.min(UPDATE_RATE, UPDATE_RATE - (loopTime/1000000-UPDATE_RATE));
-
-		//updateTimer.setDelay((int)Math.max(1,delay));
-
 		startTime = System.nanoTime();
-
-		//System.out.println(updateTimer.getDelay());
+		
+		
+		// Add free IDs to free ID list
+		for (int ID: IDsToAdd)
+		{
+			freeIDs.add(ID);
+		}
+		IDsToAdd.clear();
 	}
 
 	boolean lagSpike = false;
