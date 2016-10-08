@@ -159,6 +159,15 @@ public class ServerWorld {
 	private char[][] tileGrid;
 
 	/**
+	 * Grid of tiles for simpler collision detection
+	 */
+	private char[][] collisionGrid;
+	
+	public static final char SOLID_TILE = '#';
+	public static final char BACKGROUND_TILE = ' ';
+	public static final char PLATFORM_TILE = '_';
+
+	/**
 	 * The size of each tile
 	 */
 	public static final int TILE_SIZE = 16;
@@ -194,7 +203,7 @@ public class ServerWorld {
 	/**
 	 * The size of each object tile
 	 */
-	public static final int OBJECT_TILE_SIZE = TILE_SIZE * 4;
+	public static final int OBJECT_TILE_SIZE = TILE_SIZE * 16;
 
 	/**
 	 * Number of pixels that the collision may be off by that we need to adjust
@@ -269,7 +278,7 @@ public class ServerWorld {
 	/**
 	 * List of possible names for bots
 	 */
-	private String[] botNames = { };
+	private String[] botNames = {};
 
 	/**
 	 * Constructor for server
@@ -281,7 +290,7 @@ public class ServerWorld {
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
-		objectTypes = new ServerObject[]{
+		objectTypes = new ServerObject[] {
 				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
 				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
 				new ServerChest(0, 0, this),
@@ -304,7 +313,7 @@ public class ServerWorld {
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
-		objectTypes = new ServerObject[]{
+		objectTypes = new ServerObject[] {
 				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
 				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
 				new ServerChest(0, 0, this),
@@ -333,6 +342,10 @@ public class ServerWorld {
 		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
 				.parseInt(tokenizer.nextToken()) + 6];
 
+		// Collision grid mirrors tileGrid but is simpler
+		collisionGrid = new char[tileGrid.length][tileGrid[0].length];
+
+		// Make object grid
 		objectGrid = new ArrayList[tileGrid.length
 				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
 				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
@@ -370,7 +383,31 @@ public class ServerWorld {
 			tileGrid[row][tileGrid[0].length - 2] = '_';
 			tileGrid[row][tileGrid[0].length - 3] = '_';
 		}
+		
+		// Copy tileGrid to collision grid for easier collision detection
+		// '#' is a solid tile
+		// '_' is a platform tile
+		// ' ' is a background tile
 
+		for (int row =0; row < tileGrid.length; row++)
+		{
+			for (int col = 0; col < tileGrid[0].length; col++)
+			{
+				if (tileGrid[row][col]>='A')
+				{
+					collisionGrid[row][col]=SOLID_TILE;
+				}
+				else if (tileGrid[row][col]>='0' || tileGrid[row][col]==' ')
+				{
+					collisionGrid[row][col]=BACKGROUND_TILE;
+				}
+				else
+				{
+					collisionGrid[row][col]=PLATFORM_TILE;
+				}
+			}
+		}
+		
 		// Add objects to the grid
 		int numObjects = Integer.parseInt(worldInput.readLine());
 		for (int object = 0; object < numObjects; object++) {
@@ -709,13 +746,13 @@ public class ServerWorld {
 						}
 						if (startRow < 0) {
 							startRow = 0;
-						} else if (endRow > tileGrid.length - 1) {
-							endRow = tileGrid.length - 1;
+						} else if (endRow > collisionGrid.length - 1) {
+							endRow = collisionGrid.length - 1;
 						}
 						if (startColumn < 0) {
 							startColumn = 0;
-						} else if (endColumn > tileGrid[0].length - 1) {
-							endColumn = tileGrid[0].length - 1;
+						} else if (endColumn > collisionGrid[0].length - 1) {
+							endColumn = collisionGrid[0].length - 1;
 						}
 
 						// Check for collions with the tiles determined above
@@ -726,7 +763,7 @@ public class ServerWorld {
 
 							for (int row = startRow; row <= endRow; row++) {
 								for (int column = startColumn; column <= endColumn; column++) {
-									if (((tileGrid[row][column] >= 'A' || ((tileGrid[row][column] > ' ' && tileGrid[row][column] <= '/') && !((((object
+									if (((collisionGrid[row][column] == SOLID_TILE || (collisionGrid[row][column] == PLATFORM_TILE && !((((object
 											.getType().equals(PLAYER_TYPE) && ((ServerPlayer) object)
 											.isDropping())
 											|| object.getType().charAt(0) == PROJECTILE_TYPE || object
@@ -761,7 +798,7 @@ public class ServerWorld {
 
 							for (int row = startRow; row <= endRow; row++) {
 								for (int column = startColumn; column <= endColumn; column++) {
-									if (tileGrid[row][column] >= 'A'
+									if (collisionGrid[row][column] == SOLID_TILE
 											&& column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1) {
 										if (y1 + vSpeed <= row * TILE_SIZE
@@ -793,7 +830,7 @@ public class ServerWorld {
 
 							for (int row = startRow; row <= endRow; row++) {
 								for (int column = startColumn; column <= endColumn; column++) {
-									if (tileGrid[row][column] >= 'A'
+									if (collisionGrid[row][column] == SOLID_TILE
 											&& row * TILE_SIZE < y2
 											&& row * TILE_SIZE + TILE_SIZE > y1) {
 										if (x2 + hSpeed >= column * TILE_SIZE
@@ -821,7 +858,7 @@ public class ServerWorld {
 
 							for (int row = startRow; row <= endRow; row++) {
 								for (int column = startColumn; column <= endColumn; column++) {
-									if (tileGrid[row][column] >= 'A'
+									if (collisionGrid[row][column] == SOLID_TILE
 											&& row * TILE_SIZE < y2
 											&& row * TILE_SIZE + TILE_SIZE > y1) {
 										if (x1 + hSpeed <= column * TILE_SIZE
@@ -1064,6 +1101,7 @@ public class ServerWorld {
 
 	/**
 	 * Get a random bot name from the list of names
+	 * 
 	 * @return
 	 */
 	public String getBotName() {
@@ -1164,17 +1202,15 @@ public class ServerWorld {
 	public void setWorldCounter(long worldCounter) {
 		this.worldCounter = worldCounter;
 	}
-	
-	public ServerEngine getEngine()
-	{
+
+	public ServerEngine getEngine() {
 		return engine;
 	}
-	
+
 	/**
 	 * Closes everything in the world
 	 */
-	public void close()
-	{
+	public void close() {
 		objectGrid = null;
 		redTeam.clear();
 		blueTeam.clear();
@@ -1186,7 +1222,7 @@ public class ServerWorld {
 		engine = null;
 		blueCastle = null;
 		redCastle = null;
-		
+
 	}
 
 }
