@@ -196,7 +196,7 @@ public abstract class ServerObject
 	 */
 	public boolean collidesWith(ServerObject other)
 	{
-		if (x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
+		if (exists && x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
 				&& y <= other.getY() + other.getHeight()
 				&& (y + height) >= other.getY())
 		{
@@ -212,7 +212,7 @@ public abstract class ServerObject
 	 */
 	public boolean collidesWith(int x1, int y1, int x2, int y2)
 	{
-		if (x <= x2 && (x + width) >= x1 && y <= y2 && (y + height) >= y1)
+		if (exists && x <= x2 && (x + width) >= x1 && y <= y2 && (y + height) >= y1)
 		{
 			return true;
 		}

@@ -240,6 +240,7 @@ MouseMotionListener
 			JOptionPane.showMessageDialog(null, "Server was closed", "Server",
 					JOptionPane.ERROR_MESSAGE);
 			inventory.getMenuButton().doClick();
+			leaveGame = true;
 		}
 	}
 
@@ -321,9 +322,7 @@ MouseMotionListener
 
 		gameThread = new Thread(new ReadServer());
 		gameThread.start();
-		
-		gameThread = new Thread(new updateScreen());
-		gameThread.start();
+
 
 		System.out.println("Game started");
 
@@ -376,7 +375,7 @@ MouseMotionListener
 		public void run()
 		{
 
-			while (true)
+			while (!leaveGame)
 			{
 				while (!lines.isEmpty())
 				{
@@ -444,7 +443,14 @@ MouseMotionListener
 								}
 								else if (tokens[token].equals("U"))
 								{
+									if (!startPainting)
+									{
+										gameThread = new Thread(new updateScreen());
+										gameThread.start();
+									}
 									startPainting = true;
+									repaint();
+									
 								}
 								// If there is a player to be updated
 								else if (tokens[token].equals("O"))
@@ -718,7 +724,7 @@ MouseMotionListener
 			{
 				startTime = System.currentTimeMillis();
 
-				while (true)
+				while (!leaveGame)
 				{
 					String message = System.currentTimeMillis() + " "
 							+ input.readLine();
@@ -850,7 +856,7 @@ MouseMotionListener
 	}
 	
 	/**
-	 * Keep calling the paint component independent of the server
+	 * Keep calling the paint component independent of the server (on top of the server repaint call) up to 120 fps
 	 * @author William Xu
 	 *
 	 */
@@ -859,11 +865,22 @@ MouseMotionListener
 
 		@Override
 		public void run() {
-			while (true)
+			long repaintDelay = ServerEngine.UPDATE_RATE/2;
+			while (!leaveGame)
 			{
 				repaint();
+				
+				if (currentFPS < 100 && repaintDelay > ServerEngine.UPDATE_RATE)
+				{
+					repaintDelay--;
+				}
+				else if (currentFPS > 130)
+				{
+					repaintDelay ++;
+				}
+				
 				try {
-					Thread.sleep(ServerEngine.UPDATE_RATE/2);
+					Thread.sleep(repaintDelay);
 					
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -965,7 +982,7 @@ MouseMotionListener
 		// Draw the chat
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 
-		while (true)
+		while (!leaveGame)
 		{
 			try
 			{

@@ -517,7 +517,7 @@ public class ClientInventory extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		client.printToServer("X");
-
+		client.leaveGame = true;
 	}
 
 }

@@ -269,9 +269,7 @@ public class ServerWorld {
 	/**
 	 * List of possible names for bots
 	 */
-	private String[] botNames = { "Eddard", "Tyrion", "Tywin", "Robb", "Jon",
-			"Sandor", "Gregor", "Petyr", "Oberyn", "Joffrey", "Robert",
-			"Samuel", "Ramsay", "Stannis", "Renly", "Drogo" };
+	private String[] botNames = { };
 
 	/**
 	 * Constructor for server
@@ -432,6 +430,8 @@ public class ServerWorld {
 			removeFromObjectTiles(object);
 			objects.remove(object);
 			engine.removeID(object.getID());
+			blueTeam.remove(object);
+			redTeam.remove(object);
 		}
 		objectsToRemove.clear();
 

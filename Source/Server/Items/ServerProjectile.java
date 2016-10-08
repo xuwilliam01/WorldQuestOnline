@@ -354,10 +354,10 @@ public class ServerProjectile extends ServerFlyingObject
 			setSolid(false);
 			setMapVisible(false);
 			counter = 0;
-			setWidth(128);
-			setHeight(128);
-			setX(getX() - 64);
-			setY(getY() - 80);
+			setWidth(32);
+			setHeight(32);
+			setX(getX() - 16);
+			setY(getY() - 16);
 			setImage("EXPLOSION0_0");
 			noOfExplosionFrames = 6;
 		}
