@@ -858,7 +858,10 @@ public class MainMenu implements KeyListener {
 					String maxRoomsStr = JOptionPane
 							.showInputDialog("What is the maximum number of gamerooms you would like?");
 					if (maxRoomsStr == null)
+					{
+						mainFrame.requestFocus();
 						return;
+					}
 					maxRooms = Integer.parseInt(maxRoomsStr);
 					if (maxRooms < 1)
 						maxRooms = 1;
