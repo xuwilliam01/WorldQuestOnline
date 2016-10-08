@@ -865,18 +865,18 @@ MouseMotionListener
 
 		@Override
 		public void run() {
-			long repaintDelay = ServerEngine.UPDATE_RATE;
-			while (!leaveGame)
-			{
-				repaint();
-				
-				try {
-					Thread.sleep(repaintDelay);
-					
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+//			long repaintDelay = ServerEngine.UPDATE_RATE;
+//			while (!leaveGame)
+//			{
+//				repaint();
+//				
+//				try {
+//					Thread.sleep(repaintDelay);
+//					
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
 			
 		}
 		
