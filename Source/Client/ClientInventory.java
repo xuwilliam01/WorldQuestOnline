@@ -58,7 +58,7 @@ public class ClientInventory extends JPanel implements ActionListener
 	 */
 	public ClientInventory(JButton menu)
 	{
-		ToolTipManager.sharedInstance().setInitialDelay(0);
+		ToolTipManager.sharedInstance().setInitialDelay(100);
 		setDoubleBuffered(true);
 		setBackground(Color.BLACK);
 		setFocusable(true);
