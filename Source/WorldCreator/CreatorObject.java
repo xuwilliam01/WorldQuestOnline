@@ -21,7 +21,7 @@ import Imports.Images;
  */
 public class CreatorObject extends JButton implements MouseListener
 {
-	public final static int SCALE = 2;
+	public final static int SCALE = 1;
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
 	private boolean isTile;

@@ -850,7 +850,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 
 		if (notches > 0 )
 		{
-			if (objectFactor * (1.1 * (notches))< FRAME_FACTOR * 16)
+			if (objectFactor * (1.1 * (notches))< FRAME_FACTOR *ServerWorld.TILE_SIZE)
 			{
 				objectFactor *= (1.1 * (notches));
 				posX /= (1.1 * notches);
@@ -859,9 +859,9 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			}
 			else
 			{
-				posX /= FRAME_FACTOR * 16 / objectFactor;
-				posY /= FRAME_FACTOR * 16 / objectFactor;
-				objectFactor = FRAME_FACTOR * 16;
+				posX /= FRAME_FACTOR *ServerWorld.TILE_SIZE / objectFactor;
+				posY /= FRAME_FACTOR *ServerWorld.TILE_SIZE / objectFactor;
+				objectFactor = FRAME_FACTOR *ServerWorld.TILE_SIZE;
 			}
 		}
 		else if (notches < 0)

@@ -768,40 +768,40 @@ public class Images {
 
 			// Rest of the icons
 			addtoImageArray(new GameImage("SLIME_6_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("RED_CASTLE_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("CHEST_ICON.png", CreatorObject.SCALE
-					* ServerWorld.SMALL_TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("VENDOR_LEFT_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("SLIME_SPAWN.png",
-					ServerWorld.SMALL_TILE_SIZE, ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("SLIME_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BAT_SPAWN.png",
-					ServerWorld.SMALL_TILE_SIZE, ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BAT_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN.png",
-					ServerWorld.SMALL_TILE_SIZE, ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN.png",
-					ServerWorld.SMALL_TILE_SIZE, ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.SMALL_TILE_SIZE, "Creatures//"));
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
+					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 
 			addtoImageArray(new GameImage("VENDOR_RIGHT.png",
 					4 * ServerWorld.SMALL_TILE_SIZE, 5 * ServerWorld.SMALL_TILE_SIZE,
