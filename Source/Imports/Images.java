@@ -953,6 +953,11 @@ public class Images {
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
 			
+			addtoImageArray(new GameImage("sand_right" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			addtoImageArray(new GameImage("sand_left" +  ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
 			for (int no=0; no < 4; no++)
 			{
 				addtoImageArray(new GameImage("sand_corner" + no + ".png", ServerWorld.TILE_SIZE,
