@@ -167,6 +167,12 @@ public class ServerWorld {
 	public static final char BACKGROUND_TILE = ' ';
 	public static final char PLATFORM_TILE = '_';
 
+	
+	/**
+	 * The former size of a tile
+	 */
+	public static final int SMALL_TILE_SIZE = 16;
+	
 	/**
 	 * The size of each tile
 	 */
