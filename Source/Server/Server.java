@@ -140,12 +140,13 @@ public class Server implements Runnable {
 		if (map == null) {
 			map = defaultMap;
 		}
-
+		
 		// Construct the new world
 		System.out.println("Creating world...");
 		try {
 			engine = new ServerEngine(map, this);
 		} catch (IOException e1) {
+			e1.printStackTrace();
 			System.out.println("Error with Creating World and/or Engine");
 		}
 

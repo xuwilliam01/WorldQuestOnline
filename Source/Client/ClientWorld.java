@@ -181,6 +181,8 @@ public class ClientWorld {
 	public static final int right = 9;
 	public static final int left = 10;
 	public static final int middle = 11;
+	public static final int edgeright = 12;
+	public static final int edgeleft = 13;
 
 	/**
 	 * Check the neighbours of a tile on the grid
@@ -201,12 +203,22 @@ public class ClientWorld {
 					backgroundGrid[row][col] = backgroundGrid[row][col+1];
 				}
 				
+				if (row - 1 >= 0 && foregroundGrid[row-1][col] == ' ')
+				{
+					return edgeright;
+				}
+				
 				return corner2;
 			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
 				
 				if (backgroundGrid[row][col-1]!=' ')
 				{
 					backgroundGrid[row][col] = backgroundGrid[row][col-1];
+				}
+				
+				if (row - 1 >= 0 && foregroundGrid[row-1][col] == ' ')
+				{
+					return edgeleft;
 				}
 				
 				return corner3;
@@ -341,6 +353,12 @@ public class ClientWorld {
 					case corner3:
 						newGrid[row][col] = (char) 138; // dirt_corner3
 						break;
+					case edgeright:
+						newGrid[row][col] = (char) (302 + (int)(Math.random()*2)); //dirt_edgeright
+						break;
+					case edgeleft:
+						newGrid[row][col] = (char) (304 + (int)(Math.random()*2)); //dirt_edgeleft
+						break;
 					case top:
 						if (Math.random() > 0.05) {
 							newGrid[row][col] = (char) (141 + (int) (Math
@@ -379,7 +397,14 @@ public class ClientWorld {
 						}
 						break;
 					case bottom:
-						newGrid[row][col] = (char) (133 + (int) (Math.random() * 2)); // dirt_bottom
+						if (Math.random()>0.5)
+						{
+							newGrid[row][col] = (char) (133 + (int) (Math.random() * 2)); // dirt_bottom 0-1
+						}
+						else
+						{
+							newGrid[row][col] = (char) (300 + (int) (Math.random() * 2)); // dirt_bottom 2-3
+						}
 						break;
 					case right:
 						newGrid[row][col] = (char) 140; // dirt_right
@@ -440,6 +465,26 @@ public class ClientWorld {
 						break;
 					case corner3:
 						newGrid[row][col] = (char) 153; // sand_corner3
+						break;
+					case edgeright:
+						if (Math.random()>0.25)
+						{
+							newGrid[row][col] = (char) 400; // sand_edgeright0
+						}
+						else
+						{
+							newGrid[row][col] = (char) 401; // sand_edgeright1
+						}
+						break;
+					case edgeleft:
+						if (Math.random()>0.25)
+						{
+						newGrid[row][col] = (char) 402; // sand_edgeleft0
+						}
+						else
+						{
+							newGrid[row][col] = (char) 403; // sand_edgeleft1
+						}
 						break;
 					case top:
 						if (Math.random() > 0.02) {
@@ -513,6 +558,26 @@ public class ClientWorld {
 						break;
 					case corner3:
 						newGrid[row][col] = (char) 167; // stone_corner3
+						break;
+					case edgeright:
+						if (Math.random()>0.25)
+						{
+							newGrid[row][col] = (char) 500; // stone_edgeright0
+						}
+						else
+						{
+							newGrid[row][col] = (char) 501; // stone_edgeright1
+						}
+						break;
+					case edgeleft:
+						if (Math.random()>0.25)
+						{
+						newGrid[row][col] = (char) 502; // stone_edgeleft0
+						}
+						else
+						{
+							newGrid[row][col] = (char) 503; // stone_edgeleft1
+						}
 						break;
 					case top:
 					case topWithSky:

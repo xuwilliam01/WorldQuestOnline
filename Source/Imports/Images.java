@@ -57,34 +57,34 @@ public class Images {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-//		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
-//				+ "Platform.png"));
-//		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
-//				.getWidth() / 32];
-//		for (int row = 0; row < imageTiles.length; row++) {
-//			for (int column = 0; column < imageTiles[0].length; column++) {
-//				imageTiles[row][column] = image.getSubimage(column * 32,
-//						row * 32, 32, 32);
-//			}
-//		}
-//
-//		// double rotationRequired = Math.toRadians(135);
-//		// AffineTransform tx;
-//		//
-//		// tx = AffineTransform.getRotateInstance(
-//		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
-//		//
-//		// AffineTransformOp op = new AffineTransformOp(tx,
-//		// AffineTransformOp.TYPE_BILINEAR);
-//		//
-//		// BufferedImage newImage = op
-//		// .filter(image, null);
-//
-//		for (int no = 0; no < 3; no++) {
-//			image = imageTiles[3][9+no ];
-//			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
-//					+ "barrel_" + (0 +no) + ".png"));
-//		}
+		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
+				+ "Platform.png"));
+		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
+				.getWidth() / 32];
+		for (int row = 0; row < imageTiles.length; row++) {
+			for (int column = 0; column < imageTiles[0].length; column++) {
+				imageTiles[row][column] = image.getSubimage(column * 32,
+						row * 32, 32, 32);
+			}
+		}
+
+		// double rotationRequired = Math.toRadians(135);
+		// AffineTransform tx;
+		//
+		// tx = AffineTransform.getRotateInstance(
+		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
+		//
+		// AffineTransformOp op = new AffineTransformOp(tx,
+		// AffineTransformOp.TYPE_BILINEAR);
+		//
+		// BufferedImage newImage = op
+		// .filter(image, null);
+
+		for (int no = 0; no < 1; no++) {
+			image = imageTiles[10][7+no ];
+			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
+					+ "stone_edgeright"  + (0 + no) + ".png"));
+		}
 	}
 
 	/**
@@ -910,9 +910,19 @@ public class Images {
 				addtoImageArray(new GameImage("dirt_" + no + ".png", ServerWorld.TILE_SIZE,
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
-			for (int no=0; no < 2; no++)
+			for (int no=0; no < 4; no++)
 			{
 				addtoImageArray(new GameImage("dirt_bottom" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("dirt_edgeright" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("dirt_edgeleft" + no + ".png", ServerWorld.TILE_SIZE,
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
 			for (int no=0; no < 4; no++)
@@ -949,11 +959,16 @@ public class Images {
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
 			
-			addtoImageArray(new GameImage("sand_left" + ".png", ServerWorld.TILE_SIZE,
-					ServerWorld.TILE_SIZE, "Tiles//"));
-			
-			addtoImageArray(new GameImage("sand_right" + ".png", ServerWorld.TILE_SIZE,
-					ServerWorld.TILE_SIZE, "Tiles//"));
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("sand_edgeright" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("sand_edgeleft" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
 			
 			for (int no=0; no < 3; no++)
 			{
@@ -976,6 +991,17 @@ public class Images {
 			for (int no=0; no < 4; no++)
 			{
 				addtoImageArray(new GameImage("stone_corner" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("stone_edgeright" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("stone_edgeleft" + no + ".png", ServerWorld.TILE_SIZE,
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
 			
