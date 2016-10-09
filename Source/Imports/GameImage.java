@@ -53,10 +53,10 @@ public class GameImage implements Comparable<GameImage> {
 	 * 
 	 * @param name
 	 */
-	public GameImage(String name) {
+	public GameImage(String name, String directory) {
 
 		try {
-			bufferedImage = ImageIO.read(new File("Images//" + name));
+			bufferedImage = ImageIO.read(new File("Images//" + directory + name));
 		} catch (IOException e) {
 			System.out.println("Error loading image: " + name);
 			MainMenu.imageLoadFailed = true;
@@ -82,10 +82,10 @@ public class GameImage implements Comparable<GameImage> {
 	 * 
 	 * @param name
 	 */
-	public GameImage(String name, int width, int height) {
+	public GameImage(String name, int width, int height, String directory) {
 
 		try {
-			bufferedImage = ImageIO.read(new File("Images//" + name));
+			bufferedImage = ImageIO.read(new File("Images//" + directory + name));
 		} catch (IOException e) {
 			System.out.println("Error loading image: " + name);
 			MainMenu.imageLoadFailed = true;

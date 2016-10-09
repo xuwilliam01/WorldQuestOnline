@@ -11,15 +11,15 @@ import WorldCreator.CreatorObject;
 
 /**
  * Links an image with a character reference
+ * 
  * @author Alex Raita & William Xu
  *
  */
-public class ImageReferencePair
-{
+public class ImageReferencePair {
 	/**
 	 * Store all tiles and their images
 	 */
-	private static ImageReferencePair[] images = new ImageReferencePair[256];
+	private static ImageReferencePair[] images = new ImageReferencePair[(int)(Math.pow(2, 16))];
 	private char reference;
 	private String imageName;
 	private Image image;
@@ -27,11 +27,13 @@ public class ImageReferencePair
 
 	/**
 	 * Constructor
-	 * @param ref the reference
-	 * @param name the image name
+	 * 
+	 * @param ref
+	 *            the reference
+	 * @param name
+	 *            the image name
 	 */
-	public ImageReferencePair(char ref, String name)
-	{
+	public ImageReferencePair(char ref, String name) {
 		reference = ref;
 		imageName = name;
 
@@ -44,59 +46,66 @@ public class ImageReferencePair
 	/**
 	 * Imports the reference
 	 */
-	public static void importReferences() throws IOException
-	{
+	public static void importReferences() throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(new File(
-				"Resources",
-				"WorldCreator.cfg")));
-		int numTiles = Integer.parseInt(br.readLine());
-		for (int tile = 0; tile < numTiles; tile++)
-		{
-			String line = br.readLine();
+				"Resources", "WorldCreator.cfg")));
+		String line;
+		while ((line = br.readLine()) != null) {
 			String[] name = line.substring(2).split(" ");
 			images[line.charAt(0)] = new ImageReferencePair(line.charAt(0),
 					name[0]);
 		}
 		br.close();
+
+		br = new BufferedReader(new FileReader(new File("Resources",
+				"MoreTiles.cfg")));
+		while ((line = br.readLine()) != null) {
+			if (line.charAt(0) != '/') {
+				String[] tokens = line.split(" ");
+				char index = (char)(Integer.parseInt(tokens[0]));
+				images[index] = new ImageReferencePair(index,
+						tokens[1]);
+			}
+		}
+		br.close();
 	}
-	
-	/////////////////////////
+
+	// ///////////////////////
 	// GETTERS AND SETTERS //
-	/////////////////////////
-	public static ImageReferencePair[] getImages()
-	{
+	// ///////////////////////
+	public static ImageReferencePair[] getImages() {
 		return images;
 	}
-	public static void setImages(ImageReferencePair[] images)
-	{
+
+	public static void setImages(ImageReferencePair[] images) {
 		ImageReferencePair.images = images;
 	}
-	public char getReference()
-	{
+
+	public char getReference() {
 		return reference;
 	}
-	public void setReference(char reference)
-	{
+
+	public void setReference(char reference) {
 		this.reference = reference;
 	}
-	public String getImageName()
-	{
+
+	public String getImageName() {
 		return imageName;
 	}
-	public Image getImage()
-	{
+
+	public Image getImage() {
 		return image;
 	}
-	public void setImage(Image image)
-	{
+
+	public void setImage(Image image) {
 		this.image = image;
 	}
-	public Color getColor()
-	{
+
+	public Color getColor() {
 		return color;
 	}
-	public void setColor(Color color)
-	{
+
+	public void setColor(Color color) {
 		this.color = color;
 	}
 }
