@@ -57,35 +57,34 @@ public class Images {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		// BufferedImage image = ImageIO.read(new File("Images//"
-		// + "RESOURCE_SHEET_5.png"));
-		// BufferedImage[][] imageTiles = new BufferedImage[image
-		// .getHeight() / 32][image.getWidth() / 32];
-		// for (int row = 0; row < imageTiles.length; row++)
-		// {
-		// for (int column = 0; column < imageTiles[0].length; column++)
-		// {
-		// imageTiles[row][column] = image.getSubimage(
-		// column * 32, row * 32, 32, 32);
-		// }
-		// }
+		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
+				+ "Platform.png"));
+		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
+				.getWidth() / 32];
+		for (int row = 0; row < imageTiles.length; row++) {
+			for (int column = 0; column < imageTiles[0].length; column++) {
+				imageTiles[row][column] = image.getSubimage(column * 32,
+						row * 32, 32, 32);
+			}
+		}
+
+		// double rotationRequired = Math.toRadians(135);
+		// AffineTransform tx;
 		//
-		// image = imageTiles[2][6];
+		// tx = AffineTransform.getRotateInstance(
+		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
 		//
-		// // double rotationRequired = Math.toRadians(135);
-		// // AffineTransform tx;
-		// //
-		// // tx = AffineTransform.getRotateInstance(
-		// // rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
-		// //
-		// // AffineTransformOp op = new AffineTransformOp(tx,
-		// // AffineTransformOp.TYPE_BILINEAR);
-		// //
-		// // BufferedImage newImage = op
-		// // .filter(image, null);
+		// AffineTransformOp op = new AffineTransformOp(tx,
+		// AffineTransformOp.TYPE_BILINEAR);
 		//
-		// ImageIO.write(image, "PNG", new File(
-		// "Images//" + "STONEBRICKS.png"));
+		// BufferedImage newImage = op
+		// .filter(image, null);
+
+		for (int no = 0; no < 4; no++) {
+			image = imageTiles[1][4 + no];
+			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
+					+ "dirt_" + (12 + no) + ".png"));
+		}
 	}
 
 	/**
@@ -445,8 +444,8 @@ public class Images {
 					addtoImageArray(new GameImage(weapons[no] + "_ICON.png",
 							"Weapons//"));
 
-					image = ImageIO.read(new File("Images//" + "Weapons//" + weapons[no]
-							+ ".png"));
+					image = ImageIO.read(new File("Images//" + "Weapons//"
+							+ weapons[no] + ".png"));
 					int width = image.getWidth();
 					int height = image.getHeight();
 
@@ -556,7 +555,8 @@ public class Images {
 			 */
 
 			for (int no = 0; no < 6; no++) {
-				addtoImageArray(new GameImage("CLOUD_" + no + ".png", "Background//"));
+				addtoImageArray(new GameImage("CLOUD_" + no + ".png",
+						"Background//"));
 
 			}
 			addtoImageArray(new GameImage("FIREWAND_RIGHT.png", "Weapons//"));
@@ -588,15 +588,15 @@ public class Images {
 			addtoImageArray(new GameImage("MEGABOW_ICON.png", "Weapons//"));
 
 			addtoImageArray(new GameImage("Objective.png", "Interface////"));
-			addtoImageArray(new GameImage("Controls.png","Interface////"));
-			addtoImageArray(new GameImage("Stats.png","Interface////"));
+			addtoImageArray(new GameImage("Controls.png", "Interface////"));
+			addtoImageArray(new GameImage("Stats.png", "Interface////"));
 
-			addtoImageArray(new GameImage("Next.png","Interface////"));
+			addtoImageArray(new GameImage("Next.png", "Interface////"));
 
-			addtoImageArray(new GameImage("Cursor.png","Interface////"));
-			addtoImageArray(new GameImage("Cursorclick.png","Interface////"));
+			addtoImageArray(new GameImage("Cursor.png", "Interface////"));
+			addtoImageArray(new GameImage("Cursorclick.png", "Interface////"));
 
-			addtoImageArray(new GameImage("WorldQuestIcon.png","Interface////"));
+			addtoImageArray(new GameImage("WorldQuestIcon.png", "Interface////"));
 
 			addtoImageArray(new GameImage("BRICK.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
@@ -622,9 +622,9 @@ public class Images {
 			newImage.setName("WATER_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("DIRT.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("DIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("DIRT.jpg", CreatorObject.SCALE
+			newImage = new GameImage("DIRT.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("DIRT_ICON");
@@ -702,9 +702,9 @@ public class Images {
 			newImage.setName("WATERPLAT_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("SAND.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("SAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("SAND.jpg", CreatorObject.SCALE
+			newImage = new GameImage("SAND.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("SAND_ICON");
@@ -804,16 +804,21 @@ public class Images {
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 
 			addtoImageArray(new GameImage("VENDOR_RIGHT.png",
-					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE, "Creatures//"));
+					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE,
+					"Creatures//"));
 			addtoImageArray(new GameImage("VENDOR_LEFT.png",
-					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE, "Creatures//"));
+					4 * ServerWorld.TILE_SIZE, 5 * ServerWorld.TILE_SIZE,
+					"Creatures//"));
 
 			addtoImageArray(new GameImage("CHEST.png",
-					5 * ServerWorld.TILE_SIZE, 3 * ServerWorld.TILE_SIZE, "Creatures//"));
+					5 * ServerWorld.TILE_SIZE, 3 * ServerWorld.TILE_SIZE,
+					"Creatures//"));
 			addtoImageArray(new GameImage("RED_CASTLE.png",
-					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE, "Creatures//"));
+					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE,
+					"Creatures//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
-					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE, "Creatures//"));
+					26 * ServerWorld.TILE_SIZE, 52 * ServerWorld.TILE_SIZE,
+					"Creatures//"));
 			addtoImageArray(new GameImage("COIN.png",
 					ClientFrame.getScaledWidth(10),
 					ClientFrame.getScaledHeight(10), "Items//"));
@@ -839,19 +844,24 @@ public class Images {
 					Images.INVENTORY_IMAGE_SIDELENGTH,
 					Images.INVENTORY_IMAGE_SIDELENGTH, "Items//"));
 			addtoImageArray(new GameImage("MONEY.png",
-					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH, "Items//"));
+					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH,
+					"Items//"));
 			addtoImageArray(new GameImage("MONEY_ICON.png",
-					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH, "Items//"));
+					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH,
+					"Items//"));
 
 			addtoImageArray(new GameImage("BACKGROUND.png",
-					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT, "Background//"));
+					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
+					"Background//"));
 
 			addtoImageArray(new GameImage("Lobby.png",
-					Client.Client.SCREEN_WIDTH + Client.ClientInventory.INVENTORY_WIDTH,
+					Client.Client.SCREEN_WIDTH
+							+ Client.ClientInventory.INVENTORY_WIDTH,
 					Client.Client.SCREEN_HEIGHT, "Interface//"));
 
 			addtoImageArray(new GameImage("PLAINBLACK.png",
-					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT, "Interface//"));
+					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
+					"Interface//"));
 
 			addtoImageArray(new GameImage("ButtonTray.png",
 					(int) (ClientFrame.getScaledWidth(360)),
@@ -888,9 +898,11 @@ public class Images {
 					(int) (ClientFrame.getScaledWidth(300)),
 					Client.Client.SCREEN_HEIGHT, "Interface//"));
 
-			addtoImageArray(new GameImage("Shop.png",
+			addtoImageArray(new GameImage(
+					"Shop.png",
 					(int) (ClientFrame.getScaledWidth(ClientShop.SHOP_WIDTH)),
-					(int) (ClientFrame.getScaledHeight(ClientShop.SHOP_HEIGHT)), "Interface//"));
+					(int) (ClientFrame.getScaledHeight(ClientShop.SHOP_HEIGHT)),
+					"Interface//"));
 
 			image = null;
 		}
