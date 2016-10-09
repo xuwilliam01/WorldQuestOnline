@@ -219,6 +219,7 @@ public class ServerBat extends ServerEnemy
 				atRest = false;
 				restCounter = (int) (getCounter() + (Math.random())
 						* BAT_NEXT_REST_TIME);
+				setRelativeDrawY(0);
 			}
 			
 			
@@ -264,6 +265,7 @@ public class ServerBat extends ServerEnemy
 		else
 		{
 			setImage(getBaseImage() + "_" + getDirection() + "_5");
+			setRelativeDrawY(-getHeight()/6);
 		}
 
 		setCounter(getCounter() + 1);

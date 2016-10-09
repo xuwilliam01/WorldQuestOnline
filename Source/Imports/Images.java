@@ -598,9 +598,9 @@ public class Images {
 
 			addtoImageArray(new GameImage("WorldQuestIcon.png", "Interface////"));
 
-			addtoImageArray(new GameImage("BRICK.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			GameImage newImage = new GameImage("BRICK.jpg", CreatorObject.SCALE
+			GameImage newImage = new GameImage("BRICK.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("BRICK_ICON");
@@ -742,9 +742,9 @@ public class Images {
 			newImage.setName("BSTONEPLAT_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("PLANKS.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("PLANKS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("PLANKS.jpg", CreatorObject.SCALE
+			newImage = new GameImage("PLANKS.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("PLANKS_ICON");

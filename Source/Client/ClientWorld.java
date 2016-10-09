@@ -354,9 +354,11 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 138; // dirt_corner3
 						break;
 					case edgeright:
+						newGrid[row - 1][col] = (char) 177; // grass_4
 						newGrid[row][col] = (char) (302 + (int)(Math.random()*2)); //dirt_edgeright
 						break;
 					case edgeleft:
+						newGrid[row - 1][col] = (char) 178; // grass_5
 						newGrid[row][col] = (char) (304 + (int)(Math.random()*2)); //dirt_edgeleft
 						break;
 					case top:
