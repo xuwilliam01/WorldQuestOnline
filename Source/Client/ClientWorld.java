@@ -380,13 +380,13 @@ public class ClientWorld {
 							newGrid[row][col] = (char) (141 + (int) (Math
 									.random() * 2)); // dirt_top 0-1
 							double random = Math.random();
-							if (random > 0.15) {
+							if (random > 0.10) {
 								newGrid[row - 1][col] = (char) (173 + (int) (Math
 										.random() * 4)); // grass 0-3
 							} else if (random > 0.05) {
 								newGrid[row - 1][col] = (char) (179 + (int) (Math
 										.random() * 3)); // grass 6-8
-							} else if (random > 0.25) {
+							} else if (random > 0.025) {
 								newGrid[row - 1][col] = (char) (182 + (int) (Math
 										.random() * 4)); // grass 9-12
 							} else {
@@ -762,15 +762,15 @@ public class ClientWorld {
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
 			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
-					* 0.95
+					* 0.90
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
 				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.95;
+			alphaMultiplier = 0.90;
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.95
+			alphaMultiplier = 0.90
 					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
-					* 0.95
+					* 0.90
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
