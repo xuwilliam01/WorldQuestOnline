@@ -19,7 +19,7 @@ public class ImageReferencePair {
 	/**
 	 * Store all tiles and their images
 	 */
-	private static ImageReferencePair[] images = new ImageReferencePair[(int)(Math.pow(2, 16))];
+	private static ImageReferencePair[] images = new ImageReferencePair[256];
 	private char reference;
 	private String imageName;
 	private Image image;

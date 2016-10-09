@@ -57,34 +57,34 @@ public class Images {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
-				+ "Platform.png"));
-		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
-				.getWidth() / 32];
-		for (int row = 0; row < imageTiles.length; row++) {
-			for (int column = 0; column < imageTiles[0].length; column++) {
-				imageTiles[row][column] = image.getSubimage(column * 32,
-						row * 32, 32, 32);
-			}
-		}
-
-		// double rotationRequired = Math.toRadians(135);
-		// AffineTransform tx;
-		//
-		// tx = AffineTransform.getRotateInstance(
-		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
-		//
-		// AffineTransformOp op = new AffineTransformOp(tx,
-		// AffineTransformOp.TYPE_BILINEAR);
-		//
-		// BufferedImage newImage = op
-		// .filter(image, null);
-
-		for (int no = 0; no < 4; no++) {
-			image = imageTiles[1][4 + no];
-			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
-					+ "dirt_" + (12 + no) + ".png"));
-		}
+//		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
+//				+ "Platform.png"));
+//		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
+//				.getWidth() / 32];
+//		for (int row = 0; row < imageTiles.length; row++) {
+//			for (int column = 0; column < imageTiles[0].length; column++) {
+//				imageTiles[row][column] = image.getSubimage(column * 32,
+//						row * 32, 32, 32);
+//			}
+//		}
+//
+//		// double rotationRequired = Math.toRadians(135);
+//		// AffineTransform tx;
+//		//
+//		// tx = AffineTransform.getRotateInstance(
+//		// rotationRequired, image.getWidth()/2+1, image.getHeight()/2+1);
+//		//
+//		// AffineTransformOp op = new AffineTransformOp(tx,
+//		// AffineTransformOp.TYPE_BILINEAR);
+//		//
+//		// BufferedImage newImage = op
+//		// .filter(image, null);
+//
+//		for (int no = 0; no < 3; no++) {
+//			image = imageTiles[3][9+no ];
+//			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
+//					+ "barrel_" + (0 +no) + ".png"));
+//		}
 	}
 
 	/**
@@ -750,9 +750,9 @@ public class Images {
 			newImage.setName("PLANKS_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("STONE.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("STONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("STONE.jpg", CreatorObject.SCALE
+			newImage = new GameImage("STONE.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("STONE_ICON");
@@ -904,6 +904,126 @@ public class Images {
 					(int) (ClientFrame.getScaledHeight(ClientShop.SHOP_HEIGHT)),
 					"Interface//"));
 
+			// Add the better tile images
+			for (int no=0; no < 5; no++)
+			{
+				addtoImageArray(new GameImage("dirt_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("dirt_bottom" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			for (int no=0; no < 4; no++)
+			{
+				addtoImageArray(new GameImage("dirt_corner" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			addtoImageArray(new GameImage("dirt_left" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			addtoImageArray(new GameImage("dirt_right" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
+			for (int no=0; no < 4; no++)
+			{
+				addtoImageArray(new GameImage("dirt_top" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("sand_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("sand_bottom" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 4; no++)
+			{
+				addtoImageArray(new GameImage("sand_corner" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			addtoImageArray(new GameImage("sand_left" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
+			addtoImageArray(new GameImage("sand_right" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("sand_top" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("stone_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 2; no++)
+			{
+				addtoImageArray(new GameImage("stone_bottom" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 4; no++)
+			{
+				addtoImageArray(new GameImage("stone_corner" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("stone_top" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			addtoImageArray(new GameImage("stone_left" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
+			addtoImageArray(new GameImage("stone_right" + ".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
+			for (int no=0; no < 13; no++)
+			{
+				addtoImageArray(new GameImage("grass_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 4; no++)
+			{
+				addtoImageArray(new GameImage("srocks_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 6; no++)
+			{
+				addtoImageArray(new GameImage("drocks_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("barrel_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 7; no++)
+			{
+				addtoImageArray(new GameImage("tree_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			addtoImageArray(new GameImage("skull" +".png", ServerWorld.TILE_SIZE,
+					ServerWorld.TILE_SIZE, "Tiles//"));
+			
 			image = null;
 		}
 

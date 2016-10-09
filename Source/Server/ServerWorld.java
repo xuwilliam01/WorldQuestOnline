@@ -170,7 +170,7 @@ public class ServerWorld {
 	/**
 	 * The size of each tile
 	 */
-	public static final int TILE_SIZE = 16;
+	public static final int TILE_SIZE = 24;
 
 	/**
 	 * Grid of objects
@@ -203,7 +203,7 @@ public class ServerWorld {
 	/**
 	 * The size of each object tile
 	 */
-	public static final int OBJECT_TILE_SIZE = TILE_SIZE * 16;
+	public static final int OBJECT_TILE_SIZE = TILE_SIZE * 4;
 
 	/**
 	 * Number of pixels that the collision may be off by that we need to adjust

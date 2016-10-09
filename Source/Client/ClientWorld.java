@@ -4,23 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.NoSuchElementException;
-
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerCreature;
-import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Effects.ServerDamageIndicator;
 
@@ -37,24 +30,14 @@ public class ClientWorld {
 	public static int MAX_NO_OF_STARS = 500;
 
 	/**
-	 * The grid of tiles
+	 * The grid of background tiles
 	 */
-	private char[][] grid;
+	private char[][] backgroundGrid;
 
 	/**
-	 * Grid of light of tiles (0 = full dark, 10 = full light)
+	 * The grid of foreground tiles
 	 */
-	private int[][] lightGrid;
-
-	/**
-	 * Grid of original light sources
-	 */
-	private int[][] sourceGrid;
-
-	/**
-	 * Grid of sun-exposed tiles;
-	 */
-	private boolean[][] exposedGrid;
+	private char[][] foregroundGrid;
 
 	/**
 	 * Array of client objects, where the index of the object in the array is
@@ -186,6 +169,104 @@ public class ClientWorld {
 
 	private Client client;
 
+	public static final int corner0 = 0;
+	public static final int corner0WithSky = 1;
+	public static final int corner1 = 2;
+	public static final int corner1WithSky = 3;
+	public static final int corner2 = 4;
+	public static final int corner3 = 5;
+	public static final int bottom = 6;
+	public static final int top = 7;
+	public static final int topWithSky = 8;
+	public static final int right = 9;
+	public static final int left = 10;
+	public static final int middle = 11;
+
+	/**
+	 * Check the neighbours of a tile on the grid
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	private int checkTileSituation(int row, int col, char[][] grid) {
+		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
+			
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+				
+				if (backgroundGrid[row][col+1]!=' ')
+				{
+					backgroundGrid[row][col] = backgroundGrid[row][col+1];
+				}
+				
+				return corner2;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+				
+				if (backgroundGrid[row][col-1]!=' ')
+				{
+					backgroundGrid[row][col] = backgroundGrid[row][col-1];
+				}
+				
+				return corner3;
+			} else {
+				return bottom;
+			}
+		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+			
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
+			
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+				
+				if (backgroundGrid[row][col+1]!=' ')
+				{
+					backgroundGrid[row][col] = backgroundGrid[row][col+1];
+				}
+				
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner1WithSky;
+				}
+
+				return corner1;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+				
+				if (backgroundGrid[row][col-1]!=' ')
+				{
+					backgroundGrid[row][col] = backgroundGrid[row][col-1];
+				}
+				
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner0WithSky;
+				}
+
+				return corner0;
+			} else {
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return topWithSky;
+				}
+
+				return top;
+			}
+		} else {
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+				
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col+1];
+				
+				return right;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col-1];
+				
+				return left;
+			} else {
+				return middle;
+			}
+		}
+	}
+
 	/**
 	 * Constructor for the client's side of the world
 	 * 
@@ -200,9 +281,275 @@ public class ClientWorld {
 	public ClientWorld(char[][] grid, int tileSize, Client client)
 			throws IOException {
 		this.tileSize = tileSize;
-		this.grid = grid;
-		this.client = client;
+		backgroundGrid = new char[grid.length][grid[0].length];
+		foregroundGrid = new char[grid.length][grid[0].length];
 
+		// Remember to delete grid
+
+		// Create a background and foreground grid
+		for (int row = 0; row < grid.length; row++) {
+			for (int column = 0; column < grid[0].length; column++) {
+				if (grid[row][column] < 'A') {
+					backgroundGrid[row][column] = grid[row][column];
+					foregroundGrid[row][column] = ' ';
+				} else {
+					foregroundGrid[row][column] = grid[row][column];
+					backgroundGrid[row][column] = ' ';
+				}
+			}
+		}
+
+		// Change the tiles to the modified ones (based on location)
+		char newGrid[][] = new char[grid.length][grid[0].length];
+
+		for (int row = 0; row < grid.length; row++) {
+			for (int col = 0; col < grid[0].length; col++) {
+				newGrid[row][col] = foregroundGrid[row][col];
+
+				switch (newGrid[row][col]) {
+
+				// Dirt tile
+				case 'D':
+					int situation = checkTileSituation(row, col, grid);
+
+					switch (situation) {
+					case corner0:
+						newGrid[row][col] = (char) 135; // dirt_corner0
+						if (Math.random() > 0.9) {
+							newGrid[row - 1][col] = (char) (193 + (int) (Math
+									.random() * 6)); // drocks
+						}
+						break;
+					case corner0WithSky:
+						newGrid[row][col] = (char) 135; // dirt_corner0
+						newGrid[row - 1][col] = (char) 178; // grass_5
+						break;
+					case corner1:
+						newGrid[row][col] = (char) 136; // dirt_corner1
+						if (Math.random() > 0.9) {
+							newGrid[row - 1][col] = (char) (193 + (int) (Math
+									.random() * 6)); // drocks
+						}
+						break;
+					case corner1WithSky:
+						newGrid[row][col] = (char) 136; // dirt_corner1
+						newGrid[row - 1][col] = (char) 177; // grass_4
+						break;
+					case corner2:
+						newGrid[row][col] = (char) 137; // dirt_corner2
+						break;
+					case corner3:
+						newGrid[row][col] = (char) 138; // dirt_corner3
+						break;
+					case top:
+						if (Math.random() > 0.1) {
+							newGrid[row][col] = (char) (141 + (int) (Math
+									.random() * 2)); // dirt_top 0-1
+							if (Math.random() > 0.9) {
+								newGrid[row - 1][col] = (char) (193 + (int) (Math
+										.random() * 6)); // drocks
+							}
+						} else {
+							newGrid[row][col] = (char) (143 + (int) (Math
+									.random() * 2)); // dirt_top 2-3
+						}
+
+						break;
+					case topWithSky:
+						if (Math.random() > 0.1) {
+							newGrid[row][col] = (char) (141 + (int) (Math
+									.random() * 2)); // dirt_top 0-1
+							double random = Math.random();
+							if (random > 0.15) {
+								newGrid[row - 1][col] = (char) (173 + (int) (Math
+										.random() * 4)); // grass 0-3
+							} else if (random > 0.05) {
+								newGrid[row - 1][col] = (char) (179 + (int) (Math
+										.random() * 3)); // grass 6-8
+							} else if (random > 0.25) {
+								newGrid[row - 1][col] = (char) (182 + (int) (Math
+										.random() * 4)); // grass 9-12
+							} else {
+								newGrid[row - 1][col] = (char) (202 + (int) (Math
+										.random() * 5)); // tree
+							}
+						} else {
+							newGrid[row][col] = (char) (143 + (int) (Math
+									.random() * 2)); // dirt_top 2-3
+						}
+						break;
+					case bottom:
+						newGrid[row][col] = (char) (133 + (int) (Math.random() * 2)); // dirt_bottom
+						break;
+					case right:
+						newGrid[row][col] = (char) 140; // dirt_right
+						break;
+					case left:
+						newGrid[row][col] = (char) 139; // dirt_left
+						break;
+					case middle:
+						newGrid[row][col] = (char) (128 + (int) (Math.random() * 5)); // dirt_middle
+						break;
+					}
+					break;
+
+				// Sand tile
+				case 'S':
+					int situation2 = checkTileSituation(row, col, grid);
+
+					switch (situation2) {
+					case corner0:
+						newGrid[row][col] = (char) 150; // sand_corner0
+						if (Math.random() > 0.99) {
+							newGrid[row - 1][col] = (char) 209; // skull
+						}
+						break;
+					case corner0WithSky:
+						newGrid[row][col] = (char) 150; // sand_corner0
+
+						double random = Math.random();
+						if (random > 0.95) {
+							if (random < 0.96) {
+								newGrid[row - 1][col] = (char) 209; // skull
+							} else {
+								newGrid[row - 1][col] = (char) (207 + (int) (Math
+										.random() * 2)); // tree 5-6
+							}
+						}
+						break;
+					case corner1:
+						newGrid[row][col] = (char) 151; // sand_corner1
+						if (Math.random() > 0.99) {
+							newGrid[row - 1][col] = (char) 209; // skull
+						}
+						break;
+					case corner1WithSky:
+						newGrid[row][col] = (char) 151; // sand_corner1
+						double random1 = Math.random();
+						if (random1 > 0.95) {
+							if (random1 < 0.96) {
+								newGrid[row - 1][col] = (char) 209; // skull
+							} else {
+								newGrid[row - 1][col] = (char) (207 + (int) (Math
+										.random() * 2)); // tree 5-6
+							}
+						}
+						break;
+					case corner2:
+						newGrid[row][col] = (char) 152; // sand_corner2
+						break;
+					case corner3:
+						newGrid[row][col] = (char) 153; // sand_corner3
+						break;
+					case top:
+						if (Math.random() > 0.1) {
+							newGrid[row][col] = (char) (156 + (int) (Math
+									.random() * 2)); // sand_top 0-1
+							if (Math.random() > 0.99) {
+								newGrid[row - 1][col] = (char) 209; // skull
+							}
+						} else {
+							newGrid[row][col] = (char) 158; // sand_top 2
+						}
+
+						break;
+					case topWithSky:
+						if (Math.random() > 0.1) {
+							newGrid[row][col] = (char) (156 + (int) (Math
+									.random() * 2)); // sand_top 0-1
+							double random2 = Math.random();
+							if (random2 > 0.95) {
+								if (random2 < 0.96) {
+									newGrid[row - 1][col] = (char) 209; // skull
+								} else {
+									newGrid[row - 1][col] = (char) (207 + (int) (Math
+											.random() * 2)); // tree 5-6
+								}
+							}
+						} else {
+							newGrid[row][col] = (char) 158; // sand_top 2
+						}
+
+						break;
+					case bottom:
+						newGrid[row][col] = (char) (148 + (int) (Math.random() * 2)); // sand_bottom
+						break;
+					case right:
+						newGrid[row][col] = (char) 155; // sand_right
+						break;
+					case left:
+						newGrid[row][col] = (char) 154; // sand_left
+						break;
+					case middle:
+						newGrid[row][col] = (char) (145 + (int) (Math.random() * 3)); // sand_middle
+						break;
+					}
+
+					break;
+
+				// Stone tile
+				case 'E':
+					int situation3 = checkTileSituation(row, col, grid);
+
+					switch (situation3) {
+					case corner0:
+					case corner0WithSky:
+						newGrid[row][col] = (char) 164; // stone_corner0
+						if (Math.random() > 0.9) {
+							newGrid[row - 1][col] = (char) (189 + (int) (Math
+									.random() * 4)); // srocks
+						}
+						break;
+					case corner1:
+					case corner1WithSky:
+						newGrid[row][col] = (char) 165; // stone_corner1
+						if (Math.random() > 0.9) {
+							newGrid[row - 1][col] = (char) (189 + (int) (Math
+									.random() * 4)); // srocks
+						}
+						break;
+					case corner2:
+						newGrid[row][col] = (char) 166; // stone_corner2
+						break;
+					case corner3:
+						newGrid[row][col] = (char) 167; // stone_corner3
+						break;
+					case top:
+					case topWithSky:
+						if (Math.random() > 0.1) {
+							newGrid[row][col] = (char) (170 + (int) (Math
+									.random() * 2)); // stone_top 0-1
+							if (Math.random() > 0.9) {
+								newGrid[row - 1][col] = (char) (189 + (int) (Math
+										.random() * 4)); // srocks
+							}
+						} else {
+							newGrid[row][col] = (char) 172; // stone_top 2
+						}
+						break;
+					case bottom:
+						newGrid[row][col] = (char) (162 + (int) (Math.random() * 2)); // stone_bottom
+						break;
+					case right:
+						newGrid[row][col] = (char) 169; // stone_right
+						break;
+					case left:
+						newGrid[row][col] = (char) 168; // stone_left
+						break;
+					case middle:
+						newGrid[row][col] = (char) (159 + (int) (Math.random() * 3)); // stone_middle
+						break;
+					}
+
+					break;
+				}
+			}
+		}
+
+		// Copy the new and improved tiles to the foreground grid
+		foregroundGrid = newGrid;
+
+		this.client = client;
 		alphaMultiplier = 0;
 		worldTime = 0;
 
@@ -268,24 +615,22 @@ public class ClientWorld {
 	 */
 	public void setObject(int id, int x, int y, String image, int team,
 			String type, String name) {
-		try{
-		if (objects[id] == null) {
-			if (name.equals("{")) {
-				objects[id] = new ClientObject(id, x, y, image, team, type);
+		try {
+			if (objects[id] == null) {
+				if (name.equals("{")) {
+					objects[id] = new ClientObject(id, x, y, image, team, type);
+				} else {
+					objects[id] = new ClientObject(id, x, y, image, team, type,
+							name);
+				}
+				noOfObjects++;
 			} else {
-				objects[id] = new ClientObject(id, x, y, image, team, type,
-						name);
+				objects[id].setX(x);
+				objects[id].setY(y);
+				objects[id].setTeam(team);
+				objects[id].setImage(image);
 			}
-			noOfObjects++;
-		} else {
-			objects[id].setX(x);
-			objects[id].setY(y);
-			objects[id].setTeam(team);
-			objects[id].setImage(image);
-		}
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
+		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 			System.out.println(name + " " + type + " " + image);
 		}
@@ -425,30 +770,30 @@ public class ClientWorld {
 		}
 
 		// Draw tiles (draw based on player's position later)
-		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / tileSize);
+		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / ServerWorld.TILE_SIZE);
 		if (startRow < 0) {
 			startRow = 0;
 		}
-		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + ServerPlayer.DEFAULT_HEIGHT) / tileSize);
-		if (endRow >= grid.length) {
-			endRow = grid.length - 1;
+		int endRow = (int) ((Client.SCREEN_HEIGHT / 2 + playerY + ServerPlayer.DEFAULT_HEIGHT) / ServerWorld.TILE_SIZE);
+		if (endRow >= backgroundGrid.length) {
+			endRow = backgroundGrid.length - 1;
 		}
-		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH) / tileSize);
+		int startColumn = (int) ((playerX - Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH) / ServerWorld.TILE_SIZE);
 		if (startColumn < 0) {
 			startColumn = 0;
 		}
-		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + ServerPlayer.DEFAULT_WIDTH) / tileSize);
-		if (endColumn >= grid[0].length) {
-			endColumn = grid[0].length - 1;
+		int endColumn = (int) ((Client.SCREEN_WIDTH / 2 + playerX + ServerPlayer.DEFAULT_WIDTH) / ServerWorld.TILE_SIZE);
+		if (endColumn >= backgroundGrid[0].length) {
+			endColumn = backgroundGrid[0].length - 1;
 		}
 
 		// Draw background tiles
 		for (int row = startRow; row <= endRow; row++) {
 			for (int column = startColumn; column <= endColumn; column++) {
 
-				if (grid[row][column] < 'A' && grid[row][column] != ' ') {
+				if (backgroundGrid[row][column] != ' ') {
 					graphics.drawImage(
-							ImageReferencePair.getImages()[(int) (grid[row][column])]
+							ImageReferencePair.getImages()[(int) (backgroundGrid[row][column])]
 									.getImage(), centreX + column * tileSize
 									- playerX, centreY + row * tileSize
 									- playerY, null);
@@ -541,11 +886,10 @@ public class ClientWorld {
 								.substring(2, imageName.length());
 
 						char first = text.charAt(0);
-						if (first=='/')
-						{
+						if (first == '/') {
 							continue;
 						}
-						
+
 						if (!Character.isLetter(text.charAt(0))) {
 							if (text.equals("!M")) {
 								text = "NOT ENOUGH MANA";
@@ -575,7 +919,7 @@ public class ClientWorld {
 									text += oldText.charAt(no);
 								}
 							}
-							x-= text.length() * PLAYER_TEXT_FONT_WIDTH / 2;
+							x -= text.length() * PLAYER_TEXT_FONT_WIDTH / 2;
 						}
 
 						graphics.drawString(text, x, y - 10);
@@ -595,9 +939,9 @@ public class ClientWorld {
 		for (int row = startRow; row <= endRow; row++) {
 			for (int column = startColumn; column <= endColumn; column++) {
 
-				if (grid[row][column] >= 'A' && grid[row][column] != '_') {
+				if (foregroundGrid[row][column] != ' ') {
 					graphics.drawImage(
-							ImageReferencePair.getImages()[(int) (grid[row][column])]
+							ImageReferencePair.getImages()[(int) (foregroundGrid[row][column])]
 									.getImage(), centreX + column * tileSize
 									- playerX, centreY + row * tileSize
 									- playerY, null);
@@ -702,14 +1046,6 @@ public class ClientWorld {
 
 	public ClientObject[] getObjects() {
 		return objects;
-	}
-
-	public char[][] getGrid() {
-		return grid;
-	}
-
-	public void setGrid(char[][] grid) {
-		this.grid = grid;
 	}
 
 	public int getTileSize() {

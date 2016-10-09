@@ -731,11 +731,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					grid[row][column] = gridRow.charAt(column);
 				}
 			}
-
+			
 			world = new ClientWorld(grid, tileSize, this);
 		} catch (IOException e) {
 			serverClosed();
 		}
+		
+		
 
 		System.out.println("Map import has finished");
 	}
