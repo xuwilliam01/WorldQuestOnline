@@ -218,10 +218,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	{
 		BufferedReader br = new BufferedReader(new FileReader(new File("Resources",
 				"WorldCreator.cfg")));
-		int numTiles = Integer.parseInt(br.readLine());
-		for (int tile = 0; tile < numTiles; tile++)
+
+		String fullLine;
+		while ((fullLine = br.readLine())!=null)
 		{
-			String fullLine = br.readLine();
 			String[] line = fullLine.substring(2).split(" ");
 			String toolTip = line[2];
 			for(int word = 3; word < line.length;word++)
@@ -545,7 +545,24 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for (int row = 0; row < grid.length; row++)
 		{
 			for (int col = 0; col < grid[0].length; col++)
+			{
+				if (grid[row][col]=='F')
+				{
+					output.print('S');
+				}
+				else if (grid[row][col]=='b' || grid[row][col]=='C')
+				{
+					output.print('E');
+				}
+				else if (grid[row][col] == 'd')
+				{
+					output.print('D');
+				}
+				else
+				{
 				output.print(grid[row][col]);
+				}
+			}
 			output.println();
 		}
 		

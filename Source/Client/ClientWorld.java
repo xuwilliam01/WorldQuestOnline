@@ -342,7 +342,7 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 138; // dirt_corner3
 						break;
 					case top:
-						if (Math.random() > 0.1) {
+						if (Math.random() > 0.05) {
 							newGrid[row][col] = (char) (141 + (int) (Math
 									.random() * 2)); // dirt_top 0-1
 							if (Math.random() > 0.9) {
@@ -356,7 +356,7 @@ public class ClientWorld {
 
 						break;
 					case topWithSky:
-						if (Math.random() > 0.1) {
+						if (Math.random() > 0.05) {
 							newGrid[row][col] = (char) (141 + (int) (Math
 									.random() * 2)); // dirt_top 0-1
 							double random = Math.random();
@@ -408,8 +408,8 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 150; // sand_corner0
 
 						double random = Math.random();
-						if (random > 0.95) {
-							if (random < 0.96) {
+						if (random > 0.97) {
+							if (random < 0.98) {
 								newGrid[row - 1][col] = (char) 209; // skull
 							} else {
 								newGrid[row - 1][col] = (char) (207 + (int) (Math
@@ -426,8 +426,8 @@ public class ClientWorld {
 					case corner1WithSky:
 						newGrid[row][col] = (char) 151; // sand_corner1
 						double random1 = Math.random();
-						if (random1 > 0.95) {
-							if (random1 < 0.96) {
+						if (random1 > 0.97) {
+							if (random1 < 0.98) {
 								newGrid[row - 1][col] = (char) 209; // skull
 							} else {
 								newGrid[row - 1][col] = (char) (207 + (int) (Math
@@ -442,7 +442,7 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 153; // sand_corner3
 						break;
 					case top:
-						if (Math.random() > 0.1) {
+						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (156 + (int) (Math
 									.random() * 2)); // sand_top 0-1
 							if (Math.random() > 0.99) {
@@ -454,12 +454,12 @@ public class ClientWorld {
 
 						break;
 					case topWithSky:
-						if (Math.random() > 0.1) {
+						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (156 + (int) (Math
 									.random() * 2)); // sand_top 0-1
 							double random2 = Math.random();
-							if (random2 > 0.95) {
-								if (random2 < 0.96) {
+							if (random2 > 0.97) {
+								if (random2 < 0.98) {
 									newGrid[row - 1][col] = (char) 209; // skull
 								} else {
 									newGrid[row - 1][col] = (char) (207 + (int) (Math
@@ -495,7 +495,7 @@ public class ClientWorld {
 					case corner0:
 					case corner0WithSky:
 						newGrid[row][col] = (char) 164; // stone_corner0
-						if (Math.random() > 0.9) {
+						if (Math.random() > 0.95) {
 							newGrid[row - 1][col] = (char) (189 + (int) (Math
 									.random() * 4)); // srocks
 						}
@@ -503,7 +503,7 @@ public class ClientWorld {
 					case corner1:
 					case corner1WithSky:
 						newGrid[row][col] = (char) 165; // stone_corner1
-						if (Math.random() > 0.9) {
+						if (Math.random() > 0.95) {
 							newGrid[row - 1][col] = (char) (189 + (int) (Math
 									.random() * 4)); // srocks
 						}
@@ -516,10 +516,10 @@ public class ClientWorld {
 						break;
 					case top:
 					case topWithSky:
-						if (Math.random() > 0.1) {
+						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (170 + (int) (Math
 									.random() * 2)); // stone_top 0-1
-							if (Math.random() > 0.9) {
+							if (Math.random() > 0.95) {
 								newGrid[row - 1][col] = (char) (189 + (int) (Math
 										.random() * 4)); // srocks
 							}
