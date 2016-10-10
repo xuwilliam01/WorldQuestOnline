@@ -8,6 +8,8 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -42,6 +44,7 @@ public class Images {
 	public static BinaryTree<GameImage> images = null;
 
 	private static GameImage[] imageArray;
+	private static Map<String, Integer> imageMap = new HashMap<String, Integer>();
 
 	private static int noOfImages = 0;
 
@@ -87,16 +90,29 @@ public class Images {
 		}
 	}
 
+	public static int getImageIndex(String image)
+	{
+		//if (imageArray[imageMap.get(image)]== null)
+		//	System.out.println("IMPORTANT " + image +" "+imageMap.get(image));
+		return imageMap.get(image);
+	}
+	
+	public static String getImageName(int index)
+	{
+		//System.out.println(index);
+		return imageArray[index].getName();
+	}
+	
 	/**
 	 * Import the images from the folder
 	 * 
 	 * @throws IOException
 	 */
 	public static void importImages() {
-		imageArray = new GameImage[10000];
-
 		if (imported)
 			return;
+		
+		imageArray = new GameImage[10000];
 
 		imported = true;
 		// Only import if the images haven't been imported already
@@ -1079,9 +1095,15 @@ public class Images {
 
 		Arrays.sort(imageArray);
 
+		for (int no = 0; no < noOfImages; no++)
+		{
+			imageMap.put(imageArray[no].getName(), no);
+		}
+		
 		createBalancedTree(0, noOfImages);
-		imageArray = null;
-		clone = null;
+		//System.out.println(imageMap);
+		//imageArray = null;
+		//clone = null;
 	}
 
 	/**
@@ -1109,7 +1131,7 @@ public class Images {
 		int midpoint = (low + high) / 2;
 
 		images.add(imageArray[midpoint]);
-
+		
 		createBalancedTree(midpoint + 1, high);
 		createBalancedTree(low, midpoint);
 	}

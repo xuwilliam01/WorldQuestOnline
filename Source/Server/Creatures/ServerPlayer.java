@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerObjectShown;
@@ -320,7 +321,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// Send the player's information
 		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
 				+ " "
-				+ "BASE_" + skinColour + "_RIGHT_0_0 " + getTeam());
+				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0") +" " + getTeam());
 
 		baseImage = "BASE_" + skinColour;
 
@@ -685,7 +686,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ " "
 											+ y
 											+ " "
-											+ object.getImage()
+											+ object.getImageIndex()
 											+ " "
 											+ team
 											+ " "
@@ -699,7 +700,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									queueMessage("O " + object.getID() + " "
 											+ x
-											+ " " + y + " " + object.getImage()
+											+ " " + y + " " + object.getImageIndex()
 											+ " " + team + " "
 											+ object.getType() + " " + "{");
 									
@@ -1182,7 +1183,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				}
 
 				String newMessage = String.format("V %s %s %d %d",
-						item.getImage(), item.getType(), 1, item.getCost());
+						item.getImageIndex(), item.getType(), 1, item.getCost());
 				queueMessage(newMessage);
 
 				increaseMoney((item.getCost() + 1) / 2);
@@ -1599,8 +1600,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 										for (ServerItem item : vendor
 												.getInventory())
 											newMessage += String.format(
-													" %s %s %d %d",
-													item.getImage(),
+													" %d %s %d %d",
+													item.getImageIndex(),
 													item.getType(),
 													item.getAmount(),
 													item.getCost());
@@ -1729,7 +1730,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super.addItem(item);
 		System.out.println("Added item");
-		queueMessage("I " + item.getImage() + " " + item.getType() + " "
+		queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
 				+ item.getAmount() + " " + item.getCost());
 	}
 

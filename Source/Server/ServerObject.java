@@ -52,6 +52,7 @@ public abstract class ServerObject
 	 * The image name for the object (ex. pie)
 	 */
 	private String image;
+	private int imageIndex;
 
 	/**
 	 * The horizontal speed of the player (negative -- left, positive -- right)
@@ -98,7 +99,7 @@ public abstract class ServerObject
 	 * object is inside
 	 */
 	private ArrayList<RowCol> objectTiles;
-	
+
 	/**
 	 * Whether the object is visible in the game
 	 */
@@ -128,6 +129,14 @@ public abstract class ServerObject
 		this.id = engine.useNextID();
 		this.image = image;
 		
+		try{
+			this.imageIndex = Images.getImageIndex(image);
+		}
+		catch(NullPointerException E)
+		{
+
+		}
+
 		if (width == -1)
 		{
 			this.width = Images.getGameImage(image).getWidth();
@@ -139,7 +148,7 @@ public abstract class ServerObject
 			this.height = height;
 		}
 	}
-	
+
 	/**
 	 * Constructor for an object
 	 * @param x
@@ -163,7 +172,7 @@ public abstract class ServerObject
 		this.x = x;
 		this.y = y;
 		this.id = engine.useNextID();
-		
+
 		if (width == -1)
 		{
 			this.width = Images.getGameImage(image).getWidth();
@@ -265,6 +274,7 @@ public abstract class ServerObject
 	public void setImage(String image)
 	{
 		this.image = image;
+		this.imageIndex = Images.getImageIndex(image);
 	}
 
 	/**
@@ -332,31 +342,31 @@ public abstract class ServerObject
 			ServerBatSpawner newBatSpawner = (ServerBatSpawner)original;
 			return new ServerBatSpawner(original.getX(), original.getY(), newBatSpawner.getWorld());
 		}
-		
-//		case ServerWorld.SLIME_TYPE:
-//			ServerSlime newSlime = (ServerSlime)original;
-//			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld());
-//		}
-//		
-//		//Special case if we have a goblin type
-//		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
-//		{
-//			ServerGoblin newGoblin = (ServerGoblin)original;
-//			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam());
-//		}
-		
+
+		//		case ServerWorld.SLIME_TYPE:
+		//			ServerSlime newSlime = (ServerSlime)original;
+		//			return new ServerSlime(newSlime.getX(),newSlime.getY(),newSlime.getWorld());
+		//		}
+		//		
+		//		//Special case if we have a goblin type
+		//		if(original.getType().contains(ServerWorld.GOBLIN_TYPE))
+		//		{
+		//			ServerGoblin newGoblin = (ServerGoblin)original;
+		//			return new ServerGoblin(newGoblin.getX(),newGoblin.getY(),newGoblin.getWorld(),newGoblin.getTeam());
+		//		}
+
 		return null;
 	}
-	
+
 	/**
 	 * For overriding
 	 */
 	public abstract void update();
-	
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////
-	
+
 	public ArrayList<RowCol> getObjectTiles()
 	{
 		return objectTiles;
@@ -375,7 +385,7 @@ public abstract class ServerObject
 	public void destroy()
 	{
 		exists = false;
-		
+
 	}
 
 	public double getGravity()
@@ -492,6 +502,11 @@ public abstract class ServerObject
 		return image;
 	}
 
+	public int getImageIndex()
+	{
+		return imageIndex;
+	}
+
 	public String getType()
 	{
 		return type;
@@ -532,5 +547,5 @@ public abstract class ServerObject
 		this.visible = visible;
 	}
 
-	
+
 }

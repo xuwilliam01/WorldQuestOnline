@@ -291,7 +291,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			int id = Integer.parseInt(tokens[0]);
 			int x = Integer.parseInt(tokens[1]);
 			int y = Integer.parseInt(tokens[2]);
-			String image = tokens[3];
+			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
 
 			player = new ClientObject(id, x, y, image, team,
@@ -447,7 +447,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												id,
 												x,
 												y,
-												tokens[++token],
+												Images.getImageName(Integer.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token],
 												tokens[++token]);
@@ -469,7 +469,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												id,
 												x,
 												y,
-												tokens[++token],
+												Images.getImageName(Integer.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token], name.trim());
 										token += len;
@@ -486,7 +486,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "I":
 									System.out.println("Received an item");
-									inventory.addItem(tokens[++token],
+									inventory.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
 											tokens[++token],
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
@@ -517,7 +517,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												.parseInt(tokens[++token]);
 										for (int item = 0; item < numItems; item++)
 											shop.addItem(
-													tokens[++token],
+													Images.getImageName(Integer.parseInt(tokens[++token])),
 													tokens[++token],
 													Integer.parseInt(tokens[++token]),
 													Integer.parseInt(tokens[++token]));
@@ -527,7 +527,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										frame.setVisible(true);
 									} else if (shop != null)
 										shop.addItem(
-												tokens[++token],
+												Images.getImageName(Integer.parseInt(tokens[++token])),
 												tokens[++token],
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));

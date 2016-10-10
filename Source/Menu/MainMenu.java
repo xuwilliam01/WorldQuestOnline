@@ -853,6 +853,7 @@ public class MainMenu implements KeyListener {
 	private static class StartServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			int maxRooms;
+			Images.importImages();
 			while (true) {
 				try {
 					String maxRoomsStr = JOptionPane
