@@ -917,13 +917,13 @@ public class MainMenu implements KeyListener {
 			// Get filename. If it is invalid, exit
 			String fileName = "";
 			String[] mapNames = null;
-			String defaultMapName = "New Map Name";
+			final String DEFAULT_MAP_NAME = "New Map Name";
 			try {
 				BufferedReader maps = new BufferedReader(new FileReader(
 						new File("Resources", "Maps")));
 				int numMaps = Integer.parseInt(maps.readLine());
 				mapNames = new String[numMaps + 1];
-				mapNames[0] = defaultMapName;
+				mapNames[0] = DEFAULT_MAP_NAME;
 				for (int i = 0; i < numMaps; i++) {
 					mapNames[i + 1] = maps.readLine();
 				}
@@ -944,7 +944,7 @@ public class MainMenu implements KeyListener {
 									.getSelectedItem();
 							boolean editable = selectedItem instanceof String
 									&& ((String) selectedItem)
-											.equals(defaultMapName);
+											.equals(DEFAULT_MAP_NAME);
 							jcb.setEditable(editable);
 						}
 					});
