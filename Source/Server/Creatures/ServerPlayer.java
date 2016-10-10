@@ -623,10 +623,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setHP(getHP() + 1);
 		}
 
-		// While the writer is not being currently flushed, send the information
-		// to the client
-		if (!flushWriterNow)
-		{
+
 			if (exists())
 			{
 				// Send all the objects within all the object tiles in the
@@ -778,7 +775,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("U");
 				flushWriterNow = true;
 			}
-		}
+		
 	}
 
 	/**
