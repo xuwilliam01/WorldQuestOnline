@@ -710,33 +710,33 @@ public class Images {
 			newImage.setName("SAND_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("BSAND.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BSAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSAND.jpg", CreatorObject.SCALE
+			newImage = new GameImage("BSAND.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("BSAND_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("BSANDPLAT.jpg",
+			addtoImageArray(new GameImage("BSANDPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSANDPLAT.jpg", CreatorObject.SCALE
+			newImage = new GameImage("BSANDPLAT.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("BSANDPLAT_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("BSTONE.jpg", ServerWorld.TILE_SIZE,
+			addtoImageArray(new GameImage("BSTONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONE.jpg", CreatorObject.SCALE
+			newImage = new GameImage("BSTONE.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("BSTONE_ICON");
 			addtoImageArray(newImage);
 
-			addtoImageArray(new GameImage("BSTONEPLAT.jpg",
+			addtoImageArray(new GameImage("BSTONEPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONEPLAT.jpg", CreatorObject.SCALE
+			newImage = new GameImage("BSTONEPLAT.png", CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
 					* ServerWorld.TILE_SIZE, "Tiles//");
 			newImage.setName("BSTONEPLAT_ICON");
@@ -938,6 +938,18 @@ public class Images {
 			for (int no=0; no < 4; no++)
 			{
 				addtoImageArray(new GameImage("dirt_top" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 5; no++)
+			{
+				addtoImageArray(new GameImage("bdirt_" + no + ".png", ServerWorld.TILE_SIZE,
+						ServerWorld.TILE_SIZE, "Tiles//"));
+			}
+			
+			for (int no=0; no < 3; no++)
+			{
+				addtoImageArray(new GameImage("bdirt_plat" + no + ".png", ServerWorld.TILE_SIZE,
 						ServerWorld.TILE_SIZE, "Tiles//"));
 			}
 			

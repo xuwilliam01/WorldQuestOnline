@@ -66,11 +66,6 @@ public class ClientWorld {
 	private int cloudDirection = 0;
 
 	/**
-	 * The side length of one square tile in pixels
-	 */
-	private int tileSize;
-
-	/**
 	 * The font for damage indicators
 	 */
 	public final static Font DAMAGE_FONT = new Font("Courier", Font.BOLD, 18);
@@ -292,7 +287,6 @@ public class ClientWorld {
 	 */
 	public ClientWorld(char[][] grid, int tileSize, Client client)
 			throws IOException {
-		this.tileSize = tileSize;
 		backgroundGrid = new char[grid.length][grid[0].length];
 		foregroundGrid = new char[grid.length][grid[0].length];
 
@@ -302,8 +296,24 @@ public class ClientWorld {
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
 				if (grid[row][column] < 'A') {
+					
+					// Invisible solid tiles
+					if (grid[row][column] == '_')
+					{
+						grid[row][column] = ' ';
+					}
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
+					
+					switch (backgroundGrid[row][column])
+					{
+					case '0':
+						backgroundGrid[row][column] = (char)(250 + (int)(Math.random()*5));
+						break;
+					case '+':
+						backgroundGrid[row][column] = (char)(255 + (int)(Math.random()*3));
+					}
+					
 				} else {
 					foregroundGrid[row][column] = grid[row][column];
 					backgroundGrid[row][column] = ' ';
@@ -861,8 +871,8 @@ public class ClientWorld {
 				if (backgroundGrid[row][column] != ' ') {
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (backgroundGrid[row][column])]
-									.getImage(), centreX + column * tileSize
-									- playerX, centreY + row * tileSize
+									.getImage(), centreX + column * ServerWorld.TILE_SIZE
+									- playerX, centreY + row * ServerWorld.TILE_SIZE
 									- playerY, null);
 				}
 			}
@@ -1009,8 +1019,8 @@ public class ClientWorld {
 				if (foregroundGrid[row][column] != ' ') {
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (foregroundGrid[row][column])]
-									.getImage(), centreX + column * tileSize
-									- playerX, centreY + row * tileSize
+									.getImage(), centreX + column * ServerWorld.TILE_SIZE
+									- playerX, centreY + row * ServerWorld.TILE_SIZE
 									- playerY, null);
 				}
 			}
@@ -1113,14 +1123,6 @@ public class ClientWorld {
 
 	public ClientObject[] getObjects() {
 		return objects;
-	}
-
-	public int getTileSize() {
-		return tileSize;
-	}
-
-	public void setTileSize(int tileSize) {
-		this.tileSize = tileSize;
 	}
 
 	public double getAlphaMultiplier() {
