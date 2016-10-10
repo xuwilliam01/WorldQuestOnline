@@ -15,7 +15,6 @@ import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
-import Server.Effects.ServerDamageIndicator;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
@@ -162,17 +161,16 @@ public class ServerWorld {
 	 * Grid of tiles for simpler collision detection
 	 */
 	private char[][] collisionGrid;
-	
+
 	public static final char SOLID_TILE = '#';
 	public static final char BACKGROUND_TILE = ' ';
 	public static final char PLATFORM_TILE = '_';
 
-	
 	/**
 	 * The former size of a tile
 	 */
 	public static final int SMALL_TILE_SIZE = 16;
-	
+
 	/**
 	 * The size of each tile
 	 */
@@ -389,31 +387,25 @@ public class ServerWorld {
 			tileGrid[row][tileGrid[0].length - 2] = '_';
 			tileGrid[row][tileGrid[0].length - 3] = '_';
 		}
-		
+
 		// Copy tileGrid to collision grid for easier collision detection
 		// '#' is a solid tile
 		// '_' is a platform tile
 		// ' ' is a background tile
 
-		for (int row =0; row < tileGrid.length; row++)
-		{
-			for (int col = 0; col < tileGrid[0].length; col++)
-			{
-				if (tileGrid[row][col]>='A')
-				{
-					collisionGrid[row][col]=SOLID_TILE;
-				}
-				else if (tileGrid[row][col]>='0' || tileGrid[row][col]==' ')
-				{
-					collisionGrid[row][col]=BACKGROUND_TILE;
-				}
-				else
-				{
-					collisionGrid[row][col]=PLATFORM_TILE;
+		for (int row = 0; row < tileGrid.length; row++) {
+			for (int col = 0; col < tileGrid[0].length; col++) {
+				if (tileGrid[row][col] >= 'A') {
+					collisionGrid[row][col] = SOLID_TILE;
+				} else if (tileGrid[row][col] >= '0'
+						|| tileGrid[row][col] == ' ') {
+					collisionGrid[row][col] = BACKGROUND_TILE;
+				} else {
+					collisionGrid[row][col] = PLATFORM_TILE;
 				}
 			}
 		}
-		
+
 		// Add objects to the grid
 		int numObjects = Integer.parseInt(worldInput.readLine());
 		for (int object = 0; object < numObjects; object++) {
@@ -472,7 +464,7 @@ public class ServerWorld {
 		for (ServerObject object : objectsToRemove) {
 			removeFromObjectTiles(object);
 			objects.remove(object);
-			engine.removeID(object.getID());
+			//engine.removeID(object.getID());
 			blueTeam.remove(object);
 			redTeam.remove(object);
 		}
@@ -519,6 +511,7 @@ public class ServerWorld {
 					updateObjectTiles(object, startRow, endRow, startColumn,
 							endColumn);
 
+					// //////FIX THIS LATER//////////////
 					if (object.getType().equals(SPAWN_TYPE)) {
 						object.update();
 						continue;

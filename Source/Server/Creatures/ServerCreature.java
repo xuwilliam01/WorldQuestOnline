@@ -1,14 +1,11 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
-
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Effects.ServerDamageIndicator;
-import Server.Items.ServerAccessory;
+import Server.Effects.ServerText;
 import Server.Items.ServerItem;
 import Server.Items.ServerPotion;
-import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
 /**
@@ -224,14 +221,20 @@ public abstract class ServerCreature extends ServerObject
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 					+ getHeight() / 4;
-			char colour = ServerDamageIndicator.YELLOW_TEXT;
-
+			
+			
+			char colour = ServerText.YELLOW_TEXT;
+			
+			if (amount ==0)
+			{
+				colour = ServerText.BLUE_TEXT;
+			}
 			if (getType().equals(ServerWorld.PLAYER_TYPE))
 			{
-				colour = ServerDamageIndicator.RED_TEXT;
+				colour = ServerText.RED_TEXT;
 			}
 
-			world.add(new ServerDamageIndicator(damageX, damageY, Integer
+			world.add(new ServerText(damageX, damageY, Integer
 					.toString(amount), colour, world));
 		}
 

@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
@@ -15,7 +16,6 @@ import Server.ServerWorld;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
-import Server.Effects.ServerDamageIndicator;
 
 public class ClientWorld {
 
@@ -188,62 +188,56 @@ public class ClientWorld {
 	 */
 	private int checkTileSituation(int row, int col, char[][] grid) {
 		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
-			
+
 			// Fill in background if there are empty spaces in foreground
 			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
 			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-				
-				if (backgroundGrid[row][col+1]!=' ')
-				{
-					backgroundGrid[row][col] = backgroundGrid[row][col+1];
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
 				}
-				
-				if (row - 1 >= 0 && foregroundGrid[row-1][col] == ' ')
-				{
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
 					return edgeright;
 				}
-				
+
 				return corner2;
 			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-				
-				if (backgroundGrid[row][col-1]!=' ')
-				{
-					backgroundGrid[row][col] = backgroundGrid[row][col-1];
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
 				}
-				
-				if (row - 1 >= 0 && foregroundGrid[row-1][col] == ' ')
-				{
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
 					return edgeleft;
 				}
-				
+
 				return corner3;
 			} else {
 				return bottom;
 			}
 		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-			
+
 			// Fill in background if there are empty spaces in foreground
 			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
-			
+
 			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-				
-				if (backgroundGrid[row][col+1]!=' ')
-				{
-					backgroundGrid[row][col] = backgroundGrid[row][col+1];
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
 				}
-				
+
 				if (backgroundGrid[row - 1][col] == ' ') {
 					return corner1WithSky;
 				}
 
 				return corner1;
 			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-				
-				if (backgroundGrid[row][col-1]!=' ')
-				{
-					backgroundGrid[row][col] = backgroundGrid[row][col-1];
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
 				}
-				
+
 				if (backgroundGrid[row - 1][col] == ' ') {
 					return corner0WithSky;
 				}
@@ -258,15 +252,15 @@ public class ClientWorld {
 			}
 		} else {
 			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-				
+
 				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col+1];
-				
+				backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+
 				return right;
 			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
 				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col-1];
-				
+				backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+
 				return left;
 			} else {
 				return middle;
@@ -296,24 +290,24 @@ public class ClientWorld {
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
 				if (grid[row][column] < 'A') {
-					
+
 					// Invisible solid tiles
-					if (grid[row][column] == '_')
-					{
+					if (grid[row][column] == '_') {
 						grid[row][column] = ' ';
 					}
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
-					
-					switch (backgroundGrid[row][column])
-					{
+
+					switch (backgroundGrid[row][column]) {
 					case '0':
-						backgroundGrid[row][column] = (char)(250 + (int)(Math.random()*5));
+						backgroundGrid[row][column] = (char) (250 + (int) (Math
+								.random() * 5));
 						break;
 					case '+':
-						backgroundGrid[row][column] = (char)(255 + (int)(Math.random()*3));
+						backgroundGrid[row][column] = (char) (255 + (int) (Math
+								.random() * 3));
 					}
-					
+
 				} else {
 					foregroundGrid[row][column] = grid[row][column];
 					backgroundGrid[row][column] = ' ';
@@ -365,11 +359,11 @@ public class ClientWorld {
 						break;
 					case edgeright:
 						newGrid[row - 1][col] = (char) 177; // grass_4
-						newGrid[row][col] = (char) (302 + (int)(Math.random()*2)); //dirt_edgeright
+						newGrid[row][col] = (char) (302 + (int) (Math.random() * 2)); // dirt_edgeright
 						break;
 					case edgeleft:
 						newGrid[row - 1][col] = (char) 178; // grass_5
-						newGrid[row][col] = (char) (304 + (int)(Math.random()*2)); //dirt_edgeleft
+						newGrid[row][col] = (char) (304 + (int) (Math.random() * 2)); // dirt_edgeleft
 						break;
 					case top:
 						if (Math.random() > 0.05) {
@@ -409,13 +403,12 @@ public class ClientWorld {
 						}
 						break;
 					case bottom:
-						if (Math.random()>0.5)
-						{
-							newGrid[row][col] = (char) (133 + (int) (Math.random() * 2)); // dirt_bottom 0-1
-						}
-						else
-						{
-							newGrid[row][col] = (char) (300 + (int) (Math.random() * 2)); // dirt_bottom 2-3
+						if (Math.random() > 0.5) {
+							newGrid[row][col] = (char) (133 + (int) (Math
+									.random() * 2)); // dirt_bottom 0-1
+						} else {
+							newGrid[row][col] = (char) (300 + (int) (Math
+									.random() * 2)); // dirt_bottom 2-3
 						}
 						break;
 					case right:
@@ -479,22 +472,16 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 153; // sand_corner3
 						break;
 					case edgeright:
-						if (Math.random()>0.25)
-						{
+						if (Math.random() > 0.25) {
 							newGrid[row][col] = (char) 400; // sand_edgeright0
-						}
-						else
-						{
+						} else {
 							newGrid[row][col] = (char) 401; // sand_edgeright1
 						}
 						break;
 					case edgeleft:
-						if (Math.random()>0.25)
-						{
-						newGrid[row][col] = (char) 402; // sand_edgeleft0
-						}
-						else
-						{
+						if (Math.random() > 0.25) {
+							newGrid[row][col] = (char) 402; // sand_edgeleft0
+						} else {
 							newGrid[row][col] = (char) 403; // sand_edgeleft1
 						}
 						break;
@@ -572,22 +559,16 @@ public class ClientWorld {
 						newGrid[row][col] = (char) 167; // stone_corner3
 						break;
 					case edgeright:
-						if (Math.random()>0.25)
-						{
+						if (Math.random() > 0.25) {
 							newGrid[row][col] = (char) 500; // stone_edgeright0
-						}
-						else
-						{
+						} else {
 							newGrid[row][col] = (char) 501; // stone_edgeright1
 						}
 						break;
 					case edgeleft:
-						if (Math.random()>0.25)
-						{
-						newGrid[row][col] = (char) 502; // stone_edgeleft0
-						}
-						else
-						{
+						if (Math.random() > 0.25) {
+							newGrid[row][col] = (char) 502; // stone_edgeleft0
+						} else {
 							newGrid[row][col] = (char) 503; // stone_edgeleft1
 						}
 						break;
@@ -706,6 +687,7 @@ public class ClientWorld {
 				objects[id].setY(y);
 				objects[id].setTeam(team);
 				objects[id].setImage(image);
+				objects[id].setName(name);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -721,7 +703,7 @@ public class ClientWorld {
 	 *            the object to add
 	 */
 	public void setObject(ClientObject object) {
-		if (objects[object.getID()] != null) {
+		if (objects[object.getID()] == null) {
 			noOfObjects++;
 		}
 		objects[object.getID()] = object;
@@ -736,6 +718,7 @@ public class ClientWorld {
 	 */
 	public void remove(int id) {
 		objects[id] = null;
+
 		noOfObjects--;
 	}
 
@@ -871,9 +854,10 @@ public class ClientWorld {
 				if (backgroundGrid[row][column] != ' ') {
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (backgroundGrid[row][column])]
-									.getImage(), centreX + column * ServerWorld.TILE_SIZE
-									- playerX, centreY + row * ServerWorld.TILE_SIZE
-									- playerY, null);
+									.getImage(), centreX + column
+									* ServerWorld.TILE_SIZE - playerX, centreY
+									+ row * ServerWorld.TILE_SIZE - playerY,
+							null);
 				}
 			}
 
@@ -892,114 +876,88 @@ public class ClientWorld {
 		// remove it
 		try {
 			for (ClientObject object : objects) {
-				if (objectNo == noOfObjects) {
-					break;
-				}
 				if (object == null) {
 					continue;
+				}
+				if (objectNo == noOfObjects) {
+					break;
 				}
 				objectNo++;
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
 
-				if (object.getX() == player.getX()
-						&& object.getY() == player.getY()) {
-					x = centreX;
-					y = centreY;
-				}
-
-				Image image = object.getImage();
-
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
 						|| y + object.getHeight() < 0) {
 					objectsToRemove.add(object.getID());
+					continue;
+				}
+
+				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
+					ClientFloatingText textObject = (ClientFloatingText) object;
+
+					graphics.setColor(textObject.getColor());
+					graphics.setFont(DAMAGE_FONT);
+					graphics.drawString(textObject.getText(), x, y);
+
+					textObject.update();
+					// System.out.println("Drawing floating text");
 				} else {
-					if (image != null) {
-						graphics.setFont(DAMAGE_FONT);
-						if (object.getTeam() == ServerCreature.RED_TEAM) {
-							graphics.setColor(Color.red);
-							if (object.getName().equals("")) {
-								graphics.fillRect(
-										x + object.getWidth() / 2 - 5, y
-												+ object.getHeight() / 4, 10,
-										10);
+					Image image = object.getImage();
+
+					switch (object.getTeam()) {
+					case ServerCreature.RED_TEAM:
+						graphics.setColor(Color.red);
+						break;
+					case ServerCreature.BLUE_TEAM:
+						graphics.setColor(Color.blue);
+						break;
+					}
+					graphics.setFont(DAMAGE_FONT);
+
+					if (object.getTeam() != ServerCreature.NEUTRAL) {
+						if (object.getName().equals("")) {
+							graphics.fillRect(x + object.getWidth() / 2 - 5, y
+									+ object.getHeight() / 4, 10, 10);
+						} else {
+							if (object.getType()
+									.equals(ServerWorld.PLAYER_TYPE)) {
+
+								//System.out.println(object.getName());
+								String[] tokens = object.getName().split("`");
+								String name = tokens[0];
+								graphics.drawString(name,
+										(int) (x + object.getWidth() / 2 - name
+												.trim().length()
+												* DAMAGE_FONT_WIDTH / 2), y + 15);
+
+								if (tokens.length > 1) {
+									String currentText = tokens[1];
+
+									graphics.setColor(YELLOW_TEXT);
+
+									graphics.drawString(
+											currentText,
+											(int) (x + object.getWidth() / 2 - currentText.length()
+													* DAMAGE_FONT_WIDTH / 2), y -7);
+								}
 							} else {
 								graphics.drawString(object.getName(), (int) (x
 										+ object.getWidth() / 2 - object
 										.getName().trim().length()
 										* DAMAGE_FONT_WIDTH / 2), y + 15);
 							}
-						} else if (object.getTeam() == ServerCreature.BLUE_TEAM) {
-							graphics.setColor(Color.blue);
-							if (object.getName().equals("")) {
-								graphics.fillRect(
-										x + object.getWidth() / 2 - 5, y
-												+ object.getHeight() / 4, 10,
-										10);
-							} else {
-								graphics.drawString(object.getName(), (int) (x
-										+ object.getWidth() / 2 - object
-										.getName().trim().length()
-										* DAMAGE_FONT_WIDTH / 2), y + 15);
-							}
-						}
-
-						graphics.drawImage(image, x, y, null);
-
-						// Draw a hint if necessary
-						// DOES NOT DRAW OVER SOLID TILES
-						if (player.collidesWith(object)
-								&& !object.getHint().equals("")) {
-							displayedText = object.getHint();
 						}
 					}
-					// If there is no image, then the object is text/numbers
-					else {
-						String imageName = object.getImageName();
-						char colour = imageName.charAt(1);
-						String text = imageName
-								.substring(2, imageName.length());
 
-						char first = text.charAt(0);
-						if (first == '/') {
-							continue;
-						}
+					graphics.drawImage(image, x, y, null);
 
-						if (!Character.isLetter(text.charAt(0))) {
-							if (text.equals("!M")) {
-								text = "NOT ENOUGH MANA";
-								graphics.setColor(PURPLE_TEXT);
-							} else if (Integer.parseInt(text) == 0) {
-								graphics.setColor(BLUE_TEXT);
-								text = "BLOCK";
-							} else if (colour == ServerDamageIndicator.RED_TEXT) {
-								graphics.setColor(RED_TEXT);
-							} else if (colour == ServerDamageIndicator.YELLOW_TEXT) {
-								graphics.setColor(YELLOW_TEXT);
-							}
-
-							graphics.setFont(DAMAGE_FONT);
-
-							x -= ((int) (text.length() * DAMAGE_FONT_WIDTH + 0.5)) / 2;
-						} else {
-							graphics.setFont(PLAYER_TEXT_FONT);
-							graphics.setColor(YELLOW_TEXT);
-
-							String oldText = text;
-							text = "";
-							for (int no = 0; no < oldText.length(); no++) {
-								if (oldText.charAt(no) == '_') {
-									text += ' ';
-								} else {
-									text += oldText.charAt(no);
-								}
-							}
-							x -= text.length() * PLAYER_TEXT_FONT_WIDTH / 2;
-						}
-
-						graphics.drawString(text, x, y - 10);
+					// Draw a hint if necessary
+					// DOES NOT DRAW OVER SOLID TILES
+					if (player.collidesWith(object)
+							&& !object.getHint().equals("")) {
+						displayedText = object.getHint();
 					}
 				}
 			}
@@ -1019,9 +977,10 @@ public class ClientWorld {
 				if (foregroundGrid[row][column] != ' ') {
 					graphics.drawImage(
 							ImageReferencePair.getImages()[(int) (foregroundGrid[row][column])]
-									.getImage(), centreX + column * ServerWorld.TILE_SIZE
-									- playerX, centreY + row * ServerWorld.TILE_SIZE
-									- playerY, null);
+									.getImage(), centreX + column
+									* ServerWorld.TILE_SIZE - playerX, centreY
+									+ row * ServerWorld.TILE_SIZE - playerY,
+							null);
 				}
 			}
 

@@ -1,10 +1,9 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
-
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Effects.ServerDamageIndicator;
+import Server.Effects.ServerText;
 import Server.Items.ServerItem;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
@@ -643,7 +642,9 @@ public class ServerGoblin extends ServerCreature {
 			amount = 1;
 		}
 
+		char textColour = ServerText.YELLOW_TEXT;
 		if (action == "BLOCK") {
+			textColour = ServerText.BLUE_TEXT;
 			amount = 0;
 		}
 
@@ -653,8 +654,8 @@ public class ServerGoblin extends ServerCreature {
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
 				/ 3;
 		getWorld().add(
-				new ServerDamageIndicator(damageX, damageY, Integer
-						.toString(amount), ServerDamageIndicator.YELLOW_TEXT,
+				new ServerText(damageX, damageY, Integer
+						.toString(amount),textColour ,
 						getWorld()));
 
 		// Play the death animation for a goblin when it dies

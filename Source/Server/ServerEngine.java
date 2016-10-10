@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
@@ -38,27 +39,19 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * The number of possible ID's for any objects. The number of objects
 	 * existing the game (aside from tiles) cannot exceed this limit
 	 */
-	public static final int NUMBER_OF_IDS = 1000000;
+	public static final int NUMBER_OF_IDS = 100000;
 
 	/**
 	 * The highest ID not used yet for objects
 	 */
-	private int nextID = -1;
+	private int nextID = 0;
 
-	/**
-	 * Free IDs two rounds from now
-	 */
-	private ArrayList<Integer> IDsToAdd2 = new ArrayList<Integer>();
+	private boolean[] usedIDs = new boolean[NUMBER_OF_IDS];
 
-	/**
-	 * Free IDs to add next round
-	 */
-	private ArrayList<Integer> IDsToAdd = new ArrayList<Integer>();
-
-	/**
-	 * Stack of freeIDs to use
-	 */
-	private PriorityQueue<Integer> freeIDs = new PriorityQueue<Integer>();
+	// /**
+	// * Stack of freeIDs to use
+	// */
+	// private PriorityQueue<Integer> freeIDs = new PriorityQueue<Integer>();
 
 	/**
 	 * The world the engine works with
@@ -96,7 +89,6 @@ public class ServerEngine implements Runnable, ActionListener {
 	private ServerGUI gui = null;
 
 	private boolean endGame = false;
-	private boolean end = false;
 	private int losingTeam;
 	private Server server;
 
@@ -181,7 +173,6 @@ public class ServerEngine implements Runnable, ActionListener {
 	}
 
 	public void close() {
-		end = true;
 		updateTimer.stop();
 		listOfPlayers.clear();
 		toRemove.clear();
@@ -247,10 +238,18 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * @return the id
 	 */
 	public int useNextID() {
-		if (!freeIDs.isEmpty()) {
-			return freeIDs.poll();
+
+		while (true) {
+			for (int no = nextID; no < NUMBER_OF_IDS; no++) {
+				if (usedIDs[no] != true) {
+					usedIDs[no] = true;
+					nextID = no++;
+					return no;
+				}
+			}
+			nextID = 0;
 		}
-		return ++nextID;
+
 	}
 
 	/**
@@ -259,7 +258,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * @return
 	 */
 	public void removeID(int id) {
-		IDsToAdd2.add(id);
+		usedIDs[id] = false;
 	}
 
 	@Override
@@ -332,17 +331,17 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		startTime = System.nanoTime();
 
-		// Add free IDs to free ID list
-		for (int ID : IDsToAdd) {
-			freeIDs.add(ID);
-		}
-		IDsToAdd.clear();
-
-		// Second rounds of adding
-		for (int ID : IDsToAdd2) {
-			IDsToAdd.add(ID);
-		}
-		IDsToAdd2.clear();
+		// // Add free IDs to free ID list
+		// for (int ID : IDsToAdd) {
+		// freeIDs.add(ID);
+		// }
+		// IDsToAdd.clear();
+		//
+		// // Second rounds of adding
+		// for (int ID : IDsToAdd2) {
+		// IDsToAdd.add(ID);
+		// }
+		// IDsToAdd2.clear();
 	}
 
 	boolean lagSpike = false;

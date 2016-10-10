@@ -84,7 +84,7 @@ public class ClientObject implements Comparable<ClientObject>
 		{
 			// All objects that are just text have lower case names
 			// Don't import an actual image if it is just text
-			if (image.charAt(0) != 't')
+			if (type.charAt(0)!= ServerWorld.TEXT_TYPE)
 			{
 				GameImage gameImage = Images.getGameImage(image);
 				this.image = gameImage.getImage();
@@ -130,7 +130,7 @@ public class ClientObject implements Comparable<ClientObject>
 		this.id = id;
 		this.imageName = image;
 		this.type = type;
-		this.name = name.trim();
+		this.name = name;
 
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
@@ -216,6 +216,11 @@ public class ClientObject implements Comparable<ClientObject>
 		}
 		return false;
 	}
+	
+	public void update()
+	{
+		
+	}
 
 	public int getID()
 	{
@@ -282,10 +287,24 @@ public class ClientObject implements Comparable<ClientObject>
 	{
 		return hint;
 	}
+	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getName()
 	{
-		return name.trim();
+		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name.replace('_', ' ').replace('{', ' ').trim();
+	}
+
+	
 }

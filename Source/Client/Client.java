@@ -341,32 +341,27 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.println(message);
 		output.flush();
 	}
-	
-	
-	
+
 	/**
 	 * Converts a string back to an int
+	 * 
 	 * @param number
 	 * @return
 	 */
-	public int stringToInt(String message)
-	{
+	public int stringToInt(String message) {
 		int number = 0;
 		int messageLength = message.length();
 		int multiplier = 1;
-		for (int no = 1; no < messageLength; no++)
-		{
-			number+=message.charAt(no)*multiplier;
-			multiplier *=128;
+		for (int no = 1; no < messageLength; no++) {
+			number += message.charAt(no) * multiplier;
+			multiplier *= 128;
 		}
-		if (message.charAt(0)=='-')
-		{
-			number*=-1;
+		if (message.charAt(0) == '-') {
+			number *= -1;
 		}
-		
+
 		return number;
 	}
-	
 
 	/**
 	 * Thread for running the actual game
@@ -447,7 +442,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												id,
 												x,
 												y,
-												Images.getImageName(Integer.parseInt(tokens[++token])),
+												Images.getImageName(Integer
+														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token],
 												tokens[++token]);
@@ -469,11 +465,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												id,
 												x,
 												y,
-												Images.getImageName(Integer.parseInt(tokens[++token])),
+												Images.getImageName(Integer
+														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token], name.trim());
 										token += len;
 									}
+									break;
+								case "t":
+									world.setObject(new ClientFloatingText(
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]),
+											tokens[++token], ServerPlayer.NEUTRAL, world));
+									//System.out.println("Receiving text");
 									break;
 								case "P":
 									pingString = "Ping: "
@@ -486,10 +491,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "I":
 									System.out.println("Received an item");
-									inventory.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
-											tokens[++token],
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]));
+									inventory
+											.addItem(
+													Images.getImageName(Integer
+															.parseInt(tokens[++token])),
+													tokens[++token],
+													Integer.parseInt(tokens[++token]),
+													Integer.parseInt(tokens[++token]));
 									inventory.repaint();
 									break;
 								case "D":
@@ -517,7 +525,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												.parseInt(tokens[++token]);
 										for (int item = 0; item < numItems; item++)
 											shop.addItem(
-													Images.getImageName(Integer.parseInt(tokens[++token])),
+													Images.getImageName(Integer
+															.parseInt(tokens[++token])),
 													tokens[++token],
 													Integer.parseInt(tokens[++token]),
 													Integer.parseInt(tokens[++token]));
@@ -527,7 +536,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										frame.setVisible(true);
 									} else if (shop != null)
 										shop.addItem(
-												Images.getImageName(Integer.parseInt(tokens[++token])),
+												Images.getImageName(Integer
+														.parseInt(tokens[++token])),
 												tokens[++token],
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));
@@ -731,13 +741,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					grid[row][column] = gridRow.charAt(column);
 				}
 			}
-			
+
 			world = new ClientWorld(grid, tileSize, this);
 		} catch (IOException e) {
 			serverClosed();
 		}
-		
-		
 
 		System.out.println("Map import has finished");
 	}
