@@ -340,7 +340,7 @@ public class ServerWorld {
 	@SuppressWarnings("unchecked")
 	public void newWorld() throws IOException {
 		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
-				"Resources", mapFile)));
+				"Resources", mapFile.toLowerCase())));
 
 		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
 

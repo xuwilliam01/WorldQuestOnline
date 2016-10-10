@@ -538,7 +538,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	public void save() throws IOException
 	{	
 		justSaved = true;
-		PrintWriter output = new PrintWriter(new File("Resources", fileName));
+		PrintWriter output = new PrintWriter(new File("Resources", fileName.toLowerCase()));
 
 		// Print the grid
 		output.println(grid.length + " " + grid[0].length);
