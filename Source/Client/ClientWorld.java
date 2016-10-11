@@ -44,6 +44,8 @@ public class ClientWorld {
 	 * its ID
 	 */
 	private ClientObject[] objects;
+	
+	private ArrayList<ClientObject> objectsToRemove = new ArrayList<ClientObject>();
 
 	/**
 	 * Number of objects in the client
@@ -152,15 +154,14 @@ public class ClientWorld {
 	private int worldTime;
 
 	/**
-	 *  Center of the screen
+	 * Center of the screen
 	 */
 	int centreX;
 	int centreY;
-	
-	public final static int MAX_NO_OF_TEXT = 50;
-	
+
+	public final static int MAX_NO_OF_TEXT = Integer.MAX_VALUE;
+
 	private int noOfText = 0;
-	
 
 	/**
 	 * Adjusts the alpha of the darkness
@@ -694,9 +695,8 @@ public class ClientWorld {
 				objects[id].setY(y);
 				objects[id].setTeam(team);
 				objects[id].setImage(image);
-				if (name!=null)
-				{
-				objects[id].setName(name);
+				if (name != null) {
+					objects[id].setName(name);
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -727,8 +727,8 @@ public class ClientWorld {
 	 *            the object to remove
 	 */
 	public void remove(int id) {
-		objects[id] = null;
 
+		objects[id] = null;
 		noOfObjects--;
 	}
 
@@ -873,9 +873,6 @@ public class ClientWorld {
 
 		}
 
-		// Create a list of objects to remove after leaving the screen
-		ArrayList<Integer> objectsToRemove = new ArrayList<Integer>();
-
 		// The text to display to the player in the centre of the screen
 		String displayedText = null;
 
@@ -896,25 +893,22 @@ public class ClientWorld {
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
-				
-				if (object.getID() == player.getID())
-				{
+
+				if (object.getID() == player.getID()) {
 					player.setX(object.getX());
 					player.setY(object.getY());
 				}
-				
-				if (object.getX() == player.getX() && object.getY() == player.getY())
-				{
+
+				if (object.getX() == player.getX()
+						&& object.getY() == player.getY()) {
 					x = centreX;
 					y = centreY;
 				}
-				
-				
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
 						|| y + object.getHeight() < 0) {
-					objectsToRemove.add(object.getID());
+					objectsToRemove.add(object);
 					continue;
 				}
 
@@ -948,13 +942,14 @@ public class ClientWorld {
 							if (object.getType()
 									.equals(ServerWorld.PLAYER_TYPE)) {
 
-								//System.out.println(object.getName());
+								// System.out.println(object.getName());
 								String[] tokens = object.getName().split("`");
 								String name = tokens[0];
 								graphics.drawString(name,
 										(int) (x + object.getWidth() / 2 - name
 												.trim().length()
-												* DAMAGE_FONT_WIDTH / 2), y + 15);
+												* DAMAGE_FONT_WIDTH / 2),
+										y + 15);
 
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
@@ -963,8 +958,10 @@ public class ClientWorld {
 
 									graphics.drawString(
 											currentText,
-											(int) (x + object.getWidth() / 2 - currentText.length()
-													* DAMAGE_FONT_WIDTH / 2), y -7);
+											(int) (x + object.getWidth() / 2 - currentText
+													.length()
+													* DAMAGE_FONT_WIDTH / 2),
+											y - 7);
 								}
 							} else {
 								graphics.drawString(object.getName(), (int) (x
@@ -986,9 +983,14 @@ public class ClientWorld {
 				}
 			}
 
-			for (Integer object : objectsToRemove) {
-				remove(object);
+			for (ClientObject object : objectsToRemove) {
+				if (object.getType().charAt(0)==ServerWorld.TEXT_TYPE)
+				{
+					setNoOfText(getNoOfText()-1);
+				}
+				remove(object.getID());
 			}
+			objectsToRemove.clear();
 		} catch (ConcurrentModificationException E) {
 			System.out
 					.println("Tried to access the object list while it was being used");
@@ -1097,7 +1099,7 @@ public class ClientWorld {
 		// graphics.fillRect(row*16, column*16, 16,16);
 		// }
 		// }
-
+		System.out.println(noOfText);
 	}
 
 	public void clear() {
@@ -1132,5 +1134,9 @@ public class ClientWorld {
 		this.noOfText = noOfText;
 	}
 
+	public void addToRemove(ClientObject object)
+	{
+		objectsToRemove.add(object);
+	}
 	
 }

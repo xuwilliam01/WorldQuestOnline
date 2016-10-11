@@ -473,12 +473,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									break;
 								case "t":
+									if (world.getNoOfText()< ClientWorld.MAX_NO_OF_TEXT)
+									{
 									world.setObject(new ClientFloatingText(
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
 											tokens[++token], ServerPlayer.NEUTRAL, world));
-									//System.out.println("Receiving text");
+									}
 									break;
 								case "P":
 									pingString = "Ping: "
