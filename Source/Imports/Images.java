@@ -17,6 +17,7 @@ import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientShop;
 import Server.ServerWorld;
+import Server.Creatures.ServerPlayer;
 import Tools.BinaryTree;
 import WorldCreator.CreatorObject;
 
@@ -60,16 +61,16 @@ public class Images {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
-				+ "Platform.png"));
-		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
-				.getWidth() / 32];
-		for (int row = 0; row < imageTiles.length; row++) {
-			for (int column = 0; column < imageTiles[0].length; column++) {
-				imageTiles[row][column] = image.getSubimage(column * 32,
-						row * 32, 32, 32);
-			}
-		}
+//		BufferedImage image = ImageIO.read(new File("Images//" + "Other//"
+//				+ "Platform.png"));
+//		BufferedImage[][] imageTiles = new BufferedImage[image.getHeight() / 32][image
+//				.getWidth() / 32];
+//		for (int row = 0; row < imageTiles.length; row++) {
+//			for (int column = 0; column < imageTiles[0].length; column++) {
+//				imageTiles[row][column] = image.getSubimage(column * 32,
+//						row * 32, 32, 32);
+//			}
+//		}
 
 		// double rotationRequired = Math.toRadians(135);
 		// AffineTransform tx;
@@ -83,11 +84,12 @@ public class Images {
 		// BufferedImage newImage = op
 		// .filter(image, null);
 
-		for (int no = 0; no < 1; no++) {
-			image = imageTiles[10][7+no ];
-			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
-					+ "stone_edgeright"  + (0 + no) + ".png"));
-		}
+//		for (int no = 0; no < 1; no++) {
+//			image = imageTiles[10][7+no ];
+//			ImageIO.write(image, "PNG", new File("Images//" + "Tiles//"
+//					+ "stone_edgeright"  + (0 + no) + ".png"));
+//		}
+	
 	}
 
 	public static int getImageIndex(String image)

@@ -47,7 +47,7 @@ import Server.Creatures.ServerPlayer;
  *
  */
 public class Client extends JPanel implements KeyListener, MouseListener,
-		ActionListener, MouseMotionListener {
+ActionListener, MouseMotionListener {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
 	public static int SCREEN_HEIGHT = 1080;
@@ -288,9 +288,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			String message = input.readLine();
 			String[] tokens = message.split(" ");
 
-			int id = Integer.parseInt(tokens[0]);
-			int x = Integer.parseInt(tokens[1]);
-			int y = Integer.parseInt(tokens[2]);
+			int id = toInt(tokens[0]);
+			int x = toInt(tokens[1]);
+			int y = toInt(tokens[2]);
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
 
@@ -398,7 +398,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								case "B":
 									// End the game
 									int team = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									String winner = "Red Team";
 									String loser = "Blue Team";
 									if (team == ServerPlayer.RED_TEAM) {
@@ -407,11 +407,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 
 									JOptionPane
-											.showMessageDialog(
-													Client.this,
-													String.format(
-															"The %s castle has been destroyed, the winner is the %s!",
-															loser, winner));
+									.showMessageDialog(
+											Client.this,
+											String.format(
+													"The %s castle has been destroyed, the winner is the %s!",
+													loser, winner));
 									leaveGame = true;
 									input.close();
 									output.close();
@@ -429,9 +429,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									repaint();
 									break;
 								case "O":
-									int id = Integer.parseInt(tokens[++token]);
-									int x = Integer.parseInt(tokens[++token]);
-									int y = Integer.parseInt(tokens[++token]);
+									int id = toInt(tokens[++token]);
+									int x = toInt(tokens[++token]);
+									int y = toInt(tokens[++token]);
 									if (id == player.getID()) {
 										player.setX(x);
 										player.setY(y);
@@ -474,9 +474,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "t":
 									world.setObject(new ClientFloatingText(
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]),
+											toInt(tokens[++token]),
+											toInt(tokens[++token]),
+											toInt(tokens[++token]),
 											tokens[++token], ServerPlayer.NEUTRAL, world));
 									//System.out.println("Receiving text");
 									break;
@@ -486,18 +486,18 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									startTimer = System.currentTimeMillis();
 									break;
 								case "R":
-									int ID = Integer.parseInt(tokens[++token]);
+									int ID = toInt(tokens[++token]);
 									world.remove(ID);
 									break;
 								case "I":
 									System.out.println("Received an item");
 									inventory
-											.addItem(
-													Images.getImageName(Integer
-															.parseInt(tokens[++token])),
-													tokens[++token],
-													Integer.parseInt(tokens[++token]),
-													Integer.parseInt(tokens[++token]));
+									.addItem(
+											Images.getImageName(Integer
+													.parseInt(tokens[++token])),
+											tokens[++token],
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]));
 									inventory.repaint();
 									break;
 								case "D":
@@ -511,30 +511,30 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								case "J":
 									jump = Integer.parseInt(tokens[++token]);
 									break;
-								case "V":
-									if (Character.isDigit(tokens[token + 1]
-											.charAt(0))) {
-										if (shop != null) {
-											shop.setVisible(false);
-											frame.remove(shop);
-											frame.invalidate();
-											shop = null;
-										}
-										shop = new ClientShop(Client.this);
-										int numItems = Integer
-												.parseInt(tokens[++token]);
-										for (int item = 0; item < numItems; item++)
-											shop.addItem(
-													Images.getImageName(Integer
-															.parseInt(tokens[++token])),
-													tokens[++token],
-													Integer.parseInt(tokens[++token]),
-													Integer.parseInt(tokens[++token]));
-										frame.add(shop,
-												JLayeredPane.PALETTE_LAYER);
-										shop.revalidate();
-										frame.setVisible(true);
-									} else if (shop != null)
+								case "VB":
+									if (shop != null) {
+										shop.setVisible(false);
+										frame.remove(shop);
+										frame.invalidate();
+										shop = null;
+									}
+									shop = new ClientShop(Client.this);
+									int numItems = Integer
+											.parseInt(tokens[++token]);
+									for (int item = 0; item < numItems; item++)
+										shop.addItem(
+												Images.getImageName(Integer
+														.parseInt(tokens[++token])),
+												tokens[++token],
+												Integer.parseInt(tokens[++token]),
+												Integer.parseInt(tokens[++token]));
+									frame.add(shop,
+											JLayeredPane.PALETTE_LAYER);
+									shop.revalidate();
+									frame.setVisible(true);
+									break;
+								case "VS":
+									if (shop != null)
 										shop.addItem(
 												Images.getImageName(Integer
 														.parseInt(tokens[++token])),
@@ -547,8 +547,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										closeShop();
 									break;
 								case "T":
-									world.setWorldTime(Integer
-											.parseInt(tokens[++token]));
+									world.setWorldTime(toInt(tokens[++token]));
 									break;
 								case "SI":
 									String type = tokens[++token];
@@ -606,7 +605,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "RO":
 									int len2 = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									String name3 = "";
 
 									for (int i = 0; i < len2; i++)
@@ -615,7 +614,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "XR":
 									redCastleHP = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									redCastleTier = Integer
 											.parseInt(tokens[++token]);
 									redCastleMoney = Integer
@@ -625,7 +624,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "XB":
 									blueCastleHP = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									blueCastleTier = Integer
 											.parseInt(tokens[++token]);
 									blueCastleMoney = Integer
@@ -1005,7 +1004,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-													+ " by a "), textY);
+											+ " by a "), textY);
 						else
 							graphics.drawString(
 									lastName.substring(1),
@@ -1626,4 +1625,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.shop = shop;
 	}
 
+	public int toInt(String base95)
+	{
+		int ret = 0;
+		for(int i = 0; i < base95.length();i++)
+		{
+			int num = (int)base95.charAt(i) - 33;
+			ret += num * (int)Math.pow(95, i);
+		}
+		return ret;
+	}
 }

@@ -327,7 +327,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		sendMap();
 
 		// Send the player's information
-		sendMessage(getID() + " " + (int) (x + 0.5) + " " + (int) (y + 0.5)
+		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " " + toChars((int) (y + 0.5))
 				+ " "
 				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
 				+ " " + getTeam());
@@ -592,11 +592,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								if (object.getType().equals(
 										ServerWorld.PLAYER_TYPE)) {
 									queueMessage("O "
-											+ object.getID()
+											+ toChars(object.getID())
 											+ " "
-											+ x
+											+ toChars(x)
 											+ " "
-											+ y
+											+ toChars(y)
 											+ " "
 											+ object.getImageIndex()
 											+ " "
@@ -620,18 +620,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								y = ((ServerProjectile) object).getDrawY();
 								break;
 							case ServerWorld.TEXT_TYPE:
-								queueMessage("t " + object.getID() + " " + x
-										+ " " + y + " " + object.getImage());
+								queueMessage("t " + toChars(object.getID()) + " " + toChars(x)
+										+ " " + toChars(y) + " " + object.getImage());
 								continue;
 							}
 
 							// If it's any other object
-							queueMessage("O " + object.getID() + " " + x + " "
-									+ y + " " + object.getImageIndex() + " "
+							queueMessage("O " + toChars(object.getID()) + " " + toChars(x) + " "
+									+ toChars(y) + " " + object.getImageIndex() + " "
 									+ team + " " + object.getType() + " " + "{");
 
 						} else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
-							queueMessage("R " + object.getID());
+							queueMessage("R " + toChars(object.getID()));
 						}
 					}
 				}
@@ -687,7 +687,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				queueMessage("L " + getHP());
 			}
 			// Send the current time in the world
-			queueMessage("T " + world.getWorldTime());
+			queueMessage("T " + toChars(world.getWorldTime()));
 
 			// Signal a repaint
 			queueMessage("U");
@@ -991,7 +991,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				}
 
 				String newMessage = String
-						.format("V %s %s %d %d", item.getImageIndex(),
+						.format("VS %s %s %d %d", item.getImageIndex(),
 								item.getType(), 1, item.getCost());
 				queueMessage(newMessage);
 
@@ -1340,7 +1340,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 													.isBusy()) {
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
-										String newMessage = "V "
+										String newMessage = "VB "
 												+ vendor.getInventory().size();
 										for (ServerItem item : vendor
 												.getInventory())
@@ -1706,6 +1706,20 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public void setCurrentText(String currentText) {
 		this.currentText = currentText;
+	}
+	
+	public String toChars(int y)
+	{
+		int x = y;
+		String ret = "";
+		
+		while(x > 0)
+		{
+			ret += (char)(x%95 + 33);
+			x /= 95;
+		}
+		//System.out.println("StringRep: " +y+" "+ret);
+		return ret;
 	}
 
 }
