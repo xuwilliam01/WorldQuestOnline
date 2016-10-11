@@ -55,6 +55,9 @@ public class ClientFloatingText extends ClientObject {
 	public ClientFloatingText(int id, int x, int y, String image, int team,
 			ClientWorld world) {
 		super(id, x, y, image, team, ServerWorld.TEXT_TYPE + "");
+		
+		if (world.getNoOfText()< world.MAX_NO_OF_TEXT)
+		{
 		this.y = y;
 		this.world = world;
 		char colour = image.charAt(0);
@@ -78,12 +81,20 @@ public class ClientFloatingText extends ClientObject {
 			break;
 		}
 
-		x -= (int) (this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5 / 2);
+		setX(getX() - (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5 )/ 2));
+				
+		world.setNoOfText(world.getNoOfText()+1);
+		}
+		else
+		{
+			world.remove(getID());
+		}
 	}
 
 	@Override
 	public void update() {
 		if ((--aliveTime) <= 0) {
+			world.setNoOfText(world.getNoOfText()-1);
 			world.remove(getID());
 			return;
 		}

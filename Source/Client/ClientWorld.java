@@ -151,9 +151,16 @@ public class ClientWorld {
 	 */
 	private int worldTime;
 
-	// Center of the screen
+	/**
+	 *  Center of the screen
+	 */
 	int centreX;
 	int centreY;
+	
+	public final static int MAX_NO_OF_TEXT = 50;
+	
+	private int noOfText = 0;
+	
 
 	/**
 	 * Adjusts the alpha of the darkness
@@ -1100,4 +1107,13 @@ public class ClientWorld {
 		this.worldTime = worldTime;
 	}
 
+	public int getNoOfText() {
+		return noOfText;
+	}
+
+	public void setNoOfText(int noOfText) {
+		this.noOfText = noOfText;
+	}
+
+	
 }
