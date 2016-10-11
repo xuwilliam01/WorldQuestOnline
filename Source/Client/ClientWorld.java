@@ -687,7 +687,10 @@ public class ClientWorld {
 				objects[id].setY(y);
 				objects[id].setTeam(team);
 				objects[id].setImage(image);
+				if (name!=null)
+				{
 				objects[id].setName(name);
+				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -886,6 +889,20 @@ public class ClientWorld {
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
+				
+				if (object.getID() == player.getID())
+				{
+					player.setX(object.getX());
+					player.setY(object.getY());
+				}
+				
+				if (object.getX() == player.getX() && object.getY() == player.getY())
+				{
+					x = centreX;
+					y = centreY;
+				}
+				
+				
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
