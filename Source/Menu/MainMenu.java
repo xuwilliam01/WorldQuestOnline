@@ -806,7 +806,7 @@ public class MainMenu implements KeyListener {
 
 			if (JOptionPane.showConfirmDialog(null,
 					"Would you like to play on official servers?","Join a Game",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				serverIP = "159.203.18.245";
+				serverIP = "159.203.13.47";
 			}
 
 			else {
