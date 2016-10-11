@@ -695,7 +695,7 @@ public class ClientWorld {
 				objects[id].setY(y);
 				objects[id].setTeam(team);
 				objects[id].setImage(image);
-				if (name != null) {
+				if (name != null && name.length()>0) {
 					objects[id].setName(name);
 				}
 			}
