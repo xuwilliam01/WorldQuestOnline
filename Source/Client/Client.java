@@ -473,12 +473,14 @@ ActionListener, MouseMotionListener {
 									}
 									break;
 								case "t":
+									if (world.getNoOfText()< ClientWorld.MAX_NO_OF_TEXT)
+									{
 									world.setObject(new ClientFloatingText(
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),
 											tokens[++token], ServerPlayer.NEUTRAL, world));
-									//System.out.println("Receiving text");
+									}
 									break;
 								case "P":
 									pingString = "Ping: "
