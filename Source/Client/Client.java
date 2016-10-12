@@ -453,7 +453,7 @@ ActionListener, MouseMotionListener {
 									}
 									break;
 								case "t":
-									world.setObject(new ClientFloatingText(
+									world.setObject(new ClientText(
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),

@@ -19,13 +19,6 @@ import Server.Creatures.ServerPlayer;
 
 public class ClientWorld {
 
-	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
-	public final static Color RED_TEXT = new Color(153, 0, 38);
-	public final static Color BLUE_TEXT = new Color(0, 161, 230);
-	public final static Color GREEN_TEXT = new Color(0, 153, 0);
-	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
-	public final static Color GRAY_TEXT = Color.gray;
-
 	public static int NO_OF_CLOUDS = 8;
 	public static int MAX_NO_OF_STARS = 500;
 
@@ -45,6 +38,9 @@ public class ClientWorld {
 	 */
 	private ClientObject[] objects=new ClientObject[ServerEngine.NUMBER_OF_IDS];
 	
+	/**
+	 * List of objects to remove
+	 */
 	private ArrayList<ClientObject> objectsToRemove = new ArrayList<ClientObject>();
 
 	/**
@@ -186,95 +182,6 @@ public class ClientWorld {
 	public static final int edgeleft = 13;
 
 	/**
-	 * Check the neighbours of a tile on the grid
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	private int checkTileSituation(int row, int col, char[][] grid) {
-		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
-
-			// Fill in background if there are empty spaces in foreground
-			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				if (backgroundGrid[row][col + 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-				}
-
-				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-					return edgeright;
-				}
-
-				return corner2;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-
-				if (backgroundGrid[row][col - 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-				}
-
-				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-					return edgeleft;
-				}
-
-				return corner3;
-			} else {
-				return bottom;
-			}
-		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-
-			// Fill in background if there are empty spaces in foreground
-			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
-
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				if (backgroundGrid[row][col + 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-				}
-
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return corner1WithSky;
-				}
-
-				return corner1;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-
-				if (backgroundGrid[row][col - 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-				}
-
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return corner0WithSky;
-				}
-
-				return corner0;
-			} else {
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return topWithSky;
-				}
-
-				return top;
-			}
-		} else {
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-
-				return right;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-
-				return left;
-			} else {
-				return middle;
-			}
-		}
-	}
-
-	/**
 	 * Constructor for the client's side of the world
 	 * 
 	 * @param rows
@@ -287,11 +194,10 @@ public class ClientWorld {
 	 */
 	public ClientWorld(char[][] grid, int tileSize, Client client)
 			throws IOException {
+		
 		backgroundGrid = new char[grid.length][grid[0].length];
 		foregroundGrid = new char[grid.length][grid[0].length];
-
-		// Remember to delete grid
-
+		
 		// Create a background and foreground grid
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
@@ -657,6 +563,97 @@ public class ClientWorld {
 		centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
 
 	}
+	
+	/**
+	 * Check the neighbours of a tile on the grid
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	private int checkTileSituation(int row, int col, char[][] grid) {
+		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
+
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+				}
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+					return edgeright;
+				}
+
+				return corner2;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+				}
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+					return edgeleft;
+				}
+
+				return corner3;
+			} else {
+				return bottom;
+			}
+		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
+
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+				}
+
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner1WithSky;
+				}
+
+				return corner1;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+				}
+
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner0WithSky;
+				}
+
+				return corner0;
+			} else {
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return topWithSky;
+				}
+
+				return top;
+			}
+		} else {
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+
+				return right;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+
+				return left;
+			} else {
+				return middle;
+			}
+		}
+	}
+
+	
 
 	/**
 	 * Get a specific object from the list
@@ -911,7 +908,7 @@ public class ClientWorld {
 				}
 
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
-					ClientFloatingText textObject = (ClientFloatingText) object;
+					ClientText textObject = (ClientText) object;
 
 					textObject.update();
 					if (textObject.exists())
@@ -954,7 +951,7 @@ public class ClientWorld {
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
 
-									graphics.setColor(YELLOW_TEXT);
+									graphics.setColor(Images.YELLOW_TEXT);
 
 									graphics.drawString(
 											currentText,
@@ -1010,7 +1007,7 @@ public class ClientWorld {
 		}
 
 		if (displayedText != null) {
-			graphics.setColor(PURPLE_TEXT);
+			graphics.setColor(Images.PURPLE_TEXT);
 			graphics.setFont(MESSAGE_FONT);
 			graphics.drawString(displayedText,
 					(int) (Client.SCREEN_WIDTH / 2
@@ -1033,7 +1030,7 @@ public class ClientWorld {
 						.getRedCastleHP() / (client.getRedCastleMaxHP()))),
 				ClientFrame.getScaledHeight(20));
 
-		graphics.setColor(PURPLE_TEXT);
+		graphics.setColor(Images.PURPLE_TEXT);
 		graphics.drawRect(ClientFrame.getScaledWidth(100),
 				ClientFrame.getScaledHeight(980),
 				ClientFrame.getScaledWidth(500),

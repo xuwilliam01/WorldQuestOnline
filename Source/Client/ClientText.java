@@ -2,12 +2,13 @@ package Client;
 
 import java.awt.Color;
 
+import Imports.Images;
 import Server.ServerWorld;
 import Server.Effects.ServerText;
 
-public class ClientFloatingText extends ClientObject {
+public class ClientText extends ClientObject {
 
-	public final static int TOTAL_ALIVE_TIME = 45;
+	public final static int TOTAL_ALIVE_TIME = 60;
 
 	/**
 	 * Number of frames that the text is alive for
@@ -43,7 +44,15 @@ public class ClientFloatingText extends ClientObject {
 	 */
 	private ClientWorld world;
 
+	/**
+	 * Whether or not the object exists
+	 */
 	private boolean exists = false;
+	
+	/**
+	 * Color array used for this text
+	 */
+	private Color[] colorArray;
 
 	/**
 	 * 
@@ -54,7 +63,7 @@ public class ClientFloatingText extends ClientObject {
 	 * @param team
 	 * @param type
 	 */
-	public ClientFloatingText(int id, int x, int y, String image, int team,
+	public ClientText(int id, int x, int y, String image, int team,
 			ClientWorld world) {
 		super(id, x, y, image, team, ServerWorld.TEXT_TYPE + "");
 		this.exists = true;
@@ -67,24 +76,27 @@ public class ClientFloatingText extends ClientObject {
 		switch (colour) {
 		case ServerText.PURPLE_TEXT:
 			this.text = "NOT ENOUGH MANA";
-			color = ClientWorld.PURPLE_TEXT;
+			colorArray = Images.purples;
+			color = Images.PURPLE_TEXT;
 			break;
 		case ServerText.BLUE_TEXT:
 			this.text = "BLOCK";
-			color = ClientWorld.BLUE_TEXT;
+			colorArray = Images.blues;
+			color = Images.BLUE_TEXT;
 			break;
 		case ServerText.RED_TEXT:
-			color = ClientWorld.RED_TEXT;
+			colorArray = Images.reds;
+			color = Images.RED_TEXT;
 			break;
 		case ServerText.YELLOW_TEXT:
-			color = ClientWorld.YELLOW_TEXT;
+			colorArray = Images.yellows;
+			color = Images.YELLOW_TEXT;
 			break;
 		}
 
 		this.aliveTime = TOTAL_ALIVE_TIME;
 		
-		setX(getX()
-				- (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5) / 2));
+		setX(getX()- (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5) / 2));
 
 	}
 
@@ -96,7 +108,7 @@ public class ClientFloatingText extends ClientObject {
 				destroy();
 				return;
 			}
-
+			color = colorArray[(int)((1.0*aliveTime/TOTAL_ALIVE_TIME)*100.0)];
 			y += vSpeed;
 			setY((int) y);
 		}
