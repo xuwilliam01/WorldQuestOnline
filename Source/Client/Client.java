@@ -1607,10 +1607,12 @@ ActionListener, MouseMotionListener {
 	public int toInt(String base95)
 	{
 		int ret = 0;
+		int pow = 1;
 		for(int i = 0; i < base95.length();i++)
 		{
 			int num = (int)base95.charAt(i) - 33;
-			ret += num * (int)Math.pow(95, i);
+			ret += num * pow;
+			pow*=95;
 		}
 		return ret;
 	}
