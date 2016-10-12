@@ -12,7 +12,7 @@ public class ClientFloatingText extends ClientObject {
 	/**
 	 * Number of frames that the text is alive for
 	 */
-	private int aliveTime = TOTAL_ALIVE_TIME;
+	private int aliveTime;
 
 	/**
 	 * Number of frames it moves every second
@@ -42,7 +42,7 @@ public class ClientFloatingText extends ClientObject {
 	 * Reference to the world
 	 */
 	private ClientWorld world;
-	
+
 	private boolean exists = false;
 
 	/**
@@ -61,7 +61,7 @@ public class ClientFloatingText extends ClientObject {
 		this.y = y;
 		this.world = world;
 		char colour = image.charAt(0);
-		
+
 		this.text = image.substring(1);
 
 		switch (colour) {
@@ -81,24 +81,30 @@ public class ClientFloatingText extends ClientObject {
 			break;
 		}
 
-		setX(getX() - (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5 )/ 2));
-				
-		world.setNoOfText(world.getNoOfText()+1);
+		this.aliveTime = TOTAL_ALIVE_TIME;
+		
+		setX(getX()
+				- (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5) / 2));
+
 	}
 
 	@Override
 	public void update() {
-		if (exists)
-		{
-		if ((--aliveTime) <= 0) {
-			world.addToRemove(this);
-			exists = false;
-			return;
-		}
+		if (exists) {
+			if (aliveTime-- <= 0) {
+				world.addToRemove(this);
+				destroy();
+				return;
+			}
 
-		y += vSpeed;
-		setY((int) y);
+			y += vSpeed;
+			setY((int) y);
 		}
+	}
+
+	@Override
+	public void destroy() {
+		this.exists = false;
 	}
 
 	public float getAlpha() {
@@ -124,5 +130,14 @@ public class ClientFloatingText extends ClientObject {
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	public boolean exists() {
+		return exists;
+	}
+
+	public void setExists(boolean exists) {
+		this.exists = exists;
+	}
+	
 
 }

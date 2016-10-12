@@ -65,7 +65,11 @@ public class ClientObject implements Comparable<ClientObject>
 	 */
 	private String hint = "";
 
+	/**
+	 * Name of the object (may include their current message as well)
+	 */
 	private String name = "";
+	
 
 	/**
 	 * Constructor
@@ -218,6 +222,11 @@ public class ClientObject implements Comparable<ClientObject>
 	}
 	
 	public void update()
+	{
+		
+	}
+	
+	public void destroy()
 	{
 		
 	}

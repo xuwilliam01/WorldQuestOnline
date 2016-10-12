@@ -43,7 +43,7 @@ public class ClientWorld {
 	 * Array of client objects, where the index of the object in the array is
 	 * its ID
 	 */
-	private ClientObject[] objects;
+	private ClientObject[] objects=new ClientObject[ServerEngine.NUMBER_OF_IDS];
 	
 	private ArrayList<ClientObject> objectsToRemove = new ArrayList<ClientObject>();
 
@@ -160,8 +160,6 @@ public class ClientWorld {
 	int centreY;
 
 	public final static int MAX_NO_OF_TEXT = Integer.MAX_VALUE;
-
-	private int noOfText = 0;
 
 	/**
 	 * Adjusts the alpha of the darkness
@@ -619,8 +617,6 @@ public class ClientWorld {
 		alphaMultiplier = 0;
 		worldTime = 0;
 
-		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
-
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 
@@ -689,7 +685,7 @@ public class ClientWorld {
 					objects[id] = new ClientObject(id, x, y, image, team, type,
 							name);
 				}
-				noOfObjects++;
+				addObjectNo();
 			} else {
 				objects[id].setX(x);
 				objects[id].setY(y);
@@ -714,7 +710,7 @@ public class ClientWorld {
 	 */
 	public void setObject(ClientObject object) {
 		if (objects[object.getID()] == null) {
-			noOfObjects++;
+			addObjectNo();
 		}
 		objects[object.getID()] = object;
 
@@ -727,9 +723,11 @@ public class ClientWorld {
 	 *            the object to remove
 	 */
 	public void remove(int id) {
-
+		if (objects[id]!=null)
+		{
+			subtractObjectNo();
+		}
 		objects[id] = null;
-		noOfObjects--;
 	}
 
 	/**
@@ -915,11 +913,13 @@ public class ClientWorld {
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
 					ClientFloatingText textObject = (ClientFloatingText) object;
 
+					textObject.update();
+					if (textObject.exists())
+					{
 					graphics.setColor(textObject.getColor());
 					graphics.setFont(DAMAGE_FONT);
 					graphics.drawString(textObject.getText(), x, y);
-
-					textObject.update();
+					}
 					// System.out.println("Drawing floating text");
 				} else {
 					Image image = object.getImage();
@@ -984,10 +984,7 @@ public class ClientWorld {
 			}
 
 			for (ClientObject object : objectsToRemove) {
-				if (object.getType().charAt(0)==ServerWorld.TEXT_TYPE)
-				{
-					setNoOfText(getNoOfText()-1);
-				}
+				object.destroy();
 				remove(object.getID());
 			}
 			objectsToRemove.clear();
@@ -1099,7 +1096,8 @@ public class ClientWorld {
 		// graphics.fillRect(row*16, column*16, 16,16);
 		// }
 		// }
-		System.out.println(noOfText);
+		
+		System.out.println(noOfObjects);
 	}
 
 	public void clear() {
@@ -1126,17 +1124,19 @@ public class ClientWorld {
 		this.worldTime = worldTime;
 	}
 
-	public int getNoOfText() {
-		return noOfText;
-	}
-
-	public void setNoOfText(int noOfText) {
-		this.noOfText = noOfText;
-	}
-
 	public void addToRemove(ClientObject object)
 	{
 		objectsToRemove.add(object);
+	}
+	
+	public synchronized void addObjectNo()
+	{
+		noOfObjects++;
+	}
+	
+	public synchronized void subtractObjectNo()
+	{
+		noOfObjects--;
 	}
 	
 }
