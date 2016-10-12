@@ -38,6 +38,10 @@ public class ServerText extends ServerObject {
 	 */
 	public ServerText(double x, double y, String text, char colour, ServerWorld world) {
 		super(x, y, 20, 20, 0, colour + text, ServerWorld.TEXT_TYPE +"",world.getEngine());
+		if (colour == ServerText.YELLOW_TEXT)
+		{
+			//System.out.println("Yellow");
+		}
 		setSolid(false);
 		this.world = world;
 		this.text = text;

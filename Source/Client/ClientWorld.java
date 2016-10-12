@@ -951,7 +951,7 @@ public class ClientWorld {
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
 
-									graphics.setColor(Images.YELLOW_TEXT);
+									graphics.setColor(Color.YELLOW);
 
 									graphics.drawString(
 											currentText,
@@ -1094,7 +1094,7 @@ public class ClientWorld {
 		// }
 		// }
 		
-		System.out.println(noOfObjects);
+		//System.out.println(noOfObjects);
 	}
 
 	public void clear() {

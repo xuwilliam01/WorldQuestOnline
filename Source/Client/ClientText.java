@@ -70,7 +70,6 @@ public class ClientText extends ClientObject {
 		this.y = y;
 		this.world = world;
 		char colour = image.charAt(0);
-
 		this.text = image.substring(1);
 
 		switch (colour) {
@@ -80,7 +79,7 @@ public class ClientText extends ClientObject {
 			color = Images.PURPLE_TEXT;
 			break;
 		case ServerText.BLUE_TEXT:
-			this.text = "BLOCK";
+			this.text = "0";
 			colorArray = Images.blues;
 			color = Images.BLUE_TEXT;
 			break;
@@ -90,6 +89,7 @@ public class ClientText extends ClientObject {
 			break;
 		case ServerText.YELLOW_TEXT:
 			colorArray = Images.yellows;
+			System.out.println(colorArray[99].getRed());
 			color = Images.YELLOW_TEXT;
 			break;
 		}
@@ -109,6 +109,7 @@ public class ClientText extends ClientObject {
 				return;
 			}
 			color = colorArray[(int)((1.0*aliveTime/TOTAL_ALIVE_TIME)*100.0)];
+			
 			y += vSpeed;
 			setY((int) y);
 		}
