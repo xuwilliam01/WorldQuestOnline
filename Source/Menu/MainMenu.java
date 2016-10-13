@@ -57,6 +57,11 @@ public class MainMenu implements KeyListener {
 	static MainMenu main;
 
 	/**
+	 * The IP address for the dedicated server
+	 */
+	public final static String DEDICATED_IP = "138.197.137.246";
+	
+	/**
 	 * Default port number
 	 */
 	public final static int DEF_PORT = 9988;
@@ -806,7 +811,7 @@ public class MainMenu implements KeyListener {
 
 			if (JOptionPane.showConfirmDialog(null,
 					"Would you like to play on official servers?","Join a Game",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				serverIP = "159.203.13.47";
+				serverIP = DEDICATED_IP;
 			}
 
 			else {
