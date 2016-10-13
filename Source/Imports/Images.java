@@ -30,7 +30,7 @@ import WorldCreator.CreatorObject;
  */
 public class Images {
 	
-	public final static Color YELLOW_TEXT = new Color(204, 204, 0);
+	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
 	public final static Color RED_TEXT = new Color(153, 0, 38);
 	public final static Color BLUE_TEXT = new Color(0, 161, 230);
 	public final static Color GREEN_TEXT = new Color(0, 153, 0);
