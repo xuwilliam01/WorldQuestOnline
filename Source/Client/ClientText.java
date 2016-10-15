@@ -89,7 +89,6 @@ public class ClientText extends ClientObject {
 			break;
 		case ServerText.YELLOW_TEXT:
 			colorArray = Images.yellows;
-			System.out.println(colorArray[99].getRed());
 			color = Images.YELLOW_TEXT;
 			break;
 		}

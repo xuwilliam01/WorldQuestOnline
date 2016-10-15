@@ -361,7 +361,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 							}
 
 							mapBox.setSelectedItem(map);
-							System.out.println(map);
+							//System.out.println(map);
 						}
 					}
 					repaint();

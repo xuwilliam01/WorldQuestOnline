@@ -694,7 +694,11 @@ public class ClientWorld {
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
-			System.out.println(name + " " + type + " " + image);
+			System.out.println(id + " " + name + " " + type + " " + image);
+		} catch (NullPointerException e2)
+		{
+			e2.printStackTrace();
+			System.out.println(id + " " + name + " " + type + " " + image);
 		}
 	}
 
