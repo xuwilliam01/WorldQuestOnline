@@ -73,6 +73,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int playerScreenWidth = 1620;
 	private int playerScreenHeight = 1080;
 
+	private ServerCastle castle;
+	
 	/**
 	 * Whether the game is over or not
 	 */
@@ -302,7 +304,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0, world);
 		setHead(newHair);
 		world.add(newHair);
-
+	
+		
 		// Set the initial variables
 		actionDelay = 20;
 		actionSpeed = 13;
@@ -332,6 +335,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
 				+ " " + getTeam());
 
+		if(getTeam() == RED_TEAM)
+			castle = world.getRedCastle();
+		else
+			castle = world.getBlueCastle();
+		
 		baseImage = "BASE_" + skinColour;
 
 		// Give the player random start weapon(s)
@@ -648,6 +656,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					&& (!collidesWith(vendor) || getHP() <= 0 || isDisconnected())) {
 				vendor.setIsBusy(false);
 				vendor = null;
+				queueMessage("C");
+			}
+			
+			if(castle.isOpen() && (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
+				castle.close();
 				queueMessage("C");
 			}
 
@@ -1356,6 +1369,17 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										vendor = null;
 									}
 									return;
+								}
+								else if (object.getType().equals(
+										ServerWorld.CASTLE_TYPE)) {
+									//Make a shop
+									if(!castle.isOpen())
+										queueMessage("CS");
+									else if (castle.isOpen())
+									{
+										castle.close();
+									}
+									
 								}
 
 							}

@@ -164,6 +164,7 @@ ActionListener, MouseMotionListener {
 	 * The shop
 	 */
 	private ClientShop shop = null;
+	private ClientCastleShop castleShop = null;
 
 	/**
 	 * All the leftover lines to read in to the client
@@ -544,9 +545,28 @@ ActionListener, MouseMotionListener {
 												Integer.parseInt(tokens[++token]),
 												Integer.parseInt(tokens[++token]));
 									break;
+								case "CS":
+									if(castleShop != null)
+									{
+										castleShop.setVisible(false);
+										frame.remove(castleShop);
+										frame.invalidate();
+										castleShop = null;
+									}
+									if (player.getTeam() == ServerCreature.RED_TEAM)
+										castleShop = new ClientCastleShop(Client.this, redCastleMoney);
+									else
+										castleShop = new ClientCastleShop(Client.this, blueCastleMoney);
+									frame.add(castleShop,
+											JLayeredPane.PALETTE_LAYER);
+									castleShop.revalidate();
+									frame.setVisible(true);
+									break;
 								case "C":
 									if (shop != null)
 										closeShop();
+									if(castleShop != null)
+										closeCastleShop();
 									break;
 								case "T":
 									world.setWorldTime(toInt(tokens[++token]));
@@ -621,6 +641,8 @@ ActionListener, MouseMotionListener {
 											.parseInt(tokens[++token]);
 									redCastleMoney = Integer
 											.parseInt(tokens[++token]);
+									if(castleShop != null && player.getTeam() == ServerCreature.RED_TEAM)
+										castleShop.setMoney(redCastleMoney);
 									redCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
 									break;
@@ -631,6 +653,8 @@ ActionListener, MouseMotionListener {
 											.parseInt(tokens[++token]);
 									blueCastleMoney = Integer
 											.parseInt(tokens[++token]);
+									if(castleShop != null && player.getTeam() == ServerCreature.BLUE_TEAM)
+										castleShop.setMoney(blueCastleMoney);
 									blueCastleMaxHP = Integer
 											.parseInt(tokens[++token]);
 									break;
@@ -706,6 +730,13 @@ ActionListener, MouseMotionListener {
 		frame.remove(shop);
 		frame.invalidate();
 		shop = null;
+	}
+	
+	public void closeCastleShop(){
+		castleShop.setVisible(false);
+		frame.remove(castleShop);
+		frame.invalidate();
+		castleShop = null;
 	}
 
 	/**
@@ -1105,6 +1136,11 @@ ActionListener, MouseMotionListener {
 			printToServer("E");
 			if (shop != null) {
 				closeShop();
+			}
+			if(castleShop != null)
+			{
+				System.out.println("trying to close castle shop");
+				closeCastleShop();
 			}
 		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (!writingMessage) {

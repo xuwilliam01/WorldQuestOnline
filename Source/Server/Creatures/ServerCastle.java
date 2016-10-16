@@ -51,6 +51,10 @@ public class ServerCastle extends ServerCreature {
 	private int team;
 
 	/**
+	 * Whether the castle shop is open or not
+	 */
+	private boolean open = false;
+	/**
 	 * To prices to advance from each tier
 	 */
 	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 };
@@ -166,6 +170,17 @@ public class ServerCastle extends ServerCreature {
 		return null;
 	}
 
+	//Methods for the castle shop
+	public boolean isOpen()
+	{
+		return open;
+	}
+	
+	public void close()
+	{
+		open = false;
+	}
+	
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
