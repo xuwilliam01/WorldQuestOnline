@@ -295,7 +295,6 @@ ActionListener, MouseMotionListener {
 			int y = toInt(tokens[2]);
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
-
 			player = new ClientObject(id, x, y, image, team,
 					ServerWorld.PLAYER_TYPE);
 		} catch (IOException e) {
@@ -416,6 +415,7 @@ ActionListener, MouseMotionListener {
 									if (id == player.getID()) {
 										player.setX(x);
 										player.setY(y);
+										player.setTeam(Integer.parseInt(tokens[token+2]));
 									}
 									if (tokens[token + 4].equals("{")) {
 
@@ -531,7 +531,9 @@ ActionListener, MouseMotionListener {
 										castleShop = null;
 									}
 									if (player.getTeam() == ServerCreature.RED_TEAM)
+									{
 										castleShop = new ClientCastleShop(Client.this, redCastleMoney);
+									}
 									else
 										castleShop = new ClientCastleShop(Client.this, blueCastleMoney);
 									frame.add(castleShop,
@@ -1116,8 +1118,6 @@ ActionListener, MouseMotionListener {
 			}
 			if(castleShop != null)
 			{
-				System.out.println("trying to close castle shop");
-				
 				closeCastleShop();
 			}
 		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {

@@ -73,7 +73,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int playerScreenWidth = 1620;
 	private int playerScreenHeight = 1080;
 
-	private ServerCastle castle;
+	private ServerCastle castle = null;
+	private boolean weOpened = false;
 	
 	/**
 	 * Whether the game is over or not
@@ -335,10 +336,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
 				+ " " + getTeam());
 
-		if(getTeam() == RED_TEAM)
-			castle = world.getRedCastle();
-		else
-			castle = world.getBlueCastle();
+		
+		//System.out.printf("%.2f %.2f x, y%n", castle.getX(), castle.getY());
 		
 		baseImage = "BASE_" + skinColour;
 
@@ -659,8 +658,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				queueMessage("C");
 			}
 			
-			if(castle.isOpen() && (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
+			if(castle != null && castle.isOpen() && weOpened && (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
 				castle.close();
+				weOpened = false;
+				System.out.println("closing: "+collidesWith(castle));
 				queueMessage("C");
 			}
 
@@ -792,6 +793,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					inflictDamage(10000, this);
 					if (getTeam() == RED_TEAM) {
 						setTeam(BLUE_TEAM);
+						if(castle != null)
+							castle = world.getBlueCastle();
 						while (true) {
 							try {
 								if (!world.getBlueTeam().contains(this))
@@ -803,6 +806,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						}
 					} else {
 						setTeam(RED_TEAM);
+						if(castle != null)
+							castle = world.getRedCastle();
 						while (true) {
 							try {
 								world.getBlueTeam().remove(this);
@@ -1376,15 +1381,25 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 									return;
 								}
 								else if (object.getType().equals(
-										ServerWorld.CASTLE_TYPE)) {
+										ServerWorld.CASTLE_TYPE) && ((ServerCreature)object).getTeam() == getTeam()) {
 									//Make a shop
+									if(castle == null)
+										if(getTeam() == RED_TEAM)
+											castle = world.getRedCastle();
+										else
+											castle = world.getBlueCastle();
 									if(!castle.isOpen())
+									{
 										queueMessage("CS");
-									else if (castle.isOpen())
+										castle.open();
+										weOpened = true;
+									}
+									else if (castle.isOpen() && weOpened)
 									{
 										castle.close();
+										weOpened = false;
 									}
-									
+									return;
 								}
 
 							}

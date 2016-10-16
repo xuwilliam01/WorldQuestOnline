@@ -181,6 +181,11 @@ public class ServerCastle extends ServerCreature {
 		open = false;
 	}
 	
+	public void open()
+	{
+		open = true;
+	}
+	
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
