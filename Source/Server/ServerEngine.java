@@ -237,13 +237,13 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * 
 	 * @return the id
 	 */
-	public int useNextID() {
+	public synchronized int useNextID() {
 
 		while (true) {
 			for (int no = nextID; no < NUMBER_OF_IDS; no++) {
 				if (usedIDs[no] != true) {
 					usedIDs[no] = true;
-					nextID = no++;
+					nextID = no+1;
 					return no;
 				}
 			}

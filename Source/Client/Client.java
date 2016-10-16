@@ -233,6 +233,7 @@ ActionListener, MouseMotionListener {
 	private void serverClosed() {
 		if (!leaveGame) {
 			System.out.println("Server was closed");
+			world.clear();
 			JOptionPane.showMessageDialog(null, "Server was closed", "Server",
 					JOptionPane.ERROR_MESSAGE);
 			inventory.getMenuButton().doClick();
@@ -341,27 +342,6 @@ ActionListener, MouseMotionListener {
 	public void printToServer(String message) {
 		output.println(message);
 		output.flush();
-	}
-
-	/**
-	 * Converts a string back to an int
-	 * 
-	 * @param number
-	 * @return
-	 */
-	public int stringToInt(String message) {
-		int number = 0;
-		int messageLength = message.length();
-		int multiplier = 1;
-		for (int no = 1; no < messageLength; no++) {
-			number += message.charAt(no) * multiplier;
-			multiplier *= 128;
-		}
-		if (message.charAt(0) == '-') {
-			number *= -1;
-		}
-
-		return number;
 	}
 
 	/**
@@ -474,14 +454,11 @@ ActionListener, MouseMotionListener {
 									}
 									break;
 								case "t":
-									if (world.getNoOfText()< ClientWorld.MAX_NO_OF_TEXT)
-									{
-									world.setObject(new ClientFloatingText(
+									world.setObject(new ClientText(
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),
 											toInt(tokens[++token]),
 											tokens[++token], ServerPlayer.NEUTRAL, world));
-									}
 									break;
 								case "P":
 									pingString = "Ping: "
@@ -1666,10 +1643,12 @@ ActionListener, MouseMotionListener {
 	public int toInt(String base95)
 	{
 		int ret = 0;
+		int pow = 1;
 		for(int i = 0; i < base95.length();i++)
 		{
 			int num = (int)base95.charAt(i) - 33;
-			ret += num * (int)Math.pow(95, i);
+			ret += num * pow;
+			pow*=95;
 		}
 		return ret;
 	}

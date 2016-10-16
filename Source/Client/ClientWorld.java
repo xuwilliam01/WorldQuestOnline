@@ -19,13 +19,6 @@ import Server.Creatures.ServerPlayer;
 
 public class ClientWorld {
 
-	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
-	public final static Color RED_TEXT = new Color(153, 0, 38);
-	public final static Color BLUE_TEXT = new Color(0, 161, 230);
-	public final static Color GREEN_TEXT = new Color(0, 153, 0);
-	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
-	public final static Color GRAY_TEXT = Color.gray;
-
 	public static int NO_OF_CLOUDS = 8;
 	public static int MAX_NO_OF_STARS = 500;
 
@@ -43,8 +36,11 @@ public class ClientWorld {
 	 * Array of client objects, where the index of the object in the array is
 	 * its ID
 	 */
-	private ClientObject[] objects;
+	private ClientObject[] objects=new ClientObject[ServerEngine.NUMBER_OF_IDS];
 	
+	/**
+	 * List of objects to remove
+	 */
 	private ArrayList<ClientObject> objectsToRemove = new ArrayList<ClientObject>();
 
 	/**
@@ -161,8 +157,6 @@ public class ClientWorld {
 
 	public final static int MAX_NO_OF_TEXT = Integer.MAX_VALUE;
 
-	private int noOfText = 0;
-
 	/**
 	 * Adjusts the alpha of the darkness
 	 */
@@ -188,95 +182,6 @@ public class ClientWorld {
 	public static final int edgeleft = 13;
 
 	/**
-	 * Check the neighbours of a tile on the grid
-	 * 
-	 * @param row
-	 * @param col
-	 * @return
-	 */
-	private int checkTileSituation(int row, int col, char[][] grid) {
-		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
-
-			// Fill in background if there are empty spaces in foreground
-			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				if (backgroundGrid[row][col + 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-				}
-
-				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-					return edgeright;
-				}
-
-				return corner2;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-
-				if (backgroundGrid[row][col - 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-				}
-
-				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-					return edgeleft;
-				}
-
-				return corner3;
-			} else {
-				return bottom;
-			}
-		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
-
-			// Fill in background if there are empty spaces in foreground
-			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
-
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				if (backgroundGrid[row][col + 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-				}
-
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return corner1WithSky;
-				}
-
-				return corner1;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-
-				if (backgroundGrid[row][col - 1] != ' ') {
-					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-				}
-
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return corner0WithSky;
-				}
-
-				return corner0;
-			} else {
-				if (backgroundGrid[row - 1][col] == ' ') {
-					return topWithSky;
-				}
-
-				return top;
-			}
-		} else {
-			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
-
-				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col + 1];
-
-				return right;
-			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
-				// Fill in background if there are empty spaces in foreground
-				backgroundGrid[row][col] = backgroundGrid[row][col - 1];
-
-				return left;
-			} else {
-				return middle;
-			}
-		}
-	}
-
-	/**
 	 * Constructor for the client's side of the world
 	 * 
 	 * @param rows
@@ -289,11 +194,10 @@ public class ClientWorld {
 	 */
 	public ClientWorld(char[][] grid, int tileSize, Client client)
 			throws IOException {
+		
 		backgroundGrid = new char[grid.length][grid[0].length];
 		foregroundGrid = new char[grid.length][grid[0].length];
-
-		// Remember to delete grid
-
+		
 		// Create a background and foreground grid
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
@@ -619,8 +523,6 @@ public class ClientWorld {
 		alphaMultiplier = 0;
 		worldTime = 0;
 
-		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
-
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 
@@ -661,6 +563,97 @@ public class ClientWorld {
 		centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
 
 	}
+	
+	/**
+	 * Check the neighbours of a tile on the grid
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
+	private int checkTileSituation(int row, int col, char[][] grid) {
+		if (row + 1 < grid.length && foregroundGrid[row + 1][col] == ' ') {
+
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row + 1][col];
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+				}
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+					return edgeright;
+				}
+
+				return corner2;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+				}
+
+				if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+					return edgeleft;
+				}
+
+				return corner3;
+			} else {
+				return bottom;
+			}
+		} else if (row - 1 >= 0 && foregroundGrid[row - 1][col] == ' ') {
+
+			// Fill in background if there are empty spaces in foreground
+			backgroundGrid[row][col] = backgroundGrid[row - 1][col];
+
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				if (backgroundGrid[row][col + 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+				}
+
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner1WithSky;
+				}
+
+				return corner1;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+
+				if (backgroundGrid[row][col - 1] != ' ') {
+					backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+				}
+
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return corner0WithSky;
+				}
+
+				return corner0;
+			} else {
+				if (backgroundGrid[row - 1][col] == ' ') {
+					return topWithSky;
+				}
+
+				return top;
+			}
+		} else {
+			if (col + 1 < grid[0].length && foregroundGrid[row][col + 1] == ' ') {
+
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col + 1];
+
+				return right;
+			} else if (col - 1 >= 0 && foregroundGrid[row][col - 1] == ' ') {
+				// Fill in background if there are empty spaces in foreground
+				backgroundGrid[row][col] = backgroundGrid[row][col - 1];
+
+				return left;
+			} else {
+				return middle;
+			}
+		}
+	}
+
+	
 
 	/**
 	 * Get a specific object from the list
@@ -689,19 +682,23 @@ public class ClientWorld {
 					objects[id] = new ClientObject(id, x, y, image, team, type,
 							name);
 				}
-				noOfObjects++;
+				addObjectNo();
 			} else {
 				objects[id].setX(x);
 				objects[id].setY(y);
 				objects[id].setTeam(team);
 				objects[id].setImage(image);
-				if (name != null) {
+				if (name != null && name.length()>0) {
 					objects[id].setName(name);
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
-			System.out.println(name + " " + type + " " + image);
+			System.out.println(id + " " + name + " " + type + " " + image);
+		} catch (NullPointerException e2)
+		{
+			e2.printStackTrace();
+			System.out.println(id + " " + name + " " + type + " " + image);
 		}
 	}
 
@@ -714,7 +711,7 @@ public class ClientWorld {
 	 */
 	public void setObject(ClientObject object) {
 		if (objects[object.getID()] == null) {
-			noOfObjects++;
+			addObjectNo();
 		}
 		objects[object.getID()] = object;
 
@@ -727,9 +724,11 @@ public class ClientWorld {
 	 *            the object to remove
 	 */
 	public void remove(int id) {
-
+		if (objects[id]!=null)
+		{
+			subtractObjectNo();
+		}
 		objects[id] = null;
-		noOfObjects--;
 	}
 
 	/**
@@ -913,13 +912,15 @@ public class ClientWorld {
 				}
 
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
-					ClientFloatingText textObject = (ClientFloatingText) object;
+					ClientText textObject = (ClientText) object;
 
+					textObject.update();
+					if (textObject.exists())
+					{
 					graphics.setColor(textObject.getColor());
 					graphics.setFont(DAMAGE_FONT);
 					graphics.drawString(textObject.getText(), x, y);
-
-					textObject.update();
+					}
 					// System.out.println("Drawing floating text");
 				} else {
 					Image image = object.getImage();
@@ -954,7 +955,7 @@ public class ClientWorld {
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
 
-									graphics.setColor(YELLOW_TEXT);
+									graphics.setColor(Color.YELLOW);
 
 									graphics.drawString(
 											currentText,
@@ -984,10 +985,7 @@ public class ClientWorld {
 			}
 
 			for (ClientObject object : objectsToRemove) {
-				if (object.getType().charAt(0)==ServerWorld.TEXT_TYPE)
-				{
-					setNoOfText(getNoOfText()-1);
-				}
+				object.destroy();
 				remove(object.getID());
 			}
 			objectsToRemove.clear();
@@ -1013,7 +1011,7 @@ public class ClientWorld {
 		}
 
 		if (displayedText != null) {
-			graphics.setColor(PURPLE_TEXT);
+			graphics.setColor(Images.PURPLE_TEXT);
 			graphics.setFont(MESSAGE_FONT);
 			graphics.drawString(displayedText,
 					(int) (Client.SCREEN_WIDTH / 2
@@ -1036,7 +1034,7 @@ public class ClientWorld {
 						.getRedCastleHP() / (client.getRedCastleMaxHP()))),
 				ClientFrame.getScaledHeight(20));
 
-		graphics.setColor(PURPLE_TEXT);
+		graphics.setColor(Images.PURPLE_TEXT);
 		graphics.drawRect(ClientFrame.getScaledWidth(100),
 				ClientFrame.getScaledHeight(980),
 				ClientFrame.getScaledWidth(500),
@@ -1099,7 +1097,8 @@ public class ClientWorld {
 		// graphics.fillRect(row*16, column*16, 16,16);
 		// }
 		// }
-		System.out.println(noOfText);
+		
+		//System.out.println(noOfObjects);
 	}
 
 	public void clear() {
@@ -1126,17 +1125,19 @@ public class ClientWorld {
 		this.worldTime = worldTime;
 	}
 
-	public int getNoOfText() {
-		return noOfText;
-	}
-
-	public void setNoOfText(int noOfText) {
-		this.noOfText = noOfText;
-	}
-
 	public void addToRemove(ClientObject object)
 	{
 		objectsToRemove.add(object);
+	}
+	
+	public synchronized void addObjectNo()
+	{
+		noOfObjects++;
+	}
+	
+	public synchronized void subtractObjectNo()
+	{
+		noOfObjects--;
 	}
 	
 }

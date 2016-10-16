@@ -1267,7 +1267,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				amount = 1;
 			}
 
-			if (action.equals("BLOCK")) {
+			char textColour = ServerText.RED_TEXT;
+			if (action == "BLOCK") {
+				textColour = ServerText.BLUE_TEXT;
 				amount = 0;
 			}
 
@@ -1276,8 +1278,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 					- getHeight() / 3;
+			
+			
+			
 			world.add(new ServerText(damageX, damageY,
-					Integer.toString(amount), ServerText.RED_TEXT, world));
+					Integer.toString(amount), textColour, world));
 
 			// Play the death animation of the player when the HP drops to 0 or
 			// below, and eventually respawn the player
