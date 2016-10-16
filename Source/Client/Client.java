@@ -1117,6 +1117,7 @@ ActionListener, MouseMotionListener {
 			if(castleShop != null)
 			{
 				System.out.println("trying to close castle shop");
+				
 				closeCastleShop();
 			}
 		} else if (key.getKeyCode() == KeyEvent.VK_ENTER) {
