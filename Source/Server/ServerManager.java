@@ -4,7 +4,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
 import Client.ClientFrame;
+import Imports.Maps;
 
 public class ServerManager implements Runnable {
 
@@ -48,6 +50,8 @@ public class ServerManager implements Runnable {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
 		}
+		
+		Maps.importMaps();
 	}
 	
 	@Override

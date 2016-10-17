@@ -12,15 +12,13 @@ import Server.ServerObject;
 public class Map
 {
 	private String name;
-	private long ID;
 	private char[][]tileGrid;
 	private char[][]collisionGrid;
 	private ArrayList<ServerObject>[][]objectGrid;
 	private ArrayList<String> startingObjects;
-	public Map(String name, long ID, char[][] tileGrid, char[][] collisionGrid, ArrayList<ServerObject>[][]objectGrid, ArrayList<String> startingObjects)
+	public Map(String name, char[][] tileGrid, char[][] collisionGrid, ArrayList<ServerObject>[][]objectGrid, ArrayList<String> startingObjects)
 	{
 		this.name=name;
-		this.ID = ID;
 		this.tileGrid = tileGrid;
 		this.collisionGrid = collisionGrid;
 		this.objectGrid = objectGrid;
@@ -31,12 +29,6 @@ public class Map
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public long getID() {
-		return ID;
-	}
-	public void setID(int iD) {
-		ID = iD;
 	}
 	public char[][] getTileGrid() {
 		return tileGrid;
@@ -49,9 +41,6 @@ public class Map
 	}
 	public void setCollisionGrid(char[][] collisionGrid) {
 		this.collisionGrid = collisionGrid;
-	}
-	public void setID(long iD) {
-		ID = iD;
 	}
 	public ArrayList<ServerObject>[][] getObjectGrid() {
 		return objectGrid;

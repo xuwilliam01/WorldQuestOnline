@@ -133,9 +133,6 @@ public class MainMenu implements KeyListener {
 		main = this;
 		Thread loadImages = new Thread(new LoadImages());
 		loadImages.start();
-		
-		Thread loadMaps = new Thread(new LoadMaps());
-		loadMaps.start();
 
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment
@@ -195,7 +192,7 @@ public class MainMenu implements KeyListener {
 			}
 		}
 
-		while (!(imagesLoaded&&mapsLoaded)) {
+		while (!(imagesLoaded)) {
 			try {
 				Thread.sleep(10);
 				if (imageLoadFailed) {
@@ -226,15 +223,6 @@ public class MainMenu implements KeyListener {
 		public void run() {
 			Images.importImages();
 			imagesLoaded = true;
-		}
-	}
-	
-	private class LoadMaps implements Runnable {
-
-		@Override
-		public void run() {
-			Maps.importMaps();
-			mapsLoaded = true;
 		}
 	}
 

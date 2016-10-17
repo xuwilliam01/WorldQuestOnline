@@ -10,9 +10,6 @@ import java.util.StringTokenizer;
 
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Creatures.ServerCastle;
-import Server.Creatures.ServerPlayer;
-import Server.Spawners.ServerSpawner;
 
 public class Maps 
 {
@@ -52,15 +49,6 @@ public class Maps
 				e.printStackTrace();
 			}
 			
-			long ID = 0;
-			
-			try {
-				ID = Long.parseLong((worldInput.readLine()));
-			} catch (NumberFormatException e2) {
-				e2.printStackTrace();
-			} catch (IOException e2) {
-				e2.printStackTrace();
-			}
 			
 			StringTokenizer tokenizer = null;
 			try {
@@ -151,7 +139,7 @@ public class Maps
 				e.printStackTrace();
 			}
 			
-			maps.add(new Map(mapFile, ID, tileGrid, collisionGrid, objectGrid, startingObjects));
+			maps.add(new Map(mapFile, tileGrid, collisionGrid, objectGrid, startingObjects));
 		}
 		
 		try {
@@ -161,23 +149,6 @@ public class Maps
 			e.printStackTrace();
 		}
 		
-	}
-	
-	/**
-	 * Get a map using its ID
-	 * @param ID
-	 * @return
-	 */
-	public static Map getMap(long ID)
-	{
-		for (Map map:maps)
-		{
-			if (map.getID()==ID)
-			{
-				return map;
-			}
-		}
-		return null;
 	}
 	
 	/**
