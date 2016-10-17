@@ -39,6 +39,7 @@ import Client.ClientInventory;
 import Client.ClientLobby;
 import Client.ClientWorld;
 import Imports.Images;
+import Imports.Maps;
 import START.StartGame;
 import Server.Server;
 import Server.ServerFrame;
@@ -84,6 +85,7 @@ public class MainMenu implements KeyListener {
 	private static String playerName;
 
 	private boolean imagesLoaded = false;
+	private boolean mapsLoaded = false;
 
 	/**
 	 * Whether or not image loading has failed
@@ -131,6 +133,9 @@ public class MainMenu implements KeyListener {
 		main = this;
 		Thread loadImages = new Thread(new LoadImages());
 		loadImages.start();
+		
+		Thread loadMaps = new Thread(new LoadMaps());
+		loadMaps.start();
 
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment
@@ -190,7 +195,7 @@ public class MainMenu implements KeyListener {
 			}
 		}
 
-		while (!imagesLoaded) {
+		while (!(imagesLoaded&&mapsLoaded)) {
 			try {
 				Thread.sleep(10);
 				if (imageLoadFailed) {
@@ -221,6 +226,15 @@ public class MainMenu implements KeyListener {
 		public void run() {
 			Images.importImages();
 			imagesLoaded = true;
+		}
+	}
+	
+	private class LoadMaps implements Runnable {
+
+		@Override
+		public void run() {
+			Maps.importMaps();
+			mapsLoaded = true;
 		}
 	}
 

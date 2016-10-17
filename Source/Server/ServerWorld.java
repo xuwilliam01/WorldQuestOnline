@@ -7,6 +7,8 @@ import java.util.ConcurrentModificationException;
 import java.util.StringTokenizer;
 
 import Imports.ImageReferencePair;
+import Imports.Map;
+import Imports.Maps;
 import Server.Creatures.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
@@ -294,16 +296,6 @@ public class ServerWorld {
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
-		objectTypes = new ServerObject[] {
-				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
-				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
-				new ServerChest(0, 0, this),
-				new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
-				new ServerVendor(0, 0, this, "VENDOR_LEFT"),
-				new ServerSlimeSpawner(0, 0, this),
-				new ServerBatSpawner(0, 0, this),
-				new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
-				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
 		newWorld();
 	}
 
@@ -335,81 +327,19 @@ public class ServerWorld {
 	 * 
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	public void newWorld() throws IOException {
-		BufferedReader worldInput = new BufferedReader(new FileReader(new File(
-				"Resources", mapFile.toLowerCase())));
-
-		StringTokenizer tokenizer = new StringTokenizer(worldInput.readLine());
-
-		// Add to both sides to make room for the invisible walls
-		tileGrid = new char[Integer.parseInt(tokenizer.nextToken()) + 6][Integer
-				.parseInt(tokenizer.nextToken()) + 6];
-
-		// Collision grid mirrors tileGrid but is simpler
-		collisionGrid = new char[tileGrid.length][tileGrid[0].length];
-
-		// Make object grid
-		objectGrid = new ArrayList[tileGrid.length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1][tileGrid[0].length
-				/ (OBJECT_TILE_SIZE / TILE_SIZE) + 1];
-
-		// Initialize each arraylist of objects in the objectGridWo
-		for (int row = 0; row < objectGrid.length; row++) {
-			for (int column = 0; column < objectGrid[0].length; column++) {
-				objectGrid[row][column] = new ArrayList<ServerObject>();
-			}
-		}
-
-		String line;
-		for (int row = 3; row < tileGrid.length - 3; row++) {
-			line = worldInput.readLine();
-			for (int col = 3; col < tileGrid[row].length - 3; col++)
-				tileGrid[row][col] = line.charAt(col - 3);
-		}
-
-		// Make a border around the grid
-		for (int col = 0; col < tileGrid[0].length; col++) {
-			tileGrid[0][col] = '_';
-			tileGrid[1][col] = '_';
-			tileGrid[2][col] = '_';
-			tileGrid[tileGrid.length - 1][col] = '_';
-			tileGrid[tileGrid.length - 2][col] = '_';
-			tileGrid[tileGrid.length - 3][col] = '_';
-		}
-
-		// Make a border around the grid
-		for (int row = 0; row < tileGrid.length; row++) {
-			tileGrid[row][0] = '_';
-			tileGrid[row][1] = '_';
-			tileGrid[row][2] = '_';
-			tileGrid[row][tileGrid[0].length - 1] = '_';
-			tileGrid[row][tileGrid[0].length - 2] = '_';
-			tileGrid[row][tileGrid[0].length - 3] = '_';
-		}
-
-		// Copy tileGrid to collision grid for easier collision detection
-		// '#' is a solid tile
-		// '_' is a platform tile
-		// ' ' is a background tile
-
-		for (int row = 0; row < tileGrid.length; row++) {
-			for (int col = 0; col < tileGrid[0].length; col++) {
-				if (tileGrid[row][col] >= 'A') {
-					collisionGrid[row][col] = SOLID_TILE;
-				} else if (tileGrid[row][col] >= '0'
-						|| tileGrid[row][col] == ' ') {
-					collisionGrid[row][col] = BACKGROUND_TILE;
-				} else {
-					collisionGrid[row][col] = PLATFORM_TILE;
-				}
-			}
-		}
-
+		// Get the map from pre-existing loading
+		Map map = Maps.getMapWithName(mapFile);
+		tileGrid = map.getTileGrid();
+		collisionGrid = map.getCollisionGrid();
+		objectGrid = map.getObjectGrid();
+		ArrayList<String> startingObjects = map.getStartingObjects();
+		
+		StringTokenizer tokenizer = null;
+		
 		// Add objects to the grid
-		int numObjects = Integer.parseInt(worldInput.readLine());
-		for (int object = 0; object < numObjects; object++) {
-			tokenizer = new StringTokenizer(worldInput.readLine());
+		for (String object:startingObjects) {
+			tokenizer = new StringTokenizer(object);
 			int row = Integer.parseInt(tokenizer.nextToken()) + 3;
 			int col = Integer.parseInt(tokenizer.nextToken()) + 3;
 			char ref = tokenizer.nextToken().charAt(0);
@@ -447,7 +377,6 @@ public class ServerWorld {
 					add(newObject);
 				}
 		}
-		worldInput.close();
 
 		worldTime = DAY_COUNTERS / 12 * 11
 				+ (int) (Math.random() * (DAY_COUNTERS / 6));

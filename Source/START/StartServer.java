@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Client.ClientFrame;
 import Imports.GameImage;
 import Imports.Images;
+import Imports.Maps;
 import Menu.MainMenu;
 import Server.ServerManager;
 
@@ -15,6 +16,7 @@ public class StartServer {
 	public static void main(String[] args) {
 		GameImage.hostingServer=true;
 		Images.importImages();
+		Maps.importMaps();
 
 		ServerManager server = new ServerManager(MainMenu.DEF_PORT, MAX_ROOMS);
 
