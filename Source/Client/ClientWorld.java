@@ -764,15 +764,15 @@ public class ClientWorld {
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
 			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
-					* 0.90
+					* 0.95
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
 				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.90;
+			alphaMultiplier = 0.95;
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.90
+			alphaMultiplier = 0.95
 					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
-					* 0.90
+					* 0.95
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
@@ -795,8 +795,7 @@ public class ClientWorld {
 			if (star.exists()) {
 				if (star.getAlpha() > 0) {
 
-					graphics.setColor(new Color(1f, 1f, 1f, (float) (1f * star
-							.getAlpha())));
+					graphics.setColor(Images.whites[Math.min(254,(int)(star.getAlpha()*255))]);
 					graphics.fillRect(star.getX(), star.getY(), star.getSize(),
 							star.getSize());
 				}

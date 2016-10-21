@@ -178,12 +178,11 @@ public class MainMenu implements KeyListener {
 				int enableCloudsAndStars = JOptionPane
 						.showConfirmDialog(
 								null,
-								"Would you like to enable in-game clouds and stars? (May reduce performance on low-end machines)",
+								"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
 								"Select Game Quality",
 								JOptionPane.YES_NO_OPTION);
-				if (enableCloudsAndStars != JOptionPane.YES_OPTION) {
+				if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
 					ClientWorld.NO_OF_CLOUDS = 0;
-					ClientWorld.MAX_NO_OF_STARS = 0;
 				}
 
 				break;

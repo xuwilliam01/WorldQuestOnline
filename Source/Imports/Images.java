@@ -37,6 +37,7 @@ public class Images {
 	public final static Color PURPLE = new Color(82, 42, 122);
 	public final static Color GRAY = Color.gray;
 	public final static Color BLACK = Color.black;
+	public final static Color WHITE = Color.white;
 
 	/**
 	 * Array of yellow starting from lowest opacity to highest opacity
@@ -62,6 +63,11 @@ public class Images {
 	 * Array of blacks starting from lowest opacity to highest opacity
 	 */
 	public static Color[] blacks = new Color[255];
+	
+	/**
+	 * Array of whites starting from lowest opacity to highest opacity
+	 */
+	public static Color[] whites = new Color[255];
 	
 	/**
 	 * The format of the images (.jpg, .png, .gif, etc.)
@@ -147,6 +153,9 @@ public class Images {
 	 */
 	public static void importImages() {
 		
+		if (imported)
+			return;
+		
 		// Create array of yellows with varying opacity
 		for (int no = 0; no < yellows.length;no++)
 		{
@@ -171,14 +180,17 @@ public class Images {
 			reds[no] = new Color (RED.getRed(), RED.getGreen(), RED.getBlue(), (int)((1.0*(no+1)/reds.length)*255.0));
 		}
 		
-		// Create array of reds with varying opacity
+		// Create array of blacks with varying opacity
 		for (int no = 0; no < blacks.length;no++)
 		{
 			blacks[no] = new Color (BLACK.getRed(), BLACK.getGreen(), BLACK.getBlue(), (int)((1.0*(no+1)/blacks.length)*255.0));
 		}
 		
-		if (imported)
-			return;
+		// Create array of whites with varying opacity
+		for (int no = 0; no < whites.length;no++)
+		{
+			whites[no] = new Color (WHITE.getRed(), WHITE.getGreen(), WHITE.getBlue(), (int)((1.0*(no+1)/whites.length)*255.0));
+		}
 		
 		imageArray = new GameImage[10000];
 
