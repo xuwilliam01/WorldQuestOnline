@@ -835,7 +835,7 @@ ActionListener, MouseMotionListener {
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + getCurrentFPS(),
+		graphics.drawString("FPS: " + Math.min(60,getCurrentFPS()),
 				Client.SCREEN_WIDTH - 60, 40);
 
 		// Set the time of day to be displayed

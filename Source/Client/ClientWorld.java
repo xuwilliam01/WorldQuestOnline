@@ -451,7 +451,7 @@ public class ClientWorld {
 					case corner0:
 					case corner0WithSky:
 						newGrid[row][col] = (char) 164; // stone_corner0
-						if (Math.random() > 0.95) {
+						if (Math.random() > 0.92) {
 							newGrid[row - 1][col] = (char) (189 + (int) (Math
 									.random() * 4)); // srocks
 						}
@@ -459,7 +459,7 @@ public class ClientWorld {
 					case corner1:
 					case corner1WithSky:
 						newGrid[row][col] = (char) 165; // stone_corner1
-						if (Math.random() > 0.95) {
+						if (Math.random() > 0.92) {
 							newGrid[row - 1][col] = (char) (189 + (int) (Math
 									.random() * 4)); // srocks
 						}
@@ -489,7 +489,7 @@ public class ClientWorld {
 						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (170 + (int) (Math
 									.random() * 2)); // stone_top 0-1
-							if (Math.random() > 0.95) {
+							if (Math.random() > 0.92) {
 								newGrid[row - 1][col] = (char) (189 + (int) (Math
 										.random() * 4)); // srocks
 							}
@@ -764,15 +764,15 @@ public class ClientWorld {
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
 				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
 			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
-					* 0.95
+					* 0.92
 					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
 				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.95;
+			alphaMultiplier = 0.92;
 		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.95
+			alphaMultiplier = 0.92
 					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
-					* 0.95
+					* 0.92
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
@@ -895,10 +895,6 @@ public class ClientWorld {
 				if (object.getID() == player.getID()) {
 					player.setX(object.getX());
 					player.setY(object.getY());
-				}
-
-				if (object.getX() == player.getX()
-						&& object.getY() == player.getY()) {
 					x = centreX;
 					y = centreY;
 				}
