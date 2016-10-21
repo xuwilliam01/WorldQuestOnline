@@ -75,7 +75,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private ServerCastle castle = null;
 	private boolean weOpened = false;
-	
+
 	/**
 	 * Whether the game is over or not
 	 */
@@ -305,8 +305,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0, world);
 		setHead(newHair);
 		world.add(newHair);
-	
-		
+
 		// Set the initial variables
 		actionDelay = 20;
 		actionSpeed = 13;
@@ -331,14 +330,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		sendMap();
 
 		// Send the player's information
-		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " " + toChars((int) (y + 0.5))
-				+ " "
+		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " "
+				+ toChars((int) (y + 0.5)) + " "
 				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
 				+ " " + getTeam());
 
-		
-		//System.out.printf("%.2f %.2f x, y%n", castle.getX(), castle.getY());
-		
+		// System.out.printf("%.2f %.2f x, y%n", castle.getX(), castle.getY());
+
 		baseImage = "BASE_" + skinColour;
 
 		// Give the player random start weapon(s)
@@ -627,15 +625,17 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								y = ((ServerProjectile) object).getDrawY();
 								break;
 							case ServerWorld.TEXT_TYPE:
-								queueMessage("t " + toChars(object.getID()) + " " + toChars(x)
-										+ " " + toChars(y) + " " + object.getImage());
+								queueMessage("t " + toChars(object.getID())
+										+ " " + toChars(x) + " " + toChars(y)
+										+ " " + object.getImage());
 								continue;
 							}
 
 							// If it's any other object
-							queueMessage("O " + toChars(object.getID()) + " " + toChars(x) + " "
-									+ toChars(y) + " " + object.getImageIndex() + " "
-									+ team + " " + object.getType() + " " + "{");
+							queueMessage("O " + toChars(object.getID()) + " "
+									+ toChars(x) + " " + toChars(y) + " "
+									+ object.getImageIndex() + " " + team + " "
+									+ object.getType() + " " + "{");
 
 						} else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
 							queueMessage("R " + toChars(object.getID()));
@@ -657,11 +657,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				vendor = null;
 				queueMessage("C");
 			}
-			
-			if(castle != null && castle.isOpen() && weOpened && (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
+
+			if (castle != null
+					&& castle.isOpen()
+					&& weOpened
+					&& (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
 				castle.close();
 				weOpened = false;
-				System.out.println("closing: "+collidesWith(castle));
+				System.out.println("closing: " + collidesWith(castle));
 				queueMessage("C");
 			}
 
@@ -743,211 +746,223 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
+				String[] tokens = command.split(" ");
 
 				// Execute the player's action based on the command received
 				// from the client
-				if ((command.charAt(0) == 'A' || command.charAt(0) == 'a')
-						&& isOnSurface() && !performingAction && isAlive()) {
-					// If the client tries to send an invalid message
-					try {
-						String[] tokens = command.split(" ");
-						performingAction = true;
-						newMouseX = Integer.parseInt(tokens[1]);
-						newMouseY = Integer.parseInt(tokens[2]);
-						if (command.charAt(0) == 'a') {
-							rightClick = true;
-						} else {
-							rightClick = false;
+				switch (tokens[0]) {
+				case "A":
+				case "a":
+					if (isOnSurface() && ! performingAction && isAlive())
+					{
+						// If the client tries to send an invalid message
+						try {
+							performingAction = true;
+							newMouseX = Integer.parseInt(tokens[1]);
+							newMouseY = Integer.parseInt(tokens[2]);
+							if (command.charAt(0) == 'a') {
+								rightClick = true;
+							} else {
+								rightClick = false;
+							}
+						} catch (Exception e) {
 						}
-					} catch (Exception e) {
-
 					}
-				} else if (command.equals("!a") && isAlive()) {
-					actionCounter = actionDelay;
-				} else if (command.equals("D") && isAlive()) {
+					break;
+				case "!a": 
+					if (isAlive()) {
+						actionCounter = actionDelay;
+					}
+					break;
+				case "D": 
+					if ( isAlive()) {
 					isDropping = true;
-				} else if (command.equals("!D") && isAlive()) {
+					}
+					break;
+				case "!D": 
+					if ( isAlive()) {
 					isDropping = false;
-				} else if (command.equals("R") && isAlive()) {
+					}
+					break;
+				case "R": 
+					if ( isAlive()) {
 					setHSpeed(horizontalMovement);
 					movingDirection = 1;
-				} else if (command.equals("!R")) {
+					}
+					break;
+				case "!R": 
 					movingDirection = 0;
 					if (getHSpeed() > 0) {
 						setHSpeed(0);
 					}
-				} else if (command.equals("L") && isAlive()) {
+					break;
+				case "L": 
+					if ( isAlive()) {
 					movingDirection = -1;
 					setHSpeed(-horizontalMovement);
-				} else if (command.equals("!L")) {
+					}
+					break;
+				case "!L": 
 					movingDirection = 0;
 					if (getHSpeed() < 0) {
 						setHSpeed(0);
 					}
-				} else if (command.equals("U") && isOnSurface() && isAlive()
-						&& !inAction()) {
+					break;
+				case "U": 
+					if (isOnSurface() && isAlive() && !inAction()) {
 					setVSpeed(-verticalMovement);
 					setOnSurface(false);
-				} else if (command.equalsIgnoreCase("X")
-						&& world.getWorldCounter() - joinTime <= 1800) {
-					inflictDamage(10000, this);
-					if (getTeam() == RED_TEAM) {
-						setTeam(BLUE_TEAM);
-						if(castle != null)
-							castle = world.getBlueCastle();
-						while (true) {
-							try {
-								if (!world.getBlueTeam().contains(this))
-									world.getBlueTeam().add(this);
-								world.getRedTeam().remove(this);
-								break;
-							} catch (ConcurrentModificationException E) {
-							}
-						}
-					} else {
-						setTeam(RED_TEAM);
-						if(castle != null)
-							castle = world.getRedCastle();
-						while (true) {
-							try {
-								world.getBlueTeam().remove(this);
-								if (!world.getRedTeam().contains(this))
-									world.getRedTeam().add(this);
-								break;
-							} catch (ConcurrentModificationException E) {
-
-							}
-						}
 					}
-
-				} else if (command.equals("DR")) {
+					break;
+				case "DR": 
 					setDirection("RIGHT");
-				} else if (command.equals("DL")) {
+					break;
+				case "DL":
 					setDirection("LEFT");
-				} else if (command.equals("P")) {
+					break;
+				case "P":
 					sendMessage("P");
-				}
-
-				// Player uses the chat
-				else if (command.length() >= 3 && command.charAt(0) == 'C') {
-					String message = command.substring(2);
-					String[] tokens = message.split(" ");
-					if (tokens[0].equals("/t")) {
-						engine.broadCastTeam("CH " + "T "
-								+ (getTeam() + getName()).split(" ").length
-								+ " " + getTeam() + getName() + " "
-								+ tokens.length + " " + message, getTeam());
-					} else {
-						engine.broadcast("CH " + "E "
-								+ (getTeam() + getName()).split(" ").length
-								+ " " + getTeam() + getName() + " "
-								+ tokens.length + " " + message);
-
-					}
-
-					String text = "";
-					for (int no = 0; no < message.length(); no++) {
-						if (message.charAt(no) == ' ') {
-							text += '_';
+					break;
+				case "C":
+					// Player uses the chat
+					if (command.length() >= 3)
+					{
+						String message = command.substring(2);
+						String[] tokens2 = message.split(" ");
+						if (tokens2[0].equals("/t")) {
+							engine.broadCastTeam("CH " + "T "
+									+ (getTeam() + getName()).split(" ").length
+									+ " " + getTeam() + getName() + " "
+									+ tokens2.length + " " + message, getTeam());
 						} else {
-							text += message.charAt(no);
+							engine.broadcast("CH " + "E "
+									+ (getTeam() + getName()).split(" ").length
+									+ " " + getTeam() + getName() + " "
+									+ tokens2.length + " " + message);
+
+						}
+
+						String text = "";
+						for (int no = 0; no < message.length(); no++) {
+							if (message.charAt(no) == ' ') {
+								text += '_';
+							} else {
+								text += message.charAt(no);
+							}
+						}
+
+						if (text.length() > 0) {
+							currentText = text;
+							textStartTime = world.getWorldCounter();
+							textDuration = (int) (60 * 3 + text.length() * 60 * 0.1);
 						}
 					}
+					break;
+				case "Dr":
+						try {
+							switch (command.charAt(3))
+							{
+							case 'I':
+								// If dropping from inventory
+								super.drop(command.substring(5));
+								break;
+							case 'W':
+								// If dropping from equipped
+								drop(Integer.parseInt(command.substring(5)));
+								break;
+							case 'U':
+								// If using a potion
+								super.use(command.substring(5));
+								break;
+							}
+						}
+						// If the player sends a bad message
+						catch (Exception E) {
+						}
+					break;
 
-					if (text.length() > 0) {
-						currentText = text;
-						textStartTime = world.getWorldCounter();
-						textDuration = (int) (60 * 3 + text.length() * 60 * 0.1);
-					}
-
-				} else if (command.length() >= 2
-						&& command.substring(0, 2).equals("Dr")) {
+				case "M":
 					try {
-						// If dropping from inventory
-						if (command.charAt(2) == 'I')
-							super.drop(command.substring(4));
-						// If dropping from equipped
-						else if (command.charAt(2) == 'W')
-							drop(Integer.parseInt(command.substring(4)));
-						// If using a potion
-						else if (command.charAt(2) == 'U')
-							super.use(command.substring(4));
-					}
-					// If the player sends a bad message
-					catch (Exception E) {
-
-					}
-				} else if (command.charAt(0) == 'M') {
-					try {
+						switch (command.charAt(2))
+						{
 						// Move to inventory
-						if (command.charAt(1) == 'I') {
-							unequip(Integer.parseInt(command.substring(3)));
-						}
+						case 'I':
+							unequip(Integer.parseInt(command.substring(4)));
+							break;
 						// Move to equipped weapons
-						else if (command.charAt(1) == 'W') {
-							equipWeapon(command.substring(3));
-						} else if (command.charAt(1) == 'A') {
-							equipArmour(command.substring(3));
+						case 'W':
+							equipWeapon(command.substring(4));
+							break;
+						// Move to equipped armors
+						case 'A':
+							equipArmour(command.substring(4));
+							break;
 						}
 					} catch (Exception E) {
-
 					}
-				}
-				// This is temporary for selecting a gun or a sword
-				else if (command.charAt(0) == 'W') {
+					break;
+		
+				case "W":
 					try {
-						weaponSelected = command.charAt(1);
+						weaponSelected = command.charAt(2);
 					} catch (Exception E) {
+					}
+					break;
+				case "B":
+					if (vendor != null)
+					{
+						ServerItem vendorItem = null;
+						String itemName = "";
+						try {
+							itemName = command.substring(2);
+						} catch (Exception E) {
+							continue;
+						}
+						for (ServerItem item : vendor.getInventory())
+							if (item.getType().equals(itemName))
+								vendorItem = item;
 
+						if (vendorItem != null
+								&& getMoney() >= vendorItem.getCost()) {
+							decreaseMoney(vendorItem.getCost());
+							vendor.drop(vendorItem.getType());
+						}
 					}
-				} else if (command.charAt(0) == 'B' && vendor != null) {
-					ServerItem vendorItem = null;
-					String itemName = "";
-					try {
-						itemName = command.substring(2);
-					} catch (Exception E) {
-						continue;
-					}
-					for (ServerItem item : vendor.getInventory())
-						if (item.getType().equals(itemName))
-							vendorItem = item;
-
-					if (vendorItem != null
-							&& getMoney() >= vendorItem.getCost()) {
-						decreaseMoney(vendorItem.getCost());
-						vendor.drop(vendorItem.getType());
-					}
-				} else if (command.charAt(0) == 'E') {
+					break;
+				case "E":
 					interact();
-				} else if (command.charAt(0) == 'S' && vendor != null) {
-					String type = "";
-					try {
-						type = command.substring(2);
-					} catch (Exception E) {
-						continue;
+					break;
+				case "S":
+					if (vendor!=null)
+					{
+						String type = "";
+						try {
+							type = command.substring(2);
+						} catch (Exception E) {
+							continue;
+						}
+						if (!type.equals(ServerWorld.MONEY_TYPE)) {
+							sell(type);
+							queueMessage("SI " + type);
+						}
 					}
-					if (!type.equals(ServerWorld.MONEY_TYPE)) {
-						sell(type);
-						queueMessage("SI " + type);
-					}
-				} else if (command.length() > 2
-						&& command.substring(0, 2).equals("Na")) {
+					break;
+				case "Na":
 					try {
 						setName(command.substring(3));
 					} catch (Exception E) {
 						continue;
 					}
 					// Maybe broadcast name change later
-				}
-				// Adjust the screen width and height for the player
-				else if (command.charAt(0) == 's') {
+					break;
+				case "s":
 					try {
-						String[] tokens = command.split(" ");
 						playerScreenWidth = Integer.parseInt(tokens[1]);
 						playerScreenHeight = Integer.parseInt(tokens[2]);
 					} catch (Exception E) {
 						continue;
 					}
+					break;
 				}
 			} catch (IOException e) {
 				break;
@@ -1283,9 +1298,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 					- getHeight() / 3;
-			
-			
-			
+
 			world.add(new ServerText(damageX, damageY,
 					Integer.toString(amount), textColour, world));
 
@@ -1379,23 +1392,20 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										vendor = null;
 									}
 									return;
-								}
-								else if (object.getType().equals(
-										ServerWorld.CASTLE_TYPE) && ((ServerCreature)object).getTeam() == getTeam()) {
-									//Make a shop
-									if(castle == null)
-										if(getTeam() == RED_TEAM)
+								} else if (object.getType().equals(
+										ServerWorld.CASTLE_TYPE)
+										&& ((ServerCreature) object).getTeam() == getTeam()) {
+									// Make a shop
+									if (castle == null)
+										if (getTeam() == RED_TEAM)
 											castle = world.getRedCastle();
 										else
 											castle = world.getBlueCastle();
-									if(!castle.isOpen())
-									{
+									if (!castle.isOpen()) {
 										queueMessage("CS");
 										castle.open();
 										weOpened = true;
-									}
-									else if (castle.isOpen() && weOpened)
-									{
+									} else if (castle.isOpen() && weOpened) {
 										castle.close();
 										weOpened = false;
 									}
@@ -1751,18 +1761,16 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void setCurrentText(String currentText) {
 		this.currentText = currentText;
 	}
-	
-	public String toChars(int y)
-	{
+
+	public String toChars(int y) {
 		int x = y;
 		String ret = "";
-		
-		while(x > 0)
-		{
-			ret += (char)(x%95 + 33);
+
+		while (x > 0) {
+			ret += (char) (x % 95 + 33);
 			x /= 95;
 		}
-		//System.out.println("StringRep: " +y+" "+ret);
+		// System.out.println("StringRep: " +y+" "+ret);
 		return ret;
 	}
 

@@ -784,7 +784,7 @@ ActionListener, MouseMotionListener {
 			inventory.getEquippedWeapons()[weaponSelected]
 					.setBorder(BorderFactory.createLineBorder(new Color(240,
 							240, 240)));
-		output.println("W" + weaponSelected);
+		output.println("W " + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}

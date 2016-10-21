@@ -234,7 +234,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (item.getAmount() > 1)
 		{
 			item.decreaseAmount();
-			client.printToServer("DrI " + item.getType());
+			client.printToServer("Dr I " + item.getType());
 		}
 		else
 		{
@@ -250,7 +250,7 @@ public class ClientInventory extends JPanel implements ActionListener
 						if (inventory[row][col] == item)
 						{
 							inventory[row][col] = null;
-							client.printToServer("DrI " + item.getType());
+							client.printToServer("Dr I " + item.getType());
 							repaint();
 							return;
 						}
@@ -259,14 +259,14 @@ public class ClientInventory extends JPanel implements ActionListener
 			else if (pos == ServerPlayer.DEFAULT_ARMOUR_SLOT)
 			{
 				equippedArmour = null;
-				client.printToServer("DrW " + item.getEquipSlot());
+				client.printToServer("Dr W " + item.getEquipSlot());
 
 			}
 			// If it's a weapon
 			else
 			{
 				equippedWeapons[pos] = null;
-				client.printToServer("DrW " + item.getEquipSlot());
+				client.printToServer("Dr W " + item.getEquipSlot());
 
 				// If we dropped the weapon we selected, select a new weapon
 				if (client.getWeaponSelected() == pos)
@@ -316,7 +316,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (item.getAmount() > 1)
 		{
 			item.decreaseAmount();
-			client.printToServer("DrU " + item.getType());
+			client.printToServer("Dr U " + item.getType());
 		}
 		else
 		{
@@ -331,7 +331,7 @@ public class ClientInventory extends JPanel implements ActionListener
 					if (inventory[row][col] == item)
 					{
 						inventory[row][col] = null;
-						client.printToServer("DrU " + item.getType());
+						client.printToServer("Dr U " + item.getType());
 						repaint();
 						return;
 					}

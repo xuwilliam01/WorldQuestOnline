@@ -69,13 +69,13 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("+%d HP",ServerPotion.HEAL_AMOUNT));
 			break;
 		case ServerWorld.MAX_HP_TYPE:
-			setToolTipText(String.format("Max HP +%d",ServerPotion.MAX_HP_INCREASE));
+			setToolTipText(String.format("M ax HP +%d",ServerPotion.MAX_HP_INCREASE));
 			break;
 		case ServerWorld.MANA_POTION_TYPE:
 			setToolTipText(String.format("+%d Mana",ServerPotion.MANA_AMOUNT));
 			break;
 		case ServerWorld.MAX_MANA_TYPE:
-			setToolTipText(String.format("Max Mana +%d",ServerPotion.MAX_MANA_INCREASE));
+			setToolTipText(String.format("M ax Mana +%d",ServerPotion.MAX_MANA_INCREASE));
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
 			setToolTipText(String.format("+%d Base Damage",ServerPotion.DMG_AMOUNT));
@@ -87,7 +87,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("+%d Jump",ServerPotion.JUMP_AMOUNT));
 			break;
 		case ServerWorld.MONEY_TYPE:
-			setToolTipText("Money");
+			setToolTipText("M oney");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setToolTipText(String.format("Steel Armour (%.0f%% Damage Reduction)",ServerArmour.STEEL_DEF*100));
@@ -171,7 +171,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("Steel Bow (+%d Damage)",ServerWeapon.STEELBOW_DMG));
 			break;
 		case ServerWorld.MEGABOW_TYPE:
-			setToolTipText(String.format("Mega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
+			setToolTipText(String.format("M ega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setToolTipText(String.format("<html>Fire Wand (+%d Damage)<p>ManaCost: %d",ServerWeapon.FIREWAND_DMG,ServerWeapon.FIREWAND_MANA));
@@ -321,7 +321,7 @@ public class ClientItem extends JButton implements MouseListener{
 							if(invGrid[row][col] == null)
 							{
 								//Move back to inventory
-								inventory.getClient().printToServer("MI "+equipSlot);
+								inventory.getClient().printToServer("M I "+equipSlot);
 								setBorder(BorderFactory.createEmptyBorder());
 								selected = false;
 
@@ -366,7 +366,7 @@ public class ClientItem extends JButton implements MouseListener{
 					if(pos == ServerPlayer.MAX_WEAPONS)
 						return;
 
-					inventory.getClient().printToServer("MW "+type);
+					inventory.getClient().printToServer("M W "+type);
 					selected = true;
 					inventory.getInventory()[row][col] = null;
 					inventory.getEquippedWeapons()[pos] = this;
@@ -424,7 +424,7 @@ public class ClientItem extends JButton implements MouseListener{
 								break;
 						}
 					}		
-					inventory.getClient().printToServer("MA "+type);
+					inventory.getClient().printToServer("M A "+type);
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
