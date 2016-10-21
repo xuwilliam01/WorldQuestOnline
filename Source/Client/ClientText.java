@@ -76,20 +76,20 @@ public class ClientText extends ClientObject {
 		case ServerText.PURPLE_TEXT:
 			this.text = "NOT ENOUGH MANA";
 			colorArray = Images.purples;
-			color = Images.PURPLE_TEXT;
+			color = Images.PURPLE;
 			break;
 		case ServerText.BLUE_TEXT:
 			this.text = "0";
 			colorArray = Images.blues;
-			color = Images.BLUE_TEXT;
+			color = Images.BLUE;
 			break;
 		case ServerText.RED_TEXT:
 			colorArray = Images.reds;
-			color = Images.RED_TEXT;
+			color = Images.RED;
 			break;
 		case ServerText.YELLOW_TEXT:
 			colorArray = Images.yellows;
-			color = Images.YELLOW_TEXT;
+			color = Images.YELLOW;
 			break;
 		}
 
@@ -107,7 +107,7 @@ public class ClientText extends ClientObject {
 				destroy();
 				return;
 			}
-			color = colorArray[(int)((1.0*aliveTime/TOTAL_ALIVE_TIME)*100.0)];
+			color = colorArray[Math.min(99,(int)((1.0*aliveTime/(TOTAL_ALIVE_TIME*2.0/3))*100.0))];
 			
 			y += vSpeed;
 			setY((int) y);

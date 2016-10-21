@@ -776,7 +776,7 @@ public class ClientWorld {
 					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
 		}
 
-		graphics.setColor(new Color(0, 0, 0, (float) (1f * alphaMultiplier)));
+		graphics.setColor(Images.blacks[Math.min(254, (int)(alphaMultiplier*255))]);
 		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 		// Add stars when dusk begins
@@ -1011,7 +1011,7 @@ public class ClientWorld {
 		}
 
 		if (displayedText != null) {
-			graphics.setColor(Images.PURPLE_TEXT);
+			graphics.setColor(Images.PURPLE);
 			graphics.setFont(MESSAGE_FONT);
 			graphics.drawString(displayedText,
 					(int) (Client.SCREEN_WIDTH / 2
@@ -1034,7 +1034,7 @@ public class ClientWorld {
 						.getRedCastleHP() / (client.getRedCastleMaxHP()))),
 				ClientFrame.getScaledHeight(20));
 
-		graphics.setColor(Images.PURPLE_TEXT);
+		graphics.setColor(Images.PURPLE);
 		graphics.drawRect(ClientFrame.getScaledWidth(100),
 				ClientFrame.getScaledHeight(980),
 				ClientFrame.getScaledWidth(500),

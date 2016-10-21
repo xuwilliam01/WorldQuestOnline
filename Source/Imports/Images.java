@@ -30,12 +30,13 @@ import WorldCreator.CreatorObject;
  */
 public class Images {
 	
-	public final static Color YELLOW_TEXT = new Color(204, 153, 0);
-	public final static Color RED_TEXT = new Color(153, 0, 38);
-	public final static Color BLUE_TEXT = new Color(0, 161, 230);
-	public final static Color GREEN_TEXT = new Color(0, 153, 0);
-	public final static Color PURPLE_TEXT = new Color(82, 42, 122);
-	public final static Color GRAY_TEXT = Color.gray;
+	public final static Color YELLOW = new Color(204, 153, 0);
+	public final static Color RED = new Color(153, 0, 38);
+	public final static Color BLUE = new Color(0, 161, 230);
+	public final static Color GREEN = new Color(0, 153, 0);
+	public final static Color PURPLE = new Color(82, 42, 122);
+	public final static Color GRAY = Color.gray;
+	public final static Color BLACK = Color.black;
 
 	/**
 	 * Array of yellow starting from lowest opacity to highest opacity
@@ -56,6 +57,11 @@ public class Images {
 	 * Array of purple starting from lowest opacity to highest opacity
 	 */
 	public static Color[] purples = new Color[100];
+	
+	/**
+	 * Array of blacks starting from lowest opacity to highest opacity
+	 */
+	public static Color[] blacks = new Color[255];
 	
 	/**
 	 * The format of the images (.jpg, .png, .gif, etc.)
@@ -144,25 +150,31 @@ public class Images {
 		// Create array of yellows with varying opacity
 		for (int no = 0; no < yellows.length;no++)
 		{
-			yellows[no] = new Color (YELLOW_TEXT.getRed(), YELLOW_TEXT.getGreen(), YELLOW_TEXT.getBlue(), (int)((1.0*(no+1)/yellows.length)*255.0));
+			yellows[no] = new Color (YELLOW.getRed(), YELLOW.getGreen(), YELLOW.getBlue(), (int)((1.0*(no+1)/yellows.length)*255.0));
 		}
 		
 		// Create array of blues with varying opacity
 		for (int no = 0; no < blues.length;no++)
 		{
-			blues[no] = new Color (BLUE_TEXT.getRed(), BLUE_TEXT.getGreen(), BLUE_TEXT.getBlue(), (int)((1.0*(no+1)/blues.length)*255.0));
+			blues[no] = new Color (BLUE.getRed(), BLUE.getGreen(), BLUE.getBlue(), (int)((1.0*(no+1)/blues.length)*255.0));
 		}
 		
 		// Create array of PURPLEs with varying opacity
 		for (int no = 0; no < purples.length;no++)
 		{
-			purples[no] = new Color (PURPLE_TEXT.getRed(), PURPLE_TEXT.getGreen(), PURPLE_TEXT.getBlue(), (int)((1.0*(no+1)/purples.length)*255.0));
+			purples[no] = new Color (PURPLE.getRed(), PURPLE.getGreen(), PURPLE.getBlue(), (int)((1.0*(no+1)/purples.length)*255.0));
 		}
 		
 		// Create array of reds with varying opacity
 		for (int no = 0; no < reds.length;no++)
 		{
-			reds[no] = new Color (RED_TEXT.getRed(), RED_TEXT.getGreen(), RED_TEXT.getBlue(), (int)((1.0*(no+1)/reds.length)*255.0));
+			reds[no] = new Color (RED.getRed(), RED.getGreen(), RED.getBlue(), (int)((1.0*(no+1)/reds.length)*255.0));
+		}
+		
+		// Create array of reds with varying opacity
+		for (int no = 0; no < blacks.length;no++)
+		{
+			blacks[no] = new Color (BLACK.getRed(), BLACK.getGreen(), BLACK.getBlue(), (int)((1.0*(no+1)/blacks.length)*255.0));
 		}
 		
 		if (imported)
