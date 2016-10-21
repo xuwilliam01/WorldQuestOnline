@@ -11,7 +11,7 @@ import Server.ServerManager;
 
 public class StartServer {
 
-	final static int MAX_ROOMS = 100;
+	final static int MAX_ROOMS = 1;
 
 	public static void main(String[] args) {
 		GameImage.hostingServer=true;
