@@ -1283,7 +1283,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		for (int item = 0; item < equippedWeapons.length; item++)
 			if (equippedWeapons[item] != null)
 				dropItem(equippedWeapons[item]);
-		equippedWeapons = new ServerWeapon[MAX_WEAPONS];
+		equippedWeapons = new ServerItem[MAX_WEAPONS];
 
 		if (equippedArmour != null)
 			dropItem(equippedArmour);
