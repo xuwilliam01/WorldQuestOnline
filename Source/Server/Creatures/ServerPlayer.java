@@ -1135,7 +1135,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					ServerWorld.MELEE_TYPE)) {
 				actionDelay = equippedWeapons[weaponNo].getActionDelay();
 				actionSpeed = equippedWeapons[weaponNo].getActionSpeed();
-				world.add(new ServerWeaponSwing(this, 0, -25,
+				world.add(new ServerWeaponSwing(this, 0, -20,
 						equippedWeapons[weaponNo].getActionImage(), (int) (Math
 								.toDegrees(angle) + 0.5),
 						equippedWeapons[weaponNo].getActionSpeed(), (int) Math

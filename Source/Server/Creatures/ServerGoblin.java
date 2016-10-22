@@ -141,7 +141,7 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_HP);
 			setHP(GOBLIN_HP);
 
-			weapon = "DAIRON_0";
+			weapon = "DASTONE_0";
 			damage = 4;
 			setName("A Goblin");
 			break;
@@ -441,7 +441,7 @@ public class ServerGoblin extends ServerCreature {
 									}
 
 									getWorld().add(
-											new ServerWeaponSwing(this, 0, -25,
+											new ServerWeaponSwing(this, 4, -19,
 													weapon, angle, actionDelay,
 													damage));
 								}
