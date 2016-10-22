@@ -1235,25 +1235,6 @@ public class Images {
 	}
 
 	/**
-	 * Get a specific image from the list using the name of the image
-	 * 
-	 * @param name
-	 *            the name of the image
-	 * @return the image (inside a game image) from the list
-	 */
-	public static Image getImage(String name, int width, int height) {
-		try {
-			return images.get(new GameImage(name, true)).getImage()
-					.getScaledInstance(width, height, 0);
-		} catch (NullPointerException e) {
-			System.out.println("Could not find image " + name);
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	/**
 	 * Get a specific game image from the list using the name of the image
 	 * 
 	 * @param name

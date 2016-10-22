@@ -143,19 +143,24 @@ public class MainMenu implements KeyListener {
 		ClientInventory.INVENTORY_WIDTH = (int) (300 * (dm.getWidth() / 1920.0));
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
+		
+		boolean tooLarge = true;
+		
 		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
 			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
+			tooLarge = true;
 		}
 		Client.SCREEN_HEIGHT = dm.getHeight();
 		if (Client.SCREEN_HEIGHT > 1080) {
 			Client.SCREEN_HEIGHT = 1080;
+			tooLarge = true;
 		}
 
 		// Display results
 		System.out.println(dm.getWidth());
 		System.out.println(dm.getHeight());
 
-		mainFrame = new ClientFrame();
+		mainFrame = new ClientFrame(tooLarge);
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 

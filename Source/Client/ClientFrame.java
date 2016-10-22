@@ -25,7 +25,7 @@ public class ClientFrame extends JFrame
 	/**
 	 * Constructor for the game frame
 	 */
-	public ClientFrame()
+	public ClientFrame(boolean tooLarge)
 	{
 
 		setBackground(Color.BLACK);
@@ -37,7 +37,10 @@ public class ClientFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setLayout(null);
+		if (!tooLarge)
+		{
 		setUndecorated(true);
+		}
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setVisible(true);
