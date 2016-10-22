@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import Client.ClientCastleShopItem;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientShop;
@@ -1163,6 +1164,7 @@ public class Images {
 			addtoImageArray(new GameImage("skull" +".png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
 			
+			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
 			image = null;
 		}
 

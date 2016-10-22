@@ -87,7 +87,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("+%d Jump",ServerPotion.JUMP_AMOUNT));
 			break;
 		case ServerWorld.MONEY_TYPE:
-			setToolTipText("M oney");
+			setToolTipText("Money");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setToolTipText(String.format("Steel Armour (%.0f%% Damage Reduction)",ServerArmour.STEEL_DEF*100));

@@ -85,10 +85,8 @@ public class ServerCastle extends ServerCreature {
 			setName("Blue Team's Castle");
 	}
 
-	/**
-	 * Update the castle behavior
-	 */
-	public void update() {
+	public void upgrade()
+	{
 		// Try to purchase the next tier of goblin
 		if (tier < CASTLE_TIER_PRICE.length
 				&& money >= ServerCastle.CASTLE_TIER_PRICE[tier]) {
@@ -104,6 +102,11 @@ public class ServerCastle extends ServerCreature {
 			}
 		}
 
+	}
+	/**
+	 * Update the castle behavior
+	 */
+	public void update() {
 		// Attack a target
 		if (getTarget() == null) {
 			if (getWorld().getWorldCounter() % 15 == 0) {
@@ -120,7 +123,7 @@ public class ServerCastle extends ServerCreature {
 						/ 2 - (getX() + 270));
 
 				int yDist = (int) ((getY() + 232) - (getTarget().getY() + getTarget()
-						.getHeight() / 2));
+				.getHeight() / 2));
 
 				int sign = -1;
 
@@ -175,17 +178,17 @@ public class ServerCastle extends ServerCreature {
 	{
 		return open;
 	}
-	
+
 	public void close()
 	{
 		open = false;
 	}
-	
+
 	public void open()
 	{
 		open = true;
 	}
-	
+
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////

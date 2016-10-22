@@ -930,6 +930,15 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						}
 					}
 					break;
+				case "BC":
+					try{
+						buyCastleItem(command.substring(3));
+					}
+					catch (Exception e)
+					{
+						continue;
+					}
+					break;
 				case "E":
 					interact();
 					break;
@@ -969,6 +978,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				break;
 			} catch (NullPointerException e) {
 				break;
+			}
+			catch(IndexOutOfBoundsException e)
+			{
+				System.out.println("Indexing problem caught");
+				e.printStackTrace();
 			}
 		}
 
@@ -1609,6 +1623,34 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	}
 
+	public String toChars(int y) {
+		int x = y;
+		String ret = "";
+
+		while (x > 0) {
+			int ch = x % 94 + 33;
+			if(ch >= 92)
+				ch++;
+			ret += (char) ch;
+			x /= 94;
+		}
+		// System.out.println("StringRep: " +y+" "+ret);
+		return ret;
+	}
+	
+	public void buyCastleItem(String type)
+	{
+		switch(type)
+		{
+		case ServerWorld.UPG_CASTLE_BUTT:
+			//Checks inside upgrade() whether the castle can be upgraded
+			if(getTeam() == ServerCreature.RED_TEAM)
+				world.getRedCastle().upgrade();
+			else
+				world.getBlueCastle().upgrade();
+			break;
+		}
+	}
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
@@ -1762,20 +1804,4 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void setCurrentText(String currentText) {
 		this.currentText = currentText;
 	}
-
-	public String toChars(int y) {
-		int x = y;
-		String ret = "";
-
-		while (x > 0) {
-			int ch = x % 94 + 33;
-			if(ch == 92)
-				ch++;
-			ret += (char) ch;
-			x /= 94;
-		}
-		// System.out.println("StringRep: " +y+" "+ret);
-		return ret;
-	}
-
 }
