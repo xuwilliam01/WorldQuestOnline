@@ -144,7 +144,7 @@ public class MainMenu implements KeyListener {
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
 		
-		boolean tooLarge = true;
+		boolean tooLarge = false;
 		
 		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
 			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
@@ -159,6 +159,11 @@ public class MainMenu implements KeyListener {
 		// Display results
 		System.out.println(dm.getWidth());
 		System.out.println(dm.getHeight());
+		
+		if (tooLarge)
+		{
+			JOptionPane.showMessageDialog(null, "Please set your monitor to 1080x1920 or smaller for an optimized experience");
+		}
 
 		mainFrame = new ClientFrame(tooLarge);
 		mainFrame.addKeyListener(this);
