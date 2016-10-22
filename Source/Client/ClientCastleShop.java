@@ -30,12 +30,19 @@ public class ClientCastleShop extends JPanel{
 		setLocation(200,200);
 
 		if (client.getPlayer().getTeam() == ServerCreature.RED_TEAM)
-			add(new ClientCastleShopItem("Upgrade", ServerCastle.CASTLE_TIER_PRICE[client.getRedCastleTier()], ServerWorld.UPG_CASTLE_BUTT,this));
+			add(new ClientCastleShopItem(ServerWorld.UPG_CASTLER_BUTT,this));
 		else
-			add(new ClientCastleShopItem("Upgrade", ServerCastle.CASTLE_TIER_PRICE[client.getBlueCastleTier()], ServerWorld.UPG_CASTLE_BUTT,this));
+			add(new ClientCastleShopItem(ServerWorld.UPG_CASTLEB_BUTT,this));
+		
+		add(new ClientCastleShopItem(ServerWorld.BARRACK_TYPE,this));
 		
 		
 		
+	}
+	
+	public Client getClient()
+	{
+		return client;
 	}
 	
 	public void setMoney(int money)

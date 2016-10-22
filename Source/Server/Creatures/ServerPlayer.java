@@ -16,6 +16,7 @@ import Server.ServerWorld;
 import Server.Effects.ServerText;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
+import Server.Items.ServerBuildingItem;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
@@ -153,7 +154,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * Stores the equipped weapons
 	 */
-	private ServerWeapon[] equippedWeapons = new ServerWeapon[MAX_WEAPONS];
+	private ServerItem[] equippedWeapons = new ServerItem[MAX_WEAPONS];
 
 	/**
 	 * The equipped armor
@@ -610,12 +611,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 											+ object.getType()
 											+ " "
 											+ ((ServerPlayer) object).getName()
-													.split(" ").length
+											.split(" ").length
 											+ " "
 											+ ((ServerPlayer) object).getName()
 											+ '`'
 											+ ((ServerPlayer) object)
-													.getCurrentText());
+											.getCurrentText());
 									continue;
 								}
 
@@ -626,8 +627,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								break;
 							case ServerWorld.TEXT_TYPE:
 								queueMessage("t " + toChars(object.getID())
-										+ " " + toChars(x) + " " + toChars(y)
-										+ " " + object.getImage());
+								+ " " + toChars(x) + " " + toChars(y)
+								+ " " + object.getImage());
 								continue;
 							}
 
@@ -697,7 +698,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			int weaponNo = weaponSelected - '0';
 			if (weaponNo != DEFAULT_WEAPON_SLOT
 					&& equippedWeapons[weaponNo] != null) {
-				currentDamage = equippedWeapons[weaponNo].getDamage();
+				if(equippedWeapons[weaponNo].getType().charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2))
+					currentDamage = ((ServerWeapon)equippedWeapons[weaponNo]).getDamage();
+				else currentDamage = 0;
 			}
 			queueMessage("D " + currentDamage + " " + getBaseDamage());
 
@@ -777,18 +780,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					break;
 				case "D": 
 					if ( isAlive()) {
-					isDropping = true;
+						isDropping = true;
 					}
 					break;
 				case "!D": 
 					if ( isAlive()) {
-					isDropping = false;
+						isDropping = false;
 					}
 					break;
 				case "R": 
 					if ( isAlive()) {
-					setHSpeed(horizontalMovement);
-					movingDirection = 1;
+						setHSpeed(horizontalMovement);
+						movingDirection = 1;
 					}
 					break;
 				case "!R": 
@@ -799,8 +802,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					break;
 				case "L": 
 					if ( isAlive()) {
-					movingDirection = -1;
-					setHSpeed(-horizontalMovement);
+						movingDirection = -1;
+						setHSpeed(-horizontalMovement);
 					}
 					break;
 				case "!L": 
@@ -811,8 +814,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					break;
 				case "U": 
 					if (isOnSurface() && isAlive() && !inAction()) {
-					setVSpeed(-verticalMovement);
-					setOnSurface(false);
+						setVSpeed(-verticalMovement);
+						setOnSurface(false);
 					}
 					break;
 				case "DR": 
@@ -860,26 +863,26 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 					break;
 				case "Dr":
-						try {
-							switch (command.charAt(3))
-							{
-							case 'I':
-								// If dropping from inventory
-								super.drop(command.substring(5));
-								break;
-							case 'W':
-								// If dropping from equipped
-								drop(Integer.parseInt(command.substring(5)));
-								break;
-							case 'U':
-								// If using a potion
-								super.use(command.substring(5));
-								break;
-							}
+					try {
+						switch (command.charAt(3))
+						{
+						case 'I':
+							// If dropping from inventory
+							super.drop(command.substring(5));
+							break;
+						case 'W':
+							// If dropping from equipped
+							drop(Integer.parseInt(command.substring(5)));
+							break;
+						case 'U':
+							// If using a potion
+							super.use(command.substring(5));
+							break;
 						}
-						// If the player sends a bad message
-						catch (Exception E) {
-						}
+					}
+					// If the player sends a bad message
+					catch (Exception E) {
+					}
 					break;
 
 				case "M":
@@ -890,11 +893,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						case 'I':
 							unequip(Integer.parseInt(command.substring(4)));
 							break;
-						// Move to equipped weapons
+							// Move to equipped weapons
 						case 'W':
 							equipWeapon(command.substring(4));
 							break;
-						// Move to equipped armors
+							// Move to equipped armors
 						case 'A':
 							equipArmour(command.substring(4));
 							break;
@@ -902,10 +905,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					} catch (Exception E) {
 					}
 					break;
-		
+
 				case "W":
 					try {
 						weaponSelected = command.charAt(2);
+						System.out.println("Selected weapon: "+weaponSelected);
 					} catch (Exception E) {
 					}
 					break;
@@ -951,7 +955,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						} catch (Exception E) {
 							continue;
 						}
-						if (!type.equals(ServerWorld.MONEY_TYPE)) {
+						if (!type.equals(ServerWorld.MONEY_TYPE) && !type.contains(ServerWorld.BUILDING_TYPE)) {
 							sell(type);
 							queueMessage("SI " + type);
 						}
@@ -1148,14 +1152,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				setHasPunched(false);
 			} else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.MELEE_TYPE)) {
-				actionDelay = equippedWeapons[weaponNo].getActionDelay();
-				actionSpeed = equippedWeapons[weaponNo].getActionSpeed();
+				actionDelay = ((ServerWeapon)equippedWeapons[weaponNo]).getActionDelay();
+				actionSpeed = ((ServerWeapon)equippedWeapons[weaponNo]).getActionSpeed();
 				world.add(new ServerWeaponSwing(this, 0, -20,
-						equippedWeapons[weaponNo].getActionImage(), (int) (Math
+						((ServerWeapon)equippedWeapons[weaponNo]).getActionImage(), (int) (Math
 								.toDegrees(angle) + 0.5),
-						equippedWeapons[weaponNo].getActionSpeed(), (int) Math
-								.ceil(equippedWeapons[weaponNo].getDamage()
-										* (1 + getBaseDamage() / 100.0))));
+						((ServerWeapon)equippedWeapons[weaponNo]).getActionSpeed(), (int) Math
+						.ceil(((ServerWeapon)equippedWeapons[weaponNo]).getDamage()
+								* (1 + getBaseDamage() / 100.0))));
 				action = "SWING";
 			} else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.RANGED_TYPE)) {
@@ -1263,6 +1267,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					world.add(message);
 				}
 			}
+			else if(equippedWeapons[weaponNo].getType().contains(ServerWorld.BUILDING_TYPE))
+			{
+				actionDelay = 0;
+			}
 		}
 		canPerformAction = false;
 	}
@@ -1312,7 +1320,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
-					- getHeight() / 3;
+			- getHeight() / 3;
 
 			world.add(new ServerText(damageX, damageY,
 					Integer.toString(amount), textColour, world));
@@ -1388,7 +1396,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										ServerWorld.VENDOR_TYPE)) {
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy()) {
+											.isBusy()) {
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
 										String newMessage = "VB "
@@ -1478,7 +1486,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			catch (ArrayIndexOutOfBoundsException e) {
 				System.out
-						.println("String builder queue lagged and out of bounds happened");
+				.println("String builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}
@@ -1560,8 +1568,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				break;
 			}
 		}
-
-		equippedWeapons[pos] = (ServerWeapon) toRemove;
+		equippedWeapons[pos] = toRemove;
 		getInventory().remove(toRemove);
 	}
 
@@ -1637,17 +1644,25 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		// System.out.println("StringRep: " +y+" "+ret);
 		return ret;
 	}
-	
+
 	public void buyCastleItem(String type)
 	{
 		switch(type)
 		{
-		case ServerWorld.UPG_CASTLE_BUTT:
+		case ServerWorld.UPG_CASTLER_BUTT:
 			//Checks inside upgrade() whether the castle can be upgraded
-			if(getTeam() == ServerCreature.RED_TEAM)
-				world.getRedCastle().upgrade();
-			else
-				world.getBlueCastle().upgrade();
+			world.getRedCastle().upgrade();
+			break;
+		case ServerWorld.UPG_CASTLEB_BUTT:
+			//Checks inside upgrade() whether the castle can be upgraded
+			world.getBlueCastle().upgrade();
+			break;
+		case ServerWorld.BARRACK_TYPE:
+			if(castle != null && castle.getMoney() >= ServerBuildingItem.BARRACK_COST)
+			{
+				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
+				addItem(new ServerBuildingItem(ServerWorld.BARRACK_TYPE,world));
+			}
 			break;
 		}
 	}

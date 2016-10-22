@@ -173,6 +173,11 @@ public class ServerCastle extends ServerCreature {
 		return null;
 	}
 
+	public void spendMoney(int money)
+	{
+		this.money -= money;
+	}
+	
 	//Methods for the castle shop
 	public boolean isOpen()
 	{

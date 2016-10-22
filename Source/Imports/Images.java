@@ -1165,6 +1165,7 @@ public class Images {
 					ServerWorld.TILE_SIZE, "Tiles//"));
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			image = null;
 		}
 

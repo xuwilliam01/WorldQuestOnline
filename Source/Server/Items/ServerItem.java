@@ -211,6 +211,10 @@ public abstract class ServerItem extends ServerObject
 			setImage("DARKWAND_ICON");
 			value = 60;
 			break;
+		case ServerWorld.BARRACK_TYPE:
+			setImage("BARRACKS_ICON");
+			value = ServerBuildingItem.BARRACK_COST; //Change?
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -291,6 +295,8 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.ICEWAND_TYPE:
 		case ServerWorld.DARKWAND_TYPE:
 			return new ServerWeapon(item.getX(), item.getY(), item.getType(),world);
+		case ServerWorld.BARRACK_TYPE:
+			return new ServerBuildingItem(item.getType(),world);
 
 		}
 		return null;
