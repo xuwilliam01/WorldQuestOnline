@@ -711,6 +711,8 @@ ActionListener, MouseMotionListener {
 						ping = System.currentTimeMillis();
 						printToServer("P");
 						startTimer = -1;
+						
+						//System.out.println("Current in-game fps: " + currentFPS + " /// Current server reading fps: " + currentFPS2 + " /// noOfLines: " + lines.size() +" /// noOfObjects: " + world.getNoOfObjects());
 					}
 
 					try {

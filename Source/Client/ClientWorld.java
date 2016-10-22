@@ -902,7 +902,7 @@ public class ClientWorld {
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
-						|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>1) // If the object wasn't present in the last update
+						|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>2) // If the object wasn't present in the last update
 				{
 					objectsToRemove.add(object);
 					continue;
@@ -1135,6 +1135,14 @@ public class ClientWorld {
 	public synchronized void subtractObjectNo()
 	{
 		noOfObjects--;
+	}
+
+	public int getNoOfObjects() {
+		return noOfObjects;
+	}
+
+	public void setNoOfObjects(int noOfObjects) {
+		this.noOfObjects = noOfObjects;
 	}
 	
 }
