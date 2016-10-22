@@ -162,7 +162,7 @@ public class MainMenu implements KeyListener {
 		
 		if (tooLarge)
 		{
-			JOptionPane.showMessageDialog(null, "Please set your monitor to 1080x1920 or smaller for an optimized experience");
+			JOptionPane.showMessageDialog(null, "Please set your monitor to 1080x1920 or smaller for an optimized experience (Then log out of Windows then log back in to see changes)");
 		}
 
 		mainFrame = new ClientFrame(tooLarge);

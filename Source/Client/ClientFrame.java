@@ -37,12 +37,16 @@ public class ClientFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setLayout(null);
+		setUndecorated(false);
 		if (!tooLarge)
 		{
-		setUndecorated(true);
+			setUndecorated(true);
 		}
 		pack();
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		if (!tooLarge)
+		{
+			setExtendedState(JFrame.MAXIMIZED_BOTH);
+		}
 		setVisible(true);
 
 	}
