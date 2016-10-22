@@ -1768,8 +1768,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		String ret = "";
 
 		while (x > 0) {
-			ret += (char) (x % 95 + 33);
-			x /= 95;
+			int ch = x % 94 + 33;
+			if(ch == 92)
+				ch++;
+			ret += (char) ch;
+			x /= 94;
 		}
 		// System.out.println("StringRep: " +y+" "+ret);
 		return ret;

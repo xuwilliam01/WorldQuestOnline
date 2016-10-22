@@ -870,6 +870,7 @@ public class MainMenu implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			int maxRooms;
 			Images.importImages();
+			Maps.importMaps();
 			while (true) {
 				try {
 					String maxRoomsStr = JOptionPane

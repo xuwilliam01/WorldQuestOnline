@@ -1671,15 +1671,18 @@ ActionListener, MouseMotionListener {
 		this.shop = shop;
 	}
 
-	public int toInt(String base95)
+	public int toInt(String base94)
 	{
 		int ret = 0;
 		int pow = 1;
-		for(int i = 0; i < base95.length();i++)
+		for(int i = 0; i < base94.length();i++)
 		{
-			int num = (int)base95.charAt(i) - 33;
+			int b = (int)base94.charAt(i);
+			if(b > 92)
+				b--;
+			int num = b - 33;
 			ret += num * pow;
-			pow*=95;
+			pow*=94;
 		}
 		return ret;
 	}
