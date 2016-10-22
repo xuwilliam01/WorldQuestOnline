@@ -104,6 +104,8 @@ public abstract class ServerObject {
 	 * Whether the object is visible in the game
 	 */
 	private boolean visible;
+	
+	private ServerEngine engine;
 
 	/**
 	 * Constructor for an object
@@ -119,6 +121,7 @@ public abstract class ServerObject {
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
+		this.engine = engine;
 		this.type = type;
 		exists = true;
 		onSurface = false;
@@ -126,7 +129,7 @@ public abstract class ServerObject {
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-			this.id = engine.useNextID();
+		this.id = engine.useNextID();
 		this.image = image;
 
 		try {
@@ -372,7 +375,7 @@ public abstract class ServerObject {
 
 	public void destroy() {
 		exists = false;
-
+		engine.removeID(getID());
 	}
 
 	public double getGravity() {
