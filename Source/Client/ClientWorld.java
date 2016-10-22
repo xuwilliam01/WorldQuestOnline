@@ -906,6 +906,12 @@ public class ClientWorld {
 					x = centreX;
 					y = centreY;
 				}
+				else if (object.getX() == player.getX() && object.getY() == player.getY())
+				{
+					x = centreX;
+					y = centreY;
+				}
+				
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
