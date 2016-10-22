@@ -182,6 +182,9 @@ public class ClientItem extends JButton implements MouseListener{
 		case ServerWorld.DARKWAND_TYPE:
 			setToolTipText(String.format("<html>Dark Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.DARKWAND_DMG,ServerWeapon.DARKWAND_MANA));
 			break;
+		case ServerWorld.BARRACK_TYPE:
+			setToolTipText("Barracks");
+			break;
 		}
 	}
 
