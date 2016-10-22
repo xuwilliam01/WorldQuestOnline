@@ -151,6 +151,21 @@ ActionListener, MouseMotionListener {
 	private int FPScounter = 0;
 
 	/**
+	 * The startTime for checking FPS (for server reading)
+	 */
+	private long startTime2 = 0;
+
+	/**
+	 * The current FPS of the client (for server reading)
+	 */
+	private int currentFPS2 = 60;
+
+	/**
+	 * A counter updating every repaint and reseting at the expected FPS (for server reading)
+	 */
+	private int FPScounter2 = 0;
+	
+	/**
 	 * Store the selected weapon
 	 */
 	private int weaponSelected = 9;
@@ -343,6 +358,8 @@ ActionListener, MouseMotionListener {
 		output.flush();
 	}
 
+	
+	
 	/**
 	 * Thread for running the actual game
 	 * 
@@ -356,6 +373,17 @@ ActionListener, MouseMotionListener {
 			while (!leaveGame) {
 				while (!lines.isEmpty()) {
 					String message = lines.remove(0);
+					
+					// Update the FPS counter
+					if (FPScounter2 >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5)) {
+						FPScounter2 = 0;
+						currentFPS2 = Math.min((int) ((1000.0
+								/ (System.currentTimeMillis() - startTime2)
+								* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5)), 120);
+						startTime2 = System.currentTimeMillis();
+					}
+
+					FPScounter2++;
 
 					if (message != null) {
 						String[] tokens = message.split(" ");

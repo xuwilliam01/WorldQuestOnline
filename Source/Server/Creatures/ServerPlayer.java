@@ -637,7 +637,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 									+ object.getImageIndex() + " " + team + " "
 									+ object.getType() + " " + "{");
 
-						} else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
+						} 
+						else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
 							queueMessage("R " + toChars(object.getID()));
 						}
 					}
@@ -703,7 +704,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			while (message.length() < 4000) {
 				queueMessage("L " + getHP());
 			}
-			// Send the current time in the world
+			// Send the current time in the world (Must be the last thing)
 			queueMessage("T " + toChars(world.getWorldTime()));
 
 			// Signal a repaint

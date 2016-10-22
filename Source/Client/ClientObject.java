@@ -70,6 +70,11 @@ public class ClientObject implements Comparable<ClientObject>
 	 */
 	private String name = "";
 	
+	/**
+	 * The last time this was set
+	 */
+	private int lastCounter = 0;
+	
 
 	/**
 	 * Constructor
@@ -120,6 +125,8 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Drop money on the castle to upgrade your goblins";
 			break;
 		}
+		
+		lastCounter = ClientWorld.worldTime;
 	}
 
 	/**
@@ -315,5 +322,14 @@ public class ClientObject implements Comparable<ClientObject>
 		this.name = name.replace('_', ' ').replace('{', ' ').trim();
 	}
 
+	public int getLastCounter() {
+		return lastCounter;
+	}
+
+	public void setLastCounter(int lastCounter) {
+		this.lastCounter = lastCounter;
+	}
+
+	
 	
 }

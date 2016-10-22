@@ -147,7 +147,7 @@ public class ClientWorld {
 	/**
 	 * The time in the world
 	 */
-	private int worldTime;
+	public static int worldTime;
 
 	/**
 	 * Center of the screen
@@ -691,6 +691,7 @@ public class ClientWorld {
 				if (name != null && name.length()>0) {
 					objects[id].setName(name);
 				}
+				objects[id].setLastCounter(worldTime);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -901,7 +902,8 @@ public class ClientWorld {
 
 				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 						|| y > Client.SCREEN_HEIGHT
-						|| y + object.getHeight() < 0) {
+						|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>1) // If the object wasn't present in the last update
+				{
 					objectsToRemove.add(object);
 					continue;
 				}
@@ -909,7 +911,7 @@ public class ClientWorld {
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
 					ClientText textObject = (ClientText) object;
 
-					textObject.update();
+					textObject.updateText();
 					if (textObject.exists())
 					{
 					graphics.setColor(textObject.getColor());

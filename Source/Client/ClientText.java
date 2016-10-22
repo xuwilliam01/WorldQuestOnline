@@ -99,8 +99,7 @@ public class ClientText extends ClientObject {
 
 	}
 
-	@Override
-	public void update() {
+	public void updateText() {
 		if (exists) {
 			if (aliveTime-- <= 0) {
 				world.addToRemove(this);
