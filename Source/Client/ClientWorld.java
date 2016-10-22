@@ -725,11 +725,18 @@ public class ClientWorld {
 	 *            the object to remove
 	 */
 	public void remove(int id) {
+		try
+		{
 		if (objects[id]!=null)
 		{
 			subtractObjectNo();
 		}
 		objects[id] = null;
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
