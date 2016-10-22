@@ -137,7 +137,7 @@ public class ServerGoblin extends ServerCreature {
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE / 2;
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_HP);
 			setHP(GOBLIN_HP);
 
@@ -166,8 +166,8 @@ public class ServerGoblin extends ServerCreature {
 		case 2:
 			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
 			setImage("GOBSOLDIER_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE*2)
+					+ ServerWorld.TILE_SIZE*2;
 
 			setMaxHP(GOBLIN_SOLDIER_HP);
 			setHP(GOBLIN_SOLDIER_HP);
@@ -195,8 +195,8 @@ public class ServerGoblin extends ServerCreature {
 		case 4:
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
 			setImage("GOBWORKER_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 3;
 			setMaxHP(GOBLIN_WORKER_HP);
 			setHP(GOBLIN_WORKER_HP);
 
@@ -213,8 +213,8 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_GUARD_HP);
 			setHP(GOBLIN_GUARD_HP);
 
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 2;
 			armour = 0.2;
 			damage = 8;
 			weapon = "SWIRON_0";
@@ -223,8 +223,8 @@ public class ServerGoblin extends ServerCreature {
 		case 6:
 			setType(ServerWorld.GOBLIN_KNIGHT_TYPE);
 			setImage("GOBKNIGHT_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_KNIGHT_HP);
 			setHP(GOBLIN_KNIGHT_HP);
 
@@ -236,8 +236,8 @@ public class ServerGoblin extends ServerCreature {
 		case 7:
 			setType(ServerWorld.GOBLIN_LORD_TYPE);
 			setImage("GOBLORD_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_LORD_HP);
 			setHP(GOBLIN_LORD_HP);
 
@@ -283,8 +283,8 @@ public class ServerGoblin extends ServerCreature {
 		case 10:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_GENERAL_HP);
 			setHP(GOBLIN_GENERAL_HP);
 
@@ -296,8 +296,8 @@ public class ServerGoblin extends ServerCreature {
 		case 11:
 			setType(ServerWorld.GOBLIN_KING_TYPE);
 			setImage("GOBKING_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_KING_HP);
 			setHP(GOBLIN_KING_HP);
 
