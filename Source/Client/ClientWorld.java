@@ -913,14 +913,6 @@ public class ClientWorld {
 				}
 				
 
-				if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
-						|| y > Client.SCREEN_HEIGHT
-						|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>2) // If the object wasn't present in the last update
-				{
-					objectsToRemove.add(object);
-					continue;
-				}
-
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
 					ClientText textObject = (ClientText) object;
 
@@ -933,6 +925,15 @@ public class ClientWorld {
 					}
 					// System.out.println("Drawing floating text");
 				} else {
+					
+					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
+							|| y > Client.SCREEN_HEIGHT
+							|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>2) // If the object wasn't present in the last update
+					{
+						objectsToRemove.add(object);
+						continue;
+					}
+					
 					Image image = object.getImage();
 
 					switch (object.getTeam()) {
