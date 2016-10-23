@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="Resources"/>
 	<classpathentry kind="src" path="Source"/>
 	<classpathentry kind="src" path="Images"/>
+	<classpathentry kind="src" path="Audio"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
