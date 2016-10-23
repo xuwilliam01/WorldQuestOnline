@@ -129,12 +129,14 @@ public abstract class ServerObject {
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-		this.id = engine.useNextID();
 		this.image = image;
 
 		try {
+			this.id = engine.useNextID();
 			this.imageIndex = Images.getImageIndex(image);
 		} catch (NullPointerException E) {
+			E.printStackTrace();
+			System.out.println("ID: " + this.id + " Image: " + image);
 		}
 
 		if (width == -1) {
