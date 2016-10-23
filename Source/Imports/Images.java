@@ -914,7 +914,6 @@ public class Images {
 					26 * ServerWorld.SMALL_TILE_SIZE, 52 * ServerWorld.SMALL_TILE_SIZE,
 					"Creatures//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
-					26 * ServerWorld.SMALL_TILE_SIZE, 52 * ServerWorld.SMALL_TILE_SIZE,
 					"Creatures//"));
 			addtoImageArray(new GameImage("COIN.png",
 					ClientFrame.getScaledWidth(10),
