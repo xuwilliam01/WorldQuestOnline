@@ -133,12 +133,16 @@ public abstract class ServerObject {
 
 		try {
 			this.id = engine.useNextID();
-			if (!type.equals(ServerWorld.TEXT_TYPE)) {
-				this.imageIndex = Images.getImageIndex(image);
-			}
 		} catch (NullPointerException E) {
 			E.printStackTrace();
 			System.out.println("ID: " + this.id + " Image: " + image + " ImageIndex: " + this.imageIndex);
+		}
+		
+		try
+		{
+			this.imageIndex = Images.getImageIndex(image);
+		} catch (NullPointerException E)
+		{
 		}
 
 		if (width == -1) {
