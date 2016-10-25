@@ -104,7 +104,7 @@ public abstract class ServerObject {
 	 * Whether the object is visible in the game
 	 */
 	private boolean visible;
-	
+
 	private ServerEngine engine;
 
 	/**
@@ -116,8 +116,8 @@ public abstract class ServerObject {
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(double x, double y, int width, int height,
-			double gravity, String image, String type, ServerEngine engine) {
+	public ServerObject(double x, double y, int width, int height, double gravity, String image, String type,
+			ServerEngine engine) {
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
@@ -133,10 +133,12 @@ public abstract class ServerObject {
 
 		try {
 			this.id = engine.useNextID();
-			this.imageIndex = Images.getImageIndex(image);
+			if (!type.equals(ServerWorld.TEXT_TYPE)) {
+				this.imageIndex = Images.getImageIndex(image);
+			}
 		} catch (NullPointerException E) {
 			E.printStackTrace();
-			System.out.println("ID: " + this.id + " Image: " + image);
+			System.out.println("ID: " + this.id + " Image: " + image + " ImageIndex: " + this.imageIndex);
 		}
 
 		if (width == -1) {
@@ -157,8 +159,7 @@ public abstract class ServerObject {
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(double x, double y, int width, int height,
-			double gravity, String type, ServerEngine engine) {
+	public ServerObject(double x, double y, int width, int height, double gravity, String type, ServerEngine engine) {
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
@@ -201,10 +202,8 @@ public abstract class ServerObject {
 	 * @return whether or not the two objects are colliding
 	 */
 	public boolean collidesWith(ServerObject other) {
-		if (exists && x <= other.getX() + other.getWidth()
-				&& (x + width) >= other.getX()
-				&& y <= other.getY() + other.getHeight()
-				&& (y + height) >= other.getY()) {
+		if (exists && x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
+				&& y <= other.getY() + other.getHeight() && (y + height) >= other.getY()) {
 			return true;
 		}
 		return false;
@@ -217,8 +216,7 @@ public abstract class ServerObject {
 	 * @return whether or not the two objects are colliding
 	 */
 	public boolean collidesWith(int x1, int y1, int x2, int y2) {
-		if (exists && x <= x2 && (x + width) >= x1 && y <= y2
-				&& (y + height) >= y1) {
+		if (exists && x <= x2 && (x + width) >= x1 && y <= y2 && (y + height) >= y1) {
 			return true;
 		}
 		return false;
@@ -252,10 +250,8 @@ public abstract class ServerObject {
 	public boolean quickInRange(ServerObject other, double distance) {
 		// Create a big hitbox and see if the other object touches it,
 		// essentially
-		if (other.getX() <= x + width + distance
-				&& other.getX() + other.getWidth() >= x - distance
-				&& other.getY() <= y + height + distance / 3
-				&& other.getY() + other.getHeight() >= y - distance / 3) {
+		if (other.getX() <= x + width + distance && other.getX() + other.getWidth() >= x - distance
+				&& other.getY() <= y + height + distance / 3 && other.getY() + other.getHeight() >= y - distance / 3) {
 			return true;
 		}
 		return false;
@@ -298,8 +294,7 @@ public abstract class ServerObject {
 			thisY = y + height;
 		}
 
-		return Math.sqrt((thisX - otherX) * (thisX - otherX) + (thisY - otherY)
-				* (thisY - otherY));
+		return Math.sqrt((thisX - otherX) * (thisX - otherX) + (thisY - otherY) * (thisY - otherY));
 	}
 
 	/**
@@ -313,28 +308,23 @@ public abstract class ServerObject {
 		switch (original.getType()) {
 		case ServerWorld.CASTLE_TYPE:
 			ServerCastle newCastle = (ServerCastle) original;
-			return new ServerCastle(newCastle.getX(), newCastle.getY(),
-					newCastle.getTeam(), newCastle.getWorld());
+			return new ServerCastle(newCastle.getX(), newCastle.getY(), newCastle.getTeam(), newCastle.getWorld());
 		case ServerWorld.CHEST_TYPE:
 			ServerChest newChest = (ServerChest) original;
-			return new ServerChest(newChest.getX(), newChest.getY(),
-					newChest.getWorld());
+			return new ServerChest(newChest.getX(), newChest.getY(), newChest.getWorld());
 		case ServerWorld.VENDOR_TYPE:
 			ServerVendor newVendor = (ServerVendor) original;
-			return new ServerVendor(newVendor.getX(), newVendor.getY(),
-					newVendor.getWorld());
+			return new ServerVendor(newVendor.getX(), newVendor.getY(), newVendor.getWorld());
 		case ServerWorld.GOBLIN_SPAWN_TYPE:
 			ServerGoblinSpawner newSpawner = (ServerGoblinSpawner) original;
-			return new ServerGoblinSpawner(original.getX(), original.getY(),
-					newSpawner.getWorld(), newSpawner.getTeam());
+			return new ServerGoblinSpawner(original.getX(), original.getY(), newSpawner.getWorld(),
+					newSpawner.getTeam());
 		case ServerWorld.SLIME_SPAWN_TYPE:
 			ServerSlimeSpawner newSlimeSpawner = (ServerSlimeSpawner) original;
-			return new ServerSlimeSpawner(original.getX(), original.getY(),
-					newSlimeSpawner.getWorld());
+			return new ServerSlimeSpawner(original.getX(), original.getY(), newSlimeSpawner.getWorld());
 		case ServerWorld.BAT_SPAWN_TYPE:
 			ServerBatSpawner newBatSpawner = (ServerBatSpawner) original;
-			return new ServerBatSpawner(original.getX(), original.getY(),
-					newBatSpawner.getWorld());
+			return new ServerBatSpawner(original.getX(), original.getY(), newBatSpawner.getWorld());
 		}
 
 		// case ServerWorld.SLIME_TYPE:
