@@ -1328,6 +1328,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// Play the death animation of the player when the HP drops to 0 or
 			// below, and eventually respawn the player
 			if (getHP() <= 0) {
+				//For the scoreboard
+				if(source.getType().equals(ServerWorld.PLAYER_TYPE))
+					engine.broadcast("SK "+toChars(source.getID())+" "+source.getTeam());
+				engine.broadcast("SD "+toChars(getID())+" "+getTeam());
+				
 				if (source.getTeam() == ServerCreature.NEUTRAL) {
 					String firstName = getTeam() + getName();
 					String secondName = ServerCreature.NEUTRAL
@@ -1630,7 +1635,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	}
 
-	public String toChars(int y) {
+	public static String toChars(int y) {
 		int x = y;
 		String ret = "";
 

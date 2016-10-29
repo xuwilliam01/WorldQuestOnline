@@ -111,6 +111,8 @@ ActionListener, MouseMotionListener {
 	private JButton enter;
 	private ArrayList<String> chatQueue = new ArrayList<String>();
 
+	//Scoreboard
+	ClientScoreBoard scoreboard = new ClientScoreBoard();
 	/**
 	 * Mouse's x coordinate
 	 */
@@ -236,6 +238,9 @@ ActionListener, MouseMotionListener {
 		enter.addActionListener(this);
 		enter.setBackground(new Color(240, 240, 240));
 
+		scoreboard.setVisible(false);
+		setFocusTraversalKeysEnabled(false);
+		
 		setLayout(null);
 		add(chat);
 		add(enter);
@@ -581,6 +586,27 @@ ActionListener, MouseMotionListener {
 								case "SI":
 									String type = tokens[++token];
 									inventory.removeThis(type);
+									break;
+								case "SP":
+									int l = Integer
+											.parseInt(tokens[++token]);
+									String n = tokens[++token];;
+									for (int i = 1; i < l;i++)
+										n+= " " + tokens[++token];
+									scoreboard.addPlayer(n, toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+									scoreboard.repaint();
+									break;
+								case "SK":
+									scoreboard.addKill(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+									scoreboard.repaint();
+									break;
+								case "SD":
+									scoreboard.addDeath(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+									scoreboard.repaint();
+									break;
+								case "RP":
+									scoreboard.removePlayer(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+									scoreboard.repaint();
 									break;
 								case "CH":
 									char who = tokens[++token].charAt(0);
@@ -1161,6 +1187,10 @@ ActionListener, MouseMotionListener {
 				writingMessage = false;
 
 			}
+		} else if (key.getKeyCode() == KeyEvent.VK_TAB && !scoreboard.isVisible()) {
+			scoreboard.setVisible(true);
+			add(scoreboard);
+			revalidate();
 		}
 	}
 
@@ -1169,7 +1199,12 @@ ActionListener, MouseMotionListener {
 
 		if (key.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			inventory.getMenuButton().doClick();
-		} else {
+		} else if (key.getKeyCode() == KeyEvent.VK_TAB) {
+			scoreboard.setVisible(false);
+			remove(scoreboard);
+			revalidate();
+		}
+		else {
 			if ((key.getKeyCode() == KeyEvent.VK_D || key.getKeyCode() == KeyEvent.VK_RIGHT)
 					&& !currentMessage.equals("!R")) {
 				currentMessage = "!R";

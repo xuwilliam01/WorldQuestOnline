@@ -216,9 +216,11 @@ public class ServerEngine implements Runnable, ActionListener {
 		listOfPlayers.remove(remove);
 		world.remove(remove);
 		server.decreaseNumPlayer();
-		broadcast("R " + remove.getID());
+		broadcast("R " + ServerPlayer.toChars(remove.getID()));
 		broadcast("RO " + remove.getName().split(" ").length + " "
 				+ remove.getTeam() + remove.getName());
+		//Remove from the scoreboard
+		broadcast("RP " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
 	}
 
 	/**
@@ -229,6 +231,17 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void addPlayer(ServerPlayer newPlayer) {
 		listOfPlayers.add(newPlayer);
+
+		//For the scoreboard
+		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
+				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam());
+		for(ServerPlayer player : listOfPlayers)
+		{
+			if(player.getID() != newPlayer.getID())
+				newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
+						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam());
+		}
+
 		world.add(newPlayer);
 	}
 

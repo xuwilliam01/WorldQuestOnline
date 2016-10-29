@@ -41,7 +41,7 @@ public class Server implements Runnable {
 	int noOfPlayers = 0;
 
 	private boolean closeServer = false;
-	
+
 	public boolean isFull() {
 		if (!start) {
 			return lobbyPlayers.size() >= MAX_PLAYERS;
@@ -64,7 +64,7 @@ public class Server implements Runnable {
 				break;
 			} catch (ConcurrentModificationException E) {
 				System.out
-						.println("Concurrnet modification adding players to game");
+				.println("Concurrnet modification adding players to game");
 			}
 		}
 	}
@@ -99,7 +99,7 @@ public class Server implements Runnable {
 		// sizeIndex);
 		if(closeServer)
 			return null;
-		
+
 		sizeIndex++;
 		return newPlayerWaiting.get(sizeIndex - 1);
 	}
@@ -140,7 +140,7 @@ public class Server implements Runnable {
 		if (map == null) {
 			map = defaultMap;
 		}
-		
+
 		// Construct the new world
 		System.out.println("Creating world...");
 		try {
@@ -169,10 +169,10 @@ public class Server implements Runnable {
 		while (true) {
 			try {
 				Socket newClient = nextGameClient();
-				
+
 				if(closeServer)
 					return;
-				
+
 				output = new PrintWriter(newClient.getOutputStream());
 				noOfPlayers++;
 
@@ -308,8 +308,18 @@ public class Server implements Runnable {
 	 * Send an instant message to all clients
 	 */
 	public void broadcast(String message) {
-		for (ServerLobbyPlayer player : lobbyPlayers) {
-			player.sendMessage(message);
+		while(true)
+		{
+			try{
+				for (ServerLobbyPlayer player : lobbyPlayers) {
+					player.sendMessage(message);
+				}
+				break;
+			}
+			catch (ConcurrentModificationException e)
+			{
+				
+			}
 		}
 		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
@@ -331,7 +341,7 @@ public class Server implements Runnable {
 			gui.setMap(map);
 		}
 	}
-	
+
 	public void close()
 	{
 		closeServer = true;

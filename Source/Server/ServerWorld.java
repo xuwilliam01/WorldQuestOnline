@@ -624,9 +624,7 @@ public class ServerWorld {
 											&& otherObject.getType().equals(
 													MONEY_TYPE)
 											&& !((ServerMoney) otherObject)
-													.hasCoolDown()
-											&& ((ServerCastle) object)
-													.getTier() < 5) {
+													.hasCoolDown()) {
 										((ServerCastle) object)
 												.addMoney(((ServerMoney) otherObject)
 														.getAmount());
