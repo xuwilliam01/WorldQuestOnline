@@ -139,7 +139,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * The specific action being performed alongside the action counter
 	 */
-	private String action;
+	private String action = "NOTHING";
 
 	/**
 	 * The counter that plays the death animation
@@ -395,7 +395,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void update() {
 		if (exists()) {
 			// Change the player's facing direction after its current action
-			if (actionCounter < 0) {
+			if (actionCounter < 0 && action == "NOTHING") {
 				super.setDirection(getNextDirection());
 			}
 

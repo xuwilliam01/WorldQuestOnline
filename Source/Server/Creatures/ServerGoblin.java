@@ -26,7 +26,7 @@ public class ServerGoblin extends ServerCreature {
 	 */
 	public final static int GOBLIN_HP = 60;
 	public final static int GOBLIN_ARCHER_HP = 35;
-	public final static int ARCHER_FIGHTING_RANGE = 700;
+	public final static int ARCHER_FIGHTING_RANGE = 550;
 
 	public final static int GOBLIN_SOLDIER_HP = 70;
 	public final static int GOBLIN_WIZARD_HP = 60;
@@ -136,8 +136,8 @@ public class ServerGoblin extends ServerCreature {
 		case 0:
 			setType(ServerWorld.NAKED_GOBLIN_TYPE);
 			setImage("GOB_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
-					+ ServerWorld.TILE_SIZE;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE / 2)
+					+ ServerWorld.TILE_SIZE / 2;
 			setMaxHP(GOBLIN_HP);
 			setHP(GOBLIN_HP);
 
@@ -166,8 +166,8 @@ public class ServerGoblin extends ServerCreature {
 		case 2:
 			setType(ServerWorld.GOBLIN_SOLDIER_TYPE);
 			setImage("GOBSOLDIER_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE*2)
-					+ ServerWorld.TILE_SIZE*2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 
 			setMaxHP(GOBLIN_SOLDIER_HP);
 			setHP(GOBLIN_SOLDIER_HP);
@@ -195,8 +195,8 @@ public class ServerGoblin extends ServerCreature {
 		case 4:
 			setType(ServerWorld.GOBLIN_WORKER_TYPE);
 			setImage("GOBWORKER_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 3;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE * 2;
 			setMaxHP(GOBLIN_WORKER_HP);
 			setHP(GOBLIN_WORKER_HP);
 
@@ -213,8 +213,8 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_GUARD_HP);
 			setHP(GOBLIN_GUARD_HP);
 
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 			armour = 0.2;
 			damage = 8;
 			weapon = "SWIRON_0";
@@ -223,8 +223,8 @@ public class ServerGoblin extends ServerCreature {
 		case 6:
 			setType(ServerWorld.GOBLIN_KNIGHT_TYPE);
 			setImage("GOBKNIGHT_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_KNIGHT_HP);
 			setHP(GOBLIN_KNIGHT_HP);
 
@@ -236,8 +236,8 @@ public class ServerGoblin extends ServerCreature {
 		case 7:
 			setType(ServerWorld.GOBLIN_LORD_TYPE);
 			setImage("GOBLORD_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_LORD_HP);
 			setHP(GOBLIN_LORD_HP);
 
@@ -250,6 +250,7 @@ public class ServerGoblin extends ServerCreature {
 			setType(ServerWorld.GOBLIN_WIZARD_TYPE);
 			setImage("GOBWIZARD_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 250 + 250);
+			targetRange = fightingRange;
 			setMaxHP(GOBLIN_WIZARD_HP);
 			setHP(GOBLIN_WIZARD_HP);
 
@@ -267,7 +268,7 @@ public class ServerGoblin extends ServerCreature {
 		case 9:
 			setType(ServerWorld.GOBLIN_GIANT_TYPE);
 			setImage("GOBGIANT_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * 16 + 4);
+			fightingRange = (int) (Math.random() * 16 + 8);
 			setMaxHP(GOBLIN_GIANT_HP);
 			setHP(GOBLIN_GIANT_HP);
 
@@ -283,8 +284,8 @@ public class ServerGoblin extends ServerCreature {
 		case 10:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
 			setImage("GOBGENERAL_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_GENERAL_HP);
 			setHP(GOBLIN_GENERAL_HP);
 
@@ -296,8 +297,8 @@ public class ServerGoblin extends ServerCreature {
 		case 11:
 			setType(ServerWorld.GOBLIN_KING_TYPE);
 			setImage("GOBKING_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE * 2)
-					+ ServerWorld.TILE_SIZE * 2;
+			fightingRange = (int) (Math.random() * ServerWorld.TILE_SIZE)
+					+ ServerWorld.TILE_SIZE;
 			setMaxHP(GOBLIN_KING_HP);
 			setHP(GOBLIN_KING_HP);
 
@@ -330,7 +331,8 @@ public class ServerGoblin extends ServerCreature {
 				setDirection("LEFT");
 			}
 
-			if (Math.abs(getHSpeed()) <= 1 && isOnSurface() && !onTarget && action==null) {
+			if (Math.abs(getHSpeed()) <= 1 && isOnSurface() && !onTarget
+					&& action == null) {
 				setVSpeed(-jumpSpeed);
 				setOnSurface(false);
 			}
@@ -341,15 +343,16 @@ public class ServerGoblin extends ServerCreature {
 			} else {
 				action = null;
 				actionCounter = -1;
+				setRowCol(new RowCol(0, 0));
 			}
 
 			// Have the goblin move towards the enemy base when it has no target
 			if (getTarget() == null) {
-				onTarget = false;
 				if (getWorld().getWorldCounter() % 15 == 0) {
 					setTarget(findTarget());
 				}
 
+				onTarget = false;
 				if (getTarget() == null && action == null) {
 					if (getTeam() == ServerPlayer.BLUE_TEAM) {
 						if (quickInRange(getWorld().getRedCastle(),
@@ -389,16 +392,6 @@ public class ServerGoblin extends ServerCreature {
 				// fightingRange = 1200;
 				// }
 				// }
-				if ((getX() + getWidth() / 2 < getTarget().getX()) && !onTarget
-						&& action == null) {
-					setHSpeed(movementSpeed);
-				} else if ((getX() + getWidth() / 2 > getTarget().getX()
-						+ getTarget().getWidth())
-						&& !onTarget && action == null) {
-					setHSpeed(-movementSpeed);
-				} else {
-					setHSpeed(0);
-				}
 
 				// Attack the target with the weapon the goblin uses.
 				if (quickInRange(getTarget(), fightingRange)) {
@@ -440,10 +433,18 @@ public class ServerGoblin extends ServerCreature {
 										angle = 0;
 									}
 
-									getWorld().add(
-											new ServerWeaponSwing(this, 4, -19,
-													weapon, angle, actionDelay,
-													damage));
+									if (getType().equals(
+											ServerWorld.GOBLIN_WORKER_TYPE)) {
+										getWorld().add(
+												new ServerWeaponSwing(this, 0,
+														-16, weapon, angle,
+														actionDelay, damage));
+									} else {
+										getWorld().add(
+												new ServerWeaponSwing(this, 4,
+														-19, weapon, angle,
+														actionDelay, damage));
+									}
 								}
 							} else {
 								action = "SHOOT";
@@ -523,53 +524,84 @@ public class ServerGoblin extends ServerCreature {
 				} else {
 					onTarget = false;
 				}
+
+				if (getTarget() != null && !onTarget && action == null) {
+					if ((getX() + getWidth() / 2 < getTarget().getX())) {
+						setHSpeed(movementSpeed);
+					} else {
+						setHSpeed(-movementSpeed);
+					}
+				} else {
+					setHSpeed(0);
+				}
 			}
 		}
 
 		// Update the animation of the goblin
-		setRowCol(new RowCol(0, 0));
 		if (actionCounter >= 0) {
-			if (action.equals("SWING")) {
-				if (actionCounter < 1.0 * actionDelay / 4.0) {
+			switch (action) {
+			case "SWING":
+				switch (actionCounter) {
+				case 0:
 					setRowCol(new RowCol(2, 0));
-				} else if (actionCounter < 1.0 * actionDelay / 2.0) {
+					break;
+				case 4:
 					setRowCol(new RowCol(2, 1));
-				} else if (actionCounter < 1.0 * actionDelay / 4.0 * 3) {
+					break;
+				case 8:
 					setRowCol(new RowCol(2, 2));
-				} else if (actionCounter < actionDelay) {
+					break;
+				case 12:
 					setRowCol(new RowCol(2, 3));
+					break;
 				}
-			}
-
-			else if (action.equals("SHOOT")) {
-				if (getType().equals(ServerWorld.GOBLIN_NINJA_TYPE)) {
-					if (actionCounter < 4) {
+				break;
+			case "SHOOT":
+				switch (getType()) {
+				case ServerWorld.GOBLIN_WIZARD_TYPE:
+				case ServerWorld.GOBLIN_NINJA_TYPE:
+					switch (actionCounter) {
+					case 0:
 						setRowCol(new RowCol(2, 4));
-					} else if (actionCounter < 8) {
+						break;
+					case 4:
 						setRowCol(new RowCol(2, 5));
-					} else if (actionCounter < 2 * actionDelay / 3) {
+						break;
+					case 8:
 						setRowCol(new RowCol(2, 6));
-					} else {
+						break;
+					case 40:
 						setRowCol(new RowCol(0, 0));
+						break;
 					}
-				} else {
-					setRowCol(new RowCol(2, 7));
+					break;
+				case ServerWorld.GOBLIN_ARCHER_TYPE:
+					if (actionCounter == 0) {
+						setRowCol(new RowCol(2, 7));
+					}
+					break;
 				}
-			} else if (action.equals("BLOCK")) {
+				break;
+			case "BLOCK":
 				setRowCol(new RowCol(2, 9));
-			} else if (action.equals("PUNCH")) {
-				if (actionCounter < 10) {
+				break;
+			case "PUNCH":
+				switch (actionCounter) {
+				case 0:
 					setRowCol(new RowCol(2, 7));
-				} else if (actionCounter < 30) {
+					break;
+				case 10:
 					setRowCol(new RowCol(2, 8));
-
 					if (!isHasPunched()) {
 						punch(damage);
 						setHasPunched(true);
 					}
+					break;
 				}
+				break;
 			}
-		} else if (getHSpeed() != 0 && isOnSurface()) {
+		}
+		if (getHSpeed() != 0 && isOnSurface()) {
 			int checkFrame = (int) (getWorld().getWorldCounter() % 30);
 			if (checkFrame < 5) {
 				setRowCol(new RowCol(0, 1));
@@ -654,9 +686,8 @@ public class ServerGoblin extends ServerCreature {
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()
 				/ 3;
 		getWorld().add(
-				new ServerText(damageX, damageY, Integer
-						.toString(amount),textColour ,
-						getWorld()));
+				new ServerText(damageX, damageY, Integer.toString(amount),
+						textColour, getWorld()));
 
 		// Play the death animation for a goblin when it dies
 		if (getHP() <= 0 && isAlive()) {
