@@ -250,6 +250,7 @@ public class ServerGoblin extends ServerCreature {
 			setType(ServerWorld.GOBLIN_WIZARD_TYPE);
 			setImage("GOBWIZARD_RIGHT_0_0");
 			fightingRange = (int) (Math.random() * 250 + 250);
+			privateFightingRange = fightingRange;
 			targetRange = fightingRange;
 			setMaxHP(GOBLIN_WIZARD_HP);
 			setHP(GOBLIN_WIZARD_HP);
@@ -257,10 +258,12 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.2;
 			int weaponChoice = (int) (Math.random() * 5);
 			weapon = ServerWorld.ICEBALL_TYPE;
+			damage = ServerWeapon.ICEWAND_DMG;
 			actionDelay = 240;
 			if (weaponChoice == 4) {
 				weapon = ServerWorld.FIREBALL_TYPE;
 				actionDelay = 180;
+				damage = ServerWeapon.FIREWAND_DMG;
 			}
 			isMelee = false;
 			setName("A Goblin Wizard");
@@ -380,9 +383,10 @@ public class ServerGoblin extends ServerCreature {
 			else if (!getTarget().isAlive() || !getTarget().exists()
 					|| !quickInRange(getTarget(), targetRange)) {
 				setTarget(null);
-				fightingRange = privateFightingRange;
+				if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
+					fightingRange = privateFightingRange;
+				}
 			}
-
 			// Follow and attack the target
 			else {
 				// if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {

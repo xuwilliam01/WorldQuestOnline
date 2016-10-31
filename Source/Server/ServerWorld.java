@@ -658,17 +658,17 @@ public class ServerWorld {
 						// Detect the rows and columns of the tiles that the
 						// object collides with in this tick
 						if (vSpeed > 0) {
-							startRow = (int) (y1 / TILE_SIZE - 1);
+							startRow = (int) (y2 / TILE_SIZE - 1);
 							endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
 						} else if (vSpeed < 0) {
 							startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
-							endRow = (int) (y2 / TILE_SIZE + 1);
+							endRow = (int) (y1 / TILE_SIZE + 1);
 						} else {
 							startRow = (int) (y1 / TILE_SIZE);
 							endRow = (int) (y2 / TILE_SIZE + 1);
 						}
 						if (hSpeed > 0) {
-							startColumn = (int) (x1 / TILE_SIZE - 1);
+							startColumn = (int) (x2 / TILE_SIZE - 1);
 							endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
 						} else if (hSpeed < 0) {
 							startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
