@@ -674,7 +674,7 @@ public class ServerWorld {
 							// with
 							int collideRow = 0;
 
-							for (int row = startRow; row <= endRow; row++) {
+							for (int row = endRow; row >=startRow; row--) {
 								for (int column = startColumn; column <= endColumn; column++) {
 									if (collisionGrid[row][column] == SOLID_TILE && column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1) {
@@ -728,7 +728,7 @@ public class ServerWorld {
 							int collideColumn = 0;
 
 							for (int row = startRow; row <= endRow; row++) {
-								for (int column = startColumn; column <= endColumn; column++) {
+								for (int column = endColumn; column >= startColumn; column--) {
 									if (collisionGrid[row][column] == SOLID_TILE && row * TILE_SIZE < y2
 											&& row * TILE_SIZE + TILE_SIZE > y1) {
 										if (x1 + hSpeed <= column * TILE_SIZE + TILE_SIZE
