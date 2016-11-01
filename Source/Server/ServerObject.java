@@ -22,7 +22,7 @@ import Tools.RowCol;
  * @author William Xu & Alex Raita
  *
  */
-public abstract class ServerObject {
+public abstract class ServerObject implements Comparable<ServerObject> {
 	/**
 	 * Unique identifier for the object
 	 */
@@ -105,8 +105,6 @@ public abstract class ServerObject {
 	 */
 	private boolean visible;
 
-	private ServerEngine engine;
-
 	/**
 	 * Constructor for an object
 	 * 
@@ -121,7 +119,6 @@ public abstract class ServerObject {
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
-		this.engine = engine;
 		this.type = type;
 		exists = true;
 		onSurface = false;
@@ -168,7 +165,6 @@ public abstract class ServerObject {
 		solid = true;
 		mapVisible = true;
 		this.type = type;
-
 		exists = true;
 		onSurface = false;
 		this.visible = false;
@@ -346,6 +342,12 @@ public abstract class ServerObject {
 		// }
 
 		return null;
+	}
+	
+	@Override
+	public int compareTo(ServerObject other)
+	{
+		return other.getID()-getID();
 	}
 
 	/**

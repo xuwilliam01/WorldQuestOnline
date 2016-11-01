@@ -17,7 +17,7 @@ public class ServerCastle extends ServerCreature {
 	/**
 	 * The default HP of a castle
 	 */
-	public final static int CASTLE_HP = 5000;
+	public final static int CASTLE_HP = 20000;
 
 	/**
 	 * The number of pixels for a target to be in range for the castle to fire
@@ -33,7 +33,7 @@ public class ServerCastle extends ServerCreature {
 	/**
 	 * The current tier of the castle
 	 */
-	private int tier = 0;
+	private int tier = 5;
 
 	/**
 	 * The target for the castle to attack
