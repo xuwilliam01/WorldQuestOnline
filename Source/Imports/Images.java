@@ -925,17 +925,16 @@ public class Images {
 					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
 
 			addtoImageArray(new GameImage("VENDOR_RIGHT.png",
-					4 * ServerWorld.SMALL_TILE_SIZE, 5 * ServerWorld.SMALL_TILE_SIZE,
+					56, 72,
 					"Creatures//"));
 			addtoImageArray(new GameImage("VENDOR_LEFT.png",
-					4 * ServerWorld.SMALL_TILE_SIZE, 5 * ServerWorld.SMALL_TILE_SIZE,
+					56, 72,
 					"Creatures//"));
 
 			addtoImageArray(new GameImage("CHEST.png",
-					5 * ServerWorld.SMALL_TILE_SIZE, 3 * ServerWorld.SMALL_TILE_SIZE,
+					80, 48,
 					"Creatures//"));
 			addtoImageArray(new GameImage("RED_CASTLE.png",
-					26 * ServerWorld.SMALL_TILE_SIZE, 52 * ServerWorld.SMALL_TILE_SIZE,
 					"Creatures//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
 					"Creatures//"));
