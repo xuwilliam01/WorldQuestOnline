@@ -60,7 +60,7 @@ public class MainMenu implements KeyListener {
 	/**
 	 * The IP address for the dedicated server
 	 */
-	public final static String DEDICATED_IP = "138.197.137.246";
+	public final static String DEDICATED_IP = "159.203.60.120";
 	
 	/**
 	 * Default port number
