@@ -203,6 +203,9 @@ ActionListener, MouseMotionListener {
 	private boolean writingMessage = false;
 
 	public boolean leaveGame;
+	
+	private int deathTime = 0;
+	private float fillAmount = 0;
 
 	/**
 	 * Constructor for the client
@@ -886,6 +889,26 @@ ActionListener, MouseMotionListener {
 			// System.out.println("Null Pointer Exception for world.update");
 			// e.printStackTrace();
 		}
+		
+		// Draw death message if applicable
+		if (getHP() > 0) {
+			setJustDied(true);
+			deathTime = 1;
+		} else {
+			if (isJustDied()) {
+				getInventory().clear();
+				setJustDied(false);
+			}
+			deathTime++;
+			fillAmount += Math.max(0.5, 1.5-deathTime/15.0);
+			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
+			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+			
+			graphics.setColor(Color.black);
+			graphics.setFont(ClientWorld.MESSAGE_FONT);
+			graphics.drawString(
+					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
+		}
 
 		// Draw the ping and the FPS
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -1086,19 +1109,6 @@ ActionListener, MouseMotionListener {
 			} catch (ConcurrentModificationException E) {
 
 			}
-		}
-
-		if (getHP() > 0) {
-			setJustDied(true);
-		} else {
-			if (isJustDied()) {
-				getInventory().clear();
-				setJustDied(false);
-			}
-			graphics.setColor(Color.black);
-			graphics.setFont(ClientWorld.MESSAGE_FONT);
-			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
 
 		// Repaint the inventory

@@ -271,7 +271,7 @@ public class ServerGoblin extends ServerCreature {
 		case 9:
 			setType(ServerWorld.GOBLIN_GIANT_TYPE);
 			setImage("GOBGIANT_RIGHT_0_0");
-			fightingRange = (int) (Math.random() * 16 + 8);
+			fightingRange = (int) (Math.random() * 8 + 8);
 			setMaxHP(GOBLIN_GIANT_HP);
 			setHP(GOBLIN_GIANT_HP);
 
