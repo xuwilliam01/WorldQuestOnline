@@ -529,7 +529,7 @@ public class ServerGoblin extends ServerCreature {
 					onTarget = false;
 				}
 
-				if (getTarget() != null && !onTarget && action == null) {
+				if (getTarget() != null && !onTarget && action == null && getWorld().getWorldCounter()%60==0) {
 					if ((getX() + getWidth() / 2 < getTarget().getX())) {
 						setHSpeed(movementSpeed);
 					} else {
