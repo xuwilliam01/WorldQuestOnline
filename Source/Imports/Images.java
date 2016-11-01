@@ -33,10 +33,12 @@ public class Images {
 	
 	public final static Color YELLOW = new Color(204, 153, 0);
 	public final static Color RED = new Color(153, 0, 38);
+	public final static Color DARK_RED = new Color(102,0,0);
 	public final static Color BLUE = new Color(0, 161, 230);
 	public final static Color GREEN = new Color(0, 153, 0);
 	public final static Color PURPLE = new Color(82, 42, 122);
 	public final static Color GRAY = Color.gray;
+	public final static Color DARK_GRAY = Color.darkGray;
 	public final static Color BLACK = Color.black;
 	public final static Color WHITE = Color.white;
 
@@ -49,6 +51,11 @@ public class Images {
 	 * Array of red starting from lowest opacity to highest opacity
 	 */
 	public static Color[] reds = new Color[100];
+	
+	/**
+	 * Array of darkReds starting from lowest opacity to highest opacity
+	 */
+	public static Color[] darkReds = new Color[255];
 	
 	/**
 	 * Array of blue starting from lowest opacity to highest opacity
@@ -69,6 +76,11 @@ public class Images {
 	 * Array of whites starting from lowest opacity to highest opacity
 	 */
 	public static Color[] whites = new Color[255];
+	
+	/**
+	 * Array of darkGrays starting from lowest opacity to highest opacity
+	 */
+	public static Color[] darkGrays = new Color[255];
 	
 	/**
 	 * The format of the images (.jpg, .png, .gif, etc.)
@@ -181,6 +193,12 @@ public class Images {
 			reds[no] = new Color (RED.getRed(), RED.getGreen(), RED.getBlue(), (int)((1.0*(no+1)/reds.length)*255.0));
 		}
 		
+		// Create array of reds with varying opacity
+		for (int no = 0; no < darkReds.length;no++)
+		{
+			darkReds[no] = new Color (DARK_RED.getRed(), DARK_RED.getGreen(), DARK_RED.getBlue(), (int)((1.0*(no+1)/darkReds.length)*255.0));
+		}
+		
 		// Create array of blacks with varying opacity
 		for (int no = 0; no < blacks.length;no++)
 		{
@@ -191,6 +209,12 @@ public class Images {
 		for (int no = 0; no < whites.length;no++)
 		{
 			whites[no] = new Color (WHITE.getRed(), WHITE.getGreen(), WHITE.getBlue(), (int)((1.0*(no+1)/whites.length)*255.0));
+		}
+		
+		// Create array of darkGrays with varying opacity
+		for (int no = 0; no < darkGrays.length;no++)
+		{
+			darkGrays[no] = new Color (DARK_GRAY.getRed(), DARK_GRAY.getGreen(), DARK_GRAY.getBlue(), (int)((1.0*(no+1)/darkGrays.length)*255.0));
 		}
 		
 		imageArray = new GameImage[10000];

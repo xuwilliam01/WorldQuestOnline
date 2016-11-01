@@ -43,7 +43,20 @@ public class Map
 		this.collisionGrid = collisionGrid;
 	}
 	public ArrayList<ServerObject>[][] getObjectGrid() {
-		return objectGrid;
+		@SuppressWarnings("unchecked")
+		ArrayList<ServerObject>[][]newObjectGrid = new ArrayList[objectGrid.length][objectGrid[0].length];
+		for (int row = 0; row < objectGrid.length; row++)
+		{
+			for (int col = 0; col < objectGrid[0].length; col++)
+			{
+				newObjectGrid[row][col] = new ArrayList<ServerObject>();
+				for (ServerObject object:objectGrid[row][col])
+				{
+					newObjectGrid[row][col].add(object);
+				}
+			}
+		}
+		return newObjectGrid;
 	}
 	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid) {
 		this.objectGrid = objectGrid;
@@ -54,4 +67,5 @@ public class Map
 	public void setStartingObjects(ArrayList<String> startingObjects) {
 		this.startingObjects = startingObjects;
 	}
+
 }

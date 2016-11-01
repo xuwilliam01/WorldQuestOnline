@@ -140,7 +140,7 @@ public class MainMenu implements KeyListener {
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 		DisplayMode dm = gs.getDisplayMode();
 
-		ClientInventory.INVENTORY_WIDTH = (int) (300 * (dm.getWidth() / 1920.0));
+		ClientInventory.INVENTORY_WIDTH = (int) (300 * (Math.min(dm.getWidth(),1920) / 1920.0));
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
 		
@@ -162,7 +162,7 @@ public class MainMenu implements KeyListener {
 		
 		if (tooLarge)
 		{
-			JOptionPane.showMessageDialog(null, "Please set your monitor to 1080x1920 or smaller for an optimized experience (Then log out of Windows then log back in to see changes)");
+			JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
 		}
 
 		mainFrame = new ClientFrame(tooLarge);
