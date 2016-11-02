@@ -201,12 +201,13 @@ public class ClientWorld {
 		// Create a background and foreground grid
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
+				
+				// Invisible solid tiles
+				if (grid[row][column] == '_') {
+					grid[row][column] = ' ';
+				}
+				
 				if (grid[row][column] < 'A') {
-
-					// Invisible solid tiles
-					if (grid[row][column] == '_') {
-						grid[row][column] = ' ';
-					}
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
 
