@@ -43,9 +43,10 @@ public class ServerHologram extends ServerObject{
 		setHeight(Images.getGameImage(getImage()).getHeight());
 	}
 	
-	public ServerBuilding toBuilding()
+	public ServerBuilding toBuilding(int team)
 	{
-		return ServerBuilding.getNewBuilding((int)getX(), (int)getY(),imageType, world);
+		int x = (int) (ServerWorld.TILE_SIZE * Math.round(getX()/ServerWorld.TILE_SIZE));
+		return ServerBuilding.getNewBuilding(x, (int)getY(),imageType, team, world);
 	}
 
 	public int getGoodImage()

@@ -678,7 +678,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 									if(hologram.wantToPlace() && hologram.canPlace())
 									{
-										world.add(hologram.toBuilding());
+										world.add(hologram.toBuilding(getTeam()));
+										queueMessage("PB");
+										queueMessage("PB");
+										equippedWeapons[weaponSelected - '0'] = null;
+										hologram.destroy();
 										hologram = null;
 									}
 									else

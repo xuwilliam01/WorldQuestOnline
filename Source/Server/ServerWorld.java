@@ -153,7 +153,7 @@ public class ServerWorld {
 
 	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 
-	public final static char BUILDING_TYPE = 'b';
+	public final static String BUILDING_TYPE = CREATURE_TYPE + "B";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
 	public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
 	
@@ -585,7 +585,7 @@ public class ServerWorld {
 										break;
 									case HOLOGRAM_TYPE:
 										//Check other object collisions
-										if (otherObject.getType().contains(CASTLE_TYPE) || otherObject.getType().charAt(0) == BUILDING_TYPE)
+										if (((ServerHologram) object).canPlace() &&(otherObject.getType().contains(CASTLE_TYPE) || otherObject.getType().substring(0,2).equals(BUILDING_TYPE) || otherObject.getType().equals(VENDOR_TYPE)))
 										{
 											//System.out.println("HOLOGRAM COLLISION");
 											((ServerHologram) object).setCanPlace(false);

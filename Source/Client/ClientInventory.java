@@ -258,7 +258,8 @@ public class ClientInventory extends JPanel implements ActionListener
 			else
 			{
 				equippedWeapons[pos] = null;
-				client.printToServer("Dr W " + item.getEquipSlot());
+				if(!item.getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
+					client.printToServer("Dr W " + item.getEquipSlot());
 
 				// If we dropped the weapon we selected, select a new weapon
 				if (client.getWeaponSelected() == pos)

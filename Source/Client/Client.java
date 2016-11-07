@@ -652,6 +652,14 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										castleShop.setMoney(blueCastleMoney);
 									blueCastleMaxHP = Integer.parseInt(tokens[++token]);
 									break;
+								case "PB":
+									for(int weap = 0; weap < inventory.getEquippedWeapons().length;weap++)
+										if(inventory.getEquippedWeapons()[weap] != null && inventory.getEquippedWeapons()[weap].getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
+										{
+											inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
+											break;
+										}
+									break;
 
 								}
 
@@ -1191,7 +1199,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		if (event.getButton() == MouseEvent.BUTTON1 && currentMessage.charAt(0) != 'A') {
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY()  + " t";
-
 			printToServer(currentMessage);
 
 			// System.out.println("Pressed");
