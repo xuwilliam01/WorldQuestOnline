@@ -155,6 +155,8 @@ public class ClientWorld {
 	int centreX;
 	int centreY;
 
+	private ClientHologram hologram = null;
+	
 	public final static int MAX_NO_OF_TEXT = Integer.MAX_VALUE;
 
 	/**
@@ -888,7 +890,6 @@ public class ClientWorld {
 		// Go through each object in the world and draw it relative to the
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
-		ClientObject hologram = null;
 		try {
 			for (ClientObject object : objects) {
 				if (object == null) {
@@ -898,12 +899,6 @@ public class ClientWorld {
 					break;
 				}
 				objectNo++;
-				
-				if(object.getType().equals(ServerWorld.HOLOGRAM_TYPE))
-				{
-					hologram = object;
-					continue;
-				}
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
@@ -1040,7 +1035,7 @@ public class ClientWorld {
 
 		//Draw the hologram if it exists
 		if(hologram != null)
-			graphics.drawImage(hologram.getImage(), hologram.getX(), hologram.getY(), null);
+			graphics.drawImage(hologram.getImage(), hologram.getX() - hologram.getImage().getWidth(null)/2, hologram.getY() - hologram.getImage().getHeight(null)/2, null);
 		
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
@@ -1170,5 +1165,21 @@ public class ClientWorld {
 	public void setNoOfObjects(int noOfObjects) {
 		this.noOfObjects = noOfObjects;
 	}
+	
+	public ClientHologram getHologram()
+	{
+		return hologram;
+	}
+	
+	public void newHologram(int image, int x, int y)
+	{
+		hologram = new ClientHologram(image, x, y);
+	}
+	
+	public void removeHologram()
+	{
+		hologram = null;
+	}
+	
 	
 }

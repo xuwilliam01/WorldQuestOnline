@@ -397,6 +397,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								case "L":
 									HP = Integer.parseInt(tokens[++token]);
 									break;
+								case "A":
+									armour = Double.parseDouble(tokens[++token]);
+									break;
 								case "M":
 									maxHP = Integer.parseInt(tokens[++token]);
 									break;
@@ -432,6 +435,19 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									}
 									startPainting = true;
 									repaint();
+									break;
+								case "H":
+									if (world.getHologram() == null)
+										world.newHologram(Integer.parseInt(tokens[++token]),mouseX,mouseY);
+									else
+									{
+										world.getHologram().setImage(Integer.parseInt(tokens[++token]));
+										world.getHologram().setX(mouseX);
+										world.getHologram().setY(mouseY);
+									}
+									break;
+								case "h":
+									world.removeHologram();
 									break;
 								case "O":
 									int id = toInt(tokens[++token]);

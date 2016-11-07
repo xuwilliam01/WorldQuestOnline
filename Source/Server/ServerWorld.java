@@ -580,11 +580,13 @@ public class ServerWorld {
 										}
 										break;
 									case HOLOGRAM_TYPE:
-										if (!otherObject.getType().equals(HOLOGRAM_TYPE))
+										//Check other object collisions
+										if (otherObject.getType().contains(CASTLE_TYPE) || (!otherObject.getType().equals(HOLOGRAM_TYPE) && otherObject.getType().charAt(0) != CREATURE_TYPE && otherObject.getType().charAt(0) != TEXT_TYPE && otherObject.getType().charAt(0) != ANIMATION_TYPE))
 										{
 											//System.out.println("HOLOGRAM COLLISION");
 											((ServerHologram) object).setCanPlace(false);
 										}
+
 										break;
 									}
 								}
@@ -595,6 +597,48 @@ public class ServerWorld {
 					boolean moveVertical = true;
 					boolean moveHorizontal = true;
 
+					//Check tile collisions for the hologram
+					if(object.getType().equals(HOLOGRAM_TYPE) && ((ServerHologram) object).canPlace())
+					{
+						double x1 = object.getX();
+						double x2 = object.getX() + object.getWidth();
+						double y1 = object.getY();
+						double y2 = object.getY() + object.getHeight();
+
+						int startRow1 = (int) (y1 / TILE_SIZE);
+						int endRow1 = (int) (y2 / TILE_SIZE + 1);
+						int startColumn1 = (int) (x1 / TILE_SIZE );
+						int endColumn1 = (int) (x2 / TILE_SIZE );
+
+						if (startRow1 < 0) {
+							startRow1 = 0;
+						} else if (endRow1 > collisionGrid.length - 1) {
+							endRow1 = collisionGrid.length - 1;
+						}
+						if (startColumn1 < 0) {
+							startColumn1 = 0;
+						} else if (endColumn1 > collisionGrid[0].length - 1) {
+							endColumn1 = collisionGrid[0].length - 1;
+						}
+
+						for (int row1 = startRow1; row1 <= endRow1; row1++) {
+							for (int column1 = startColumn1; column1 <= endColumn1; column1++) {
+								if (row1 < endRow1 && collisionGrid[row1][column1] == SOLID_TILE
+										|| (collisionGrid[row1][column1] == PLATFORM_TILE))
+								{
+									((ServerHologram) object).setCanPlace(false);
+									break;
+								}
+								else if (row1 == endRow1 && collisionGrid[endRow1][column1] != SOLID_TILE)
+								{
+									((ServerHologram) object).setCanPlace(false);
+									break;
+								}
+							}
+
+						}
+
+					}
 					if (object.isSolid()) {
 						// Apply gravity first (DEFINITELY BEFORE CHECKING
 						// VSPEED)

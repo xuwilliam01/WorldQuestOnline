@@ -587,6 +587,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				endColumn = world.getObjectGrid()[0].length - 1;
 			}
 
+			//Only checks collisions for the hologram once
+			boolean holoChecked = false;
+			
 			// Send information to the client about all the objects
 			for (int row = startRow; row <= endRow; row++) {
 				for (int column = startColumn; column <= endColumn; column++) {
@@ -659,26 +662,30 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							}
 							else
 							{
-								hologram = (ServerHologram) object;
-								int x = getNewMouseX() - object.getWidth()/2;
-								int y = getNewMouseY() - object.getHeight()/2;
-								object.setX(x + getX() - playerScreenWidth/2);
-								object.setY(y + getY() - playerScreenHeight/2);
-								
-								int imageIndex = -1;
-								if(hologram.canPlace())
-									imageIndex = hologram.getGoodImage();
-								else
-									imageIndex = hologram.getBadImage();
-								//hologram.setCanPlace(true);
-								queueMessage("O " + toChars(object.getID()) + " "
-										+ toChars(x) + " " + toChars(y) + " "
-										+ imageIndex + " " + ServerCreature.NEUTRAL + " "
-										+ object.getType() + " " + "{");
+								if (!holoChecked)
+								{
+									hologram = (ServerHologram) object;
+									int x = getNewMouseX() - object.getWidth()/2;
+									int y = getNewMouseY() - object.getHeight()/2;
+									object.setX(x + getX() - playerScreenWidth/2);
+									object.setY(y + getY() - playerScreenHeight/2);
+
+									int imageIndex = -1;
+									if(hologram.canPlace())
+										imageIndex = hologram.getGoodImage();
+									else
+										imageIndex = hologram.getBadImage();
+									hologram.setCanPlace(true);
+									queueMessage("H " + imageIndex);
+									holoChecked = true;
+								}
 							}
 						}
 						else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
-							queueMessage("R " + toChars(object.getID()));
+							if(object.getType().equals(ServerWorld.HOLOGRAM_TYPE))
+								queueMessage("h");
+							else
+								queueMessage("R " + toChars(object.getID()));
 						}			
 					}
 				}
