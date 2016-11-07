@@ -1,6 +1,6 @@
 package Server.Creatures;
 
-import java.io.BufferedReader;
+import java.io.BufferedReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -589,7 +589,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			//Only checks collisions for the hologram once
 			boolean holoChecked = false;
-			
+
 			// Send information to the client about all the objects
 			for (int row = startRow; row <= endRow; row++) {
 				for (int column = startColumn; column <= endColumn; column++) {
@@ -652,7 +652,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						{
 							int weap = weaponSelected - '0';
 							if (weap == DEFAULT_WEAPON_SLOT
-									|| equippedWeapons[weap] == null || !equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_TYPE))
+									|| equippedWeapons[weap] == null || !equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
 							{
 								if (hologram != null)
 								{
@@ -675,8 +675,19 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										imageIndex = hologram.getGoodImage();
 									else
 										imageIndex = hologram.getBadImage();
-									hologram.setCanPlace(true);
-									queueMessage("H " + imageIndex);
+
+									if(hologram.wantToPlace() && hologram.canPlace())
+									{
+										world.add(hologram.toBuilding());
+										hologram = null;
+									}
+									else
+									{
+										hologram.dontPlace();
+
+										hologram.setCanPlace(true);
+										queueMessage("H " + imageIndex);
+									}
 									holoChecked = true;
 								}
 							}
@@ -959,9 +970,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						int weap = weaponSelected - '0';
 						System.out.println("Selected weapon: "+weaponSelected);
 						if (weap != DEFAULT_WEAPON_SLOT
-								&& equippedWeapons[weap] != null && equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_TYPE))
+								&& equippedWeapons[weap] != null && equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
 						{
-							hologram = new ServerHologram(getNewMouseX() + getX() - playerScreenWidth/2, getNewMouseY() + getY() - playerScreenHeight/2,equippedWeapons[weap].getType(), this, engine);					
+							hologram = new ServerHologram(getNewMouseX() + getX() - playerScreenWidth/2, getNewMouseY() + getY() - playerScreenHeight/2,((ServerBuildingItem)equippedWeapons[weap]).getBuildingType(), this, engine);					
 							world.add(hologram);
 							System.out.println("Added HOLOGRAM to world at "+getNewMouseX() + " "+getNewMouseY());
 						}
@@ -1017,7 +1028,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						} catch (Exception E) {
 							continue;
 						}
-						if (!type.equals(ServerWorld.MONEY_TYPE) && !type.contains(ServerWorld.BUILDING_TYPE)) {
+						if (!type.equals(ServerWorld.MONEY_TYPE) && !type.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
 							sell(type);
 							queueMessage("SI " + type);
 						}
@@ -1329,10 +1340,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					world.add(message);
 				}
 			}
-			else if(equippedWeapons[weaponNo].getType().contains(ServerWorld.BUILDING_TYPE))
+			else if(equippedWeapons[weaponNo].getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
 			{
 				actionDelay = 0;
 				//Place building
+				if(hologram != null)
+				{
+					hologram.place();
+				}
 			}
 		}
 		canPerformAction = false;
@@ -1725,11 +1740,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			//Checks inside upgrade() whether the castle can be upgraded
 			world.getBlueCastle().upgrade();
 			break;
-		case ServerWorld.BARRACK_TYPE:
+		case ServerWorld.BARRACK_ITEM_TYPE:
 			if(castle != null && castle.getMoney() >= ServerBuildingItem.BARRACK_COST)
 			{
 				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
-				addItem(new ServerBuildingItem(ServerWorld.BARRACK_TYPE,world));
+				addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,world));
 			}
 			break;
 		}

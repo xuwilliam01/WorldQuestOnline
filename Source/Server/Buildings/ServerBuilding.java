@@ -4,7 +4,7 @@ import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 
-public class ServerBuilding extends ServerCreature {
+public abstract class ServerBuilding extends ServerCreature {
 
 	public final static int BARRACKS_HP = 1000;
 	
@@ -13,7 +13,7 @@ public class ServerBuilding extends ServerCreature {
 		switch (type)
 		{
 		case ServerWorld.BARRACK_TYPE:
-			setImage("BARRACKS.png");
+			setImage("BARRACKS");
 			setMaxHP(BARRACKS_HP);
 			break;
 		}
@@ -22,6 +22,16 @@ public class ServerBuilding extends ServerCreature {
 		setHeight(Images.getGameImage(getImage()).getHeight());
 	}
 
+	public static ServerBuilding getNewBuilding(int x, int y, String type, ServerWorld world)
+	{
+		switch(type)
+		{
+		//Different type of barrack exist. Will all be put in the same statement
+		case ServerWorld.BARRACK_TYPE:
+			return new ServerBarrack(x,y,type, world);
+		}
+		return null;
+	}
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub

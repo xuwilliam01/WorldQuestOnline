@@ -34,7 +34,7 @@ public class ClientCastleShop extends JPanel{
 		else
 			add(new ClientCastleShopItem(ServerWorld.UPG_CASTLEB_BUTT,this));
 		
-		add(new ClientCastleShopItem(ServerWorld.BARRACK_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.BARRACK_ITEM_TYPE,this));
 		
 		
 		

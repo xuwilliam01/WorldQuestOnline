@@ -38,7 +38,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setLocation(100,100);
 			setToolTipText("Upgrade castle tier");
 			break;
-		case ServerWorld.BARRACK_TYPE:
+		case ServerWorld.BARRACK_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(200,100);
 			//Set the cost as well

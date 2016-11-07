@@ -99,7 +99,6 @@ public class ServerWorld {
 	public final static String MELEE_TYPE = WEAPON_TYPE + "M";
 	public final static String RANGED_TYPE = WEAPON_TYPE + "R";
 	public final static String ARMOUR_TYPE = EQUIP_TYPE + "A";
-	public final static String BUILDING_TYPE = EQUIP_TYPE + "B";
 
 	public final static String STEEL_ARMOUR = ARMOUR_TYPE + "I";
 	public final static String RED_NINJA_ARMOUR = ARMOUR_TYPE + "R";
@@ -149,10 +148,15 @@ public class ServerWorld {
 	public final static String UPG_CASTLEB_BUTT = "UCB";
 	public final static String UPG_CASTLER_BUTT = "UCR";
 
+	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "B";
+	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
+
+	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
+
+	public final static char BUILDING_TYPE = 'b';
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
-
 	public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
-
+	
 	public final static String HOLOGRAM_TYPE = "HOL";
 	/**
 	 * Map name
@@ -581,7 +585,7 @@ public class ServerWorld {
 										break;
 									case HOLOGRAM_TYPE:
 										//Check other object collisions
-										if (otherObject.getType().contains(CASTLE_TYPE) || (!otherObject.getType().equals(HOLOGRAM_TYPE) && otherObject.getType().charAt(0) != CREATURE_TYPE && otherObject.getType().charAt(0) != TEXT_TYPE && otherObject.getType().charAt(0) != ANIMATION_TYPE))
+										if (otherObject.getType().contains(CASTLE_TYPE) || otherObject.getType().charAt(0) == BUILDING_TYPE)
 										{
 											//System.out.println("HOLOGRAM COLLISION");
 											((ServerHologram) object).setCanPlace(false);

@@ -182,7 +182,7 @@ public class ClientItem extends JButton implements MouseListener{
 		case ServerWorld.DARKWAND_TYPE:
 			setToolTipText(String.format("<html>Dark Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.DARKWAND_DMG,ServerWeapon.DARKWAND_MANA));
 			break;
-		case ServerWorld.BARRACK_TYPE:
+		case ServerWorld.BARRACK_ITEM_TYPE:
 			setToolTipText("Barracks");
 			break;
 		}
@@ -331,7 +331,7 @@ public class ClientItem extends JButton implements MouseListener{
 								invGrid[row][col] = this;
 								this.row = row;
 								this.col = col;
-								if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2) || type.contains(ServerWorld.BUILDING_TYPE))
+								if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2) || type.contains(ServerWorld.BUILDING_ITEM_TYPE))
 								{
 									inventory.getEquippedWeapons()[equipSlot] = null;
 									//If this weapon as selected remove it
@@ -356,7 +356,7 @@ public class ClientItem extends JButton implements MouseListener{
 							}
 				}
 				//If it is not equipped, equip it
-				else if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2) || type.contains(ServerWorld.BUILDING_TYPE))
+				else if(type.charAt(2) == ServerWorld.WEAPON_TYPE.charAt(2) || type.contains(ServerWorld.BUILDING_ITEM_TYPE))
 				{
 					//Only move to weapons if there is room
 					int pos = 0;
@@ -448,7 +448,7 @@ public class ClientItem extends JButton implements MouseListener{
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			//Sell item
-			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE) && !type.contains(ServerWorld.BUILDING_TYPE)&& !inventory.getClient().getShop().isFull(type) && !selected)
+			if(inventory.getClient().isShopOpen() && !type.equals(ServerWorld.MONEY_TYPE) && !type.contains(ServerWorld.BUILDING_ITEM_TYPE)&& !inventory.getClient().getShop().isFull(type) && !selected)
 			{
 				inventory.sellItem(this,equipSlot);
 			}

@@ -13,15 +13,19 @@ public class ServerHologram extends ServerObject{
 	//The type of the image that this hologram represents
 	private String imageType;
 	private boolean canPlace = true;
+	private boolean wantToPlace = false;
 	
 	private int goodImageIndex;
 	private int badImageIndex;
+	
+	private ServerWorld world;
 	
 	public ServerHologram(double x, double y, String imageType, ServerPlayer owner,
 			ServerEngine engine) {
 		super(x, y, 0,0, 0, "ServerHologram", ServerWorld.HOLOGRAM_TYPE, engine);
 		
 		this.owner = owner;
+		this.world = engine.getWorld();
 		setVisible(false);
 		setSolid(false);
 		this.imageType = imageType;
@@ -37,6 +41,11 @@ public class ServerHologram extends ServerObject{
 		
 		setWidth(Images.getGameImage(getImage()).getWidth());
 		setHeight(Images.getGameImage(getImage()).getHeight());
+	}
+	
+	public ServerBuilding toBuilding()
+	{
+		return ServerBuilding.getNewBuilding((int)getX(), (int)getY(),imageType, world);
 	}
 
 	public int getGoodImage()
@@ -70,4 +79,18 @@ public class ServerHologram extends ServerObject{
 		return owner;
 	}
 
+	public void place()
+	{
+		wantToPlace = true;
+	}
+	
+	public void dontPlace()
+	{
+		wantToPlace = false;
+	}
+	
+	public boolean wantToPlace()
+	{
+		return wantToPlace;
+	}
 }
