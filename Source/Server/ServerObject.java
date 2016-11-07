@@ -3,7 +3,7 @@ package Server;
 import java.util.ArrayList;
 
 import Imports.Images;
-import Server.Creatures.ServerCastle;
+import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;

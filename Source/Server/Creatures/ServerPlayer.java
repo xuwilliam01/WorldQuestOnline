@@ -13,6 +13,7 @@ import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerObjectShown;
 import Server.ServerWorld;
+import Server.Buildings.*;
 import Server.Effects.ServerText;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
@@ -245,6 +246,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * The amount of time the text is allowed to be shown
 	 */
 	private int textDuration = 0;
+
+	/**
+	 * Stores the hologram for placing a building
+	 */
+	private ServerHologram hologram = null;
 
 	/**
 	 * Constructor for a player in the server
@@ -638,10 +644,42 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 									+ object.getImageIndex() + " " + team + " "
 									+ object.getType() + " " + "{");
 
-						} 
+						}
+						else if(object.exists() && object.getType().contains(ServerWorld.HOLOGRAM_TYPE) && ((ServerHologram) object).getOwner() == this)
+						{
+							int weap = weaponSelected - '0';
+							if (weap == DEFAULT_WEAPON_SLOT
+									|| equippedWeapons[weap] == null || !equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_TYPE))
+							{
+								if (hologram != null)
+								{
+									hologram.destroy();
+									hologram = null;
+								}
+							}
+							else
+							{
+								hologram = (ServerHologram) object;
+								int x = getNewMouseX() - object.getWidth()/2;
+								int y = getNewMouseY() - object.getHeight()/2;
+								object.setX(x + getX() - playerScreenWidth/2);
+								object.setY(y + getY() - playerScreenHeight/2);
+								
+								int imageIndex = -1;
+								if(hologram.canPlace())
+									imageIndex = hologram.getGoodImage();
+								else
+									imageIndex = hologram.getBadImage();
+								//hologram.setCanPlace(true);
+								queueMessage("O " + toChars(object.getID()) + " "
+										+ toChars(x) + " " + toChars(y) + " "
+										+ imageIndex + " " + ServerCreature.NEUTRAL + " "
+										+ object.getType() + " " + "{");
+							}
+						}
 						else if (object.getType().charAt(0) != ServerWorld.TEXT_TYPE) {
 							queueMessage("R " + toChars(object.getID()));
-						}
+						}			
 					}
 				}
 			}
@@ -757,20 +795,22 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				switch (tokens[0]) {
 				case "A":
 				case "a":
-					if (isOnSurface() && ! performingAction && isAlive())
-					{
-						// If the client tries to send an invalid message
-						try {
-							performingAction = true;
-							newMouseX = Integer.parseInt(tokens[1]);
-							newMouseY = Integer.parseInt(tokens[2]);
+					try {
+						newMouseX = Integer.parseInt(tokens[1]);
+						newMouseY = Integer.parseInt(tokens[2]);
+						if (isOnSurface() && ! performingAction && isAlive())
+						{
+
+							// If the client tries to send an invalid message
+							if (command.charAt(0) == 'a' || tokens[3].charAt(0) == 't')
+								performingAction = true;
 							if (command.charAt(0) == 'a') {
 								rightClick = true;
 							} else {
 								rightClick = false;
 							}
-						} catch (Exception e) {
 						}
+					} catch (Exception e) {
 					}
 					break;
 				case "!a": 
@@ -909,8 +949,23 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				case "W":
 					try {
 						weaponSelected = command.charAt(2);
+						int weap = weaponSelected - '0';
 						System.out.println("Selected weapon: "+weaponSelected);
+						if (weap != DEFAULT_WEAPON_SLOT
+								&& equippedWeapons[weap] != null && equippedWeapons[weap].getType().contains(ServerWorld.BUILDING_TYPE))
+						{
+							hologram = new ServerHologram(getNewMouseX() + getX() - playerScreenWidth/2, getNewMouseY() + getY() - playerScreenHeight/2,equippedWeapons[weap].getType(), this, engine);					
+							world.add(hologram);
+							System.out.println("Added HOLOGRAM to world at "+getNewMouseX() + " "+getNewMouseY());
+						}
+						else if (hologram != null)
+						{
+							hologram.destroy();
+							System.out.println("Removed HOLOGRAM from world");
+							hologram = null;
+						}
 					} catch (Exception E) {
+						E.printStackTrace();
 					}
 					break;
 				case "B":
@@ -1270,6 +1325,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			else if(equippedWeapons[weaponNo].getType().contains(ServerWorld.BUILDING_TYPE))
 			{
 				actionDelay = 0;
+				//Place building
 			}
 		}
 		canPerformAction = false;
@@ -1332,7 +1388,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				if(source.getType().equals(ServerWorld.PLAYER_TYPE))
 					engine.broadcast("SK "+toChars(source.getID())+" "+source.getTeam());
 				engine.broadcast("SD "+toChars(getID())+" "+getTeam());
-				
+
 				if (source.getTeam() == ServerCreature.NEUTRAL) {
 					String firstName = getTeam() + getName();
 					String secondName = ServerCreature.NEUTRAL

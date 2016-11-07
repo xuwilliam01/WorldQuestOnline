@@ -13,7 +13,7 @@ import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
-import Server.Creatures.ServerCastle;
+import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -888,6 +888,7 @@ public class ClientWorld {
 		// Go through each object in the world and draw it relative to the
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
+		ClientObject hologram = null;
 		try {
 			for (ClientObject object : objects) {
 				if (object == null) {
@@ -897,6 +898,12 @@ public class ClientWorld {
 					break;
 				}
 				objectNo++;
+				
+				if(object.getType().equals(ServerWorld.HOLOGRAM_TYPE))
+				{
+					hologram = object;
+					continue;
+				}
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
@@ -1031,6 +1038,10 @@ public class ClientWorld {
 							* (2.0 / 5) + 0.5), Client.SCREEN_HEIGHT / 3);
 		}
 
+		//Draw the hologram if it exists
+		if(hologram != null)
+			graphics.drawImage(hologram.getImage(), hologram.getX(), hologram.getY(), null);
+		
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.CYAN);

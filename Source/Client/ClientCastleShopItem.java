@@ -9,7 +9,7 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Creatures.ServerCastle;
+import Server.Buildings.ServerCastle;
 
 public class ClientCastleShopItem extends JButton implements ActionListener{
 

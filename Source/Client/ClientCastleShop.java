@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import Server.ServerWorld;
-import Server.Creatures.ServerCastle;
+import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerCreature;
 
 public class ClientCastleShop extends JPanel{

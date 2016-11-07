@@ -1174,7 +1174,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 		if (event.getButton() == MouseEvent.BUTTON1 && currentMessage.charAt(0) != 'A') {
 			// A for action
-			currentMessage = "A " + event.getX() + " " + event.getY();
+			currentMessage = "A " + event.getX() + " " + event.getY()  + " t";
 
 			printToServer(currentMessage);
 
@@ -1228,6 +1228,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public void mouseDragged(MouseEvent event) {
 		mouseX = event.getX();
 		mouseY = event.getY();
+		printToServer("A " + mouseX + " " + mouseY  + " f");
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'R') {
 			printToServer("DR");
@@ -1243,6 +1244,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public void mouseMoved(MouseEvent event) {
 		mouseX = event.getX();
 		mouseY = event.getY();
+		printToServer("A " + mouseX + " " + mouseY + " f");
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'R') {
 			printToServer("DR");

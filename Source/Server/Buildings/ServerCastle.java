@@ -1,8 +1,10 @@
-package Server.Creatures;
+package Server.Buildings;
 
 import java.util.ArrayList;
 
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 import Server.Items.ServerProjectile;
 import Server.Spawners.ServerSpawner;
 
