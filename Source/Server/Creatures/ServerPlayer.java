@@ -251,6 +251,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * Stores the hologram for placing a building
 	 */
 	private ServerHologram hologram = null;
+	
+	private int kills = 0;
+	private int deaths = 0;
 
 	/**
 	 * Constructor for a player in the server
@@ -1417,8 +1420,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			if (getHP() <= 0) {
 				//For the scoreboard
 				if(source.getType().equals(ServerWorld.PLAYER_TYPE))
+				{
 					engine.broadcast("SK "+toChars(source.getID())+" "+source.getTeam());
+					((ServerPlayer)source).kills++;
+				}
 				engine.broadcast("SD "+toChars(getID())+" "+getTeam());
+				deaths++;
 
 				if (source.getTeam() == ServerCreature.NEUTRAL) {
 					String firstName = getTeam() + getName();
@@ -1911,4 +1918,22 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void setCurrentText(String currentText) {
 		this.currentText = currentText;
 	}
+
+	public int getKills() {
+		return kills;
+	}
+
+	public void setKills(int kills) {
+		this.kills = kills;
+	}
+
+	public int getDeaths() {
+		return deaths;
+	}
+
+	public void setDeaths(int deaths) {
+		this.deaths = deaths;
+	}
+	
+	
 }

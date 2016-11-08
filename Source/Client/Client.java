@@ -568,7 +568,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									;
 									for (int i = 1; i < l; i++)
 										n += " " + tokens[++token];
-									scoreboard.addPlayer(n, toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
+									scoreboard.addPlayer(n, toInt(tokens[++token]), Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
 								case "SK":

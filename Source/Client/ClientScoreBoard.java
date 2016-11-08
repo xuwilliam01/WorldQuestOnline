@@ -47,12 +47,12 @@ public class ClientScoreBoard extends JPanel{
 		}
 	}
 	
-	public void addPlayer(String name, int id, int team)
+	public void addPlayer(String name, int id, int team, int kills, int deaths)
 	{
 		if(team == ServerCreature.RED_TEAM)
-			redTeam.add(new ClientPlayerScore(name,id));
+			redTeam.add(new ClientPlayerScore(name,id, kills, deaths));
 		else
-			blueTeam.add(new ClientPlayerScore(name,id));
+			blueTeam.add(new ClientPlayerScore(name,id, kills, deaths));
 	}
 	
 	public void addKill(int id, int team)
