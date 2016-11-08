@@ -3,13 +3,15 @@ package Client;
 public class ClientPlayerScore implements Comparable<ClientPlayerScore>{
 	private String name;
 	private int id;
-	private int kills = 0;
-	private int deaths = 0;
+	private int kills;
+	private int deaths;
 	
-	public ClientPlayerScore(String name, int id)
+	public ClientPlayerScore(String name, int id, int kills, int deaths)
 	{
 		this.name = name;
 		this.id = id;
+		this.kills = kills;
+		this.deaths = deaths;
 	}
 	
 	public String getName() {

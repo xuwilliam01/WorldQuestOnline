@@ -232,12 +232,12 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		//For the scoreboard
 		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
-				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam());
+				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0);
 		for(ServerPlayer player : listOfPlayers)
 		{
 			if(player.getID() != newPlayer.getID())
 				newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
-						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam());
+						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths());
 		}
 
 		world.add(newPlayer);
