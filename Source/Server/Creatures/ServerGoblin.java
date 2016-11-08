@@ -466,9 +466,10 @@ public class ServerGoblin extends ServerCreature {
 								int yDist;
 
 								double angle = 0;
+								double targetHeightFactor = 5;
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE)) {
 
-									double targetHeightFactor = 5;
+									
 									if (getTarget().getType().equals(
 											ServerWorld.CASTLE_TYPE)) {
 										targetHeightFactor = 1.3;
@@ -506,7 +507,7 @@ public class ServerGoblin extends ServerCreature {
 
 								} else {
 									yDist = (int) (getTarget().getY()
-											+ getTarget().getHeight() / 2 - (getY() + getHeight() / 3));
+											+ getTarget().getHeight() / 2 - (getY() + getHeight() / targetHeightFactor));
 									angle = Math.atan2(yDist, xDist);
 								}
 								double random = Math.random() * 6;

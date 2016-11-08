@@ -1125,6 +1125,16 @@ public class ServerWorld {
 		return engine;
 	}
 
+	public char[][] getCollisionGrid()
+	{
+		return collisionGrid;
+	}
+
+	public void setCollisionGrid(char[][] collisionGrid)
+	{
+		this.collisionGrid = collisionGrid;
+	}
+
 	/**
 	 * Closes everything in the world
 	 */

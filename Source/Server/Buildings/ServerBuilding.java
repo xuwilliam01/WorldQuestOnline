@@ -10,7 +10,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public final static int CASTLE_HP = 20000;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
-		super(x, y, 0, 0, 0, 0, 1, "SERVERBUILDING", type, 0, world, true);
+		super(x, y, 0, 0, 0, 0, 0, "SERVERBUILDING", type, 0, world, true);
 		switch (type)
 		{
 		case ServerWorld.CASTLE_TYPE:
@@ -35,7 +35,7 @@ public abstract class ServerBuilding extends ServerCreature {
 		setHeight(Images.getGameImage(getImage()).getHeight());
 	}
 
-	public static ServerBuilding getNewBuilding(int x, int y, String type, int team, ServerWorld world)
+	public static ServerBuilding getNewBuilding(double x, double y, String type, int team, ServerWorld world)
 	{
 		switch(type)
 		{
