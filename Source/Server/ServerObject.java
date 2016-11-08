@@ -22,7 +22,8 @@ import Tools.RowCol;
  * @author William Xu & Alex Raita
  *
  */
-public abstract class ServerObject implements Comparable<ServerObject> {
+public abstract class ServerObject implements Comparable<ServerObject>
+{
 	/**
 	 * Unique identifier for the object
 	 */
@@ -114,8 +115,10 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(double x, double y, int width, int height, double gravity, String image, String type,
-			ServerEngine engine) {
+	public ServerObject(double x, double y, int width, int height,
+			double gravity, String image, String type,
+			ServerEngine engine)
+	{
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
@@ -128,24 +131,35 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 		this.y = y;
 		this.image = image;
 
-		try {
-			this.id = engine.useNextID();
-		} catch (NullPointerException E) {
-			E.printStackTrace();
-			System.out.println("ID: " + this.id + " Image: " + image + " ImageIndex: " + this.imageIndex);
-		}
-		
 		try
 		{
-			this.imageIndex = Images.getImageIndex(image);
-		} catch (NullPointerException E)
+			if (type.contains(ServerWorld.BUILDING_TYPE))
+			{
+				this.id = engine.useNextBuildingID();
+			}
+			else
+			{
+				this.id = engine.useNextID();
+			}
+		}
+		catch (NullPointerException E)
 		{
+			E.printStackTrace();
+			System.out.println("ID: " + this.id + " Image: " + image
+					+ " ImageIndex: " + this.imageIndex);
 		}
 
-		if (width == -1) {
+
+		this.imageIndex = Images.getImageIndex(image);
+
+
+		if (width == -1)
+		{
 			this.width = Images.getGameImage(image).getWidth();
 			this.height = Images.getGameImage(image).getHeight();
-		} else {
+		}
+		else
+		{
 			this.width = width;
 			this.height = height;
 		}
@@ -160,7 +174,9 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param width
 	 * @param ID
 	 */
-	public ServerObject(double x, double y, int width, int height, double gravity, String type, ServerEngine engine) {
+	public ServerObject(double x, double y, int width, int height,
+			double gravity, String type, ServerEngine engine)
+	{
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
@@ -171,12 +187,31 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 		this.gravity = gravity;
 		this.x = x;
 		this.y = y;
-		this.id = engine.useNextID();
+		try
+		{
+			if (type.contains(ServerWorld.BUILDING_TYPE))
+			{
+				this.id = engine.useNextBuildingID();
+			}
+			else
+			{
+				this.id = engine.useNextID();
+			}
+		}
+		catch (NullPointerException E)
+		{
+			E.printStackTrace();
+			System.out.println("ID: " + this.id + " Image: " + image
+					+ " ImageIndex: " + this.imageIndex);
+		}
 
-		if (width == -1) {
+		if (width == -1)
+		{
 			this.width = Images.getGameImage(image).getWidth();
 			this.height = Images.getGameImage(image).getHeight();
-		} else {
+		}
+		else
+		{
 			this.width = width;
 			this.height = height;
 		}
@@ -189,7 +224,8 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * 
 	 * @return the base image
 	 */
-	public String getBaseImage() {
+	public String getBaseImage()
+	{
 		// The first word is always the base image
 		String[] tokens = image.split("_");
 		return tokens[0];
@@ -201,9 +237,13 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param other
 	 * @return whether or not the two objects are colliding
 	 */
-	public boolean collidesWith(ServerObject other) {
-		if (exists && x <= other.getX() + other.getWidth() && (x + width) >= other.getX()
-				&& y <= other.getY() + other.getHeight() && (y + height) >= other.getY()) {
+	public boolean collidesWith(ServerObject other)
+	{
+		if (exists && x <= other.getX() + other.getWidth()
+				&& (x + width) >= other.getX()
+				&& y <= other.getY() + other.getHeight()
+				&& (y + height) >= other.getY())
+		{
 			return true;
 		}
 		return false;
@@ -215,8 +255,11 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param other
 	 * @return whether or not the two objects are colliding
 	 */
-	public boolean collidesWith(int x1, int y1, int x2, int y2) {
-		if (exists && x <= x2 && (x + width) >= x1 && y <= y2 && (y + height) >= y1) {
+	public boolean collidesWith(int x1, int y1, int x2, int y2)
+	{
+		if (exists && x <= x2 && (x + width) >= x1 && y <= y2
+				&& (y + height) >= y1)
+		{
 			return true;
 		}
 		return false;
@@ -229,10 +272,12 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param distance
 	 * @return
 	 */
-	public boolean inRange(ServerObject other, double distance) {
+	public boolean inRange(ServerObject other, double distance)
+	{
 		double distanceBetween = distanceBetween(other);
 
-		if (distanceBetween <= distance) {
+		if (distanceBetween <= distance)
+		{
 			return true;
 		}
 		return false;
@@ -247,11 +292,15 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * @param distance
 	 * @return
 	 */
-	public boolean quickInRange(ServerObject other, double distance) {
+	public boolean quickInRange(ServerObject other, double distance)
+	{
 		// Create a big hitbox and see if the other object touches it,
 		// essentially
-		if (other.getX() <= x + width + distance && other.getX() + other.getWidth() >= x - distance
-				&& other.getY() <= y + height + distance / 3 && other.getY() + other.getHeight() >= y - distance / 3) {
+		if (other.getX() <= x + width + distance
+				&& other.getX() + other.getWidth() >= x - distance
+				&& other.getY() <= y + height + distance / 3
+				&& other.getY() + other.getHeight() >= y - distance / 3)
+		{
 			return true;
 		}
 		return false;
@@ -262,7 +311,8 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	 * 
 	 * @param image
 	 */
-	public void setImage(String image) {
+	public void setImage(String image)
+	{
 		this.image = image;
 		this.imageIndex = Images.getImageIndex(image);
 	}
@@ -270,11 +320,11 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	/**
 	 * Find the minimum distance between two objects
 	 * 
-	 * @param other
-	 *            the other object
+	 * @param other the other object
 	 * @return the distance between this and the other object
 	 */
-	public double distanceBetween(ServerObject other) {
+	public double distanceBetween(ServerObject other)
+	{
 		// The specific sides of each object to calculate distance between (top,
 		// bottom, left, right)
 		double thisX = 0;
@@ -282,49 +332,63 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 		double thisY = 0;
 		double otherY = 0;
 
-		if (x - (other.getX() + other.getWidth()) > 0) {
+		if (x - (other.getX() + other.getWidth()) > 0)
+		{
 			otherX = other.getX() + other.getWidth();
-		} else if (other.getX() - (x + width) > 0) {
+		}
+		else if (other.getX() - (x + width) > 0)
+		{
 			thisX = x + width;
 		}
 
-		if (y - (other.getY() + other.getHeight()) > 0) {
+		if (y - (other.getY() + other.getHeight()) > 0)
+		{
 			otherY = other.getY() + other.getHeight();
-		} else if (other.getY() - (y + height) > 0) {
+		}
+		else if (other.getY() - (y + height) > 0)
+		{
 			thisY = y + height;
 		}
 
-		return Math.sqrt((thisX - otherX) * (thisX - otherX) + (thisY - otherY) * (thisY - otherY));
+		return Math.sqrt((thisX - otherX) * (thisX - otherX) + (thisY - otherY)
+				* (thisY - otherY));
 	}
 
 	/**
 	 * Makes a copy of a given object
 	 * 
-	 * @param original
-	 *            the original object
+	 * @param original the original object
 	 * @return a copy of the original object
 	 */
-	public static ServerObject copy(ServerObject original) {
-		switch (original.getType()) {
+	public static ServerObject copy(ServerObject original)
+	{
+		switch (original.getType())
+		{
 		case ServerWorld.CASTLE_TYPE:
 			ServerCastle newCastle = (ServerCastle) original;
-			return new ServerCastle(newCastle.getX(), newCastle.getY(), newCastle.getTeam(), newCastle.getWorld());
+			return new ServerCastle(newCastle.getX(), newCastle.getY(),
+					newCastle.getTeam(), newCastle.getWorld());
 		case ServerWorld.CHEST_TYPE:
 			ServerChest newChest = (ServerChest) original;
-			return new ServerChest(newChest.getX(), newChest.getY(), newChest.getWorld());
+			return new ServerChest(newChest.getX(), newChest.getY(),
+					newChest.getWorld());
 		case ServerWorld.VENDOR_TYPE:
 			ServerVendor newVendor = (ServerVendor) original;
-			return new ServerVendor(newVendor.getX(), newVendor.getY(), newVendor.getWorld());
+			return new ServerVendor(newVendor.getX(), newVendor.getY(),
+					newVendor.getWorld());
 		case ServerWorld.GOBLIN_SPAWN_TYPE:
 			ServerGoblinSpawner newSpawner = (ServerGoblinSpawner) original;
-			return new ServerGoblinSpawner(original.getX(), original.getY(), newSpawner.getWorld(),
+			return new ServerGoblinSpawner(original.getX(), original.getY(),
+					newSpawner.getWorld(),
 					newSpawner.getTeam());
 		case ServerWorld.SLIME_SPAWN_TYPE:
 			ServerSlimeSpawner newSlimeSpawner = (ServerSlimeSpawner) original;
-			return new ServerSlimeSpawner(original.getX(), original.getY(), newSlimeSpawner.getWorld());
+			return new ServerSlimeSpawner(original.getX(), original.getY(),
+					newSlimeSpawner.getWorld());
 		case ServerWorld.BAT_SPAWN_TYPE:
 			ServerBatSpawner newBatSpawner = (ServerBatSpawner) original;
-			return new ServerBatSpawner(original.getX(), original.getY(), newBatSpawner.getWorld());
+			return new ServerBatSpawner(original.getX(), original.getY(),
+					newBatSpawner.getWorld());
 		}
 
 		// case ServerWorld.SLIME_TYPE:
@@ -343,11 +407,11 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 
 		return null;
 	}
-	
+
 	@Override
 	public int compareTo(ServerObject other)
 	{
-		return other.getID()-getID();
+		return other.getID() - getID();
 	}
 
 	/**
@@ -359,143 +423,182 @@ public abstract class ServerObject implements Comparable<ServerObject> {
 	// GETTERS AND SETTERS //
 	// ///////////////////////
 
-	public ArrayList<RowCol> getObjectTiles() {
+	public ArrayList<RowCol> getObjectTiles()
+	{
 		return objectTiles;
 	}
 
-	public void setObjectTiles(ArrayList<RowCol> objectTiles) {
+	public void setObjectTiles(ArrayList<RowCol> objectTiles)
+	{
 		this.objectTiles = objectTiles;
 	}
 
-	public boolean exists() {
+	public boolean exists()
+	{
 		return exists;
 	}
 
-	public void destroy() {
+	public void destroy()
+	{
 		exists = false;
 	}
 
-	public double getGravity() {
+	public double getGravity()
+	{
 		return gravity;
 	}
 
-	public void makeExist() {
+	public void makeExist()
+	{
 		exists = true;
 	}
 
-	public void setGravity(double gravity) {
+	public void setGravity(double gravity)
+	{
 		this.gravity = gravity;
 	}
 
-	public boolean isOnSurface() {
+	public boolean isOnSurface()
+	{
 		return onSurface;
 	}
 
-	public void setOnSurface(boolean onSurface) {
+	public void setOnSurface(boolean onSurface)
+	{
 		this.onSurface = onSurface;
 	}
 
-	public double getHSpeed() {
+	public double getHSpeed()
+	{
 		return hSpeed;
 	}
 
-	public void setHSpeed(double hSpeed) {
+	public void setHSpeed(double hSpeed)
+	{
 		this.hSpeed = hSpeed;
 	}
 
-	public double getVSpeed() {
+	public double getVSpeed()
+	{
 		return vSpeed;
 	}
 
-	public void setVSpeed(double vSpeed) {
+	public void setVSpeed(double vSpeed)
+	{
 		this.vSpeed = vSpeed;
 	}
 
-	public int getID() {
+	public int getID()
+	{
 		return id;
 	}
 
-	public void setID(int iD) {
+	public void setID(int iD)
+	{
 		id = iD;
 	}
 
-	public double getX() {
+	public double getX()
+	{
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(double x)
+	{
 		this.x = x;
 	}
 
-	public double getY() {
+	public double getY()
+	{
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(double y)
+	{
 		this.y = y;
 	}
 
-	public int getHeight() {
+	public int getHeight()
+	{
 		return height;
 	}
 
-	public void setHeight(int height) {
-		if (height == -1) {
+	public void setHeight(int height)
+	{
+		if (height == -1)
+		{
 			this.height = Images.getGameImage(image).getHeight();
-		} else {
+		}
+		else
+		{
 			this.height = height;
 		}
 	}
 
-	public int getWidth() {
+	public int getWidth()
+	{
 		return width;
 	}
 
-	public void setWidth(int width) {
-		if (width == -1) {
+	public void setWidth(int width)
+	{
+		if (width == -1)
+		{
 			this.width = Images.getGameImage(image).getWidth();
-		} else {
+		}
+		else
+		{
 			this.width = width;
 		}
 	}
 
-	public String getImage() {
+	public String getImage()
+	{
 		return image;
 	}
 
-	public int getImageIndex() {
+	public int getImageIndex()
+	{
 		return imageIndex;
 	}
 
-	public String getType() {
+	public String getType()
+	{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(String type)
+	{
 		this.type = type;
 	}
 
-	public boolean isMapVisible() {
+	public boolean isMapVisible()
+	{
 		return mapVisible;
 	}
 
-	public void setMapVisible(boolean mapVisible) {
+	public void setMapVisible(boolean mapVisible)
+	{
 		this.mapVisible = mapVisible;
 	}
 
-	public boolean isSolid() {
+	public boolean isSolid()
+	{
 		return solid;
 	}
 
-	public void setSolid(boolean solid) {
+	public void setSolid(boolean solid)
+	{
 		this.solid = solid;
 	}
 
-	public boolean isVisible() {
+	public boolean isVisible()
+	{
 		return visible;
 	}
 
-	public void setVisible(boolean visible) {
+	public void setVisible(boolean visible)
+	{
 		this.visible = visible;
 	}
 

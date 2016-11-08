@@ -41,12 +41,21 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public static final int NUMBER_OF_IDS = 100000;
 
+	private final int normalIDStart = 500;
+	
 	/**
-	 * The highest ID not used yet for objects
+	 * The highest ID not used yet for normal objects
 	 */
-	private int nextID = 0;
+	private int nextID = normalIDStart;
+	
+	/**
+	 * The highest ID not used yet for building objects
+	 */
+	private int nextBuildingID = 0;
 
-	private boolean[] usedIDs = new boolean[NUMBER_OF_IDS];
+	private boolean[] usedIDs= new boolean[NUMBER_OF_IDS];
+	
+	
 
 	// /**
 	// * Stack of freeIDs to use
@@ -104,20 +113,6 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new ServerWorld(this, map);
-
-	}
-
-	/**
-	 * Constructor for the engine
-	 */
-	public ServerEngine() throws IOException {
-		// Start importing the images from the file (place in a loading screen
-		// or something later)
-		Images.importImages();
-		ImageReferencePair.importReferences();
-		listOfPlayers = new ArrayList<ServerPlayer>();
-		world = new ServerWorld(this);
-
 	}
 
 	/**
@@ -170,6 +165,9 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void endGame(int losingTeam) {
 		endGame = true;
 		this.losingTeam = losingTeam;
+		usedIDs= new boolean[NUMBER_OF_IDS];
+		nextID = normalIDStart;
+		nextBuildingID = 0;
 	}
 
 	public void close() {
@@ -260,9 +258,28 @@ public class ServerEngine implements Runnable, ActionListener {
 					return no;
 				}
 			}
-			nextID = 1;
+			nextID = normalIDStart;
 		}
 
+	}
+	
+	/**
+	 * Use and reserve the next available building ID (to make sure they underlap other objects) in the list of booleans
+	 * 
+	 * @return the id
+	 */
+	public synchronized int useNextBuildingID()
+	{
+		while (true) {
+			for (int no = nextBuildingID; no < normalIDStart; no++) {
+				if (!usedIDs[no]) {
+					usedIDs[no] = true;
+					nextBuildingID = no+1;
+					return no;
+				}
+			}
+			nextBuildingID = 1;
+		}
 	}
 
 	/**

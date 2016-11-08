@@ -148,9 +148,12 @@ public class Images {
 
 	public static int getImageIndex(String image)
 	{
-		//if (imageArray[imageMap.get(image)]== null)
-		//	System.out.println("IMPORTANT " + image +" "+imageMap.get(image));
-		return imageMap.get(image);
+		Integer no = imageMap.get(image);
+		if (no!=null)
+		{
+			return no;
+		}
+		return -1;
 	}
 	
 	public static String getImageName(int index)
