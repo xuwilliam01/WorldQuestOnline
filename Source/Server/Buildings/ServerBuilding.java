@@ -7,11 +7,23 @@ import Server.Creatures.ServerCreature;
 public abstract class ServerBuilding extends ServerCreature {
 
 	public final static int BARRACKS_HP = 1000;
+	public final static int CASTLE_HP = 20000;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
 		super(x, y, 0, 0, 0, 0, 1, "SERVERBUILDING", type, 0, world, true);
 		switch (type)
 		{
+		case ServerWorld.CASTLE_TYPE:
+			if (team == ServerCreature.RED_TEAM) {
+				setImage("RED_CASTLE");
+			}
+			else
+			{
+				setImage("BLUE_CASTLE");
+			}
+			setMaxHP(CASTLE_HP);
+			setHP(CASTLE_HP);
+			break;
 		case ServerWorld.BARRACK_TYPE:
 			setImage("BARRACKS");
 			setMaxHP(BARRACKS_HP);

@@ -811,6 +811,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				// Read the next line the player sent in
 				String command = input.readLine();
 				String[] tokens = command.split(" ");
+				
+				if (tokens.length==0)
+				{
+					continue;
+				}
 
 				// Execute the player's action based on the command received
 				// from the client

@@ -80,7 +80,6 @@ public class ServerWorld {
 	public final static String GOBLIN_WORKER_TYPE = GOBLIN_TYPE + "w";
 
 	public final static String CHEST_TYPE = CREATURE_TYPE + "M";
-	public final static String CASTLE_TYPE = CREATURE_TYPE + "T";
 	public final static String VENDOR_TYPE = CREATURE_TYPE + "V";
 
 	public final static char ITEM_TYPE = 'I';
@@ -148,13 +147,15 @@ public class ServerWorld {
 	public final static String UPG_CASTLEB_BUTT = "UCB";
 	public final static String UPG_CASTLER_BUTT = "UCR";
 
-	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "B";
+	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
 
 	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 
-	public final static String BUILDING_TYPE = CREATURE_TYPE + "B";
+	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
+	public final static String CASTLE_TYPE = BUILDING_TYPE + "T";
+	
 	public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
 	
 	public final static String HOLOGRAM_TYPE = "HOL";
@@ -585,7 +586,7 @@ public class ServerWorld {
 										break;
 									case HOLOGRAM_TYPE:
 										//Check other object collisions
-										if (((ServerHologram) object).canPlace() &&(otherObject.getType().contains(CASTLE_TYPE) || otherObject.getType().substring(0,2).equals(BUILDING_TYPE) || otherObject.getType().equals(VENDOR_TYPE)))
+										if (((ServerHologram) object).canPlace() &&(otherObject.getType().contains(BUILDING_TYPE)))
 										{
 											//System.out.println("HOLOGRAM COLLISION");
 											((ServerHologram) object).setCanPlace(false);

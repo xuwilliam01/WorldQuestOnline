@@ -14,12 +14,7 @@ import Server.Spawners.ServerSpawner;
  * @author Alex Raita & William Xu
  *
  */
-public class ServerCastle extends ServerCreature {
-
-	/**
-	 * The default HP of a castle
-	 */
-	public final static int CASTLE_HP = 20000;
+public class ServerCastle extends ServerBuilding {
 
 	/**
 	 * The number of pixels for a target to be in range for the castle to fire
@@ -74,12 +69,7 @@ public class ServerCastle extends ServerCreature {
 	 *            the world of the castle
 	 */
 	public ServerCastle(double x, double y, int team, ServerWorld world) {
-		super(x, y, -1, -1, 0, 0, ServerWorld.GRAVITY, "BLUE_CASTLE",
-				ServerWorld.CASTLE_TYPE, CASTLE_HP, world, true);
-		if (team == ServerCreature.RED_TEAM) {
-			setImage("RED_CASTLE");
-		}
-		this.team = team;
+		super(x, y, ServerWorld.CASTLE_TYPE, team, world);
 
 		if (team == RED_TEAM)
 			setName("Red Team's Castle");
