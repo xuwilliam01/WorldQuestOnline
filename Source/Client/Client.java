@@ -533,7 +533,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									if (tokens[token + 4].equals("{"))
 									{
-
 										world.setObject(
 												id,
 												x,
@@ -542,7 +541,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token],
-												tokens[++token]);
+												tokens[++token], Double.parseDouble(tokens[++token]));
 									}
 									else
 									{

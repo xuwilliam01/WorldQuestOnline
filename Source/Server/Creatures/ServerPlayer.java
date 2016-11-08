@@ -364,6 +364,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10, world));
+		addItem(new ServerWeapon(0,0, ServerWorld.STEELBOW_TYPE, world));
+		addItem(new ServerWeapon(0,0, ServerWorld.SLINGSHOT_TYPE, world));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -707,12 +709,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ object.getType()
 											+ " "
 											+ ((ServerPlayer) object).getName()
-													.split(" ").length
+											.split(" ").length
 											+ " "
 											+ ((ServerPlayer) object).getName()
 											+ '`'
 											+ ((ServerPlayer) object)
-													.getCurrentText());
+											.getCurrentText());
 									continue;
 								}
 
@@ -723,16 +725,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								break;
 							case ServerWorld.TEXT_TYPE:
 								queueMessage("t " + toChars(object.getID())
-										+ " " + toChars(x) + " " + toChars(y)
-										+ " " + object.getImage());
+								+ " " + toChars(x) + " " + toChars(y)
+								+ " " + object.getImage());
 								continue;
 							}
 
 							// If it's any other object
-							queueMessage("O " + toChars(object.getID()) + " "
-									+ toChars(x) + " " + toChars(y) + " "
-									+ object.getImageIndex() + " " + team + " "
-									+ object.getType() + " " + "{");
+							if(object.getType().contains(ServerWorld.BUILDING_TYPE))
+								queueMessage("O " + toChars(object.getID()) + " "
+										+ toChars(x) + " " + toChars(y) + " "
+										+ object.getImageIndex() + " " + team + " "
+										+ object.getType() + " " + "{ " + Math.max(0,Math.round(100.0*((ServerBuilding)object).getHP()/((ServerBuilding)object).getMaxHP())/100.0));
+							else
+								queueMessage("O " + toChars(object.getID()) + " "
+										+ toChars(x) + " " + toChars(y) + " "
+										+ object.getImageIndex() + " " + team + " "
+										+ object.getType() + " " + "{ "+"-1");
 
 						}
 						else if (object.exists()
@@ -776,7 +784,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									int tileCol = (int) ((x) / ServerWorld.TILE_SIZE);
 									for (int tileRow = (int) ((y + object
 											.getHeight()) / ServerWorld.TILE_SIZE) + 1; tileRow <= (int) ((getY()
-											+ getHeight() / 2 + playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow++)
+													+ getHeight() / 2 + playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow++)
 									{
 										if (world.getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
 												&& world.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
@@ -806,13 +814,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											break;
 										}
 									}
-									
+
 									if (clientY==0)
 									{
 										// Snap to best good solid tile above it
 										for (int tileRow = (int) ((y + object
 												.getHeight()) / ServerWorld.TILE_SIZE); tileRow >= (int) ((getY()
-												+ getHeight() / 2 - playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow--)
+														+ getHeight() / 2 - playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow--)
 										{
 											if (world.getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
 													&& world.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
@@ -841,16 +849,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 														- (getY()) + playerScreenHeight / 2);
 											}
 										}
-										
-										
+
+
 									}
 
 									object.setY(y);
 
 									System.out.println(getNewMouseY() + getY()
-											- playerScreenHeight / 2 + " " + y
-											+ " " + getNewMouseY() + " "
-											+ clientY);
+									- playerScreenHeight / 2 + " " + y
+									+ " " + getNewMouseY() + " "
+									+ clientY);
 
 									int imageIndex = -1;
 									if (hologram.canPlace())
@@ -953,7 +961,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				if (equippedWeapons[weaponNo].getType().charAt(2) == ServerWorld.WEAPON_TYPE
 						.charAt(2))
 					currentDamage = ((ServerWeapon) equippedWeapons[weaponNo])
-							.getDamage();
+					.getDamage();
 				else
 					currentDamage = 0;
 			}
@@ -1193,11 +1201,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						case 'I':
 							unequip(Integer.parseInt(command.substring(4)));
 							break;
-						// Move to equipped weapons
+							// Move to equipped weapons
 						case 'W':
 							equipWeapon(command.substring(4));
 							break;
-						// Move to equipped armors
+							// Move to equipped armors
 						case 'A':
 							equipArmour(command.substring(4));
 							break;
@@ -1214,7 +1222,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						weaponSelected = command.charAt(2);
 						int weap = weaponSelected - '0';
 						System.out
-								.println("Selected weapon: " + weaponSelected);
+						.println("Selected weapon: " + weaponSelected);
 						if (weap != DEFAULT_WEAPON_SLOT
 								&& equippedWeapons[weap] != null
 								&& equippedWeapons[weap].getType().contains(
@@ -1222,11 +1230,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							hologram = new ServerHologram(
 									getNewMouseX() + getX() - playerScreenWidth
-											/ 2,
+									/ 2,
 									getNewMouseY() + getY()
-											- playerScreenHeight / 2,
+									- playerScreenHeight / 2,
 									((ServerBuildingItem) equippedWeapons[weap])
-											.getBuildingType(), this, engine);
+									.getBuildingType(), this, engine);
 							world.add(hologram);
 							System.out.println("Added HOLOGRAM to world at "
 									+ getNewMouseX() + " " + getNewMouseY());
@@ -1542,15 +1550,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						0,
 						-20,
 						((ServerWeapon) equippedWeapons[weaponNo])
-								.getActionImage(),
+						.getActionImage(),
 						(int) (Math
 								.toDegrees(angle) + 0.5),
 						((ServerWeapon) equippedWeapons[weaponNo])
-								.getActionSpeed(),
+						.getActionSpeed(),
 						(int) Math
-								.ceil(((ServerWeapon) equippedWeapons[weaponNo])
-										.getDamage()
-										* (1 + getBaseDamage() / 100.0))));
+						.ceil(((ServerWeapon) equippedWeapons[weaponNo])
+								.getDamage()
+								* (1 + getBaseDamage() / 100.0))));
 				action = "SWING";
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(
@@ -1742,7 +1750,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
-					- getHeight() / 3;
+			- getHeight() / 3;
 
 			world.add(new ServerText(damageX, damageY,
 					Integer.toString(amount), textColour, world));
@@ -1847,7 +1855,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy())
+											.isBusy())
 									{
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
@@ -1952,7 +1960,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			catch (ArrayIndexOutOfBoundsException e)
 			{
 				System.out
-						.println("String builder queue lagged and out of bounds happened");
+				.println("String builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}
@@ -2146,7 +2154,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			break;
 		case ServerWorld.BARRACK_ITEM_TYPE:
 			if (castle != null
-					&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST)
+			&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST)
 			{
 				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
 				addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,

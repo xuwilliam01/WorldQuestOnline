@@ -75,6 +75,10 @@ public class ClientObject implements Comparable<ClientObject>
 	 */
 	private int lastCounter = 0;
 	
+	/**
+	 * HP % of the object. Most objects don't have hp
+	 */
+	private double hp = -1;
 
 	/**
 	 * Constructor
@@ -173,6 +177,50 @@ public class ClientObject implements Comparable<ClientObject>
 		}
 	}
 
+	/**
+	 * Constructor for buildings with hp
+	 */
+	public ClientObject(int id, int x, int y, String image, int team,
+			String type, double hp)
+	{
+		this.team = team;
+		this.x = x;
+		this.y = y;
+		this.id = id;
+		this.imageName = image;
+		this.type = type;
+		this.hp = hp;
+
+		// All objects that are just text have lower case names
+		// Don't import an actual image if it is just text
+		if (image.charAt(0) != 't')
+		{
+			GameImage gameImage = Images.getGameImage(image);
+			this.image = gameImage.getImage();
+			height = gameImage.getHeight();
+			width = gameImage.getWidth();
+		}
+		else
+		{
+			height = 0;
+			width = 0;
+		}
+
+		// Select a hint for this object, if it has one
+		switch (type)
+		{
+		case ServerWorld.VENDOR_TYPE:
+			hint = "Press 'E' to open/close the shop";
+			break;
+		case ServerWorld.CHEST_TYPE:
+			hint = "Destroy the chest and it will drop items";
+			break;
+		case ServerWorld.CASTLE_TYPE:
+			hint = "Drop money on the castle to upgrade your goblins";
+			break;
+		}
+	}
+	
 	public int getTeam()
 	{
 		return team;
@@ -330,6 +378,14 @@ public class ClientObject implements Comparable<ClientObject>
 		this.lastCounter = lastCounter;
 	}
 
+	public double getHP()
+	{
+		return hp;
+	}
 	
+	public void setHP(double hp)
+	{
+		this.hp = hp;
+	}
 	
 }

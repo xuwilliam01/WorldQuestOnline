@@ -710,6 +710,46 @@ public class ClientWorld {
 	 * Add an object (not a tile) to the client, or update it if it already
 	 * exists
 	 * 
+	 * @param type
+	 * @param object
+	 *            the object to add
+	 */
+	public void setObject(int id, int x, int y, String image, int team,
+			String type, String name, double hp) {
+		try {
+			if (objects[id] == null) {
+				if (name.equals("{")) {
+					objects[id] = new ClientObject(id, x, y, image, team, type, hp);
+				} else {
+					objects[id] = new ClientObject(id, x, y, image, team, type,
+							name);
+				}
+				addObjectNo();
+			} else {
+				objects[id].setX(x);
+				objects[id].setY(y);
+				objects[id].setTeam(team);
+				objects[id].setImage(image);
+				if (name != null && name.length()>0) {
+					objects[id].setName(name);
+				}
+				objects[id].setLastCounter(worldTime);
+				objects[id].setHP(hp);
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			System.out.println(id + " " + name + " " + type + " " + image);
+		} catch (NullPointerException e2)
+		{
+			e2.printStackTrace();
+			System.out.println(id + " " + name + " " + type + " " + image);
+		}
+	}
+	
+	/**
+	 * Add an object (not a tile) to the client, or update it if it already
+	 * exists
+	 * 
 	 * @param object
 	 *            the object to add
 	 */
@@ -950,8 +990,14 @@ public class ClientWorld {
 					graphics.setFont(DAMAGE_FONT);
 
 					if (object.getTeam() != ServerCreature.NEUTRAL) {
-						if (object.getName().equals("")) {
-							graphics.fillRect(x + object.getWidth() / 2 - 5, y
+						if (object.getName().equals("") && !object.getType().contains(ServerWorld.CASTLE_TYPE)) {
+							if(object.getType().contains(ServerWorld.BUILDING_TYPE))
+							{
+								graphics.drawRect(x + object.getWidth()/5, y-10, 3*object.getWidth()/5, 5);
+								graphics.fillRect(x + object.getWidth()/5, y-10, (int)(3*object.getWidth()/5*object.getHP()), 5);
+							}
+							else
+								graphics.fillRect(x + object.getWidth() / 2 - 5, y
 									+ object.getHeight() / 4, 10, 10);
 						} else {
 							if (object.getType()
