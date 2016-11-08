@@ -46,7 +46,7 @@ public class ServerHologram extends ServerObject{
 	public ServerBuilding toBuilding(int team)
 	{
 		// -6 with hologram location
-		return ServerBuilding.getNewBuilding(getY(), getY()+6, imageType, team, world);
+		return ServerBuilding.getNewBuilding(getX(), getY()+6, imageType, team, world);
 	}
 
 	public int getGoodImage()
