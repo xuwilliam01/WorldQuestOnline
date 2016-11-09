@@ -541,7 +541,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token],
-												tokens[++token], Double.parseDouble(tokens[++token]));
+												tokens[++token], Integer.parseInt(tokens[++token]));
 									}
 									else
 									{

@@ -713,9 +713,10 @@ public class ClientWorld {
 	 * @param type
 	 * @param object
 	 *            the object to add
+	 * @param hp the hp out of 100
 	 */
 	public void setObject(int id, int x, int y, String image, int team,
-			String type, String name, double hp) {
+			String type, String name, int hp) {
 		try {
 			if (objects[id] == null) {
 				if (name.equals("{")) {
@@ -990,11 +991,11 @@ public class ClientWorld {
 					graphics.setFont(DAMAGE_FONT);
 
 					if (object.getTeam() != ServerCreature.NEUTRAL) {
-						if (object.getName().equals("") && !object.getType().contains(ServerWorld.CASTLE_TYPE)) {
+						if (object.getName().equals("") && !object.getType().equals(ServerWorld.CASTLE_TYPE)) {
 							if(object.getType().contains(ServerWorld.BUILDING_TYPE))
 							{
 								graphics.drawRect(x + object.getWidth()/5, y-10, 3*object.getWidth()/5, 5);
-								graphics.fillRect(x + object.getWidth()/5, y-10, (int)(3*object.getWidth()/5*object.getHP()), 5);
+								graphics.fillRect(x + object.getWidth()/5, y-10, (int)(3*object.getWidth()/5*(object.getHP()/100.0)), 5);
 							}
 							else
 								graphics.fillRect(x + object.getWidth() / 2 - 5, y

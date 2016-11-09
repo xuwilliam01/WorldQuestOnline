@@ -78,7 +78,7 @@ public class ClientObject implements Comparable<ClientObject>
 	/**
 	 * HP % of the object. Most objects don't have hp
 	 */
-	private double hp = -1;
+	private int hp = 0;
 
 	/**
 	 * Constructor
@@ -175,13 +175,15 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Drop money on the castle to upgrade your goblins";
 			break;
 		}
+		
+		lastCounter = ClientWorld.worldTime;
 	}
 
 	/**
 	 * Constructor for buildings with hp
 	 */
 	public ClientObject(int id, int x, int y, String image, int team,
-			String type, double hp)
+			String type, int hp)
 	{
 		this.team = team;
 		this.x = x;
@@ -219,6 +221,8 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Drop money on the castle to upgrade your goblins";
 			break;
 		}
+		
+		lastCounter = ClientWorld.worldTime;
 	}
 	
 	public int getTeam()
@@ -383,7 +387,7 @@ public class ClientObject implements Comparable<ClientObject>
 		return hp;
 	}
 	
-	public void setHP(double hp)
+	public void setHP(int hp)
 	{
 		this.hp = hp;
 	}

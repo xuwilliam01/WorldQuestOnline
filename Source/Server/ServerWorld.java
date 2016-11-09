@@ -38,8 +38,6 @@ import Tools.RowCol;
 public class ServerWorld {
 	// String definitions for each type of object to identify them when in the
 	// super class "ServerObject" state
-	public final static String BACKGROUND_OBJECT_TYPE = "B";
-
 	public final static String WEAPON_HOLD_TYPE = "H";
 
 	public final static char PROJECTILE_TYPE = 'P';

@@ -732,15 +732,19 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 							// If it's any other object
 							if(object.getType().contains(ServerWorld.BUILDING_TYPE))
+							{
 								queueMessage("O " + toChars(object.getID()) + " "
 										+ toChars(x) + " " + toChars(y) + " "
 										+ object.getImageIndex() + " " + team + " "
-										+ object.getType() + " " + "{ " + Math.max(0,Math.round(100.0*((ServerBuilding)object).getHP()/((ServerBuilding)object).getMaxHP())/100.0));
+										+ object.getType() + " " + "{ " + Math.round(100.0*((ServerBuilding)object).getHP()/((ServerBuilding)object).getMaxHP()));
+							}
 							else
+							{
 								queueMessage("O " + toChars(object.getID()) + " "
 										+ toChars(x) + " " + toChars(y) + " "
 										+ object.getImageIndex() + " " + team + " "
-										+ object.getType() + " " + "{ "+"-1");
+										+ object.getType() + " " + "{ 0");
+							}
 
 						}
 						else if (object.exists()
