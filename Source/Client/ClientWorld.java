@@ -980,15 +980,15 @@ public class ClientWorld {
 										(int) (x + object.getWidth() / 2 - name
 												.trim().length()
 												* DAMAGE_FONT_WIDTH / 2),
-										y + 15);
+										y + 25);
 
 								if(object.getHP() > 0)
 								{
 									Color col = graphics.getColor();
 									graphics.setColor(Color.black);
-									graphics.fillRect(x, y-10, object.getWidth(), 3);
+									graphics.fillRect(x, y+5, object.getWidth(), 3);
 									graphics.setColor(col);
-									graphics.fillRect(x, y-10, (int)(object.getWidth()*object.getHP()/100.0), 3);
+									graphics.fillRect(x, y+5, (int)(object.getWidth()*object.getHP()/100.0), 3);
 								}
 
 								if (tokens.length > 1) {
