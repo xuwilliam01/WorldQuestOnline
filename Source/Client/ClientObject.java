@@ -86,6 +86,7 @@ public class ClientObject implements Comparable<ClientObject>
 	public ClientObject(int id, int x, int y, String image, int team,
 			String type)
 	{
+		this.name = "";
 		this.team = team;
 		this.x = x;
 		this.y = y;
@@ -139,6 +140,7 @@ public class ClientObject implements Comparable<ClientObject>
 	public ClientObject(int id, int x, int y, String image, int team,
 			String type, String name, int hp)
 	{
+		this.name = "";
 		this.team = team;
 		this.x = x;
 		this.y = y;
@@ -193,6 +195,7 @@ public class ClientObject implements Comparable<ClientObject>
 		this.imageName = image;
 		this.type = type;
 		this.hp = hp;
+		this.name = "";
 
 		// All objects that are just text have lower case names
 		// Don't import an actual image if it is just text
