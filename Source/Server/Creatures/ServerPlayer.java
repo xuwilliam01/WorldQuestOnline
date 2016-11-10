@@ -714,7 +714,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ ((ServerPlayer) object).getName()
 											+ '`'
 											+ ((ServerPlayer) object)
-											.getCurrentText());
+											.getCurrentText()
+											+ " "
+											+ Math.max(0, Math.round(100.0*((ServerPlayer) object).getHP()/((ServerPlayer) object).getMaxHP())));
 									continue;
 								}
 
@@ -736,7 +738,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								queueMessage("O " + toChars(object.getID()) + " "
 										+ toChars(x) + " " + toChars(y) + " "
 										+ object.getImageIndex() + " " + team + " "
-										+ object.getType() + " " + "{ " + Math.round(100.0*((ServerBuilding)object).getHP()/((ServerBuilding)object).getMaxHP()));
+										+ object.getType() + " " + "{ " + Math.max(0, Math.round(100.0*((ServerBuilding)object).getHP()/((ServerBuilding)object).getMaxHP())));
 							}
 							else
 							{

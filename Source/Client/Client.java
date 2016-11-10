@@ -569,8 +569,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 												Images.getImageName(Integer
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
-												tokens[++token], name.trim());
-										token += len;
+												tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
+										token += len+2;
 									}
 									break;
 								case "t":
