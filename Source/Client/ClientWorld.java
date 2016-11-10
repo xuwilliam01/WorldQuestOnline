@@ -37,7 +37,7 @@ public class ClientWorld {
 	 * its ID
 	 */
 	private ClientObject[] objects=new ClientObject[ServerEngine.NUMBER_OF_IDS];
-	
+
 	/**
 	 * List of objects to remove
 	 */
@@ -156,7 +156,7 @@ public class ClientWorld {
 	int centreY;
 
 	private ClientHologram hologram = null;
-	
+
 	public final static int MAX_NO_OF_TEXT = Integer.MAX_VALUE;
 
 	/**
@@ -196,19 +196,19 @@ public class ClientWorld {
 	 */
 	public ClientWorld(char[][] grid, int tileSize, Client client)
 			throws IOException {
-		
+
 		backgroundGrid = new char[grid.length][grid[0].length];
 		foregroundGrid = new char[grid.length][grid[0].length];
-		
+
 		// Create a background and foreground grid
 		for (int row = 0; row < grid.length; row++) {
 			for (int column = 0; column < grid[0].length; column++) {
-				
+
 				// Invisible solid tiles
 				if (grid[row][column] == '_') {
 					grid[row][column] = ' ';
 				}
-				
+
 				if (grid[row][column] < 'A') {
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
@@ -338,7 +338,7 @@ public class ClientWorld {
 					}
 					break;
 
-				// Sand tile
+					// Sand tile
 				case 'S':
 					int situation2 = checkTileSituation(row, col, grid);
 
@@ -446,7 +446,7 @@ public class ClientWorld {
 
 					break;
 
-				// Stone tile
+					// Stone tile
 				case 'E':
 					int situation3 = checkTileSituation(row, col, grid);
 
@@ -566,7 +566,7 @@ public class ClientWorld {
 		centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
 
 	}
-	
+
 	/**
 	 * Check the neighbours of a tile on the grid
 	 * 
@@ -656,7 +656,7 @@ public class ClientWorld {
 		}
 	}
 
-	
+
 
 	/**
 	 * Get a specific object from the list
@@ -667,7 +667,7 @@ public class ClientWorld {
 		return objects[id];
 	}
 
-	
+
 
 	/**
 	 * Add an object (not a tile) to the client, or update it if it already
@@ -709,7 +709,7 @@ public class ClientWorld {
 			System.out.println(id + " " + name + " " + type + " " + image);
 		}
 	}
-	
+
 	/**
 	 * Add an object (not a tile) to the client, or update it if it already
 	 * exists
@@ -734,11 +734,11 @@ public class ClientWorld {
 	public void remove(int id) {
 		try
 		{
-		if (objects[id]!=null)
-		{
-			subtractObjectNo();
-		}
-		objects[id] = null;
+			if (objects[id]!=null)
+			{
+				subtractObjectNo();
+			}
+			objects[id] = null;
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
@@ -880,7 +880,7 @@ public class ClientWorld {
 									.getImage(), centreX + column
 									* ServerWorld.TILE_SIZE - playerX, centreY
 									+ row * ServerWorld.TILE_SIZE - playerY,
-							null);
+									null);
 				}
 			}
 
@@ -918,7 +918,7 @@ public class ClientWorld {
 					x = centreX;
 					y = centreY;
 				}
-				
+
 
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
 					ClientText textObject = (ClientText) object;
@@ -926,13 +926,13 @@ public class ClientWorld {
 					textObject.updateText();
 					if (textObject.exists())
 					{
-					graphics.setColor(textObject.getColor());
-					graphics.setFont(DAMAGE_FONT);
-					graphics.drawString(textObject.getText(), x, y);
+						graphics.setColor(textObject.getColor());
+						graphics.setFont(DAMAGE_FONT);
+						graphics.drawString(textObject.getText(), x, y);
 					}
 					// System.out.println("Drawing floating text");
 				} else {
-					
+
 					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 							|| y > Client.SCREEN_HEIGHT
 							|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>2) // If the object wasn't present in the last update
@@ -940,7 +940,7 @@ public class ClientWorld {
 						objectsToRemove.add(object);
 						continue;
 					}
-					
+
 					Image image = object.getImage();
 
 					switch (object.getTeam()) {
@@ -957,15 +957,18 @@ public class ClientWorld {
 						if (object.getName().equals("") && !object.getType().equals(ServerWorld.CASTLE_TYPE)) {
 							if(object.getType().contains(ServerWorld.BUILDING_TYPE))
 							{
-								Color col = graphics.getColor();
-								graphics.setColor(Color.black);
-								graphics.fillRect(x + object.getWidth()/7, y-10, 5*object.getWidth()/7, 3);
-								graphics.setColor(col);
-								graphics.fillRect(x + object.getWidth()/7, y-10, (int)(5*object.getWidth()/7*(object.getHP()/100.0)), 3);
+								if(object.getHP() > 0)
+								{
+									Color col = graphics.getColor();
+									graphics.setColor(Color.black);
+									graphics.fillRect(x + object.getWidth()/7, y-10, 5*object.getWidth()/7, 3);
+									graphics.setColor(col);
+									graphics.fillRect(x + object.getWidth()/7, y-10, (int)(5*object.getWidth()/7*(object.getHP()/100.0)), 3);
+								}
 							}
 							else
 								graphics.fillRect(x + object.getWidth() / 2 - 5, y
-									+ object.getHeight() / 4, 10, 10);
+										+ object.getHeight() / 4, 10, 10);
 						} else {
 							if (object.getType()
 									.equals(ServerWorld.PLAYER_TYPE)) {
@@ -978,13 +981,16 @@ public class ClientWorld {
 												.trim().length()
 												* DAMAGE_FONT_WIDTH / 2),
 										y + 15);
-								
-								Color col = graphics.getColor();
-								graphics.setColor(Color.black);
-								graphics.fillRect(x, y-10, object.getWidth(), 3);
-								graphics.setColor(col);
-								graphics.fillRect(x, y-10, (int)(object.getWidth()*object.getHP()/100.0), 3);
-								
+
+								if(object.getHP() > 0)
+								{
+									Color col = graphics.getColor();
+									graphics.setColor(Color.black);
+									graphics.fillRect(x, y-10, object.getWidth(), 3);
+									graphics.setColor(col);
+									graphics.fillRect(x, y-10, (int)(object.getWidth()*object.getHP()/100.0), 3);
+								}
+
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
 
@@ -1024,7 +1030,7 @@ public class ClientWorld {
 			objectsToRemove.clear();
 		} catch (ConcurrentModificationException E) {
 			System.out
-					.println("Tried to access the object list while it was being used");
+			.println("Tried to access the object list while it was being used");
 		}
 
 		// Draw solid tiles at the very front
@@ -1037,7 +1043,7 @@ public class ClientWorld {
 									.getImage(), centreX + column
 									* ServerWorld.TILE_SIZE - playerX, centreY
 									+ row * ServerWorld.TILE_SIZE - playerY,
-							null);
+									null);
 				}
 			}
 
@@ -1055,7 +1061,7 @@ public class ClientWorld {
 		//Draw the hologram if it exists
 		if(hologram != null)
 			graphics.drawImage(hologram.getImage(), hologram.getX() - hologram.getImage().getWidth(null)/2, hologram.getY() - hologram.getImage().getHeight(null)/2, null);
-		
+
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
 		graphics.setColor(Color.CYAN);
@@ -1106,7 +1112,7 @@ public class ClientWorld {
 					client.getRedCastleTier() + 1, client.getRedCastleMoney(),
 					ServerCastle.CASTLE_TIER_PRICE[client.getRedCastleTier()]),
 					ClientFrame.getScaledWidth(1050), ClientFrame
-							.getScaledHeight(975));
+					.getScaledHeight(975));
 
 		graphics.setColor(Color.blue);
 		if (client.getBlueCastleTier() == 5)
@@ -1120,11 +1126,11 @@ public class ClientWorld {
 					String.format(
 							"Blue Castle Tier %d (Money For Next Tier  %d/%d)",
 							client.getBlueCastleTier() + 1, client
-									.getBlueCastleMoney(),
+							.getBlueCastleMoney(),
 							ServerCastle.CASTLE_TIER_PRICE[client
-									.getBlueCastleTier()]), ClientFrame
-							.getScaledWidth(100), ClientFrame
-							.getScaledHeight(975));
+							                               .getBlueCastleTier()]), ClientFrame
+					.getScaledWidth(100), ClientFrame
+					.getScaledHeight(975));
 
 		// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
 		// {
@@ -1134,7 +1140,7 @@ public class ClientWorld {
 		// graphics.fillRect(row*16, column*16, 16,16);
 		// }
 		// }
-		
+
 		//System.out.println(noOfObjects);
 	}
 
@@ -1166,12 +1172,12 @@ public class ClientWorld {
 	{
 		objectsToRemove.add(object);
 	}
-	
+
 	public synchronized void addObjectNo()
 	{
 		noOfObjects++;
 	}
-	
+
 	public synchronized void subtractObjectNo()
 	{
 		noOfObjects--;
@@ -1184,21 +1190,21 @@ public class ClientWorld {
 	public void setNoOfObjects(int noOfObjects) {
 		this.noOfObjects = noOfObjects;
 	}
-	
+
 	public ClientHologram getHologram()
 	{
 		return hologram;
 	}
-	
+
 	public void newHologram(int image, int x, int y)
 	{
 		hologram = new ClientHologram(image, x, y);
 	}
-	
+
 	public void removeHologram()
 	{
 		hologram = null;
 	}
-	
-	
+
+
 }
