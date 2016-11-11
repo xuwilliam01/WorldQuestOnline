@@ -67,8 +67,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private PrintWriter output;
 	private BufferedReader input;
 	private ServerEngine engine;
-	private ServerWorld world;
-
 	private int respawnXSpeed = MOVE_SPEED;
 	private int respawnYSpeed = JUMP_SPEED;
 
@@ -309,7 +307,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0, world);
 		setHead(newHair);
-		world.add(newHair);
+		getWorld().add(newHair);
 
 		// Set the initial variables
 		actionDelay = 20;
@@ -327,7 +325,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.engine = engine;
 		xUpdated = true;
 		yUpdated = true;
-		this.joinTime = world.getWorldCounter();
+		this.joinTime = getWorld().getWorldCounter();
 
 		this.output = output;
 		this.input = input;
@@ -378,8 +376,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 */
 	public void sendMap()
 	{
-		world = engine.getWorld();
-		char[][] grid = world.getGrid();
+		char[][] grid = getWorld().getGrid();
 
 		// Send to the client the height and width of the grid, the starting x
 		// and y position of the grid (top left) and the side length of each
@@ -505,7 +502,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			else if (getHSpeed() != 0 && isOnSurface())
 			{
-				int checkFrame = (int) (world.getWorldCounter() % 30);
+				int checkFrame = (int) (getWorld().getWorldCounter() % 30);
 				if (checkFrame < 5)
 				{
 					setRowCol(new RowCol(0, 1));
@@ -535,18 +532,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				if (deathCounter < 0)
 				{
-					deathCounter = world.getWorldCounter();
+					deathCounter = getWorld().getWorldCounter();
 					setRowCol(new RowCol(5, 1));
 				}
-				else if (world.getWorldCounter() - deathCounter < 10)
+				else if (getWorld().getWorldCounter() - deathCounter < 10)
 				{
 					setRowCol(new RowCol(5, 1));
 				}
-				else if (world.getWorldCounter() - deathCounter < 20)
+				else if (getWorld().getWorldCounter() - deathCounter < 20)
 				{
 					setRowCol(new RowCol(5, 2));
 				}
-				else if (world.getWorldCounter() - deathCounter < 600)
+				else if (getWorld().getWorldCounter() - deathCounter < 600)
 				{
 					setRowCol(new RowCol(5, 4));
 				}
@@ -559,15 +556,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-								+ ServerWorld.STONE_TIER, world));
+								+ ServerWorld.STONE_TIER, getWorld()));
 						break;
 					case 1:
 						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-								+ ServerWorld.STONE_TIER, world));
+								+ ServerWorld.STONE_TIER, getWorld()));
 						break;
 					case 2:
 						addItem(new ServerWeapon(0, 0,
-								ServerWorld.SLINGSHOT_TYPE, world));
+								ServerWorld.SLINGSHOT_TYPE, getWorld()));
 						break;
 					}
 
@@ -578,14 +575,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 					if (getTeam() == RED_TEAM)
 					{
-						setX(world.getRedCastleX());
-						setY(world.getRedCastleY());
+						setX(getWorld().getRedCastleX());
+						setY(getWorld().getRedCastleY());
 
 					}
 					else
 					{
-						setX(world.getBlueCastleX());
-						setY(world.getBlueCastleY());
+						setX(getWorld().getBlueCastleX());
+						setY(getWorld().getBlueCastleY());
 					}
 
 					setHP(getMaxHP());
@@ -629,17 +626,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void updateClient()
 	{
 		// Slowly regenerate the player's mana and hp, and send it to the client
-		if (world.getWorldCounter() % 40 == 0 && mana < maxMana)
+		if (getWorld().getWorldCounter() % 40 == 0 && mana < maxMana)
 		{
 			mana++;
 		}
-		if (world.getWorldCounter() % 80 == 0 && getHP() < getMaxHP()
+		if (getWorld().getWorldCounter() % 80 == 0 && getHP() < getMaxHP()
 				&& getHP() > 0)
 		{
 			setHP(getHP() + 1);
 		}
 
-		if (world.getWorldCounter() - textStartTime > textDuration)
+		if (getWorld().getWorldCounter() - textStartTime > textDuration)
 		{
 			currentText = "";
 		}
@@ -657,17 +654,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				startRow = 0;
 			}
-			if (endRow > world.getObjectGrid().length - 1)
+			if (endRow > getWorld().getObjectGrid().length - 1)
 			{
-				endRow = world.getObjectGrid().length - 1;
+				endRow = getWorld().getObjectGrid().length - 1;
 			}
 			if (startColumn < 0)
 			{
 				startColumn = 0;
 			}
-			if (endColumn > world.getObjectGrid()[0].length - 1)
+			if (endColumn > getWorld().getObjectGrid()[0].length - 1)
 			{
-				endColumn = world.getObjectGrid()[0].length - 1;
+				endColumn = getWorld().getObjectGrid()[0].length - 1;
 			}
 
 			// Only checks collisions for the hologram once
@@ -678,7 +675,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				for (int column = startColumn; column <= endColumn; column++)
 				{
-					for (ServerObject object : world.getObjectGrid()[row][column])
+					for (ServerObject object : getWorld().getObjectGrid()[row][column])
 					{
 						if (object.exists() && object.isVisible())
 						{
@@ -792,16 +789,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											.getHeight()) / ServerWorld.TILE_SIZE) + 1; tileRow <= (int) ((getY()
 													+ getHeight() / 2 + playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow++)
 									{
-										if (world.getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
-												&& world.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
+										if (getWorld().getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
+												&& getWorld().getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
 										{
 											boolean canPlace = true;
 											for (int tileCol2 = tileCol; tileCol2 <= tileCol
 													+ object.getWidth()
 													/ ServerWorld.TILE_SIZE; tileCol2++)
 											{
-												if (world.getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
-														|| world.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE)
+												if (getWorld().getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
+														|| getWorld().getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE)
 												{
 													canPlace = false;
 													break;
@@ -828,16 +825,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 												.getHeight()) / ServerWorld.TILE_SIZE); tileRow >= (int) ((getY()
 														+ getHeight() / 2 - playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow--)
 										{
-											if (world.getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
-													&& world.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
+											if (getWorld().getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
+													&& getWorld().getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE)
 											{
 												boolean canPlace = true;
 												for (int tileCol2 = tileCol; tileCol2 <= tileCol
 														+ object.getWidth()
 														/ ServerWorld.TILE_SIZE; tileCol2++)
 												{
-													if (world.getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
-															|| world.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE)
+													if (getWorld().getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
+															|| getWorld().getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE)
 													{
 														canPlace = false;
 														break;
@@ -875,7 +872,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									if (hologram.wantToPlace()
 											&& hologram.canPlace())
 									{
-										world.add(hologram
+										getWorld().add(hologram
 												.toBuilding(getTeam()));
 										queueMessage("PB");
 										queueMessage("PB");
@@ -939,19 +936,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			queueMessage("K " + maxMana);
 			queueMessage("L " + getHP());
 			queueMessage("M " + getMaxHP());
+			queueMessage("XPR " + toChars(getWorld().getRedCastle().getXP()));
+			queueMessage("XPB " + toChars(getWorld().getBlueCastle().getXP()));
 			if (isAlive())
 			{
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
 			}
-			queueMessage("XB " + world.getBlueCastle().getHP() + " "
-					+ world.getBlueCastle().getTier() + " "
-					+ world.getBlueCastle().getMoney() + " "
-					+ world.getBlueCastle().getMaxHP());
-			queueMessage("XR " + world.getRedCastle().getHP() + " "
-					+ world.getRedCastle().getTier() + " "
-					+ world.getRedCastle().getMoney() + " "
-					+ world.getRedCastle().getMaxHP());
+			queueMessage("XB " + getWorld().getBlueCastle().getHP() + " "
+					+ getWorld().getBlueCastle().getTier() + " "
+					+ getWorld().getBlueCastle().getMoney() + " "
+					+ getWorld().getBlueCastle().getMaxHP());
+			queueMessage("XR " + getWorld().getRedCastle().getHP() + " "
+					+ getWorld().getRedCastle().getTier() + " "
+					+ getWorld().getRedCastle().getMoney() + " "
+					+ getWorld().getRedCastle().getMaxHP());
 			if (equippedArmour != null)
 				queueMessage(String
 						.format("A %.2f", equippedArmour.getArmour()));
@@ -978,7 +977,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				queueMessage("L " + getHP());
 			}
 			// Send the current time in the world (Must be the last thing)
-			queueMessage("T " + toChars(world.getWorldTime()));
+			queueMessage("T " + toChars(getWorld().getWorldTime()));
 
 			// Signal a repaint
 			queueMessage("U");
@@ -1168,7 +1167,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						if (text.length() > 0)
 						{
 							currentText = text;
-							textStartTime = world.getWorldCounter();
+							textStartTime = getWorld().getWorldCounter();
 							textDuration = (int) (60 * 3 + text.length() * 60 * 0.1);
 						}
 					}
@@ -1241,7 +1240,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									- playerScreenHeight / 2,
 									((ServerBuildingItem) equippedWeapons[weap])
 									.getBuildingType(), this, engine);
-							world.add(hologram);
+							getWorld().add(hologram);
 							System.out.println("Added HOLOGRAM to world at "
 									+ getNewMouseX() + " " + getNewMouseY());
 						}
@@ -1280,7 +1279,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							decreaseMoney(vendorItem.getCost());
 							vendor.drop(vendorItem.getType());
 							if (vendorItem.getAmount() > 1)
-								addItem(ServerItem.copy(vendorItem, world));
+								addItem(ServerItem.copy(vendorItem, getWorld()));
 							else addItem(vendorItem);
 						}
 					}
@@ -1411,7 +1410,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				if (item.getAmount() > 1)
 				{
 					item.decreaseAmount();
-					vendor.addItem(ServerItem.copy(item, world));
+					vendor.addItem(ServerItem.copy(item, getWorld()));
 				}
 				else
 				{
@@ -1442,14 +1441,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public void increaseMoney(int amount)
 	{
 		ServerMoney newMoney = new ServerMoney(getX() + getWidth() / 2, getY()
-				+ getHeight() / 2, amount, world);
+				+ getHeight() / 2, amount, getWorld());
 		newMoney.makeExist();
 		if (vendor != null)
 		{
 			newMoney.setSource(vendor);
 		}
-		newMoney.startCoolDown(world.getWorldCounter());
-		world.add(newMoney);
+		newMoney.startCoolDown(getWorld().getWorldCounter());
+		getWorld().add(newMoney);
 	}
 
 	/**
@@ -1554,7 +1553,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						.getActionDelay();
 				actionSpeed = ((ServerWeapon) equippedWeapons[weaponNo])
 						.getActionSpeed();
-				world.add(new ServerWeaponSwing(
+				getWorld().add(new ServerWeaponSwing(
 						this,
 						0,
 						-20,
@@ -1667,9 +1666,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				if (canAttack)
 				{
-					world.add(new ServerProjectile(getX() + getWidth() / 2,
+					getWorld().add(new ServerProjectile(getX() + getWidth() / 2,
 							getY() + getHeight() / 3, this, angle, arrowType,
-							world));
+							getWorld()));
 
 					if (getDirection().equals("LEFT"))
 					{
@@ -1682,9 +1681,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 
 					heldWeapon = new ServerObjectShown(x, y, 0, 0, 0, image,
-							ServerWorld.WEAPON_HOLD_TYPE, world.getEngine());
+							ServerWorld.WEAPON_HOLD_TYPE, getWorld().getEngine());
 					heldWeapon.setSolid(false);
-					world.add(heldWeapon);
+					getWorld().add(heldWeapon);
 				}
 				else
 				{
@@ -1692,8 +1691,8 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					actionDelay = 0;
 					ServerText message = new ServerText(
 							getX() + getWidth() / 2, getY() - getHeight() / 2,
-							"!M", ServerText.PURPLE_TEXT, world);
-					world.add(message);
+							"!M", ServerText.PURPLE_TEXT, getWorld());
+					getWorld().add(message);
 				}
 			}
 			else if (equippedWeapons[weaponNo].getType().contains(
@@ -1756,13 +1755,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 
 			setHP(getHP() - amount);
-
+			addCastleXP(amount,source);
+			
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 			- getHeight() / 3;
 
-			world.add(new ServerText(damageX, damageY,
-					Integer.toString(amount), textColour, world));
+			getWorld().add(new ServerText(damageX, damageY,
+					Integer.toString(amount), textColour, getWorld()));
 
 			// Play the death animation of the player when the HP drops to 0 or
 			// below, and eventually respawn the player
@@ -1832,18 +1832,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 			startRow = 0;
 		}
-		else if (endRow > world.getObjectGrid().length - 1)
+		else if (endRow > getWorld().getObjectGrid().length - 1)
 		{
-			endRow = world.getObjectGrid().length - 1;
+			endRow = getWorld().getObjectGrid().length - 1;
 		}
 
 		if (startColumn < 0)
 		{
 			startColumn = 0;
 		}
-		else if (endColumn > world.getObjectGrid()[0].length - 1)
+		else if (endColumn > getWorld().getObjectGrid()[0].length - 1)
 		{
-			endColumn = world.getObjectGrid()[0].length - 1;
+			endColumn = getWorld().getObjectGrid()[0].length - 1;
 		}
 
 		while (true)
@@ -1854,7 +1854,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				{
 					for (int column = startColumn; column <= endColumn; column++)
 					{
-						for (ServerObject object : world.getObjectGrid()[row][column])
+						for (ServerObject object : getWorld().getObjectGrid()[row][column])
 						{
 							if (object.exists() && object.collidesWith(this))
 							{
@@ -1894,9 +1894,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									// Make a shop
 									if (castle == null)
 										if (getTeam() == RED_TEAM)
-											castle = world.getRedCastle();
+											castle = getWorld().getRedCastle();
 										else
-											castle = world.getBlueCastle();
+											castle = getWorld().getBlueCastle();
 									if (!castle.isOpen())
 									{
 										queueMessage("CS");
@@ -2097,13 +2097,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 		ServerAccessory newArmour = new ServerAccessory(this,
 				equippedArmour.getArmourImage(), equippedArmour.getArmour(),
-				world);
+				getWorld());
 		if (getBody() != null)
 		{
 			getBody().destroy();
 		}
 		setBody(newArmour);
-		world.add(newArmour);
+		getWorld().add(newArmour);
 
 	}
 
@@ -2155,11 +2155,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		{
 		case ServerWorld.UPG_CASTLER_BUTT:
 			// Checks inside upgrade() whether the castle can be upgraded
-			world.getRedCastle().upgrade();
+			getWorld().getRedCastle().upgrade();
 			break;
 		case ServerWorld.UPG_CASTLEB_BUTT:
 			// Checks inside upgrade() whether the castle can be upgraded
-			world.getBlueCastle().upgrade();
+			getWorld().getBlueCastle().upgrade();
 			break;
 		case ServerWorld.BARRACK_ITEM_TYPE:
 			if (castle != null
@@ -2167,7 +2167,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			{
 				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
 				addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,
-						world));
+						getWorld()));
 			}
 			break;
 		}

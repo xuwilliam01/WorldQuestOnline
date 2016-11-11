@@ -101,11 +101,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int redCastleTier;
 	private int redCastleMoney;
 	private int redCastleMaxHP;
+	private int redCastleXP;
 
 	private int blueCastleHP;
 	private int blueCastleTier;
 	private int blueCastleMoney;
 	private int blueCastleMaxHP;
+	private int blueCastleXP;
 
 	// Chat Components
 	public final static int MAX_MESSAGES = 15;
@@ -443,6 +445,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "K":
 									maxMana = Integer.parseInt(tokens[++token]);
+									break;
+								case "XPR":
+									redCastleXP = toInt(tokens[++token]);
+									break;
+								case "XPB":
+									blueCastleXP = toInt(tokens[++token]);
 									break;
 								case "B":
 									// End the game
@@ -2046,6 +2054,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.blueCastleHP = blueCastleHP;
 	}
 
+	public int getRedCastleXP()
+	{
+		return redCastleXP;
+	}
+	
+	public int getBlueCastleXP()
+	{
+		return blueCastleXP;
+	}
+	
 	public void setShop(ClientShop shop)
 	{
 		this.shop = shop;

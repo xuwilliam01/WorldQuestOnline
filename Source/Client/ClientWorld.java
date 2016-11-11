@@ -1108,9 +1108,9 @@ public class ClientWorld {
 					ClientFrame.getScaledHeight(975));
 		else
 			graphics.drawString(String.format(
-					"Red Castle Tier %d (Money For Next Tier  %d/%d)",
-					client.getRedCastleTier() + 1, client.getRedCastleMoney(),
-					ServerCastle.CASTLE_TIER_PRICE[client.getRedCastleTier()]),
+					"Red Castle Tier %d (XP For Next Tier  %d/%d)",
+					client.getRedCastleTier() + 1, client.getRedCastleXP(),
+					ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]),
 					ClientFrame.getScaledWidth(1050), ClientFrame
 					.getScaledHeight(975));
 
@@ -1124,10 +1124,10 @@ public class ClientWorld {
 		else
 			graphics.drawString(
 					String.format(
-							"Blue Castle Tier %d (Money For Next Tier  %d/%d)",
+							"Blue Castle Tier %d (XP For Next Tier  %d/%d)",
 							client.getBlueCastleTier() + 1, client
-							.getBlueCastleMoney(),
-							ServerCastle.CASTLE_TIER_PRICE[client
+							.getBlueCastleXP(),
+							ServerCastle.CASTLE_TIER_XP[client
 							                               .getBlueCastleTier()]), ClientFrame
 					.getScaledWidth(100), ClientFrame
 					.getScaledHeight(975));

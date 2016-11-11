@@ -37,8 +37,8 @@ public abstract class ServerCreature extends ServerObject
 	 * Name of the creature
 	 */
 	private String name;
-	
-	
+
+
 	/**
 	 * Whether this creature is attackable or not
 	 */
@@ -101,7 +101,7 @@ public abstract class ServerCreature extends ServerObject
 	 * The base damage the creature does
 	 */
 	private int baseDamage = 0;
-	
+
 	/**
 	 * Whether or not the creature has already punched in one instance of punching (to avoid multiple punch detection in one punch)
 	 */
@@ -150,7 +150,7 @@ public abstract class ServerCreature extends ServerObject
 		if (team == ServerPlayer.BLUE_TEAM)
 		{
 			world.addToBlue(this);
-			
+
 			if (getType().equals(ServerWorld.CASTLE_TYPE))
 			{
 				System.out.println("BlueCastle " + getX() + " " + getY());
@@ -205,6 +205,17 @@ public abstract class ServerCreature extends ServerObject
 		this.HP = HP;
 	}
 
+	public void addCastleXP(int amount, ServerCreature source)
+	{
+		//Add xp to the team of the source
+		if (source.getType().equals(ServerWorld.PLAYER_TYPE))
+		{
+			if (source.getTeam() == RED_TEAM)
+				world.getRedCastle().addXP(amount);
+			else
+				world.getBlueCastle().addXP(amount);
+		}
+	}
 	/**
 	 * Inflict a certain amount of damage to the npc and destroy if less than 0
 	 * hp
@@ -216,15 +227,16 @@ public abstract class ServerCreature extends ServerObject
 		if (HP > 0)
 		{
 			HP -= amount;
-
+			addCastleXP(amount, source);
+			
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
-					+ getHeight() / 4;
-			
-			
+			+ getHeight() / 4;
+
+
 			char colour = ServerText.YELLOW_TEXT;
-			
+
 			if (amount ==0)
 			{
 				colour = ServerText.BLUE_TEXT;
@@ -398,18 +410,18 @@ public abstract class ServerCreature extends ServerObject
 		int startRow = (int) (getY() / ServerWorld.OBJECT_TILE_SIZE);
 		int endRow = (int) ((getY() + getHeight()) /
 				ServerWorld.OBJECT_TILE_SIZE);
-		
+
 		int y1 = (int)(getY());
 		int y2 = (int)(getY()+getHeight());
-		
+
 		int startColumn = (int) ((getX()- getWidth()/2) / ServerWorld.OBJECT_TILE_SIZE);
 		int endColumn = (int) ((getX() + getWidth()) /
 				ServerWorld.OBJECT_TILE_SIZE);
 		int x1 = (int) (getX()- getWidth()/2);
 		int x2 = (int) (getX() + getWidth());
-		
-		
-		
+
+
+
 		if (getDirection().equals("RIGHT"))
 		{
 			startColumn = (int) ((getX()) / ServerWorld.OBJECT_TILE_SIZE);
@@ -418,7 +430,7 @@ public abstract class ServerCreature extends ServerObject
 			x1 = (int)(getX());
 			x2 = (int) (getX() + getWidth() + getWidth()/2);
 		}
-		
+
 		// Inflict damage to every creature in range of the player's
 		// punch
 		for (int row = startRow; row <= endRow; row++)
@@ -557,15 +569,15 @@ public abstract class ServerCreature extends ServerObject
 	{
 		this.hasPunched = hasPunched;
 	}
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public void setName(String name)
 	{
 		this.name = name;
 	}
-	
+
 }
