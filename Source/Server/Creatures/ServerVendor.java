@@ -2,6 +2,7 @@ package Server.Creatures;
 
 import Server.ServerWorld;
 import Server.Items.ServerArmour;
+import Server.Items.ServerItem;
 import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
 
@@ -42,6 +43,23 @@ public class ServerVendor extends ServerCreature
 
 	}
 
+	public void drop(String item)
+	{
+		ServerItem toRemove = null;
+		for (ServerItem sItem : getInventory())
+		{
+			if (sItem.getType().equals(item))
+			{
+				toRemove = sItem;
+			}
+		}
+
+		if (toRemove.getAmount() > 1)
+			toRemove.decreaseAmount();
+		else
+			getInventory().remove(toRemove);
+	}
+	
 	/**
 	 * Constructor
 	 * @param x the x-coordinate

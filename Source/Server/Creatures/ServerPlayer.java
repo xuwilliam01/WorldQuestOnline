@@ -1279,6 +1279,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						{
 							decreaseMoney(vendorItem.getCost());
 							vendor.drop(vendorItem.getType());
+							if (vendorItem.getAmount() > 1)
+								addItem(ServerItem.copy(vendorItem, world));
+							else addItem(vendorItem);
 						}
 					}
 					break;
