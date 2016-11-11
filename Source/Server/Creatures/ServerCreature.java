@@ -336,10 +336,11 @@ public abstract class ServerCreature extends ServerObject
 					HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
 					break;
 				case ServerWorld.MAX_HP_TYPE:
-					maxHP = Math.min(ServerPlayer.PLAYER_MAX_HP,maxHP + ServerPotion.MAX_HP_INCREASE);
+					ServerPlayer thisPlayer = (ServerPlayer) this;
+					thisPlayer.setMaxHP(maxHP + ServerPotion.MAX_HP_INCREASE);
 					break;
 				case ServerWorld.MANA_POTION_TYPE:
-					ServerPlayer thisPlayer = (ServerPlayer) this;
+					thisPlayer = (ServerPlayer) this;
 					thisPlayer.setMana(Math.min(thisPlayer.getMaxMana(),
 							thisPlayer.getMana() + ServerPotion.MANA_AMOUNT));
 					break;
@@ -349,7 +350,8 @@ public abstract class ServerCreature extends ServerObject
 							+ ServerPotion.MAX_MANA_INCREASE);
 					break;
 				case ServerWorld.DMG_POTION_TYPE:
-					baseDamage = Math.min(ServerPlayer.MAX_DMGADD, baseDamage+ ServerPotion.DMG_AMOUNT);
+					thisPlayer = (ServerPlayer) this;
+					thisPlayer.setBaseDamage(baseDamage+ ServerPotion.DMG_AMOUNT);
 					break;
 				case ServerWorld.SPEED_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
@@ -531,15 +533,17 @@ public abstract class ServerCreature extends ServerObject
 	{
 		return baseDamage;
 	}
+	
 	public void setBaseDamage(int baseDamage)
 	{
 		this.baseDamage = baseDamage;
 	}
+	
 	public void setMaxHP(int maxHP)
 	{
 		this.maxHP = maxHP;
 	}
-
+	
 	public double getRelativeDrawX()
 	{
 		return relativeDrawX;

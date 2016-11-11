@@ -1100,7 +1100,7 @@ public class ClientWorld {
 		graphics.setFont(BIG_NORMAL_FONT);
 
 		graphics.setColor(Color.red);
-		if (client.getRedCastleTier() == 5)
+		if (client.getRedCastleTier() == 6)
 			graphics.drawString(
 					String.format("Red Castle Tier %d (Max)",
 							client.getRedCastleTier() + 1),
@@ -1115,7 +1115,7 @@ public class ClientWorld {
 					.getScaledHeight(975));
 
 		graphics.setColor(Color.blue);
-		if (client.getBlueCastleTier() == 5)
+		if (client.getBlueCastleTier() == 6)
 			graphics.drawString(
 					String.format("Blue Castle Tier %d (Max)",
 							client.getBlueCastleTier() + 1),

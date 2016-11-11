@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
+import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Spawners.ServerSpawner;
 
@@ -60,7 +61,8 @@ public class ServerCastle extends ServerBuilding {
 	 */
 	private int xp = 0;
 	
-	public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
+	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
+	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
 	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 };
 
 	/**
@@ -247,11 +249,29 @@ public class ServerCastle extends ServerBuilding {
 		return xp;
 	}
 	
-	public void addXP(int xp)
+	public synchronized void addXP(int xp)
 	{
 		this.xp += xp;
 		if (tier < CASTLE_TIER_XP.length && this.xp >= CASTLE_TIER_XP[tier])
+		{
 			upgrade();
+			for (ServerPlayer player : getWorld().getEngine().getListOfPlayers())
+			{
+				if(player.getTeam() == getTeam())
+				{
+					player.setBaseDamage(player.getBaseDamage()+ServerPotion.DMG_AMOUNT);
+					player.setMaxHP(player.getMaxHP()+ServerPotion.MAX_HP_INCREASE);
+					player.setHP(player.getMaxHP());
+					player.setMaxMana(player.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
+					player.setMana(player.getMana());
+					player.setHorizontalMovement(player
+							.getHorizontalMovement()
+							+ ServerPotion.SPEED_AMOUNT);
+					player.setVerticalMovement(player
+							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+				}
+			}
+		}
 	}
 
 }

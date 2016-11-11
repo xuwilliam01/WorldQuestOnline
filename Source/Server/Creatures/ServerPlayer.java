@@ -2382,5 +2382,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.deaths = deaths;
 	}
+	
+	public void setMaxHP(int maxHP)
+	{
+		super.setMaxHP(Math.min(ServerPlayer.PLAYER_MAX_HP,maxHP));
+	}
+	
+	public void setBaseDamage(int baseDamage)
+	{
+		super.setBaseDamage(Math.min(ServerPlayer.MAX_DMGADD, baseDamage));
+	}
 
 }
