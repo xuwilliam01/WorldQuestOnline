@@ -910,7 +910,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 										getWorld().add(hologram
 												.toBuilding(getTeam()));
 										queueMessage("PB");
-										queueMessage("PB");
 										equippedWeapons[weaponSelected - '0'] = null;
 										hologram.destroy();
 										hologram = null;
