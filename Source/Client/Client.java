@@ -1098,13 +1098,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			graphics.drawString(
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
-
-		// Draw the ping and the FPS
-		graphics.setFont(ClientWorld.BOLD_NORMAL_FONT);
-		graphics.setColor(Color.BLACK);
-		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()),
-				Client.SCREEN_WIDTH - 60, 40);
 		
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
