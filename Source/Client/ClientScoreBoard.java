@@ -2,33 +2,42 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import Imports.Images;
 import Server.Creatures.ServerCreature;
 
 public class ClientScoreBoard extends JPanel{
 
 	private PriorityQueue<ClientPlayerScore> redTeam = new PriorityQueue<ClientPlayerScore>();
 	private PriorityQueue<ClientPlayerScore> blueTeam = new PriorityQueue<ClientPlayerScore>();
+	Image scoreboardImage;
+	
 	
 	public ClientScoreBoard()
 	{
 		setDoubleBuffered(true);
 		setFocusable(false);
 		setOpaque(false);
-		setBorder(BorderFactory.createLineBorder(Color.black, 10));
+		//setBorder(BorderFactory.createLineBorder(Color.black, 10));
 		setSize(Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2);
 		setLocation(Client.SCREEN_WIDTH/4, Client.SCREEN_HEIGHT/4);
+		scoreboardImage = Images.getImage("scoreboard");
 	}
 	
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		int yPos = 100;
 		int xPos = (int)(0.5*Client.SCREEN_WIDTH/8);
+		
+		
+		graphics.drawImage(scoreboardImage, 0, 0, Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2, null);
+		
 		graphics.setColor(Color.blue);
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		for(ClientPlayerScore player: blueTeam)

@@ -2,9 +2,12 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -18,6 +21,8 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 public class ClientWorld {
+	
+	
 
 	public static int NO_OF_CLOUDS = 8;
 	public static int MAX_NO_OF_STARS = 500;
@@ -88,29 +93,36 @@ public class ClientWorld {
 	/**
 	 * The normal font for text
 	 */
-	public final static Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 12);
+	/*try {
+	     GraphicsEnvironment ge = 
+	         GraphicsEnvironment.getLocalGraphicsEnvironment();
+	     ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("Images/Interface/KellySlab-Regular.ttf")));
+	} catch (IOException|FontFormatException e) {
+	     System.out.println("font not loaded");
+	}*/
+	public final static Font NORMAL_FONT = new Font("Berlin Sans FB", Font.PLAIN, 14);
 
 	/**
 	 * The bold normal font for text
 	 */
-	public final static Font BOLD_NORMAL_FONT = new Font("Arial", Font.BOLD, 12);
+	public final static Font BOLD_NORMAL_FONT = new Font("Berlin Sans FB", Font.BOLD, 14);
 
 	/**
 	 * Bigger normal font
 	 */
-	public final static Font BIG_NORMAL_FONT = new Font("Arial", Font.PLAIN,
+	public final static Font BIG_NORMAL_FONT = new Font("Berlin Sans FB", Font.PLAIN,
 			ClientFrame.getScaledWidth(20));
 
 	/**
 	 * Team Title normal font
 	 */
-	public final static Font TEAM_TITLE_FONT = new Font("Arial", Font.BOLD,
+	public final static Font TEAM_TITLE_FONT = new Font("Berlin Sans FB", Font.BOLD,
 			ClientFrame.getScaledWidth(36));
 
 	/**
 	 * Player name font
 	 */
-	public final static Font PLAYER_NAME_FONT = new Font("Arial", Font.PLAIN,
+	public final static Font PLAYER_NAME_FONT = new Font("Berlin Sans FB", Font.PLAIN,
 			ClientFrame.getScaledWidth(20));
 
 	/**

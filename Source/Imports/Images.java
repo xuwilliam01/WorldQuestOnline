@@ -1016,6 +1016,10 @@ public class Images {
 			addtoImageArray(new GameImage("Inventory.png",
 					(int) (ClientFrame.getScaledWidth(300)),
 					Client.Client.SCREEN_HEIGHT, "Interface//"));
+			
+			addtoImageArray(new GameImage("scoreboard.png",
+					(int) (ClientFrame.getScaledWidth(1366)),
+					(int) (ClientFrame.getScaledHeight(768)), "Interface//"));
 
 			addtoImageArray(new GameImage(
 					"Shop.png",
