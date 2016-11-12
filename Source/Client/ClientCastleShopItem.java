@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
+import Server.Items.ServerBuildingItem;
 
 public class ClientCastleShopItem extends JButton implements ActionListener{
 
@@ -26,25 +27,13 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 		setSize(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT));
 		//Add tooltips and set location:
 		switch(type) {
-		case ServerWorld.UPG_CASTLER_BUTT:
-			setIcon(new ImageIcon(Images.getImage("Upgrade").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
-			cost = ServerCastle.CASTLE_TIER_PRICE[shop.getClient().getRedCastleTier()];
-			setLocation(100,100);
-			setToolTipText("Upgrade castle tier");
-			break;
-		case ServerWorld.UPG_CASTLEB_BUTT:
-			setIcon(new ImageIcon(Images.getImage("Upgrade").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
-			cost = ServerCastle.CASTLE_TIER_PRICE[shop.getClient().getBlueCastleTier()];
-			setLocation(100,100);
-			setToolTipText("Upgrade castle tier");
-			break;
 		case ServerWorld.BARRACK_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
-			setLocation(200,100);
-			//Set the cost as well
+			setLocation(100,100);
+			cost = ServerBuildingItem.BARRACK_COST;
 			setToolTipText("Barracks");
 			break;
-		}	
+		}
 		setVisible(true);
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
@@ -53,8 +42,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(shop.getMoney() < cost)
-			return;
-		shop.buy(type, cost);
+		if(shop.getMoney() >= cost)
+			shop.buy(type, cost);
 	}
 }

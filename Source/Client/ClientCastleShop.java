@@ -28,11 +28,6 @@ public class ClientCastleShop extends JPanel{
 		setLayout(null);
 		setSize(ClientFrame.getScaledWidth(SHOP_WIDTH), ClientFrame.getScaledHeight(SHOP_HEIGHT));
 		setLocation(200,200);
-
-		if (client.getPlayer().getTeam() == ServerCreature.RED_TEAM)
-			add(new ClientCastleShopItem(ServerWorld.UPG_CASTLER_BUTT,this));
-		else
-			add(new ClientCastleShopItem(ServerWorld.UPG_CASTLEB_BUTT,this));
 		
 		add(new ClientCastleShopItem(ServerWorld.BARRACK_ITEM_TYPE,this));
 		

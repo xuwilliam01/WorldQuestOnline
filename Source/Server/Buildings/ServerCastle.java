@@ -55,12 +55,12 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * To prices to advance from each tier
 	 */
-	
+
 	/**
 	 * The XP of the castle
 	 */
 	private int xp = 0;
-	
+
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
 	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
 	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 };
@@ -88,35 +88,16 @@ public class ServerCastle extends ServerBuilding {
 
 	public void upgrade()
 	{
-		// Try to purchase the next tier of goblin
-		if (tier < CASTLE_TIER_PRICE.length
-				&& money >= ServerCastle.CASTLE_TIER_PRICE[tier]) {
-			money -= ServerCastle.CASTLE_TIER_PRICE[tier];
-			setMaxHP(getMaxHP() + 5000);
-			setHP(getHP() + 5000);
-			tier++;
+		xp -= ServerCastle.CASTLE_TIER_XP[tier];
+		setMaxHP(getMaxHP() + 5000);
+		setHP(getHP() + 5000);
+		tier++;
 
-			if (tier == 3) {
-				arrowType = ServerWorld.STEELARROW_TYPE;
-			} else if (tier == 5) {
-				arrowType = ServerWorld.MEGAARROW_TYPE;
-			}
+		if (tier == 3) {
+			arrowType = ServerWorld.STEELARROW_TYPE;
+		} else if (tier == 5) {
+			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
-		else if(tier < CASTLE_TIER_XP.length
-				&& xp >= ServerCastle.CASTLE_TIER_XP[tier])
-		{
-			xp -= ServerCastle.CASTLE_TIER_XP[tier];
-			setMaxHP(getMaxHP() + 5000);
-			setHP(getHP() + 5000);
-			tier++;
-
-			if (tier == 3) {
-				arrowType = ServerWorld.STEELARROW_TYPE;
-			} else if (tier == 5) {
-				arrowType = ServerWorld.MEGAARROW_TYPE;
-			}
-		}
-
 	}
 	/**
 	 * Update the castle behavior
@@ -192,7 +173,7 @@ public class ServerCastle extends ServerBuilding {
 	{
 		this.money -= money;
 	}
-	
+
 	//Methods for the castle shop
 	public boolean isOpen()
 	{
@@ -243,18 +224,20 @@ public class ServerCastle extends ServerBuilding {
 	public void setTier(int tier) {
 		this.tier = tier;
 	}
-	
+
 	public int getXP()
 	{
 		return xp;
 	}
-	
+
 	public synchronized void addXP(int xp)
 	{
 		this.xp += xp;
 		if (tier < CASTLE_TIER_XP.length && this.xp >= CASTLE_TIER_XP[tier])
 		{
 			upgrade();
+
+			//Upgrade all players
 			for (ServerPlayer player : getWorld().getEngine().getListOfPlayers())
 			{
 				if(player.getTeam() == getTeam())

@@ -2153,14 +2153,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		switch (type)
 		{
-		case ServerWorld.UPG_CASTLER_BUTT:
-			// Checks inside upgrade() whether the castle can be upgraded
-			getWorld().getRedCastle().upgrade();
-			break;
-		case ServerWorld.UPG_CASTLEB_BUTT:
-			// Checks inside upgrade() whether the castle can be upgraded
-			getWorld().getBlueCastle().upgrade();
-			break;
 		case ServerWorld.BARRACK_ITEM_TYPE:
 			if (castle != null
 			&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST)

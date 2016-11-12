@@ -142,9 +142,6 @@ public class ServerWorld {
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
 	public final static String PLAYER_TEXT_TYPE = TEXT_TYPE + "P";
 
-	public final static String UPG_CASTLEB_BUTT = "UCB";
-	public final static String UPG_CASTLER_BUTT = "UCR";
-
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
 
