@@ -1,43 +1,64 @@
 package Imports;
 
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner; 
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 
 public class Audio {
 
+	private static GameAudio[] audioArray;
+	private static Map<String, Integer> audioMap = new HashMap<String, Integer>();
+	private static int numAudioClips = 0;
+	
+	private static boolean imported = false;
+	
 	public static void main(String[] args) {
 		importAudio();
 	}
 	
+	public static void addToAudioArray(GameAudio audio)
+	{
+		audioArray[numAudioClips] = audio;
+		numAudioClips++;
+	}
+	
 	public static void importAudio()
 	{
-		GameAudio heartbeat = new GameAudio("heartbeat");
-		GameAudio gag = new GameAudio("gag");
-		Scanner scan = new Scanner (System.in);
-		while (true)
+		if (imported)
+			return;
+		imported = true;
+		audioArray = new GameAudio[1000];
+		
+		//Import all audio
+		addToAudioArray(new GameAudio("heartbeat"));
+		addToAudioArray(new GameAudio("gag"));
+		
+		//Configure storage for audio
+		GameAudio[] clone = audioArray;
+		audioArray = new GameAudio[numAudioClips];
+		for (int i = 0; i < numAudioClips; i++)
 		{
-			String message = scan.nextLine();
-			if (message.equals("play"))
-			{
-
-				heartbeat.getAudio().loop(Clip.LOOP_CONTINUOUSLY);
-				System.out.println("Playing");
-			}
-			else if (message.equals("stop"))
-			{
-				heartbeat.getAudio().stop();
-			}
-			else if (message.equals("gag"))
-			{
-				gag.getAudio().start();
-				System.out.println("gagged");
-			}
-			else if (message.equals("stopgag"))
-			{
-				gag.getAudio().stop();
-			}
+			audioArray[i] = clone[i];
+			audioMap.put(audioArray[i].getName(),i);
 		}
+	}
+	
+	public static void playAudio(String name)
+	{
+		audioArray[audioMap.get(name)].play();
+	}
+	
+	public static void playAudio(int index)
+	{
+		audioArray[index].play();
+	}
+	
+	public static int getIndex(String name)
+	{
+		return audioMap.get(name);
 	}
 }

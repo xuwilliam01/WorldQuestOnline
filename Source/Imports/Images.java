@@ -96,8 +96,6 @@ public class Images {
 	/**
 	 * Array list of the game images
 	 */
-	public static BinaryTree<GameImage> images = null;
-
 	private static GameImage[] imageArray;
 	private static Map<String, Integer> imageMap = new HashMap<String, Integer>();
 
@@ -224,8 +222,7 @@ public class Images {
 
 		imported = true;
 		// Only import if the images haven't been imported already
-		if (images == null) {
-			images = new BinaryTree<GameImage>();
+		if (imageMap.isEmpty()) {
 			BufferedImage image;
 
 			// Import sprite sheets to create images with
@@ -1203,19 +1200,8 @@ public class Images {
 		imageArray = new GameImage[noOfImages];
 		for (int no = 0; no < noOfImages; no++) {
 			imageArray[no] = clone[no];
-		}
-
-		Arrays.sort(imageArray);
-
-		for (int no = 0; no < noOfImages; no++)
-		{
 			imageMap.put(imageArray[no].getName(), no);
 		}
-		
-		createBalancedTree(0, noOfImages);
-		//System.out.println(imageMap);
-		//imageArray = null;
-		//clone = null;
 	}
 
 	/**
@@ -1230,25 +1216,6 @@ public class Images {
 	}
 
 	/**
-	 * Create the balanced tree of images
-	 * 
-	 * @param low
-	 * @param high
-	 */
-	private static void createBalancedTree(int low, int high) {
-
-		if (low == high)
-			return;
-
-		int midpoint = (low + high) / 2;
-
-		images.add(imageArray[midpoint]);
-		
-		createBalancedTree(midpoint + 1, high);
-		createBalancedTree(low, midpoint);
-	}
-
-	/**
 	 * Get a specific image from the list using the name of the image
 	 * 
 	 * @param name
@@ -1256,14 +1223,7 @@ public class Images {
 	 * @return the image (inside a game image) from the list
 	 */
 	public static Image getImage(String name) {
-		try {
-			return images.get(new GameImage(name, true)).getImage();
-		} catch (NullPointerException e) {
-			System.out.println("Could not find image " + name);
-			e.printStackTrace();
-			return null;
-		}
-
+		return imageArray[imageMap.get(name)].getImage();
 	}
 
 	/**
@@ -1274,13 +1234,7 @@ public class Images {
 	 * @return the game image from the list
 	 */
 	public static GameImage getGameImage(String name) {
-		try {
-			return images.get(new GameImage(name, true));
-		} catch (NullPointerException e) {
-			System.out.println("Could not find image " + name);
-			e.printStackTrace();
-			return null;
-		}
+		return imageArray[imageMap.get(name)];
 	}
 
 }

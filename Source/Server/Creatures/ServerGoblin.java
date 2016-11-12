@@ -1,6 +1,8 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
+
+import Imports.Audio;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Effects.ServerText;
@@ -680,7 +682,10 @@ public class ServerGoblin extends ServerCreature {
 		}
 
 		amount -= amount * armour;
-
+		
+		if(source.getType().equals(ServerWorld.PLAYER_TYPE))
+			((ServerPlayer)source).queueMessage("a "+Audio.getIndex("gag"));
+		
 		if (amount <= 0) {
 			amount = 1;
 		}

@@ -34,6 +34,7 @@ import javax.swing.text.PlainDocument;
 
 import com.sun.corba.se.spi.activation.Server;
 
+import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
@@ -222,6 +223,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		System.out.println("PlayerName: " + playerName);
 		setBackground(Color.BLACK);
 		Images.importImages();
+		Audio.importAudio();
 		mySocket = socket;
 		currentMessage = " ";
 		this.playerName = playerName;
@@ -619,6 +621,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "J":
 									jump = Integer.parseInt(tokens[++token]);
+									break;
+								case "a":
+									Audio.playAudio(Integer.parseInt(tokens[++token]));
 									break;
 								case "VB":
 									if (shop != null)

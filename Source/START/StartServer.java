@@ -3,6 +3,7 @@ package START;
 import java.util.Scanner;
 
 import Client.ClientFrame;
+import Imports.Audio;
 import Imports.GameImage;
 import Imports.Images;
 import Imports.Maps;
@@ -16,6 +17,7 @@ public class StartServer {
 	public static void main(String[] args) {
 		GameImage.hostingServer=true;
 		Images.importImages();
+		Audio.importAudio();
 		Maps.importMaps();
 
 		ServerManager server = new ServerManager(MainMenu.DEF_PORT, MAX_ROOMS);

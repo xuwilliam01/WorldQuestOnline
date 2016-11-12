@@ -38,6 +38,7 @@ import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
 import Client.ClientWorld;
+import Imports.Audio;
 import Imports.Images;
 import Imports.Maps;
 import START.StartGame;
@@ -84,7 +85,7 @@ public class MainMenu implements KeyListener {
 
 	private static String playerName;
 
-	private boolean imagesLoaded = false;
+	private boolean imagesAudioLoaded = false;
 	private boolean mapsLoaded = false;
 
 	/**
@@ -131,7 +132,7 @@ public class MainMenu implements KeyListener {
 	 */
 	public MainMenu() {
 		main = this;
-		Thread loadImages = new Thread(new LoadImages());
+		Thread loadImages = new Thread(new LoadImagesAudio());
 		loadImages.start();
 
 		// Set up the dimensions of the screen
@@ -201,7 +202,7 @@ public class MainMenu implements KeyListener {
 			}
 		}
 
-		while (!(imagesLoaded)) {
+		while (!(imagesAudioLoaded)) {
 			try {
 				Thread.sleep(10);
 				if (imageLoadFailed) {
@@ -226,12 +227,13 @@ public class MainMenu implements KeyListener {
 		generateClouds();
 	}
 
-	private class LoadImages implements Runnable {
+	private class LoadImagesAudio implements Runnable {
 
 		@Override
 		public void run() {
 			Images.importImages();
-			imagesLoaded = true;
+			Audio.importAudio();
+			imagesAudioLoaded = true;
 		}
 	}
 
@@ -870,6 +872,7 @@ public class MainMenu implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			int maxRooms;
 			Images.importImages();
+			Audio.importAudio();
 			Maps.importMaps();
 			while (true) {
 				try {

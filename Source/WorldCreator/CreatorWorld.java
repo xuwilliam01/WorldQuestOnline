@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import Imports.Audio;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerFrame;
@@ -129,6 +130,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	IOException
 	{	
 		Images.importImages();
+		Audio.importAudio();
 		ImageReferencePair.importReferences();
 
 		setDoubleBuffered(true);

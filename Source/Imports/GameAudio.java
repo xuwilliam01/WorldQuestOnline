@@ -17,6 +17,7 @@ public class GameAudio {
 	
 	public GameAudio(String name)
 	{
+		this.name = name;
 		File soundFile = new File("Audio//"+name+".wav");
 		try {
 			AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
@@ -48,6 +49,11 @@ public class GameAudio {
 		this.audio = audio;
 	}
 
+	public void play()
+	{
+		if(!audio.isActive())
+			audio.loop(1);
+	}
 
 	
 }
