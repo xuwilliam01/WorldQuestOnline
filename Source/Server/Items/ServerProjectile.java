@@ -207,10 +207,6 @@ public class ServerProjectile extends ServerFlyingObject
 	@Override
 	public void update()
 	{
-		if (getOwner().getType().equals(ServerWorld.PLAYER_TYPE))
-		{
-		System.out.println(getType() + " " + getX() + " " +getY() + " " + getID());
-		}
 		if (getType().equals(ServerWorld.EXPLOSION_TYPE))
 		{
 			updateExplosion();

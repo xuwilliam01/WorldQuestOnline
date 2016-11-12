@@ -46,13 +46,21 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
 
-	// The starting mana and hp for the player
-	public final static int PLAYER_START_HP = 100;
-	public final static int PLAYER_START_MANA = 100;
+	// The starting mana and hp for the player. Change as castle upgrades
+	public static int bluePlayerStartHP = 100;
+	public static int redPlayerStartHP = 100;
+	public static int bluePlayerStartMana = 100;
+	public static int redPlayerStartMana = 100;
+	public static int blueStartBaseDamage = 0;
+	public static int redStartBaseDamage = 0;
 
 	// Initial jump and move speeds of the player
-	public final static int MOVE_SPEED = 5;
-	public final static int JUMP_SPEED = 20;
+	public final static int DEFAULT_MOVE_SPEED = 5;
+	public final static int DEFAULT_JUMP_SPEED = 20;
+	public static int blueMoveSpeed = DEFAULT_MOVE_SPEED;
+	public static int redMoveSpeed = DEFAULT_MOVE_SPEED;
+	public static int blueJumpSpeed = DEFAULT_JUMP_SPEED;
+	public static int redJumpSpeed = DEFAULT_JUMP_SPEED;
 
 	public final static int MAX_HSPEED = 8;
 	public final static int MAX_VSPEED = 24;
@@ -67,8 +75,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	private PrintWriter output;
 	private BufferedReader input;
 	private ServerEngine engine;
-	private int respawnXSpeed = MOVE_SPEED;
-	private int respawnYSpeed = JUMP_SPEED;
+
+	private int respawnXSpeed;
+	private int respawnYSpeed;
 
 	// The width and height of the screen of this specific player
 	private int playerScreenWidth = 1620;
@@ -106,12 +115,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The speed the player moves horizontally
 	 */
-	private int horizontalMovement = MOVE_SPEED;
+	private int horizontalMovement;
 
 	/**
 	 * The speed the player moves vertically
 	 */
-	private int verticalMovement = JUMP_SPEED;
+	private int verticalMovement;
 
 	/**
 	 * The current weapon selected (change later to actual inventory slot)
@@ -219,12 +228,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * Stores the mana the player currently has
 	 */
-	private int mana = PLAYER_START_MANA;
+	private int mana;
 
 	/**
 	 * Stores the maximum possible mana for the player
 	 */
-	private int maxMana = PLAYER_START_MANA;
+	private int maxMana;
 
 	/**
 	 * When the player joined the server
@@ -273,7 +282,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
 				"BASE_" + skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
-				PLAYER_START_HP, world, true);
+				bluePlayerStartHP, world, true); //player start HP doesn't matter since it will change
 
 		// Set default name of the player
 		setName("Player");
@@ -619,6 +628,37 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		}
 	}
 
+	public void setTeam(int team)
+	{
+		super.setTeam(team);
+
+		//Set default player stats
+		if(getTeam() == RED_TEAM)
+		{
+			respawnXSpeed = redMoveSpeed;
+			respawnYSpeed = redJumpSpeed;
+			horizontalMovement = redMoveSpeed;
+			verticalMovement = redJumpSpeed;
+			mana = redPlayerStartMana; 
+			maxMana = redPlayerStartMana;
+			setMaxHP(redPlayerStartHP);
+			setHP(getMaxHP());
+			setBaseDamage(redStartBaseDamage);
+		}
+		else
+		{
+			respawnXSpeed = blueMoveSpeed;
+			respawnYSpeed = blueJumpSpeed;
+			horizontalMovement = blueMoveSpeed;
+			verticalMovement = blueJumpSpeed;
+			mana = bluePlayerStartMana; 
+			maxMana = bluePlayerStartMana;
+			setMaxHP(bluePlayerStartHP);
+			setHP(getMaxHP());
+			setBaseDamage(blueStartBaseDamage);
+		}
+	}
+
 	/**
 	 * Send to the client all the updated values (x and y must be rounded to
 	 * closest integer)
@@ -857,11 +897,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 									}
 
 									object.setY(y);
-
-									System.out.println(getNewMouseY() + getY()
-									- playerScreenHeight / 2 + " " + y
-									+ " " + getNewMouseY() + " "
-									+ clientY);
 
 									int imageIndex = -1;
 									if (hologram.canPlace())
@@ -1756,7 +1791,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			setHP(getHP() - amount);
 			addCastleXP(amount,source);
-			
+
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 			- getHeight() / 3;
@@ -2374,12 +2409,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	{
 		this.deaths = deaths;
 	}
-	
+
 	public void setMaxHP(int maxHP)
 	{
 		super.setMaxHP(Math.min(ServerPlayer.PLAYER_MAX_HP,maxHP));
 	}
-	
+
 	public void setBaseDamage(int baseDamage)
 	{
 		super.setBaseDamage(Math.min(ServerPlayer.MAX_DMGADD, baseDamage));

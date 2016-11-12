@@ -292,10 +292,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setFocusable(true);
 		requestFocusInWindow();
 		setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-		HP = ServerPlayer.PLAYER_START_HP;
-		maxHP = HP;
-		mana = ServerPlayer.PLAYER_START_MANA;
-		maxMana = mana;
 
 		// Set up the input
 		try
@@ -337,6 +333,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			int y = toInt(tokens[2]);
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
+			
+			if(team == ServerCreature.RED_TEAM)
+			{
+				HP = ServerPlayer.redPlayerStartHP;
+				mana = ServerPlayer.redPlayerStartMana;
+			}
+			else
+			{
+				HP = ServerPlayer.bluePlayerStartHP;
+				mana = ServerPlayer.bluePlayerStartMana;
+			}			
+			maxHP = HP;	
+			maxMana = mana;
+			
 			player = new ClientObject(id, x, y, image, team,
 					ServerWorld.PLAYER_TYPE);
 		}
@@ -345,6 +355,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			System.out.println("Error getting player from server");
 			e.printStackTrace();
 		}
+		
 
 		// Start the actual game
 		gameThread = new Thread(new RunGame());

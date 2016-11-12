@@ -15,6 +15,7 @@ import javax.swing.ToolTipManager;
 
 import Imports.Images;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
@@ -449,16 +450,16 @@ public class ClientInventory extends JPanel implements ActionListener
 
 		graphics.setColor(RED);
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
-			graphics.setColor(Color.green);
+			graphics.setColor(Color.green);				
 		graphics.drawString(
-				String.format("%d", client.getSpeed() - ServerPlayer.MOVE_SPEED
+				String.format("%d", client.getSpeed() - ServerPlayer.DEFAULT_MOVE_SPEED
 						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(215));
 
 		graphics.setColor(RED);
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
-			graphics.setColor(Color.green);
+			graphics.setColor(Color.green);		
 		graphics.drawString(
-				String.format("%d", client.getJump() - ServerPlayer.JUMP_SPEED
+				String.format("%d", client.getJump() - ServerPlayer.DEFAULT_JUMP_SPEED
 						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(255));
 	}
 
