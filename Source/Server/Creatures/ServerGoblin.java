@@ -683,9 +683,6 @@ public class ServerGoblin extends ServerCreature {
 
 		amount -= amount * armour;
 		
-		if(source.getType().equals(ServerWorld.PLAYER_TYPE))
-			((ServerPlayer)source).queueMessage("a "+Audio.getIndex("gag"));
-		
 		if (amount <= 0) {
 			amount = 1;
 		}
@@ -698,6 +695,7 @@ public class ServerGoblin extends ServerCreature {
 
 		setHP(getHP() - amount);
 		addCastleXP(amount,source);
+		playSound("Damage");
 
 		double damageX = Math.random() * getWidth() + getX();
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()

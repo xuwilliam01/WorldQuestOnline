@@ -55,6 +55,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
 	public static int SCREEN_HEIGHT = 1080;
+	
+	//Constant used for sound
+	public static float distanceConstant;
 
 	private Socket mySocket;
 	private PrintWriter output;
@@ -256,6 +259,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setLayout(null);
 		add(chat);
 		add(enter);
+		
+		distanceConstant = 60.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
 
 	}
 
@@ -634,7 +639,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									jump = Integer.parseInt(tokens[++token]);
 									break;
 								case "a":
-									Audio.playAudio(Integer.parseInt(tokens[++token]));
+									Audio.playAudio(Integer.parseInt(tokens[++token]), Math.abs(toInt(tokens[++token]) - player.getX()+ Math.abs(toInt(tokens[++token]) - player.getY())));
 									break;
 								case "VB":
 									if (shop != null)

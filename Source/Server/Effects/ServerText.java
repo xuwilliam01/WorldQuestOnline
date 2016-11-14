@@ -13,7 +13,7 @@ public class ServerText extends ServerObject {
 	public final static char PURPLE_TEXT = 'p';
 	
 	// Send the text object only once
-	private final int aliveTime = 2;
+	private final int ALIVE_TIME = 2;
 	
 	private String text;
 	
@@ -51,7 +51,7 @@ public class ServerText extends ServerObject {
 	@Override
 	public void update()
 	{
-		if (world.getWorldCounter()-startCounter>= aliveTime)
+		if (world.getWorldCounter()-startCounter>= ALIVE_TIME)
 		{
 			destroy();
 		}

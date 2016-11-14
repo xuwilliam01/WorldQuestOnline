@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -14,6 +15,7 @@ public class GameAudio {
 
 	private String name;
 	private Clip audio;
+	private FloatControl gainControl;
 	
 	public GameAudio(String name)
 	{
@@ -31,6 +33,8 @@ public class GameAudio {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+		gainControl = 
+			    (FloatControl) audio.getControl(FloatControl.Type.MASTER_GAIN);
 	}
 
 	public String getName() {
@@ -49,11 +53,12 @@ public class GameAudio {
 		this.audio = audio;
 	}
 
-	public void play()
+	public void play(int dist)
 	{
+		gainControl.setValue(3f - Client.Client.distanceConstant*dist);
 		if(!audio.isActive())
 			audio.loop(1);
+		else
+			new GameAudio(name).play(dist);
 	}
-
-	
 }

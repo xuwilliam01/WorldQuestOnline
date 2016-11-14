@@ -141,6 +141,8 @@ public class ServerWorld {
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
 	public final static String PLAYER_TEXT_TYPE = TEXT_TYPE + "P";
+	
+	public final static char SOUND_TYPE = 's';
 
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";

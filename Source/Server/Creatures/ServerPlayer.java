@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerObject;
@@ -767,6 +768,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								+ " " + toChars(x) + " " + toChars(y)
 								+ " " + object.getImage());
 								continue;
+							case ServerWorld.SOUND_TYPE:
+								queueMessage("a "+Audio.getIndex(object.getImage()) + " " + toChars((int) object.getX()) + " " + toChars((int)object.getY()));
+								continue;
 							}
 
 							// If it's any other object
@@ -931,7 +935,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							if (object.getType().equals(
 									ServerWorld.HOLOGRAM_TYPE))
 								queueMessage("h");
-							else
+							else if(object.getType().charAt(0) != ServerWorld.SOUND_TYPE)
 								queueMessage("R " + toChars(object.getID()));
 						}
 					}
@@ -1790,6 +1794,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			setHP(getHP() - amount);
 			addCastleXP(amount,source);
+			playSound("Damage");
 
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()

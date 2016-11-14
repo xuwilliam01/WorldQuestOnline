@@ -1,8 +1,11 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
+
+import Imports.Audio;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Effects.ServerSound;
 import Server.Effects.ServerText;
 import Server.Items.ServerItem;
 import Server.Items.ServerPotion;
@@ -228,6 +231,7 @@ public abstract class ServerCreature extends ServerObject
 		{
 			HP -= amount;
 			addCastleXP(amount, source);
+			playSound("Damage");
 			
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
@@ -280,6 +284,11 @@ public abstract class ServerCreature extends ServerObject
 
 	}
 
+	public void playSound(String name)
+	{
+		world.add(new ServerSound(getX(), getY(), name, world.getEngine()));
+	}
+	
 	public void addItem(ServerItem item)
 	{
 		if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
