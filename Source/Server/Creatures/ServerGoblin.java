@@ -695,7 +695,6 @@ public class ServerGoblin extends ServerCreature {
 
 		setHP(getHP() - amount);
 		addCastleXP(amount,source);
-		playSound("Damage");
 
 		double damageX = Math.random() * getWidth() + getX();
 		double damageY = Math.random() * getHeight() / 2 + getY() - getHeight()

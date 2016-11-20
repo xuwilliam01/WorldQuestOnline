@@ -17,6 +17,7 @@ import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Creatures.ServerSlime;
 import Server.Creatures.ServerVendor;
+import Server.Effects.ServerSound;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
@@ -514,6 +515,7 @@ public class ServerWorld {
 														((ServerWeaponSwing) object).getDamage(),
 														((ServerWeaponSwing) object).getOwner());
 												((ServerWeaponSwing) object).addCollided(otherObject);
+												playSound("cut",otherObject.getX(),otherObject.getY(),object,otherObject);
 											}
 										}
 										break;
@@ -850,6 +852,12 @@ public class ServerWorld {
 		{
 			System.out.println("Concurrent Modification Exception");
 		}
+		
+		// Iterate through objects once more at the end
+		for (ServerObject object:objects)
+		{
+			object.setPlayedSound(false);
+		}
 
 		// Increase the world counter by 1 after this game tick
 		worldCounter++;
@@ -1030,6 +1038,22 @@ public class ServerWorld {
 
 		return name;
 	}
+	
+	public void playSound(String name,double x, double y, ServerObject objectOne, ServerObject objectTwo)
+	{
+		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound())
+		{
+			playSound(name,x,y);
+			objectOne.setPlayedSound(true);
+			objectTwo.setPlayedSound(true);
+		}
+	}
+	
+	
+	public void playSound(String name, double x, double y)
+	{
+		add(new ServerSound(x, y, name, getEngine()));
+	}
 
 	// //////////////////////
 	// GETTERS AND SETTERS//
@@ -1149,5 +1173,6 @@ public class ServerWorld {
 		redCastle = null;
 
 	}
+
 
 }

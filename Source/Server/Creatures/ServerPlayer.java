@@ -1794,7 +1794,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 			setHP(getHP() - amount);
 			addCastleXP(amount,source);
-			playSound("Damage");
 
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()

@@ -1,7 +1,10 @@
 package Imports;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import Server.ServerEngine;
 
 public class Audio {
 
@@ -17,7 +20,7 @@ public class Audio {
 		//playAudio("Damage",0);
 		for(int i =0; i < 10;i++)
 		{
-			playAudio("gag",0);
+			//playAudio("gag",0);
 			Thread.sleep(500);
 		}
 	}
@@ -38,7 +41,7 @@ public class Audio {
 		//Import all audio
 		addToAudioArray(new GameAudio("heartbeat"));
 		addToAudioArray(new GameAudio("gag"));
-		addToAudioArray(new GameAudio("Damage"));
+		addToAudioArray(new GameAudio("cut"));
 
 		//Configure storage for audio
 		GameAudio[] clone = audioArray;
@@ -50,14 +53,46 @@ public class Audio {
 		}
 	}
 
-	public static void playAudio(String name, int dist)
-	{
-		audioArray[audioMap.get(name)].play(dist);
-	}
+//	public static void playAudio(String name, int dist)
+//	{
+//		audioArray[audioMap.get(name)].play(dist);
+//	}
 
+	
+	public static ArrayList<GameAudio> currentlyPlaying = new ArrayList<GameAudio>();
+	public static int maxConcurrentAudio = 5;
+	
 	public static void playAudio(int index, int dist)
 	{
-		audioArray[index].play(dist);
+		ArrayList<GameAudio>toRemove = new ArrayList<GameAudio>();
+		for (GameAudio audio:currentlyPlaying)
+		{
+			if (!audio.isActive())
+			{
+				toRemove.add(audio);
+			}
+		}
+		
+		for (GameAudio audio:toRemove)
+		{
+			currentlyPlaying.remove(audio);
+		}
+		
+		if (currentlyPlaying.size()< maxConcurrentAudio)
+		{
+			if (audioArray[index].isActive())
+			{
+				GameAudio newAudio = new GameAudio(audioArray[index].getName());
+				currentlyPlaying.add(newAudio);
+				newAudio.play(dist);
+			}
+			else
+			{
+				currentlyPlaying.add(audioArray[index]);
+				audioArray[index].play(dist);
+			}
+		
+		}
 	}
 
 	public static int getIndex(String name)

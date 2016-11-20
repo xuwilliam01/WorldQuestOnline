@@ -231,7 +231,6 @@ public abstract class ServerCreature extends ServerObject
 		{
 			HP -= amount;
 			addCastleXP(amount, source);
-			playSound("Damage");
 			
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
@@ -282,11 +281,6 @@ public abstract class ServerCreature extends ServerObject
 		if (money != null)
 			inventory.add(money);
 
-	}
-
-	public void playSound(String name)
-	{
-		world.add(new ServerSound(getX(), getY(), name, world.getEngine()));
 	}
 	
 	public void addItem(ServerItem item)

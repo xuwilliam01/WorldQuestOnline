@@ -105,6 +105,11 @@ public abstract class ServerObject implements Comparable<ServerObject>
 	 * Whether the object is visible in the game
 	 */
 	private boolean visible;
+	
+	/**
+	 * Whether or not the object just played a sound (each object can only play one sound at once)
+	 */
+	private boolean playedSound;
 
 	/**
 	 * Constructor for an object
@@ -119,6 +124,7 @@ public abstract class ServerObject implements Comparable<ServerObject>
 			double gravity, String image, String type,
 			ServerEngine engine)
 	{
+		playedSound = false;
 		objectTiles = new ArrayList<RowCol>();
 		solid = true;
 		mapVisible = true;
@@ -601,5 +607,15 @@ public abstract class ServerObject implements Comparable<ServerObject>
 	{
 		this.visible = visible;
 	}
+
+	public boolean isPlayedSound() {
+		return playedSound;
+	}
+
+	public void setPlayedSound(boolean playedSound) {
+		this.playedSound = playedSound;
+	}
+	
+	
 
 }

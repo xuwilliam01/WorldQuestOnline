@@ -11,6 +11,8 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import Server.ServerEngine;
+
 public class GameAudio {
 
 	private String name;
@@ -53,12 +55,14 @@ public class GameAudio {
 		this.audio = audio;
 	}
 
+	public boolean isActive()
+	{
+		return audio.isActive();
+	}
+
 	public void play(int dist)
 	{
 		gainControl.setValue(3f - Client.Client.distanceConstant*dist);
-		if(!audio.isActive())
-			audio.loop(1);
-		else
-			new GameAudio(name).play(dist);
+		audio.loop(1);
 	}
 }
