@@ -142,7 +142,7 @@ public class ServerWorld {
 	public final static char TEXT_TYPE = 'T';
 	public final static String DAMAGE_INDICATOR_TYPE = TEXT_TYPE + "D";
 	public final static String PLAYER_TEXT_TYPE = TEXT_TYPE + "P";
-	
+
 	public final static char SOUND_TYPE = 's';
 
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
@@ -153,9 +153,9 @@ public class ServerWorld {
 	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
 	public final static String CASTLE_TYPE = BUILDING_TYPE + "T";
-	
+
 	public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
-	
+
 	public final static String HOLOGRAM_TYPE = "HOL";
 	/**
 	 * Map name
@@ -469,11 +469,11 @@ public class ServerWorld {
 									switch (object.getType().charAt(0)) {
 									case PROJECTILE_TYPE:
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
-										&& ((ServerCreature) otherObject).isAttackable()
-										&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
-										&& ((ServerCreature) otherObject)
-										.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
-										&& ((ServerProjectile) object).collidesWith(otherObject)) {
+												&& ((ServerCreature) otherObject).isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
+												&& ((ServerProjectile) object).collidesWith(otherObject)) {
 											if (object.getType().contains(PIERCING_TYPE)) {
 												if (!((ServerProjectile) object).hasCollided(otherObject)) {
 													((ServerCreature) otherObject).inflictDamage(
@@ -495,7 +495,7 @@ public class ServerWorld {
 											if (object.getType().equals(otherObject.getType())
 													&& object.getID() != otherObject.getID()) {
 												((ServerItem) object)
-												.increaseAmount(((ServerItem) otherObject).getAmount());
+														.increaseAmount(((ServerItem) otherObject).getAmount());
 												otherObject.destroy();
 											}
 										}
@@ -507,15 +507,14 @@ public class ServerWorld {
 													&& ((ServerCreature) otherObject).isAttackable()
 													&& otherObject.getID() != ((ServerWeaponSwing) object).getOwnerID()
 													&& ((ServerCreature) otherObject)
-													.getTeam() != ((ServerWeaponSwing) object).getWielder()
-													.getTeam()
+															.getTeam() != ((ServerWeaponSwing) object).getWielder()
+																	.getTeam()
 													&& ((ServerWeaponSwing) object).collidesWith(otherObject)
 													&& !((ServerWeaponSwing) object).hasCollided(otherObject)) {
 												((ServerCreature) otherObject).inflictDamage(
 														((ServerWeaponSwing) object).getDamage(),
 														((ServerWeaponSwing) object).getOwner());
 												((ServerWeaponSwing) object).addCollided(otherObject);
-												playSound("cut",otherObject.getX(),otherObject.getY(),object,otherObject);
 											}
 										}
 										break;
@@ -525,12 +524,12 @@ public class ServerWorld {
 									switch (object.getType()) {
 									case EXPLOSION_TYPE:
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
-										&& ((ServerCreature) otherObject).isAttackable()
-										&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
-										&& ((ServerCreature) otherObject)
-										.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
-										&& object.collidesWith(otherObject)
-										&& !((ServerProjectile) object).hasCollided(otherObject)) {
+												&& ((ServerCreature) otherObject).isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
+												&& object.collidesWith(otherObject)
+												&& !((ServerProjectile) object).hasCollided(otherObject)) {
 											((ServerCreature) otherObject).inflictDamage(
 													((ServerProjectile) object).getDamage(),
 													((ServerProjectile) object).getOwner());
@@ -550,8 +549,8 @@ public class ServerWorld {
 										break;
 									case PLAYER_TYPE:
 										if (otherObject.getType().charAt(0) == ITEM_TYPE
-										&& ((ServerCreature) object).isAlive()
-										&& object.collidesWith(otherObject)) {
+												&& ((ServerCreature) object).isAlive()
+												&& object.collidesWith(otherObject)) {
 											ServerItem item = (ServerItem) otherObject;
 											ServerCreature player = (ServerCreature) object;
 											if (!(item.hasCoolDown() && item.getSource().getID() == player.getID())
@@ -584,10 +583,11 @@ public class ServerWorld {
 										}
 										break;
 									case HOLOGRAM_TYPE:
-										//Check other object collisions
-										if (((ServerHologram) object).canPlace() &&(otherObject.getType().contains(BUILDING_TYPE)))
-										{
-											//System.out.println("HOLOGRAM COLLISION");
+										// Check other object collisions
+										if (((ServerHologram) object).canPlace()
+												&& (otherObject.getType().contains(BUILDING_TYPE))) {
+											// System.out.println("HOLOGRAM
+											// COLLISION");
 											((ServerHologram) object).setCanPlace(false);
 										}
 
@@ -601,9 +601,8 @@ public class ServerWorld {
 					boolean moveVertical = true;
 					boolean moveHorizontal = true;
 
-					//Check tile collisions for the hologram
-					if(object.getType().equals(HOLOGRAM_TYPE) && ((ServerHologram) object).canPlace())
-					{
+					// Check tile collisions for the hologram
+					if (object.getType().equals(HOLOGRAM_TYPE) && ((ServerHologram) object).canPlace()) {
 						double x1 = object.getX();
 						double x2 = object.getX() + object.getWidth();
 						double y1 = object.getY();
@@ -611,8 +610,8 @@ public class ServerWorld {
 
 						int startRow1 = (int) (y1 / TILE_SIZE);
 						int endRow1 = (int) (y2 / TILE_SIZE + 1);
-						int startColumn1 = (int) (x1 / TILE_SIZE );
-						int endColumn1 = (int) (x2 / TILE_SIZE );
+						int startColumn1 = (int) (x1 / TILE_SIZE);
+						int endColumn1 = (int) (x2 / TILE_SIZE);
 
 						if (startRow1 < 0) {
 							startRow1 = 0;
@@ -628,13 +627,10 @@ public class ServerWorld {
 						for (int row1 = startRow1; row1 <= endRow1; row1++) {
 							for (int column1 = startColumn1; column1 <= endColumn1; column1++) {
 								if (row1 < endRow1 && collisionGrid[row1][column1] == SOLID_TILE
-										|| (collisionGrid[row1][column1] == PLATFORM_TILE))
-								{
+										|| (collisionGrid[row1][column1] == PLATFORM_TILE)) {
 									((ServerHologram) object).setCanPlace(false);
 									break;
-								}
-								else if (row1 == endRow1 && collisionGrid[endRow1][column1] != SOLID_TILE)
-								{
+								} else if (row1 == endRow1 && collisionGrid[endRow1][column1] != SOLID_TILE) {
 									((ServerHologram) object).setCanPlace(false);
 									break;
 								}
@@ -702,10 +698,10 @@ public class ServerWorld {
 								for (int column = startColumn; column <= endColumn; column++) {
 									if (((collisionGrid[row][column] == SOLID_TILE
 											|| (collisionGrid[row][column] == PLATFORM_TILE
-											&& !((((object.getType().equals(PLAYER_TYPE)
-													&& ((ServerPlayer) object).isDropping())
-													|| object.getType().charAt(0) == PROJECTILE_TYPE
-													|| object.getType().equals(BAT_TYPE))))))
+													&& !((((object.getType().equals(PLAYER_TYPE)
+															&& ((ServerPlayer) object).isDropping())
+															|| object.getType().charAt(0) == PROJECTILE_TYPE
+															|| object.getType().equals(BAT_TYPE))))))
 											&& column * TILE_SIZE < x2 && column * TILE_SIZE + TILE_SIZE > x1)) {
 										if (y2 + vSpeed >= row * TILE_SIZE && y2 <= row * TILE_SIZE) {
 											moveVertical = false;
@@ -731,7 +727,7 @@ public class ServerWorld {
 							// with
 							int collideRow = 0;
 
-							for (int row = endRow; row >=startRow; row--) {
+							for (int row = endRow; row >= startRow; row--) {
 								for (int column = startColumn; column <= endColumn; column++) {
 									if (collisionGrid[row][column] == SOLID_TILE && column * TILE_SIZE < x2
 											&& column * TILE_SIZE + TILE_SIZE > x1) {
@@ -846,16 +842,14 @@ public class ServerWorld {
 
 			}
 
-		}catch(
+		} catch (
 
-				ConcurrentModificationException e)
-		{
+		ConcurrentModificationException e) {
 			System.out.println("Concurrent Modification Exception");
 		}
-		
+
 		// Iterate through objects once more at the end
-		for (ServerObject object:objects)
-		{
+		for (ServerObject object : objects) {
 			object.setPlayedSound(false);
 		}
 
@@ -863,8 +857,7 @@ public class ServerWorld {
 		worldCounter++;
 
 		// Update game time
-		if(worldCounter%COUNTER_TIME==0)
-		{
+		if (worldCounter % COUNTER_TIME == 0) {
 			worldTime++;
 
 			if (worldTime >= DAY_COUNTERS) {
@@ -1038,20 +1031,16 @@ public class ServerWorld {
 
 		return name;
 	}
-	
-	public void playSound(String name,double x, double y, ServerObject objectOne, ServerObject objectTwo)
-	{
-		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound())
-		{
-			playSound(name,x,y);
+
+	public void playSound(String name, double x, double y, ServerObject objectOne, ServerObject objectTwo) {
+		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound()) {
+			playSound(name, x, y);
 			objectOne.setPlayedSound(true);
 			objectTwo.setPlayedSound(true);
 		}
 	}
-	
-	
-	public void playSound(String name, double x, double y)
-	{
+
+	public void playSound(String name, double x, double y) {
 		add(new ServerSound(x, y, name, getEngine()));
 	}
 
@@ -1146,13 +1135,11 @@ public class ServerWorld {
 		return engine;
 	}
 
-	public char[][] getCollisionGrid()
-	{
+	public char[][] getCollisionGrid() {
 		return collisionGrid;
 	}
 
-	public void setCollisionGrid(char[][] collisionGrid)
-	{
+	public void setCollisionGrid(char[][] collisionGrid) {
 		this.collisionGrid = collisionGrid;
 	}
 
@@ -1173,6 +1160,5 @@ public class ServerWorld {
 		redCastle = null;
 
 	}
-
 
 }

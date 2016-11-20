@@ -42,6 +42,11 @@ public class Audio {
 		addToAudioArray(new GameAudio("heartbeat"));
 		addToAudioArray(new GameAudio("gag"));
 		addToAudioArray(new GameAudio("cut"));
+		
+		for (int no = 0; no < 11; no++)
+		{
+			addToAudioArray(new GameAudio("cut_air"+no));
+		}
 
 		//Configure storage for audio
 		GameAudio[] clone = audioArray;
@@ -58,43 +63,48 @@ public class Audio {
 //		audioArray[audioMap.get(name)].play(dist);
 //	}
 
+	private static long cooldownStart = 0;
 	
-	public static ArrayList<GameAudio> currentlyPlaying = new ArrayList<GameAudio>();
-	public static int maxConcurrentAudio = 5;
+	public static ArrayList<QueuedAudio> currentlyPlaying = new ArrayList<QueuedAudio>();
+	public final static int maxConcurrentAudio = 5;
 	
-	public static void playAudio(int index, int dist)
+	// Make an exception for closer sounds (compared to the farthest sound currently playing)
+	public final static int MIN_EXCEPTION_DIST = 32;
+	
+	public synchronized static void playAudio(int index, int dist)
 	{
-		ArrayList<GameAudio>toRemove = new ArrayList<GameAudio>();
-		for (GameAudio audio:currentlyPlaying)
+		ArrayList<QueuedAudio>toRemove = new ArrayList<QueuedAudio>();
+		for (QueuedAudio audio:currentlyPlaying)
 		{
-			if (!audio.isActive())
+			if (!audio.getAudio().isActive())
 			{
 				toRemove.add(audio);
 			}
 		}
 		
-		for (GameAudio audio:toRemove)
+		for (QueuedAudio audio:toRemove)
 		{
 			currentlyPlaying.remove(audio);
 		}
 		
-		if (currentlyPlaying.size()< maxConcurrentAudio)
+		if (System.currentTimeMillis()-cooldownStart>=ServerEngine.UPDATE_RATE && (currentlyPlaying.size()< maxConcurrentAudio || (dist+MIN_EXCEPTION_DIST<currentlyPlaying.get(maxConcurrentAudio-1).getDist())))
 		{
 			if (audioArray[index].isActive())
 			{
-				GameAudio newAudio = new GameAudio(audioArray[index].getName());
+				QueuedAudio newAudio = new QueuedAudio(dist,new GameAudio(audioArray[index].getName()));
 				currentlyPlaying.add(newAudio);
-				newAudio.play(dist);
+				newAudio.getAudio().play(dist);
 			}
 			else
 			{
-				currentlyPlaying.add(audioArray[index]);
+				currentlyPlaying.add(new QueuedAudio(dist,audioArray[index]));
 				audioArray[index].play(dist);
 			}
+			cooldownStart = System.currentTimeMillis();
 		
 		}
 	}
-
+	
 	public static int getIndex(String name)
 	{
 		return audioMap.get(name);

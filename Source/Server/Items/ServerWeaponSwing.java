@@ -158,6 +158,9 @@ public class ServerWeaponSwing extends ServerObject
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
 		setImage(getBaseImage() + "_" + currentAngle + "");
+		
+		int soundNo = (int)(Math.random()*11);
+		owner.getWorld().playSound("cut_air"+soundNo, getX()+getWidth()/2, getY()+getHeight()/2);
 
 	}
 
@@ -242,6 +245,9 @@ public class ServerWeaponSwing extends ServerObject
 	public void addCollided(ServerObject other)
 	{
 		objectsCollided.add(other.getID());
+		owner.getWorld().playSound("cut", other.getX() + other.getWidth() / 2,
+				other.getY() + other.getHeight() / 2, this,
+				other);
 	}
 
 	// ///////////////////////

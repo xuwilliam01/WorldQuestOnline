@@ -62,7 +62,7 @@ public class GameAudio {
 
 	public void play(int dist)
 	{
-		gainControl.setValue(3f - Client.Client.distanceConstant*dist);
+		gainControl.setValue(1f - Client.Client.distanceConstant*dist);
 		audio.loop(1);
 	}
 }
