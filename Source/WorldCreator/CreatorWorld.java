@@ -596,6 +596,37 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 			mapWriter.println(fileName);
 			mapWriter.close();
 		}
+		
+		
+		// For our SE 101 project
+		output = new PrintWriter(new File("Resources", fileName.toLowerCase() + "_SE.txt"));
+
+		
+		// Print the grid
+		output.println("const BYTE " + fileName +"[" + (grid[0].length-1) + " * " + (grid.length-1)+"] =");
+		output.println('{');
+		for (int row = 0; row < grid.length-1; row++)
+		{
+			for (int col = 0; col < grid[0].length-1; col++)
+			{
+				if (grid[row][col] == ' ')
+				{
+					output.print("0, ");
+				}
+				else if (grid[row][col] == '2')
+				{
+					output.print("2, ");
+				}
+				else
+				{
+					output.print("1, ");
+				}
+			}
+			output.println();
+		}
+		output.println("};");
+		output.println("const def_image " + fileName +" = {" + (grid[0].length-1) + ", " + (grid.length-1)+", " + fileName + "};");
+		output.close();
 	}
 
 	/**

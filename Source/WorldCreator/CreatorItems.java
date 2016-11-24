@@ -37,7 +37,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 	private static final int NUM_COLS = 5;
 	public static final int NUM_ROWS_OBJ = 3;
 	public static final int NUM_COLS_OBJ = 5;
-	public static final int MIN_WORLD_SIZE = 20;
+	public static final int MIN_WORLD_SIZE = 2;
 	public static final int MAX_WORLD_SIZE = 100000;
 
 	private CreatorWorld world;
