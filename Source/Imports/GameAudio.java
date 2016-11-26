@@ -28,15 +28,17 @@ public class GameAudio {
 			DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
 		    audio = (Clip) AudioSystem.getLine(info);
 		    audio.open(sound);
+			gainControl = 
+				    (FloatControl) audio.getControl(FloatControl.Type.MASTER_GAIN);
 		} catch (UnsupportedAudioFileException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
+			System.out.println("Audio not working: " + name);
 		}
-		gainControl = 
-			    (FloatControl) audio.getControl(FloatControl.Type.MASTER_GAIN);
+
 	}
 
 	public String getName() {
