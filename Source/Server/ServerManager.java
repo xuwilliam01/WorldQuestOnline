@@ -154,7 +154,10 @@ public class ServerManager implements Runnable, ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		if(rooms.size() == 0)
 			return;
-		String data = "A "+ name + " " + rooms.get(0).noOfPlayers;
+		int numPlayers = rooms.get(0).noOfPlayers;
+		if(!rooms.get(0).started())
+			numPlayers = rooms.get(0).getPlayers().size();
+		String data = "A "+ name + " " + numPlayers;
 		sendData = data.getBytes();
 		try {
 			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);

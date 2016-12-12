@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -15,11 +17,14 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import CentralServer.ServerInfo;
+import Menu.MainMenu;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 public class ClientServerSelection extends JFrame implements Runnable, WindowListener, ActionListener{
 
@@ -32,6 +37,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 	private ArrayList<ServerInfo> servers = new ArrayList<ServerInfo>();
 	private JButton refresh = new JButton("Refresh");
+	private JButton connect = new JButton("Connect");
 	private JTable table;
 	private JScrollPane scrollTable;
 	private final static String[] columns = {"Name", "Capacity", "Ping"};
@@ -53,22 +59,42 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		revalidate();
 		addWindowListener(this);
 		open = true;
-		
-		table = new JTable(serversData, columns);
-		scrollTable = new JScrollPane(table);
-		scrollTable.setSize(400,serversData.length*50);
-		scrollTable.setLocation(10,50);
-		add(scrollTable);
-				
+
+		initTable();
+
 		refresh.addActionListener(this);
 		refresh.setSize(100,50);
-		refresh.setLocation(200,200);
+		refresh.setLocation(50,400);
 		add(refresh);
 
+		connect.addActionListener(this);
+		connect.setSize(100,50);
+		connect.setLocation(200,400);
+		add(connect);
+		
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		refresh();
+	}
+
+	public void initTable()
+	{
+		table = new JTable(serversData, columns)
+		{
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {                
+				return false; 
+			}
+		};
+		table.setRowSelectionAllowed(true);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.addMouseListener(new TableListener(table));
+		scrollTable = new JScrollPane(table);
+		scrollTable.setSize(400,serversData.length*50);
+		scrollTable.setLocation(10,50);
+		add(scrollTable);
 	}
 
 	public void refresh()
@@ -83,6 +109,21 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		}
 	}
 
+	public void connect()
+	{
+		int row = table.getSelectedRow();
+		if(row > -1)
+		{
+			ServerInfo destination = servers.get(row);
+			open = false;
+			String IP = destination.getIP();
+			if(!Character.isDigit(IP.charAt(0)))
+				IP = IP.substring(1);
+			MainMenu.joinLobby(IP, destination.getPort());
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+	
 	public void run() {
 		while(true)
 		{
@@ -106,12 +147,9 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				servers.add(new ServerInfo(tokens[i], tokens[i+1], Integer.parseInt(tokens[i+2]), Integer.parseInt(tokens[i+3])));
 			}
 			remove(table);
+			remove(scrollTable);
 			revalidate();
-			table = new JTable(serversData, columns);
-			scrollTable = new JScrollPane(table);
-			scrollTable.setSize(400,serversData.length*50);
-			scrollTable.setLocation(10,50);
-			add(scrollTable);
+			initTable();
 			revalidate();
 		}
 	}
@@ -162,7 +200,61 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	public void actionPerformed(ActionEvent button) {
 		if(button.getSource() == refresh)
 			refresh();
+		else if(button.getSource() == connect)
+			connect();
 
 	}
 
+	private class TableListener implements MouseListener {
+
+		private JTable table;
+
+		public TableListener(JTable table)
+		{
+			this.table = table;
+		}
+
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			int row = table.getSelectedRow();
+			table.setRowSelectionAllowed(false);
+			table.setRowSelectionAllowed(true);
+		    if ((row > -1)) {
+		        table.setRowSelectionInterval(row, row);
+		    }
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			int row = table.getSelectedRow();
+			table.setRowSelectionAllowed(false);
+			table.setRowSelectionAllowed(true);
+		    if ((row > -1)) {
+		        table.setRowSelectionInterval(row, row);
+		    }	
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+	}
+
+
 }
+
