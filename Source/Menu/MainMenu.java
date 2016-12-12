@@ -20,6 +20,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
+import Client.ClientServerSelection;
 import Client.ClientWorld;
 import Imports.Audio;
 import Imports.Images;
@@ -253,6 +255,8 @@ public class MainMenu implements KeyListener {
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
+		
+		JButton online;
 
 		Image buttonTrayImage = Images.getImage("ButtonTray");
 
@@ -340,6 +344,18 @@ public class MainMenu implements KeyListener {
 			instructions.addMouseListener(this);
 			add(instructions);
 
+			online = new JButton("Play Online");
+			online.setSize(instructionsImage.getWidth(null),
+					instructionsImage.getHeight(null));
+			online.setLocation(middle - instructionsImage.getWidth(null)
+					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			//online.setBorder(BorderFactory.createEmptyBorder());
+			//online.setContentAreaFilled(false);
+			//online.setOpaque(false);
+			online.addActionListener(new OnlineButton());
+			online.addMouseListener(this);
+			add(online);
+			
 			setVisible(true);
 			repaint();
 		}
@@ -640,6 +656,28 @@ public class MainMenu implements KeyListener {
 	}
 
 	/**
+	 * Opens the menu to select a server
+	 */
+	private static class OnlineButton implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			if(ClientServerSelection.open)
+				return;
+			ClientServerSelection serverList = null;
+			try {
+				serverList = new ClientServerSelection(DEF_PORT+1);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Thread listThread = new Thread(serverList);
+			listThread.start();
+			
+			
+		}
+		
+	}
+	/**
 	 * Reacts when the menu button in the creator is pressed
 	 * 
 	 * @author Alex Raita & William Xu
@@ -871,6 +909,7 @@ public class MainMenu implements KeyListener {
 	private static class StartServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			int maxRooms;
+			String name;
 			Images.importImages();
 			Audio.importAudio();
 			Maps.importMaps();
@@ -892,6 +931,23 @@ public class MainMenu implements KeyListener {
 				}
 			}
 
+			while (true) {
+				try {
+					name = JOptionPane
+							.showInputDialog("What would you like to name the room? (No spaces)");
+					if (name == null)
+					{
+						mainFrame.requestFocus();
+						return;
+					}
+					if (name.contains(" ") || name.equals(""))
+						throw new Exception();
+					break;
+				} catch (Exception E) {
+
+				}
+			}
+			
 			int portNum = DEF_PORT;
 			// while (true)
 			// {
@@ -916,8 +972,14 @@ public class MainMenu implements KeyListener {
 
 			// Starts the server
 			System.out.println("rooms " + maxRooms);
-			ServerManager server = new ServerManager(portNum, maxRooms,
-					mainFrame);
+			ServerManager server = null;
+			try {
+				server = new ServerManager(name, portNum, maxRooms,
+						mainFrame);
+			} catch (SocketException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			Thread serverThread = new Thread(server);
 

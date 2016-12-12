@@ -1,31 +1,53 @@
 package Server;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
 
 import Client.ClientFrame;
 import Imports.Maps;
 
-public class ServerManager implements Runnable {
+public class ServerManager implements Runnable, ActionListener{
 
 	private ServerSocket socket;
 	private static ArrayList<Server> rooms = new ArrayList<Server>();
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
+	private Timer updateCentral = new Timer(1000,this);
+	private String name = "Default";
+	
+	//Variables for central server comm
+	DatagramSocket centralSocket;
+	DatagramPacket send;
+	byte[] sendData;
 
 	/**
 	 * 
 	 * @param port
 	 * @param maxRooms
 	 * @param mainFrame
+	 * @throws SocketException 
 	 */
-	public ServerManager(int port, int maxRooms, ClientFrame mainFrame) {
+	public ServerManager(String name, int port, int maxRooms, ClientFrame mainFrame) throws SocketException {
+		this.name = name;
 		this.maxRooms = maxRooms;
-		this.mainFrame = mainFrame;
+		this.mainFrame = mainFrame;		
 		addNewRoom();
+		updateCentral.start();
+		centralSocket = new DatagramSocket(port);
+		sendData = new byte[1024];
 		try {
 			this.socket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -39,11 +61,16 @@ public class ServerManager implements Runnable {
 	 * @param port
 	 * @param maxRooms
 	 * @param mainFrame
+	 * @throws SocketException 
 	 */
-	public ServerManager(int port, int maxRooms) {
+	public ServerManager(String name, int port, int maxRooms) throws SocketException {
+		this.name = name;
 		this.maxRooms = maxRooms;
 		HAS_FRAME = false;
 		addNewRoom();
+		updateCentral.start();
+		centralSocket = new DatagramSocket(port);
+		sendData = new byte[1024];
 		try {
 			this.socket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -122,6 +149,21 @@ public class ServerManager implements Runnable {
 	public static void removeRoom(Server remove)
 	{
 		rooms.remove(remove);
+	}
+
+	public void actionPerformed(ActionEvent arg0) {
+		if(rooms.size() == 0)
+			return;
+		String data = "A "+ name + " " + rooms.get(0).noOfPlayers;
+		sendData = data.getBytes();
+		try {
+			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
+			centralSocket.send(send);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
