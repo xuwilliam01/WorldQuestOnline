@@ -1,4 +1,4 @@
-package CentralServer;
+package ClientUDP;
 
 public class ServerInfo{
 	private String name;
@@ -10,6 +10,7 @@ public class ServerInfo{
 	{
 		this.name = name;
 		this.IP = IP;
+		System.out.println("Server received: " + name + " " + IP + " " + port);
 		this.port = port;
 		this.numPlayers = numPlayers;
 	}

@@ -1,4 +1,4 @@
-package Client;
+package ClientUDP;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,7 +16,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import CentralServer.ServerInfo;
+import Client.Client;
+import Client.ClientInventory;
 import Menu.MainMenu;
 
 import javax.swing.DefaultListSelectionModel;
@@ -41,6 +42,9 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private JTable table;
 	private JScrollPane scrollTable;
 	private final static String[] columns = {"Name", "Capacity", "Ping"};
+	/**
+	 * Name, capacity, ping
+	 */
 	private Object[][] serversData = new Object[0][3];
 	public static boolean open = false;
 

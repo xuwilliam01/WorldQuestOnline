@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.Timer;
 
+import ClientUDP.ServerInfo;
+
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int PORT = 5000;
