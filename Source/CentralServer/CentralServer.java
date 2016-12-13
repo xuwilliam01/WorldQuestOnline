@@ -14,7 +14,7 @@ import ClientUDP.ServerInfo;
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int PORT = 5000;
-	public final static String IP = "138.197.138.125";
+	public final static String IP = "127.0.0.1";
 
 	DatagramSocket socket;
 	DatagramPacket receive;
@@ -35,7 +35,7 @@ public class CentralServer implements Runnable, ActionListener{
 		socket = new DatagramSocket(PORT);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
-		listServers = "S";
+		listServers = "";
 		reset = new Timer(4000, this);
 	}
 	public void run() {
@@ -59,21 +59,20 @@ public class CentralServer implements Runnable, ActionListener{
 				//Get info from servers
 				case 'A':
 					String[] tokens = input.trim().split(" ");
-					String orig = receive.getAddress().toString();
-					ServerInfo newServer = new ServerInfo(tokens[1],orig, receive.getPort(), 
+					ServerInfo newServer = new ServerInfo(tokens[1], receive.getAddress().toString(), receive.getPort(), 
 							Integer.parseInt(tokens[2]));
 					if(!servers.contains(newServer))
 					{
 						//System.out.println(newServer.getIP() + " " + newServer.getPort());
 						servers.add(newServer);
-						listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " " + orig + " ";
+						listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
 					}
 					break;
 				//Send clients the list of servers
 				case 'G':
-					//System.out.println(listServers);
-					listServers.trim();
-					sendData = listServers.getBytes();
+					String serversOut = "S "+receive.getAddress().toString()+" "+listServers;
+					serversOut.trim();
+					sendData = serversOut.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;	
@@ -90,7 +89,7 @@ public class CentralServer implements Runnable, ActionListener{
 			{
 				//System.out.println("Clearing Servers");
 				servers.clear();
-				listServers = "S";
+				listServers = "";
 				clearServers = false;
 			}
 		}

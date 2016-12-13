@@ -149,10 +149,6 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			String IP = destination.getIP();
 			//Checks if server IP is the same as your external IP
 			//Must use 127.0.0.1 in this case
-			if(IP.equals(destination.getOrigIP()))
-				IP = "127.0.0.1";
-			else if(!Character.isDigit(IP.charAt(0)))
-				IP = IP.substring(1);
 			send("C", IP, destination.getPort());
 		}
 	}
@@ -174,25 +170,31 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			switch(input.charAt(0))
 			{
 			case 'S':
-				input = input.substring(1);
 				String[] tokens = input.split(" ");
+				System.out.println(input);
 				servers.clear();
 				pings.clear();
-				int numInputs = 5;
-				serversData = new Object[tokens.length/numInputs][3];
+				int numInputs = 4;
+				serversData = new Object[(tokens.length-2)/numInputs][3];
+				String thisIP = tokens[1];
 				//System.out.println("Received Servers\n"+input);
-				if(input.length() > 0)
-					for(int i = 0; i < tokens.length;i+=numInputs)
+				if(tokens.length > 2)
+					for(int i = 0; i < tokens.length-2;i+=numInputs)
 					{
-						serversData[i/numInputs][0] = tokens[i];
-						serversData[i/numInputs][1] = tokens[i+3] +"/10";
-						serversData[i/numInputs][2] = "200+";
+						serversData[i/numInputs][0] = tokens[i+2];
+						serversData[i/numInputs][1] = tokens[i+5] +"/10";
+						serversData[i/numInputs][2] = "-";
 
-						int port = Integer.parseInt(tokens[i+2]);
-						pings.add(new Ping(tokens[i+1],port, System.currentTimeMillis()));
-						send("P", tokens[i+1], port);
-
-						servers.add(new ServerInfo(tokens[i], tokens[i+1], port, Integer.parseInt(tokens[i+3]), tokens[i+4]));
+						int port = Integer.parseInt(tokens[i+4]);
+						String IP = tokens[i+3];
+						if(IP.equals(thisIP))
+						{
+							System.out.println("Local server");
+							IP = "/127.0.0.1";
+						}
+						send("P", IP, port);
+						pings.add(new Ping(IP,port, System.currentTimeMillis()));
+						servers.add(new ServerInfo(tokens[i+2], IP, port, Integer.parseInt(tokens[i+5])));
 					}			
 				remove(table);
 				remove(scrollTable);

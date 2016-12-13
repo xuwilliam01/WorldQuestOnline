@@ -5,7 +5,6 @@ public class ServerInfo{
 	private String IP;
 	private int port;
 	private int numPlayers;
-	private String origIP = null;
 	
 	public ServerInfo(String name, String IP, int port, int numPlayers)
 	{
@@ -14,16 +13,6 @@ public class ServerInfo{
 		//System.out.println("Server received: " + name + " " + IP + " " + port);
 		this.port = port;
 		this.numPlayers = numPlayers;
-	}
-
-	public ServerInfo(String name, String IP, int port, int numPlayers, String origIP)
-	{
-		this.name = name;
-		this.IP = IP;
-		//System.out.println("Server received: " + name + " " + IP + " " + port);
-		this.port = port;
-		this.numPlayers = numPlayers;
-		this.origIP = origIP;
 	}
 	
 	public String getName() {
@@ -40,11 +29,6 @@ public class ServerInfo{
 	
 	public int getNumPlayers() {
 		return numPlayers;
-	}
-
-	public String getOrigIP()
-	{
-		return origIP;
 	}
 	
 	@Override
