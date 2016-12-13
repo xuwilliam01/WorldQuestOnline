@@ -22,7 +22,9 @@ public class StartServer {
 		Maps.importMaps();
 		
 		Scanner scan = new Scanner(System.in);
+		System.out.print("Enter server name: ");
 		String name = scan.nextLine();
+		name = name.replace(' ', '_');
 
 		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);
 
