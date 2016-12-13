@@ -12,7 +12,7 @@ import javax.swing.Timer;
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int PORT = 5000;
-	public final static String IP = "74.12.138.159";
+	public final static String IP = "159.203.14.30";
 
 	DatagramSocket socket;
 	DatagramPacket receive;
