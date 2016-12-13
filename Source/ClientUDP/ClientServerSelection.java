@@ -82,7 +82,6 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
-		refresh();
 		repaint();
 	}
 
@@ -123,13 +122,13 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void send(String out, String destIP, int destPort)
 	{
 		sendData = out.getBytes();
 		String IP = destIP;
 		if(!Character.isDigit(IP.charAt(0)))
-				IP = IP.substring(1);
+			IP = IP.substring(1);
 		try {
 			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), destPort);	
 			socket.send(send);
@@ -138,7 +137,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void connect()
 	{
 		int row = table.getSelectedRow();
@@ -147,28 +146,27 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			ServerInfo destination = servers.get(row);
 			if(destination.getNumPlayers() >= 10)
 				return;
-			open = false;
 			String IP = destination.getIP();
 			//Checks if server IP is the same as your external IP
 			//Must use 127.0.0.1 in this case
 			if(IP.equals(destination.getOrigIP()))
 				IP = "127.0.0.1";
-			if(!Character.isDigit(IP.charAt(0)))
+			else if(!Character.isDigit(IP.charAt(0)))
 				IP = IP.substring(1);
-			MainMenu.joinLobby(IP, destination.getPort());
-			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			send("C", IP, destination.getPort());
 		}
 	}
 
 	public void run() {
 		ArrayList<Ping> pings = new ArrayList<Ping>();
+		refresh();
 		while(true)
 		{
 			receiveData = new byte[1024];
 			receive = new DatagramPacket(receiveData, receiveData.length);
 			try {
 				socket.receive(receive);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				return;
 			}
 			//Get input
@@ -189,11 +187,11 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 						serversData[i/numInputs][0] = tokens[i];
 						serversData[i/numInputs][1] = tokens[i+3] +"/10";
 						serversData[i/numInputs][2] = "200+";
-						
+
 						int port = Integer.parseInt(tokens[i+2]);
 						pings.add(new Ping(tokens[i+1],port, System.currentTimeMillis()));
 						send("P", tokens[i+1], port);
-						
+
 						servers.add(new ServerInfo(tokens[i], tokens[i+1], port, Integer.parseInt(tokens[i+3]), tokens[i+4]));
 					}			
 				remove(table);
@@ -219,6 +217,14 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 					index++;
 				}
 				break;
+			case 'C':
+				open = false;
+				IP = receive.getAddress().toString();
+				if(!Character.isDigit(IP.charAt(0)))
+					IP = IP.substring(1);
+				MainMenu.joinLobby(IP, receive.getPort());
+				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+				break;
 			}
 		}
 	}
@@ -231,6 +237,13 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
+		if(socket != null)
+		{
+			socket.close();
+			socket = null;
+			open = false;
+			dispose();
+		}
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class CentralServer implements Runnable, ActionListener{
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		listServers = "S";
-		reset = new Timer(2000, this);
+		reset = new Timer(4000, this);
 	}
 	public void run() {
 		reset.start();

@@ -25,7 +25,7 @@ public class ServerManager implements Runnable, ActionListener{
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
-	private Timer updateCentral = new Timer(500,this);
+	private Timer updateCentral = new Timer(1000,this);
 	private String name = "Default";
 
 	//Variables for central server comm
@@ -53,7 +53,7 @@ public class ServerManager implements Runnable, ActionListener{
 		PingReceiver ping = new PingReceiver();
 		Thread pingThread = new Thread(ping);
 		pingThread.start();
-		
+
 		try {
 			this.socket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -193,15 +193,30 @@ public class ServerManager implements Runnable, ActionListener{
 					e.printStackTrace();
 				}
 				String input = new String(receive.getData()).trim();
-				if(input.length() > 0 && input.charAt(0) == 'P')
+				if(input.length() > 0)
 				{
-					sendData = "P".getBytes();
-					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
-					try {
-						centralSocket.send(send);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					switch(input.charAt(0))
+					{
+					case 'P':
+						sendData = "P".getBytes();
+						send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+						try {
+							centralSocket.send(send);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break;
+					case 'C':
+						sendData = "C".getBytes();
+						send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+						try {
+							centralSocket.send(send);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						break;
 					}
 				}
 			}
