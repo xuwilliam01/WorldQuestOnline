@@ -26,7 +26,7 @@ public class CentralServer implements Runnable, ActionListener{
 	boolean clearServers = false;
 	
 	//Clear servers after a period of time
-	Timer reset = new Timer(4000, this);
+	Timer reset;
 
 	public CentralServer() throws IOException
 	{
@@ -34,6 +34,7 @@ public class CentralServer implements Runnable, ActionListener{
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		listServers = "";
+		reset = new Timer(3000, this);
 	}
 	public void run() {
 		reset.start();
@@ -48,18 +49,12 @@ public class CentralServer implements Runnable, ActionListener{
 			}
 			//Get input
 			String input = new String(receive.getData());
-
+			
 			try{
 				switch(input.charAt(0))
 				{
 				//Get info from servers
 				case 'A':
-					if(clearServers)
-					{
-						servers.clear();
-						listServers = "";
-						clearServers = false;
-					}
 					String[] tokens = input.trim().split(" ");
 					ServerInfo newServer = new ServerInfo(tokens[1],receive.getAddress().toString(), receive.getPort(), 
 							Integer.parseInt(tokens[2]));
@@ -82,6 +77,14 @@ public class CentralServer implements Runnable, ActionListener{
 			{
 				System.out.println("Bad Input");
 				e.printStackTrace();
+			}
+			
+			// Remove servers when necessary
+			if(clearServers)
+			{
+				servers.clear();
+				listServers = "";
+				clearServers = false;
 			}
 		}
 
