@@ -39,6 +39,10 @@ public class StartServer {
 				scan.close();
 				System.exit(0);
 			}
+			else if (scan.nextLine().contains("name"))
+			{
+				server.setName(scan.nextLine());
+			}
 		}
 	}
 

@@ -225,4 +225,16 @@ public class ServerManager implements Runnable, ActionListener{
 
 	}
 
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	
+
 }
