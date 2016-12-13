@@ -14,7 +14,7 @@ import ClientUDP.ServerInfo;
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int PORT = 5000;
-	public final static String IP = "159.203.14.30";
+	public final static String IP = "127.0.0.1";
 
 	DatagramSocket socket;
 	DatagramPacket receive;
@@ -35,13 +35,14 @@ public class CentralServer implements Runnable, ActionListener{
 		socket = new DatagramSocket(PORT);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
-		listServers = "";
-		reset = new Timer(3000, this);
+		listServers = "S";
+		reset = new Timer(2000, this);
 	}
 	public void run() {
 		reset.start();
 		while(true)
 		{
+			receiveData = new byte[1024];
 			receive = new DatagramPacket(receiveData, receiveData.length);
 			try {
 				socket.receive(receive);
@@ -58,17 +59,20 @@ public class CentralServer implements Runnable, ActionListener{
 				//Get info from servers
 				case 'A':
 					String[] tokens = input.trim().split(" ");
-					ServerInfo newServer = new ServerInfo(tokens[1],receive.getAddress().toString(), receive.getPort(), 
+					String orig = receive.getAddress().toString();
+					ServerInfo newServer = new ServerInfo(tokens[1],orig, receive.getPort(), 
 							Integer.parseInt(tokens[2]));
 					if(!servers.contains(newServer))
 					{
+						//System.out.println(newServer.getIP() + " " + newServer.getPort());
 						servers.add(newServer);
-						listServers += " " + newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers();
-						listServers.trim();
+						listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " " + orig + " ";
 					}
 					break;
 				//Send clients the list of servers
 				case 'G':
+					//System.out.println(listServers);
+					listServers.trim();
 					sendData = listServers.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
@@ -84,8 +88,9 @@ public class CentralServer implements Runnable, ActionListener{
 			// Remove servers when necessary
 			if(clearServers)
 			{
+				//System.out.println("Clearing Servers");
 				servers.clear();
-				listServers = "";
+				listServers = "S";
 				clearServers = false;
 			}
 		}

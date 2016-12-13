@@ -25,13 +25,15 @@ public class ServerManager implements Runnable, ActionListener{
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
-	private Timer updateCentral = new Timer(1000,this);
+	private Timer updateCentral = new Timer(500,this);
 	private String name = "Default";
-	
+
 	//Variables for central server comm
 	DatagramSocket centralSocket;
 	DatagramPacket send;
+	DatagramPacket receive;
 	byte[] sendData;
+	byte[] receiveData;
 
 	/**
 	 * 
@@ -48,6 +50,10 @@ public class ServerManager implements Runnable, ActionListener{
 		updateCentral.start();
 		centralSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
+		PingReceiver ping = new PingReceiver();
+		Thread pingThread = new Thread(ping);
+		pingThread.start();
+		
 		try {
 			this.socket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -71,16 +77,19 @@ public class ServerManager implements Runnable, ActionListener{
 		updateCentral.start();
 		centralSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
+		PingReceiver ping = new PingReceiver();
+		Thread pingThread = new Thread(ping);
+		pingThread.start();
 		try {
 			this.socket = new ServerSocket(port);
 		} catch (IOException e) {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
 		}
-		
+
 		Maps.importMaps();
 	}
-	
+
 	@Override
 	public void run() {
 		outerloop: while (true) {
@@ -102,7 +111,7 @@ public class ServerManager implements Runnable, ActionListener{
 							room.addClient(newClient, output);
 						}
 						continue outerloop; // Once the client is added wait for
-											// a new one
+						// a new one
 					}
 				}
 
@@ -145,7 +154,7 @@ public class ServerManager implements Runnable, ActionListener{
 			newServer.setGUI(gui);
 		}
 	}
-	
+
 	public static void removeRoom(Server remove)
 	{
 		rooms.remove(remove);
@@ -166,7 +175,39 @@ public class ServerManager implements Runnable, ActionListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	private class PingReceiver implements Runnable
+	{
+		@Override
+		public void run() {
+			while(true)
+			{
+				receiveData = new byte[1024];
+				receive = new DatagramPacket(receiveData, receiveData.length);
+				try {
+					centralSocket.receive(receive);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String input = new String(receive.getData()).trim();
+				if(input.length() > 0 && input.charAt(0) == 'P')
+				{
+					sendData = "P".getBytes();
+					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+					try {
+						centralSocket.send(send);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+
 	}
 
 }

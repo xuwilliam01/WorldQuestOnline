@@ -41,6 +41,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private JButton connect = new JButton("Connect");
 	private JTable table;
 	private JScrollPane scrollTable;
+	private int NUM_ROWS = 24;
 	private final static String[] columns = {"Name", "Capacity", "Ping"};
 	/**
 	 * Name, capacity, ping
@@ -68,18 +69,21 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 		refresh.addActionListener(this);
 		refresh.setSize(100,50);
-		refresh.setLocation(50,400);
+		refresh.setLocation((Client.SCREEN_WIDTH
+				+ ClientInventory.INVENTORY_WIDTH)/2-200,75);
 		add(refresh);
 
 		connect.addActionListener(this);
 		connect.setSize(100,50);
-		connect.setLocation(200,400);
+		connect.setLocation((Client.SCREEN_WIDTH
+				+ ClientInventory.INVENTORY_WIDTH)/2-200,150);
 		add(connect);
 
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		refresh();
+		repaint();
 	}
 
 	public void initTable()
@@ -94,16 +98,23 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		};
 		table.setRowSelectionAllowed(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getTableHeader().setReorderingAllowed(false);
 		table.addMouseListener(new TableListener(table));
 		scrollTable = new JScrollPane(table);
-		scrollTable.setSize(400,serversData.length*50);
+		scrollTable.setSize(3*(Client.SCREEN_WIDTH
+				+ ClientInventory.INVENTORY_WIDTH)/8,(table.getRowHeight()+1)*NUM_ROWS - 1);
 		scrollTable.setLocation(10,50);
 		add(scrollTable);
 	}
 
 	public void refresh()
 	{
-		sendData = "G".getBytes();
+		send("G");
+	}
+
+	public void send(String out)
+	{
+		sendData = out.getBytes();
 		try {
 			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);	
 			socket.send(send);
@@ -112,15 +123,36 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void send(String out, String destIP, int destPort)
+	{
+		sendData = out.getBytes();
+		String IP = destIP;
+		if(!Character.isDigit(IP.charAt(0)))
+				IP = IP.substring(1);
+		try {
+			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), destPort);	
+			socket.send(send);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void connect()
 	{
 		int row = table.getSelectedRow();
-		if(row > -1)
+		if(row > -1 && row < servers.size())
 		{
 			ServerInfo destination = servers.get(row);
+			if(destination.getNumPlayers() >= 10)
+				return;
 			open = false;
 			String IP = destination.getIP();
+			//Checks if server IP is the same as your external IP
+			//Must use 127.0.0.1 in this case
+			if(IP.equals(destination.getOrigIP()))
+				IP = "127.0.0.1";
 			if(!Character.isDigit(IP.charAt(0)))
 				IP = IP.substring(1);
 			MainMenu.joinLobby(IP, destination.getPort());
@@ -129,8 +161,10 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	}
 
 	public void run() {
+		ArrayList<Ping> pings = new ArrayList<Ping>();
 		while(true)
 		{
+			receiveData = new byte[1024];
 			receive = new DatagramPacket(receiveData, receiveData.length);
 			try {
 				socket.receive(receive);
@@ -138,25 +172,54 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				return;
 			}
 			//Get input
-			System.out.println("Received Servers");
 			String input = new String(receive.getData()).trim();
-			String[] tokens = input.split(" ");
-			servers.clear();
-			serversData = new Object[tokens.length/4][3];
-			if(serversData.length > 0)
-				for(int i = 0; i < tokens.length;i+=4)
+			switch(input.charAt(0))
+			{
+			case 'S':
+				input = input.substring(1);
+				String[] tokens = input.split(" ");
+				servers.clear();
+				pings.clear();
+				int numInputs = 5;
+				serversData = new Object[tokens.length/numInputs][3];
+				//System.out.println("Received Servers\n"+input);
+				if(input.length() > 0)
+					for(int i = 0; i < tokens.length;i+=numInputs)
+					{
+						serversData[i/numInputs][0] = tokens[i];
+						serversData[i/numInputs][1] = tokens[i+3] +"/10";
+						serversData[i/numInputs][2] = "200+";
+						
+						int port = Integer.parseInt(tokens[i+2]);
+						pings.add(new Ping(tokens[i+1],port, System.currentTimeMillis()));
+						send("P", tokens[i+1], port);
+						
+						servers.add(new ServerInfo(tokens[i], tokens[i+1], port, Integer.parseInt(tokens[i+3]), tokens[i+4]));
+					}			
+				remove(table);
+				remove(scrollTable);
+				revalidate();
+				initTable();
+				revalidate();
+				repaint();
+				break;
+			case 'P':
+				long end = System.currentTimeMillis();
+				String IP = receive.getAddress().toString();
+				int port = receive.getPort();
+				int index = 0;
+				for(Ping ping : pings)
 				{
-					serversData[i/4][0] = tokens[i];
-					serversData[i/4][1] = Integer.parseInt(tokens[i+3]);
-					serversData[i/4][2] = 0;
-					servers.add(new ServerInfo(tokens[i], tokens[i+1], Integer.parseInt(tokens[i+2]), Integer.parseInt(tokens[i+3])));
+					if(ping.getPort() == port && ping.getIP().equals(IP))
+					{
+						serversData[index][2] = end - ping.getStart();
+						table.setValueAt(end - ping.getStart(), index, 2);
+						break;
+					}
+					index++;
 				}
-			
-			remove(table);
-			remove(scrollTable);
-			revalidate();
-			initTable();
-			revalidate();
+				break;
+			}
 		}
 	}
 
