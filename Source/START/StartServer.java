@@ -30,7 +30,7 @@ public class StartServer {
 		serverThread.start();
 
 		Scanner scan = new Scanner(System.in);
-		
+
 		System.out.println("Done loading");
 
 		while (true) {

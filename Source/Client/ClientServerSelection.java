@@ -43,7 +43,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private final static String[] columns = {"Name", "Capacity", "Ping"};
 	private Object[][] serversData = new Object[0][3];
 	public static boolean open = false;
-	
+
 
 	public ClientServerSelection(int port) throws SocketException
 	{
@@ -71,7 +71,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		connect.setSize(100,50);
 		connect.setLocation(200,400);
 		add(connect);
-		
+
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
@@ -123,7 +123,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 	}
-	
+
 	public void run() {
 		while(true)
 		{
@@ -139,13 +139,15 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			String[] tokens = input.split(" ");
 			servers.clear();
 			serversData = new Object[tokens.length/4][3];
-			for(int i = 0; i < tokens.length;i+=4)
-			{
-				serversData[i/4][0] = tokens[i];
-				serversData[i/4][1] = Integer.parseInt(tokens[i+3]);
-				serversData[i/4][2] = 0;
-				servers.add(new ServerInfo(tokens[i], tokens[i+1], Integer.parseInt(tokens[i+2]), Integer.parseInt(tokens[i+3])));
-			}
+			if(serversData.length > 0)
+				for(int i = 0; i < tokens.length;i+=4)
+				{
+					serversData[i/4][0] = tokens[i];
+					serversData[i/4][1] = Integer.parseInt(tokens[i+3]);
+					serversData[i/4][2] = 0;
+					servers.add(new ServerInfo(tokens[i], tokens[i+1], Integer.parseInt(tokens[i+2]), Integer.parseInt(tokens[i+3])));
+				}
+			
 			remove(table);
 			remove(scrollTable);
 			revalidate();
@@ -220,21 +222,21 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			int row = table.getSelectedRow();
 			table.setRowSelectionAllowed(false);
 			table.setRowSelectionAllowed(true);
-		    if ((row > -1)) {
-		        table.setRowSelectionInterval(row, row);
-		    }
+			if ((row > -1)) {
+				table.setRowSelectionInterval(row, row);
+			}
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -242,15 +244,15 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			int row = table.getSelectedRow();
 			table.setRowSelectionAllowed(false);
 			table.setRowSelectionAllowed(true);
-		    if ((row > -1)) {
-		        table.setRowSelectionInterval(row, row);
-		    }	
+			if ((row > -1)) {
+				table.setRowSelectionInterval(row, row);
+			}	
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}
