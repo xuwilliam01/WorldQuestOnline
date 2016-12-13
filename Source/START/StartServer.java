@@ -14,22 +14,23 @@ import Server.ServerManager;
 public class StartServer {
 
 	final static int MAX_ROOMS = 1;
-	private final static String[] roomNames = {"ROOM1", "ROOM2", "ROOM3", "ROOM4", "ROOM5"};
-	private static int currRoomName = 0;
 
 	public static void main(String[] args) throws SocketException {
 		GameImage.hostingServer=true;
 		Images.importImages();
 		Audio.importAudio();
 		Maps.importMaps();
+		
+		Scanner scan = new Scanner(System.in);
+		String name = scan.nextLine();
 
-		ServerManager server = new ServerManager(roomNames[currRoomName++], MainMenu.DEF_PORT, MAX_ROOMS);
+		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);
 
 		Thread serverThread = new Thread(server);
 
 		serverThread.start();
 
-		Scanner scan = new Scanner(System.in);
+		
 
 		System.out.println("Done loading");
 
@@ -38,10 +39,6 @@ public class StartServer {
 				System.out.println("Server closed");
 				scan.close();
 				System.exit(0);
-			}
-			else if (scan.nextLine().contains("name"))
-			{
-				server.setName(scan.nextLine());
 			}
 		}
 	}
