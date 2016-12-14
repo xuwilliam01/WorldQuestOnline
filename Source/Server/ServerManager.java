@@ -25,7 +25,7 @@ public class ServerManager implements Runnable, ActionListener{
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
-	private Timer updateCentral = new Timer(1000,this);
+	private Timer updateCentral = new Timer(500,this);
 	private String name = "Default";
 
 	//Variables for central server comm
@@ -161,11 +161,13 @@ public class ServerManager implements Runnable, ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(rooms.size() == 0)
-			return;
-		int numPlayers = rooms.get(0).noOfPlayers;
-		if(!rooms.get(0).started())
-			numPlayers = rooms.get(0).getPlayers().size();
+		int numPlayers = 0;
+		if(rooms.size() != 0)
+		{
+			numPlayers = rooms.get(0).noOfPlayers;
+			if(!rooms.get(0).started())
+				numPlayers = rooms.get(0).getPlayers().size();
+		}
 		String data = "A "+ name + " " + numPlayers;
 		sendData = data.getBytes();
 		try {
@@ -234,7 +236,7 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		this.name = name;
 	}
-	
-	
+
+
 
 }

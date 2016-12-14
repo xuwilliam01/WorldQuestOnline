@@ -14,8 +14,9 @@ import ClientUDP.ServerInfo;
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int PORT = 5000;
+	//public final static String IP = "138.197.138.125";
 	public final static String IP = "127.0.0.1";
-
+	
 	DatagramSocket socket;
 	DatagramPacket receive;
 	DatagramPacket send;
@@ -25,6 +26,7 @@ public class CentralServer implements Runnable, ActionListener{
 
 	private ArrayList<ServerInfo> servers = new ArrayList<ServerInfo>();
 	private String listServers;
+	private String delayedListServers;
 	boolean clearServers = false;
 	
 	//Clear servers after a period of time
@@ -36,7 +38,8 @@ public class CentralServer implements Runnable, ActionListener{
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		listServers = "";
-		reset = new Timer(4000, this);
+		delayedListServers = "";
+		reset = new Timer(2000, this);
 	}
 	public void run() {
 		reset.start();
@@ -70,7 +73,7 @@ public class CentralServer implements Runnable, ActionListener{
 					break;
 				//Send clients the list of servers
 				case 'G':
-					String serversOut = "S "+receive.getAddress().toString()+" "+listServers;
+					String serversOut = "S "+receive.getAddress().toString()+" "+delayedListServers;
 					serversOut.trim();
 					sendData = serversOut.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
@@ -88,6 +91,7 @@ public class CentralServer implements Runnable, ActionListener{
 			if(clearServers)
 			{
 				//System.out.println("Clearing Servers");
+				delayedListServers = listServers;
 				servers.clear();
 				listServers = "";
 				clearServers = false;
