@@ -16,7 +16,7 @@ public class CentralServer implements Runnable, ActionListener{
 	public final static int PORT = 5000;
 	//public final static String IP = "138.197.138.125";
 	public final static String IP = "127.0.0.1";
-	
+
 	DatagramSocket socket;
 	DatagramPacket receive;
 	DatagramPacket send;
