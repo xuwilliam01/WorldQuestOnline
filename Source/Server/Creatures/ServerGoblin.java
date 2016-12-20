@@ -328,12 +328,16 @@ public class ServerGoblin extends ServerCreature {
 	 * Update the goblin behavior every game tick
 	 */
 	public void update() {
+		super.update();
 		if (isAlive()) {
 			// Update the goblin's direction or try to jump over tiles
-			if (getHSpeed() > 0) {
-				setDirection("RIGHT");
-			} else if (getHSpeed() < 0) {
-				setDirection("LEFT");
+			if (!isKnockedBack())
+			{
+				if (getHSpeed() > 0) {
+					setDirection(ServerCreature.RIGHT);
+				} else if (getHSpeed() < 0) {
+					setDirection(ServerCreature.LEFT);
+				}
 			}
 
 			if (getHSpeed()==0 && isOnSurface() && !onTarget
@@ -413,7 +417,7 @@ public class ServerGoblin extends ServerCreature {
 							setTarget(null);
 							setVSpeed(-jumpSpeed);
 							setOnSurface(false);
-							if (getDirection().equals("RIGHT")) {
+							if (getDirection()==ServerCreature.RIGHT) {
 								setHSpeed(movementSpeed);
 							} else {
 								setHSpeed(-movementSpeed);
@@ -435,7 +439,7 @@ public class ServerGoblin extends ServerCreature {
 									actionDelay = 16;
 
 									int angle = 180;
-									if (getDirection().equals("RIGHT")) {
+									if (getDirection()==ServerCreature.RIGHT) {
 										angle = 0;
 									}
 
@@ -460,9 +464,9 @@ public class ServerGoblin extends ServerCreature {
 										+ getTarget().getWidth() / 2 - (getX() + getWidth() / 2));
 
 								if (xDist > 0) {
-									setDirection("RIGHT");
+									setDirection(ServerCreature.RIGHT);
 								} else if (xDist < 0) {
-									setDirection("LEFT");
+									setDirection(ServerCreature.LEFT);
 								}
 
 								int yDist;
@@ -702,6 +706,8 @@ public class ServerGoblin extends ServerCreature {
 		getWorld().add(
 				new ServerText(damageX, damageY, Integer.toString(amount),
 						textColour, getWorld()));
+		
+		
 
 		// Play the death animation for a goblin when it dies
 		if (getHP() <= 0 && isAlive()) {
@@ -715,6 +721,11 @@ public class ServerGoblin extends ServerCreature {
 
 			actionCounter = -1;
 			action = null;
+			setKnockBackCounter(0);
+		}
+		else
+		{
+			knockBack(amount,source);
 		}
 	}
 

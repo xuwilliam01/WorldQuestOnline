@@ -26,11 +26,6 @@ public class ServerWeaponSwing extends ServerObject
 	private int currentAngle;
 
 	/**
-	 * Whether the sword swings clockwise or counterclockwise
-	 */
-	private boolean isClockwise;
-
-	/**
 	 * The time in server frames the animation will last
 	 */
 	private int timeInFrames;
@@ -120,15 +115,13 @@ public class ServerWeaponSwing extends ServerObject
 
 		this.damage = damage;
 
-		if (owner.getDirection().equals("RIGHT"))
+		if (wielder.getDirection()==ServerCreature.RIGHT)
 		{
 			currentAngle = -135;
-			isClockwise = true;
 		}
 		else
 		{
 			currentAngle = -45;
-			isClockwise = false;
 		}
 
 		width = Images.getGameImage(image).getWidth();
@@ -178,7 +171,7 @@ public class ServerWeaponSwing extends ServerObject
 		else if (counter % (int) (timeInFrames / 13.0 + 0.5) == 0
 				&& counter != 0)
 		{
-			if (isClockwise)
+			if (wielder.getDirection()==ServerCreature.RIGHT)
 			{
 				currentAngle += 15;
 				if (currentAngle > 180)
@@ -197,7 +190,7 @@ public class ServerWeaponSwing extends ServerObject
 			setImage(getBaseImage() + "_" + currentAngle + "");
 		}
 
-		// Lock the weapon onto the player
+		// Lock the weapon onto the user
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
 		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + relativeY);
 		
@@ -267,11 +260,6 @@ public class ServerWeaponSwing extends ServerObject
 	public void setDamage(int damage)
 	{
 		this.damage = damage;
-	}
-
-	public boolean isClockwise()
-	{
-		return isClockwise;
 	}
 
 	public int getOwnerID()

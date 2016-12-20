@@ -45,9 +45,10 @@ public class ServerAccessory extends ServerObject
 	 */
 	public void update(String direction, RowCol rowCol)
 	{
+
 		setX(wielder.getDrawX());
 		setY(wielder.getDrawY());
-		setImage(baseImage + "_" + direction + "_" + rowCol.getRow() + "_"
+		setImage(baseImage + "_" + direction +"_"+ rowCol.getRow() + "_"
 				+ rowCol.getColumn()
 				+ "");
 	}

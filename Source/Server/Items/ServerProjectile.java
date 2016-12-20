@@ -95,6 +95,9 @@ public class ServerProjectile extends ServerFlyingObject
 	 * The ID's of the objects that have already collided with this projectile
 	 */
 	private ArrayList<Integer> objectsCollided;
+	
+	private double prevHSpeed = 0;
+	private double prevVSpeed = 0;
 
 	/**
 	 * Constructor for a projectile
@@ -347,6 +350,8 @@ public class ServerProjectile extends ServerFlyingObject
 	@Override
 	public void destroy()
 	{
+		prevHSpeed = getHSpeed();
+		prevVSpeed = getVSpeed();
 		if (getType() == ServerWorld.BULLET_TYPE)
 		{
 			setType(ServerWorld.EXPLOSION_TYPE);
@@ -526,5 +531,35 @@ public class ServerProjectile extends ServerFlyingObject
 	{
 		this.knockBack = knockBack;
 	}
+
+	public double getPrevHSpeed()
+	{
+		if (getType().equals(ServerWorld.EXPLOSION_TYPE))
+		{
+		return prevHSpeed;
+		}
+		return getHSpeed();
+	}
+
+	public void setPrevHSpeed(double prevHSpeed)
+	{
+		this.prevHSpeed = prevHSpeed;
+
+	}
+
+	public double getPrevVSpeed()
+	{
+		if (getType().equals(ServerWorld.EXPLOSION_TYPE))
+		{
+		return prevVSpeed;
+		}
+		return getVSpeed();
+	}
+
+	public void setPrevVSpeed(double prevVSpeed)
+	{
+		this.prevVSpeed = prevVSpeed;
+	}
+	
 	
 }

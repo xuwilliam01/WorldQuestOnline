@@ -56,6 +56,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	 */
 	public void update()
 	{
+		super.update();
 		counter++;
 	}
 

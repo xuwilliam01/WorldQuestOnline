@@ -3,12 +3,15 @@ package Server.Creatures;
 import java.util.ArrayList;
 
 import Imports.Audio;
+import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Effects.ServerSound;
 import Server.Effects.ServerText;
 import Server.Items.ServerItem;
 import Server.Items.ServerPotion;
+import Server.Items.ServerProjectile;
+import Server.Items.ServerWeaponSwing;
 import Tools.RowCol;
 
 /**
@@ -20,6 +23,9 @@ import Tools.RowCol;
 public abstract class ServerCreature extends ServerObject
 {
 
+	public final static String RIGHT = "RIGHT";
+	public final static String LEFT = "LEFT";
+	
 	/**
 	 * Teams
 	 */
@@ -109,6 +115,21 @@ public abstract class ServerCreature extends ServerObject
 	 * Whether or not the creature has already punched in one instance of punching (to avoid multiple punch detection in one punch)
 	 */
 	private boolean hasPunched = false;
+	
+	/**
+	 * The world time in which this creature was knocked back
+	 */
+	private long knockBackCounter=0;
+	
+	/**
+	 * The cooldown before the creature can move again or be knocked back
+	 */
+	private long knockBackCooldown=0;
+	
+	/**
+	 * Magnitude and direction of acceleration when being knocked back (constant)
+	 */
+	public final static double KNOCKBACK_ACCELERATION=0.3;
 
 	/**
 	 * Constructor for a creature
@@ -129,8 +150,8 @@ public abstract class ServerCreature extends ServerObject
 		HP = maxHP;
 		this.world = world;
 
-		direction = "RIGHT";
-		nextDirection = "RIGHT";
+		direction = RIGHT;
+		nextDirection = direction;
 
 		// Calculate the resistance to knockback based on weight
 		knockBackResistance = Math.sqrt((getWidth() * getHeight())) / 16;
@@ -258,6 +279,23 @@ public abstract class ServerCreature extends ServerObject
 		{
 			destroy();
 			dropInventory();
+			setKnockBackCounter(0);
+		}
+	}
+	
+	@Override
+	public void update()
+	{
+		if (isKnockedBack())
+		{
+			if (getHSpeed()>0)
+			{
+				super.setHSpeed(getHSpeed()-KNOCKBACK_ACCELERATION);
+			}
+			else
+			{
+				super.setHSpeed(getHSpeed()+KNOCKBACK_ACCELERATION);
+			}
 		}
 	}
 
@@ -427,7 +465,7 @@ public abstract class ServerCreature extends ServerObject
 
 
 
-		if (getDirection().equals("RIGHT"))
+		if (getDirection()==ServerCreature.RIGHT)
 		{
 			startColumn = (int) ((getX()) / ServerWorld.OBJECT_TILE_SIZE);
 			endColumn = (int) ((getX() + getWidth() + getWidth()/2) /
@@ -461,9 +499,104 @@ public abstract class ServerCreature extends ServerObject
 			}
 		}
 	}
+	
+	/**
+	 * Damage of weapon combined with HP converted to a force, with a source
+	 * @param damage
+	 * @param x
+	 * @param y
+	 */
+	public void knockBack(int damage, ServerObject source)
+	{
+		if (isKnockedBack())
+		{
+			return;
+		}
+		// Remember to add any other non-moveable creatures
+		if (source.getType().contains(ServerWorld.BUILDING_TYPE)|| source.getType().equals(ServerWorld.CHEST_TYPE))
+		{
+			return;
+		}
+		
+		double force = Math.sqrt(damage) * 5;
+		double angle = 0;
+		double mass = Math.sqrt(getHP());
+
+		switch (source.getType().charAt(0))
+		{
+		// This means it's either a punch or a slime/bat/etc.
+		case ServerWorld.CREATURE_TYPE:
+			double diff = -(source.getX() + source.getWidth()/2 - (getX() + getWidth()/2));
+			angle = Math.atan2(-1, diff/Math.abs(diff));
+			break;
+		case ServerWorld.PROJECTILE_TYPE:
+			angle = Math.atan2(-source.getVSpeed(),-source.getHSpeed());
+			break;
+		case ServerWorld.ANIMATION_TYPE:
+			if (source.getType().equals(ServerWorld.EXPLOSION_TYPE))
+			{
+				ServerProjectile explosion = (ServerProjectile)source;
+				angle = Math.atan2(-explosion.getPrevVSpeed(),-explosion.getPrevHSpeed());
+			}
+			else //must be a weapon swing
+			{
+				ServerWeaponSwing swing = (ServerWeaponSwing)source;
+				double xdiff = -(swing.getWielder().getX() + swing.getWielder().getWidth()/2 - (getX() + getWidth()/2));
+				angle = Math.atan2(-1, xdiff/Math.abs(xdiff));
+			}
+			break;
+		}
+		
+		double amount = force/mass * Math.cos(angle);
+		if (Math.cos(angle) > 0)
+		{
+			if (getHSpeed() + amount > 0)
+			{
+				setHSpeed(Math.max(getHSpeed()/2 + amount, getHSpeed()+0.5));
+			}
+			else
+			{
+				setHSpeed(amount);
+			}
+		}
+		else
+		{
+			if (getHSpeed() + amount < 0)
+			{
+				setHSpeed(Math.min(getHSpeed()/2 + amount, getHSpeed()-0.5));
+			}
+			else
+			{
+				setHSpeed(amount);
+			}
+		}
+		
+		setVSpeed(getVSpeed() + force/mass * Math.sin(angle));
+		
+		knockBackCounter = getWorld().getWorldCounter();
+		knockBackCooldown = (int)(Math.abs(getHSpeed())/KNOCKBACK_ACCELERATION);
+	}
+	
+	
+	
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////
+
+	public long getKnockBackCounter()
+	{
+		return knockBackCounter;
+	}
+	
+	@Override
+	public void setHSpeed(double hSpeed)
+	{
+		if (hSpeed==0 || !isKnockedBack())
+		{
+			super.setHSpeed(hSpeed);
+		}
+	}
+	
 	public ArrayList<ServerItem> getInventory()
 	{
 		return inventory;
@@ -587,4 +720,36 @@ public abstract class ServerCreature extends ServerObject
 		this.name = name;
 	}
 
+	public long getKnockedBackTime()
+	{
+		return knockBackCounter;
+	}
+
+	public void setKnockedBackTime(long knockedBackTime)
+	{
+		this.knockBackCounter = knockedBackTime;
+	}
+
+	public long getKnockBackCooldown()
+	{
+		return knockBackCooldown;
+	}
+
+	public void setKnockBackCooldown(long knockBackCooldown)
+	{
+		this.knockBackCooldown = knockBackCooldown;
+	}
+
+	public boolean isKnockedBack()
+	{
+		return getWorld().getWorldCounter()-knockBackCounter<knockBackCooldown+2;
+	}
+
+	public void setKnockBackCounter(long knockBackCounter)
+	{
+		this.knockBackCounter = knockBackCounter;
+	}
+	
+	
+	
 }

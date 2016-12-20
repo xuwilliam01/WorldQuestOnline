@@ -101,7 +101,7 @@ public class ServerBat extends ServerEnemy
 		// Set a random direction
 		if ((int) (Math.random() * 2) == 0)
 		{
-			setDirection("RIGHT");
+			setDirection(ServerCreature.RIGHT);
 		}
 
 		setDamage((int) (Math.random() * 2) + 2);
@@ -156,12 +156,12 @@ public class ServerBat extends ServerEnemy
 			// Change image direction
 			if (getHSpeed() > 0)
 			{
-				setDirection("RIGHT");
+				setDirection(ServerCreature.RIGHT);
 				setRelativeDrawX(-36);
 			}
 			else if (getHSpeed() < 0)
 			{
-				setDirection("LEFT");
+				setDirection(ServerCreature.LEFT);
 				setRelativeDrawX(0);
 			}
 
@@ -228,12 +228,12 @@ public class ServerBat extends ServerEnemy
 			// Change image direction
 			if (getX() + getWidth() / 2 < getTarget().getX() + getWidth() / 2)
 			{
-				setDirection("RIGHT");
+				setDirection(ServerCreature.RIGHT);
 				setRelativeDrawX(-36);
 			}
 			else
 			{
-				setDirection("LEFT");
+				setDirection(ServerCreature.LEFT);
 				setRelativeDrawX(0);
 			}
 		}
@@ -241,6 +241,7 @@ public class ServerBat extends ServerEnemy
 		if (!atRest)
 		{
 			int imageCounter = getCounter() % 35;
+			
 			if (imageCounter < 5)
 			{
 				setImage(getBaseImage() + "_" + getDirection() + "_0");
