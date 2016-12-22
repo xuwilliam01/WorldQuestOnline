@@ -54,14 +54,14 @@ public class CentralServer implements Runnable, ActionListener{
 				e.printStackTrace();
 			}
 			//Get input
-			String input = new String(receive.getData()).trim();
+			String input = new String(receive.getData());
 			
 			try{
 				switch(input.charAt(0))
 				{
 				//Get info from servers
 				case 'A':
-					String[] tokens = input.split(" ");
+					String[] tokens = input.trim().split(" ");
 					ServerInfo newServer = new ServerInfo(tokens[1], receive.getAddress().toString(), receive.getPort(), 
 							Integer.parseInt(tokens[2]));
 					if(!servers.contains(newServer))

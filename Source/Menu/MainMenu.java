@@ -1,6 +1,6 @@
 package Menu;
 
-import java.awt.Color; 
+import java.awt.Color;
 import java.awt.DisplayMode;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
@@ -19,9 +19,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -67,12 +64,11 @@ public class MainMenu implements KeyListener {
 	 * The IP address for the dedicated server
 	 */
 	public final static String DEDICATED_IP = "159.203.60.120";
-
+	
 	/**
 	 * Default port number
 	 */
 	public final static int DEF_PORT = 9988;
-	public final static int DEF_UDP_PORT = 9989;
 
 	// All the panels
 	public static ClientFrame mainFrame;
@@ -93,7 +89,7 @@ public class MainMenu implements KeyListener {
 
 	private boolean imagesAudioLoaded = false;
 	private boolean mapsLoaded = false;
-
+	
 	private static ClientServerSelection serverList = null;
 
 	/**
@@ -101,7 +97,6 @@ public class MainMenu implements KeyListener {
 	 */
 	public static boolean imageLoadFailed = false;
 
-	private static boolean canConnect = false;
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -153,9 +148,9 @@ public class MainMenu implements KeyListener {
 		ClientInventory.INVENTORY_WIDTH = (int) (300 * (Math.min(dm.getWidth(),1920) / 1920.0));
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
-
+		
 		boolean tooLarge = false;
-
+		
 		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
 			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
 			tooLarge = true;
@@ -169,7 +164,7 @@ public class MainMenu implements KeyListener {
 		// Display results
 		System.out.println(dm.getWidth());
 		System.out.println(dm.getHeight());
-
+		
 		if (tooLarge)
 		{
 			JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
@@ -216,10 +211,10 @@ public class MainMenu implements KeyListener {
 				Thread.sleep(10);
 				if (imageLoadFailed) {
 					JOptionPane
-					.showMessageDialog(
-							null,
-							"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							.showMessageDialog(
+									null,
+									"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
+									"Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
 					break;
 				}
@@ -253,7 +248,7 @@ public class MainMenu implements KeyListener {
 	 *
 	 */
 	private static class MainPanel extends JPanel implements ActionListener,
-	MouseListener {
+			MouseListener {
 
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
@@ -262,7 +257,7 @@ public class MainMenu implements KeyListener {
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
-
+		
 		JButton online;
 
 		Image buttonTrayImage = Images.getImage("ButtonTray");
@@ -362,7 +357,7 @@ public class MainMenu implements KeyListener {
 			online.addActionListener(new OnlineButton());
 			online.addMouseListener(this);
 			add(online);
-
+			
 			setVisible(true);
 			repaint();
 		}
@@ -526,63 +521,6 @@ public class MainMenu implements KeyListener {
 		}
 	}
 
-	private static class ConnectionTimer implements Runnable
-	{
-		DatagramSocket socket;
-		DatagramPacket receive;
-		DatagramPacket send;
-
-		byte[] receiveData;
-		byte[] sendData;
-
-		private int port;
-		private String IP;
-
-		public ConnectionTimer(String IP, int port)
-		{
-			this.IP = IP;
-			this.port = port;
-			canConnect = false;
-		}
-
-		public void close()
-		{
-			if(socket != null)
-				socket.close();
-		}
-		@Override
-		public void run() {
-			while(true)
-			{
-				try {
-					socket = new DatagramSocket(DEF_UDP_PORT);
-					receiveData = new byte[1024];
-					sendData = "C".getBytes();
-					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), port);
-					socket.send(send);
-
-
-					receiveData = new byte[1024];
-					receive = new DatagramPacket(receiveData, receiveData.length);
-
-					socket.receive(receive);
-
-					//Get input
-					String input = new String(receive.getData()).trim();
-					if (input.length() == 1 && input.charAt(0) == 'C')
-					{
-						canConnect = true;
-						return;
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					return;
-				}
-			}
-
-		}
-
-	}
 	/**
 	 * The panel to run the actual game
 	 * 
@@ -618,30 +556,6 @@ public class MainMenu implements KeyListener {
 			BufferedReader input = null;
 
 			while (!connected) {
-				ConnectionTimer con = new ConnectionTimer(serverIP, port);
-				Thread conThread = new Thread(con);
-				conThread.start();
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				if (!canConnect)
-				{
-					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please re-enter the IP.");
-					if (serverIP == null)
-						exit = true;
-					else 
-					{
-						con.close();
-						continue;
-					}
-				}
-				con.close();
-				if (exit)
-					break;		
 				try {
 					mySocket = new Socket(serverIP, port);
 					input = new BufferedReader(new InputStreamReader(
@@ -703,7 +617,7 @@ public class MainMenu implements KeyListener {
 		}
 
 		public void startGame(ClientLobby lobby) throws UnknownHostException,
-		IOException {
+				IOException {
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
 			mainFrame.invalidate();
@@ -757,17 +671,17 @@ public class MainMenu implements KeyListener {
 			}
 			serverList = null;
 			try {
-				serverList = new ClientServerSelection(DEF_UDP_PORT);
+				serverList = new ClientServerSelection(DEF_PORT+1);
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Thread listThread = new Thread(serverList);
 			listThread.start();
-
-
+			
+			
 		}
-
+		
 	}
 	/**
 	 * Reacts when the menu button in the creator is pressed
@@ -843,7 +757,7 @@ public class MainMenu implements KeyListener {
 	 *
 	 */
 	private static class InstructionPanel extends JPanel implements
-	ActionListener {
+			ActionListener {
 		int currentPanel = 0;
 		JButton next;
 		JButton previous;
@@ -1017,7 +931,7 @@ public class MainMenu implements KeyListener {
 		mainFrame.setVisible(true);
 		gamePanel.revalidate();
 	}
-
+	
 	/**
 	 * Starts the server when this button is pressed
 	 * 
@@ -1032,7 +946,7 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			
 			int maxRooms;
 			String name;
 			Images.importImages();
@@ -1072,7 +986,7 @@ public class MainMenu implements KeyListener {
 
 				}
 			}
-
+			
 			int portNum = DEF_PORT;
 			// while (true)
 			// {
@@ -1129,7 +1043,7 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			
 			String fileName = "";
 			String[] mapNames = null;
 			final String DEFAULT_MAP_NAME = "New Map Name";
@@ -1159,7 +1073,7 @@ public class MainMenu implements KeyListener {
 									.getSelectedItem();
 							boolean editable = selectedItem instanceof String
 									&& ((String) selectedItem)
-									.equals(DEFAULT_MAP_NAME);
+											.equals(DEFAULT_MAP_NAME);
 							jcb.setEditable(editable);
 						}
 					});
@@ -1208,12 +1122,12 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			
 			JOptionPane
-			.showMessageDialog(
-					null,
-					"We are updating the instructions! The controls are shown in the lobby.",
-					"Sorry", JOptionPane.ERROR_MESSAGE);
+					.showMessageDialog(
+							null,
+							"We are updating the instructions! The controls are shown in the lobby.",
+							"Sorry", JOptionPane.ERROR_MESSAGE);
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
