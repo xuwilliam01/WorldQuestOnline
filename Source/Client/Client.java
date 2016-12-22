@@ -260,7 +260,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		add(chat);
 		add(enter);
 		
-		distanceConstant = 60.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
+		distanceConstant = 120.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
 
 	}
 

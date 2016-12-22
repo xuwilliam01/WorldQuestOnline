@@ -18,6 +18,7 @@ public class GameAudio {
 	private String name;
 	private Clip audio;
 	private FloatControl gainControl;
+	public static final float MAX_DISTANCE = 1080;
 	
 	public GameAudio(String name)
 	{
@@ -64,7 +65,8 @@ public class GameAudio {
 
 	public void play(int dist)
 	{
-		gainControl.setValue(1f - Client.Client.distanceConstant*dist);
-		audio.loop(1);
+		gainControl.setValue(-dist*Client.Client.distanceConstant);
+		audio.setFramePosition(0);
+		audio.start();
 	}
 }

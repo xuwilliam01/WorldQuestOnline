@@ -73,36 +73,38 @@ public class Audio {
 	
 	public synchronized static void playAudio(int index, int dist)
 	{
-		ArrayList<QueuedAudio>toRemove = new ArrayList<QueuedAudio>();
-		for (QueuedAudio audio:currentlyPlaying)
-		{
-			if (!audio.getAudio().isActive())
-			{
-				toRemove.add(audio);
-			}
-		}
+		audioArray[index].play(dist);
 		
-		for (QueuedAudio audio:toRemove)
-		{
-			currentlyPlaying.remove(audio);
-		}
-		
-		if (System.currentTimeMillis()-cooldownStart>=ServerEngine.UPDATE_RATE && (currentlyPlaying.size()< maxConcurrentAudio || (dist+MIN_EXCEPTION_DIST<currentlyPlaying.get(maxConcurrentAudio-1).getDist())))
-		{
-			if (audioArray[index].isActive())
-			{
-				QueuedAudio newAudio = new QueuedAudio(dist,new GameAudio(audioArray[index].getName()));
-				currentlyPlaying.add(newAudio);
-				newAudio.getAudio().play(dist);
-			}
-			else
-			{
-				currentlyPlaying.add(new QueuedAudio(dist,audioArray[index]));
-				audioArray[index].play(dist);
-			}
-			cooldownStart = System.currentTimeMillis();
-		
-		}
+//		ArrayList<QueuedAudio>toRemove = new ArrayList<QueuedAudio>();
+//		for (QueuedAudio audio:currentlyPlaying)
+//		{
+//			if (!audio.getAudio().isActive())
+//			{
+//				toRemove.add(audio);
+//			}
+//		}
+//		
+//		for (QueuedAudio audio:toRemove)
+//		{
+//			currentlyPlaying.remove(audio);
+//		}
+//		
+//		if (System.currentTimeMillis()-cooldownStart>=ServerEngine.UPDATE_RATE && (currentlyPlaying.size()< maxConcurrentAudio || (dist+MIN_EXCEPTION_DIST<currentlyPlaying.get(maxConcurrentAudio-1).getDist())))
+//		{
+//			if (audioArray[index].isActive())
+//			{
+//				QueuedAudio newAudio = new QueuedAudio(dist,new GameAudio(audioArray[index].getName()));
+//				currentlyPlaying.add(newAudio);
+//				newAudio.getAudio().play(dist);
+//			}
+//			else
+//			{
+//				currentlyPlaying.add(new QueuedAudio(dist,audioArray[index]));
+//				audioArray[index].play(dist);
+//			}
+//			cooldownStart = System.currentTimeMillis();
+//		
+//		}
 	}
 	
 	public static int getIndex(String name)

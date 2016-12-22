@@ -16,15 +16,15 @@ public class StartServer {
 	final static int MAX_ROOMS = 1;
 
 	public static void main(String[] args) throws SocketException {
-		GameImage.hostingServer=true;
-		Images.importImages();
-		Audio.importAudio();
-		Maps.importMaps();
-		
 		Scanner scan = new Scanner(System.in);
 		System.out.print("Enter server name: ");
 		String name = scan.nextLine();
 		name = name.replace(' ', '_');
+		
+		GameImage.hostingServer=true;
+		Images.importImages();
+		Audio.importAudio();
+		Maps.importMaps();
 
 		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);
 
