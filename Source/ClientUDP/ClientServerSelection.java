@@ -29,12 +29,12 @@ import javax.swing.ListSelectionModel;
 
 public class ClientServerSelection extends JFrame implements Runnable, WindowListener, ActionListener{
 
-	DatagramSocket socket;
-	DatagramPacket receive;
-	DatagramPacket send;
+	private DatagramSocket socket;
+	private DatagramPacket receive;
+	private DatagramPacket send;
 
-	byte[] receiveData;
-	byte[] sendData;
+	private byte[] receiveData;
+	private byte[] sendData;
 
 	private ArrayList<ServerInfo> servers = new ArrayList<ServerInfo>();
 	private JButton refresh = new JButton("Refresh");
@@ -243,15 +243,18 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		{
 			socket.close();
 			socket = null;
-			open = false;
-			dispose();
 		}
+		open = false;
+		dispose();
 	}
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		socket.close();
-		socket = null;
+		if(socket != null)
+		{
+			socket.close();
+			socket = null;
+		}
 		open = false;
 		dispose();
 	}
