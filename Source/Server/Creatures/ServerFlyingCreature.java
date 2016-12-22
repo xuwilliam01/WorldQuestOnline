@@ -1,8 +1,6 @@
 package Server.Creatures;
 
-import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Items.ServerProjectile;
 
 /**
  * A more advanced object with absolute speed and angle of movement
@@ -92,5 +90,6 @@ public abstract class ServerFlyingCreature extends ServerCreature
 			setVSpeed((speed * Math.sin(angle)));
 		}
 	}
+
 
 }

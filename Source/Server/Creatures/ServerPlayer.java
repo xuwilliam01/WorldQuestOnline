@@ -411,7 +411,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	@Override
 	public void update()
 	{
-		super.update();
 		if (exists())
 		{
 			// Change the player's facing direction after its current action
@@ -495,7 +494,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					setRowCol(new RowCol(2, 5));
 					if (heldWeapon != null)
 					{
-						if (getDirection()==ServerCreature.LEFT)
+						if (getDirection().equals("LEFT"))
 						{
 							heldWeapon.setX(getDrawX() - (90 - 64));
 						}
@@ -1160,10 +1159,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					break;
 				case "DR":
-					setDirection(ServerCreature.RIGHT);
+					setDirection("RIGHT");
 					break;
 				case "DL":
-					setDirection(ServerCreature.LEFT);
+					setDirection("LEFT");
 					break;
 				case "P":
 					sendMessage("P");
@@ -1659,7 +1658,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					arrowType = ServerWorld.FIREBALL_TYPE;
 					image = "FIREWAND";
-					if (getDirection()==ServerCreature.LEFT)
+					if (getDirection().equals("LEFT"))
 					{
 						x -= 90 - 64;
 					}
@@ -1677,7 +1676,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					arrowType = ServerWorld.ICEBALL_TYPE;
 					image = "ICEWAND";
-					if (getDirection()==ServerCreature.LEFT)
+					if (getDirection().equals("LEFT"))
 					{
 						x -= 90 - 64;
 					}
@@ -1695,7 +1694,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					}
 					arrowType = ServerWorld.DARKBALL_TYPE;
 					image = "DARKWAND";
-					if (getDirection()==ServerCreature.LEFT)
+					if (getDirection().equals("LEFT"))
 					{
 						x -= 90 - 64;
 					}
@@ -1709,7 +1708,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 							getY() + getHeight() / 3, this, angle, arrowType,
 							getWorld()));
 
-					if (getDirection()==ServerCreature.LEFT)
+					if (getDirection().equals("LEFT"))
 					{
 
 						image += "_LEFT";
@@ -1851,10 +1850,6 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 				setAttackable(false);
 				isDropping = false;
-			}
-			else
-			{
-				knockBack(amount,source);
 			}
 		}
 	}
