@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import Client.Client;
@@ -41,8 +42,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JLabel passwordL = new JLabel("Password: ");
 	private JLabel confirmL = new JLabel("Confirm Password: ");
 	private JTextField username = new JTextField();
-	private JTextField password = new JTextField();
-	private JTextField confirm  = new JTextField();
+	private JPasswordField password = new JPasswordField();
+	private JPasswordField confirm  = new JPasswordField();
 	private JButton menuLoginButton;
 	
 	public static boolean open = false;
@@ -56,7 +57,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	{
 		setBackground(Color.BLACK);
 		setSize((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/3, Client.SCREEN_HEIGHT/3);
+				+ ClientInventory.INVENTORY_WIDTH)/4, (int)(Client.SCREEN_HEIGHT/3.5));
 		setResizable(false);
 		setTitle("Account Login");
 		setLocationRelativeTo(null);
@@ -73,8 +74,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		open = true;
 		this.menuLoginButton = menuLoginButton;
 		
-		int deltay = 50;
-		int y = 75;
+		int deltay = 45;
+		int y = 25;
 		int x = 10;
 		int deltax = 140;
 		usernameL.setSize(150,50);
@@ -87,6 +88,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		
 		confirmL.setSize(150,50);
 		confirmL.setLocation(x,y+2*deltay);
+		confirmL.setVisible(false);
 		add(confirmL);
 		
 		username.setSize(200,40);
@@ -99,16 +101,17 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		
 		confirm.setSize(200,40);
 		confirm.setLocation(x+deltax,y+2*deltay);
+		confirm.setVisible(false);
 		add(confirm);
 		
 		create.addActionListener(this);
 		create.setSize(100,50);
-		create.setLocation(x,250);
+		create.setLocation(x,y+(int)(3.5*deltay));
 		add(create);
 		
 		login.addActionListener(this);
 		login.setSize(100,50);
-		login.setLocation(x+deltax,250);
+		login.setLocation(x+deltax,y+(int)(3.5*deltay));
 		add(login);
 	}
 
@@ -162,6 +165,9 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	{
 		File f = new File(CREDS_PATH);
 		loggedIn = false;
+		savedUser = null;
+		savedPassword = null;
+		savedKey = null;
 		if(!f.exists() || f.isDirectory()) { 
 		    return;
 		}
@@ -171,8 +177,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public void saveCredentials()
 	{
 		savedUser = username.getText();
-		savedPassword = password.getText();
-		savedKey = hash(username.getText(),password.getText());
+		savedPassword = new String(password.getPassword());
+		savedKey = hash(username.getText(),new String(password.getPassword()));
 		loggedIn = true;
 		menuLoginButton.setText("Logout");
 		
@@ -197,12 +203,15 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == login)
 		{
-			if(!password.getText().equals(confirm.getText()))
+			confirm.setVisible(false);
+			confirmL.setVisible(false);
+			repaint();
+			if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
 			{
-				JOptionPane.showMessageDialog(this, "Passwords do not match");
+				JOptionPane.showMessageDialog(this, "Username and password are too short");
 				return;
 			}
-			String out = "L "+hash(username.getText(),password.getText())+" "+username.getText();
+			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
 				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
@@ -214,7 +223,24 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		}
 		else if(arg0.getSource() == create)
 		{
-			String out = "C "+hash(username.getText(),password.getText())+" "+username.getText();
+			if(!confirm.isVisible())
+			{
+				confirm.setVisible(true);
+				confirmL.setVisible(true);
+				repaint();
+				return;
+			}
+			if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
+			{
+				JOptionPane.showMessageDialog(this, "Username and password are too short");
+				return;
+			}
+			if(!new String(password.getPassword()).equals(new String(confirm.getPassword())))
+			{
+				JOptionPane.showMessageDialog(this, "Passwords do not match");
+				return;
+			}
+			String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
 				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
