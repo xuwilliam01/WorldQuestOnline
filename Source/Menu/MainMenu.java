@@ -42,6 +42,7 @@ import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
 import Client.ClientWorld;
+import ClientUDP.ClientAccountWindow;
 import ClientUDP.ClientServerSelection;
 import Imports.Audio;
 import Imports.Images;
@@ -95,6 +96,7 @@ public class MainMenu implements KeyListener {
 	private boolean mapsLoaded = false;
 
 	private static ClientServerSelection serverList = null;
+	private static ClientAccountWindow newLogin = null;
 
 	/**
 	 * Whether or not image loading has failed
@@ -102,6 +104,8 @@ public class MainMenu implements KeyListener {
 	public static boolean imageLoadFailed = false;
 
 	private static boolean canConnect = false;
+	
+	private static JButton login;
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -362,6 +366,21 @@ public class MainMenu implements KeyListener {
 			online.addActionListener(new OnlineButton());
 			online.addMouseListener(this);
 			add(online);
+			
+			ClientAccountWindow.checkLogin();
+			if(ClientAccountWindow.loggedIn)
+			{
+				login = new JButton("Logout");
+			}
+			else login = new JButton("Login");
+			login.setSize(100, 50);
+			login.setLocation(Client.SCREEN_WIDTH - 200,50);
+			login.setBorder(BorderFactory.createEmptyBorder());
+			login.setContentAreaFilled(false);
+			login.setOpaque(false);
+			login.addActionListener(new LoginButton());
+			login.addMouseListener(this);
+			add(login);
 
 			setVisible(true);
 			repaint();
@@ -749,6 +768,13 @@ public class MainMenu implements KeyListener {
 	private static class OnlineButton implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
+			
 			if(ClientServerSelection.open)
 			{
 				serverList.setVisible(true);
@@ -768,6 +794,40 @@ public class MainMenu implements KeyListener {
 
 		}
 
+	}
+	
+	/**
+	 * Reacts to login/logout
+	 */
+	private static class LoginButton implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(ClientServerSelection.open)
+			{
+				serverList.setVisible(true);
+				serverList.toFront();
+				return;
+			}
+			if(ClientAccountWindow.loggedIn)
+			{
+				ClientAccountWindow.logout();
+				login.setText("Login");
+				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!");
+				return;
+			}
+			newLogin = null;
+			try {
+				newLogin = new ClientAccountWindow(DEF_UDP_PORT, login);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Thread loginThread = new Thread(newLogin);
+			loginThread.start();
+			
+		}
+		
 	}
 	/**
 	 * Reacts when the menu button in the creator is pressed
@@ -951,6 +1011,12 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
 			// Get user info. If it invalid, then ask for it again or exit back
 			// to the main menu
 			String serverIP;
@@ -1032,7 +1098,12 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
 			int maxRooms;
 			String name;
 			Images.importImages();
@@ -1129,7 +1200,13 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
+			
 			String fileName = "";
 			String[] mapNames = null;
 			final String DEFAULT_MAP_NAME = "New Map Name";
@@ -1208,7 +1285,13 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
+			
 			JOptionPane
 			.showMessageDialog(
 					null,

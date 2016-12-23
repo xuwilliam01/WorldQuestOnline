@@ -5,11 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,6 +27,7 @@ import Client.ClientInventory;
 
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener {
 
+	public static final String CREDS_PATH = "Resources//LoginCredentials.txt";
 	private DatagramSocket socket;
 	private DatagramPacket receive;
 	private DatagramPacket send;
@@ -37,10 +43,16 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JTextField username = new JTextField();
 	private JTextField password = new JTextField();
 	private JTextField confirm  = new JTextField();
+	private JButton menuLoginButton;
 	
 	public static boolean open = false;
+	public static boolean loggedIn = false;
 	
-	public ClientAccountWindow(int port) throws SocketException
+	private static String savedUser;
+	private static String savedPassword;
+	private static String savedKey;
+	
+	public ClientAccountWindow(int port, JButton menuLoginButton) throws SocketException
 	{
 		setBackground(Color.BLACK);
 		setSize((Client.SCREEN_WIDTH
@@ -59,6 +71,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		sendData = new byte[1024];
 		
 		open = true;
+		this.menuLoginButton = menuLoginButton;
 		
 		int deltay = 50;
 		int y = 75;
@@ -115,6 +128,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			switch(input)
 			{
 			case "LY":
+				saveCredentials();
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				JOptionPane.showMessageDialog(this, "Login Successful!");
 				break;
@@ -122,8 +136,9 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 				JOptionPane.showMessageDialog(this, "Login Failed! Either your username or password is incorrect!");
 				break;
 			case "CY":
+				saveCredentials();
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-				JOptionPane.showMessageDialog(this, "Created Account! You are logged in.");
+				JOptionPane.showMessageDialog(this, "Created Account! You are now logged in.");
 				break;
 			case "CN":
 				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.");
@@ -134,6 +149,45 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 
 	}
 
+	public static boolean checkLogin()
+	{
+		File f = new File(CREDS_PATH);
+		if(f.exists() && !f.isDirectory()) {
+		    loggedIn = true;
+		    return true;
+		}
+		return false;
+	}
+	public static void logout()
+	{
+		File f = new File(CREDS_PATH);
+		loggedIn = false;
+		if(!f.exists() || f.isDirectory()) { 
+		    return;
+		}
+		f.delete();
+	}
+	
+	public void saveCredentials()
+	{
+		savedUser = username.getText();
+		savedPassword = password.getText();
+		savedKey = hash(username.getText(),password.getText());
+		loggedIn = true;
+		menuLoginButton.setText("Logout");
+		
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new File(CREDS_PATH));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		out.println(savedUser);
+		out.println(savedPassword);
+		out.println(savedKey);
+		out.close();
+	}
 	public static String hash(String user, String pass)
 	{
 		return (user+pass).replaceAll(" ","_");
