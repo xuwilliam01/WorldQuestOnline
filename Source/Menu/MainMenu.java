@@ -573,7 +573,6 @@ public class MainMenu implements KeyListener {
 						return;
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
 					return;
 				}
 			}
@@ -665,6 +664,22 @@ public class MainMenu implements KeyListener {
 					else if(line.equals("DOUBLEACC"))
 					{
 						JOptionPane.showMessageDialog(this, "You are already playing a game on this account!");
+						exit = true;
+						input.close();
+						output.close();
+						mySocket.close();
+					}
+					else if(line.equals("INVALID"))
+					{
+						JOptionPane.showMessageDialog(this, "Invalid login credentials. Try to logout and login again.");
+						exit = true;
+						input.close();
+						output.close();
+						mySocket.close();
+					}
+					else if(line.equals("ERROR"))
+					{
+						JOptionPane.showMessageDialog(this, "Error Connecting");
 						exit = true;
 						input.close();
 						output.close();

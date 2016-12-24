@@ -113,7 +113,7 @@ public class ServerManager implements Runnable, ActionListener{
 					//System.out.println("Stuck on input.ready");
 					if(timeout)
 					{
-						output.println("DOUBLEACC");
+						output.println("ERROR");
 						output.flush();
 						input.close();
 						output.close();
@@ -142,7 +142,12 @@ public class ServerManager implements Runnable, ActionListener{
 								{
 									if(player.getName().equals(name))
 									{
-										throw new Exception();
+										output.println("DOUBLEACC");
+										output.flush();
+										input.close();
+										output.close();
+										newClient.close();
+										continue outerloop;
 									}
 								}
 							}
@@ -152,7 +157,12 @@ public class ServerManager implements Runnable, ActionListener{
 								{
 									if(player.getName().equals(name))
 									{
-										throw new Exception();
+										output.println("DOUBLEACC");
+										output.flush();
+										input.close();
+										output.close();
+										newClient.close();
+										continue outerloop;
 									}
 								}
 							}
@@ -181,7 +191,7 @@ public class ServerManager implements Runnable, ActionListener{
 				}
 				catch(Exception e)
 				{
-					output.println("DOUBLEACC");
+					output.println("INVALID");
 					output.flush();
 					input.close();
 					output.close();
