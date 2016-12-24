@@ -13,6 +13,7 @@ import Menu.MainMenu.GamePanel;
 import Server.ServerFrame;
 import Server.Creatures.ServerCreature;
 import Client.Client.JTextFieldLimit;
+import ClientUDP.ClientAccountWindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -83,10 +84,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public ClientLobby(Socket socket, BufferedReader input, String playerName, GamePanel panel,
+	public ClientLobby(Socket socket, BufferedReader input, PrintWriter output, GamePanel panel,
 			ArrayList<ClientCloud> clouds, JButton menu)
 					throws NumberFormatException, IOException
 	{
+		System.out.println("INITIALIZING LOBBY");
 		lobbyImage = Images.getImage("Lobby");
 		background = Images.getImage("BACKGROUND");
 		middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
@@ -96,20 +98,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		this.clouds = clouds;
 
 		this.input = input;
+		
+		this.output = output;
 
-		// Set up the output
-		try
-		{
-			output = new PrintWriter(socket.getOutputStream());
-			printToServer("Lobby");
-
-		}
-		catch (IOException e)
-		{
-			// System.out.println("Error creating print writer");
-			e.printStackTrace();
-		}
-
+		printToServer("Lobby");
+		
 		String message = input.readLine();
 		if (message.equals("Start"))
 		{
@@ -121,9 +114,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		else
 		{
 			this.socket = socket;
-			name = playerName;
 			this.panel = panel;
-
+			name = ClientAccountWindow.savedUser;
+			
 			menu.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(320)));
 			menu.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
@@ -207,11 +200,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 			add(mapBox);
 
+			printToServer("Na "+name);
+			
 			ReadServer reader = new ReadServer();
 			Thread startReader = new Thread(reader);
 			startReader.start();
-
-			printToServer("Na " + name);
 
 			Timer repaintTimer = new Timer(15, this);
 			repaintTimer.start();

@@ -5,9 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -22,9 +25,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import Client.Client;
 import Client.ClientInventory;
+import Menu.MainMenu;
 
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener {
 
@@ -45,14 +52,14 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JPasswordField password = new JPasswordField();
 	private JPasswordField confirm  = new JPasswordField();
 	private JButton menuLoginButton;
-	
+
 	public static boolean open = false;
 	public static boolean loggedIn = false;
-	
-	private static String savedUser;
+
+	public static String savedUser;
 	private static String savedPassword;
-	private static String savedKey;
-	
+	public static String savedKey;
+
 	public ClientAccountWindow(int port, JButton menuLoginButton) throws SocketException
 	{
 		setBackground(Color.BLACK);
@@ -66,14 +73,14 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		setVisible(true);
 		revalidate();
 		addWindowListener(this);
-		
+
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
-		
+
 		open = true;
 		this.menuLoginButton = menuLoginButton;
-		
+
 		int deltay = 45;
 		int y = 25;
 		int x = 10;
@@ -81,34 +88,37 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		usernameL.setSize(150,50);
 		usernameL.setLocation(x,y);
 		add(usernameL);
-		
+
 		passwordL.setSize(150,50);
 		passwordL.setLocation(x,y+deltay);
 		add(passwordL);
-		
+
 		confirmL.setSize(150,50);
 		confirmL.setLocation(x,y+2*deltay);
 		confirmL.setVisible(false);
 		add(confirmL);
-		
+
 		username.setSize(200,40);
 		username.setLocation(x+deltax,y);
+		username.setDocument(new JTextFieldLimit(25));
 		add(username);
-		
+
 		password.setSize(200,40);
 		password.setLocation(x+deltax,y+deltay);
+		password.setDocument(new JTextFieldLimit(25));
 		add(password);
-		
+
 		confirm.setSize(200,40);
 		confirm.setLocation(x+deltax,y+2*deltay);
 		confirm.setVisible(false);
+		confirm.setDocument(new JTextFieldLimit(25));
 		add(confirm);
-		
+
 		create.addActionListener(this);
 		create.setSize(100,50);
 		create.setLocation(x,y+(int)(3.5*deltay));
 		add(create);
-		
+
 		login.addActionListener(this);
 		login.setSize(100,50);
 		login.setLocation(x+deltax,y+(int)(3.5*deltay));
@@ -147,7 +157,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.");
 				break;
 			}
-			
+
 		}
 
 	}
@@ -156,8 +166,18 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	{
 		File f = new File(CREDS_PATH);
 		if(f.exists() && !f.isDirectory()) {
-		    loggedIn = true;
-		    return true;
+			loggedIn = true;
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(CREDS_PATH));
+				savedUser = br.readLine();
+				savedPassword = br.readLine();
+				savedKey = br.readLine();
+				br.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return true;
 		}
 		return false;
 	}
@@ -169,11 +189,11 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		savedPassword = null;
 		savedKey = null;
 		if(!f.exists() || f.isDirectory()) { 
-		    return;
+			return;
 		}
 		f.delete();
 	}
-	
+
 	public void saveCredentials()
 	{
 		savedUser = username.getText();
@@ -181,7 +201,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		savedKey = hash(username.getText(),new String(password.getPassword()));
 		loggedIn = true;
 		menuLoginButton.setText("Logout");
-		
+
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(CREDS_PATH));
@@ -198,7 +218,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	{
 		return (user+pass).replaceAll(" ","_");
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == login)
@@ -250,13 +270,13 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -266,9 +286,10 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			socket.close();
 			socket = null;
 		}
+		MainMenu.mainFrame.requestFocus();
 		open = false;
 		dispose();
-		
+
 	}
 
 	@Override
@@ -278,33 +299,51 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			socket.close();
 			socket = null;
 		}
+		MainMenu.mainFrame.requestFocus();
 		open = false;
 		dispose();
-		
+
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
+	
+	public class JTextFieldLimit extends PlainDocument {
+		  private int limit;
+
+		  JTextFieldLimit(int limit) {
+		   super();
+		   this.limit = limit;
+		   }
+
+		  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
+		    if (str == null) return;
+
+		    if ((getLength() + str.length()) <= limit) {
+		      super.insertString(offset, str, attr);
+		    }
+		  }
+		}
 
 }

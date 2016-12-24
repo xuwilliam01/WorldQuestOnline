@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -104,7 +105,7 @@ public class MainMenu implements KeyListener {
 	public static boolean imageLoadFailed = false;
 
 	private static boolean canConnect = false;
-	
+
 	private static JButton login;
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -183,36 +184,14 @@ public class MainMenu implements KeyListener {
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 
-		while (playerName == null) {
-			try {
-				playerName = JOptionPane.showInputDialog(null,
-						"Please enter your name (max 25 characters)",
-						"Identification", JOptionPane.QUESTION_MESSAGE);
-				if (playerName == null) {
-					System.exit(0);
-					break;
-				} else if (playerName.equals("") || playerName.length() > 25) {
-
-					playerName = null;
-					continue;
-				}
-
-				playerName = playerName.trim();
-
-				int enableCloudsAndStars = JOptionPane
-						.showConfirmDialog(
-								null,
-								"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
-								"Select Game Quality",
-								JOptionPane.YES_NO_OPTION);
-				if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
-					ClientWorld.NO_OF_CLOUDS = 0;
-				}
-
-				break;
-			} catch (NumberFormatException E) {
-
-			}
+		int enableCloudsAndStars = JOptionPane
+				.showConfirmDialog(
+						null,
+						"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
+						"Select Game Quality",
+						JOptionPane.YES_NO_OPTION);
+		if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
+			ClientWorld.NO_OF_CLOUDS = 0;
 		}
 
 		while (!(imagesAudioLoaded)) {
@@ -366,7 +345,7 @@ public class MainMenu implements KeyListener {
 			online.addActionListener(new OnlineButton());
 			online.addMouseListener(this);
 			add(online);
-			
+
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
 			{
@@ -574,7 +553,7 @@ public class MainMenu implements KeyListener {
 			while(true)
 			{
 				try {
-					socket = new DatagramSocket(DEF_UDP_PORT);
+					socket = new DatagramSocket(DEF_UDP_PORT+1);
 					receiveData = new byte[1024];
 					sendData = "C".getBytes();
 					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), port);
@@ -594,7 +573,7 @@ public class MainMenu implements KeyListener {
 						return;
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
 					return;
 				}
 			}
@@ -614,6 +593,8 @@ public class MainMenu implements KeyListener {
 
 		String serverIP;
 		int port;
+		BufferedReader input = null;
+		PrintWriter output = null;
 
 		/**
 		 * Constructor
@@ -634,7 +615,6 @@ public class MainMenu implements KeyListener {
 			boolean connected = false;
 			boolean exit = false;
 			boolean full = false;
-			BufferedReader input = null;
 
 			while (!connected) {
 				ConnectionTimer con = new ConnectionTimer(serverIP, port);
@@ -660,20 +640,34 @@ public class MainMenu implements KeyListener {
 				}
 				con.close();
 				if (exit)
-					break;		
+					break;
 				try {
 					mySocket = new Socket(serverIP, port);
+
+					// Set up the output
+					output = new PrintWriter(mySocket.getOutputStream());
+					output.println("Na " + ClientAccountWindow.savedKey + " "+ClientAccountWindow.savedUser);
+					output.flush();
+
 					input = new BufferedReader(new InputStreamReader(
 							mySocket.getInputStream()));
-					String line = null;
-					while (line == null) {
-						line = input.readLine();
-					}
+
+					String line = input.readLine();
+
 					if (line.equals("FULL")) {
 						System.out.println("ROOMS ARE FULL MESSAGE RECEIVED");
 						exit = true;
 						full = true;
 						input.close();
+						output.close();
+						mySocket.close();
+					}
+					else if(line.equals("DOUBLEACC"))
+					{
+						JOptionPane.showMessageDialog(this, "You are already playing a game on this account!");
+						exit = true;
+						input.close();
+						output.close();
 						mySocket.close();
 					}
 
@@ -708,7 +702,7 @@ public class MainMenu implements KeyListener {
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
 
-				lobby = new ClientLobby(mySocket, input, playerName, this,
+				lobby = new ClientLobby(mySocket, input, output, this,
 						clouds, menu);
 				lobby.setLocation(0, 0);
 				lobby.setLayout(null);
@@ -742,7 +736,13 @@ public class MainMenu implements KeyListener {
 			inventory = new ClientInventory(menu);
 			mySocket.close();
 			mySocket = new Socket(serverIP, port);
-			client = new Client(mySocket, inventory, pane, playerName);
+
+			// Set up the output
+			output = new PrintWriter(mySocket.getOutputStream());
+			output.println("Na " + ClientAccountWindow.savedKey + " "+ClientAccountWindow.savedUser);
+			output.flush();
+
+			client = new Client(mySocket, output, inventory, pane);
 			inventory.setClient(client);
 			inventory.setBackground(Color.BLACK);
 
@@ -768,13 +768,18 @@ public class MainMenu implements KeyListener {
 	private static class OnlineButton implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
+			if(!ClientAccountWindow.loggedIn)
+			{
+				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
+				return;
+			}
 			if(ClientAccountWindow.open)
 			{
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			
+
 			if(ClientServerSelection.open)
 			{
 				serverList.setVisible(true);
@@ -795,7 +800,7 @@ public class MainMenu implements KeyListener {
 		}
 
 	}
-	
+
 	/**
 	 * Reacts to login/logout
 	 */
@@ -825,9 +830,9 @@ public class MainMenu implements KeyListener {
 			}
 			Thread loginThread = new Thread(newLogin);
 			loginThread.start();
-			
+
 		}
-		
+
 	}
 	/**
 	 * Reacts when the menu button in the creator is pressed
@@ -1005,6 +1010,11 @@ public class MainMenu implements KeyListener {
 	 */
 	private static class GameStart implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			if(!ClientAccountWindow.loggedIn)
+			{
+				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
+				return;
+			}
 			if(ClientServerSelection.open)
 			{
 				serverList.setVisible(true);
@@ -1023,20 +1033,13 @@ public class MainMenu implements KeyListener {
 			int port = DEF_PORT;
 			// String playerName;
 
-			if (JOptionPane.showConfirmDialog(null,
-					"Would you like to play on official servers?","Join a Game",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				serverIP = DEDICATED_IP;
-			}
-
-			else {
-				serverIP = JOptionPane
-						.showInputDialog("Enter the server IP or leave blank for a server on this machine");
-				if (serverIP == null) {
-					mainFrame.requestFocus();
-					return;
-				} else if ((serverIP.trim()).equals("")) {
-					serverIP = "127.0.0.1";
-				}
+			serverIP = JOptionPane
+					.showInputDialog("Enter the server IP or leave blank for a server on this machine");
+			if (serverIP == null) {
+				mainFrame.requestFocus();
+				return;
+			} else if ((serverIP.trim()).equals("")) {
+				serverIP = "127.0.0.1";
 			}
 
 			port = DEF_PORT;
@@ -1206,7 +1209,7 @@ public class MainMenu implements KeyListener {
 				newLogin.toFront();
 				return;
 			}
-			
+
 			String fileName = "";
 			String[] mapNames = null;
 			final String DEFAULT_MAP_NAME = "New Map Name";
@@ -1291,7 +1294,7 @@ public class MainMenu implements KeyListener {
 				newLogin.toFront();
 				return;
 			}
-			
+
 			JOptionPane
 			.showMessageDialog(
 					null,

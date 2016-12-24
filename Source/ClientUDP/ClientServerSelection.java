@@ -244,6 +244,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			socket.close();
 			socket = null;
 		}
+		MainMenu.mainFrame.requestFocus();
 		open = false;
 		dispose();
 	}
@@ -255,6 +256,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			socket.close();
 			socket = null;
 		}
+		MainMenu.mainFrame.requestFocus();
 		open = false;
 		dispose();
 	}

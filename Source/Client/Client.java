@@ -34,6 +34,7 @@ import javax.swing.text.PlainDocument;
 
 import com.sun.corba.se.spi.activation.Server;
 
+import ClientUDP.ClientAccountWindow;
 import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
@@ -220,16 +221,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Constructor for the client
 	 */
-	public Client(Socket socket, ClientInventory inventory, JLayeredPane frame,
-			String playerName)
+	public Client(Socket socket, PrintWriter output, ClientInventory inventory, JLayeredPane frame)
 	{
 		System.out.println("PlayerName: " + playerName);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		Audio.importAudio();
 		mySocket = socket;
+		this.output = output;
 		currentMessage = " ";
-		this.playerName = playerName;
+		this.playerName = ClientAccountWindow.savedUser;
 		this.inventory = inventory;
 		this.frame = frame;
 

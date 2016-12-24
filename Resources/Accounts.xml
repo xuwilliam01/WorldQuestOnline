@@ -21,4 +21,7 @@
   <User name="alsdad">
     <Key>alsdadtestpass</Key>
   </User>
+  <User name="alex hello">
+    <Key>alex_hellotest</Key>
+  </User>
 </Root>

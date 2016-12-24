@@ -28,7 +28,7 @@ public class Server implements Runnable {
 
 	private PrintWriter output = null;
 
-	private ArrayList<Socket> newPlayerWaiting = new ArrayList<Socket>();
+	private ArrayList<Pair> newPlayerWaiting = new ArrayList<Pair>();
 	private int sizeIndex = 0;
 	public static String defaultMap;
 
@@ -57,10 +57,10 @@ public class Server implements Runnable {
 		return start;
 	}
 
-	public void addClient(Socket newClient, PrintWriter output) {
+	public void addClient(Socket newClient, BufferedReader input) {
 		while (true) {
 			try {
-				newPlayerWaiting.add(newClient);
+				newPlayerWaiting.add(new Pair(newClient, input));
 				break;
 			} catch (ConcurrentModificationException E) {
 				System.out
@@ -83,7 +83,7 @@ public class Server implements Runnable {
 			}
 		}
 		sizeIndex++;
-		return newPlayerWaiting.get(sizeIndex - 1);
+		return newPlayerWaiting.get(sizeIndex - 1).socket;
 	}
 
 	public Socket nextGameClient() {
@@ -101,7 +101,7 @@ public class Server implements Runnable {
 			return null;
 
 		sizeIndex++;
-		return newPlayerWaiting.get(sizeIndex - 1);
+		return newPlayerWaiting.get(sizeIndex - 1).socket;
 	}
 
 	@Override
@@ -345,5 +345,16 @@ public class Server implements Runnable {
 	public void close()
 	{
 		closeServer = true;
+	}
+	
+	public class Pair{
+		Socket socket;
+		BufferedReader reader;
+		
+		public Pair(Socket socket, BufferedReader reader)
+		{
+			this.socket = socket;
+			this.reader = reader;
+		}
 	}
 }
