@@ -753,8 +753,8 @@ public class MainMenu implements KeyListener {
 			mySocket = new Socket(serverIP, port);
 			
 			try {
-				mySocket.setReceiveBufferSize(64000);
-				mySocket.setSendBufferSize(50);
+				mySocket.setReceiveBufferSize(1024*16);
+				mySocket.setSendBufferSize(1024);
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

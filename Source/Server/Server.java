@@ -172,8 +172,8 @@ public class Server implements Runnable {
 				Socket newClient = nextGameClient();
 
 				try {
-					newClient.setReceiveBufferSize(50);
-					newClient.setSendBufferSize(64000);
+					newClient.setReceiveBufferSize(1024);
+					newClient.setSendBufferSize(1024*16);
 				} catch (SocketException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
