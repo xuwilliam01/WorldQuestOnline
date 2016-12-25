@@ -25,6 +25,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 		this.type = type;
 		this.shop = shop;
 		setSize(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT));
+		
 		//Add tooltips and set location:
 		switch(type) {
 		case ServerWorld.BARRACK_ITEM_TYPE:
@@ -32,6 +33,12 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setLocation(100,100);
 			cost = ServerBuildingItem.BARRACK_COST;
 			setToolTipText("Barracks");
+			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("WOOD_HOUSE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(200,100);
+			cost = ServerBuildingItem.WOOD_HOUSE_COST;
+			setToolTipText("Wooden house (+10 housing space)");
 			break;
 		}
 		setVisible(true);

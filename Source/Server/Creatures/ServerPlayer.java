@@ -2200,7 +2200,17 @@ public class ServerPlayer extends ServerCreature implements Runnable
 						getWorld()));
 			}
 			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			if (castle != null
+			&& castle.getMoney() >= ServerBuildingItem.WOOD_HOUSE_COST)
+			{
+				castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
+				addItem(new ServerBuildingItem(ServerWorld.WOOD_HOUSE_ITEM_TYPE,
+						getWorld()));
+			}
+			break;
 		}
+		
 	}
 
 	// ///////////////////////

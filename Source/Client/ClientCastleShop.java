@@ -30,6 +30,7 @@ public class ClientCastleShop extends JPanel{
 		setLocation(200,200);
 		
 		add(new ClientCastleShopItem(ServerWorld.BARRACK_ITEM_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.WOOD_HOUSE_ITEM_TYPE,this));
 		
 		
 		

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
@@ -60,6 +61,10 @@ public class ServerCastle extends ServerBuilding {
 	 * The XP of the castle
 	 */
 	private int xp = 0;
+	
+	public static final int POP_LIMIT = 20;
+	private int popLimit;
+	private int population;
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
 	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
@@ -79,11 +84,14 @@ public class ServerCastle extends ServerBuilding {
 	 */
 	public ServerCastle(double x, double y, int team, ServerWorld world) {
 		super(x, y, ServerWorld.CASTLE_TYPE, team, world);
-
+		
 		if (team == RED_TEAM)
 			setName("Red Team's Castle");
 		else
 			setName("Blue Team's Castle");
+		
+		popLimit = POP_LIMIT;
+		population = 0;
 	}
 
 	public void upgrade()
@@ -98,6 +106,7 @@ public class ServerCastle extends ServerBuilding {
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
+		setPopLimit(getPopLimit()+10);
 	}
 	/**
 	 * Update the castle behavior
@@ -273,6 +282,56 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 		}
+	}
+
+	public int getPopLimit() {
+		return popLimit;
+	}
+
+	public synchronized void setPopLimit(int popLimit) {
+		this.popLimit = popLimit;
+	}
+	
+	public void increasePopLimit(int amount)
+	{
+		setPopLimit(getPopLimit()+amount);
+	}
+	
+	public void decreasePopLimit(int amount)
+	{
+		setPopLimit(getPopLimit()+amount);
+	}
+
+	public int getPopulation() {
+		return population;
+	}
+
+	public synchronized void setPopulation(int population) {
+		this.population = population;
+	}
+	
+	public void increasePopulation(int amount)
+	{
+		setPopulation(getPopulation()+amount);
+	}
+	
+	public void addGoblin(ServerGoblin goblin)
+	{
+		if (population + goblin.getHousingSpace() <= popLimit)
+		{
+			setPopulation(getPopulation() + goblin.getHousingSpace());
+		}
+		else
+		{
+			goblin.destroy();
+			System.out.println("Not enough space for " + goblin.getName());
+		}
+		
+	}
+	
+	public void removeGoblin(ServerGoblin goblin)
+	{
+		setPopulation(getPopulation() - goblin.getHousingSpace());
 	}
 
 }

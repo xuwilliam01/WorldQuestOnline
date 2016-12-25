@@ -33,9 +33,14 @@ public class ServerHologram extends ServerObject{
 		switch (imageType)
 		{
 		case ServerWorld.BARRACK_TYPE:
-			setImage("BARRACKS");
+			setImage("BARRACKS_BAD");
 			goodImageIndex = Images.getImageIndex("BARRACKS_GOOD");
 			badImageIndex = Images.getImageIndex("BARRACKS_BAD");
+			break;
+		case ServerWorld.WOOD_HOUSE_TYPE:
+			setImage("WOOD_HOUSE_INVALID");
+			goodImageIndex = Images.getImageIndex("WOOD_HOUSE_VALID");
+			badImageIndex = Images.getImageIndex("WOOD_HOUSE_INVALID");
 			break;
 		}
 		

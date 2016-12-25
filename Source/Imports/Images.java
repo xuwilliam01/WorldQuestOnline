@@ -1192,10 +1192,14 @@ public class Images {
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
 			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			
 			addtoImageArray(new GameImage("BARRACKS.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("BARRACKS_GOOD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("BARRACKS_BAD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE.png","Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID","Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_VALID","Buildings//"));
 			image = null;
 		}
 

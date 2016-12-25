@@ -7,6 +7,7 @@ import Server.Creatures.ServerCreature;
 public abstract class ServerBuilding extends ServerCreature {
 
 	public final static int BARRACKS_HP = 1000;
+	public final static int WOOD_HOUSE_HP = 1000;
 	public final static int CASTLE_HP = 20000;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
@@ -28,6 +29,11 @@ public abstract class ServerBuilding extends ServerCreature {
 			setImage("BARRACKS");
 			setMaxHP(BARRACKS_HP);
 			setHP(BARRACKS_HP);
+			break;
+		case ServerWorld.WOOD_HOUSE_TYPE:
+			setImage("WOOD_HOUSE");
+			setMaxHP(WOOD_HOUSE_HP);
+			setHP(WOOD_HOUSE_HP);
 			break;
 		}
 		setTeam(team);

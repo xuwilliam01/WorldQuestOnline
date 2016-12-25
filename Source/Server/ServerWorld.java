@@ -145,16 +145,25 @@ public class ServerWorld {
 
 	public final static char SOUND_TYPE = 's';
 
+	
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
+	
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
+	
+	public final static String HOUSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "H";
+	public final static String WOOD_HOUSE_ITEM_TYPE = HOUSE_ITEM_TYPE + "W";
 
+	
 	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 
 	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
 	public final static String CASTLE_TYPE = BUILDING_TYPE + "T";
+	
+	public final static String HOUSE_TYPE = BUILDING_TYPE + "H";
+	public final static String WOOD_HOUSE_TYPE = HOUSE_TYPE + "W";
 
-	public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
+	//public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
 
 	public final static String HOLOGRAM_TYPE = "HOL";
 	/**
@@ -218,6 +227,16 @@ public class ServerWorld {
 	// settings
 	ArrayList<ServerSpawner> redSpawners = new ArrayList<ServerSpawner>();
 	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>();
+	
+	/**
+	 * The blue team castle
+	 */
+	private ServerCastle blueCastle;
+
+	/**
+	 * The red team castle
+	 */
+	private ServerCastle redCastle;
 
 	/**
 	 * The size of each object tile
@@ -283,16 +302,6 @@ public class ServerWorld {
 	public int slimeCount = 0;
 
 	private ServerEngine engine;
-
-	/**
-	 * The blue team castle
-	 */
-	private ServerCastle blueCastle;
-
-	/**
-	 * The red team castle
-	 */
-	private ServerCastle redCastle;
 
 	/**
 	 * List of possible names for bots
@@ -642,7 +651,7 @@ public class ServerWorld {
 					if (object.isSolid()) {
 						// Apply gravity first (DEFINITELY BEFORE CHECKING
 						// VSPEED)
-						if (object.getVSpeed() < MAX_SPEED) {
+						if (object.getVSpeed() + object.getGravity() < MAX_SPEED) {
 							object.setVSpeed(object.getVSpeed() + object.getGravity());
 						} else {
 							object.setVSpeed(MAX_SPEED);

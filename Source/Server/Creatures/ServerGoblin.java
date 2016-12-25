@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Imports.Audio;
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Buildings.ServerCastle;
 import Server.Effects.ServerText;
 import Server.Items.ServerItem;
 import Server.Items.ServerProjectile;
@@ -117,6 +118,13 @@ public class ServerGoblin extends ServerCreature {
 	 * The fighting range of this goblin
 	 */
 	private int privateFightingRange;
+	
+	/**
+	 * Amount of space goblin takes
+	 */
+	private int housingSpace;
+	
+	private ServerCastle castle = null;
 
 	/**
 	 * Constructor for a random goblin type
@@ -124,7 +132,7 @@ public class ServerGoblin extends ServerCreature {
 	public ServerGoblin(double x, double y, ServerWorld world, int team) {
 		super(x, y, 20, 64, -24, -64, ServerWorld.GRAVITY, "GOB_RIGHT_0_0",
 				ServerWorld.NAKED_GOBLIN_TYPE, GOBLIN_HP, world, true);
-
+		housingSpace = 1;
 		int castleTier = world.getRedCastle().getTier();
 
 		if (team == ServerPlayer.BLUE_TEAM) {
@@ -145,6 +153,8 @@ public class ServerGoblin extends ServerCreature {
 
 			weapon = "DASTONE_0";
 			damage = 4;
+			housingSpace = 1;
+			
 			setName("A Goblin");
 			break;
 		case 1:
@@ -161,6 +171,7 @@ public class ServerGoblin extends ServerCreature {
 			weapon = ServerWorld.WOODARROW_TYPE;
 			damage = 7;
 			isMelee = false;
+			housingSpace = 2;
 
 			setName("A Goblin Archer");
 
@@ -177,6 +188,8 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.2;
 			weapon = "AXIRON_0";
 			damage = 6;
+			housingSpace = 2;
+			
 			setName("A Goblin Soldier");
 			break;
 		case 3:
@@ -192,6 +205,8 @@ public class ServerGoblin extends ServerCreature {
 			isMelee = false;
 			movementSpeed = 5;
 			jumpSpeed = 16;
+			housingSpace = 2;
+			
 			setName("A Ninja Goblin");
 			break;
 		case 4:
@@ -207,6 +222,8 @@ public class ServerGoblin extends ServerCreature {
 			movementSpeed = 4;
 			jumpSpeed = 14;
 			weapon = "HAIRON_0";
+			housingSpace = 2;
+			
 			setName("A Goblin Samurai");
 			break;
 		case 5:
@@ -220,6 +237,8 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.2;
 			damage = 8;
 			weapon = "SWIRON_0";
+			housingSpace = 3;
+			
 			setName("A Goblin Guard");
 			break;
 		case 6:
@@ -233,6 +252,8 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.4;
 			weapon = "SWIRON_0";
 			damage = 8;
+			housingSpace = 3;
+			
 			setName("A Goblin Knight");
 			break;
 		case 7:
@@ -246,6 +267,8 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.3;
 			weapon = "SWGOLD_0";
 			damage = 12;
+			housingSpace = 3;
+			
 			setName("A Goblin Lord");
 			break;
 		case 8:
@@ -268,6 +291,8 @@ public class ServerGoblin extends ServerCreature {
 				damage = ServerWeapon.FIREWAND_DMG;
 			}
 			isMelee = false;
+			housingSpace = 3;
+			
 			setName("A Goblin Wizard");
 			break;
 		case 9:
@@ -277,6 +302,7 @@ public class ServerGoblin extends ServerCreature {
 			setMaxHP(GOBLIN_GIANT_HP);
 			setHP(GOBLIN_GIANT_HP);
 
+			housingSpace = 3;
 			movementSpeed = 2;
 			armour = 0;
 			damage = 15;
@@ -285,6 +311,8 @@ public class ServerGoblin extends ServerCreature {
 			setRelativeDrawX(getRelativeDrawX() * 2);
 			setRelativeDrawY(getRelativeDrawY() * 2);
 			setName("A Goblin Giant");
+			housingSpace = 6;
+			
 			break;
 		case 10:
 			setType(ServerWorld.GOBLIN_GENERAL_TYPE);
@@ -298,6 +326,8 @@ public class ServerGoblin extends ServerCreature {
 			weapon = "SWDIAMOND_0";
 			damage = 16;
 			setName("A Goblin General");
+			housingSpace = 4;
+			
 			break;
 		case 11:
 			setType(ServerWorld.GOBLIN_KING_TYPE);
@@ -311,6 +341,8 @@ public class ServerGoblin extends ServerCreature {
 			weapon = "AXDIAMOND_0";
 			damage = 20;
 			setName("A Goblin King");
+			housingSpace = 5;
+			
 			break;
 		}
 
@@ -322,6 +354,17 @@ public class ServerGoblin extends ServerCreature {
 		if (Math.random() < 0.1)
 			addItem(ServerItem.randomItem(getX(), getY(), world));
 		setTeam(team);
+		
+		if (team==ServerCastle.BLUE_TEAM)
+		{
+			castle = world.getBlueCastle();;
+		}
+		else
+		{
+			castle = world.getRedCastle();
+		}
+		
+		castle.addGoblin(this);
 	}
 
 	/**
@@ -653,6 +696,13 @@ public class ServerGoblin extends ServerCreature {
 				+ getRowCol().getRow() + "_" + getRowCol().getColumn() + "");
 	}
 
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		castle.removeGoblin(this);
+	}
+	
 	/**
 	 * Find the nearest enemy creature and attack it, in this case something
 	 * from the other team
@@ -728,4 +778,9 @@ public class ServerGoblin extends ServerCreature {
 	public void setTarget(ServerCreature target) {
 		this.target = target;
 	}
+
+	public int getHousingSpace() {
+		return housingSpace;
+	}
+	
 }
