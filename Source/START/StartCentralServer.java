@@ -12,6 +12,7 @@ public class StartCentralServer {
 		CentralServer server = new CentralServer();
 		Thread serverThread = new Thread(server);
 		serverThread.start();
+		System.out.println("Central server started");
 //		ClientAccountWindow cl = new ClientAccountWindow(9000);
 //		Thread newThread = new Thread(cl);
 //		newThread.start();

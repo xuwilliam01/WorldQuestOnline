@@ -1016,6 +1016,10 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			// Send the current time in the world (Must be the last thing)
 			queueMessage("T " + toChars(getWorld().getWorldTime()));
+			
+			// Send population for red and blue castles
+			queueMessage("rp " + getWorld().getRedCastle().getPopulation() + " " + getWorld().getRedCastle().getPopLimit());
+			queueMessage("bp " + getWorld().getBlueCastle().getPopulation() + " " + getWorld().getBlueCastle().getPopLimit());
 
 			// Signal a repaint
 			queueMessage("U");
@@ -2207,6 +2211,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
 				addItem(new ServerBuildingItem(ServerWorld.WOOD_HOUSE_ITEM_TYPE,
 						getWorld()));
+				System.out.println("Added house");
 			}
 			break;
 		}

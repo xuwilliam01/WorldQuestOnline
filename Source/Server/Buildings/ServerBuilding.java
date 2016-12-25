@@ -48,6 +48,8 @@ public abstract class ServerBuilding extends ServerCreature {
 		//Different type of barrack exist. Will all be put in the same statement
 		case ServerWorld.BARRACK_TYPE:
 			return new ServerBarrack(x,y,type, team, world);
+		case ServerWorld.WOOD_HOUSE_TYPE:
+			return new ServerHouse(x,y,type, team, world);
 		}
 		return null;
 	}

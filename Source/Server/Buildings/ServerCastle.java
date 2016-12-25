@@ -65,6 +65,8 @@ public class ServerCastle extends ServerBuilding {
 	public static final int POP_LIMIT = 20;
 	private int popLimit;
 	private int population;
+	
+	
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
 	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
@@ -292,14 +294,14 @@ public class ServerCastle extends ServerBuilding {
 		this.popLimit = popLimit;
 	}
 	
-	public void increasePopLimit(int amount)
+	public synchronized void increasePopLimit(int amount)
 	{
 		setPopLimit(getPopLimit()+amount);
 	}
 	
-	public void decreasePopLimit(int amount)
+	public synchronized void decreasePopLimit(int amount)
 	{
-		setPopLimit(getPopLimit()+amount);
+		setPopLimit(getPopLimit()-amount);
 	}
 
 	public int getPopulation() {
@@ -315,7 +317,7 @@ public class ServerCastle extends ServerBuilding {
 		setPopulation(getPopulation()+amount);
 	}
 	
-	public void addGoblin(ServerGoblin goblin)
+	public synchronized void addGoblin(ServerGoblin goblin)
 	{
 		if (population + goblin.getHousingSpace() <= popLimit)
 		{
@@ -323,13 +325,16 @@ public class ServerCastle extends ServerBuilding {
 		}
 		else
 		{
+			// Counter-act the lost housing space from the goblin dying
+			setPopulation(getPopulation() + goblin.getHousingSpace());
 			goblin.destroy();
+			
 			System.out.println("Not enough space for " + goblin.getName());
 		}
 		
 	}
 	
-	public void removeGoblin(ServerGoblin goblin)
+	public synchronized void removeGoblin(ServerGoblin goblin)
 	{
 		setPopulation(getPopulation() - goblin.getHousingSpace());
 	}

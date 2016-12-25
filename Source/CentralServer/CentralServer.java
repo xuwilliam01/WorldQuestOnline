@@ -97,6 +97,7 @@ public class CentralServer implements Runnable, ActionListener{
 						//System.out.println(newServer.getIP() + " " + newServer.getPort());
 						servers.add(newServer);
 						listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
+						System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
 					}
 					break;
 				//Send clients the list of servers

@@ -751,6 +751,14 @@ public class MainMenu implements KeyListener {
 			inventory = new ClientInventory(menu);
 			mySocket.close();
 			mySocket = new Socket(serverIP, port);
+			
+			try {
+				mySocket.setReceiveBufferSize(64000);
+				mySocket.setSendBufferSize(50);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// Set up the output
 			output = new PrintWriter(mySocket.getOutputStream());

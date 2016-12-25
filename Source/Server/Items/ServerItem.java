@@ -215,6 +215,10 @@ public abstract class ServerItem extends ServerObject
 			setImage("BARRACKS_ICON");
 			value = ServerBuildingItem.BARRACK_COST; //Change?
 			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			setImage("WOOD_HOUSE_ICON");
+			value = ServerBuildingItem.WOOD_HOUSE_COST; //Change?
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -296,6 +300,7 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.DARKWAND_TYPE:
 			return new ServerWeapon(item.getX(), item.getY(), item.getType(),world);
 		case ServerWorld.BARRACK_ITEM_TYPE:
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			return new ServerBuildingItem(item.getType(),world);
 
 		}

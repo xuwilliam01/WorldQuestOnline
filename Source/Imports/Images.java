@@ -1198,8 +1198,8 @@ public class Images {
 			addtoImageArray(new GameImage("BARRACKS_GOOD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("BARRACKS_BAD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE.png","Buildings//"));
-			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID","Buildings//"));
-			addtoImageArray(new GameImage("WOOD_HOUSE_VALID","Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
 			image = null;
 		}
 

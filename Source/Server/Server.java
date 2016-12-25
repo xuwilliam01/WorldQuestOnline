@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -170,6 +171,14 @@ public class Server implements Runnable {
 			try {
 				Socket newClient = nextGameClient();
 
+				try {
+					newClient.setReceiveBufferSize(50);
+					newClient.setSendBufferSize(64000);
+				} catch (SocketException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				if(closeServer)
 					return;
 

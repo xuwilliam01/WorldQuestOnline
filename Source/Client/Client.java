@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
@@ -107,12 +108,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	private int redCastleMoney;
 	private int redCastleMaxHP;
 	private int redCastleXP;
+	private int redPop;
+	private int redPopLimit;
 
 	private int blueCastleHP;
 	private int blueCastleTier;
 	private int blueCastleMoney;
 	private int blueCastleMaxHP;
 	private int blueCastleXP;
+	private int bluePop;
+	private int bluePopLimit;
 
 	// Chat Components
 	public final static int MAX_MESSAGES = 15;
@@ -233,6 +238,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		this.playerName = ClientAccountWindow.savedUser;
 		this.inventory = inventory;
 		this.frame = frame;
+		redPop=0;
+		redPopLimit=0;
+		bluePop=0;
+		bluePopLimit=0;
 
 		leaveGame = false;
 
@@ -843,7 +852,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 											break;
 										}
 									break;
-
+								case "rp":
+									redPop = Integer.parseInt(tokens[++token]);
+									redPopLimit = Integer.parseInt(tokens[++token]);
+									break;
+								case "bp":
+									bluePop = Integer.parseInt(tokens[++token]);
+									bluePopLimit = Integer.parseInt(tokens[++token]);
+									break;
 								}
 
 							}
@@ -2088,6 +2104,38 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void setShop(ClientShop shop)
 	{
 		this.shop = shop;
+	}
+
+	public int getRedPop() {
+		return redPop;
+	}
+
+	public void setRedPop(int redPop) {
+		this.redPop = redPop;
+	}
+
+	public int getRedPopLimit() {
+		return redPopLimit;
+	}
+
+	public void setRedPopLimit(int redPopLimit) {
+		this.redPopLimit = redPopLimit;
+	}
+
+	public int getBluePop() {
+		return bluePop;
+	}
+
+	public void setBluePop(int bluePop) {
+		this.bluePop = bluePop;
+	}
+
+	public int getBluePopLimit() {
+		return bluePopLimit;
+	}
+
+	public void setBluePopLimit(int bluePopLimit) {
+		this.bluePopLimit = bluePopLimit;
 	}
 
 	public int toInt(String base94)
