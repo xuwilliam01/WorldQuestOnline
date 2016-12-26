@@ -2,12 +2,17 @@ package CentralServer;
 
 import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
@@ -39,14 +44,16 @@ public class CentralServer implements Runnable, ActionListener{
 	private String listServers;
 	private String delayedListServers;
 	boolean clearServers = false;
-	
+
 	private Element root;
 	private Document document;
 	private SAXBuilder builder;
 	private String FILE_NAME = "Resources//Accounts.xml";
-	
+
 	//Clear servers after a period of time
 	private Timer reset;
+
+	private ServerSocket TCPSocket;
 
 	public CentralServer() throws IOException, JDOMException
 	{
@@ -56,21 +63,24 @@ public class CentralServer implements Runnable, ActionListener{
 		listServers = "";
 		delayedListServers = "";
 		reset = new Timer(2000, this);
-		
+
 		//Build XML
 		builder = new SAXBuilder();
 		document = builder.build(new File(FILE_NAME));
 		root = document.getRootElement();
-		
-//		System.out.println(login("Alex","uhoh"));
-//		System.out.println(login("Alex","12313ibsdfibsbfhskjdvbfjhs1234234"));
-//		System.out.println(createAccount("Alex3","EasyPass"));
-//		System.out.println(createAccount("Alex3","EasyPass"));
-//		System.out.println(login("Alex3","EasyPass"));
+
+		TCPSocket = new ServerSocket(PORT);
+		//		System.out.println(login("Alex","uhoh"));
+		//		System.out.println(login("Alex","12313ibsdfibsbfhskjdvbfjhs1234234"));
+		//		System.out.println(createAccount("Alex3","EasyPass"));
+		//		System.out.println(createAccount("Alex3","EasyPass"));
+		//		System.out.println(login("Alex3","EasyPass"));
 	}
-	
+
 	public void run() {
 		reset.start();
+		Thread TCPThread = new Thread(new TCPIn());
+		TCPThread.start();
 		while(true)
 		{
 			receiveData = new byte[1024];
@@ -83,23 +93,10 @@ public class CentralServer implements Runnable, ActionListener{
 			}
 			//Get input
 			String input = new String(receive.getData()).trim();
-			
+
 			try{
 				switch(input.charAt(0))
 				{
-				//Get info from servers
-				case 'A':
-					String[] tokens = input.split(" ");
-					ServerInfo newServer = new ServerInfo(tokens[1], receive.getAddress().toString(), receive.getPort(), 
-							Integer.parseInt(tokens[2]));
-					if(!servers.contains(newServer))
-					{
-						//System.out.println(newServer.getIP() + " " + newServer.getPort());
-						servers.add(newServer);
-						listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
-						System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
-					}
-					break;
 				//Send clients the list of servers
 				case 'G':
 					String serversOut = "S "+receive.getAddress().toString()+" "+delayedListServers;
@@ -109,7 +106,7 @@ public class CentralServer implements Runnable, ActionListener{
 					socket.send(send);
 					break;
 				case 'L':
-					tokens = input.split(" ");
+					String[] tokens = input.split(" ");
 					String key = tokens[1];
 					String name = tokens[2];
 					for(int i = 3; i < tokens.length;i++)
@@ -146,7 +143,7 @@ public class CentralServer implements Runnable, ActionListener{
 				System.out.println("Bad Input");
 				e.printStackTrace();
 			}
-			
+
 			// Remove servers when necessary
 			if(clearServers)
 			{
@@ -171,7 +168,7 @@ public class CentralServer implements Runnable, ActionListener{
 		}
 		return false;
 	}
-	
+
 	public boolean createAccount(String user, String key)
 	{
 		boolean contains = false;
@@ -182,14 +179,14 @@ public class CentralServer implements Runnable, ActionListener{
 				//If account already exists, but the username and password match, then pretend we made a new account
 				if(key.equals(username.getChild("Key").getValue()))
 					return true;
-				
+
 				contains = true;
 				break;
 			}
 		}
 		if(contains)
 			return false;
-		
+
 		Element newUser = new Element("User");
 		Attribute username = new Attribute("name", user);
 		Element newKey = new Element("Key");
@@ -197,7 +194,7 @@ public class CentralServer implements Runnable, ActionListener{
 		newUser.addContent(newKey);
 		newUser.setAttribute(username);
 		root.addContent(newUser);
-		
+
 		//Save with new username + key
 		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 		try {
@@ -209,12 +206,92 @@ public class CentralServer implements Runnable, ActionListener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return true;
 	}
-	
+
 	public void actionPerformed(ActionEvent arg0) {
 		clearServers = true;
 	}
 
+	private class TCPIn implements Runnable
+	{
+		@Override
+		public void run() {
+			while(true)
+			{
+				try {
+					Socket newServer = TCPSocket.accept();
+					Thread inputThread = new Thread(new ReadIn(newServer));
+					inputThread.start();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private class ReadIn implements Runnable
+	{
+		Socket server;
+		BufferedReader input;
+		PrintWriter output;
+
+		public ReadIn(Socket server)
+		{
+			this.server = server;
+		}
+
+		public void run()
+		{
+			try {
+				input= new BufferedReader(new InputStreamReader(server.getInputStream()));
+				output = new PrintWriter(server.getOutputStream());
+				while(true)
+				{
+
+					String command = input.readLine();
+					switch(command.charAt(0))
+					{
+					//Get info from servers
+					case 'A':
+						String[] tokens = command.split(" ");
+						ServerInfo newServer = new ServerInfo(tokens[1], server.getInetAddress().toString(), Integer.parseInt(tokens[3]), 
+								Integer.parseInt(tokens[2]));
+						if(!servers.contains(newServer))
+						{
+							//System.out.println(newServer.getIP() + " " + newServer.getPort());
+							servers.add(newServer);
+							listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
+							System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+						}
+						break;
+					case 'l':
+						tokens = command.split(" ");
+						String key = tokens[1];
+						String name = tokens[2];
+						for(int i = 3; i < tokens.length;i++)
+							name+=" "+tokens[i];
+						String out;
+						if(login(name, key))
+						{
+							out = "L "+key+" "+name;
+							send(out);
+						}
+						break;
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				return;
+			}
+		}
+
+		public void send(String s)
+		{
+			output.println(s);
+			output.flush();
+		}
+	}
 }

@@ -37,10 +37,13 @@ public class ServerManager implements Runnable, ActionListener{
 	private byte[] sendData;
 	private byte[] receiveData;
 
-	private final Timer inputTimer = new Timer(400,this);
-	private boolean timeout = false;
-	private boolean validCredentials = false;
+	private Socket centralServer;
+	private BufferedReader in;
+	private PrintWriter out;
 
+	private int thisPort;
+	
+	private ArrayList<AddNewPlayer> listOfNewPlayers;
 	/**
 	 * 
 	 * @param port
@@ -51,7 +54,8 @@ public class ServerManager implements Runnable, ActionListener{
 	public ServerManager(String name, int port, int maxRooms, ClientFrame mainFrame) throws SocketException {
 		this.name = name;
 		this.maxRooms = maxRooms;
-		this.mainFrame = mainFrame;		
+		this.mainFrame = mainFrame;	
+		thisPort = port;
 		addNewRoom();
 		updateCentral.start();
 		centralSocket = new DatagramSocket(port);
@@ -62,10 +66,16 @@ public class ServerManager implements Runnable, ActionListener{
 
 		try {
 			this.socket = new ServerSocket(port);
+			centralServer = new Socket(CentralServer.CentralServer.IP, CentralServer.CentralServer.PORT);
+			out = new PrintWriter(centralServer.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
 		}
+
+		Thread centralServerThread = new Thread(new CentralServerReceive());
+		centralServerThread.start();
 	}
 
 	/**
@@ -78,6 +88,7 @@ public class ServerManager implements Runnable, ActionListener{
 	public ServerManager(String name, int port, int maxRooms) throws SocketException {
 		this.name = name;
 		this.maxRooms = maxRooms;
+		thisPort = port;
 		HAS_FRAME = false;
 		addNewRoom();
 		updateCentral.start();
@@ -88,26 +99,108 @@ public class ServerManager implements Runnable, ActionListener{
 		pingThread.start();
 		try {
 			this.socket = new ServerSocket(port);
+			centralServer = new Socket(CentralServer.CentralServer.IP, CentralServer.CentralServer.PORT);
+			out = new PrintWriter(centralServer.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
 		}
 
+		Thread centralServerThread = new Thread(new CentralServerReceive());
+		centralServerThread.start();
 		Maps.importMaps();
 	}
 
 	@Override
 	public void run() {
-		outerloop: while (true) {
+		listOfNewPlayers = new ArrayList<AddNewPlayer>();
+		while (true) {
 			try {
 				Socket newClient = socket.accept();
 				System.out.println("New player JOINED");
+				AddNewPlayer toAdd = new AddNewPlayer(newClient);
+				synchronized(listOfNewPlayers)
+				{
+					listOfNewPlayers.add(toAdd);
+				}
+				Thread newPlayerAccept = new Thread(toAdd);
+				newPlayerAccept.start();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	private class CentralServerReceive implements Runnable
+	{
+
+		@Override
+		public void run() {
+			while(true)
+			{
+				try {
+					String input = in.readLine();
+					switch(input.charAt(0))
+					{
+					case 'L':
+						String[] tokens = input.split(" ");
+						String key = tokens[1];
+						String name = tokens[2];
+						for(int i = 3; i < tokens.length;i++)
+						{
+							name += " "+tokens[i];
+						}
+						AddNewPlayer toRemove = null;
+						synchronized(listOfNewPlayers){
+							for(AddNewPlayer player : listOfNewPlayers)
+							{
+								if(player.key != null && player.name != null && player.key.equals(key) && player.name.equals(name))
+								{
+									player.validCredentials = true;
+									toRemove = player;
+								}
+							}
+							listOfNewPlayers.remove(toRemove);
+						}
+						break;
+					}
+				}
+				catch (IOException e) {
+					System.out.println("Central Server Closed");
+					e.printStackTrace();
+					return;
+				}
+			}
+		}
+
+	}
+
+	private class AddNewPlayer implements Runnable, ActionListener
+	{
+		Socket newClientSocket;
+		boolean timeout = false;
+		boolean validCredentials = false;
+		String key = null;
+		String name = null;
+		public AddNewPlayer(Socket socket)
+		{
+			this.newClientSocket = socket;
+		}
+
+		@SuppressWarnings("resource")
+		@Override
+		public void run() {
+			try{
 				PrintWriter output = new PrintWriter(
-						newClient.getOutputStream());
+						newClientSocket.getOutputStream());
 				BufferedReader input = new BufferedReader(
-						new InputStreamReader(newClient.getInputStream()));
-				timeout = false;
-				inputTimer.restart();
+						new InputStreamReader(newClientSocket.getInputStream()));
+				Timer inputTimer = new Timer(400,this);
+				inputTimer.start();
 				while(!input.ready())
 				{
 					//System.out.println("Stuck on input.ready");
@@ -117,8 +210,8 @@ public class ServerManager implements Runnable, ActionListener{
 						output.flush();
 						input.close();
 						output.close();
-						newClient.close();
-						continue outerloop;
+						newClientSocket.close();
+						return;
 					}
 				}
 				String command = input.readLine();
@@ -126,59 +219,53 @@ public class ServerManager implements Runnable, ActionListener{
 				try{
 					if(tokens[0].equals("Na"))
 					{
-						String key = tokens[1];
-						String name = tokens[2];
+						key = tokens[1];
+						name = tokens[2];
 						for(int i = 3; i < tokens.length;i++)
 						{
 							name += " "+tokens[i];
 						}
 
 						//Check to make sure the player isn't already logged in
-						for(Server room : rooms)
-						{
-							if(!room.started())
+						synchronized(rooms){
+							for(Server room : rooms)
 							{
-								for(ServerLobbyPlayer player : room.getPlayers())
+								if(!room.started())
 								{
-									if(player.getName().equals(name))
+									for(ServerLobbyPlayer player : room.getPlayers())
 									{
-										output.println("DOUBLEACC");
-										output.flush();
-										input.close();
-										output.close();
-										newClient.close();
-										continue outerloop;
+										if(player.getName().equals(name))
+										{
+											output.println("DOUBLEACC");
+											output.flush();
+											input.close();
+											output.close();
+											newClientSocket.close();
+											return;
+										}
 									}
 								}
-							}
-							else
-							{
-								for(ServerPlayer player : room.getEngine().getListOfPlayers())
+								else
 								{
-									if(player.getName().equals(name))
+									for(ServerPlayer player : room.getEngine().getListOfPlayers())
 									{
-										output.println("DOUBLEACC");
-										output.flush();
-										input.close();
-										output.close();
-										newClient.close();
-										continue outerloop;
+										if(player.getName().equals(name))
+										{
+											output.println("DOUBLEACC");
+											output.flush();
+											input.close();
+											output.close();
+											newClientSocket.close();
+											return;
+										}
 									}
 								}
 							}
 						}
-
 						//Check with the central server to validate the account info
 						validCredentials = false;
-						String data = "L "+ key+" "+name;
-						sendData = data.getBytes();
-						try {
-							send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
-							centralSocket.send(send);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						String data = "l "+ key+" "+name;
+						send(data);
 						Thread.sleep(200);
 						if(!validCredentials)
 						{
@@ -195,47 +282,64 @@ public class ServerManager implements Runnable, ActionListener{
 					output.flush();
 					input.close();
 					output.close();
-					newClient.close();
-					continue outerloop;
-				}
-				for (Server room : rooms) {
-					if (!room.isFull()) {
-						if (room.started()) {
-							output.println("CONNECTED");
-							System.out.println("CONNECTED GAME STARTED");
-							output.flush();
-							room.addClient(newClient, input);
-						} else {
-							output.println("CONNECTED");
-							System.out.println("CONNECTED TO LOBBY");
-							output.flush();
-							room.addClient(newClient, input);
-						}
-						continue outerloop; // Once the client is added wait for
-						// a new one
-					}
+					newClientSocket.close();
+					return;
 				}
 
-				if (rooms.size() < maxRooms) {
-					output.println("CONNECTED");
-					System.out.println("CONNECTED NEW ROOM");
-					output.flush();
-					addNewRoom();
-					rooms.get(rooms.size() - 1).addClient(newClient, input);
-				} else // No More Space
-				{
-					System.out.println("Sent full message to client");
-					output.println("FULL");
-					output.flush();
-					output.close();
-					newClient.close();
+				synchronized(rooms){
+					for (Server room : rooms) {
+						if (!room.isFull()) {
+							if (room.started()) {
+								output.println("CONNECTED");
+								System.out.println("CONNECTED GAME STARTED");
+								output.flush();
+								room.addClient(newClientSocket, input);
+							} else {
+								output.println("CONNECTED");
+								System.out.println("CONNECTED TO LOBBY");
+								output.flush();
+								room.addClient(newClientSocket, input);
+							}
+							return; // Once the client is added wait for
+							// a new one
+						}
+					}
+
+					if (rooms.size() < maxRooms) {
+						output.println("CONNECTED");
+						System.out.println("CONNECTED NEW ROOM");
+						output.flush();
+						addNewRoom();
+						rooms.get(rooms.size() - 1).addClient(newClientSocket, input);
+					} else // No More Space
+					{
+						System.out.println("Sent full message to client");
+						output.println("FULL");
+						output.flush();
+						output.close();
+						newClientSocket.close();
+					}
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+			catch(Exception e)
+			{
 				e.printStackTrace();
 			}
 		}
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			((Timer)arg0.getSource()).stop();
+			timeout = true;
+
+		}
+
+	}
+
+	public void send(String s)
+	{
+		out.println(s);
+		out.flush();
 	}
 
 	public void addNewRoom() {
@@ -262,12 +366,7 @@ public class ServerManager implements Runnable, ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if(arg0.getSource() == inputTimer)
-		{
-			timeout = true;
-			((Timer)arg0.getSource()).stop();
-		}
-		else
+		synchronized(rooms)
 		{
 			int numPlayers = 0;
 			if(rooms.size() != 0)
@@ -276,15 +375,8 @@ public class ServerManager implements Runnable, ActionListener{
 				if(!rooms.get(0).started())
 					numPlayers = rooms.get(0).getPlayers().size();
 			}
-			String data = "A "+ name + " " + numPlayers;
-			sendData = data.getBytes();
-			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
-				centralSocket.send(send);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			String data = "A "+ name + " " + numPlayers+" "+thisPort;
+			send(data);
 		}
 
 	}
@@ -328,21 +420,12 @@ public class ServerManager implements Runnable, ActionListener{
 							e.printStackTrace();
 						}
 						break;
-					case 'L':
-						if(input.length() == 2)
-						{
-							if(input.charAt(1) == 'Y')
-							{
-								validCredentials = true;
-							}
-						}
-						break;
 					}
 				}
+
 			}
 
 		}
-
 	}
 
 	public String getName()
@@ -354,7 +437,5 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		this.name = name;
 	}
-
-
 
 }
