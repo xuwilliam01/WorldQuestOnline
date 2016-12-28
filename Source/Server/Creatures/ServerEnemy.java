@@ -62,7 +62,7 @@ public abstract class ServerEnemy extends ServerCreature implements
 	/**
 	 * Find the nearest player and target it, if within range
 	 */
-	public void findTarget()
+	public void findPlayerTarget()
 	{
 		for (ServerPlayer player : getWorld().getEngine().getListOfPlayers())
 		{

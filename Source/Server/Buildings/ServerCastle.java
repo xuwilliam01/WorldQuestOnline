@@ -2,6 +2,7 @@ package Server.Buildings;
 
 import java.util.ArrayList;
 
+import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
@@ -22,7 +23,7 @@ public class ServerCastle extends ServerBuilding {
 	 * The number of pixels for a target to be in range for the castle to fire
 	 * at it
 	 */
-	private int targetRange = 1000;
+	private int targetRange;
 
 	/**
 	 * The money invested in upgrading the castle
@@ -45,11 +46,6 @@ public class ServerCastle extends ServerBuilding {
 	private String arrowType = ServerWorld.WOODARROW_TYPE;
 
 	/**
-	 * The team of the castle
-	 */
-	private int team;
-
-	/**
 	 * Whether the castle shop is open or not
 	 */
 	private boolean open = false;
@@ -61,6 +57,8 @@ public class ServerCastle extends ServerBuilding {
 	 * The XP of the castle
 	 */
 	private int xp = 0;
+	
+	private ArrayList<ServerObject> arrowSources;
 	
 	public static final int POP_LIMIT = 20;
 	private int popLimit;
@@ -87,10 +85,8 @@ public class ServerCastle extends ServerBuilding {
 	public ServerCastle(double x, double y, int team, ServerWorld world) {
 		super(x, y, ServerWorld.CASTLE_TYPE, team, world);
 		
-		if (team == RED_TEAM)
-			setName("Red Team's Castle");
-		else
-			setName("Blue Team's Castle");
+		arrowSources = new ArrayList<ServerObject>();
+		targetRange = 1000;
 		
 		popLimit = POP_LIMIT;
 		population = 0;
@@ -103,81 +99,36 @@ public class ServerCastle extends ServerBuilding {
 		setHP(getHP() + 5000);
 		tier++;
 
+		for (ServerObject object: arrowSources)
+		{
+			object.destroy();
+		}
+		
+		arrowSources.clear();
+		
 		if (tier == 3) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
+		
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+				arrowType, targetRange, this, getWorld())));
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+				arrowType, targetRange, this, getWorld())));
+		
 		setPopLimit(getPopLimit()+10);
 	}
-	/**
-	 * Update the castle behavior
-	 */
-	public void update() {
-		// Attack a target
-		if (getTarget() == null) {
-			if (getWorld().getWorldCounter() % 15 == 0) {
-				setTarget(findTarget());
-			}
-		} else if (!getTarget().isAlive() || !getTarget().exists()
-				|| !quickInRange(getTarget(), targetRange)) {
-			setTarget(null);
-		} else {
-			// Every second and a half calculate the angle to shoot the target
-			// from and launch a projectile at it
-			if (getWorld().getWorldCounter() % 90 == 0) {
-				int xDist = (int) (getTarget().getX() + getTarget().getWidth()
-						/ 2 - (getX() + 270));
-
-				int yDist = (int) ((getY() + 232) - (getTarget().getY() + getTarget()
-				.getHeight() / 2));
-
-				int sign = -1;
-
-				double angle = Math
-						.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
-								* Math.sqrt(Math.pow(
-										ServerProjectile.ARROW_SPEED, 4)
-										- ServerProjectile.ARROW_GRAVITY
-										* (ServerProjectile.ARROW_GRAVITY
-												* xDist * xDist + 2 * yDist
-												* ServerProjectile.ARROW_SPEED
-												* ServerProjectile.ARROW_SPEED)))
-								/ (ServerProjectile.ARROW_GRAVITY * xDist));
-
-				if (xDist <= 0) {
-					angle = Math.PI - angle;
-				} else {
-					angle *= -1;
-				}
-
-				ServerProjectile arrow = new ServerProjectile(getX() + 270,
-						getY() + 232, this, angle, arrowType,getWorld());
-
-				getWorld().add(arrow);
-			}
+	
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		for (ServerObject object: arrowSources)
+		{
+			object.destroy();
 		}
-	}
-
-	/**
-	 * Find the nearest enemy creature and attack it (in this case any creature
-	 * from the enemy team)
-	 */
-	public ServerCreature findTarget() {
-		ArrayList<ServerCreature> enemyTeam = null;
-
-		if (getTeam() == ServerPlayer.BLUE_TEAM) {
-			enemyTeam = getWorld().getRedTeam();
-		} else if (getTeam() == ServerPlayer.RED_TEAM) {
-			enemyTeam = getWorld().getBlueTeam();
-		}
-		for (ServerCreature enemy : enemyTeam) {
-			if (enemy.isAlive() && quickInRange(enemy, targetRange)
-					&& !enemy.getType().equals(ServerWorld.CASTLE_TYPE)) {
-				return enemy;
-			}
-		}
-		return null;
+		arrowSources.clear();
 	}
 
 	public void spendMoney(int money)
@@ -220,14 +171,6 @@ public class ServerCastle extends ServerBuilding {
 		return money;
 	}
 
-	public int getTeam() {
-		return team;
-	}
-
-	public void setTeam(int team) {
-		this.team = team;
-	}
-
 	public int getTier() {
 		return tier;
 	}
@@ -239,6 +182,22 @@ public class ServerCastle extends ServerBuilding {
 	public int getXP()
 	{
 		return xp;
+	}
+
+	public void reinitialize()
+	{
+		if (getTeam() == RED_TEAM)
+			setName("Red Team's Castle");
+		else
+			setName("Blue Team's Castle");
+		
+		
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+	
+		
 	}
 
 	public synchronized void addXP(int xp)
@@ -328,8 +287,6 @@ public class ServerCastle extends ServerBuilding {
 			// Counter-act the lost housing space from the goblin dying
 			setPopulation(getPopulation() + goblin.getHousingSpace());
 			goblin.destroy();
-			
-			System.out.println("Not enough space for " + goblin.getName());
 		}
 		
 	}

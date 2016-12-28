@@ -346,7 +346,6 @@ public class ServerGoblin extends ServerCreature {
 
 		if (team == ServerCastle.BLUE_TEAM) {
 			castle = world.getBlueCastle();
-			;
 		} else {
 			castle = world.getRedCastle();
 		}
@@ -383,7 +382,7 @@ public class ServerGoblin extends ServerCreature {
 			// Have the goblin move towards the enemy base when it has no target
 			if (getTarget() == null) {
 				if (getWorld().getWorldCounter() % 15 == 0) {
-					setTarget(findTarget());
+					setTarget(findTarget(targetRange));
 				}
 
 				onTarget = false;
@@ -665,25 +664,6 @@ public class ServerGoblin extends ServerCreature {
 			super.destroy();
 			castle.removeGoblin(this);
 		}
-	}
-
-	/**
-	 * Find the nearest enemy creature and attack it, in this case something
-	 * from the other team
-	 */
-	public ServerCreature findTarget() {
-		ArrayList<ServerCreature> enemyTeam = getWorld().getBlueTeam();
-
-		if (getTeam() == ServerPlayer.BLUE_TEAM) {
-			enemyTeam = getWorld().getRedTeam();
-		}
-
-		for (ServerCreature enemy : enemyTeam) {
-			if (enemy.isAlive() && quickInRange(enemy, targetRange)) {
-				return enemy;
-			}
-		}
-		return null;
 	}
 
 	@Override

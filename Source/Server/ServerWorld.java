@@ -36,7 +36,8 @@ import Tools.RowCol;
  * @author William Xu and Alex Raita
  *
  */
-public class ServerWorld {
+public class ServerWorld
+{
 	// String definitions for each type of object to identify them when in the
 	// super class "ServerObject" state
 	public final static String WEAPON_HOLD_TYPE = "H";
@@ -145,30 +146,30 @@ public class ServerWorld {
 
 	public final static char SOUND_TYPE = 's';
 
-	
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
-	
+
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
-	
+
 	public final static String HOUSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "H";
 	public final static String WOOD_HOUSE_ITEM_TYPE = HOUSE_ITEM_TYPE + "W";
-	
+
 	public final static String DEFENSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 	public final static String TOWER_ITEM_TYPE = DEFENSE_ITEM_TYPE + "T";
 
-	
-	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
+	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE
+			+ "D";
 
 	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
 	public final static String CASTLE_TYPE = BUILDING_TYPE + "T";
-	
+
 	public final static String HOUSE_TYPE = BUILDING_TYPE + "H";
 	public final static String WOOD_HOUSE_TYPE = HOUSE_TYPE + "W";
-	
+
 	public final static String DEFENSE_TYPE = BUILDING_TYPE + "D";
 	public final static String TOWER_TYPE = DEFENSE_TYPE + "T";
-	
+
+	public final static char ARROW_SOURCE_TYPE = 'a';
 
 	public final static String HOLOGRAM_TYPE = "HOL";
 	/**
@@ -232,7 +233,7 @@ public class ServerWorld {
 	// settings
 	ArrayList<ServerSpawner> redSpawners = new ArrayList<ServerSpawner>();
 	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>();
-	
+
 	/**
 	 * The blue team castle
 	 */
@@ -318,7 +319,8 @@ public class ServerWorld {
 	 * 
 	 * @throws IOException
 	 */
-	public ServerWorld(ServerEngine engine) throws IOException {
+	public ServerWorld(ServerEngine engine) throws IOException
+	{
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
@@ -331,15 +333,20 @@ public class ServerWorld {
 	 * 
 	 * @throws IOException
 	 */
-	public ServerWorld(ServerEngine engine, String map) throws IOException {
+	public ServerWorld(ServerEngine engine, String map) throws IOException
+	{
 		objects = new ArrayList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
-		objectTypes = new ServerObject[] { new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
-				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this), new ServerChest(0, 0, this),
-				new ServerVendor(0, 0, this, "VENDOR_RIGHT"), new ServerVendor(0, 0, this, "VENDOR_LEFT"),
-				new ServerSlimeSpawner(0, 0, this), new ServerBatSpawner(0, 0, this),
+		objectTypes = new ServerObject[] {
+				new ServerCastle(0, 0, ServerPlayer.RED_TEAM, this),
+				new ServerCastle(0, 0, ServerPlayer.BLUE_TEAM, this),
+				new ServerChest(0, 0, this),
+				new ServerVendor(0, 0, this, "VENDOR_RIGHT"),
+				new ServerVendor(0, 0, this, "VENDOR_LEFT"),
+				new ServerSlimeSpawner(0, 0, this),
+				new ServerBatSpawner(0, 0, this),
 				new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
 				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
 		newWorld();
@@ -350,7 +357,8 @@ public class ServerWorld {
 	 * 
 	 * @throws IOException
 	 */
-	public void newWorld() throws IOException {
+	public void newWorld() throws IOException
+	{
 		// Get the map from pre-existing loading
 		Map map = Maps.getMapWithName(mapFile);
 		tileGrid = map.getTileGrid();
@@ -361,33 +369,51 @@ public class ServerWorld {
 		StringTokenizer tokenizer = null;
 
 		// Add objects to the grid
-		for (String object : startingObjects) {
+		for (String object : startingObjects)
+		{
 			tokenizer = new StringTokenizer(object);
 			int row = Integer.parseInt(tokenizer.nextToken()) + 3;
 			int col = Integer.parseInt(tokenizer.nextToken()) + 3;
 			char ref = tokenizer.nextToken().charAt(0);
 			for (ServerObject obj : objectTypes)
-				if (obj.getImage().equals(ImageReferencePair.getImages()[ref].getImageName())) {
+			{
+				blueTeam.remove(obj);
+				redTeam.remove(obj);
+				if (obj.getImage().equals(
+						ImageReferencePair.getImages()[ref].getImageName()))
+				{
 					ServerObject newObject = ServerObject.copy(obj);
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
 
-					if (obj.getType().equals(ServerWorld.CASTLE_TYPE)) {
-						((ServerCastle) newObject).setTeam(((ServerCastle) newObject).getTeam());
-						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM) {
+					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
+					{
+
+						((ServerCastle) newObject)
+								.setTeam(((ServerCastle) newObject).getTeam());
+						if (((ServerCastle) newObject).getTeam() == ServerPlayer.RED_TEAM)
+						{
 							redCastleX = (int) newObject.getX() + 50;
 							redCastleY = (int) newObject.getY() + 100;
 							redCastle = (ServerCastle) newObject;
-						} else {
+							redCastle.reinitialize();
+						}
+						else
+						{
 							blueCastleX = (int) newObject.getX() + 50;
 							blueCastleY = (int) newObject.getY() + 100;
 							blueCastle = (ServerCastle) newObject;
+							blueCastle.reinitialize();
 						}
-					} else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
-							&& obj.getImage().equals("RED_GOBLIN_SPAWN")) {
+					}
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+							&& obj.getImage().equals("RED_GOBLIN_SPAWN"))
+					{
 						redSpawners.add((ServerSpawner) newObject);
-					} else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
-							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN")) {
+					}
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN"))
+					{
 						blueSpawners.add((ServerSpawner) newObject);
 					}
 					// else if (obj.getType().equals(ServerWorld.CHEST_TYPE))
@@ -397,20 +423,26 @@ public class ServerWorld {
 					// }
 					add(newObject);
 				}
+			}
 		}
 
-		worldTime = DAY_COUNTERS / 12 * 11 + (int) (Math.random() * (DAY_COUNTERS / 6));
-		if (worldTime >= DAY_COUNTERS) {
+		worldTime = DAY_COUNTERS / 12 * 11
+				+ (int) (Math.random() * (DAY_COUNTERS / 6));
+		if (worldTime >= DAY_COUNTERS)
+		{
 			worldTime -= DAY_COUNTERS;
 		}
+
 	}
 
 	/**
 	 * Update all the objects, doing whatever needs to be done
 	 */
-	public synchronized void update() {
+	public synchronized void update()
+	{
 		// Remove all the objects that no longer exist
-		for (ServerObject object : objectsToRemove) {
+		for (ServerObject object : objectsToRemove)
+		{
 			removeFromObjectTiles(object);
 			objects.remove(object);
 			blueTeam.remove(object);
@@ -420,22 +452,28 @@ public class ServerWorld {
 		objectsToRemove.clear();
 
 		// Add an object to the game
-		while (!objectsToAdd.isEmpty()) {
+		while (!objectsToAdd.isEmpty())
+		{
 			ServerObject newObject = objectsToAdd.poll();
-			if (newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE) {
+			if (newObject.getType().charAt(0) == ServerWorld.ITEM_TYPE)
+			{
 				((ServerItem) newObject).setDropTime(worldCounter);
 			}
 			objects.add(newObject);
 		}
 
-		try {
+		try
+		{
 			// Go through and update each object in the game
-			for (ServerObject object : objects) {
-				if (object.getType().equals(ServerWorld.CASTLE_TYPE) && ((ServerCreature) object).getHP() <= 0)
+			for (ServerObject object : objects)
+			{
+				if (object.getType().equals(ServerWorld.CASTLE_TYPE)
+						&& ((ServerCreature) object).getHP() <= 0)
 					engine.endGame(((ServerCreature) object).getTeam());
 
 				// This will remove the object a frame after it stops existing
-				if (object.exists()) {
+				if (object.exists())
+				{
 
 					// Add the object to all the object tiles that it collides
 					// with
@@ -446,8 +484,10 @@ public class ServerWorld {
 					int endColumn = (int) ((object.getX() + object.getWidth()) / OBJECT_TILE_SIZE);
 
 					// Destroy the object if it is not in the world
-					if (startRow < 0 || endRow > objectGrid.length - 1 || startColumn < 0
-							|| endColumn > objectGrid[0].length - 1) {
+					if (startRow < 0 || endRow > objectGrid.length - 1
+							|| startColumn < 0
+							|| endColumn > objectGrid[0].length - 1)
+					{
 						object.destroy();
 						continue;
 					}
@@ -455,13 +495,18 @@ public class ServerWorld {
 					// Update all locations of objects based on the object grid
 					// (for
 					// collisions)
-					updateObjectTiles(object, startRow, endRow, startColumn, endColumn);
+					updateObjectTiles(object, startRow, endRow, startColumn,
+							endColumn);
 
 					// //////FIX THIS LATER//////////////
-					if (object.getType().equals(SPAWN_TYPE)) {
+					if (object.getType().equals(SPAWN_TYPE))
+					{
 						object.update();
 						continue;
-					} else if (object.getType().charAt(0) == ITEM_TYPE && object.isOnSurface()) {
+					}
+					else if (object.getType().charAt(0) == ITEM_TYPE
+							&& object.isOnSurface())
+					{
 						((ServerItem) object).update(worldCounter);
 						object.setHSpeed(0);
 					}
@@ -472,114 +517,196 @@ public class ServerWorld {
 
 					// Check collisions with other objects in tiles that they
 					// both touch
-					for (int row = startRow; row <= endRow; row++) {
-						for (int column = startColumn; column <= endColumn; column++) {
-							for (ServerObject otherObject : objectGrid[row][column]) {
-								if (otherObject.exists() && otherObject.getID() != object.getID()
-										&& !collidedAlready.contains(otherObject)) {
+					for (int row = startRow; row <= endRow; row++)
+					{
+						for (int column = startColumn; column <= endColumn; column++)
+						{
+							for (ServerObject otherObject : objectGrid[row][column])
+							{
+								if (otherObject.exists()
+										&& otherObject.getID() != object
+												.getID()
+										&& !collidedAlready
+												.contains(otherObject))
+								{
 									collidedAlready.add(otherObject);
 
 									// Switch statements for the first character
-									switch (object.getType().charAt(0)) {
+									switch (object.getType().charAt(0))
+									{
 									case PROJECTILE_TYPE:
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
-												&& ((ServerCreature) otherObject).isAttackable()
-												&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
 												&& ((ServerCreature) otherObject)
-														.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
-												&& ((ServerProjectile) object).collidesWith(otherObject)) {
-											if (object.getType().contains(PIERCING_TYPE)) {
-												if (!((ServerProjectile) object).hasCollided(otherObject)) {
-													((ServerCreature) otherObject).inflictDamage(
-															((ServerProjectile) object).getDamage(),
-															((ServerProjectile) object).getOwner());
-													((ServerProjectile) object).addCollided(otherObject);
+														.isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object)
+														.getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
+												&& ((ServerProjectile) object)
+														.collidesWith(otherObject))
+										{
+											if (object.getType().contains(
+													PIERCING_TYPE))
+											{
+												if (!((ServerProjectile) object)
+														.hasCollided(otherObject))
+												{
+													((ServerCreature) otherObject)
+															.inflictDamage(
+																	((ServerProjectile) object)
+																			.getDamage(),
+																	((ServerProjectile) object)
+																			.getOwner());
+													((ServerProjectile) object)
+															.addCollided(otherObject);
 												}
-											} else {
-												((ServerProjectile) object).destroy();
+											}
+											else
+											{
+												((ServerProjectile) object)
+														.destroy();
 											}
 										}
 										break;
 									case ITEM_TYPE:
 										// If stackable items collide
 										if (object.collidesWith(otherObject)
-												&& otherObject.getType().charAt(0) == ITEM_TYPE
-												&& object.getType().charAt(1) == STACK_TYPE.charAt(1)
-												&& otherObject.getType().charAt(1) == STACK_TYPE.charAt(1)) {
-											if (object.getType().equals(otherObject.getType())
-													&& object.getID() != otherObject.getID()) {
+												&& otherObject.getType()
+														.charAt(0) == ITEM_TYPE
+												&& object.getType().charAt(1) == STACK_TYPE
+														.charAt(1)
+												&& otherObject.getType()
+														.charAt(1) == STACK_TYPE
+														.charAt(1))
+										{
+											if (object.getType().equals(
+													otherObject.getType())
+													&& object.getID() != otherObject
+															.getID())
+											{
 												((ServerItem) object)
-														.increaseAmount(((ServerItem) otherObject).getAmount());
+														.increaseAmount(((ServerItem) otherObject)
+																.getAmount());
 												otherObject.destroy();
 											}
 										}
 										break;
 									case ANIMATION_TYPE:
 										// Collision of weapons and creatures
-										if (object.getType().charAt(1) == WEAPON_SWING_TYPE.charAt(1)) {
+										if (object.getType().charAt(1) == WEAPON_SWING_TYPE
+												.charAt(1))
+										{
 											if (otherObject.getType().charAt(0) == CREATURE_TYPE
-													&& ((ServerCreature) otherObject).isAttackable()
-													&& otherObject.getID() != ((ServerWeaponSwing) object).getOwnerID()
 													&& ((ServerCreature) otherObject)
-															.getTeam() != ((ServerWeaponSwing) object).getWielder()
-																	.getTeam()
-													&& ((ServerWeaponSwing) object).collidesWith(otherObject)
-													&& !((ServerWeaponSwing) object).hasCollided(otherObject)) {
-												((ServerCreature) otherObject).inflictDamage(
-														((ServerWeaponSwing) object).getDamage(),
-														((ServerWeaponSwing) object).getOwner());
-												((ServerWeaponSwing) object).addCollided(otherObject);
+															.isAttackable()
+													&& otherObject.getID() != ((ServerWeaponSwing) object)
+															.getOwnerID()
+													&& ((ServerCreature) otherObject)
+															.getTeam() != ((ServerWeaponSwing) object)
+															.getWielder()
+															.getTeam()
+													&& ((ServerWeaponSwing) object)
+															.collidesWith(otherObject)
+													&& !((ServerWeaponSwing) object)
+															.hasCollided(otherObject))
+											{
+												((ServerCreature) otherObject)
+														.inflictDamage(
+																((ServerWeaponSwing) object)
+																		.getDamage(),
+																((ServerWeaponSwing) object)
+																		.getOwner());
+												((ServerWeaponSwing) object)
+														.addCollided(otherObject);
 											}
 										}
 										break;
 									}
 
 									// Switch statements for the entire type
-									switch (object.getType()) {
+									switch (object.getType())
+									{
 									case EXPLOSION_TYPE:
 										if (otherObject.getType().charAt(0) == CREATURE_TYPE
-												&& ((ServerCreature) otherObject).isAttackable()
-												&& otherObject.getID() != ((ServerProjectile) object).getOwnerID()
 												&& ((ServerCreature) otherObject)
-														.getTeam() != ((ServerProjectile) object).getOwner().getTeam()
-												&& object.collidesWith(otherObject)
-												&& !((ServerProjectile) object).hasCollided(otherObject)) {
-											((ServerCreature) otherObject).inflictDamage(
-													((ServerProjectile) object).getDamage(),
-													((ServerProjectile) object).getOwner());
-											((ServerProjectile) object).addCollided(otherObject);
+														.isAttackable()
+												&& otherObject.getID() != ((ServerProjectile) object)
+														.getOwnerID()
+												&& ((ServerCreature) otherObject)
+														.getTeam() != ((ServerProjectile) object)
+														.getOwner().getTeam()
+												&& object
+														.collidesWith(otherObject)
+												&& !((ServerProjectile) object)
+														.hasCollided(otherObject))
+										{
+											((ServerCreature) otherObject)
+													.inflictDamage(
+															((ServerProjectile) object)
+																	.getDamage(),
+															((ServerProjectile) object)
+																	.getOwner());
+											((ServerProjectile) object)
+													.addCollided(otherObject);
 										}
 										break;
 									case SLIME_TYPE:
 									case BAT_TYPE:
 
-										if (otherObject.getType().equals(PLAYER_TYPE)
-												&& object.collidesWith(otherObject) && getWorldCounter() % 20 == 0) {
+										if (otherObject.getType().equals(
+												PLAYER_TYPE)
+												&& object
+														.collidesWith(otherObject)
+												&& getWorldCounter() % 20 == 0)
+										{
 
-											((ServerCreature) otherObject).inflictDamage(
-													((ServerEnemy) object).getDamage(), (ServerCreature) object);
+											((ServerCreature) otherObject)
+													.inflictDamage(
+															((ServerEnemy) object)
+																	.getDamage(),
+															(ServerCreature) object);
 
 										}
 										break;
 									case PLAYER_TYPE:
 										if (otherObject.getType().charAt(0) == ITEM_TYPE
-												&& ((ServerCreature) object).isAlive()
-												&& object.collidesWith(otherObject)) {
+												&& ((ServerCreature) object)
+														.isAlive()
+												&& object
+														.collidesWith(otherObject))
+										{
 											ServerItem item = (ServerItem) otherObject;
 											ServerCreature player = (ServerCreature) object;
-											if (!(item.hasCoolDown() && item.getSource().getID() == player.getID())
-													&& player.getInventory().size() <= ServerPlayer.MAX_INVENTORY) {
-												if (player.getInventory().size() < ServerPlayer.MAX_INVENTORY) {
+											if (!(item.hasCoolDown() && item
+													.getSource().getID() == player
+													.getID())
+													&& player.getInventory()
+															.size() <= ServerPlayer.MAX_INVENTORY)
+											{
+												if (player.getInventory()
+														.size() < ServerPlayer.MAX_INVENTORY)
+												{
 													player.addItem(item);
 													item.setSource(player);
 													item.destroy();
-												} else if (player.getInventory().size() == ServerPlayer.MAX_INVENTORY
-														&& item.getType().charAt(1) == STACK_TYPE.charAt(1)) {
+												}
+												else if (player.getInventory()
+														.size() == ServerPlayer.MAX_INVENTORY
+														&& item.getType()
+																.charAt(1) == STACK_TYPE
+																.charAt(1))
+												{
 													// Only if the potion
 													// already
 													// exists, add it
-													for (ServerItem sItem : player.getInventory())
-														if (sItem.getType().equals(item.getType())) {
+													for (ServerItem sItem : player
+															.getInventory())
+														if (sItem
+																.getType()
+																.equals(item
+																		.getType()))
+														{
 															player.addItem(item);
 															item.setSource(player);
 															item.destroy();
@@ -590,19 +717,28 @@ public class ServerWorld {
 										}
 										break;
 									case CASTLE_TYPE:
-										if (otherObject.getType().equals(MONEY_TYPE)
-												&& !((ServerMoney) otherObject).hasCoolDown()) {
-											((ServerCastle) object).addMoney(((ServerMoney) otherObject).getAmount());
+										if (otherObject.getType().equals(
+												MONEY_TYPE)
+												&& !((ServerMoney) otherObject)
+														.hasCoolDown())
+										{
+											((ServerCastle) object)
+													.addMoney(((ServerMoney) otherObject)
+															.getAmount());
 											otherObject.destroy();
 										}
 										break;
 									case HOLOGRAM_TYPE:
 										// Check other object collisions
-										if (((ServerHologram) object).canPlace()
-												&& (otherObject.getType().contains(BUILDING_TYPE))) {
+										if (((ServerHologram) object)
+												.canPlace()
+												&& (otherObject.getType()
+														.contains(BUILDING_TYPE)))
+										{
 											// System.out.println("HOLOGRAM
 											// COLLISION");
-											((ServerHologram) object).setCanPlace(false);
+											((ServerHologram) object)
+													.setCanPlace(false);
 										}
 
 										break;
@@ -616,7 +752,9 @@ public class ServerWorld {
 					boolean moveHorizontal = true;
 
 					// Check tile collisions for the hologram
-					if (object.getType().equals(HOLOGRAM_TYPE) && ((ServerHologram) object).canPlace()) {
+					if (object.getType().equals(HOLOGRAM_TYPE)
+							&& ((ServerHologram) object).canPlace())
+					{
 						double x1 = object.getX();
 						double x2 = object.getX() + object.getWidth();
 						double y1 = object.getY();
@@ -627,25 +765,40 @@ public class ServerWorld {
 						int startColumn1 = (int) (x1 / TILE_SIZE);
 						int endColumn1 = (int) (x2 / TILE_SIZE);
 
-						if (startRow1 < 0) {
+						if (startRow1 < 0)
+						{
 							startRow1 = 0;
-						} else if (endRow1 > collisionGrid.length - 1) {
+						}
+						else if (endRow1 > collisionGrid.length - 1)
+						{
 							endRow1 = collisionGrid.length - 1;
 						}
-						if (startColumn1 < 0) {
+						if (startColumn1 < 0)
+						{
 							startColumn1 = 0;
-						} else if (endColumn1 > collisionGrid[0].length - 1) {
+						}
+						else if (endColumn1 > collisionGrid[0].length - 1)
+						{
 							endColumn1 = collisionGrid[0].length - 1;
 						}
 
-						for (int row1 = startRow1; row1 <= endRow1; row1++) {
-							for (int column1 = startColumn1; column1 <= endColumn1; column1++) {
-								if (row1 < endRow1 && collisionGrid[row1][column1] == SOLID_TILE
-										|| (collisionGrid[row1][column1] == PLATFORM_TILE)) {
-									((ServerHologram) object).setCanPlace(false);
+						for (int row1 = startRow1; row1 <= endRow1; row1++)
+						{
+							for (int column1 = startColumn1; column1 <= endColumn1; column1++)
+							{
+								if (row1 < endRow1
+										&& collisionGrid[row1][column1] == SOLID_TILE
+										|| (collisionGrid[row1][column1] == PLATFORM_TILE))
+								{
+									((ServerHologram) object)
+											.setCanPlace(false);
 									break;
-								} else if (row1 == endRow1 && collisionGrid[endRow1][column1] != SOLID_TILE) {
-									((ServerHologram) object).setCanPlace(false);
+								}
+								else if (row1 == endRow1
+										&& collisionGrid[endRow1][column1] != SOLID_TILE)
+								{
+									((ServerHologram) object)
+											.setCanPlace(false);
 									break;
 								}
 							}
@@ -653,12 +806,17 @@ public class ServerWorld {
 						}
 
 					}
-					if (object.isSolid()) {
+					if (object.isSolid())
+					{
 						// Apply gravity first (DEFINITELY BEFORE CHECKING
 						// VSPEED)
-						if (object.getVSpeed() + object.getGravity() < MAX_SPEED) {
-							object.setVSpeed(object.getVSpeed() + object.getGravity());
-						} else {
+						if (object.getVSpeed() + object.getGravity() < MAX_SPEED)
+						{
+							object.setVSpeed(object.getVSpeed()
+									+ object.getGravity());
+						}
+						else
+						{
 							object.setVSpeed(MAX_SPEED);
 						}
 
@@ -671,148 +829,213 @@ public class ServerWorld {
 
 						// Detect the rows and columns of the tiles that the
 						// object collides with in this tick
-						if (vSpeed > 0) {
+						if (vSpeed > 0)
+						{
 							startRow = (int) (y1 / TILE_SIZE - 1);
 							endRow = (int) ((y2 + vSpeed) / TILE_SIZE + 1);
-						} else if (vSpeed < 0) {
+						}
+						else if (vSpeed < 0)
+						{
 							startRow = (int) ((y1 + vSpeed) / TILE_SIZE - 1);
 							endRow = (int) (y2 / TILE_SIZE + 1);
-						} else {
+						}
+						else
+						{
 							startRow = (int) (y1 / TILE_SIZE);
 							endRow = (int) (y2 / TILE_SIZE + 1);
 						}
-						if (hSpeed > 0) {
+						if (hSpeed > 0)
+						{
 							startColumn = (int) (x1 / TILE_SIZE - 1);
 							endColumn = (int) ((x2 + hSpeed) / TILE_SIZE + 1);
-						} else if (hSpeed < 0) {
+						}
+						else if (hSpeed < 0)
+						{
 							startColumn = (int) ((x1 + hSpeed) / TILE_SIZE - 1);
 							endColumn = (int) (x2 / TILE_SIZE + 1);
-						} else {
+						}
+						else
+						{
 							startColumn = (int) (x1 / TILE_SIZE - 1);
 							endColumn = (int) (x2 / TILE_SIZE + 1);
 						}
-						if (startRow < 0) {
+						if (startRow < 0)
+						{
 							startRow = 0;
-						} else if (endRow > collisionGrid.length - 1) {
+						}
+						else if (endRow > collisionGrid.length - 1)
+						{
 							endRow = collisionGrid.length - 1;
 						}
-						if (startColumn < 0) {
+						if (startColumn < 0)
+						{
 							startColumn = 0;
-						} else if (endColumn > collisionGrid[0].length - 1) {
+						}
+						else if (endColumn > collisionGrid[0].length - 1)
+						{
 							endColumn = collisionGrid[0].length - 1;
 						}
 
 						// Check for collions with the tiles determined above
-						if (vSpeed > 0) {
+						if (vSpeed > 0)
+						{
 							// The row and column of the tile that was collided
 							// with
 							int collideRow = 0;
 
-							for (int row = startRow; row <= endRow; row++) {
-								for (int column = startColumn; column <= endColumn; column++) {
+							for (int row = startRow; row <= endRow; row++)
+							{
+								for (int column = startColumn; column <= endColumn; column++)
+								{
 									if (((collisionGrid[row][column] == SOLID_TILE
 											|| (collisionGrid[row][column] == PLATFORM_TILE
-													&& !((((object.getType().equals(PLAYER_TYPE)
-															&& ((ServerPlayer) object).isDropping())
-															|| object.getType().charAt(0) == PROJECTILE_TYPE
-															|| object.getType().equals(BAT_TYPE))))))
-											&& column * TILE_SIZE < x2 && column * TILE_SIZE + TILE_SIZE > x1)) {
-										if (y2 + vSpeed >= row * TILE_SIZE && y2 <= row * TILE_SIZE) {
+											&& !((((object.getType().equals(
+											PLAYER_TYPE)
+											&& ((ServerPlayer) object)
+											.isDropping())
+											|| object.getType().charAt(0) == PROJECTILE_TYPE
+											|| object.getType()
+											.equals(BAT_TYPE))))))
+											&& column * TILE_SIZE < x2 && column
+											* TILE_SIZE + TILE_SIZE > x1))
+									{
+										if (y2 + vSpeed >= row * TILE_SIZE
+												&& y2 <= row * TILE_SIZE)
+										{
 											moveVertical = false;
 											collideRow = row;
 											break;
 										}
 									}
-									if (!moveVertical) {
+									if (!moveVertical)
+									{
 										break;
 									}
 								}
 							}
-							if (!moveVertical) {
+							if (!moveVertical)
+							{
 								// Snap the object to the colliding tile
-								object.setY(collideRow * TILE_SIZE - object.getHeight());
+								object.setY(collideRow * TILE_SIZE
+										- object.getHeight());
 								object.setOnSurface(true);
 								object.setVSpeed(0);
-							} else {
+							}
+							else
+							{
 								object.setOnSurface(false);
 							}
-						} else if (vSpeed < 0) {
+						}
+						else if (vSpeed < 0)
+						{
 							// The row and column of the tile that was collided
 							// with
 							int collideRow = 0;
 
-							for (int row = endRow; row >= startRow; row--) {
-								for (int column = startColumn; column <= endColumn; column++) {
-									if (collisionGrid[row][column] == SOLID_TILE && column * TILE_SIZE < x2
-											&& column * TILE_SIZE + TILE_SIZE > x1) {
-										if (y1 + vSpeed <= row * TILE_SIZE + TILE_SIZE
-												&& y1 >= row * TILE_SIZE + TILE_SIZE) {
+							for (int row = endRow; row >= startRow; row--)
+							{
+								for (int column = startColumn; column <= endColumn; column++)
+								{
+									if (collisionGrid[row][column] == SOLID_TILE
+											&& column * TILE_SIZE < x2
+											&& column * TILE_SIZE + TILE_SIZE > x1)
+									{
+										if (y1 + vSpeed <= row * TILE_SIZE
+												+ TILE_SIZE
+												&& y1 >= row * TILE_SIZE
+														+ TILE_SIZE)
+										{
 											moveVertical = false;
 											collideRow = row;
 											break;
 										}
 									}
-									if (!moveVertical) {
+									if (!moveVertical)
+									{
 										break;
 									}
 								}
 							}
-							if (!moveVertical) {
+							if (!moveVertical)
+							{
 								// Snap the object to the colliding tile
-								object.setY(collideRow * TILE_SIZE + TILE_SIZE + 1);
+								object.setY(collideRow * TILE_SIZE + TILE_SIZE
+										+ 1);
 								object.setVSpeed(0);
 							}
 						}
 
-						if (hSpeed > 0) {
+						if (hSpeed > 0)
+						{
 							// The row and column of the tile that was collided
 							// with
 							int collideColumn = 0;
 
-							for (int row = startRow; row <= endRow; row++) {
-								for (int column = startColumn; column <= endColumn; column++) {
-									if (collisionGrid[row][column] == SOLID_TILE && row * TILE_SIZE < y2
-											&& row * TILE_SIZE + TILE_SIZE > y1) {
-										if (x2 + hSpeed >= column * TILE_SIZE && x2 <= column * TILE_SIZE) {
+							for (int row = startRow; row <= endRow; row++)
+							{
+								for (int column = startColumn; column <= endColumn; column++)
+								{
+									if (collisionGrid[row][column] == SOLID_TILE
+											&& row * TILE_SIZE < y2
+											&& row * TILE_SIZE + TILE_SIZE > y1)
+									{
+										if (x2 + hSpeed >= column * TILE_SIZE
+												&& x2 <= column * TILE_SIZE)
+										{
 											moveHorizontal = false;
 											collideColumn = column;
 											break;
 										}
 									}
-									if (!moveHorizontal) {
+									if (!moveHorizontal)
+									{
 										break;
 									}
 								}
 							}
-							if (!moveHorizontal) {
+							if (!moveHorizontal)
+							{
 								// Snap the object to the colliding tile
-								object.setX(collideColumn * TILE_SIZE - object.getWidth());
+								object.setX(collideColumn * TILE_SIZE
+										- object.getWidth());
 								object.setHSpeed(0);
 							}
-						} else if (hSpeed < 0) {
+						}
+						else if (hSpeed < 0)
+						{
 							// The row and column of the tile that was collided
 							// with
 							int collideColumn = 0;
 
-							for (int row = startRow; row <= endRow; row++) {
-								for (int column = endColumn; column >= startColumn; column--) {
-									if (collisionGrid[row][column] == SOLID_TILE && row * TILE_SIZE < y2
-											&& row * TILE_SIZE + TILE_SIZE > y1) {
-										if (x1 + hSpeed <= column * TILE_SIZE + TILE_SIZE
-												&& x1 >= column * TILE_SIZE + TILE_SIZE) {
+							for (int row = startRow; row <= endRow; row++)
+							{
+								for (int column = endColumn; column >= startColumn; column--)
+								{
+									if (collisionGrid[row][column] == SOLID_TILE
+											&& row * TILE_SIZE < y2
+											&& row * TILE_SIZE + TILE_SIZE > y1)
+									{
+										if (x1 + hSpeed <= column * TILE_SIZE
+												+ TILE_SIZE
+												&& x1 >= column * TILE_SIZE
+														+ TILE_SIZE)
+										{
 											moveHorizontal = false;
 											collideColumn = column;
 											break;
 										}
 									}
-									if (!moveHorizontal) {
+									if (!moveHorizontal)
+									{
 										break;
 									}
 								}
 							}
-							if (!moveHorizontal) {
+							if (!moveHorizontal)
+							{
 								// Snap the object to the colliding tile
-								object.setX(collideColumn * TILE_SIZE + TILE_SIZE);
+								object.setX(collideColumn * TILE_SIZE
+										+ TILE_SIZE);
 								object.setHSpeed(0);
 							}
 						}
@@ -820,27 +1043,39 @@ public class ServerWorld {
 
 					// Move this object based on its vertical speed and
 					// horizontal speed
-					if (moveHorizontal) {
+					if (moveHorizontal)
+					{
 						// Don't let the player move when trying to swing a
 						// sword
-						if (!(object.getType().contains(PLAYER_TYPE)) || !((ServerPlayer) object).inAction()) {
+						if (!(object.getType().contains(PLAYER_TYPE))
+								|| !((ServerPlayer) object).inAction())
+						{
 							object.setX(object.getX() + object.getHSpeed());
 						}
 					}
-					if (moveVertical) {
+					if (moveVertical)
+					{
 						object.setY(object.getY() + object.getVSpeed());
 					}
 
-					if (object.getType().charAt(0) == PROJECTILE_TYPE) {
-						if ((!moveHorizontal || !moveVertical)) {
+					if (object.getType().charAt(0) == PROJECTILE_TYPE)
+					{
+						if ((!moveHorizontal || !moveVertical))
+						{
 							object.destroy();
 						}
-					} else if (object.getType().charAt(0) == CREATURE_TYPE) {
-						if (object.getType().equals(PLAYER_TYPE)) {
-							if (((ServerPlayer) object).isPerformingAction()) {
-								((ServerPlayer) object).performAction(((ServerPlayer) object).getNewMouseX(),
+					}
+					else if (object.getType().charAt(0) == CREATURE_TYPE)
+					{
+						if (object.getType().equals(PLAYER_TYPE))
+						{
+							if (((ServerPlayer) object).isPerformingAction())
+							{
+								((ServerPlayer) object).performAction(
+										((ServerPlayer) object).getNewMouseX(),
 										((ServerPlayer) object).getNewMouseY());
-								((ServerPlayer) object).setPerformingAction(false);
+								((ServerPlayer) object)
+										.setPerformingAction(false);
 							}
 						}
 					}
@@ -849,21 +1084,26 @@ public class ServerWorld {
 
 				// Remove this object from the game if its 'exists' variable is
 				// false, unless it's a castle or a chest
-				else if (!object.getType().equals(CASTLE_TYPE) && !object.getType().equals(CHEST_TYPE)) {
+				else if (!object.getType().equals(CASTLE_TYPE)
+						&& !object.getType().equals(CHEST_TYPE))
+				{
 					objectsToRemove.add(object);
 				}
 				object.update();
 
 			}
 
-		} catch (
+		}
+		catch (
 
-		ConcurrentModificationException e) {
+		ConcurrentModificationException e)
+		{
 			System.out.println("Concurrent Modification Exception");
 		}
 
 		// Iterate through objects once more at the end
-		for (ServerObject object : objects) {
+		for (ServerObject object : objects)
+		{
 			object.setPlayedSound(false);
 		}
 
@@ -871,10 +1111,12 @@ public class ServerWorld {
 		worldCounter++;
 
 		// Update game time
-		if (worldCounter % COUNTER_TIME == 0) {
+		if (worldCounter % COUNTER_TIME == 0)
+		{
 			worldTime++;
 
-			if (worldTime >= DAY_COUNTERS) {
+			if (worldTime >= DAY_COUNTERS)
+			{
 				worldTime = 0;
 			}
 		}
@@ -885,8 +1127,10 @@ public class ServerWorld {
 	 * 
 	 * @param object
 	 */
-	public synchronized void add(ServerObject object) {
+	public synchronized ServerObject add(ServerObject object)
+	{
 		objectsToAdd.add(object);
+		return object;
 	}
 
 	/**
@@ -894,31 +1138,31 @@ public class ServerWorld {
 	 * 
 	 * @param object
 	 */
-	public void remove(ServerObject object) {
+	public void remove(ServerObject object)
+	{
 		objects.remove(object);
 	}
 
 	/**
 	 * Updates the object's location on the object grid
 	 * 
-	 * @param object
-	 *            the object to object
-	 * @param startRow
-	 *            the row to start checking for the object
-	 * @param endRow
-	 *            the row to end checking for the object
-	 * @param startColumn
-	 *            the column to start checking for the object
-	 * @param endColumn
-	 *            the column to end checking for the object
+	 * @param object the object to object
+	 * @param startRow the row to start checking for the object
+	 * @param endRow the row to end checking for the object
+	 * @param startColumn the column to start checking for the object
+	 * @param endColumn the column to end checking for the object
 	 */
-	public void updateObjectTiles(ServerObject object, int startRow, int endRow, int startColumn, int endColumn) {
+	public void updateObjectTiles(ServerObject object, int startRow,
+			int endRow, int startColumn, int endColumn)
+	{
 		ArrayList<RowCol> indexesToRemove = new ArrayList<RowCol>();
 		ArrayList<RowCol> objectTiles = object.getObjectTiles();
 
 		// Choose the object tiles to remove the object from
-		for (RowCol tile : objectTiles) {
-			if (!(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE, tile.getRow() * OBJECT_TILE_SIZE,
+		for (RowCol tile : objectTiles)
+		{
+			if (!(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
+					tile.getRow() * OBJECT_TILE_SIZE,
 					tile.getColumn() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE,
 					tile.getRow() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE)))
 				;
@@ -928,17 +1172,21 @@ public class ServerWorld {
 		}
 
 		// Remove all the tiles that the object has left
-		for (RowCol tile : indexesToRemove) {
+		for (RowCol tile : indexesToRemove)
+		{
 			objectTiles.remove(tile);
 			removeFromObjectTile(object, tile);
 		}
 
 		// Add the object to the tiles that the object enters
-		for (int row = startRow; row <= endRow; row++) {
-			for (int column = startColumn; column <= endColumn; column++) {
+		for (int row = startRow; row <= endRow; row++)
+		{
+			for (int column = startColumn; column <= endColumn; column++)
+			{
 				RowCol tile = new RowCol(row, column);
 
-				if (!objectTiles.contains(tile)) {
+				if (!objectTiles.contains(tile))
+				{
 					objectTiles.add(tile);
 					addToObjectTile(object, tile);
 				}
@@ -951,15 +1199,22 @@ public class ServerWorld {
 	 * 
 	 * @param object
 	 */
-	public void removeFromObjectTiles(ServerObject object) {
+	public void removeFromObjectTiles(ServerObject object)
+	{
 		ArrayList<RowCol> indexesToRemove = new ArrayList<RowCol>();
 		ArrayList<RowCol> objectTiles = object.getObjectTiles();
 
 		// Choose the object tiles to remove the object from
-		for (RowCol tile : objectTiles) {
-			if (!object.exists() || !(object.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
-					tile.getRow() * OBJECT_TILE_SIZE, tile.getColumn() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE,
-					tile.getRow() * OBJECT_TILE_SIZE + OBJECT_TILE_SIZE)))
+		for (RowCol tile : objectTiles)
+		{
+			if (!object.exists()
+					|| !(object
+							.collidesWith(tile.getColumn() * OBJECT_TILE_SIZE,
+									tile.getRow() * OBJECT_TILE_SIZE,
+									tile.getColumn() * OBJECT_TILE_SIZE
+											+ OBJECT_TILE_SIZE,
+									tile.getRow() * OBJECT_TILE_SIZE
+											+ OBJECT_TILE_SIZE)))
 				;
 			{
 				indexesToRemove.add(tile);
@@ -967,7 +1222,8 @@ public class ServerWorld {
 		}
 
 		// Remove all the tiles that the object has left
-		for (RowCol tile : indexesToRemove) {
+		for (RowCol tile : indexesToRemove)
+		{
 			objectTiles.remove(tile);
 			removeFromObjectTile(object, tile);
 		}
@@ -979,7 +1235,8 @@ public class ServerWorld {
 	 * @param object
 	 * @param objectTile
 	 */
-	public void addToObjectTile(ServerObject object, RowCol objectTile) {
+	public void addToObjectTile(ServerObject object, RowCol objectTile)
+	{
 		objectGrid[objectTile.getRow()][objectTile.getColumn()].add(object);
 	}
 
@@ -989,7 +1246,8 @@ public class ServerWorld {
 	 * @param object
 	 * @param objectTile
 	 */
-	public void removeFromObjectTile(ServerObject object, RowCol objectTile) {
+	public void removeFromObjectTile(ServerObject object, RowCol objectTile)
+	{
 		objectGrid[objectTile.getRow()][objectTile.getColumn()].remove(object);
 	}
 
@@ -998,7 +1256,8 @@ public class ServerWorld {
 	 * 
 	 * @param creature
 	 */
-	public void addToBlue(ServerCreature creature) {
+	public void addToBlue(ServerCreature creature)
+	{
 		blueTeam.add(creature);
 	}
 
@@ -1007,7 +1266,8 @@ public class ServerWorld {
 	 * 
 	 * @param creature
 	 */
-	public void removeFromBlue(ServerCreature creature) {
+	public void removeFromBlue(ServerCreature creature)
+	{
 		blueTeam.remove(creature);
 	}
 
@@ -1016,7 +1276,8 @@ public class ServerWorld {
 	 * 
 	 * @param creature
 	 */
-	public void addToRed(ServerCreature creature) {
+	public void addToRed(ServerCreature creature)
+	{
 		redTeam.add(creature);
 	}
 
@@ -1025,7 +1286,8 @@ public class ServerWorld {
 	 * 
 	 * @param creature
 	 */
-	public void removeFromRed(ServerCreature creature) {
+	public void removeFromRed(ServerCreature creature)
+	{
 		redTeam.remove(creature);
 	}
 
@@ -1034,133 +1296,165 @@ public class ServerWorld {
 	 * 
 	 * @return
 	 */
-	public String getBotName() {
+	public String getBotName()
+	{
 		String name;
 		int number;
-		do {
+		do
+		{
 			number = (int) (Math.random() * botNames.length);
 			name = botNames[number];
-		} while (name == null);
+		}
+		while (name == null);
 		botNames[number] = null;
 
 		return name;
 	}
 
-	public void playSound(String name, double x, double y, ServerObject objectOne, ServerObject objectTwo) {
-		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound()) {
+	public void playSound(String name, double x, double y,
+			ServerObject objectOne, ServerObject objectTwo)
+	{
+		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound())
+		{
 			playSound(name, x, y);
 			objectOne.setPlayedSound(true);
 			objectTwo.setPlayedSound(true);
 		}
 	}
 
-	public void playSound(String name, double x, double y) {
+	public void playSound(String name, double x, double y)
+	{
 		add(new ServerSound(x, y, name, getEngine()));
 	}
 
 	// //////////////////////
 	// GETTERS AND SETTERS//
 	// //////////////////////
-	public char[][] getGrid() {
+	public char[][] getGrid()
+	{
 		return tileGrid;
 	}
 
-	public void setGrid(char[][] grid) {
+	public void setGrid(char[][] grid)
+	{
 		this.tileGrid = grid;
 	}
 
-	public ArrayList<ServerObject> getObjects() {
+	public ArrayList<ServerObject> getObjects()
+	{
 		return objects;
 	}
 
-	public long getWorldCounter() {
+	public long getWorldCounter()
+	{
 		return worldCounter;
 	}
 
-	public ArrayList<ServerObject>[][] getObjectGrid() {
+	public ArrayList<ServerObject>[][] getObjectGrid()
+	{
 		return objectGrid;
 	}
 
-	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid) {
+	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid)
+	{
 		this.objectGrid = objectGrid;
 	}
 
-	public ArrayList<ServerCreature> getRedTeam() {
+	public ArrayList<ServerCreature> getRedTeam()
+	{
 		return redTeam;
 	}
 
-	public void setRedTeam(ArrayList<ServerCreature> redTeam) {
+	public void setRedTeam(ArrayList<ServerCreature> redTeam)
+	{
 		this.redTeam = redTeam;
 	}
 
-	public ArrayList<ServerCreature> getBlueTeam() {
+	public ArrayList<ServerCreature> getBlueTeam()
+	{
 		return blueTeam;
 	}
 
-	public void setBlueTeam(ArrayList<ServerCreature> blueTeam) {
+	public void setBlueTeam(ArrayList<ServerCreature> blueTeam)
+	{
 		this.blueTeam = blueTeam;
 	}
 
-	public int getRedCastleX() {
+	public int getRedCastleX()
+	{
 		return redCastleX;
 	}
 
-	public int getBlueCastleX() {
+	public int getBlueCastleX()
+	{
 		return blueCastleX;
 	}
 
-	public int getRedCastleY() {
+	public int getRedCastleY()
+	{
 		return redCastleY;
 	}
 
-	public int getBlueCastleY() {
+	public int getBlueCastleY()
+	{
 		return blueCastleY;
 	}
 
-	public ArrayList<ServerSpawner> getRedSpawners() {
+	public ArrayList<ServerSpawner> getRedSpawners()
+	{
 		return redSpawners;
 	}
 
-	public ArrayList<ServerSpawner> getBlueSpawners() {
+	public ArrayList<ServerSpawner> getBlueSpawners()
+	{
 		return blueSpawners;
 	}
 
-	public ServerCastle getBlueCastle() {
+	public ServerCastle getBlueCastle()
+	{
 		return blueCastle;
 	}
 
-	public ServerCastle getRedCastle() {
+	public ServerCastle getRedCastle()
+	{
 		return redCastle;
 	}
 
-	public int getWorldTime() {
+	public int getWorldTime()
+	{
 		return worldTime;
 	}
 
-	public void setWorldTime(int worldTime) {
+	public void setWorldTime(int worldTime)
+	{
 		this.worldTime = worldTime;
 	}
 
-	public void setWorldCounter(long worldCounter) {
+	public void setWorldCounter(long worldCounter)
+	{
 		this.worldCounter = worldCounter;
 	}
 
-	public ServerEngine getEngine() {
+	public ServerEngine getEngine()
+	{
 		return engine;
 	}
 
-	public char[][] getCollisionGrid() {
+	public char[][] getCollisionGrid()
+	{
 		return collisionGrid;
 	}
 
-	public void setCollisionGrid(char[][] collisionGrid) {
+	public void setCollisionGrid(char[][] collisionGrid)
+	{
 		this.collisionGrid = collisionGrid;
 	}
 
 	/**
 	 * Closes everything in the world
 	 */
-	public void close() {
+	public void close()
+	{
 		objectGrid = null;
 		redTeam.clear();
 		blueTeam.clear();
