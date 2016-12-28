@@ -1112,8 +1112,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 			deathTime++;
 			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
-			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
-			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+			
+			// Causes lag
+//			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
+//			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 			graphics.setColor(Color.white);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
