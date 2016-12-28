@@ -1,8 +1,6 @@
 package Server.Buildings;
 
-import java.util.ArrayList;
-
-import Server.ServerEngine;
+import java.util.LinkedList;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
@@ -95,7 +93,7 @@ public class ServerArrowSource extends ServerObject
 	 * from the enemy team)
 	 */
 	public ServerCreature findTarget(int range) {
-		ArrayList<ServerCreature> enemyTeam = null;
+		LinkedList<ServerCreature> enemyTeam = null;
 
 		if (team == ServerPlayer.BLUE_TEAM) {
 			enemyTeam = getWorld().getRedTeam();

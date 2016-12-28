@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 import Imports.ImageReferencePair;
@@ -209,17 +210,17 @@ public class ServerWorld
 	/**
 	 * Grid of objects
 	 */
-	private ArrayList<ServerObject>[][] objectGrid;
+	private LinkedList<ServerObject>[][] objectGrid;
 
 	/**
 	 * All the creatures in red team
 	 */
-	private ArrayList<ServerCreature> redTeam = new ArrayList<ServerCreature>();
+	private LinkedList<ServerCreature> redTeam = new LinkedList<ServerCreature>();
 
 	/**
 	 * All the creatures in blue team
 	 */
-	private ArrayList<ServerCreature> blueTeam = new ArrayList<ServerCreature>();
+	private LinkedList<ServerCreature> blueTeam = new LinkedList<ServerCreature>();
 
 	/**
 	 * Array of different types of creatures, buildings, background objects, and
@@ -279,7 +280,7 @@ public class ServerWorld
 	 * List of all the non-tile objects in the world (for movement and collision
 	 * detection)
 	 */
-	private ArrayList<ServerObject> objects;
+	private LinkedList<ServerObject> objects;
 
 	/**
 	 * List of objects to add to the world next refresh (based on the user's
@@ -321,7 +322,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine) throws IOException
 	{
-		objects = new ArrayList<ServerObject>();
+		objects = new LinkedList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
@@ -335,7 +336,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine, String map) throws IOException
 	{
-		objects = new ArrayList<ServerObject>();
+		objects = new LinkedList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
@@ -1340,7 +1341,7 @@ public class ServerWorld
 		this.tileGrid = grid;
 	}
 
-	public ArrayList<ServerObject> getObjects()
+	public LinkedList<ServerObject> getObjects()
 	{
 		return objects;
 	}
@@ -1350,32 +1351,32 @@ public class ServerWorld
 		return worldCounter;
 	}
 
-	public ArrayList<ServerObject>[][] getObjectGrid()
+	public LinkedList<ServerObject>[][] getObjectGrid()
 	{
 		return objectGrid;
 	}
 
-	public void setObjectGrid(ArrayList<ServerObject>[][] objectGrid)
+	public void setObjectGrid(LinkedList<ServerObject>[][] objectGrid)
 	{
 		this.objectGrid = objectGrid;
 	}
 
-	public ArrayList<ServerCreature> getRedTeam()
+	public LinkedList<ServerCreature> getRedTeam()
 	{
 		return redTeam;
 	}
 
-	public void setRedTeam(ArrayList<ServerCreature> redTeam)
+	public void setRedTeam(LinkedList<ServerCreature> redTeam)
 	{
 		this.redTeam = redTeam;
 	}
 
-	public ArrayList<ServerCreature> getBlueTeam()
+	public LinkedList<ServerCreature> getBlueTeam()
 	{
 		return blueTeam;
 	}
 
-	public void setBlueTeam(ArrayList<ServerCreature> blueTeam)
+	public void setBlueTeam(LinkedList<ServerCreature> blueTeam)
 	{
 		this.blueTeam = blueTeam;
 	}

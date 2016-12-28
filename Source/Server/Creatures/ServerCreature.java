@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import Imports.Audio;
 import Server.ServerObject;
@@ -467,7 +468,7 @@ public abstract class ServerCreature extends ServerObject
 	 * from the enemy team)
 	 */
 	public ServerCreature findTarget(int range) {
-		ArrayList<ServerCreature> enemyTeam = null;
+		LinkedList<ServerCreature> enemyTeam = null;
 
 		if (getTeam() == ServerPlayer.BLUE_TEAM) {
 			enemyTeam = getWorld().getRedTeam();

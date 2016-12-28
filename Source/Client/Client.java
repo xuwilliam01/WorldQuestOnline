@@ -1110,8 +1110,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				getInventory().clear();
 				setJustDied(false);
 			}
-			deathTime++;
-			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
+//			deathTime++;
+//			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
 			
 			// Causes lag
 //			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
