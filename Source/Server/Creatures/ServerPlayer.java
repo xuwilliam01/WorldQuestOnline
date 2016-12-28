@@ -2214,6 +2214,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				System.out.println("Added house");
 			}
 			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			if (castle != null
+			&& castle.getMoney() >= ServerBuildingItem.TOWER_COST)
+			{
+				castle.spendMoney(ServerBuildingItem.TOWER_COST);
+				addItem(new ServerBuildingItem(ServerWorld.TOWER_ITEM_TYPE,
+						getWorld()));
+				System.out.println("Added tower");
+			}
+			break;
 		}
 		
 	}

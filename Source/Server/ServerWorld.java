@@ -152,6 +152,9 @@ public class ServerWorld {
 	
 	public final static String HOUSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "H";
 	public final static String WOOD_HOUSE_ITEM_TYPE = HOUSE_ITEM_TYPE + "W";
+	
+	public final static String DEFENSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
+	public final static String TOWER_ITEM_TYPE = DEFENSE_ITEM_TYPE + "T";
 
 	
 	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
@@ -162,8 +165,10 @@ public class ServerWorld {
 	
 	public final static String HOUSE_TYPE = BUILDING_TYPE + "H";
 	public final static String WOOD_HOUSE_TYPE = HOUSE_TYPE + "W";
-
-	//public final static String BUILDING_DEFENCE_TYPE = BUILDING_TYPE + "D";
+	
+	public final static String DEFENSE_TYPE = BUILDING_TYPE + "D";
+	public final static String TOWER_TYPE = DEFENSE_TYPE + "T";
+	
 
 	public final static String HOLOGRAM_TYPE = "HOL";
 	/**
