@@ -934,10 +934,6 @@ public class Images {
 			addtoImageArray(new GameImage("CHEST.png",
 					80, 48,
 					"Creatures//"));
-			addtoImageArray(new GameImage("RED_CASTLE.png",
-					"Creatures//"));
-			addtoImageArray(new GameImage("BLUE_CASTLE.png",
-					"Creatures//"));
 			addtoImageArray(new GameImage("COIN.png",
 					ClientFrame.getScaledWidth(10),
 					ClientFrame.getScaledHeight(10), "Items//"));
@@ -1206,6 +1202,11 @@ public class Images {
 			addtoImageArray(new GameImage("WOOD_HOUSE.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("RED_CASTLE.png",
+					"Buildings//"));
+			addtoImageArray(new GameImage("BLUE_CASTLE.png",
+					"Buildings//"));
 
 			image = null;
 		}
