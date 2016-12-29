@@ -26,6 +26,8 @@ public class ServerHouse extends ServerBuilding {
 			castle = world.getRedCastle();
 		}
 		
+
+		
 		castle.increasePopLimit(population);
 	}
 	

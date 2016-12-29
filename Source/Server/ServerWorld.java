@@ -158,8 +158,8 @@ public class ServerWorld
 	public final static String DEFENSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 	public final static String TOWER_ITEM_TYPE = DEFENSE_ITEM_TYPE + "T";
 
-	public final static String BUILDING_DEFENCE_ITEM_TYPE = BUILDING_ITEM_TYPE
-			+ "D";
+	public final static String RESOURCE_ITEM_TYPE = BUILDING_ITEM_TYPE + "R";
+	public final static String GOLD_MINE_ITEM_TYPE = RESOURCE_ITEM_TYPE + "G";
 
 	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
@@ -170,6 +170,9 @@ public class ServerWorld
 
 	public final static String DEFENSE_TYPE = BUILDING_TYPE + "D";
 	public final static String TOWER_TYPE = DEFENSE_TYPE + "T";
+	
+	public final static String RESOURCE_TYPE = BUILDING_TYPE + "R";
+	public final static String GOLD_MINE_TYPE = RESOURCE_TYPE + "G";
 
 	public final static char ARROW_SOURCE_TYPE = 'a';
 

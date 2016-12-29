@@ -9,6 +9,7 @@ public class ServerText extends ServerObject {
 	
 	public final static char RED_TEXT = 'r';
 	public final static char YELLOW_TEXT = 'y';
+	public final static char LIGHT_YELLOW_TEXT = 'Y';
 	public final static char BLUE_TEXT = 'b';
 	public final static char PURPLE_TEXT = 'p';
 	
@@ -37,11 +38,10 @@ public class ServerText extends ServerObject {
 	 *            the text type
 	 */
 	public ServerText(double x, double y, String text, char colour, ServerWorld world) {
-		super(x, y, 20, 20, 0, colour + text, ServerWorld.TEXT_TYPE +"",world.getEngine());
-		if (colour == ServerText.YELLOW_TEXT)
-		{
-			//System.out.println("Yellow");
-		}
+		super(x, y, 20, 20, 0, (colour + text).replace(' ', '_'), ServerWorld.TEXT_TYPE +"",world.getEngine());
+
+		
+		
 		setSolid(false);
 		this.world = world;
 		this.text = text;

@@ -266,10 +266,6 @@ public class ServerCastle extends ServerBuilding {
 		arrowSources.clear();
 	}
 
-	public void spendMoney(int money)
-	{
-		this.money -= money;
-	}
 
 	//Methods for the castle shop
 	public boolean isOpen()
@@ -298,8 +294,13 @@ public class ServerCastle extends ServerBuilding {
 		this.target = target;
 	}
 
-	public void addMoney(int money) {
+	public synchronized void addMoney(int money) {
 		this.money += money;
+	}
+	
+	public synchronized void spendMoney(int money)
+	{
+		this.money -= money;
 	}
 
 	public int getMoney() {

@@ -10,6 +10,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public final static int WOOD_HOUSE_HP = 500;
 	public final static int TOWER_HP = 700;
 	public final static int CASTLE_HP = 20000;
+	public final static int GOLD_MINE_HP = 600;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
 		super(x, y, 0, 0, 0, 0, 0, "SERVERBUILDING", type, 0, world, true);
@@ -41,6 +42,11 @@ public abstract class ServerBuilding extends ServerCreature {
 			setMaxHP(TOWER_HP);
 			setHP(TOWER_HP);
 			break;
+		case ServerWorld.GOLD_MINE_TYPE:
+			setImage("GOLD_MINE");
+			setMaxHP(GOLD_MINE_HP);
+			setHP(GOLD_MINE_HP);
+			break;
 		}
 		setTeam(team);
 		setWidth(Images.getGameImage(getImage()).getWidth());
@@ -58,6 +64,8 @@ public abstract class ServerBuilding extends ServerCreature {
 			return new ServerHouse(x,y,type, team, world);
 		case ServerWorld.TOWER_TYPE:
 			return new ServerDefense(x,y,type, team, world);
+		case ServerWorld.GOLD_MINE_TYPE:
+			return new ServerMine(x,y,type, team, world);
 		}
 		return null;
 	}

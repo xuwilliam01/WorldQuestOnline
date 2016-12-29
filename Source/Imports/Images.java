@@ -32,6 +32,7 @@ import WorldCreator.CreatorObject;
 public class Images {
 	
 	public final static Color YELLOW = new Color(204, 153, 0);
+	public final static Color LIGHT_YELLOW = new Color(255, 255, 0);
 	public final static Color RED = new Color(153, 0, 38);
 	public final static Color DARK_RED = new Color(102,0,0);
 	public final static Color BLUE = new Color(0, 161, 230);
@@ -46,6 +47,11 @@ public class Images {
 	 * Array of yellow starting from lowest opacity to highest opacity
 	 */
 	public static Color[] yellows = new Color[100];
+	
+	/**
+	 * Array of yellow starting from lowest opacity to highest opacity
+	 */
+	public static Color[] lightYellows = new Color[100];
 	
 	/**
 	 * Array of red starting from lowest opacity to highest opacity
@@ -174,6 +180,12 @@ public class Images {
 		for (int no = 0; no < yellows.length;no++)
 		{
 			yellows[no] = new Color (YELLOW.getRed(), YELLOW.getGreen(), YELLOW.getBlue(), (int)((1.0*(no+1)/yellows.length)*255.0));
+		}
+		
+		// Create array of lightYellows with varying opacity
+		for (int no = 0; no < lightYellows.length;no++)
+		{
+			lightYellows[no] = new Color (LIGHT_YELLOW.getRed(), LIGHT_YELLOW.getGreen(), LIGHT_YELLOW.getBlue(), (int)((1.0*(no+1)/lightYellows.length)*255.0));
 		}
 		
 		// Create array of blues with varying opacity

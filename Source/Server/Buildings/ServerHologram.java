@@ -47,6 +47,11 @@ public class ServerHologram extends ServerObject{
 			goodImageIndex = Images.getImageIndex("TOWER_VALID");
 			badImageIndex = Images.getImageIndex("TOWER_INVALID");
 			break;
+		case ServerWorld.GOLD_MINE_TYPE:
+			setImage("GOLD_MINE_INVALID");
+			goodImageIndex = Images.getImageIndex("GOLD_MINE_VALID");
+			badImageIndex = Images.getImageIndex("GOLD_MINE_INVALID");
+			break;
 		}
 		
 		setWidth(Images.getGameImage(getImage()).getWidth());

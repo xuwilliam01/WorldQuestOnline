@@ -2224,6 +2224,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				System.out.println("Added tower");
 			}
 			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			if (castle != null
+			&& castle.getMoney() >= ServerBuildingItem.GOLD_MINE_COST)
+			{
+				castle.spendMoney(ServerBuildingItem.GOLD_MINE_COST);
+				addItem(new ServerBuildingItem(ServerWorld.GOLD_MINE_ITEM_TYPE,
+						getWorld()));
+				System.out.println("Added Gold mine");
+			}
+			break;
 		}
 		
 	}

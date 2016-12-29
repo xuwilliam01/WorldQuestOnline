@@ -70,7 +70,7 @@ public class ClientText extends ClientObject {
 		this.y = y;
 		this.world = world;
 		char colour = image.charAt(0);
-		this.text = image.substring(1);
+		this.text = image.substring(1).replace('_', ' ');
 
 		switch (colour) {
 		case ServerText.PURPLE_TEXT:
@@ -88,6 +88,10 @@ public class ClientText extends ClientObject {
 			color = Images.RED;
 			break;
 		case ServerText.YELLOW_TEXT:
+			colorArray = Images.yellows;
+			color = Images.YELLOW;
+			break;
+		case ServerText.LIGHT_YELLOW_TEXT:
 			colorArray = Images.yellows;
 			color = Images.YELLOW;
 			break;
