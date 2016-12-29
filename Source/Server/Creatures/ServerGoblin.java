@@ -358,7 +358,7 @@ public class ServerGoblin extends ServerCreature {
 
 		// Randomize the movement speed for each goblin so they don't stack as
 		// much
-		movementSpeed = Math.random() * 1.0 * (movementSpeed / 2) + movementSpeed * 3.0 / 4;
+		movementSpeed = Math.random() * 1.0 * (movementSpeed / 2.0) + movementSpeed * 3.0 / 4;
 
 		if (Math.random() < 0.1)
 			addItem(ServerItem.randomItem(getX(), getY(), world));
