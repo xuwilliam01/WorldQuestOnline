@@ -32,6 +32,8 @@ import WorldCreator.CreatorObject;
 public class Images {
 	
 	public final static Color YELLOW = new Color(204, 153, 0);
+	public final static Color LIGHT_YELLOW = new Color(255, 255, 0);
+	public final static Color LIGHT_GREEN = new Color(0, 204, 0);
 	public final static Color RED = new Color(153, 0, 38);
 	public final static Color DARK_RED = new Color(102,0,0);
 	public final static Color BLUE = new Color(0, 161, 230);
@@ -46,6 +48,16 @@ public class Images {
 	 * Array of yellow starting from lowest opacity to highest opacity
 	 */
 	public static Color[] yellows = new Color[100];
+	
+	/**
+	 * Array of yellow starting from lowest opacity to highest opacity
+	 */
+	public static Color[] lightYellows = new Color[100];
+	
+	/**
+	 * Array of green starting from lowest opacity to highest opacity
+	 */
+	public static Color[] lightGreens = new Color[100];
 	
 	/**
 	 * Array of red starting from lowest opacity to highest opacity
@@ -174,6 +186,18 @@ public class Images {
 		for (int no = 0; no < yellows.length;no++)
 		{
 			yellows[no] = new Color (YELLOW.getRed(), YELLOW.getGreen(), YELLOW.getBlue(), (int)((1.0*(no+1)/yellows.length)*255.0));
+		}
+		
+		// Create array of lightYellows with varying opacity
+		for (int no = 0; no < lightYellows.length;no++)
+		{
+			lightYellows[no] = new Color (LIGHT_YELLOW.getRed(), LIGHT_YELLOW.getGreen(), LIGHT_YELLOW.getBlue(), (int)((1.0*(no+1)/lightYellows.length)*255.0));
+		}
+		
+		// Create array of lightgreens with varying opacity
+		for (int no = 0; no < lightGreens.length;no++)
+		{
+			lightGreens[no] = new Color (LIGHT_GREEN.getRed(), LIGHT_GREEN.getGreen(), LIGHT_GREEN.getBlue(), (int)((1.0*(no+1)/lightGreens.length)*255.0));
 		}
 		
 		// Create array of blues with varying opacity
@@ -934,10 +958,6 @@ public class Images {
 			addtoImageArray(new GameImage("CHEST.png",
 					80, 48,
 					"Creatures//"));
-			addtoImageArray(new GameImage("RED_CASTLE.png",
-					"Creatures//"));
-			addtoImageArray(new GameImage("BLUE_CASTLE.png",
-					"Creatures//"));
 			addtoImageArray(new GameImage("COIN.png",
 					ClientFrame.getScaledWidth(10),
 					ClientFrame.getScaledHeight(10), "Items//"));
@@ -1191,15 +1211,32 @@ public class Images {
 					ServerWorld.TILE_SIZE, "Tiles//"));
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
-			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
-			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			addtoImageArray(new GameImage("BARRACKS.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("BARRACKS_GOOD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			addtoImageArray(new GameImage("BARRACKS_BAD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
+			
+			addtoImageArray(new GameImage("TOWER_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
+			addtoImageArray(new GameImage("TOWER.png","Buildings//"));
+			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("TOWER_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("GOLD_MINE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
+			addtoImageArray(new GameImage("GOLD_MINE.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("RED_CASTLE.png",
+					"Buildings//"));
+			addtoImageArray(new GameImage("BLUE_CASTLE.png",
+					"Buildings//"));
+
 			image = null;
 		}
 

@@ -78,6 +78,26 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * Object storing all player data
 	 */
 	private ClientObject player;
+	
+	/**
+	 * Current hSpeed of the player
+	 */
+	private double hSpeed = 0;
+	
+	/**
+	 * Current vSpeed of the player
+	 */
+	private double vSpeed = 0;
+	
+	/**
+	 * Current PRECISE x coordinate of the player
+	 */
+	private double playerX = 0;
+	
+	/**
+	 * Current PRECISE y coordinate of the player
+	 */
+	private double playerY = 0;
 
 	/**
 	 * Stores the visible world of the client
@@ -213,8 +233,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * A timer for the start
 	 */
 	private long startTimer = 0;
-
-	private boolean startPainting = false;
 
 	private boolean writingMessage = false;
 
@@ -416,6 +434,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.flush();
 	}
 
+	long start = 0;
+	int noOfTicks = 0;
+	
 	/**
 	 * Thread for running the actual game
 	 * 
@@ -427,10 +448,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
-
+			long startPaint = 0;
 			while (!leaveGame)
 			{
-				while (!lines.isEmpty())
+				if (!lines.isEmpty())
 				{
 					String message = lines.remove(0);
 
@@ -507,13 +528,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									break;
 								case "U":
-									if (!startPainting)
-									{
-										gameThread = new Thread(
-												new updateScreen());
-										gameThread.start();
-									}
-									startPainting = true;
+									//startPaint = System.currentTimeMillis();
 									repaint();
 									break;
 								case "H":
@@ -562,10 +577,24 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									int y = toInt(tokens[++token]);
 									if (id == player.getID())
 									{
-										player.setX(x);
-										player.setY(y);
+										if (Math.abs(player.getX()-x)>=0)
+										{
+										
+										}
+										if (Math.abs(player.getY()-y)>=0)
+										{
+										
+										}
 										player.setTeam(Integer
-												.parseInt(tokens[token + 2]));
+												.parseInt(tokens[token + 6]));
+										playerX = Double.parseDouble(tokens[++token]);
+										playerX = playerX-(int)playerX + x;
+										playerY = Double.parseDouble(tokens[++token]);
+										playerY = playerY -(int)playerY + y;
+										hSpeed = Double.parseDouble(tokens[++token]);
+										vSpeed = Double.parseDouble(tokens[++token]);
+										
+
 									}
 									if (tokens[token + 4].equals("{"))
 									{
@@ -598,16 +627,23 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										{
 											name += tokens[token + 5 + i] + " ";
 										}
+										if (id == player.getID())
+										{
+											player.setX((int)playerX);
+											player.setY((int)playerY);
 										world.setObject(
 												id,
-												x,
-												y,
+												player.getX(),
+												player.getY(),
 												Images.getImageName(Integer
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
 										token += len+2;
+										
+										}
 									}
+									
 									break;
 								case "t":
 									world.setObject(new ClientText(
@@ -876,6 +912,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 					}
 				}
+				
+				if (System.currentTimeMillis()-startPaint >= ServerEngine.UPDATE_RATE)
+				{
+					//startPaint = System.currentTimeMillis();
+					//clientUpdatePlayer();
+					//repaint();
+				}
+				
+				
 				try
 				{
 					Thread.sleep(1);
@@ -887,6 +932,16 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 		}
 	}
+	
+	/**
+	 * Move the player on the client side if the server side hasn't yet responded
+	 */
+	public void clientUpdatePlayer()
+	{
+		player.setX((int)(playerX+hSpeed));
+		player.setY((int)(playerY+vSpeed));
+	}
+	
 
 	/**
 	 * Thread for running the actual game
@@ -1047,37 +1102,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
-
-	/**
-	 * Keep calling the paint component independent of the server (on top of the
-	 * server repaint call) up to 120 fps
-	 * 
-	 * @author William Xu
-	 *
-	 */
-	class updateScreen implements Runnable
-	{
-
-		@Override
-		public void run()
-		{
-			// long repaintDelay = ServerEngine.UPDATE_RATE;
-			// while (!leaveGame)
-			// {
-			// repaint();
-			//
-			// try {
-			// Thread.sleep(repaintDelay);
-			//
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
-			// }
-
-		}
-
-	}
-
+	
 	/**
 	 * Draw everything
 	 */
@@ -1092,8 +1117,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		catch (NullPointerException e)
 		{
-			// System.out.println("Null Pointer Exception for world.update");
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		// Draw death message if applicable
@@ -1110,10 +1134,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				getInventory().clear();
 				setJustDied(false);
 			}
-			deathTime++;
-			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
-			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
-			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+//			deathTime++;
+//			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
+			
+			// Causes lag
+//			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
+//			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 			graphics.setColor(Color.white);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
@@ -1124,7 +1150,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()),
+		graphics.drawString("FPS: " + Math.min(9999, getCurrentFPS()),
 				Client.SCREEN_WIDTH - 60, 40);
 
 		// Set the time of day to be displayed
@@ -1348,6 +1374,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		FPScounter++;
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
+		
+		if ((++noOfTicks)>60)
+		{
+			System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
+			start = System.currentTimeMillis();
+			noOfTicks = 0;
+		}
 	}
 
 	@Override

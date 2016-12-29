@@ -40,6 +40,18 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			cost = ServerBuildingItem.WOOD_HOUSE_COST;
 			setToolTipText("Wooden house (+10 housing space)");
 			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("TOWER_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(300,100);
+			cost = ServerBuildingItem.TOWER_COST;
+			setToolTipText("Arrow Tower");
+			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("GOLD_MINE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(400,100);
+			cost = ServerBuildingItem.GOLD_MINE_COST;
+			setToolTipText("Gold Mine");
+			break;
 		}
 		setVisible(true);
 		setBorder(BorderFactory.createEmptyBorder());

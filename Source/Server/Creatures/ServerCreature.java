@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import Imports.Audio;
 import Server.ServerObject;
@@ -461,6 +462,28 @@ public abstract class ServerCreature extends ServerObject
 			}
 		}
 	}
+	
+	/**
+	 * Find the nearest enemy creature and attack it (in this case any creature
+	 * from the enemy team)
+	 */
+	public ServerCreature findTarget(int range) {
+		LinkedList<ServerCreature> enemyTeam = null;
+
+		if (getTeam() == ServerPlayer.BLUE_TEAM) {
+			enemyTeam = getWorld().getRedTeam();
+		} else if (getTeam() == ServerPlayer.RED_TEAM) {
+			enemyTeam = getWorld().getBlueTeam();
+		}
+		for (ServerCreature enemy : enemyTeam) {
+			if (enemy.isAlive() && quickInRange(enemy, range))
+			{
+				return enemy;
+			}
+		}
+		return null;
+	}
+	
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////

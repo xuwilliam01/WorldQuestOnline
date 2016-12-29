@@ -156,7 +156,7 @@ public class ServerSlime extends ServerEnemy
 
 			// if (getWorld().getWorldCounter() % 10 == 0)
 			// {
-			findTarget();
+			findPlayerTarget();
 			// }
 
 		}

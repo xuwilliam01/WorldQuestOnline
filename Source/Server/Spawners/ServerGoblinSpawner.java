@@ -1,10 +1,6 @@
 package Server.Spawners;
-
-import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Creatures.ServerCreature;
-import Server.Creatures.ServerEnemy;
-import Server.Creatures.ServerGoblin;
+import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerPlayer;
 
 /**
@@ -15,11 +11,12 @@ import Server.Creatures.ServerPlayer;
 public class ServerGoblinSpawner extends ServerSpawner
 {
 
-
 	/**
 	 * Team of the spawner
 	 */
 	private int team;
+	
+	private ServerCastle castle = null;
 
 	/**
 	 * Constructor
@@ -42,24 +39,6 @@ public class ServerGoblinSpawner extends ServerSpawner
 		{
 			setImage("BLUE_GOBLIN_SPAWN");
 		}
-		setDelay(1000);
-
-	}
-
-	/**
-	 * Update the spawner
-	 */
-	public void update()
-	{
-
-		if (getWorld().getWorldCounter() % getDelay() == 0)
-		{
-			getWorld().add(
-					new ServerGoblin(getX(), getY()
-							- getHeight()
-							- ServerWorld.TILE_SIZE, getWorld(), team));
-		}
-
 	}
 
 	public int getTeam()
@@ -70,6 +49,23 @@ public class ServerGoblinSpawner extends ServerSpawner
 	public void setTeam(int team)
 	{
 		this.team = team;
+	}
+
+	@Override
+	public void update()
+	{	
+		if (castle==null)
+		{
+			if (getTeam() == ServerPlayer.BLUE_TEAM)
+			{
+				castle = getWorld().getBlueCastle();
+			}
+			else
+			{
+				castle = getWorld().getRedCastle();
+			}
+			castle.addSpawner(this);
+		}	
 	}
 	
 }

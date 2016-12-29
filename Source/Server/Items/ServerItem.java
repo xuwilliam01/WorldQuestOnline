@@ -219,6 +219,14 @@ public abstract class ServerItem extends ServerObject
 			setImage("WOOD_HOUSE_ICON");
 			value = ServerBuildingItem.WOOD_HOUSE_COST; //Change?
 			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			setImage("TOWER_ICON");
+			value = ServerBuildingItem.TOWER_COST; //Change?
+			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			setImage("GOLD_MINE_ICON");
+			value = ServerBuildingItem.GOLD_MINE_COST; //Change?
+			break;
 		}
 
 		setWidth(Images.getGameImage(getImage()).getWidth());

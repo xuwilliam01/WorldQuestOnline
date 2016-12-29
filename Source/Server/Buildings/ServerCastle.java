@@ -1,13 +1,19 @@
 package Server.Buildings;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
+import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
+import Server.Effects.ServerText;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
+import Server.Spawners.ServerGoblinSpawner;
 import Server.Spawners.ServerSpawner;
 
 /**
@@ -18,11 +24,20 @@ import Server.Spawners.ServerSpawner;
  */
 public class ServerCastle extends ServerBuilding {
 
+	public final static int[][] GOBLIN_SPAWNS = 
+		{{ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_GUARD_NO},
+		{ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO},
+		{ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
+		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
+		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KING_NO},
+		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO},
+		{ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO}};
+	
 	/**
 	 * The number of pixels for a target to be in range for the castle to fire
 	 * at it
 	 */
-	private int targetRange = 1000;
+	private int targetRange;
 
 	/**
 	 * The money invested in upgrading the castle
@@ -45,11 +60,6 @@ public class ServerCastle extends ServerBuilding {
 	private String arrowType = ServerWorld.WOODARROW_TYPE;
 
 	/**
-	 * The team of the castle
-	 */
-	private int team;
-
-	/**
 	 * Whether the castle shop is open or not
 	 */
 	private boolean open = false;
@@ -62,15 +72,54 @@ public class ServerCastle extends ServerBuilding {
 	 */
 	private int xp = 0;
 	
+	/**
+	 * Arrow sources on the castle
+	 */
+	private ArrayList<ServerObject> arrowSources;
+	
+	/**
+	 * Starting limit of population
+	 */
 	public static final int POP_LIMIT = 20;
+	
+	/**
+	 * Current limit of population
+	 */
 	private int popLimit;
+	
+	/**
+	 * Current population
+	 */
 	private int population;
 	
+	/**
+	 * Goblins that this castle provides each spawn tick
+	 */
+	private int castleGoblins[];
 	
+	/**
+	 * All the spawners of this team
+	 */
+	private ArrayList<ServerGoblinSpawner> spawners;
+	
+	private int spawnerNo = 0;
+	
+	/**
+	 * Buildings currently alive that contribute to spawning goblins
+	 */
+	private LinkedList<ServerBarracks> barracks;
+	
+	private Stack<ServerBarracks> barracksToRemove;
+	
+	private Stack<ServerBarracks> barracksToAdd;
+	
+	/**
+	 * Delay between each spawning session
+	 */
+	public static final int spawnDelay = 1000;
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
 	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
-	public final static int[] CASTLE_TIER_PRICE = { 25, 45, 75, 100, 125, 150 };
 
 	/**
 	 * Constructor
@@ -86,104 +135,149 @@ public class ServerCastle extends ServerBuilding {
 	 */
 	public ServerCastle(double x, double y, int team, ServerWorld world) {
 		super(x, y, ServerWorld.CASTLE_TYPE, team, world);
+		spawners = new ArrayList<ServerGoblinSpawner>();
+		barracks = new LinkedList<ServerBarracks>();
+		barracksToRemove = new Stack<ServerBarracks>();
+		barracksToAdd = new Stack<ServerBarracks>();
+		castleGoblins = GOBLIN_SPAWNS[tier];
 		
-		if (team == RED_TEAM)
-			setName("Red Team's Castle");
-		else
-			setName("Blue Team's Castle");
+		arrowSources = new ArrayList<ServerObject>();
+		targetRange = 1000;
 		
 		popLimit = POP_LIMIT;
 		population = 0;
 	}
 
+	@Override
+	public void update()
+	{
+		while (!barracksToRemove.isEmpty())
+		{
+			barracks.remove(barracksToRemove.pop());
+		}
+		while (!barracksToAdd.isEmpty())
+		{
+			barracks.add(barracksToAdd.pop());
+		}
+		
+		if (getWorld().getWorldCounter() % spawnDelay == spawnDelay/4) // Don't spawn immediately once the game starts
+		{
+			for (ServerBarracks producer:barracks)
+			{
+				for (Integer goblin:producer.getGoblins())
+				{
+					spawnGoblin(goblin);
+				}
+			}
+			
+			for (Integer goblin:castleGoblins)
+			{
+				spawnGoblin(goblin);
+			}
+		}
+
+		
+	}
+	
+	/**
+	 * Spawn a goblin at one of the spawners
+	 * @param goblinNo
+	 */
+	public synchronized void spawnGoblin(int goblinNo)
+	{
+		ServerGoblinSpawner spawner = spawners.get(spawnerNo);
+		getWorld().add(new ServerGoblin(spawner.getX(), spawner.getY() - spawner.getHeight() - ServerWorld.TILE_SIZE, getWorld(), getTeam(), goblinNo));
+		
+		if ((++spawnerNo)>=spawners.size())
+		{
+			spawnerNo = 0;
+		}
+	}
+	
+	public synchronized void addGoblin(ServerGoblin goblin)
+	{
+		if (population + goblin.getHousingSpace() <= popLimit)
+		{
+			setPopulation(getPopulation() + goblin.getHousingSpace());
+		}
+		else
+		{
+			// Counter-act the lost housing space from the goblin dying
+			setPopulation(getPopulation() + goblin.getHousingSpace());
+			goblin.destroy();
+		}
+		
+	}
+	
+	/**
+	 * Upgrade the castle tier
+	 */
 	public void upgrade()
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
 		setMaxHP(getMaxHP() + 5000);
 		setHP(getHP() + 5000);
 		tier++;
-
+		castleGoblins = GOBLIN_SPAWNS[tier];
+		
+		
+		for (ServerObject object: arrowSources)
+		{
+			object.destroy();
+		}
+		
+		arrowSources.clear();
+		
 		if (tier == 3) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
+		
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+				arrowType, targetRange, this, getWorld())));
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+				arrowType, targetRange, this, getWorld())));
+		
 		setPopLimit(getPopLimit()+10);
-	}
-	/**
-	 * Update the castle behavior
-	 */
-	public void update() {
-		// Attack a target
-		if (getTarget() == null) {
-			if (getWorld().getWorldCounter() % 15 == 0) {
-				setTarget(findTarget());
-			}
-		} else if (!getTarget().isAlive() || !getTarget().exists()
-				|| !quickInRange(getTarget(), targetRange)) {
-			setTarget(null);
-		} else {
-			// Every second and a half calculate the angle to shoot the target
-			// from and launch a projectile at it
-			if (getWorld().getWorldCounter() % 90 == 0) {
-				int xDist = (int) (getTarget().getX() + getTarget().getWidth()
-						/ 2 - (getX() + 270));
-
-				int yDist = (int) ((getY() + 232) - (getTarget().getY() + getTarget()
-				.getHeight() / 2));
-
-				int sign = -1;
-
-				double angle = Math
-						.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED) + sign
-								* Math.sqrt(Math.pow(
-										ServerProjectile.ARROW_SPEED, 4)
-										- ServerProjectile.ARROW_GRAVITY
-										* (ServerProjectile.ARROW_GRAVITY
-												* xDist * xDist + 2 * yDist
-												* ServerProjectile.ARROW_SPEED
-												* ServerProjectile.ARROW_SPEED)))
-								/ (ServerProjectile.ARROW_GRAVITY * xDist));
-
-				if (xDist <= 0) {
-					angle = Math.PI - angle;
-				} else {
-					angle *= -1;
-				}
-
-				ServerProjectile arrow = new ServerProjectile(getX() + 270,
-						getY() + 232, this, angle, arrowType,getWorld());
-
-				getWorld().add(arrow);
+		
+		// Alert each player on the team
+		for (ServerPlayer player: getWorld().getEngine().getListOfPlayers())
+		{
+			if (player.getTeam()==getTeam())
+			{
+				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 30, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
 			}
 		}
 	}
-
-	/**
-	 * Find the nearest enemy creature and attack it (in this case any creature
-	 * from the enemy team)
-	 */
-	public ServerCreature findTarget() {
-		ArrayList<ServerCreature> enemyTeam = null;
-
-		if (getTeam() == ServerPlayer.BLUE_TEAM) {
-			enemyTeam = getWorld().getRedTeam();
-		} else if (getTeam() == ServerPlayer.RED_TEAM) {
-			enemyTeam = getWorld().getBlueTeam();
-		}
-		for (ServerCreature enemy : enemyTeam) {
-			if (enemy.isAlive() && quickInRange(enemy, targetRange)
-					&& !enemy.getType().equals(ServerWorld.CASTLE_TYPE)) {
-				return enemy;
-			}
-		}
-		return null;
-	}
-
-	public void spendMoney(int money)
+	
+	public void reinitialize()
 	{
-		this.money -= money;
+		if (getTeam() == RED_TEAM)
+			setName("Red Team's Castle");
+		else
+			setName("Blue Team's Castle");
+		
+		
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+	
+		
 	}
+	
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		for (ServerObject object: arrowSources)
+		{
+			object.destroy();
+		}
+		arrowSources.clear();
+	}
+
 
 	//Methods for the castle shop
 	public boolean isOpen()
@@ -212,20 +306,17 @@ public class ServerCastle extends ServerBuilding {
 		this.target = target;
 	}
 
-	public void addMoney(int money) {
+	public synchronized void addMoney(int money) {
 		this.money += money;
+	}
+	
+	public synchronized void spendMoney(int money)
+	{
+		this.money -= money;
 	}
 
 	public int getMoney() {
 		return money;
-	}
-
-	public int getTeam() {
-		return team;
-	}
-
-	public void setTeam(int team) {
-		this.team = team;
 	}
 
 	public int getTier() {
@@ -317,26 +408,23 @@ public class ServerCastle extends ServerBuilding {
 		setPopulation(getPopulation()+amount);
 	}
 	
-	public synchronized void addGoblin(ServerGoblin goblin)
-	{
-		if (population + goblin.getHousingSpace() <= popLimit)
-		{
-			setPopulation(getPopulation() + goblin.getHousingSpace());
-		}
-		else
-		{
-			// Counter-act the lost housing space from the goblin dying
-			setPopulation(getPopulation() + goblin.getHousingSpace());
-			goblin.destroy();
-			
-			System.out.println("Not enough space for " + goblin.getName());
-		}
-		
-	}
-	
 	public synchronized void removeGoblin(ServerGoblin goblin)
 	{
 		setPopulation(getPopulation() - goblin.getHousingSpace());
 	}
+	
+	public synchronized void addBarracks(ServerBarracks barracks)
+	{
+		this.barracksToAdd.push(barracks);
+	}
+	
+	public synchronized void removeBarracks(ServerBarracks barracks)
+	{
+		this.barracksToRemove.push(barracks);
+	}
 
+	public synchronized void addSpawner(ServerGoblinSpawner spawner)
+	{
+		this.spawners.add(spawner);
+	}
 }

@@ -304,8 +304,8 @@ public abstract class ServerObject implements Comparable<ServerObject>
 		// essentially
 		if (other.getX() <= x + width + distance
 				&& other.getX() + other.getWidth() >= x - distance
-				&& other.getY() <= y + height + distance / 3
-				&& other.getY() + other.getHeight() >= y - distance / 3)
+				&& other.getY() <= y + height + distance
+				&& other.getY() + other.getHeight() >= y - distance)
 		{
 			return true;
 		}
@@ -341,19 +341,23 @@ public abstract class ServerObject implements Comparable<ServerObject>
 		if (x - (other.getX() + other.getWidth()) > 0)
 		{
 			otherX = other.getX() + other.getWidth();
+			thisX = getX();
 		}
 		else if (other.getX() - (x + width) > 0)
 		{
 			thisX = x + width;
+			otherX = other.getX();
 		}
 
 		if (y - (other.getY() + other.getHeight()) > 0)
 		{
 			otherY = other.getY() + other.getHeight();
+			thisY = getY();
 		}
 		else if (other.getY() - (y + height) > 0)
 		{
 			thisY = y + height;
+			otherY = other.getY();
 		}
 
 		return Math.sqrt((thisX - otherX) * (thisX - otherX) + (thisY - otherY)
