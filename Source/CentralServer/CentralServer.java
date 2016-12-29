@@ -14,6 +14,7 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 import javax.swing.Timer;
 
@@ -31,7 +32,7 @@ import Server.Creatures.ServerCreature;
 public class CentralServer implements Runnable, ActionListener{
 
 	public final static int BASE_ELO = 1000;
-
+	public final static int LEADERBOARD_SIZE = 20;
 	public final static int PORT = 5000;
 	public final static String IP = "127.0.0.1";
 	//public final static String IP = "138.197.142.105";
@@ -58,6 +59,10 @@ public class CentralServer implements Runnable, ActionListener{
 
 	private ServerSocket TCPSocket;
 
+	private PriorityQueue<LeaderboardPlayer> leaderboard = new PriorityQueue<LeaderboardPlayer>();
+
+	private String leaderboardS = "";
+
 	public CentralServer() throws IOException, JDOMException
 	{
 		socket = new DatagramSocket(PORT);
@@ -78,7 +83,34 @@ public class CentralServer implements Runnable, ActionListener{
 		//		System.out.println(createAccount("Alex3","EasyPass"));
 		//		System.out.println(createAccount("Alex3","EasyPass"));
 		//		System.out.println(login("Alex3","EasyPass"));
+
+		//Create the leaderboard
+		createLeaderboard();
 	}
+
+	public void createLeaderboard()
+	{
+		leaderboard.clear();
+		for(Element user : root.getChildren("User"))
+		{
+			int elo = Integer.parseInt(user.getChild("Elo").getValue());
+			if(leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
+				continue;
+			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"),elo));
+		}
+		synchronized(leaderboardS)
+		{
+			leaderboardS ="";
+			while(!leaderboard.isEmpty())
+			{
+				LeaderboardPlayer next = leaderboard.poll();
+				leaderboardS = next.getName().split(" ").length + " "+next.getRating() + " "+next.getName() + " "+leaderboardS;
+			}
+			leaderboardS.trim();
+		}
+
+	}
+
 
 	public void run() {
 		reset.start();
@@ -136,6 +168,11 @@ public class CentralServer implements Runnable, ActionListener{
 					else
 						out = "CN";
 					sendData = out.getBytes();
+					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+					socket.send(send);
+					break;
+				case 'B':
+					sendData = leaderboardS.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;
@@ -390,7 +427,7 @@ public class CentralServer implements Runnable, ActionListener{
 						int bTeam = Integer.parseInt(tokens[3]);
 						if(bTeam <= 0 || rTeam <= 0)
 							return;
-						
+
 						GameResult[] red = new GameResult[rTeam];
 						GameResult[] blue = new GameResult[bTeam];
 
@@ -418,6 +455,7 @@ public class CentralServer implements Runnable, ActionListener{
 							blue[i] = new GameResult(playerName, kills);
 						}
 						updateRating(red,blue, winner);
+						createLeaderboard();
 						break;
 					}
 				}
