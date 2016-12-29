@@ -528,7 +528,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									break;
 								case "U":
-									start = System.currentTimeMillis();
+									//startPaint = System.currentTimeMillis();
 									repaint();
 									break;
 								case "H":
@@ -577,20 +577,24 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									int y = toInt(tokens[++token]);
 									if (id == player.getID())
 									{
-										if (Math.abs(player.getX()-x)>=5)
+										if (Math.abs(player.getX()-x)>=0)
 										{
-										player.setX(x);
+										
 										}
-										if (Math.abs(player.getY()-y)>=5)
+										if (Math.abs(player.getY()-y)>=0)
 										{
-										player.setY(y);
+										
 										}
 										player.setTeam(Integer
 												.parseInt(tokens[token + 6]));
 										playerX = Double.parseDouble(tokens[++token]);
+										playerX = playerX-(int)playerX + x;
 										playerY = Double.parseDouble(tokens[++token]);
+										playerY = playerY -(int)playerY + y;
 										hSpeed = Double.parseDouble(tokens[++token]);
 										vSpeed = Double.parseDouble(tokens[++token]);
+										
+
 									}
 									if (tokens[token + 4].equals("{"))
 									{
@@ -623,16 +627,23 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										{
 											name += tokens[token + 5 + i] + " ";
 										}
+										if (id == player.getID())
+										{
+											player.setX((int)playerX);
+											player.setY((int)playerY);
 										world.setObject(
 												id,
-												x,
-												y,
+												player.getX(),
+												player.getY(),
 												Images.getImageName(Integer
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
 												tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
 										token += len+2;
+										
+										}
 									}
+									
 									break;
 								case "t":
 									world.setObject(new ClientText(
@@ -902,12 +913,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					}
 				}
 				
-				if (System.currentTimeMillis()-start > ServerEngine.UPDATE_RATE)
+				if (System.currentTimeMillis()-startPaint >= ServerEngine.UPDATE_RATE)
 				{
-					start = System.currentTimeMillis();
-					clientUpdatePlayer();
-					repaint();
+					//startPaint = System.currentTimeMillis();
+					//clientUpdatePlayer();
+					//repaint();
 				}
+				
 				
 				try
 				{
@@ -926,8 +938,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public void clientUpdatePlayer()
 	{
-		player.setX((int)(player.getX()+hSpeed));
-		player.setY((int)(player.getY()+vSpeed));
+		player.setX((int)(playerX+hSpeed));
+		player.setY((int)(playerY+vSpeed));
 	}
 	
 
