@@ -86,7 +86,8 @@ public class ServerWorld
 	public final static char ITEM_TYPE = 'I';
 	public final static String EQUIP_TYPE = ITEM_TYPE + "E";
 	public final static String STACK_TYPE = ITEM_TYPE + "S";
-	public final static String POTION_TYPE = STACK_TYPE + "P";
+	
+	public final static String POTION_TYPE = ITEM_TYPE + "P";
 	public final static String HP_POTION_TYPE = POTION_TYPE + "H";
 	public final static String MAX_HP_TYPE = POTION_TYPE + "h";
 	public final static String MANA_POTION_TYPE = POTION_TYPE + "M";
