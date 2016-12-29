@@ -78,7 +78,7 @@ public class ServerWorld
 	public final static String GOBLIN_ARCHER_TYPE = GOBLIN_TYPE + "A";
 	public final static String GOBLIN_SOLDIER_TYPE = GOBLIN_TYPE + "S";
 	public final static String GOBLIN_WIZARD_TYPE = GOBLIN_TYPE + "W";
-	public final static String GOBLIN_WORKER_TYPE = GOBLIN_TYPE + "w";
+	public final static String GOBLIN_SAMURAI_TYPE = GOBLIN_TYPE + "s";
 
 	public final static String CHEST_TYPE = CREATURE_TYPE + "M";
 	public final static String VENDOR_TYPE = CREATURE_TYPE + "V";
@@ -238,12 +238,12 @@ public class ServerWorld
 	/**
 	 * The blue team castle
 	 */
-	private ServerCastle blueCastle;
+	private ServerCastle blueCastle = null;
 
 	/**
 	 * The red team castle
 	 */
-	private ServerCastle redCastle;
+	private ServerCastle redCastle = null;
 
 	/**
 	 * The size of each object tile
