@@ -246,8 +246,7 @@ public class ServerCastle extends ServerBuilding {
 		{
 			if (player.getTeam()==getTeam())
 			{
-				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 10, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
-				System.out.println("****LEVEL UP******");
+				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 30, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
 			}
 		}
 	}

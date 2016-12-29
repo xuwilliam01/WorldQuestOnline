@@ -428,10 +428,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
-
+			long startPaint = 0;
 			while (!leaveGame)
 			{
-				while (!lines.isEmpty())
+				if (!lines.isEmpty())
 				{
 					String message = lines.remove(0);
 
@@ -509,6 +509,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "U":
 									repaint();
+									start = System.currentTimeMillis();
 									break;
 								case "H":
 									if (world.getHologram() == null)
@@ -870,6 +871,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 					}
 				}
+				
+//				if (System.currentTimeMillis()-start > ServerEngine.UPDATE_RATE)
+//				{
+//					start = System.currentTimeMillis();
+//					repaint();
+//				}
+				
 				try
 				{
 					Thread.sleep(1);
@@ -881,6 +889,15 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 		}
 	}
+	
+//	/**
+//	 * Move the player on the client side if the server side hasn't yet responded
+//	 */
+//	public void clientUpdatePlayer()
+//	{
+//		
+//	}
+	
 
 	/**
 	 * Thread for running the actual game

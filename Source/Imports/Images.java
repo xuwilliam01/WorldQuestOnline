@@ -33,7 +33,7 @@ public class Images {
 	
 	public final static Color YELLOW = new Color(204, 153, 0);
 	public final static Color LIGHT_YELLOW = new Color(255, 255, 0);
-	public final static Color LIGHT_GREEN = new Color(0, 255, 0);
+	public final static Color LIGHT_GREEN = new Color(0, 204, 0);
 	public final static Color RED = new Color(153, 0, 38);
 	public final static Color DARK_RED = new Color(102,0,0);
 	public final static Color BLUE = new Color(0, 161, 230);
