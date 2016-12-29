@@ -246,7 +246,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	public Client(Socket socket, PrintWriter output, ClientInventory inventory, JLayeredPane frame)
 	{
-		System.out.println("PlayerName: " + playerName);
+		System.out.println("PlayerName: " + ClientAccountWindow.savedUser);
 		setBackground(Color.BLACK);
 		Images.importImages();
 		Audio.importAudio();

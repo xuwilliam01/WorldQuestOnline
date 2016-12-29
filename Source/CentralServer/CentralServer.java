@@ -148,13 +148,16 @@ public class CentralServer implements Runnable, ActionListener{
 			}
 
 			// Remove servers when necessary
-			if(clearServers)
+			synchronized(servers)
 			{
-				//System.out.println("Clearing Servers");
-				delayedListServers = listServers;
-				servers.clear();
-				listServers = "";
-				clearServers = false;
+				if(clearServers)
+				{
+					//System.out.println("Clearing Servers");
+					delayedListServers = listServers;
+					servers.clear();
+					listServers = "";
+					clearServers = false;
+				}
 			}
 		}
 
@@ -219,6 +222,7 @@ public class CentralServer implements Runnable, ActionListener{
 			int newElo = (int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB);		
 			setElo(acc.getName(), newElo);
 		}
+		saveXML();
 
 	}
 
@@ -354,12 +358,15 @@ public class CentralServer implements Runnable, ActionListener{
 						String[] tokens = command.split(" ");
 						ServerInfo newServer = new ServerInfo(tokens[1], server.getInetAddress().toString(), Integer.parseInt(tokens[3]), 
 								Integer.parseInt(tokens[2]));
-						if(!servers.contains(newServer))
+						synchronized(servers)
 						{
-							//System.out.println(newServer.getIP() + " " + newServer.getPort());
-							servers.add(newServer);
-							listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
-							System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+							if(!servers.contains(newServer))
+							{
+								//System.out.println(newServer.getIP() + " " + newServer.getPort());
+								servers.add(newServer);
+								listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
+								System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+							}
 						}
 						break;
 					case 'l':
@@ -376,17 +383,22 @@ public class CentralServer implements Runnable, ActionListener{
 						}
 						break;
 					case 'E':
+						System.out.println("A Game ended");
 						tokens = command.split(" ");
-						int rTeam = Integer.parseInt(tokens[1]);
-						int bTeam = Integer.parseInt(tokens[2]);
+						int winner = Integer.parseInt(tokens[1]);
+						int rTeam = Integer.parseInt(tokens[2]);
+						int bTeam = Integer.parseInt(tokens[3]);
+						if(bTeam <= 0 || rTeam <= 0)
+							return;
+						
 						GameResult[] red = new GameResult[rTeam];
 						GameResult[] blue = new GameResult[bTeam];
-						
-						int index = 3;
+
+						int index = 4;
 						for(int i = 0; i < rTeam;i++)
 						{
-							int len = tokens[index].charAt(0);
-							String playerName = tokens[index++].substring(1);
+							int len = Integer.parseInt(tokens[index++]);
+							String playerName = tokens[index++];
 							for(int j = 1; j < len;j++)
 							{
 								playerName+=" "+tokens[index++];
@@ -396,8 +408,8 @@ public class CentralServer implements Runnable, ActionListener{
 						}
 						for(int i = 0; i < bTeam;i++)
 						{
-							int len = tokens[index].charAt(0);
-							String playerName = tokens[index++].substring(1);
+							int len = Integer.parseInt(tokens[index++]);
+							String playerName = tokens[index++];
 							for(int j = 1; j < len;j++)
 							{
 								playerName+=" "+tokens[index++];
@@ -405,6 +417,7 @@ public class CentralServer implements Runnable, ActionListener{
 							int kills = Integer.parseInt(tokens[index++]);
 							blue[i] = new GameResult(playerName, kills);
 						}
+						updateRating(red,blue, winner);
 						break;
 					}
 				}

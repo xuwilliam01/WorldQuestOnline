@@ -43,6 +43,21 @@ public class Server implements Runnable {
 
 	private boolean closeServer = false;
 
+	private ServerManager manager;
+	
+	public Server(ServerManager manager)
+	{
+		this.manager = manager;
+	}
+	
+	public ServerManager getManager() {
+		return manager;
+	}
+
+	public void setManager(ServerManager manager) {
+		this.manager = manager;
+	}
+
 	public boolean isFull() {
 		if (!start) {
 			return lobbyPlayers.size() >= MAX_PLAYERS;
@@ -170,7 +185,9 @@ public class Server implements Runnable {
 		while (true) {
 			try {
 				Socket newClient = nextGameClient();
-
+				if(closeServer)
+					return;
+				
 				try {
 					newClient.setReceiveBufferSize(1024);
 					newClient.setSendBufferSize(1024*16);
@@ -178,9 +195,6 @@ public class Server implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				if(closeServer)
-					return;
 
 				output = new PrintWriter(newClient.getOutputStream());
 				noOfPlayers++;

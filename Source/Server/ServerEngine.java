@@ -43,20 +43,20 @@ public class ServerEngine implements Runnable, ActionListener {
 	public static final int NUMBER_OF_IDS = 100000;
 
 	private final int normalIDStart = 500;
-	
+
 	/**
 	 * The highest ID not used yet for normal objects
 	 */
 	private int nextID = normalIDStart;
-	
+
 	/**
 	 * The highest ID not used yet for building objects
 	 */
 	private int nextBuildingID = 0;
 
 	private boolean[] usedIDs= new boolean[NUMBER_OF_IDS];
-	
-	
+
+
 
 	// /**
 	// * Stack of freeIDs to use
@@ -153,7 +153,26 @@ public class ServerEngine implements Runnable, ActionListener {
 				}
 			}
 			if (endGame) {
-				ServerManager.removeRoom(server);
+				String redPlayers ="";
+				String bluePlayers ="";
+				int winner = ServerCreature.BLUE_TEAM;
+				if(losingTeam == ServerCreature.BLUE_TEAM)
+					winner = ServerCreature.RED_TEAM;
+				int numRed = 0;
+				int numBlue = 0;
+				for (ServerPlayer player : listOfPlayers) {
+					if(player.getTeam() == ServerCreature.RED_TEAM)
+					{
+						numRed++;
+						redPlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+					} else 
+					{
+						numBlue++;
+						bluePlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+					}
+				}
+				server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
+				server.getManager().removeRoom(server);
 				close();
 				server.close();
 			}
@@ -264,7 +283,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 
 	}
-	
+
 	/**
 	 * Use and reserve the next available building ID (to make sure they underlap other objects) in the list of booleans
 	 * 

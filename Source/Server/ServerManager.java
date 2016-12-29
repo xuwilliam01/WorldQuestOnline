@@ -343,7 +343,7 @@ public class ServerManager implements Runnable, ActionListener{
 	}
 
 	public void addNewRoom() {
-		Server newServer = new Server();
+		Server newServer = new Server(this);
 		rooms.add(newServer);
 		Thread serverThread = new Thread(newServer);
 		serverThread.start();
@@ -359,8 +359,8 @@ public class ServerManager implements Runnable, ActionListener{
 			newServer.setGUI(gui);
 		}
 	}
-
-	public static void removeRoom(Server remove)
+	
+	public void removeRoom(Server remove)
 	{
 		rooms.remove(remove);
 	}
