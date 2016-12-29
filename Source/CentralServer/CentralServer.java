@@ -26,8 +26,11 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import ClientUDP.ServerInfo;
+import Server.Creatures.ServerCreature;
 
 public class CentralServer implements Runnable, ActionListener{
+
+	public final static int BASE_ELO = 1000;
 
 	public final static int PORT = 5000;
 	//public final static String IP = "138.197.138.125";
@@ -157,6 +160,91 @@ public class CentralServer implements Runnable, ActionListener{
 
 	}
 
+	public void updateRating(GameResult[] red, GameResult[] blue, int winner)
+	{
+		double avgEloR = 0;
+		double avgKillsR = 0;
+		double avgEloB = 0;
+		double avgKillsB = 0;
+		for(GameResult acc : red)
+		{
+			int elo = getElo(acc.getName());
+			acc.setElo(elo);
+			avgEloR += elo;
+			avgKillsR += acc.getKills();
+		}
+		avgEloR /= 1.0*red.length;
+		avgKillsR /= 1.0*red.length;
+		for(GameResult acc : blue)
+		{
+			int elo = getElo(acc.getName());
+			acc.setElo(elo);
+			avgEloB += elo;
+			avgKillsB += acc.getKills();
+		}
+		avgEloB /= 1.0*blue.length;
+		avgKillsB /= 1.0*blue.length;
+
+		int actualR = 0;
+		int actualB = 1;
+		if(winner == ServerCreature.RED_TEAM)
+		{
+			actualR = 1;
+			actualB = 0;
+		}
+
+		for(GameResult acc : red)
+		{
+			int k;
+			if(acc.getElo() <= 2100)
+				k = 32;
+			else if(acc.getElo() <= 2400)
+				k = 24;
+			else k = 16;
+			double expected = 1/(1+Math.pow(10, (avgEloB - acc.getElo())/400.0));
+			int newElo = (int)(acc.getElo() + k*(actualR - expected) + acc.getKills() - avgKillsR);
+			setElo(acc.getName(), newElo);
+		}
+		for(GameResult acc : blue)
+		{
+			int k;
+			if(acc.getElo() <= 2100)
+				k = 32;
+			else if(acc.getElo() <= 2400)
+				k = 24;
+			else k = 16;
+			double expected = 1/(1+Math.pow(10, (avgEloR - acc.getElo())/400.0));
+
+			//Yes ranking can go up even if you lose
+			int newElo = (int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB);		
+			setElo(acc.getName(), newElo);
+		}
+
+	}
+
+	public int getElo(String name)
+	{
+		for(Element username : root.getChildren())
+		{
+			if(username.getAttribute("name").getValue().equals(name))
+			{
+				return Integer.parseInt(username.getChild("Elo").getValue());
+			}
+		}
+		return -1;
+	}
+
+	public void setElo(String name, int value)
+	{
+		for(Element username : root.getChildren())
+		{
+			if(username.getAttribute("name").getValue().equals(name))
+			{
+				username.getChild("Elo").setText(Integer.toString(value));
+			}
+		}
+	}
+
 	public boolean login(String user, String key)
 	{
 		for(Element username : root.getChildren())
@@ -169,6 +257,20 @@ public class CentralServer implements Runnable, ActionListener{
 		return false;
 	}
 
+	public void saveXML()
+	{
+		//Save with new username + key
+		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+		try {
+			xmlOutputter.output(document, new FileOutputStream(new File(FILE_NAME)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public boolean createAccount(String user, String key)
 	{
 		boolean contains = false;
@@ -192,20 +294,13 @@ public class CentralServer implements Runnable, ActionListener{
 		Element newKey = new Element("Key");
 		newKey.setText(key);
 		newUser.addContent(newKey);
+		Element newElo = new Element("Elo");
+		newElo.setText(Integer.toString(BASE_ELO));
+		newUser.addContent(newElo);
 		newUser.setAttribute(username);
 		root.addContent(newUser);
 
-		//Save with new username + key
-		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-		try {
-			xmlOutputter.output(document, new FileOutputStream(new File(FILE_NAME)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		saveXML();
 
 		return true;
 	}
@@ -278,6 +373,37 @@ public class CentralServer implements Runnable, ActionListener{
 						{
 							out = "L "+key+" "+name;
 							send(out);
+						}
+						break;
+					case 'E':
+						tokens = command.split(" ");
+						int rTeam = Integer.parseInt(tokens[1]);
+						int bTeam = Integer.parseInt(tokens[2]);
+						GameResult[] red = new GameResult[rTeam];
+						GameResult[] blue = new GameResult[bTeam];
+						
+						int index = 3;
+						for(int i = 0; i < rTeam;i++)
+						{
+							int len = tokens[index].charAt(0);
+							String playerName = tokens[index++].substring(1);
+							for(int j = 1; j < len;j++)
+							{
+								playerName+=" "+tokens[index++];
+							}
+							int kills = Integer.parseInt(tokens[index++]);
+							red[i] = new GameResult(playerName, kills);
+						}
+						for(int i = 0; i < bTeam;i++)
+						{
+							int len = tokens[index].charAt(0);
+							String playerName = tokens[index++].substring(1);
+							for(int j = 1; j < len;j++)
+							{
+								playerName+=" "+tokens[index++];
+							}
+							int kills = Integer.parseInt(tokens[index++]);
+							blue[i] = new GameResult(playerName, kills);
 						}
 						break;
 					}
