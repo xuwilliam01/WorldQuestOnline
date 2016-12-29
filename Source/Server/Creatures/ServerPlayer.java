@@ -733,12 +733,22 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								if (object.getType().equals(
 										ServerWorld.PLAYER_TYPE))
 								{
+									if (object.getID()==getID())
+									{
 									queueMessage("O "
 											+ toChars(object.getID())
 											+ " "
 											+ toChars(x)
 											+ " "
 											+ toChars(y)
+											+ " "
+											+ object.getX()
+											+ " "
+											+ object.getY()
+											+ " "
+											+ object.getHSpeed()
+											+ " "
+											+ object.getVSpeed()
 											+ " "
 											+ object.getImageIndex()
 											+ " "
@@ -755,6 +765,32 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											.getCurrentText()
 											+ " "
 											+ Math.max(0, Math.round(100.0*((ServerPlayer) object).getHP()/((ServerPlayer) object).getMaxHP())));
+									}
+									else
+									{
+										queueMessage("O "
+												+ toChars(object.getID())
+												+ " "
+												+ toChars(x)
+												+ " "
+												+ toChars(y)
+												+ " "
+												+ object.getImageIndex()
+												+ " "
+												+ team
+												+ " "
+												+ object.getType()
+												+ " "
+												+ ((ServerPlayer) object).getName()
+												.split(" ").length
+												+ " "
+												+ ((ServerPlayer) object).getName()
+												+ '`'
+												+ ((ServerPlayer) object)
+												.getCurrentText()
+												+ " "
+												+ Math.max(0, Math.round(100.0*((ServerPlayer) object).getHP()/((ServerPlayer) object).getMaxHP())));
+									}
 									continue;
 								}
 

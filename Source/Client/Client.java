@@ -78,6 +78,26 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * Object storing all player data
 	 */
 	private ClientObject player;
+	
+	/**
+	 * Current hSpeed of the player
+	 */
+	private double hSpeed = 0;
+	
+	/**
+	 * Current vSpeed of the player
+	 */
+	private double vSpeed = 0;
+	
+	/**
+	 * Current PRECISE x coordinate of the player
+	 */
+	private double playerX = 0;
+	
+	/**
+	 * Current PRECISE y coordinate of the player
+	 */
+	private double playerY = 0;
 
 	/**
 	 * Stores the visible world of the client
@@ -508,8 +528,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									break;
 								case "U":
-									repaint();
 									start = System.currentTimeMillis();
+									repaint();
 									break;
 								case "H":
 									if (world.getHologram() == null)
@@ -557,10 +577,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									int y = toInt(tokens[++token]);
 									if (id == player.getID())
 									{
+										if (Math.abs(player.getX()-x)>=5)
+										{
 										player.setX(x);
+										}
+										if (Math.abs(player.getY()-y)>=5)
+										{
 										player.setY(y);
+										}
 										player.setTeam(Integer
-												.parseInt(tokens[token + 2]));
+												.parseInt(tokens[token + 6]));
+										playerX = Double.parseDouble(tokens[++token]);
+										playerY = Double.parseDouble(tokens[++token]);
+										hSpeed = Double.parseDouble(tokens[++token]);
+										vSpeed = Double.parseDouble(tokens[++token]);
 									}
 									if (tokens[token + 4].equals("{"))
 									{
@@ -872,11 +902,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					}
 				}
 				
-//				if (System.currentTimeMillis()-start > ServerEngine.UPDATE_RATE)
-//				{
-//					start = System.currentTimeMillis();
-//					repaint();
-//				}
+				if (System.currentTimeMillis()-start > ServerEngine.UPDATE_RATE)
+				{
+					start = System.currentTimeMillis();
+					clientUpdatePlayer();
+					repaint();
+				}
 				
 				try
 				{
@@ -890,13 +921,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 	}
 	
-//	/**
-//	 * Move the player on the client side if the server side hasn't yet responded
-//	 */
-//	public void clientUpdatePlayer()
-//	{
-//		
-//	}
+	/**
+	 * Move the player on the client side if the server side hasn't yet responded
+	 */
+	public void clientUpdatePlayer()
+	{
+		player.setX((int)(player.getX()+hSpeed));
+		player.setY((int)(player.getY()+vSpeed));
+	}
 	
 
 	/**
@@ -1106,7 +1138,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()),
+		graphics.drawString("FPS: " + Math.min(9999, getCurrentFPS()),
 				Client.SCREEN_WIDTH - 60, 40);
 
 		// Set the time of day to be displayed
