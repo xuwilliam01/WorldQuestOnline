@@ -1203,6 +1203,11 @@ public class Images {
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
 			
+			addtoImageArray(new GameImage("GOLD_MINE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
+			addtoImageArray(new GameImage("GOLD_MINE.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
+			
 			addtoImageArray(new GameImage("RED_CASTLE.png",
 					"Buildings//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
