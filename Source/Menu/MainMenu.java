@@ -107,6 +107,9 @@ public class MainMenu implements KeyListener {
 	private static boolean canConnect = false;
 
 	private static JButton login;
+
+	private static boolean tooLarge;
+	private static boolean checkedSettingsAlready = false;
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -159,40 +162,43 @@ public class MainMenu implements KeyListener {
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
 
-		boolean tooLarge = false;
-
-		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
-			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
-			tooLarge = true;
-		}
-		Client.SCREEN_HEIGHT = dm.getHeight();
-		if (Client.SCREEN_HEIGHT > 1080) {
-			Client.SCREEN_HEIGHT = 1080;
-			tooLarge = true;
-		}
-
-		// Display results
-		System.out.println(dm.getWidth());
-		System.out.println(dm.getHeight());
-
-		if (tooLarge)
+		if(!checkedSettingsAlready)
 		{
-			JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
-		}
+			checkedSettingsAlready = true;
+			tooLarge = false;
 
+			if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
+				Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
+				tooLarge = true;
+			}
+			Client.SCREEN_HEIGHT = dm.getHeight();
+			if (Client.SCREEN_HEIGHT > 1080) {
+				Client.SCREEN_HEIGHT = 1080;
+				tooLarge = true;
+			}
+
+			// Display results
+			System.out.println(dm.getWidth());
+			System.out.println(dm.getHeight());
+
+			if (tooLarge)
+			{
+				JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
+			}
+
+			int enableCloudsAndStars = JOptionPane
+					.showConfirmDialog(
+							null,
+							"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
+							"Select Game Quality",
+							JOptionPane.YES_NO_OPTION);
+			if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
+				ClientWorld.NO_OF_CLOUDS = 0;
+			}
+		}
 		mainFrame = new ClientFrame(tooLarge);
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
-
-		int enableCloudsAndStars = JOptionPane
-				.showConfirmDialog(
-						null,
-						"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
-						"Select Game Quality",
-						JOptionPane.YES_NO_OPTION);
-		if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
-			ClientWorld.NO_OF_CLOUDS = 0;
-		}
 
 		while (!(imagesAudioLoaded)) {
 			try {
@@ -349,10 +355,10 @@ public class MainMenu implements KeyListener {
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
 			{
-				login = new JButton("Logout");
+				login = new JButton(String.format("Logout(%s)", ClientAccountWindow.savedUser));
 			}
 			else login = new JButton("Login");
-			login.setSize(100, 50);
+			login.setSize(200, 50);
 			login.setLocation(Client.SCREEN_WIDTH - 200,50);
 			login.setBorder(BorderFactory.createEmptyBorder());
 			login.setContentAreaFilled(false);
@@ -751,7 +757,7 @@ public class MainMenu implements KeyListener {
 			inventory = new ClientInventory(menu);
 			mySocket.close();
 			mySocket = new Socket(serverIP, port);
-			
+
 			try {
 				mySocket.setReceiveBufferSize(1024*16);
 				mySocket.setSendBufferSize(1024);

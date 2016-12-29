@@ -200,7 +200,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		savedPassword = new String(password.getPassword());
 		savedKey = hash(username.getText(),new String(password.getPassword()));
 		loggedIn = true;
-		menuLoginButton.setText("Logout");
+		menuLoginButton.setText((String.format("Logout(%s)", savedUser)));
 
 		PrintWriter out = null;
 		try {

@@ -205,7 +205,7 @@ public class CentralServer implements Runnable, ActionListener{
 				k = 24;
 			else k = 16;
 			double expected = 1/(1+Math.pow(10, (avgEloB - acc.getElo())/400.0));
-			int newElo = (int)(acc.getElo() + k*(actualR - expected) + acc.getKills() - avgKillsR);
+			int newElo = Math.max((int)(acc.getElo() + k*(actualR - expected) + acc.getKills() - avgKillsR),BASE_ELO);
 			setElo(acc.getName(), newElo);
 		}
 		for(GameResult acc : blue)
@@ -219,7 +219,7 @@ public class CentralServer implements Runnable, ActionListener{
 			double expected = 1/(1+Math.pow(10, (avgEloR - acc.getElo())/400.0));
 
 			//Yes ranking can go up even if you lose
-			int newElo = (int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB);		
+			int newElo = Math.max((int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB),BASE_ELO);		
 			setElo(acc.getName(), newElo);
 		}
 		saveXML();
