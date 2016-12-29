@@ -214,8 +214,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 */
 	private long startTimer = 0;
 
-	private boolean startPainting = false;
-
 	private boolean writingMessage = false;
 
 	public boolean leaveGame;
@@ -427,6 +425,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
+			long start = 0;
+			int noOfTicks = 0;
 
 			while (!leaveGame)
 			{
@@ -507,14 +507,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 									break;
 								case "U":
-									if (!startPainting)
-									{
-										gameThread = new Thread(
-												new updateScreen());
-										gameThread.start();
-									}
-									startPainting = true;
 									repaint();
+									if ((++noOfTicks)>60)
+									{
+										System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
+										start = System.currentTimeMillis();
+										noOfTicks = 0;
+									}
 									break;
 								case "H":
 									if (world.getHologram() == null)
@@ -1047,37 +1046,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
-
-	/**
-	 * Keep calling the paint component independent of the server (on top of the
-	 * server repaint call) up to 120 fps
-	 * 
-	 * @author William Xu
-	 *
-	 */
-	class updateScreen implements Runnable
-	{
-
-		@Override
-		public void run()
-		{
-			// long repaintDelay = ServerEngine.UPDATE_RATE;
-			// while (!leaveGame)
-			// {
-			// repaint();
-			//
-			// try {
-			// Thread.sleep(repaintDelay);
-			//
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
-			// }
-
-		}
-
-	}
-
+	
 	/**
 	 * Draw everything
 	 */
