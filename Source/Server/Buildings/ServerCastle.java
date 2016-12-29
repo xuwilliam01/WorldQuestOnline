@@ -10,6 +10,7 @@ import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
+import Server.Effects.ServerText;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Spawners.ServerGoblinSpawner;
@@ -159,7 +160,7 @@ public class ServerCastle extends ServerBuilding {
 			barracks.add(barracksToAdd.pop());
 		}
 		
-		if (getWorld().getWorldCounter()%spawnDelay == spawnDelay/4) // Don't spawn immediately once the game starts
+		if (getWorld().getWorldCounter() % spawnDelay == spawnDelay/4) // Don't spawn immediately once the game starts
 		{
 			for (ServerBarracks producer:barracks)
 			{
@@ -174,6 +175,8 @@ public class ServerCastle extends ServerBuilding {
 				spawnGoblin(goblin);
 			}
 		}
+
+		
 	}
 	
 	/**
@@ -237,6 +240,16 @@ public class ServerCastle extends ServerBuilding {
 				arrowType, targetRange, this, getWorld())));
 		
 		setPopLimit(getPopLimit()+10);
+		
+		// Alert each player on the team
+		for (ServerPlayer player: getWorld().getEngine().getListOfPlayers())
+		{
+			if (player.getTeam()==getTeam())
+			{
+				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 10, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
+				System.out.println("****LEVEL UP******");
+			}
+		}
 	}
 	
 	public void reinitialize()

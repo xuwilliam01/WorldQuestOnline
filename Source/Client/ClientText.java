@@ -1,12 +1,14 @@
 package Client;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Effects.ServerText;
 
-public class ClientText extends ClientObject {
+public class ClientText extends ClientObject
+{
 
 	public final static int TOTAL_ALIVE_TIME = 60;
 
@@ -48,7 +50,7 @@ public class ClientText extends ClientObject {
 	 * Whether or not the object exists
 	 */
 	private boolean exists = false;
-	
+
 	/**
 	 * Color array used for this text
 	 */
@@ -63,16 +65,18 @@ public class ClientText extends ClientObject {
 	 * @param team
 	 * @param type
 	 */
-	public ClientText(int id, int x, int y, String image, int team,
-			ClientWorld world) {
+	public ClientText(int id, int x, int y, String image, int team, ClientWorld world)
+	{
 		super(id, x, y, image, team, ServerWorld.TEXT_TYPE + "");
 		this.exists = true;
 		this.y = y;
 		this.world = world;
 		char colour = image.charAt(0);
 		this.text = image.substring(1).replace('_', ' ');
+		this.aliveTime = TOTAL_ALIVE_TIME;
 
-		switch (colour) {
+		switch (colour)
+		{
 		case ServerText.PURPLE_TEXT:
 			this.text = "NOT ENOUGH MANA";
 			colorArray = Images.purples;
@@ -95,64 +99,82 @@ public class ClientText extends ClientObject {
 			colorArray = Images.yellows;
 			color = Images.YELLOW;
 			break;
+		case ServerText.LIGHT_GREEN_TEXT:
+			colorArray = Images.lightGreens;
+			color = Images.LIGHT_GREEN;
+			vSpeed /= 2;
+			aliveTime *= 2;
+			break;
 		}
 
-		this.aliveTime = TOTAL_ALIVE_TIME;
 		
-		setX(getX()- (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5) / 2));
+		setX(getX() - (int) ((this.text.length() * ClientWorld.DAMAGE_FONT_WIDTH + 0.5) / 2));
 
 	}
 
-	public void updateText() {
-		if (exists) {
-			if (aliveTime-- <= 0) {
+	public void updateText()
+	{
+		if (exists)
+		{
+			if (aliveTime-- <= 0)
+			{
 				world.addToRemove(this);
 				destroy();
 				return;
 			}
-			color = colorArray[Math.min(99,(int)((1.0*aliveTime/(TOTAL_ALIVE_TIME*2.0/3))*100.0))];
-			
+			color = colorArray[Math
+					.min(99,
+							(int) ((1.0 * aliveTime / (TOTAL_ALIVE_TIME * 2.0 / 3)) * 100.0))];
+
 			y += vSpeed;
 			setY((int) y);
 		}
 	}
 
 	@Override
-	public void destroy() {
+	public void destroy()
+	{
 		this.exists = false;
 	}
 
-	public float getAlpha() {
+	public float getAlpha()
+	{
 		return alpha;
 	}
 
-	public void setAlpha(float alpha) {
+	public void setAlpha(float alpha)
+	{
 		this.alpha = alpha;
 	}
 
-	public Color getColor() {
+	public Color getColor()
+	{
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(Color color)
+	{
 		this.color = color;
 	}
 
-	public String getText() {
+	public String getText()
+	{
 		return text;
 	}
 
-	public void setText(String text) {
+	public void setText(String text)
+	{
 		this.text = text;
 	}
 
-	public boolean exists() {
+	public boolean exists()
+	{
 		return exists;
 	}
 
-	public void setExists(boolean exists) {
+	public void setExists(boolean exists)
+	{
 		this.exists = exists;
 	}
-	
 
 }

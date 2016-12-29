@@ -10,6 +10,7 @@ public class ServerText extends ServerObject {
 	public final static char RED_TEXT = 'r';
 	public final static char YELLOW_TEXT = 'y';
 	public final static char LIGHT_YELLOW_TEXT = 'Y';
+	public final static char LIGHT_GREEN_TEXT = 'g';
 	public final static char BLUE_TEXT = 'b';
 	public final static char PURPLE_TEXT = 'p';
 	

@@ -414,6 +414,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.flush();
 	}
 
+	long start = 0;
+	int noOfTicks = 0;
+	
 	/**
 	 * Thread for running the actual game
 	 * 
@@ -425,8 +428,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
-			long start = 0;
-			int noOfTicks = 0;
 
 			while (!leaveGame)
 			{
@@ -508,12 +509,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "U":
 									repaint();
-									if ((++noOfTicks)>60)
-									{
-										System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
-										start = System.currentTimeMillis();
-										noOfTicks = 0;
-									}
 									break;
 								case "H":
 									if (world.getHologram() == null)
@@ -1061,8 +1056,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		catch (NullPointerException e)
 		{
-			// System.out.println("Null Pointer Exception for world.update");
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		// Draw death message if applicable
@@ -1319,6 +1313,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		FPScounter++;
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
+		
+		if ((++noOfTicks)>60)
+		{
+			System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
+			start = System.currentTimeMillis();
+			noOfTicks = 0;
+		}
 	}
 
 	@Override
