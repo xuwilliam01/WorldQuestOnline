@@ -97,6 +97,8 @@ public class CentralServer implements Runnable, ActionListener{
 			if(leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
 				continue;
 			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"),elo));
+			if(leaderboard.size() > LEADERBOARD_SIZE)
+				leaderboard.poll();
 		}
 		synchronized(leaderboardS)
 		{

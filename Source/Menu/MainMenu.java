@@ -45,6 +45,7 @@ import Client.ClientLobby;
 import Client.ClientWorld;
 import ClientUDP.ClientAccountWindow;
 import ClientUDP.ClientServerSelection;
+import ClientUDP.Leaderboard;
 import Imports.Audio;
 import Imports.Images;
 import Imports.Maps;
@@ -98,6 +99,7 @@ public class MainMenu implements KeyListener {
 
 	private static ClientServerSelection serverList = null;
 	private static ClientAccountWindow newLogin = null;
+	private static Leaderboard leaderboard = null;
 
 	/**
 	 * Whether or not image loading has failed
@@ -253,6 +255,7 @@ public class MainMenu implements KeyListener {
 		JButton instructions;
 
 		JButton online;
+		JButton leaderb;
 
 		Image buttonTrayImage = Images.getImage("ButtonTray");
 
@@ -352,6 +355,15 @@ public class MainMenu implements KeyListener {
 			online.addMouseListener(this);
 			add(online);
 
+			leaderb = new JButton("Leaderboard");
+			leaderb.setSize(instructionsImage.getWidth(null),
+					instructionsImage.getHeight(null));
+			leaderb.setLocation(middle - instructionsImage.getWidth(null)
+					/ 2+200, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			leaderb.addActionListener(new LeaderboardButton());
+			leaderb.addMouseListener(this);
+			add(leaderb);
+			
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
 			{
@@ -792,16 +804,12 @@ public class MainMenu implements KeyListener {
 	}
 
 	/**
-	 * Opens the menu to select a server
+	 * Opens the leaderboard
 	 */
-	private static class OnlineButton implements ActionListener {
+	private static class LeaderboardButton implements ActionListener{
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(!ClientAccountWindow.loggedIn)
-			{
-				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
-				return;
-			}
 			if(ClientAccountWindow.open)
 			{
 				newLogin.setVisible(true);
@@ -813,6 +821,56 @@ public class MainMenu implements KeyListener {
 			{
 				serverList.setVisible(true);
 				serverList.toFront();
+				return;
+			}
+			
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
+				return;
+			}
+			
+			leaderboard = null;
+			try {
+				leaderboard = new Leaderboard(DEF_UDP_PORT);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Thread leaderboardThread = new Thread(leaderboard);
+			leaderboardThread.start();	
+		}
+		
+	}
+	/**
+	 * Opens the menu to select a server
+	 */
+	private static class OnlineButton implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
+
+			if(ClientServerSelection.open)
+			{
+				serverList.setVisible(true);
+				serverList.toFront();
+				return;
+			}
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
+				return;
+			}
+			if(!ClientAccountWindow.loggedIn)
+			{
+				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
 			serverList = null;
@@ -841,6 +899,12 @@ public class MainMenu implements KeyListener {
 			{
 				serverList.setVisible(true);
 				serverList.toFront();
+				return;
+			}
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
 				return;
 			}
 			if(ClientAccountWindow.loggedIn)
@@ -1039,11 +1103,6 @@ public class MainMenu implements KeyListener {
 	 */
 	private static class GameStart implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(!ClientAccountWindow.loggedIn)
-			{
-				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
-				return;
-			}
 			if(ClientServerSelection.open)
 			{
 				serverList.setVisible(true);
@@ -1054,6 +1113,17 @@ public class MainMenu implements KeyListener {
 			{
 				newLogin.setVisible(true);
 				newLogin.toFront();
+				return;
+			}
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
+				return;
+			}
+			if(!ClientAccountWindow.loggedIn)
+			{
+				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
 			// Get user info. If it invalid, then ask for it again or exit back
@@ -1134,6 +1204,12 @@ public class MainMenu implements KeyListener {
 			{
 				newLogin.setVisible(true);
 				newLogin.toFront();
+				return;
+			}
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
 				return;
 			}
 			int maxRooms;
@@ -1238,7 +1314,12 @@ public class MainMenu implements KeyListener {
 				newLogin.toFront();
 				return;
 			}
-
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
+				return;
+			}
 			String fileName = "";
 			String[] mapNames = null;
 			final String DEFAULT_MAP_NAME = "New Map Name";
@@ -1323,7 +1404,12 @@ public class MainMenu implements KeyListener {
 				newLogin.toFront();
 				return;
 			}
-
+			if(Leaderboard.open)
+			{
+				leaderboard.setVisible(true);
+				leaderboard.toFront();
+				return;
+			}
 			JOptionPane
 			.showMessageDialog(
 					null,

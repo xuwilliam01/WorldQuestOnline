@@ -2,18 +2,26 @@
 <Root>
   <User name="alex4">
     <Key>alex4hello</Key>
-    <Elo>2101</Elo>
+    <Elo>1000</Elo>
   </User>
   <User name="alex hello">
     <Key>alex_hellotest</Key>
-    <Elo>1000</Elo>
+    <Elo>2101</Elo>
   </User>
   <User name="williamxu">
     <Key>williamxu123456</Key>
-    <Elo>1607</Elo>
+    <Elo>1852</Elo>
   </User>
   <User name="Williamxu98">
     <Key>Williamxu98mathwizard2012</Key>
-    <Elo>1852</Elo>
+    <Elo>1607</Elo>
+  </User>
+    <User name="alex 3">
+    <Key>Williamxu98mathwizard2012</Key>
+    <Elo>1250</Elo>
+  </User>
+    <User name="hola amigo yes">
+    <Key>Williamxu98mathwizard2012</Key>
+    <Elo>3000</Elo>
   </User>
 </Root>
