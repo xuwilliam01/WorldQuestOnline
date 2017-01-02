@@ -33,7 +33,7 @@ public class CentralServer implements Runnable, ActionListener{
 
 	public final static int BASE_ELO = 1000;
 	public final static int LEADERBOARD_SIZE = 20;
-	public final static int PORT = 5000;
+	public final static int PORT = 9977;
 	public final static String IP = "138.197.131.4";
 	//public final static String IP = "138.197.142.105";
 
