@@ -35,6 +35,8 @@ import Tools.RowCol;
  */
 public class ServerPlayer extends ServerCreature implements Runnable
 {
+	public final static String NOTHING = "0";
+	
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
@@ -149,7 +151,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	/**
 	 * The specific action being performed alongside the action counter
 	 */
-	private String action = "NOTHING";
+	private String action = NOTHING;
 
 	/**
 	 * The counter that plays the death animation
@@ -263,6 +265,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int kills = 0;
 	private int deaths = 0;
+	
+	public final static int RELATIVE_X = -14;
+	public final static int RELATIVE_Y = -38;
+	
+	private boolean ignoreClient = false;
 
 	/**
 	 * Constructor for a player in the server
@@ -276,12 +283,11 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	 * @param ID the identifier of the player
 	 * @param image the image of the player
 	 */
-	public ServerPlayer(double x, double y, int width, int height,
-			double relativeDrawX, double relativeDrawY, double gravity,
+	public ServerPlayer(double x, double y, int width, int height, double gravity,
 			String skinColour, Socket socket, ServerEngine engine,
 			ServerWorld world, BufferedReader input, PrintWriter output)
 	{
-		super(x, y, width, height, relativeDrawX, relativeDrawY, gravity,
+		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity,
 				"BASE_" + skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
 				bluePlayerStartHP, world, true); //player start HP doesn't matter since it will change
 
@@ -323,7 +329,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		actionDelay = 20;
 		actionSpeed = 13;
 		canPerformAction = true;
-		action = "NOTHING";
+		action = NOTHING;
 		performingAction = false;
 		newMouseX = 0;
 		newMouseY = 0;
@@ -379,6 +385,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
+		
+		forcePlayerPos(getX(),getY());
+		forcePlayerSpeed(getHSpeed(),getVSpeed());
 	}
 
 	/**
@@ -414,7 +423,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		if (exists())
 		{
 			// Change the player's facing direction after its current action
-			if (actionCounter < 0 && action == "NOTHING")
+			if (actionCounter < 0 && action==NOTHING)
 			{
 				super.setDirection(getNextDirection());
 			}
@@ -435,7 +444,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					heldWeapon = null;
 				}
 				actionCounter = -1;
-				action = "NOTHING";
+				action = NOTHING;
 				canPerformAction = true;
 			}
 
@@ -587,12 +596,16 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					{
 						setX(getWorld().getRedCastleX());
 						setY(getWorld().getRedCastleY());
+						forcePlayerPos(getX(),getY());
+						forcePlayerSpeed(getHSpeed(),getVSpeed());
 
 					}
 					else
 					{
 						setX(getWorld().getBlueCastleX());
 						setY(getWorld().getBlueCastleY());
+						forcePlayerPos(getX(),getY());
+						forcePlayerSpeed(getHSpeed(),getVSpeed());
 					}
 
 					setHP(getMaxHP());
@@ -658,6 +671,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			setHP(getMaxHP());
 			setBaseDamage(blueStartBaseDamage);
 		}
+	}
+	
+	/**
+	 * Force a change in the player position
+	 * @param x
+	 * @param y
+	 */
+	public void forcePlayerPos(double x, double y)
+	{
+		queueMessage("p " + x + " " + y);
+	}
+	
+	/**
+	 * Force a change in the player speed
+	 * @param hSpeed
+	 * @param vSpeed
+	 */
+	public void forcePlayerSpeed(double hSpeed, double vSpeed)
+	{
+		queueMessage("* " + hSpeed + " " + vSpeed);
 	}
 
 	/**
@@ -735,6 +768,12 @@ public class ServerPlayer extends ServerCreature implements Runnable
 								{
 									if (object.getID()==getID())
 									{
+									char inAction = '0';
+									if (action.equals("NOTHING"))
+									{
+										inAction = '1';
+									}
+									
 									queueMessage("O "
 											+ toChars(object.getID())
 											+ " "
@@ -742,13 +781,15 @@ public class ServerPlayer extends ServerCreature implements Runnable
 											+ " "
 											+ toChars(y)
 											+ " "
-											+ object.getX()
-											+ " "
-											+ object.getY()
-											+ " "
-											+ object.getHSpeed()
-											+ " "
-											+ object.getVSpeed()
+//											+ object.getX()
+//											+ " "
+//											+ object.getY()
+//											+ " "
+//											+ object.getHSpeed()
+//											+ " "
+//											+ object.getVSpeed()
+//											+ " "
+											+ inAction
 											+ " "
 											+ object.getImageIndex()
 											+ " "
@@ -1046,16 +1087,26 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			}
 			queueMessage("D " + currentDamage + " " + getBaseDamage());
 
-			while (message.length() < 4000)
-			{
-				queueMessage("L " + getHP());
-			}
+//			while (message.length() < 4000)
+//			{
+//				queueMessage("L " + getHP());
+//			}
 			// Send the current time in the world (Must be the last thing)
 			queueMessage("T " + toChars(getWorld().getWorldTime()));
 			
 			// Send population for red and blue castles
 			queueMessage("rp " + getWorld().getRedCastle().getPopulation() + " " + getWorld().getRedCastle().getPopLimit());
 			queueMessage("bp " + getWorld().getBlueCastle().getPopulation() + " " + getWorld().getBlueCastle().getPopLimit());
+			
+			if (body!=null)
+			{
+				queueMessage("e "+ toChars(body.getID()));
+			}
+			
+			if (head!=null)
+			{
+				queueMessage("e "+ toChars(head.getID()));
+			}
 
 			// Signal a repaint
 			queueMessage("U");
@@ -1118,6 +1169,18 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				// from the client
 				switch (tokens[0])
 				{
+				case "&":
+					setHSpeed(Double.parseDouble(tokens[1]));
+					setVSpeed(Double.parseDouble(tokens[2]));
+					if (tokens[3].charAt(0) == '1')
+					{
+						setOnSurface(true);
+					}
+					else
+					{
+						setOnSurface(false);
+					}
+					break;
 				case "A":
 				case "a":
 					try
@@ -1203,6 +1266,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 					break;
 				case "DL":
 					setDirection("LEFT");
+					break;
+				case "p":
+					if (!ignoreClient)
+					{
+						setX(Double.parseDouble(tokens[1]));
+						setY(Double.parseDouble(tokens[2]));
+					}
 					break;
 				case "P":
 					sendMessage("P");
@@ -2494,4 +2564,13 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		super.setBaseDamage(Math.min(ServerPlayer.MAX_DMGADD, baseDamage));
 	}
 
+	public boolean isIgnoreClient() {
+		return ignoreClient;
+	}
+
+	public void setIgnoreClient(boolean ignoreClient) {
+		this.ignoreClient = ignoreClient;
+	}
+
+	
 }

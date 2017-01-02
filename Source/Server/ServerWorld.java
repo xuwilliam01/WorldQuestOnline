@@ -263,7 +263,7 @@ public class ServerWorld
 	/**
 	 * Max speed (or game may glitch out)
 	 */
-	private static final int MAX_SPEED = TILE_SIZE * 4;
+	public static final int MAX_SPEED = TILE_SIZE * 4;
 
 	/**
 	 * The amount of gravity per refresh
@@ -811,6 +811,24 @@ public class ServerWorld
 						}
 
 					}
+					
+					// Player movement should be atm controlled by the client
+					if (object.getType().equals(PLAYER_TYPE))
+					{
+						ServerPlayer player = (ServerPlayer)object;
+						if (player.isAlive())
+						{
+							object.update();
+							continue;
+						}
+						else
+						{
+							player.forcePlayerPos(player.getX(), player.getY());
+							player.forcePlayerSpeed(player.getHSpeed(), player.getVSpeed());
+						}
+					}
+					
+					
 					if (object.isSolid())
 					{
 						// Apply gravity first (DEFINITELY BEFORE CHECKING

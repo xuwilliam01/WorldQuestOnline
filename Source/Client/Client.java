@@ -42,6 +42,7 @@ import Server.ServerEngine;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
+import Server.Items.ServerPotion;
 
 @SuppressWarnings("serial")
 /**
@@ -240,6 +241,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 	private int deathTime = 0;
 	private float fillAmount = 0;
+	
+	private boolean isDropping=false;
+	private boolean inAction = false;
+	private boolean onSurface = false;
+	
 
 	/**
 	 * Constructor for the client
@@ -436,6 +442,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 	long start = 0;
 	int noOfTicks = 0;
+	long startPaint = 0;
 	
 	/**
 	 * Thread for running the actual game
@@ -448,7 +455,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		@Override
 		public void run()
 		{
-			long startPaint = 0;
 			while (!leaveGame)
 			{
 				if (!lines.isEmpty())
@@ -529,7 +535,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "U":
 									//startPaint = System.currentTimeMillis();
-									repaint();
+									//repaint();
 									break;
 								case "H":
 									if (world.getHologram() == null)
@@ -571,30 +577,30 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								case "h":
 									world.removeHologram();
 									break;
+								case "p":
+									playerX = Double.parseDouble(tokens[++token]);
+									playerY = Double.parseDouble(tokens[++token]);
+									setPos((int)playerX, (int)playerY);
+									break;
+								case "e":
+									ClientObject object = world.get(toInt(tokens[++token]));
+									object.setX(player.getX());
+									object.setY(player.getY());
+									break;
+								case "*":
+									System.out.println("Message " + tokens[token+1] + " "+  tokens[token+2]);
+									hSpeed = Double.parseDouble(tokens[++token]);
+									vSpeed = Double.parseDouble(tokens[++token]);
+									break;
 								case "O":
 									int id = toInt(tokens[++token]);
 									int x = toInt(tokens[++token]);
 									int y = toInt(tokens[++token]);
 									if (id == player.getID())
 									{
-										if (Math.abs(player.getX()-x)>=0)
-										{
-										
-										}
-										if (Math.abs(player.getY()-y)>=0)
-										{
-										
-										}
 										player.setTeam(Integer
-												.parseInt(tokens[token + 6]));
-										playerX = Double.parseDouble(tokens[++token]);
-										playerX = playerX-(int)playerX + x;
-										playerY = Double.parseDouble(tokens[++token]);
-										playerY = playerY -(int)playerY + y;
-										hSpeed = Double.parseDouble(tokens[++token]);
-										vSpeed = Double.parseDouble(tokens[++token]);
-										
-
+												.parseInt(tokens[token + 3]));
+										inAction = tokens[++token].charAt(0)=='1';
 									}
 									if (tokens[token + 4].equals("{"))
 									{
@@ -629,9 +635,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										}
 										if (id == player.getID())
 										{
-											player.setX((int)playerX);
-											player.setY((int)playerY);
-										world.setObject(
+//											player.setX((int)playerX);
+//											player.setY((int)playerY);
+											world.setObject(
 												id,
 												player.getX(),
 												player.getY(),
@@ -901,7 +907,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 							}
 							catch (NumberFormatException e)
 							{
-								System.out.println("Java can't parse integers");
+								System.out.println(message);
 								e.printStackTrace();
 							}
 							catch (IOException e)
@@ -913,13 +919,21 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 					}
 				}
 				
-				if (System.currentTimeMillis()-startPaint >= ServerEngine.UPDATE_RATE)
+				if (System.nanoTime()-startPaint>14*1000000)
 				{
-					//startPaint = System.currentTimeMillis();
-					//clientUpdatePlayer();
-					//repaint();
-				}
+				clientUpdatePlayer(System.nanoTime()-startPaint);
+				startPaint = System.nanoTime();
+				// Send to the server relevant client-side data
 				
+				char surface = '0';
+				if (onSurface)
+				{
+					surface = '1';
+				}
+				printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
+				
+				repaint();
+				}
 				
 				try
 				{
@@ -936,10 +950,283 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	/**
 	 * Move the player on the client side if the server side hasn't yet responded
 	 */
-	public void clientUpdatePlayer()
+	public void clientUpdatePlayer(long timeForTick)
 	{
-		player.setX((int)(playerX+hSpeed));
-		player.setY((int)(playerY+vSpeed));
+		if (startPaint ==0)
+		{
+			return;
+		}
+		double gravity = ServerWorld.GRAVITY * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		
+		// Apply gravity first (DEFINITELY BEFORE CHECKING
+		// VSPEED)
+		if (vSpeed + gravity < ServerWorld.MAX_SPEED)
+		{
+			vSpeed += gravity;
+		}
+		else
+		{
+			vSpeed = ServerWorld.MAX_SPEED;
+		}
+		
+		double currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		double currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		System.out.println(currHSpeed);
+		
+		//System.out.println("vSpeed " + currVSpeed + " timeForTick " + timeForTick + " multiplier " + (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0)));
+		
+		// Add the object to all the object tiles that it collides
+		// with
+		// currently
+		int startRow =0;
+		int endRow =0;
+		int startColumn =0;
+		int endColumn =0;
+		
+		double x1 = playerX;
+		double x2 = playerX + player.getWidth() - ServerPlayer.RELATIVE_X;
+		double y1 = playerY;
+		double y2 = playerY + player.getHeight() - ServerPlayer.RELATIVE_Y;
+
+		// Detect the rows and columns of the tiles that the
+		// object collides with in this tick
+		if (currVSpeed > 0)
+		{
+			startRow = (int) (y1 / ServerWorld.TILE_SIZE - 1);
+			endRow = (int) ((y2 + currVSpeed) / ServerWorld.TILE_SIZE + 1);
+		}
+		else if (currVSpeed < 0)
+		{
+			startRow = (int) ((y1 + currVSpeed) / ServerWorld.TILE_SIZE - 1);
+			endRow = (int) (y2 / ServerWorld.TILE_SIZE + 1);
+		}
+		else
+		{
+			startRow = (int) (y1 / ServerWorld.TILE_SIZE);
+			endRow = (int) (y2 / ServerWorld.TILE_SIZE + 1);
+		}
+		if (currHSpeed > 0)
+		{
+			startColumn = (int) (x1 / ServerWorld.TILE_SIZE - 1);
+			endColumn = (int) ((x2 + currHSpeed) / ServerWorld.TILE_SIZE + 1);
+		}
+		else if (currHSpeed < 0)
+		{
+			startColumn = (int) ((x1 + currHSpeed) / ServerWorld.TILE_SIZE - 1);
+			endColumn = (int) (x2 / ServerWorld.TILE_SIZE + 1);
+		}
+		else
+		{
+			startColumn = (int) (x1 / ServerWorld.TILE_SIZE - 1);
+			endColumn = (int) (x2 / ServerWorld.TILE_SIZE + 1);
+		}
+		if (startRow < 0)
+		{
+			startRow = 0;
+		}
+		else if (endRow > world.getCollisionGrid().length - 1)
+		{
+			endRow = world.getCollisionGrid().length - 1;
+		}
+		if (startColumn < 0)
+		{
+			startColumn = 0;
+		}
+		else if (endColumn > world.getCollisionGrid()[0].length - 1)
+		{
+			endColumn = world.getCollisionGrid()[0].length - 1;
+		}
+		
+		boolean moveVertical = true;
+		boolean moveHorizontal = true;
+
+		// Check for collisions with the tiles determined above
+		if (currVSpeed > 0)
+		{
+			// The row and column of the tile that was collided
+			// with
+			int collideRow = 0;
+
+			for (int row = startRow; row <= endRow; row++)
+			{
+				for (int column = startColumn; column <= endColumn; column++)
+				{
+					//System.out.println(row + " " + column + " " + endRow);
+					if (((world.getCollisionGrid()[row][column] == ServerWorld.SOLID_TILE
+							|| (world.getCollisionGrid()[row][column] == ServerWorld.PLATFORM_TILE
+							&& !isDropping))
+							&& column * ServerWorld.TILE_SIZE < x2 && column
+							* ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE > x1))
+					{
+						if (y2 + currVSpeed >= row * ServerWorld.TILE_SIZE
+								&& y2 <= row * ServerWorld.TILE_SIZE)
+						{
+							moveVertical = false;
+							collideRow = row;
+							break;
+						}
+					}
+					if (!moveVertical)
+					{
+						break;
+					}
+				}
+			}
+			if (!moveVertical)
+			{
+				// Snap the object to the colliding tile
+				playerY = collideRow * ServerWorld.TILE_SIZE
+						- (player.getHeight()-ServerPlayer.RELATIVE_Y);
+				onSurface = true;
+				vSpeed = 0;
+				currVSpeed = 0;
+			}
+			else
+			{
+				onSurface = false;
+			}
+		}
+		else if (currVSpeed < 0)
+		{
+			// The row and column of the tile that was collided
+			// with
+			int collideRow = 0;
+
+			for (int row = endRow; row >= startRow; row--)
+			{
+				for (int column = startColumn; column <= endColumn; column++)
+				{
+					if (world.getCollisionGrid()[row][column] == ServerWorld.SOLID_TILE
+							&& column * ServerWorld.TILE_SIZE < x2
+							&& column * ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE > x1)
+					{
+						if (y1 + currVSpeed <= row * ServerWorld.TILE_SIZE
+								+ ServerWorld.TILE_SIZE
+								&& y1 >= row * ServerWorld.TILE_SIZE
+										+ ServerWorld.TILE_SIZE)
+						{
+							moveVertical = false;
+							collideRow = row;
+							break;
+						}
+					}
+					if (!moveVertical)
+					{
+						break;
+					}
+				}
+			}
+			if (!moveVertical)
+			{
+				// Snap the object to the colliding tile
+				playerY = collideRow * ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE
+						+ 1;
+				vSpeed = 0;
+				currVSpeed = 0;
+			}
+		}
+
+		if (currHSpeed > 0)
+		{
+			// The row and column of the tile that was collided
+			// with
+			int collideColumn = 0;
+
+			for (int row = startRow; row <= endRow; row++)
+			{
+				for (int column = startColumn; column <= endColumn; column++)
+				{
+					if (world.getCollisionGrid()[row][column] == ServerWorld.SOLID_TILE
+							&& row * ServerWorld.TILE_SIZE < y2
+							&& row * ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE > y1)
+					{
+						if (x2 + currHSpeed >= column * ServerWorld.TILE_SIZE
+								&& x2 <= column * ServerWorld.TILE_SIZE)
+						{
+							moveHorizontal = false;
+							collideColumn = column;
+							break;
+						}
+					}
+					if (!moveHorizontal)
+					{
+						break;
+					}
+				}
+			}
+			if (!moveHorizontal)
+			{
+				// Snap the object to the colliding tile
+				playerX = collideColumn * ServerWorld.TILE_SIZE
+						- (player.getWidth()-ServerPlayer.RELATIVE_X);
+			}
+		}
+		else if (currHSpeed < 0)
+		{
+			// The row and column of the tile that was collided
+			// with
+			int collideColumn = 0;
+
+			for (int row = startRow; row <= endRow; row++)
+			{
+				for (int column = endColumn; column >= startColumn; column--)
+				{
+					if (world.getCollisionGrid()[row][column] == ServerWorld.SOLID_TILE
+							&& row * ServerWorld.TILE_SIZE < y2
+							&& row * ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE > y1)
+					{
+						if (x1 + currHSpeed <= column * ServerWorld.TILE_SIZE
+								+ ServerWorld.TILE_SIZE
+								&& x1 >= column * ServerWorld.TILE_SIZE
+										+ ServerWorld.TILE_SIZE)
+						{
+							moveHorizontal = false;
+							collideColumn = column;
+							break;
+						}
+					}
+					if (!moveHorizontal)
+					{
+						break;
+					}
+				}
+			}
+			if (!moveHorizontal)
+			{
+				// Snap the object to the colliding tile
+				playerX = collideColumn * ServerWorld.TILE_SIZE
+						+ ServerWorld.TILE_SIZE;
+			}
+		}
+	
+		
+
+	// Move this object based on its vertical speed and
+	// horizontal speed
+	if (moveHorizontal)
+	{
+		
+		// Don't let the player move when trying to swing a
+		// sword
+		//if (!inAction)
+		{
+			playerX += currHSpeed;
+		}
+	}
+	if (moveVertical)
+	{
+		playerY += currVSpeed;
+	}
+	
+	setPos((int)playerX,(int)playerY);
+	printToServer("p " + playerX + " " + playerY);
+	
+	}
+	
+	public void setPos(int x, int y)
+	{
+		player.setX(x-ServerPlayer.RELATIVE_X);
+		player.setY(y-ServerPlayer.RELATIVE_Y);
 	}
 	
 
@@ -1377,7 +1664,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		
 		if ((++noOfTicks)>60)
 		{
-			System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
+			//System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
 			start = System.currentTimeMillis();
 			noOfTicks = 0;
 		}
@@ -1396,6 +1683,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				currentMessage = "R";
 				printToServer(currentMessage);
 				System.out.println("Go right");
+				hSpeed = speed;
 			}
 			break;
 		case KeyEvent.VK_A:
@@ -1404,14 +1692,20 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				// L for left
 				currentMessage = "L";
 				printToServer(currentMessage);
+				hSpeed = -speed;
 			}
 			break;
+		case KeyEvent.VK_SPACE:
 		case KeyEvent.VK_W:
 			if (!currentMessage.equals("U"))
 			{
 				// U for up
 				currentMessage = "U";
 				printToServer(currentMessage);
+				if (onSurface)
+				{
+					vSpeed = -jump;
+				}	
 			}
 			break;
 		case KeyEvent.VK_S:
@@ -1421,7 +1715,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				// D for down
 				currentMessage = "D";
 				printToServer(currentMessage);
+				isDropping = true;
 			}
+			
 			break;
 		case KeyEvent.VK_1:
 			if (!currentMessage.equals("W0")
@@ -1506,12 +1802,14 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			if (!currentMessage.equals("!R"))
 			{
 				currentMessage = "!R";
+				hSpeed = 0;
 			}
 			break;
 		case KeyEvent.VK_A:
 			if (!currentMessage.equals("!L"))
 			{
 				currentMessage = "!L";
+				hSpeed = 0;
 			}
 			break;
 		case KeyEvent.VK_W:
@@ -1525,6 +1823,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			{
 				currentMessage = "!D";
 			}
+			isDropping = false;
 			break;
 		}
 		if (!currentMessage.isEmpty())
@@ -1555,6 +1854,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY() + " t";
 			printToServer(currentMessage);
+			inAction = true;
 
 			// System.out.println("Pressed");
 		}
@@ -1564,6 +1864,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			// A for action
 			currentMessage = "a " + event.getX() + " " + event.getY();
 
+			inAction = true;
 			printToServer(currentMessage);
 		}
 
@@ -2092,11 +2393,6 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	public void setSpeed(int speed)
 	{
 		this.speed = speed;
-	}
-
-	public void setJump(int jump)
-	{
-		this.jump = jump;
 	}
 
 	public void setArmour(double armour)

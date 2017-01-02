@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import com.sun.javafx.collections.MappingChange.Map;
+
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Server.ServerEngine;
@@ -36,6 +38,11 @@ public class ClientWorld {
 	 * The grid of foreground tiles
 	 */
 	private char[][] foregroundGrid;
+	
+	/**
+	 * The grid of solid tiles and platforms
+	 */
+	private char[][] collisionGrid;
 
 	/**
 	 * Array of client objects, where the index of the object in the array is
@@ -211,6 +218,7 @@ public class ClientWorld {
 
 		backgroundGrid = new char[grid.length][grid[0].length];
 		foregroundGrid = new char[grid.length][grid[0].length];
+		collisionGrid = new char[grid.length][grid[0].length];
 
 		// Create a background and foreground grid
 		for (int row = 0; row < grid.length; row++) {
@@ -221,9 +229,19 @@ public class ClientWorld {
 					grid[row][column] = ' ';
 				}
 
+				// Non-solid tiles
 				if (grid[row][column] < 'A') {
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
+					
+					if (grid[row][column]<'0' && grid[row][column]!=' ')
+					{
+						collisionGrid[row][column] = ServerWorld.PLATFORM_TILE;
+					}
+					else
+					{
+						collisionGrid[row][column] = ServerWorld.BACKGROUND_TILE;
+					}
 
 					switch (backgroundGrid[row][column]) {
 					case '0':
@@ -235,9 +253,11 @@ public class ClientWorld {
 								.random() * 3));
 					}
 
+				// Solid tiles
 				} else {
 					foregroundGrid[row][column] = grid[row][column];
 					backgroundGrid[row][column] = ' ';
+					collisionGrid[row][column] = ServerWorld.SOLID_TILE;
 				}
 			}
 		}
@@ -1232,5 +1252,14 @@ public class ClientWorld {
 		hologram = null;
 	}
 
+	public char[][] getCollisionGrid() {
+		return collisionGrid;
+	}
+
+	public void setCollisionGrid(char[][] collisionGrid) {
+		this.collisionGrid = collisionGrid;
+	}
+	
+	
 
 }

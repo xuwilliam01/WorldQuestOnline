@@ -270,7 +270,7 @@ public class Server implements Runnable {
 				int characterSelection = (int) (Math.random() * playerColours.length);
 				ServerPlayer newPlayer = new ServerPlayer(x, y,
 						ServerPlayer.DEFAULT_WIDTH,
-						ServerPlayer.DEFAULT_HEIGHT, -14, -38,
+						ServerPlayer.DEFAULT_HEIGHT,
 						ServerWorld.GRAVITY, playerColours[characterSelection],
 						newClient, engine, engine.getWorld(), input, output);
 
