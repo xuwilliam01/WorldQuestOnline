@@ -49,11 +49,14 @@ public class ServerPlayer extends ServerCreature implements Runnable
 	public static final int DEFAULT_WEAPON_SLOT = 9;
 	public static final int DEFAULT_ARMOUR_SLOT = -1;
 
+	public static final int PLAYER_BASE_HP = 100;
+	public static final int PLAYER_BASE_MANA = 100;
+	
 	// The starting mana and hp for the player. Change as castle upgrades
-	public static int bluePlayerStartHP = 100;
-	public static int redPlayerStartHP = 100;
-	public static int bluePlayerStartMana = 100;
-	public static int redPlayerStartMana = 100;
+	public static int bluePlayerStartHP = PLAYER_BASE_HP;
+	public static int redPlayerStartHP = PLAYER_BASE_HP;
+	public static int bluePlayerStartMana = PLAYER_BASE_MANA;
+	public static int redPlayerStartMana = PLAYER_BASE_MANA;
 	public static int blueStartBaseDamage = 0;
 	public static int redStartBaseDamage = 0;
 
@@ -265,6 +268,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 
 	private int kills = 0;
 	private int deaths = 0;
+	private int totalDamageDealt = 0;
+	private int totalMoneySpent = 0;
+	private int ping = 0;
 	
 	public final static int RELATIVE_X = -14;
 	public final static int RELATIVE_Y = -38;
@@ -1277,6 +1283,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				case "P":
 					sendMessage("P");
 					break;
+				case "y":
+					ping = Integer.parseInt(command.substring(2));
+					break;
 				case "C":
 					// Player uses the chat
 					if (command.length() >= 3)
@@ -1629,6 +1638,7 @@ public class ServerPlayer extends ServerCreature implements Runnable
 			if (item.getType().equals(ServerWorld.MONEY_TYPE))
 			{
 				item.decreaseAmount(amount);
+				addTotalMoneySpent(amount);
 				if (item.getAmount() <= 0)
 				{
 					toRemove = item;
@@ -1902,9 +1912,9 @@ public class ServerPlayer extends ServerCreature implements Runnable
 				amount = 0;
 			}
 
+			addCastleXP(Math.min(amount, getHP()),source);
 			setHP(getHP() - amount);
-			addCastleXP(amount,source);
-
+		
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
 			- getHeight() / 3;
@@ -2572,5 +2582,29 @@ public class ServerPlayer extends ServerCreature implements Runnable
 		this.ignoreClient = ignoreClient;
 	}
 
+	public int getTotalDamageDealt() {
+		return totalDamageDealt;
+	}
+
+	public void addTotalDamage(int amount) {
+		totalDamageDealt += amount;
+	}
+
+	public int getTotalMoneySpent() {
+		return totalMoneySpent;
+	}
+
+	public void addTotalMoneySpent(int amount) {
+		totalMoneySpent += amount;
+	}
+
+	public int getScore()
+	{
+		return totalDamageDealt + kills*PLAYER_BASE_HP + totalMoneySpent*10;
+	}
 	
+	public int getPing()
+	{
+		return ping;
+	}
 }

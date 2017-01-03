@@ -660,8 +660,10 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 											ServerPlayer.NEUTRAL, world));
 									break;
 								case "P":
+									long calcPing = System.currentTimeMillis() - ping;
 									pingString = "Ping: "
-											+ (System.currentTimeMillis() - ping);
+											+ calcPing;
+									printToServer("y "+calcPing);
 									startTimer = System.currentTimeMillis();
 									break;
 								case "R":
@@ -768,6 +770,8 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 											toInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
@@ -780,6 +784,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									scoreboard.addDeath(toInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
+									break;
+								case "s":
+									scoreboard.update(toInt(tokens[++token]), toInt(tokens[++token]), Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									break;
 								case "RP":
 									scoreboard.removePlayer(

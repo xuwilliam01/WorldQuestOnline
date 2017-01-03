@@ -11,6 +11,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Effects.ServerText;
+import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Spawners.ServerGoblinSpawner;
@@ -26,13 +27,13 @@ public class ServerCastle extends ServerBuilding {
 
 	public final static int[][] GOBLIN_SPAWNS = 
 		{{ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_GUARD_NO},
-		{ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO},
-		{ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
-		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
-		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KING_NO},
-		{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO},
-		{ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO}};
-	
+				{ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_GUARD_NO, ServerGoblin.GOBLIN_NO, ServerGoblin.GOBLIN_NO},
+				{ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
+				{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GUARD_NO,ServerGoblin.GOBLIN_LORD_NO},
+				{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KING_NO},
+				{ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_KNIGHT_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO},
+				{ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_GENERAL_NO,ServerGoblin.GOBLIN_KING_NO}};
+
 	/**
 	 * The number of pixels for a target to be in range for the castle to fire
 	 * at it
@@ -71,48 +72,48 @@ public class ServerCastle extends ServerBuilding {
 	 * The XP of the castle
 	 */
 	private int xp = 0;
-	
+
 	/**
 	 * Arrow sources on the castle
 	 */
 	private ArrayList<ServerObject> arrowSources;
-	
+
 	/**
 	 * Starting limit of population
 	 */
 	public static final int POP_LIMIT = 20;
-	
+
 	/**
 	 * Current limit of population
 	 */
 	private int popLimit;
-	
+
 	/**
 	 * Current population
 	 */
 	private int population;
-	
+
 	/**
 	 * Goblins that this castle provides each spawn tick
 	 */
 	private int castleGoblins[];
-	
+
 	/**
 	 * All the spawners of this team
 	 */
 	private ArrayList<ServerGoblinSpawner> spawners;
-	
+
 	private int spawnerNo = 0;
-	
+
 	/**
 	 * Buildings currently alive that contribute to spawning goblins
 	 */
 	private LinkedList<ServerBarracks> barracks;
-	
+
 	private Stack<ServerBarracks> barracksToRemove;
-	
+
 	private Stack<ServerBarracks> barracksToAdd;
-	
+
 	/**
 	 * Delay between each spawning session
 	 */
@@ -140,10 +141,10 @@ public class ServerCastle extends ServerBuilding {
 		barracksToRemove = new Stack<ServerBarracks>();
 		barracksToAdd = new Stack<ServerBarracks>();
 		castleGoblins = GOBLIN_SPAWNS[tier];
-		
+
 		arrowSources = new ArrayList<ServerObject>();
 		targetRange = 1000;
-		
+
 		popLimit = POP_LIMIT;
 		population = 0;
 	}
@@ -159,7 +160,7 @@ public class ServerCastle extends ServerBuilding {
 		{
 			barracks.add(barracksToAdd.pop());
 		}
-		
+
 		if (getWorld().getWorldCounter() % spawnDelay == spawnDelay/4) // Don't spawn immediately once the game starts
 		{
 			for (ServerBarracks producer:barracks)
@@ -169,16 +170,16 @@ public class ServerCastle extends ServerBuilding {
 					spawnGoblin(goblin);
 				}
 			}
-			
+
 			for (Integer goblin:castleGoblins)
 			{
 				spawnGoblin(goblin);
 			}
 		}
 
-		
+
 	}
-	
+
 	/**
 	 * Spawn a goblin at one of the spawners
 	 * @param goblinNo
@@ -187,13 +188,13 @@ public class ServerCastle extends ServerBuilding {
 	{
 		ServerGoblinSpawner spawner = spawners.get(spawnerNo);
 		getWorld().add(new ServerGoblin(spawner.getX(), spawner.getY() - spawner.getHeight() - ServerWorld.TILE_SIZE, getWorld(), getTeam(), goblinNo));
-		
+
 		if ((++spawnerNo)>=spawners.size())
 		{
 			spawnerNo = 0;
 		}
 	}
-	
+
 	public synchronized void addGoblin(ServerGoblin goblin)
 	{
 		if (population + goblin.getHousingSpace() <= popLimit)
@@ -206,9 +207,9 @@ public class ServerCastle extends ServerBuilding {
 			setPopulation(getPopulation() + goblin.getHousingSpace());
 			goblin.destroy();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Upgrade the castle tier
 	 */
@@ -219,28 +220,28 @@ public class ServerCastle extends ServerBuilding {
 		setHP(getHP() + 5000);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
-		
-		
+
+
 		for (ServerObject object: arrowSources)
 		{
 			object.destroy();
 		}
-		
+
 		arrowSources.clear();
-		
+
 		if (tier == 3) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
-		
+
 		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
 				arrowType, targetRange, this, getWorld())));
 		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
 				arrowType, targetRange, this, getWorld())));
-		
+
 		setPopLimit(getPopLimit()+10);
-		
+
 		// Alert each player on the team
 		for (ServerPlayer player: getWorld().getEngine().getListOfPlayers())
 		{
@@ -250,23 +251,23 @@ public class ServerCastle extends ServerBuilding {
 			}
 		}
 	}
-	
+
 	public void reinitialize()
 	{
 		if (getTeam() == RED_TEAM)
 			setName("Red Team's Castle");
 		else
 			setName("Blue Team's Castle");
-		
-		
+
+
 		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
 		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
-	
-		
+
+
 	}
-	
+
 	@Override
 	public void destroy()
 	{
@@ -304,6 +305,14 @@ public class ServerCastle extends ServerBuilding {
 
 	public void setTarget(ServerCreature target) {
 		this.target = target;
+	}
+
+	public synchronized void addMoney(ServerMoney money) {
+		if(money.getSource().getType().equals(ServerWorld.PLAYER_TYPE))
+		{
+			((ServerPlayer)money.getSource()).addTotalMoneySpent(money.getAmount());
+		}
+		this.money += money.getAmount();
 	}
 
 	public synchronized void addMoney(int money) {
@@ -384,12 +393,12 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void setPopLimit(int popLimit) {
 		this.popLimit = popLimit;
 	}
-	
+
 	public synchronized void increasePopLimit(int amount)
 	{
 		setPopLimit(getPopLimit()+amount);
 	}
-	
+
 	public synchronized void decreasePopLimit(int amount)
 	{
 		setPopLimit(getPopLimit()-amount);
@@ -402,22 +411,22 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void setPopulation(int population) {
 		this.population = population;
 	}
-	
+
 	public void increasePopulation(int amount)
 	{
 		setPopulation(getPopulation()+amount);
 	}
-	
+
 	public synchronized void removeGoblin(ServerGoblin goblin)
 	{
 		setPopulation(getPopulation() - goblin.getHousingSpace());
 	}
-	
+
 	public synchronized void addBarracks(ServerBarracks barracks)
 	{
 		this.barracksToAdd.push(barracks);
 	}
-	
+
 	public synchronized void removeBarracks(ServerBarracks barracks)
 	{
 		this.barracksToRemove.push(barracks);

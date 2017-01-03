@@ -728,8 +728,7 @@ public class ServerWorld
 														.hasCoolDown())
 										{
 											((ServerCastle) object)
-													.addMoney(((ServerMoney) otherObject)
-															.getAmount());
+													.addMoney((ServerMoney) otherObject);
 											otherObject.destroy();
 										}
 										break;

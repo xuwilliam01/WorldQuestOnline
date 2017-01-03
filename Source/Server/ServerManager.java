@@ -57,7 +57,6 @@ public class ServerManager implements Runnable, ActionListener{
 		this.mainFrame = mainFrame;	
 		thisPort = port;
 		addNewRoom();
-		updateCentral.start();
 		centralSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
 		PingReceiver ping = new PingReceiver();
@@ -74,6 +73,7 @@ public class ServerManager implements Runnable, ActionListener{
 			e.printStackTrace();
 		}
 
+		updateCentral.start();
 		Thread centralServerThread = new Thread(new CentralServerReceive());
 		centralServerThread.start();
 	}

@@ -82,6 +82,8 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
+		
+		refresh.doClick();
 		repaint();
 	}
 
@@ -175,7 +177,9 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				servers.clear();
 				pings.clear();
 				int numInputs = 4;
-				serversData = new Object[(tokens.length-2)/numInputs][3];
+				
+				Object[][] copy = serversData.clone();
+				serversData = new Object[(tokens.length-2)/numInputs][5];
 				String thisIP = tokens[1];
 				//System.out.println("Received Servers\n"+input);
 				if(tokens.length > 2)
@@ -183,7 +187,21 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 					{
 						serversData[i/numInputs][0] = tokens[i+2];
 						serversData[i/numInputs][1] = tokens[i+5] +"/10";
-						serversData[i/numInputs][2] = "-";
+						serversData[i/numInputs][3] = tokens[i+3];
+						serversData[i/numInputs][4] = tokens[i+4];
+						
+						int index = -1;
+						for(int j = 0; j < copy.length;j++)
+						{
+							if(copy[j][3].equals(tokens[i+3]) && copy[j][4].equals(tokens[i+4]))
+							{
+								index = j;
+								break;
+							}
+						}
+						if(index >= 0)
+							serversData[i/numInputs][2] = copy[index][2];
+						else serversData[i/numInputs][2] = "-";
 
 						int port = Integer.parseInt(tokens[i+4]);
 						String IP = tokens[i+3];

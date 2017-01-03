@@ -214,6 +214,7 @@ public abstract class ServerCreature extends ServerObject
 		//Add xp to the team of the source
 		if (source.getType().equals(ServerWorld.PLAYER_TYPE))
 		{
+			((ServerPlayer)source).addTotalDamage(amount);
 			if (source.getTeam() == RED_TEAM)
 				world.getRedCastle().addXP(amount);
 			else
@@ -230,8 +231,8 @@ public abstract class ServerCreature extends ServerObject
 	{
 		if (HP > 0)
 		{
+			addCastleXP(Math.min(amount,HP), source);
 			HP -= amount;
-			addCastleXP(amount, source);
 			
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
@@ -388,18 +389,19 @@ public abstract class ServerCreature extends ServerObject
 			if (sItem.getType().equals(item))
 			{
 				toRemove = sItem;
-				if (toRemove.getAmount() > 1)
-					dropItem(ServerItem.copy(sItem,world));
-				else
-					dropItem(sItem);
 				break;
 			}
 		}
-
 		if (toRemove.getAmount() > 1)
+		{
 			toRemove.decreaseAmount();
+			dropItem(ServerItem.copy(toRemove,world));
+		}
 		else
+		{
 			inventory.remove(toRemove);
+			dropItem(toRemove);
+		}
 	}
 
 	/**

@@ -203,8 +203,11 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Send an instant message to all clients
 	 */
 	public void broadcast(String message) {
-		for (ServerPlayer player : listOfPlayers) {
-			player.sendMessage(message);
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				player.sendMessage(message);
+			}
 		}
 		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
@@ -215,9 +218,12 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Sends a message to the given team
 	 */
 	public void broadCastTeam(String message, int team) {
-		for (ServerPlayer player : listOfPlayers) {
-			if (player.getTeam() == team)
-				player.sendMessage(message);
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				if (player.getTeam() == team)
+					player.sendMessage(message);
+			}
 		}
 		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
@@ -253,12 +259,12 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		//For the scoreboard
 		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
-				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0);
+				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0 + " " + 0 + " " + newPlayer.getPing());
 		for(ServerPlayer player : listOfPlayers)
 		{
 			if(player.getID() != newPlayer.getID())
 				newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
-						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths());
+						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
 		}
 
 		world.add(newPlayer);
@@ -318,9 +324,10 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		// Remove disconnected players
+		// Remove disconnected players and update all player scores/pings
 		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
 		for (ServerPlayer player : listOfPlayers) {
+			broadcast("s "+ServerPlayer.toChars(player.getID())+" "+ServerPlayer.toChars(player.getScore())+" "+player.getPing()+" "+player.getTeam());
 			if (player.isDisconnected()) {
 				listOfRemovedPlayers.add(player);
 			}
