@@ -77,7 +77,13 @@ public class ServerArrowSource extends ServerObject
 				int yDist = (int) ((getY()) - (getTarget().getY() + getTarget()
 				.getHeight() / 2));
 
-				double angle = getAngle(xDist, yDist, ServerProjectile.ARROW_SPEED, ServerProjectile.ARROW_GRAVITY);
+				int speed = ServerProjectile.ARROW_SPEED;
+				if(xDist <= 0)
+					speed += target.getHSpeed();
+				else
+					speed -= target.getHSpeed();
+					
+				double angle = getAngle(xDist, yDist, speed, ServerProjectile.ARROW_GRAVITY);
 
 				ServerProjectile arrow = new ServerProjectile(getX(),
 						getY(), owner, angle, arrowType,getWorld());
