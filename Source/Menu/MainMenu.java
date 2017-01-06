@@ -294,48 +294,53 @@ public class MainMenu implements KeyListener {
 			mainFrame.requestFocus();
 
 			repaintTimer.start();
+			
+			int currentButtonY = (int)(Client.SCREEN_HEIGHT*(0.5));
 
 			playGame = new JButton(new ImageIcon(playGameImage));
 			playGame.setSize(playGameImage.getWidth(null),
 					playGameImage.getHeight(null));
-			playGame.setLocation(middle - playGameImage.getWidth(null) / 2,
-					(int) (630 * (Client.SCREEN_HEIGHT / 1080.0)));
+			playGame.setLocation(0,
+					currentButtonY);
 			playGame.setBorder(BorderFactory.createEmptyBorder());
 			playGame.setContentAreaFilled(false);
 			playGame.setOpaque(false);
 			playGame.addActionListener(new GameStart());
 			playGame.addMouseListener(this);
 			add(playGame);
+			currentButtonY += playGameImage.getHeight(null);
 
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),
 					createServerImage.getHeight(null));
-			createServer.setLocation(middle - createServerImage.getWidth(null)
-					/ 2, (int) (720 * (Client.SCREEN_HEIGHT / 1080.0)));
+			createServer.setLocation(0,
+					currentButtonY);
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
 			createServer.addActionListener(new StartServer());
 			createServer.addMouseListener(this);
 			add(createServer);
+			currentButtonY += createServerImage.getHeight(null);
 
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),
 					createMapImage.getHeight(null));
-			createMap.setLocation(middle - createMapImage.getWidth(null) / 2,
-					(int) (810 * (Client.SCREEN_HEIGHT / 1080.0)));
+			createMap.setLocation(0,
+					currentButtonY);
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
 			createMap.addActionListener(new StartCreator());
 			createMap.addMouseListener(this);
 			add(createMap);
+			currentButtonY += createMapImage.getHeight(null);
 
 			instructions = new JButton(new ImageIcon(instructionsImage));
 			instructions.setSize(instructionsImage.getWidth(null),
 					instructionsImage.getHeight(null));
-			instructions.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2, (int) (900 * (Client.SCREEN_HEIGHT / 1080.0)));
+			instructions.setLocation(0,
+					currentButtonY);
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
@@ -430,9 +435,9 @@ public class MainMenu implements KeyListener {
 
 			graphics.drawString("Press 'ESC' to quit",
 					ClientFrame.getScaledWidth(1920) - 120, 20);
-			graphics.drawImage(buttonTrayImage,
-					middle - buttonTrayImage.getWidth(null) / 2,
-					(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
+			//graphics.drawImage(buttonTrayImage,
+					//middle - buttonTrayImage.getWidth(null) / 2,
+					//(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 

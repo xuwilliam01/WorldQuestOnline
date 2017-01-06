@@ -1006,11 +1006,11 @@ public class Images {
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(400)), "Interface//"));
 			addtoImageArray(new GameImage("FindAGame.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAServer.png",
 					(int) (ClientFrame.getScaledWidth(268)),
 					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
@@ -1018,17 +1018,17 @@ public class Images {
 					(int) (ClientFrame.getScaledWidth(268)),
 					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAMap.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("Instructions.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("WorldQuestOnline.png",
 					(int) (ClientFrame.getScaledWidth(1000)),
 					(int) (ClientFrame.getScaledHeight(250)), "Interface//"));
