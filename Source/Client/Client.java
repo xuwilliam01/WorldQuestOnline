@@ -992,9 +992,9 @@ ActionListener, MouseMotionListener
 		int endColumn =0;
 
 		double x1 = playerX;
-		double x2 = playerX + player.getWidth() - ServerPlayer.RELATIVE_X;
+		double x2 = x1 + ServerPlayer.DEFAULT_WIDTH;
 		double y1 = playerY;
-		double y2 = playerY + player.getHeight() - ServerPlayer.RELATIVE_Y;
+		double y2 = playerY + ServerPlayer.DEFAULT_HEIGHT;
 
 		// Detect the rows and columns of the tiles that the
 		// object collides with in this tick
@@ -1084,7 +1084,7 @@ ActionListener, MouseMotionListener
 			{
 				// Snap the object to the colliding tile
 				playerY = collideRow * ServerWorld.TILE_SIZE
-						- (player.getHeight()-ServerPlayer.RELATIVE_Y);
+						- (ServerPlayer.DEFAULT_HEIGHT);
 				onSurface = true;
 				vSpeed = 0;
 				currVSpeed = 0;
@@ -1166,7 +1166,7 @@ ActionListener, MouseMotionListener
 			{
 				// Snap the object to the colliding tile
 				playerX = collideColumn * ServerWorld.TILE_SIZE
-						- (player.getWidth()-ServerPlayer.RELATIVE_X);
+						- (ServerPlayer.DEFAULT_WIDTH);
 			}
 		}
 		else if (currHSpeed < 0)
@@ -1202,8 +1202,7 @@ ActionListener, MouseMotionListener
 			if (!moveHorizontal)
 			{
 				// Snap the object to the colliding tile
-				playerX = collideColumn * ServerWorld.TILE_SIZE
-						+ ServerWorld.TILE_SIZE;
+				playerX = collideColumn * ServerWorld.TILE_SIZE + ServerWorld.TILE_SIZE;
 			}
 		}
 
