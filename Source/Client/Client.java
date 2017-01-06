@@ -1233,8 +1233,8 @@ ActionListener, MouseMotionListener
 
 	public void setPos(int x, int y)
 	{
-		player.setX(x-ServerPlayer.RELATIVE_X);
-		player.setY(y-ServerPlayer.RELATIVE_Y);
+		player.setX(x+ServerPlayer.RELATIVE_X);
+		player.setY(y+ServerPlayer.RELATIVE_Y);
 	}
 
 
