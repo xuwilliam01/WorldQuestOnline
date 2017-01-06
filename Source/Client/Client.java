@@ -648,8 +648,8 @@ ActionListener, MouseMotionListener
 										}
 										world.setObject(
 												id,
-												player.getX(),
-												player.getY(),
+												x,
+												y,
 												Images.getImageName(Integer
 														.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]),
