@@ -912,6 +912,12 @@ public class MainMenu implements KeyListener {
 				leaderboard.toFront();
 				return;
 			}
+			if(ClientAccountWindow.open)
+			{
+				newLogin.setVisible(true);
+				newLogin.toFront();
+				return;
+			}
 			if(ClientAccountWindow.loggedIn)
 			{
 				ClientAccountWindow.logout();

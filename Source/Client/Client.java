@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -53,12 +54,12 @@ import Server.Items.ServerPotion;
  *
  */
 public class Client extends JPanel implements KeyListener, MouseListener,
-		ActionListener, MouseMotionListener
+ActionListener, MouseMotionListener
 {
 	// Width and height of the screen
 	public static int SCREEN_WIDTH = 1620;
 	public static int SCREEN_HEIGHT = 1080;
-	
+
 	//Constant used for sound
 	public static float distanceConstant;
 
@@ -79,22 +80,22 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	 * Object storing all player data
 	 */
 	private ClientObject player;
-	
+
 	/**
 	 * Current hSpeed of the player
 	 */
 	private double hSpeed = 0;
-	
+
 	/**
 	 * Current vSpeed of the player
 	 */
 	private double vSpeed = 0;
-	
+
 	/**
 	 * Current PRECISE x coordinate of the player
 	 */
 	private double playerX = 0;
-	
+
 	/**
 	 * Current PRECISE y coordinate of the player
 	 */
@@ -241,11 +242,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 	private int deathTime = 0;
 	private float fillAmount = 0;
-	
+
 	private boolean isDropping=false;
 	private boolean inAction = false;
 	private boolean onSurface = false;
-	
+
 
 	/**
 	 * Constructor for the client
@@ -293,7 +294,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		setLayout(null);
 		add(chat);
 		add(enter);
-		
+
 		distanceConstant = 120.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
 
 	}
@@ -372,7 +373,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			int y = toInt(tokens[2]);
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
-			
+
 			if(team == ServerCreature.RED_TEAM)
 			{
 				HP = ServerPlayer.redPlayerStartHP;
@@ -385,7 +386,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}			
 			maxHP = HP;	
 			maxMana = mana;
-			
+
 			player = new ClientObject(id, x, y, image, team,
 					ServerWorld.PLAYER_TYPE);
 		}
@@ -394,7 +395,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			System.out.println("Error getting player from server");
 			e.printStackTrace();
 		}
-		
+
 
 		// Start the actual game
 		gameThread = new Thread(new RunGame());
@@ -443,7 +444,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	long start = 0;
 	int noOfTicks = 0;
 	long startPaint = 0;
-	
+
 	/**
 	 * Thread for running the actual game
 	 * 
@@ -490,7 +491,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "A":
 									armour = Double
-											.parseDouble(tokens[++token]);
+									.parseDouble(tokens[++token]);
 									break;
 								case "M":
 									maxHP = Integer.parseInt(tokens[++token]);
@@ -510,7 +511,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								case "B":
 									// End the game
 									int team = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									String winner = "Red Team";
 									String loser = "Blue Team";
 									if (team == ServerPlayer.RED_TEAM)
@@ -520,11 +521,11 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									}
 
 									JOptionPane
-											.showMessageDialog(
-													Client.this,
-													String.format(
-															"The %s castle has been destroyed, the winner is the %s!",
-															loser, winner));
+									.showMessageDialog(
+											Client.this,
+											String.format(
+													"The %s castle has been destroyed, the winner is the %s!",
+													loser, winner));
 									leaveGame = true;
 									input.close();
 									output.close();
@@ -554,13 +555,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 											world.newHologram(image,
 													mouseX, y);
 										}
-										
+
 									}
 									else
 									{
 										world.getHologram()
-												.setImage(
-														Integer.parseInt(tokens[++token]));
+										.setImage(
+												Integer.parseInt(tokens[++token]));
 										world.getHologram().setX(mouseX);
 										int y = Integer
 												.parseInt(tokens[++token]);
@@ -635,21 +636,21 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 										}
 										if (id == player.getID())
 										{
-//											player.setX((int)playerX);
-//											player.setY((int)playerY);
+											//											player.setX((int)playerX);
+											//											player.setY((int)playerY);
 											world.setObject(
-												id,
-												player.getX(),
-												player.getY(),
-												Images.getImageName(Integer
-														.parseInt(tokens[++token])),
-												Integer.parseInt(tokens[++token]),
-												tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
-										token += len+2;
-										
+													id,
+													player.getX(),
+													player.getY(),
+													Images.getImageName(Integer
+															.parseInt(tokens[++token])),
+													Integer.parseInt(tokens[++token]),
+													tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
+											token += len+2;
+
 										}
 									}
-									
+
 									break;
 								case "t":
 									world.setObject(new ClientText(
@@ -673,12 +674,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 								case "I":
 									System.out.println("Received an item");
 									inventory
-											.addItem(
-													Images.getImageName(Integer
-															.parseInt(tokens[++token])),
-													tokens[++token],
-													Integer.parseInt(tokens[++token]),
-													Integer.parseInt(tokens[++token]));
+									.addItem(
+											Images.getImageName(Integer
+													.parseInt(tokens[++token])),
+											tokens[++token],
+											Integer.parseInt(tokens[++token]),
+											Integer.parseInt(tokens[++token]));
 									inventory.repaint();
 									break;
 								case "D":
@@ -850,7 +851,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "RO":
 									int len2 = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									String name3 = "";
 
 									for (int i = 0; i < len2; i++)
@@ -859,7 +860,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "XR":
 									redCastleHP = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									redCastleTier = Integer
 											.parseInt(tokens[++token]);
 									redCastleMoney = Integer
@@ -872,7 +873,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									break;
 								case "XB":
 									blueCastleHP = Integer
-											.parseInt(tokens[++token]);
+									.parseInt(tokens[++token]);
 									blueCastleTier = Integer
 											.parseInt(tokens[++token]);
 									blueCastleMoney = Integer
@@ -887,17 +888,17 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									for (int weap = 0; weap < inventory
 											.getEquippedWeapons().length; weap++)
 										if (inventory.getEquippedWeapons()[weap] != null
-												&& inventory
-														.getEquippedWeapons()[weap]
-														.getType()
-														.contains(
-																ServerWorld.BUILDING_ITEM_TYPE))
+										&& inventory
+										.getEquippedWeapons()[weap]
+												.getType()
+												.contains(
+														ServerWorld.BUILDING_ITEM_TYPE))
 										{
 											inventory
-													.removeItem(
-															inventory
-																	.getEquippedWeapons()[weap],
-															weap);
+											.removeItem(
+													inventory
+													.getEquippedWeapons()[weap],
+													weap);
 											break;
 										}
 									break;
@@ -925,23 +926,23 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						}
 					}
 				}
-				
+
 				if (System.nanoTime()-startPaint>14*1000000)
 				{
-				clientUpdatePlayer(System.nanoTime()-startPaint);
-				startPaint = System.nanoTime();
-				// Send to the server relevant client-side data
-				
-				char surface = '0';
-				if (onSurface)
-				{
-					surface = '1';
+					clientUpdatePlayer(System.nanoTime()-startPaint);
+					startPaint = System.nanoTime();
+					// Send to the server relevant client-side data
+
+					char surface = '0';
+					if (onSurface)
+					{
+						surface = '1';
+					}
+					printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
+
+					repaint();
 				}
-				printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
-				
-				repaint();
-				}
-				
+
 				try
 				{
 					Thread.sleep(1);
@@ -953,7 +954,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			}
 		}
 	}
-	
+
 	/**
 	 * Move the player on the client side if the server side hasn't yet responded
 	 */
@@ -964,7 +965,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 			return;
 		}
 		double gravity = ServerWorld.GRAVITY * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
-		
+
 		// Apply gravity first (DEFINITELY BEFORE CHECKING
 		// VSPEED)
 		if (vSpeed + gravity < ServerWorld.MAX_SPEED)
@@ -975,13 +976,13 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			vSpeed = ServerWorld.MAX_SPEED;
 		}
-		
+
 		double currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 		double currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 		System.out.println(currHSpeed);
-		
+
 		//System.out.println("vSpeed " + currVSpeed + " timeForTick " + timeForTick + " multiplier " + (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0)));
-		
+
 		// Add the object to all the object tiles that it collides
 		// with
 		// currently
@@ -989,7 +990,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		int endRow =0;
 		int startColumn =0;
 		int endColumn =0;
-		
+
 		double x1 = playerX;
 		double x2 = playerX + player.getWidth() - ServerPlayer.RELATIVE_X;
 		double y1 = playerY;
@@ -1043,7 +1044,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		{
 			endColumn = world.getCollisionGrid()[0].length - 1;
 		}
-		
+
 		boolean moveVertical = true;
 		boolean moveHorizontal = true;
 
@@ -1110,7 +1111,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						if (y1 + currVSpeed <= row * ServerWorld.TILE_SIZE
 								+ ServerWorld.TILE_SIZE
 								&& y1 >= row * ServerWorld.TILE_SIZE
-										+ ServerWorld.TILE_SIZE)
+								+ ServerWorld.TILE_SIZE)
 						{
 							moveVertical = false;
 							collideRow = row;
@@ -1185,7 +1186,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						if (x1 + currHSpeed <= column * ServerWorld.TILE_SIZE
 								+ ServerWorld.TILE_SIZE
 								&& x1 >= column * ServerWorld.TILE_SIZE
-										+ ServerWorld.TILE_SIZE)
+								+ ServerWorld.TILE_SIZE)
 						{
 							moveHorizontal = false;
 							collideColumn = column;
@@ -1205,37 +1206,37 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 						+ ServerWorld.TILE_SIZE;
 			}
 		}
-	
-		
 
-	// Move this object based on its vertical speed and
-	// horizontal speed
-	if (moveHorizontal)
-	{
-		
-		// Don't let the player move when trying to swing a
-		// sword
-		//if (!inAction)
+
+
+		// Move this object based on its vertical speed and
+		// horizontal speed
+		if (moveHorizontal)
 		{
-			playerX += currHSpeed;
+
+			// Don't let the player move when trying to swing a
+			// sword
+			//if (!inAction)
+			{
+				playerX += currHSpeed;
+			}
 		}
+		if (moveVertical)
+		{
+			playerY += currVSpeed;
+		}
+
+		setPos((int)playerX,(int)playerY);
+		printToServer("p " + playerX + " " + playerY);
+
 	}
-	if (moveVertical)
-	{
-		playerY += currVSpeed;
-	}
-	
-	setPos((int)playerX,(int)playerY);
-	printToServer("p " + playerX + " " + playerY);
-	
-	}
-	
+
 	public void setPos(int x, int y)
 	{
 		player.setX(x-ServerPlayer.RELATIVE_X);
 		player.setY(y-ServerPlayer.RELATIVE_Y);
 	}
-	
+
 
 	/**
 	 * Thread for running the actual game
@@ -1396,7 +1397,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		output.flush();
 		this.weaponSelected = weaponSelected;
 	}
-	
+
 	/**
 	 * Draw everything
 	 */
@@ -1411,7 +1412,9 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 		}
 		catch (NullPointerException e)
 		{
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			System.out.println(sw.toString());
 		}
 
 		// Draw death message if applicable
@@ -1428,19 +1431,19 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				getInventory().clear();
 				setJustDied(false);
 			}
-//			deathTime++;
-//			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
-			
+			//			deathTime++;
+			//			fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
+
 			// Causes lag
-//			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
-//			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+			//			graphics.setColor(Images.darkReds[(int) Math.min(100, fillAmount)]);
+			//			graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
 
 			graphics.setColor(Color.white);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
 			graphics.drawString(
 					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
 		}
-		
+
 		graphics.setFont(ClientWorld.NORMAL_FONT);
 		graphics.setColor(new Color(240, 240, 240));
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
@@ -1622,7 +1625,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 									lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(
 											firstName + "was " + killWord
-													+ " by a "),
+											+ " by a "),
 									textY);
 						else
 							graphics.drawString(
@@ -1668,7 +1671,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 
 		FPScounter++;
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
-		
+
 		if ((++noOfTicks)>60)
 		{
 			//System.out.println("Repaints per second: " + (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
@@ -1724,7 +1727,7 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 				printToServer(currentMessage);
 				isDropping = true;
 			}
-			
+
 			break;
 		case KeyEvent.VK_1:
 			if (!currentMessage.equals("W0")
@@ -2431,12 +2434,12 @@ public class Client extends JPanel implements KeyListener, MouseListener,
 	{
 		return redCastleXP;
 	}
-	
+
 	public int getBlueCastleXP()
 	{
 		return blueCastleXP;
 	}
-	
+
 	public void setShop(ClientShop shop)
 	{
 		this.shop = shop;
