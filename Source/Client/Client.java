@@ -931,15 +931,6 @@ ActionListener, MouseMotionListener
 				{
 					clientUpdatePlayer(System.nanoTime()-startPaint);
 					startPaint = System.nanoTime();
-					// Send to the server relevant client-side data
-
-					char surface = '0';
-					if (onSurface)
-					{
-						surface = '1';
-					}
-					printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
-
 					repaint();
 				}
 
@@ -1227,7 +1218,16 @@ ActionListener, MouseMotionListener
 
 		setPos((int)playerX,(int)playerY);
 		printToServer("p " + playerX + " " + playerY);
-
+		
+		char surface = '0';
+		if (onSurface)
+		{
+			surface = '1';
+		}
+		printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
+		
+		
+		
 	}
 
 	public void setPos(int x, int y)
@@ -1714,6 +1714,7 @@ ActionListener, MouseMotionListener
 				if (onSurface)
 				{
 					vSpeed = -jump;
+					onSurface = false;
 				}	
 			}
 			break;
@@ -1811,17 +1812,24 @@ ActionListener, MouseMotionListener
 			if (!currentMessage.equals("!R"))
 			{
 				currentMessage = "!R";
-				hSpeed = 0;
+				if (hSpeed > 0)
+				{
+					hSpeed = 0;
+				}
 			}
 			break;
 		case KeyEvent.VK_A:
 			if (!currentMessage.equals("!L"))
 			{
 				currentMessage = "!L";
-				hSpeed = 0;
+				if (hSpeed < 0)
+				{
+					hSpeed = 0;
+				}
 			}
 			break;
 		case KeyEvent.VK_W:
+		case KeyEvent.VK_SPACE:
 			if (!currentMessage.equals("!U"))
 			{
 				currentMessage = "!U";
