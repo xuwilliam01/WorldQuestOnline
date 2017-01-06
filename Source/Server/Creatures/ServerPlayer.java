@@ -448,6 +448,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				actionCounter = -1;
 				action = NOTHING;
 				canPerformAction = true;
+				
+				// Inform that the action is finished
+				// queueMessage("^");
 			}
 
 			// Update the animation of the player and its accessories
@@ -706,7 +709,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										ServerWorld.PLAYER_TYPE)) {
 									if (object.getID() == getID()) {
 										char inAction = '0';
-										if (action.equals("NOTHING")) {
+										if (inAction()) {
 											inAction = '1';
 										}
 

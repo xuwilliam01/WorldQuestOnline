@@ -729,7 +729,7 @@ public class ClientWorld {
 				if (name != null && name.length()>0) {
 					objects[id].setName(name);
 				}
-				objects[id].setLastCounter(worldTime);
+				objects[id].setLastCounter(Client.getPacketNo());
 				objects[id].setHP(hp);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -967,7 +967,7 @@ public class ClientWorld {
 
 					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 							|| y > Client.SCREEN_HEIGHT
-							|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-worldTime)>2) // If the object wasn't present in the last update
+							|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-Client.getPacketNo())>2) // If the object wasn't present in the last update
 					{
 						objectsToRemove.add(object);
 						continue;

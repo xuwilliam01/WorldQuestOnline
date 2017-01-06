@@ -246,6 +246,8 @@ ActionListener, MouseMotionListener
 	private boolean isDropping=false;
 	private boolean inAction = false;
 	private boolean onSurface = false;
+	
+	private static long packetNo = 0;
 
 
 	/**
@@ -478,6 +480,7 @@ ActionListener, MouseMotionListener
 
 					if (message != null)
 					{
+						addPacketNo();
 						String[] tokens = message.split(" ");
 
 						for (int token = 1; token < tokens.length && !leaveGame; token++)
@@ -589,7 +592,6 @@ ActionListener, MouseMotionListener
 									object.setY(player.getY());
 									break;
 								case "*":
-									System.out.println("Message " + tokens[token+1] + " "+  tokens[token+2]);
 									hSpeed = Double.parseDouble(tokens[++token]);
 									vSpeed = Double.parseDouble(tokens[++token]);
 									break;
@@ -602,6 +604,11 @@ ActionListener, MouseMotionListener
 										player.setTeam(Integer
 												.parseInt(tokens[token + 3]));
 										inAction = tokens[++token].charAt(0)=='1';
+										if (inAction)
+										{
+											onSurface = true;
+											isDropping = false;
+										}
 									}
 									if (tokens[token + 4].equals("{"))
 									{
@@ -922,7 +929,6 @@ ActionListener, MouseMotionListener
 							{
 								e.printStackTrace();
 							}
-
 						}
 					}
 				}
@@ -955,6 +961,10 @@ ActionListener, MouseMotionListener
 		{
 			return;
 		}
+		double currHSpeed=0;
+		double currVSpeed = 0;
+		if (!inAction)
+		{
 		double gravity = ServerWorld.GRAVITY * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 
 		// Apply gravity first (DEFINITELY BEFORE CHECKING
@@ -967,9 +977,10 @@ ActionListener, MouseMotionListener
 		{
 			vSpeed = ServerWorld.MAX_SPEED;
 		}
-
-		double currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
-		double currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		
+		currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+		}
 		System.out.println(currHSpeed);
 
 		//System.out.println("vSpeed " + currVSpeed + " timeForTick " + timeForTick + " multiplier " + (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0)));
@@ -1225,9 +1236,6 @@ ActionListener, MouseMotionListener
 			surface = '1';
 		}
 		printToServer("& " + hSpeed + " " + vSpeed + " " + surface);
-		
-		
-		
 	}
 
 	public void setPos(int x, int y)
@@ -1706,7 +1714,7 @@ ActionListener, MouseMotionListener
 			break;
 		case KeyEvent.VK_SPACE:
 		case KeyEvent.VK_W:
-			if (!currentMessage.equals("U"))
+			if (!currentMessage.equals("U") && !inAction)
 			{
 				// U for up
 				currentMessage = "U";
@@ -1720,7 +1728,7 @@ ActionListener, MouseMotionListener
 			break;
 		case KeyEvent.VK_S:
 
-			if (!currentMessage.equals("D"))
+			if (!currentMessage.equals("D") && !inAction)
 			{
 				// D for down
 				currentMessage = "D";
@@ -2499,4 +2507,18 @@ ActionListener, MouseMotionListener
 		}
 		return ret;
 	}
+
+	public static synchronized long getPacketNo() {
+		return packetNo;
+	}
+
+	public static synchronized void addPacketNo() {
+		setPacketNo(getPacketNo()+1);
+	}
+	
+	public static synchronized void setPacketNo(long no)
+	{
+		packetNo = no;
+	}
+	
 }

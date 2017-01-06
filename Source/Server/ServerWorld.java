@@ -818,6 +818,15 @@ public class ServerWorld
 						if (player.isAlive())
 						{
 							object.update();
+							if (player.isPerformingAction())
+							{
+								player.performAction(
+										player.getNewMouseX(),
+										player.getNewMouseY());
+								player
+										.setPerformingAction(false);
+							}
+							
 							continue;
 						}
 						else
@@ -1085,20 +1094,6 @@ public class ServerWorld
 						if ((!moveHorizontal || !moveVertical))
 						{
 							object.destroy();
-						}
-					}
-					else if (object.getType().charAt(0) == CREATURE_TYPE)
-					{
-						if (object.getType().equals(PLAYER_TYPE))
-						{
-							if (((ServerPlayer) object).isPerformingAction())
-							{
-								((ServerPlayer) object).performAction(
-										((ServerPlayer) object).getNewMouseX(),
-										((ServerPlayer) object).getNewMouseY());
-								((ServerPlayer) object)
-										.setPerformingAction(false);
-							}
 						}
 					}
 
