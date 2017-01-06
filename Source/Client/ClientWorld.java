@@ -967,7 +967,7 @@ public class ClientWorld {
 
 					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 							|| y > Client.SCREEN_HEIGHT
-							|| y + object.getHeight() < 0 || Math.abs(object.getLastCounter()-Client.getPacketNo())>2) // If the object wasn't present in the last update
+							|| y + object.getHeight() < 0 || (object.getLastCounter()-Client.getPacketNo()>3 && object.getID()!=player.getID())) // If the object wasn't present in the last update
 					{
 						objectsToRemove.add(object);
 						continue;

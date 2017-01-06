@@ -643,19 +643,18 @@ ActionListener, MouseMotionListener
 										}
 										if (id == player.getID())
 										{
-											//											player.setX((int)playerX);
-											//											player.setY((int)playerY);
-											world.setObject(
-													id,
-													player.getX(),
-													player.getY(),
-													Images.getImageName(Integer
-															.parseInt(tokens[++token])),
-													Integer.parseInt(tokens[++token]),
-													tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
-											token += len+2;
-
+											x = player.getX();
+											y = player.getY();
 										}
+										world.setObject(
+												id,
+												player.getX(),
+												player.getY(),
+												Images.getImageName(Integer
+														.parseInt(tokens[++token])),
+												Integer.parseInt(tokens[++token]),
+												tokens[++token], name.trim(), Integer.parseInt(tokens[token+len+2]));
+										token += len+2;
 									}
 
 									break;
@@ -981,7 +980,7 @@ ActionListener, MouseMotionListener
 		currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 		currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 		}
-		System.out.println(currHSpeed);
+		//System.out.println(currHSpeed);
 
 		//System.out.println("vSpeed " + currVSpeed + " timeForTick " + timeForTick + " multiplier " + (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0)));
 
