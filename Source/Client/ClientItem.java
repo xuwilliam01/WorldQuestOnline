@@ -12,6 +12,7 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
@@ -197,6 +198,8 @@ public class ClientItem extends JButton implements MouseListener{
 		if(amount <= 1)
 			return;
 		graphics.setColor(Color.white);
+		if((type.equals(ServerWorld.HP_POTION_TYPE) && amount == ServerPlayer.MAX_HP_POTS) || (type.equals(ServerWorld.MANA_POTION_TYPE) && amount == ServerPlayer.MAX_MANA_POTS))
+			graphics.setColor(Color.green);
 		if(amount <= 9)
 			graphics.drawString(amount+"", getWidth()-8, 10);
 		else if(amount <= 99)
@@ -438,7 +441,7 @@ public class ClientItem extends JButton implements MouseListener{
 				}
 			}
 			//If it's a potion use it
-			else if(type.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
+			else if(type.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
 			{
 				inventory.use(this);
 			}

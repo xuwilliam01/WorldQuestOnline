@@ -26,7 +26,7 @@ public class ServerPotion extends ServerItem
 	{
 		super(x, y, type,world);
 	}
-
+	
 	/**
 	 * Returns a random potion with given probabilities
 	 * @param x the x coordinate

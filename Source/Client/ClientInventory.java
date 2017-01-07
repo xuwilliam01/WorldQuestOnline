@@ -513,5 +513,31 @@ public class ClientInventory extends JPanel implements ActionListener
 		client.printToServer("X");
 		client.leaveGame = true;
 	}
+	
+	public int getNumHP()
+	{
+		for (int row = 0; row < inventory.length; row++)
+			for (int col = 0; col < inventory[row].length; col++)
+			{
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.HP_POTION_TYPE))
+				{
+					return  inventory[row][col].getAmount();
+				}
+			}
+		return 0;
+	}
+	
+	public int getNumMana()
+	{
+		for (int row = 0; row < inventory.length; row++)
+			for (int col = 0; col < inventory[row].length; col++)
+			{
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MANA_POTION_TYPE))
+				{
+					return  inventory[row][col].getAmount();
+				}
+			}
+		return 0;
+	}
 
 }

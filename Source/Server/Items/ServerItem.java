@@ -260,7 +260,7 @@ public abstract class ServerItem extends ServerObject
 	 * @param item the item to be copied
 	 * @return a copy of the item
 	 */
-	public static ServerItem copy(ServerItem item, ServerWorld world)
+	public static ServerItem copy(ServerItem item)
 	{
 		switch (item.getType())
 		{
@@ -271,14 +271,14 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.DMG_POTION_TYPE:
 		case ServerWorld.SPEED_POTION_TYPE:
 		case ServerWorld.JUMP_POTION_TYPE:
-			return new ServerPotion(item.getX(), item.getY(), item.getType(),world);
+			return new ServerPotion(item.getX(), item.getY(), item.getType(), item.getWorld());
 		case ServerWorld.MONEY_TYPE:
-			return new ServerMoney(item.getX(), item.getY(),world);
+			return new ServerMoney(item.getX(), item.getY(),item.getWorld());
 		case ServerWorld.STEEL_ARMOUR:
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 		case ServerWorld.RED_NINJA_ARMOUR:
 		case ServerWorld.GREY_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), item.getType(),world);
+			return new ServerArmour(item.getX(), item.getY(), item.getType(),item.getWorld());
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
@@ -306,15 +306,15 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.FIREWAND_TYPE:
 		case ServerWorld.ICEWAND_TYPE:
 		case ServerWorld.DARKWAND_TYPE:
-			return new ServerWeapon(item.getX(), item.getY(), item.getType(),world);
+			return new ServerWeapon(item.getX(), item.getY(), item.getType(),item.getWorld());
 		case ServerWorld.BARRACK_ITEM_TYPE:
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
-			return new ServerBuildingItem(item.getType(),world);
+			return new ServerBuildingItem(item.getType(),item.getWorld());
 
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Start a cooldown before the item can be picked up again so it isn't
 	 * instantly picked up by the creature that dropped it

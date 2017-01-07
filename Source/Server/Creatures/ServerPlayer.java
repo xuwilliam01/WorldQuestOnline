@@ -50,6 +50,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public static final int PLAYER_BASE_HP = 100;
 	public static final int PLAYER_BASE_MANA = 100;
+	
+	public static final int MAX_HP_POTS = 5;
+	public static final int MAX_MANA_POTS = 5;
+	
+	private int numHPPots = 0;
+	private int numManaPots = 0;
 
 	// The starting mana and hp for the player. Change as castle upgrades
 	public static int bluePlayerStartHP = PLAYER_BASE_HP;
@@ -303,8 +309,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
 				+ skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
 				bluePlayerStartHP, world, true); // player start HP doesn't
-													// matter since it will
-													// change
+		// matter since it will
+		// change
 
 		// Set default name of the player
 		setName("Player");
@@ -393,6 +399,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		addItem(new ServerMoney(0, 0, 10, world));
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, world));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, world));
+		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, world));
+		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, world));
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -448,7 +456,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				actionCounter = -1;
 				action = NOTHING;
 				canPerformAction = true;
-				
+
 				// Inform that the action is finished
 				// queueMessage("^");
 			}
@@ -737,21 +745,21 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												+ object.getType()
 												+ " "
 												+ ((ServerPlayer) object)
-														.getName().split(" ").length
+												.getName().split(" ").length
 												+ " "
 												+ ((ServerPlayer) object)
-														.getName()
+												.getName()
 												+ '`'
 												+ ((ServerPlayer) object)
-														.getCurrentText()
+												.getCurrentText()
 												+ " "
 												+ Math.max(
 														0,
 														Math.round(100.0
 																* ((ServerPlayer) object)
-																		.getHP()
+																.getHP()
 																/ ((ServerPlayer) object)
-																		.getMaxHP())));
+																.getMaxHP())));
 									} else {
 										queueMessage("O "
 												+ toChars(object.getID())
@@ -767,21 +775,21 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												+ object.getType()
 												+ " "
 												+ ((ServerPlayer) object)
-														.getName().split(" ").length
+												.getName().split(" ").length
 												+ " "
 												+ ((ServerPlayer) object)
-														.getName()
+												.getName()
 												+ '`'
 												+ ((ServerPlayer) object)
-														.getCurrentText()
+												.getCurrentText()
 												+ " "
 												+ Math.max(
 														0,
 														Math.round(100.0
 																* ((ServerPlayer) object)
-																		.getHP()
+																.getHP()
 																/ ((ServerPlayer) object)
-																		.getMaxHP())));
+																.getMaxHP())));
 									}
 									continue;
 								}
@@ -793,8 +801,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								break;
 							case ServerWorld.TEXT_TYPE:
 								queueMessage("t " + toChars(object.getID())
-										+ " " + toChars(x) + " " + toChars(y)
-										+ " " + object.getImage());
+								+ " " + toChars(x) + " " + toChars(y)
+								+ " " + object.getImage());
 								continue;
 							case ServerWorld.SOUND_TYPE:
 								queueMessage("a "
@@ -823,15 +831,15 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										+ "{ "
 										+ Math.max(0, Math.round(100.0
 												* ((ServerBuilding) object)
-														.getHP()
+												.getHP()
 												/ ((ServerBuilding) object)
-														.getMaxHP())));
+												.getMaxHP())));
 							} else {
 								queueMessage("O " + toChars(object.getID())
-										+ " " + toChars(x) + " " + toChars(y)
-										+ " " + object.getImageIndex() + " "
-										+ team + " " + object.getType() + " "
-										+ "{ 0");
+								+ " " + toChars(x) + " " + toChars(y)
+								+ " " + object.getImageIndex() + " "
+								+ team + " " + object.getType() + " "
+								+ "{ 0");
 							}
 
 						} else if (object.exists()
@@ -869,10 +877,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 									int tileCol = (int) ((x) / ServerWorld.TILE_SIZE);
 									for (int tileRow = (int) ((y + object
 											.getHeight()) / ServerWorld.TILE_SIZE) + 1; tileRow <= (int) ((getY()
-											+ getHeight() / 2 + playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow++) {
+													+ getHeight() / 2 + playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow++) {
 										if (getWorld().getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
 												&& getWorld()
-														.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE) {
+												.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE) {
 											boolean canPlace = true;
 											for (int tileCol2 = tileCol; tileCol2 <= tileCol
 													+ object.getWidth()
@@ -880,7 +888,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												if (getWorld()
 														.getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
 														|| getWorld()
-																.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE) {
+														.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE) {
 													canPlace = false;
 													break;
 												}
@@ -903,10 +911,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										// Snap to best good solid tile above it
 										for (int tileRow = (int) ((y + object
 												.getHeight()) / ServerWorld.TILE_SIZE); tileRow >= (int) ((getY()
-												+ getHeight() / 2 - playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow--) {
+														+ getHeight() / 2 - playerScreenHeight / 2) / ServerWorld.TILE_SIZE); tileRow--) {
 											if (getWorld().getCollisionGrid()[tileRow][tileCol] == ServerWorld.SOLID_TILE
 													&& getWorld()
-															.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE) {
+													.getCollisionGrid()[tileRow - 1][tileCol] == ServerWorld.BACKGROUND_TILE) {
 												boolean canPlace = true;
 												for (int tileCol2 = tileCol; tileCol2 <= tileCol
 														+ object.getWidth()
@@ -914,7 +922,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 													if (getWorld()
 															.getCollisionGrid()[tileRow][tileCol2] != ServerWorld.SOLID_TILE
 															|| getWorld()
-																	.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE) {
+															.getCollisionGrid()[tileRow - 1][tileCol2] == ServerWorld.SOLID_TILE) {
 														canPlace = false;
 														break;
 													}
@@ -1030,7 +1038,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				if (equippedWeapons[weaponNo].getType().charAt(2) == ServerWorld.WEAPON_TYPE
 						.charAt(2))
 					currentDamage = ((ServerWeapon) equippedWeapons[weaponNo])
-							.getDamage();
+					.getDamage();
 				else
 					currentDamage = 0;
 			}
@@ -1261,11 +1269,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						case 'I':
 							unequip(Integer.parseInt(command.substring(4)));
 							break;
-						// Move to equipped weapons
+							// Move to equipped weapons
 						case 'W':
 							equipWeapon(command.substring(4));
 							break;
-						// Move to equipped armors
+							// Move to equipped armors
 						case 'A':
 							equipArmour(command.substring(4));
 							break;
@@ -1279,18 +1287,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						weaponSelected = command.charAt(2);
 						int weap = weaponSelected - '0';
 						System.out
-								.println("Selected weapon: " + weaponSelected);
+						.println("Selected weapon: " + weaponSelected);
 						if (weap != DEFAULT_WEAPON_SLOT
 								&& equippedWeapons[weap] != null
 								&& equippedWeapons[weap].getType().contains(
 										ServerWorld.BUILDING_ITEM_TYPE)) {
 							hologram = new ServerHologram(
 									getNewMouseX() + getX() - playerScreenWidth
-											/ 2,
+									/ 2,
 									getNewMouseY() + getY()
-											- playerScreenHeight / 2,
+									- playerScreenHeight / 2,
 									((ServerBuildingItem) equippedWeapons[weap])
-											.getBuildingType(), this, engine);
+									.getBuildingType(), this, engine);
 							getWorld().add(hologram);
 							System.out.println("Added HOLOGRAM to world at "
 									+ getNewMouseX() + " " + getNewMouseY());
@@ -1317,13 +1325,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								vendorItem = item;
 
 						if (vendorItem != null
-								&& getMoney() >= vendorItem.getCost()) {
-							decreaseMoney(vendorItem.getCost());
-							vendor.drop(vendorItem.getType());
-							if (vendorItem.getAmount() > 1)
-								addItem(ServerItem.copy(vendorItem, getWorld()));
-							else
-								addItem(vendorItem);
+								&& getMoney() >= vendorItem.getCost()) {						
+							if ((vendorItem.getAmount() > 1 && addItem(ServerItem.copy(vendorItem))==1) || addItem(vendorItem) == 1)
+							{
+								decreaseMoney(vendorItem.getCost());
+								vendor.drop(vendorItem.getType());
+							}
 						}
 					}
 					break;
@@ -1423,9 +1430,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory())
 			if (item.getType().equals(type)) {
+				if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+					numHPPots--;
+				else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
+					numManaPots--;
+				
 				if (item.getAmount() > 1) {
 					item.decreaseAmount();
-					vendor.addItem(ServerItem.copy(item, getWorld()));
+					vendor.addItem(ServerItem.copy(item));
 				} else {
 					toRemove = item;
 					vendor.addItem(item);
@@ -1514,6 +1526,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 	}
 
+	public void dropItem(ServerItem item)
+	{
+		if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+			numHPPots--;
+		else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
+			numManaPots--;
+		super.dropItem(item);
+	}
 	/**
 	 * Do a specific action when the action button is pressed
 	 */
@@ -1547,18 +1567,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				actionSpeed = ((ServerWeapon) equippedWeapons[weaponNo])
 						.getActionSpeed();
 				getWorld()
-						.add(new ServerWeaponSwing(
-								this,
-								0,
-								-20,
-								((ServerWeapon) equippedWeapons[weaponNo])
-										.getActionImage(),
-								(int) (Math.toDegrees(angle) + 0.5),
-								((ServerWeapon) equippedWeapons[weaponNo])
-										.getActionSpeed(),
-								(int) Math.ceil(((ServerWeapon) equippedWeapons[weaponNo])
-										.getDamage()
-										* (1 + getBaseDamage() / 100.0))));
+				.add(new ServerWeaponSwing(
+						this,
+						0,
+						-20,
+						((ServerWeapon) equippedWeapons[weaponNo])
+						.getActionImage(),
+						(int) (Math.toDegrees(angle) + 0.5),
+						((ServerWeapon) equippedWeapons[weaponNo])
+						.getActionSpeed(),
+						(int) Math.ceil(((ServerWeapon) equippedWeapons[weaponNo])
+								.getDamage()
+								* (1 + getBaseDamage() / 100.0))));
 				action = "SWING";
 			} else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.RANGED_TYPE)) {
@@ -1656,7 +1676,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 					heldWeapon = new ServerObjectShown(x, y, 0, 0, 0, image,
 							ServerWorld.WEAPON_HOLD_TYPE, getWorld()
-									.getEngine());
+							.getEngine());
 					heldWeapon.setSolid(false);
 					getWorld().add(heldWeapon);
 				} else {
@@ -1725,7 +1745,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
-					- getHeight() / 3;
+			- getHeight() / 3;
 
 			getWorld().add(
 					new ServerText(damageX, damageY, Integer.toString(amount),
@@ -1773,6 +1793,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 				setAttackable(false);
 				isDropping = false;
+				
+				numHPPots = 0;
+				numManaPots = 0;
 			}
 		}
 	}
@@ -1811,7 +1834,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										ServerWorld.VENDOR_TYPE)) {
 									if (vendor == null
 											&& !((ServerVendor) object)
-													.isBusy()) {
+											.isBusy()) {
 										vendor = (ServerVendor) object;
 										vendor.setIsBusy(true);
 										String newMessage = "VB "
@@ -1901,7 +1924,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			catch (ArrayIndexOutOfBoundsException e) {
 				System.out
-						.println("String builder queue lagged and out of bounds happened");
+				.println("String builder queue lagged and out of bounds happened");
 				e.printStackTrace();
 			}
 		}
@@ -1950,11 +1973,62 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * Add an item to the player's inventory and also tell the client about it
 	 */
-	public void addItem(ServerItem item) {
-		super.addItem(item);
-		System.out.println("Added item");
+	public int addItem(ServerItem item) {		
+		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && (numHPPots == MAX_HP_POTS || item.getAmount() > MAX_HP_POTS))|| (item.getType().equals(ServerWorld.MANA_POTION_TYPE) && (numManaPots == MAX_MANA_POTS|| item.getAmount() > MAX_MANA_POTS)))
+			return 0;
+
+		if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
+			for (ServerItem sItem : getInventory())
+			{
+				if (item.getType().equals(sItem.getType()))
+				{
+					if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+					{
+						if(numHPPots + item.getAmount() > MAX_HP_POTS)
+						{
+							queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+									+ (MAX_HP_POTS - numHPPots) + " " + item.getCost());
+							item.decreaseAmount(MAX_HP_POTS - numHPPots);
+							sItem.setAmount(MAX_HP_POTS);
+							numHPPots = MAX_HP_POTS;
+							return 2;
+						}
+						else
+						{
+							numHPPots += item.getAmount();
+						}
+					}
+					else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
+					{
+						if(numManaPots + item.getAmount() > MAX_MANA_POTS)
+						{
+							queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+									+ (MAX_MANA_POTS - numManaPots) + " " + item.getCost());
+							item.decreaseAmount(MAX_MANA_POTS - numManaPots);
+							sItem.setAmount(MAX_MANA_POTS);
+							numManaPots = MAX_MANA_POTS;
+							return 2;
+						}
+						else
+						{
+							numManaPots += item.getAmount();
+						}
+					}
+					sItem.increaseAmount(item.getAmount());
+					queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+							+ item.getAmount() + " " + item.getCost());
+					return 1;
+				}
+			}
+		if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+			numHPPots+=item.getAmount();
+		else if (item.getType().equals(ServerWorld.MANA_POTION_TYPE))
+			numManaPots+=item.getAmount();
+		
+		getInventory().add(item);
 		queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
 				+ item.getAmount() + " " + item.getCost());
+		return 1;
 	}
 
 	/**
@@ -2064,7 +2138,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		switch (type) {
 		case ServerWorld.BARRACK_ITEM_TYPE:
 			if (castle != null
-					&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST) {
+			&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST) {
 				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
 				addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,
 						getWorld()));
@@ -2072,7 +2146,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			break;
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			if (castle != null
-					&& castle.getMoney() >= ServerBuildingItem.WOOD_HOUSE_COST) {
+			&& castle.getMoney() >= ServerBuildingItem.WOOD_HOUSE_COST) {
 				castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
 				addItem(new ServerBuildingItem(
 						ServerWorld.WOOD_HOUSE_ITEM_TYPE, getWorld()));
@@ -2081,7 +2155,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			break;
 		case ServerWorld.TOWER_ITEM_TYPE:
 			if (castle != null
-					&& castle.getMoney() >= ServerBuildingItem.TOWER_COST) {
+			&& castle.getMoney() >= ServerBuildingItem.TOWER_COST) {
 				castle.spendMoney(ServerBuildingItem.TOWER_COST);
 				addItem(new ServerBuildingItem(ServerWorld.TOWER_ITEM_TYPE,
 						getWorld()));
@@ -2090,7 +2164,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			break;
 		case ServerWorld.GOLD_MINE_ITEM_TYPE:
 			if (castle != null
-					&& castle.getMoney() >= ServerBuildingItem.GOLD_MINE_COST) {
+			&& castle.getMoney() >= ServerBuildingItem.GOLD_MINE_COST) {
 				castle.spendMoney(ServerBuildingItem.GOLD_MINE_COST);
 				addItem(new ServerBuildingItem(ServerWorld.GOLD_MINE_ITEM_TYPE,
 						getWorld()));
@@ -2309,5 +2383,15 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public int getPing() {
 		return ping;
+	}
+	
+	public void decreaseNumHPPots()
+	{
+		numHPPots--;
+	}
+	
+	public void decreaseNumManaPots()
+	{
+		numManaPots--;
 	}
 }
