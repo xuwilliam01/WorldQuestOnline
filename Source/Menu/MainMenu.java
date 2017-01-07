@@ -249,21 +249,24 @@ public class MainMenu implements KeyListener {
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
 		Image background = Images.getImage("BACKGROUND");
-		JButton playGame;
+		JButton playOnline;
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
 
-		JButton online;
+		JButton directConnect;
 		JButton leaderb;
 
-		Image buttonTrayImage = Images.getImage("ButtonTray");
+		//Image buttonTrayImage = Images.getImage("ButtonTray");
 
 		Image createMapImage = Images.getImage("CreateAMap");
 		Image createMapOver = Images.getImage("CreateAMapClicked");
 
 		Image instructionsImage = Images.getImage("Instructions");
 		Image instructionsOver = Images.getImage("InstructionsClicked");
+		
+		Image leaderbImage = Images.getImage("Leaderboards");
+		Image leaderbOver = Images.getImage("LeaderboardsClicked");
 
 		Image playGameImage = Images.getImage("FindAGame");
 		Image playGameOver = Images.getImage("FindAGameClicked");
@@ -297,37 +300,22 @@ public class MainMenu implements KeyListener {
 			
 			int currentButtonY = (int)(Client.SCREEN_HEIGHT*(0.5));
 
-			playGame = new JButton(new ImageIcon(playGameImage));
-			playGame.setSize(playGameImage.getWidth(null),
+			playOnline = new JButton(new ImageIcon(playGameImage));
+			playOnline.setSize(playGameImage.getWidth(null),
 					playGameImage.getHeight(null));
-			playGame.setLocation(0,
-					currentButtonY);
-			playGame.setBorder(BorderFactory.createEmptyBorder());
-			playGame.setContentAreaFilled(false);
-			playGame.setOpaque(false);
-			playGame.addActionListener(new GameStart());
-			playGame.addMouseListener(this);
-			add(playGame);
+			playOnline.setLocation(0, currentButtonY);
+			playOnline.setBorder(BorderFactory.createEmptyBorder());
+			playOnline.setContentAreaFilled(false);
+			playOnline.setOpaque(false);
+			playOnline.addActionListener(new OnlineButton());
+			playOnline.addMouseListener(this);
+			add(playOnline);
 			currentButtonY += playGameImage.getHeight(null);
-
-			createServer = new JButton(new ImageIcon(createServerImage));
-			createServer.setSize(createServerImage.getWidth(null),
-					createServerImage.getHeight(null));
-			createServer.setLocation(0,
-					currentButtonY);
-			createServer.setBorder(BorderFactory.createEmptyBorder());
-			createServer.setContentAreaFilled(false);
-			createServer.setOpaque(false);
-			createServer.addActionListener(new StartServer());
-			createServer.addMouseListener(this);
-			add(createServer);
-			currentButtonY += createServerImage.getHeight(null);
 
 			createMap = new JButton(new ImageIcon(createMapImage));
 			createMap.setSize(createMapImage.getWidth(null),
 					createMapImage.getHeight(null));
-			createMap.setLocation(0,
-					currentButtonY);
+			createMap.setLocation(0, currentButtonY);
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
 			createMap.setOpaque(false);
@@ -339,35 +327,46 @@ public class MainMenu implements KeyListener {
 			instructions = new JButton(new ImageIcon(instructionsImage));
 			instructions.setSize(instructionsImage.getWidth(null),
 					instructionsImage.getHeight(null));
-			instructions.setLocation(0,
-					currentButtonY);
+			instructions.setLocation(0, currentButtonY);
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
 			instructions.setOpaque(false);
 			instructions.addActionListener(new OpenInstructions());
 			instructions.addMouseListener(this);
 			add(instructions);
-
-			online = new JButton("Play Online");
-			online.setSize(instructionsImage.getWidth(null),
-					instructionsImage.getHeight(null));
-			online.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
-			//online.setBorder(BorderFactory.createEmptyBorder());
-			//online.setContentAreaFilled(false);
-			//online.setOpaque(false);
-			online.addActionListener(new OnlineButton());
-			online.addMouseListener(this);
-			add(online);
-
-			leaderb = new JButton("Leaderboard");
-			leaderb.setSize(instructionsImage.getWidth(null),
-					instructionsImage.getHeight(null));
-			leaderb.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2+200, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			currentButtonY += instructionsImage.getHeight(null);
+			
+			leaderb = new JButton(new ImageIcon(leaderbImage));
+			leaderb.setSize(leaderbImage.getWidth(null),
+					leaderbImage.getHeight(null));
+			leaderb.setLocation(0, currentButtonY);
+			leaderb.setBorder(BorderFactory.createEmptyBorder());
+			leaderb.setContentAreaFilled(false);
+			leaderb.setOpaque(false);
 			leaderb.addActionListener(new LeaderboardButton());
 			leaderb.addMouseListener(this);
 			add(leaderb);
+
+			directConnect = new JButton("Direct IP Connect");
+			directConnect.setSize(createServerImage.getWidth(null),
+					createServerImage.getHeight(null));
+			directConnect.setLocation(middle - instructionsImage.getWidth(null)
+					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			directConnect.addActionListener(new GameStart());
+			directConnect.addMouseListener(this);
+			add(directConnect);
+			
+			createServer = new JButton(new ImageIcon(createServerImage));
+			createServer.setSize(createServerImage.getWidth(null),
+					createServerImage.getHeight(null));
+			createServer.setLocation(300+middle - instructionsImage.getWidth(null)
+					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			createServer.setBorder(BorderFactory.createEmptyBorder());
+			createServer.setContentAreaFilled(false);
+			createServer.setOpaque(false);
+			createServer.addActionListener(new StartServer());
+			createServer.addMouseListener(this);
+			add(createServer);
 			
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
@@ -377,7 +376,6 @@ public class MainMenu implements KeyListener {
 			else login = new JButton("Login");
 			login.setSize(200, 50);
 			login.setLocation(Client.SCREEN_WIDTH - 200,50);
-			login.setBorder(BorderFactory.createEmptyBorder());
 			login.setContentAreaFilled(false);
 			login.setOpaque(false);
 			login.addActionListener(new LoginButton());
@@ -470,8 +468,8 @@ public class MainMenu implements KeyListener {
 				createMap.setIcon(new ImageIcon(createMapOver));
 			} else if (e.getSource() == instructions) {
 				instructions.setIcon(new ImageIcon(instructionsOver));
-			} else if (e.getSource() == playGame) {
-				playGame.setIcon(new ImageIcon(playGameOver));
+			} else if (e.getSource() == playOnline) {
+				playOnline.setIcon(new ImageIcon(playGameOver));
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerOver));
 			}
@@ -484,8 +482,8 @@ public class MainMenu implements KeyListener {
 				createMap.setIcon(new ImageIcon(createMapImage));
 			} else if (e.getSource() == instructions) {
 				instructions.setIcon(new ImageIcon(instructionsImage));
-			} else if (e.getSource() == playGame) {
-				playGame.setIcon(new ImageIcon(playGameImage));
+			} else if (e.getSource() == playOnline) {
+				playOnline.setIcon(new ImageIcon(playGameImage));
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerImage));
 			}
