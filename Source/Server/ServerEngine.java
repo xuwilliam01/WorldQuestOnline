@@ -259,7 +259,7 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		//For the scoreboard
 		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
-				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0 + " " + 0 + " " + newPlayer.getPing());
+				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0 + " " + ServerPlayer.toChars(0) + " " + newPlayer.getPing());
 		for(ServerPlayer player : listOfPlayers)
 		{
 			if(player.getID() != newPlayer.getID())
