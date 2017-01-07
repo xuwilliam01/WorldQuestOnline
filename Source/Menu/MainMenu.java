@@ -472,6 +472,8 @@ public class MainMenu implements KeyListener {
 				playOnline.setIcon(new ImageIcon(playGameOver));
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerOver));
+			} else if (e.getSource() == leaderb) {
+				leaderb.setIcon(new ImageIcon(leaderbOver));
 			}
 
 		}
@@ -486,7 +488,10 @@ public class MainMenu implements KeyListener {
 				playOnline.setIcon(new ImageIcon(playGameImage));
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerImage));
+			} else if (e.getSource() == leaderb) {
+				leaderb.setIcon(new ImageIcon(leaderbImage));
 			}
+		
 		}
 
 	}
