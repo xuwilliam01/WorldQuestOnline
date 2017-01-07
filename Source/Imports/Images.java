@@ -1026,6 +1026,14 @@ public class Images {
 			addtoImageArray(new GameImage("Instructions.png",
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			
+			addtoImageArray(new GameImage("Leaderboards.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("LeaderboardsClicked.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			
 			addtoImageArray(new GameImage("InstructionsClicked.png",
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
