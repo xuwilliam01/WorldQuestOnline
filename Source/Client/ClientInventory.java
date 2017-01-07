@@ -95,7 +95,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			for (int row = 0; row < inventory.length; row++)
 				for (int col = 0; col < inventory[row].length; col++)
 					if (inventory[row][col] != null
-							&& inventory[row][col].getType().equals(type))
+					&& inventory[row][col].getType().equals(type))
 					{
 						inventory[row][col].increaseAmount(amount);
 						return;
@@ -126,8 +126,8 @@ public class ClientInventory extends JPanel implements ActionListener
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[0].length; col++)
 				if (inventory[row][col] != null
-						&& inventory[row][col].getType().equals(
-								ServerWorld.MONEY_TYPE))
+				&& inventory[row][col].getType().equals(
+						ServerWorld.MONEY_TYPE))
 					return inventory[row][col].getAmount();
 		return 0;
 	}
@@ -142,8 +142,8 @@ public class ClientInventory extends JPanel implements ActionListener
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[0].length; col++)
 				if (inventory[row][col] != null
-						&& inventory[row][col].getType().equals(
-								ServerWorld.MONEY_TYPE))
+				&& inventory[row][col].getType().equals(
+						ServerWorld.MONEY_TYPE))
 				{
 					inventory[row][col].decreaseAmount(amount);
 					// If we have no money, remove the button
@@ -222,7 +222,7 @@ public class ClientInventory extends JPanel implements ActionListener
 	{
 		if(client.getHP() <= 0)
 			return;
-		
+
 		// Drop 1 item at a time and tell the server
 		if (item.getAmount() > 1)
 		{
@@ -339,6 +339,8 @@ public class ClientInventory extends JPanel implements ActionListener
 	public void clear()
 	{
 		ClientItem money = null;
+		ClientItem bestWeapon = null;
+		ClientItem bestArmour = null;
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[row].length; col++)
 				if (inventory[row][col] != null)
@@ -347,6 +349,30 @@ public class ClientInventory extends JPanel implements ActionListener
 							ServerWorld.MONEY_TYPE))
 					{
 						money = inventory[row][col];
+					}
+					else if(inventory[row][col].getType().contains(
+							ServerWorld.WEAPON_TYPE))
+					{
+						if(bestWeapon == null)
+							bestWeapon = inventory[row][col];
+						else if(inventory[row][col].getCost() > bestWeapon.getCost())
+						{
+							remove(bestWeapon);
+							bestWeapon = inventory[row][col];
+						}
+						else remove(inventory[row][col]);
+					}
+					else if(inventory[row][col].getType().contains(
+							ServerWorld.ARMOUR_TYPE))
+					{
+						if(bestArmour == null)
+							bestArmour = inventory[row][col];
+						else if(inventory[row][col].getCost() > bestArmour.getCost())
+						{
+							remove(bestArmour);
+							bestArmour = inventory[row][col];
+						}
+						else remove(inventory[row][col]);
 					}
 					else
 						remove(inventory[row][col]);
@@ -357,7 +383,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (money != null)
 		{
 			inventory[0][0] = money;
-			inventory[0][0].setLocation(29, 375);
+			inventory[0][0].setLocation(ClientFrame.getScaledWidth(29), ClientFrame.getScaledHeight(375));
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
@@ -365,12 +391,54 @@ public class ClientInventory extends JPanel implements ActionListener
 		// Remove all weapons
 		for (int weapon = 0; weapon < equippedWeapons.length; weapon++)
 			if (equippedWeapons[weapon] != null)
-				remove(equippedWeapons[weapon]);
+			{
+				if(bestWeapon == null)
+				{
+					bestWeapon = equippedWeapons[weapon];
+				}
+				else if(equippedWeapons[weapon].getCost() > bestWeapon.getCost())
+				{
+					remove(bestWeapon);
+					bestWeapon = equippedWeapons[weapon];
+				}
+				else remove(equippedWeapons[weapon]);
+			}
 		equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
 
 		if (equippedArmour != null)
-			remove(equippedArmour);
+		{
+			if(bestArmour == null)
+			{
+				bestArmour = equippedArmour;
+			}
+			else if(equippedArmour.getCost() > bestArmour.getCost())
+			{
+				remove(bestArmour);
+				bestArmour = equippedArmour;
+			}
+			else remove(equippedArmour);
+		}
 		equippedArmour = null;
+
+		// Reset armour and weapon
+		if (bestWeapon != null)
+		{
+			inventory[0][1] = bestWeapon;
+			bestWeapon.setSelected(false);
+			bestWeapon.setBorder(BorderFactory.createEmptyBorder());
+			inventory[0][1].setLocation(ClientFrame.getScaledWidth(1*Images.INVENTORY_IMAGE_SIDELENGTH+(2)*29 + 5), ClientFrame.getScaledHeight(375));
+			inventory[0][1].setRow(0);
+			inventory[0][1].setCol(1);
+		}
+		if (bestArmour != null)
+		{
+			inventory[0][2] = bestArmour;
+			bestArmour.setSelected(false);
+			bestArmour.setBorder(BorderFactory.createEmptyBorder());
+			inventory[0][2].setLocation(ClientFrame.getScaledWidth(2*Images.INVENTORY_IMAGE_SIDELENGTH+(3)*29 + 5), ClientFrame.getScaledHeight(375));
+			inventory[0][2].setRow(0);
+			inventory[0][2].setCol(2);
+		}
 
 		invalidate();
 		repaint();
@@ -513,7 +581,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		client.printToServer("X");
 		client.leaveGame = true;
 	}
-	
+
 	public int getNumHP()
 	{
 		for (int row = 0; row < inventory.length; row++)
@@ -526,7 +594,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			}
 		return 0;
 	}
-	
+
 	public int getNumMana()
 	{
 		for (int row = 0; row < inventory.length; row++)

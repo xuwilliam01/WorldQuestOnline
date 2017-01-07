@@ -312,7 +312,7 @@ public class ClientItem extends JButton implements MouseListener{
 	 * React to user clicks
 	 */
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton()== MouseEvent.BUTTON1)
+		if(e.getButton()== MouseEvent.BUTTON1 && inventory.getClient().getHP() > 0)
 		{
 			//If it can be equipped
 			if(type.charAt(1) == ServerWorld.EQUIP_TYPE.charAt(1))
@@ -441,7 +441,7 @@ public class ClientItem extends JButton implements MouseListener{
 				}
 			}
 			//If it's a potion use it
-			else if(type.charAt(1) == ServerWorld.POTION_TYPE.charAt(1))
+			else if(type.charAt(2) == ServerWorld.POTION_TYPE.charAt(2))
 			{
 				inventory.use(this);
 			}

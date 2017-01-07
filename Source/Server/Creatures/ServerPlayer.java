@@ -516,9 +516,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				} else if (getWorld().getWorldCounter() - deathCounter < 600) {
 					setRowCol(new RowCol(5, 4));
 				} else {
-
 					int randomStartWeapon = (int) (Math.random() * 3);
 
+					//If we already have a weapon, don't add a random one
+					for(ServerItem sItem : getInventory())
+					{
+						if(sItem.getType().contains(ServerWorld.WEAPON_TYPE))
+						{
+							randomStartWeapon = -1;
+							break;
+						}
+					}
+					
 					switch (randomStartWeapon) {
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
@@ -1703,15 +1712,85 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * Drop inventory and equipment
 	 */
 	public void dropInventory() {
-		super.dropInventory();
+		ServerItem money = null;
+		ServerItem bestWeapon = null;
+		ServerItem bestArmour = null;
+		
+		for (ServerItem item : getInventory())
+		{
+			if (item.getType().equals(ServerWorld.MONEY_TYPE)
+					&& getType().substring(0, 2)
+					.equals(ServerWorld.PLAYER_TYPE))
+				money = item;
+			else if (item.getType().contains(ServerWorld.WEAPON_TYPE))
+			{
+				if(bestWeapon == null)
+				{
+					bestWeapon = item;
+				}
+				else if(item.getCost() > bestWeapon.getCost())
+				{
+					dropItem(bestWeapon);
+					bestWeapon = item;
+				}
+				else dropItem(item);
+			}
+			else if (item.getType().contains(ServerWorld.ARMOUR_TYPE))
+			{
+				if(bestArmour == null)
+				{
+					bestArmour = item;
+				}
+				else if(item.getCost() > bestArmour.getCost())
+				{
+					dropItem(bestArmour);
+					bestArmour = item;
+				}
+				else dropItem(item);
+			}
+			else
+				dropItem(item);
+		}
+
+		getInventory().clear();
+		if (money != null)
+			getInventory().add(money);
+		
 		for (int item = 0; item < equippedWeapons.length; item++)
 			if (equippedWeapons[item] != null)
-				dropItem(equippedWeapons[item]);
+			{
+				if(bestWeapon == null || equippedWeapons[item].getCost() > bestWeapon.getCost())
+				{
+					if(bestWeapon != null)
+						dropItem(bestWeapon);
+					bestWeapon = equippedWeapons[item];
+				}
+				else dropItem(equippedWeapons[item]);
+			}
 		equippedWeapons = new ServerItem[MAX_WEAPONS];
 
 		if (equippedArmour != null)
-			dropItem(equippedArmour);
+		{
+			if(bestArmour == null || equippedArmour.getCost() > bestArmour.getCost())
+			{
+				if(bestArmour!= null)
+					dropItem(bestArmour);
+				bestArmour = equippedArmour;
+			}
+			else dropItem(equippedArmour);
+		}
 		equippedArmour = null;
+		
+		if(bestWeapon != null)
+		{
+			System.out.println("BEST W: "+bestWeapon.getType());
+			getInventory().add(bestWeapon);
+		}
+		if(bestArmour != null)
+		{
+			System.out.println("BEST A: "+bestArmour.getType());
+			getInventory().add(bestArmour);
+		}
 	}
 
 	/**
