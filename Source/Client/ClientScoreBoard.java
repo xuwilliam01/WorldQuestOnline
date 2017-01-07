@@ -42,7 +42,7 @@ public class ClientScoreBoard extends JPanel{
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		for(ClientPlayerScore player: blueTeam)
 		{
-			graphics.drawString(String.format("%20s%3d%3d",player.getName(),player.getKills(), player.getDeaths()), xPos, yPos);
+			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			yPos += 30;
 		}
 

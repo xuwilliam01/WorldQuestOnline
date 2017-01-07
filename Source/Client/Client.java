@@ -770,7 +770,6 @@ ActionListener, MouseMotionListener
 								case "SP":
 									int l = Integer.parseInt(tokens[++token]);
 									String n = tokens[++token];
-									;
 									for (int i = 1; i < l; i++)
 										n += " " + tokens[++token];
 									scoreboard.addPlayer(n,
@@ -778,7 +777,7 @@ ActionListener, MouseMotionListener
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]),
-											Integer.parseInt(tokens[++token]),
+											toInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
