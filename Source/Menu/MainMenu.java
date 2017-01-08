@@ -1,7 +1,9 @@
 package Menu;
 
 import java.awt.Color; 
+import java.awt.Component;
 import java.awt.DisplayMode;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -256,6 +258,7 @@ public class MainMenu implements KeyListener {
 
 		JButton directConnect;
 		JButton leaderb;
+		JButton exitButton;
 
 		//Image buttonTrayImage = Images.getImage("ButtonTray");
 
@@ -273,6 +276,9 @@ public class MainMenu implements KeyListener {
 
 		Image createServerImage = Images.getImage("CreateAServer");
 		Image createServerOver = Images.getImage("CreateAServerClicked");
+		
+		Image exitImage = Images.getImage("Exit");
+		Image exitOver = Images.getImage("ExitClicked");
 
 		private Timer repaintTimer = new Timer(15, this);
 
@@ -346,6 +352,20 @@ public class MainMenu implements KeyListener {
 			leaderb.addActionListener(new LeaderboardButton());
 			leaderb.addMouseListener(this);
 			add(leaderb);
+			
+			exitButton = new JButton(new ImageIcon(exitImage));
+			exitButton.setSize(exitImage.getWidth(null),
+					exitImage.getHeight(null));
+			exitButton.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - exitImage.getWidth(null),
+					Client.SCREEN_HEIGHT-exitImage.getHeight(null)-20);
+			exitButton.setBorder(BorderFactory.createEmptyBorder());
+			exitButton.setContentAreaFilled(false);
+			exitButton.setOpaque(false);
+			exitButton.addActionListener(new  ExitGame());
+			exitButton.addMouseListener(this);
+			add(exitButton);
+			
+			System.out.println(Client.SCREEN_WIDTH);
 
 			directConnect = new JButton("Direct IP Connect");
 			directConnect.setSize(createServerImage.getWidth(null),
@@ -474,6 +494,8 @@ public class MainMenu implements KeyListener {
 				createServer.setIcon(new ImageIcon(createServerOver));
 			} else if (e.getSource() == leaderb) {
 				leaderb.setIcon(new ImageIcon(leaderbOver));
+			} else if (e.getSource() == exitButton) {
+				exitButton.setIcon(new ImageIcon(exitOver));
 			}
 
 		}
@@ -489,7 +511,9 @@ public class MainMenu implements KeyListener {
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerImage));
 			} else if (e.getSource() == leaderb) {
-				leaderb.setIcon(new ImageIcon(leaderbImage));
+				leaderb.setIcon(new ImageIcon(exitImage));
+			} else if (e.getSource() == exitButton) {
+				exitButton.setIcon(new ImageIcon(exitImage));
 			}
 		
 		}
@@ -1441,6 +1465,28 @@ public class MainMenu implements KeyListener {
 			// mainFrame.setVisible(true);
 			// instructionPanel.revalidate();
 			// instructionPanel.repaint();
+
+		}
+	}
+	
+	private static class ExitGame implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object[] options = {"Exit",
+            "Cancel"};
+			Frame dialogueFrame = new Frame();
+			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame,
+					"Exit the game?",
+					"Confirm Exit",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					options,
+					options[0]); //default button title
+			mainFrame.requestFocus();
+			
+			if (confirmExit == 0) {
+				System.exit(0);
+			}
 
 		}
 	}
