@@ -1,4 +1,6 @@
 package START;
+import java.awt.Point;
+
 import javax.swing.JFrame;
 import Menu.MainMenu;
 
@@ -15,7 +17,7 @@ public class StartGame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MainMenu menu = new MainMenu();
+		MainMenu menu = new MainMenu(null);
 
 	}
 	
@@ -25,9 +27,10 @@ public class StartGame {
 	 */
 	public static void restart(JFrame oldFrame)
 	{	
+		Point pos = oldFrame.getLocationOnScreen();
 		oldFrame.setVisible(false);
 		oldFrame.dispose();
 		oldFrame.removeAll();
-		MainMenu menu = new MainMenu();
+		MainMenu menu = new MainMenu(pos);
 	}
 }

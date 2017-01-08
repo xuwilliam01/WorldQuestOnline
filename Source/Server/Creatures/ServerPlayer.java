@@ -286,6 +286,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private String skinColour;
 	private String hair;
 
+	private ServerItem bestWeapon = null;
+	private ServerItem bestArmour = null;
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -307,7 +309,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 *            the image of the player
 	 */
 	public ServerPlayer(String name, double x, double y, int width, int height,
-			double gravity, String skinColour, Socket socket,
+			double gravity, String skinColour, String hair, Socket socket,
 			ServerEngine engine, ServerWorld world, BufferedReader input,
 			PrintWriter output) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
@@ -342,26 +344,22 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		// Send the 2D grid of the world to the client
 		sendMap();
 
+		// Send the player's information
+		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " "
+				+ toChars((int) (y + 0.5)) + " "
+				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
+				+ " " + getTeam());
+
 		// System.out.printf("%.2f %.2f x, y%n", castle.getX(), castle.getY());
 		this.skinColour = skinColour;
 		baseImage = "BASE_" + skinColour;
 
-		// Give the player random start weapon(s)
-		int randomStartWeapon = (int) (Math.random() * 3);
+		// Set a random hair style for the player
+		this.hair = hair;
+		setHair(hair);
 
-		switch (randomStartWeapon) {
-		case 0:
-			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-					+ ServerWorld.STONE_TIER, world));
-			break;
-		case 1:
-			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-					+ ServerWorld.STONE_TIER, world));
-			break;
-		case 2:
-			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, world));
-			break;
-		}
+		forcePlayerPos(x, y);
+		forcePlayerSpeed(getHSpeed(), getVSpeed());
 
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
@@ -370,73 +368,40 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	}
 
-	public void sendInfo(int x, int y)
-	{
-		// Send the player's information
-		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " "
-				+ toChars((int) (y + 0.5)) + " "
-				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
-				+ " " + getTeam());
-
-		forcePlayerPos(x, y);
-		forcePlayerSpeed(getHSpeed(), getVSpeed());
-	}
-
 	public void initPlayer()
 	{
 		// Start the player off with some gold
 		addItem(new ServerMoney(0, 0, 10, getWorld()));
+
+		// Give the player random start weapon(s)
+		int randomStartWeapon = (int) (Math.random() * 3);
+		switch (randomStartWeapon) {
+		case 0:
+			addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+					+ ServerWorld.STONE_TIER, getWorld()));
+			break;
+		case 1:
+			addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+					+ ServerWorld.STONE_TIER, getWorld()));
+			break;
+		case 2:
+			addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
+			break;
+		}
+
 		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, getWorld()));
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
-
-		// Set a random hair style for the player
-		hair = "HAIR0BEIGE";
-		int randomHair = (int) (Math.random() * 8);
-		switch (randomHair) {
-		case 1:
-			hair = "HAIR1BEIGE";
-			break;
-		case 2:
-			hair = "HAIR0BLACK";
-			break;
-		case 3:
-			hair = "HAIR1BLACK";
-			break;
-		case 4:
-			hair = "HAIR0BLOND";
-			break;
-		case 5:
-			hair = "HAIR1BLOND";
-			break;
-		case 6:
-			hair = "HAIR0GREY";
-			break;
-		case 7:
-			hair = "HAIR1GREY";
-			break;
-		}
-		ServerAccessory newHair = new ServerAccessory(this, hair, 0, getWorld());
-		setHead(newHair);
-		getWorld().add(newHair);
 	}
-	
+
 	public void setHair(String hair)
 	{
 		ServerAccessory newHair = new ServerAccessory(this, hair, 0, getWorld());
 		setHead(newHair);
 		getWorld().add(newHair);
 	}
-	
-	public void setSkin(String skinColour)
-	{
-		this.skinColour = skinColour;
-		baseImage = "BASE_" + skinColour;
-		setImage("BASE_"
-				+ skinColour + "_RIGHT_0_0");
-	}
-	
+
 	/**
 	 * Send the player the entire map
 	 */
@@ -1100,6 +1065,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				queueMessage("e " + toChars(head.getID()));
 			}
 
+			if(!isAlive())
+				queueMessage("r "+(getWorld().getWorldCounter() - deathCounter));
 			// Signal a repaint
 			queueMessage("U");
 			flushWriterNow = true;
@@ -1424,6 +1391,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		if (endGame)
 			return;
 
+		//Save the players money if they disconnect
+		synchronized(engine.getSavedPlayers())
+		{
+			inflictDamage(1000, this);
+			engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour, bestWeapon, bestArmour,getWorld().getWorldCounter()));
+		}
+
 		// If the buffered reader breaks, the player has disconnected
 		if (vendor != null) {
 			vendor.setIsBusy(false);
@@ -1435,12 +1409,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			System.out.println("Error closing buffered reader");
-		}
-
-		//Save the players money if they disconnect
-		synchronized(engine.getSavedPlayers())
-		{
-			engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour));
 		}
 
 		output.close();
@@ -1743,8 +1711,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 */
 	public void dropInventory() {
 		ServerItem money = null;
-		ServerItem bestWeapon = null;
-		ServerItem bestArmour = null;
+		bestWeapon = null;
+		bestArmour = null;
 
 		for (ServerItem item : getInventory())
 		{
@@ -1849,7 +1817,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				amount = 0;
 			}
 
-			addCastleXP(Math.min(amount, getHP()), source);
+			if(source != this)
+				addCastleXP(Math.min(amount, getHP()), source);
+			
 			setHP(getHP() - amount);
 
 			double damageX = Math.random() * getWidth() + getX();
@@ -1863,28 +1833,32 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// Play the death animation of the player when the HP drops to 0 or
 			// below, and eventually respawn the player
 			if (getHP() <= 0) {
-				// For the scoreboard
-				if (source.getType().equals(ServerWorld.PLAYER_TYPE)) {
-					engine.broadcast("SK " + toChars(source.getID()) + " "
-							+ source.getTeam());
-					((ServerPlayer) source).kills++;
-				}
-				engine.broadcast("SD " + toChars(getID()) + " " + getTeam());
 				deaths++;
-
-				if (source.getTeam() == ServerCreature.NEUTRAL) {
-					String firstName = getTeam() + getName();
-					String secondName = ServerCreature.NEUTRAL
-							+ source.getName();
-					engine.broadcast("KF1 " + firstName.split(" ").length + " "
-							+ firstName + " " + secondName.split(" ").length
-							+ " " + secondName);
-				} else {
-					String firstName = source.getTeam() + source.getName();
-					String secondName = getTeam() + getName();
-					engine.broadcast("KF2 " + firstName.split(" ").length + " "
-							+ firstName + " " + secondName.split(" ").length
-							+ " " + secondName);
+				
+				// For the scoreboard
+				if(source != this)
+				{
+					if (source.getType().equals(ServerWorld.PLAYER_TYPE)) {
+						engine.broadcast("SK " + toChars(source.getID()) + " "
+								+ source.getTeam());
+						((ServerPlayer) source).kills++;
+					}
+					engine.broadcast("SD " + toChars(getID()) + " " + getTeam());
+					
+					if (source.getTeam() == ServerCreature.NEUTRAL) {
+						String firstName = getTeam() + getName();
+						String secondName = ServerCreature.NEUTRAL
+								+ source.getName();
+						engine.broadcast("KF1 " + firstName.split(" ").length + " "
+								+ firstName + " " + secondName.split(" ").length
+								+ " " + secondName);
+					} else {
+						String firstName = source.getTeam() + source.getName();
+						String secondName = getTeam() + getName();
+						engine.broadcast("KF2 " + firstName.split(" ").length + " "
+								+ firstName + " " + secondName.split(" ").length
+								+ " " + secondName);
+					}
 				}
 				setAlive(false);
 
@@ -2502,5 +2476,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void decreaseNumManaPots()
 	{
 		numManaPots--;
+	}
+	
+	public void setDeathCounter(long amount)
+	{
+		deathCounter = amount;
 	}
 }

@@ -34,6 +34,7 @@ public class Server implements Runnable {
 	public static String defaultMap;
 
 	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
+	private String[] playerHairs = {"HAIR0BEIGE", "HAIR1BEIGE", "HAIR0BLACK", "HAIR1BLACK", "HAIR0BLOND", "HAIR1BLOND", "HAIR0GREY","HAIR1GREY"};
 
 	// Lobby variables
 	private boolean needLeader = true;
@@ -224,15 +225,7 @@ public class Server implements Runnable {
 
 
 
-				int characterSelection = (int) (Math.random() * playerColours.length);
-				ServerPlayer newPlayer = new ServerPlayer(name, 0, 0,
-						ServerPlayer.DEFAULT_WIDTH,
-						ServerPlayer.DEFAULT_HEIGHT,
-						ServerWorld.GRAVITY, playerColours[characterSelection],
-						newClient, engine, engine.getWorld(), input, output);
-
-
-				newPlayer.setName(name);
+				ServerPlayer newPlayer = null;
 
 				//Check if the player already joined
 				synchronized(engine.getSavedPlayers())
@@ -242,23 +235,49 @@ public class Server implements Runnable {
 					{
 						if(name.equals(p.name))
 						{
+							int x = engine.getWorld().getBlueCastleX();
+							int y = engine.getWorld().getBlueCastleY();
+							if (p.team == ServerPlayer.RED_TEAM) {
+								x = engine.getWorld().getRedCastleX();
+								y = engine.getWorld().getRedCastleY();
+							}
+							
+							newPlayer = new ServerPlayer(name, x, y,
+									ServerPlayer.DEFAULT_WIDTH,
+									ServerPlayer.DEFAULT_HEIGHT,
+									ServerWorld.GRAVITY, p.skinColour, p.hair,
+									newClient, engine, engine.getWorld(), input, output);
+							
 							newPlayer.increaseMoney(p.money);
 							newPlayer.setKills(p.kills);
 							newPlayer.setDeaths(p.deaths);
 							newPlayer.addTotalDamage(p.totalDmg);
 							newPlayer.addTotalMoneySpent(p.totalMoney);
 							newPlayer.setTeam(p.team);
-							newPlayer.setHair(p.hair);
-							newPlayer.setSkin(p.skinColour);
+							if(p.bestWeapon != null)
+								newPlayer.addItem(p.bestWeapon);
+							if(p.bestArmour != null)
+								newPlayer.addItem(p.bestArmour);
+							if(engine.getWorld().getWorldCounter() - p.leaveTime < 600)
+							{
+								newPlayer.setAlive(false);
+								newPlayer.setDeathCounter(p.leaveTime);
+								newPlayer.setHP(0);
+							}	
 							toRemove = p;
 							break;
 						}
 					}
 					if(toRemove != null)
+					{
 						engine.getSavedPlayers().remove(toRemove);
+					}
 					//If a new player, initialize them
 					else 
 					{
+						int characterSelection = (int) (Math.random() * playerColours.length);
+						int randomHair = (int)(Math.random() * playerHairs.length);
+						
 						int team = -1;
 						boolean inServer = false;
 						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
@@ -290,21 +309,23 @@ public class Server implements Runnable {
 						if (playerToRemove != null) {
 							lobbyPlayersToAdd.remove(playerToRemove);
 						}
+						
+						int x = engine.getWorld().getBlueCastleX();
+						int y = engine.getWorld().getBlueCastleY();
+						if (team == ServerPlayer.RED_TEAM) {
+							x = engine.getWorld().getRedCastleX();
+							y = engine.getWorld().getRedCastleY();
+						}
+						
+						newPlayer = new ServerPlayer(name, x, y,
+								ServerPlayer.DEFAULT_WIDTH,
+								ServerPlayer.DEFAULT_HEIGHT,
+								ServerWorld.GRAVITY, playerColours[characterSelection], playerHairs[randomHair],
+								newClient, engine, engine.getWorld(), input, output);
 						newPlayer.setTeam(team);
 						newPlayer.initPlayer();
 					}
 				}
-
-				int x;
-				int y;
-				if (newPlayer.getTeam() == ServerPlayer.RED_TEAM) {
-					x = engine.getWorld().getRedCastleX();
-					y = engine.getWorld().getRedCastleY();
-				} else {
-					x = engine.getWorld().getBlueCastleX();
-					y = engine.getWorld().getBlueCastleY();
-				}
-				newPlayer.sendInfo(x,y);
 				
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
