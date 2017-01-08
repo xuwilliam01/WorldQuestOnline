@@ -1041,12 +1041,27 @@ public class Images {
 			addtoImageArray(new GameImage("ExitClicked.png",
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("Login.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("LoginClicked.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("Logout.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("LogoutClicked.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
 			
 			
 			addtoImageArray(new GameImage("WorldQuestOnline.png",
 					(int) (ClientFrame.getScaledWidth(1000)),
 					(int) (ClientFrame.getScaledHeight(250)), "Interface//"));
-
+			addtoImageArray(new GameImage("ProfileBackground.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(300)), "Interface//"));
+			
 			addtoImageArray(new GameImage("Inventory.png",
 					(int) (ClientFrame.getScaledWidth(300)),
 					Client.Client.SCREEN_HEIGHT, "Interface//"));

@@ -1,6 +1,7 @@
 package ClientUDP;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -19,6 +20,7 @@ import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -52,6 +54,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JPasswordField password = new JPasswordField();
 	private JPasswordField confirm  = new JPasswordField();
 	private JButton menuLoginButton;
+	private Image logoutOver;
 
 	public static boolean open = false;
 	public static boolean loggedIn = false;
@@ -60,7 +63,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private static String savedPassword;
 	public static String savedKey;
 
-	public ClientAccountWindow(int port, JButton menuLoginButton) throws SocketException
+	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		setBackground(Color.BLACK);
 		setSize((Client.SCREEN_WIDTH
@@ -80,6 +83,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 
 		open = true;
 		this.menuLoginButton = menuLoginButton;
+		this.logoutOver = logoutOver;
 
 		int deltay = 45;
 		int y = 25;
@@ -200,7 +204,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		savedPassword = new String(password.getPassword());
 		savedKey = hash(username.getText(),new String(password.getPassword()));
 		loggedIn = true;
-		menuLoginButton.setText((String.format("Logout(%s)", savedUser)));
+		menuLoginButton.setIcon(new ImageIcon(logoutOver));
 
 		PrintWriter out = null;
 		try {

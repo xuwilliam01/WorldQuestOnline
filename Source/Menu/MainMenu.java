@@ -100,6 +100,8 @@ public class MainMenu implements KeyListener {
 	private boolean imagesAudioLoaded = false;
 	private boolean mapsLoaded = false;
 
+	public static String logoutImage;
+
 	private static ClientServerSelection serverList = null;
 	private static ClientAccountWindow newLogin = null;
 	private static Leaderboard leaderboard = null;
@@ -111,7 +113,10 @@ public class MainMenu implements KeyListener {
 
 	private static boolean canConnect = false;
 
-	private static JButton login;
+	//private static JButton login;
+	private static JButton loginLogout;
+
+
 
 	private static boolean tooLarge;
 	private static boolean checkedSettingsAlready = false;
@@ -252,11 +257,13 @@ public class MainMenu implements KeyListener {
 
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
+		Image profileBackgroundImage = Images.getImage("ProfileBackground");
 		Image background = Images.getImage("BACKGROUND");
 		JButton playOnline;
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
+		//JButton loginLogout;
 
 		JButton directConnect;
 		JButton leaderb;
@@ -281,7 +288,13 @@ public class MainMenu implements KeyListener {
 		
 		Image exitImage = Images.getImage("Exit");
 		Image exitOver = Images.getImage("ExitClicked");
-
+		
+		Image loginImage = Images.getImage("Login");
+		Image loginOver = Images.getImage("LoginClicked");
+		Image logoutImage = Images.getImage("Logout");
+		Image logoutOver = Images.getImage("LogoutClicked");
+		
+		
 		private Timer repaintTimer = new Timer(15, this);
 
 		/**
@@ -367,7 +380,6 @@ public class MainMenu implements KeyListener {
 			exitButton.addMouseListener(this);
 			add(exitButton);
 			
-			System.out.println(Client.SCREEN_WIDTH);
 
 			directConnect = new JButton("Direct IP Connect");
 			directConnect.setSize(createServerImage.getWidth(null),
@@ -390,19 +402,38 @@ public class MainMenu implements KeyListener {
 			createServer.addMouseListener(this);
 			add(createServer);
 			
+
+			
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
 			{
-				login = new JButton(String.format("Logout(%s)", ClientAccountWindow.savedUser));
+				//login = new JButton(String.format("Logout(%s)", ClientAccountWindow.savedUser));
+				loginLogout = new JButton(new ImageIcon(logoutImage));
 			}
-			else login = new JButton("Login");
-			login.setSize(200, 50);
+			else {
+			
+				loginLogout = new JButton(new ImageIcon(loginImage));
+
+			}
+			
+			loginLogout.setSize(loginImage.getWidth(null),
+					loginImage.getHeight(null));
+			loginLogout.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - loginImage.getWidth(null),
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 - loginImage.getHeight(null));
+			loginLogout.setBorder(BorderFactory.createEmptyBorder());
+			loginLogout.setContentAreaFilled(false);
+			loginLogout.setOpaque(false);
+			loginLogout.addActionListener(new LoginButton());
+			loginLogout.addMouseListener(this);
+			add(loginLogout);
+			
+			/*login.setSize(200, 50);
 			login.setLocation(Client.SCREEN_WIDTH - 200,50);
 			login.setContentAreaFilled(false);
 			login.setOpaque(false);
 			login.addActionListener(new LoginButton());
 			login.addMouseListener(this);
-			add(login);
+			add(login);*/
 
 			setVisible(true);
 			repaint();
@@ -447,9 +478,12 @@ public class MainMenu implements KeyListener {
 			}
 
 			// Draw the title image
-			graphics.drawImage(titleImage, middle - titleImage.getWidth(null)
-					/ 2 - 20, (int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
+			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 20,
+					(int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
 					null);
+			
+			graphics.drawImage(profileBackgroundImage,Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null),
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2, null);
 
 			graphics.drawString("William Xu and Alex Raita", 15, 20);
 
@@ -498,7 +532,15 @@ public class MainMenu implements KeyListener {
 				leaderb.setIcon(new ImageIcon(leaderbOver));
 			} else if (e.getSource() == exitButton) {
 				exitButton.setIcon(new ImageIcon(exitOver));
+			} else if (e.getSource() == loginLogout) {
+				if(ClientAccountWindow.loggedIn)
+				{
+					loginLogout.setIcon(new ImageIcon(logoutOver));
+				} else {
+					loginLogout.setIcon(new ImageIcon(loginOver));
+				}
 			}
+			
 
 		}
 
@@ -513,9 +555,16 @@ public class MainMenu implements KeyListener {
 			} else if (e.getSource() == createServer) {
 				createServer.setIcon(new ImageIcon(createServerImage));
 			} else if (e.getSource() == leaderb) {
-				leaderb.setIcon(new ImageIcon(exitImage));
+				leaderb.setIcon(new ImageIcon(leaderbImage));
 			} else if (e.getSource() == exitButton) {
 				exitButton.setIcon(new ImageIcon(exitImage));
+			} else if (e.getSource() == loginLogout) {
+				if(ClientAccountWindow.loggedIn)
+				{
+					loginLogout.setIcon(new ImageIcon(logoutImage));
+				} else {
+					loginLogout.setIcon(new ImageIcon(loginImage));
+				}
 			}
 		
 		}
@@ -950,19 +999,23 @@ public class MainMenu implements KeyListener {
 			if(ClientAccountWindow.loggedIn)
 			{
 				ClientAccountWindow.logout();
-				login.setText("Login");
+				//login.setText("Login");
+				loginLogout.setIcon(new ImageIcon(logoutImage));
 				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!");
+				mainFrame.requestFocus();
 				return;
 			}
 			newLogin = null;
 			try {
-				newLogin = new ClientAccountWindow(DEF_UDP_PORT, login);
+				newLogin = new ClientAccountWindow(DEF_UDP_PORT, loginLogout, Images.getImage("Logout"));
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Thread loginThread = new Thread(newLogin);
 			loginThread.start();
+			
+			ClientAccountWindow.checkLogin();
 
 		}
 
