@@ -1,6 +1,6 @@
 package Server;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,6 +102,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	private int losingTeam;
 	private Server server;
 
+	private ArrayList<SavedPlayer> savedPlayers = new ArrayList<SavedPlayer>();
 	/**
 	 * Constructor for the engine
 	 */
@@ -431,7 +432,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 		return ServerCreature.BLUE_TEAM;
 	}
-
+	
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
@@ -457,5 +458,10 @@ public class ServerEngine implements Runnable, ActionListener {
 
 	public void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
+	}
+	
+	public ArrayList<SavedPlayer> getSavedPlayers()
+	{
+		return savedPlayers;
 	}
 }

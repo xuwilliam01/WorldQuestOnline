@@ -11,6 +11,7 @@ import java.util.ConcurrentModificationException;
 
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
+import Server.Items.ServerMoney;
 
 /**
  * Creates a new world and accepts new client connections
@@ -22,14 +23,13 @@ public class Server implements Runnable {
 	public final static int MAX_PLAYERS = 10;
 
 	private ServerEngine engine;
-	private int port;
 	private String map;
 	private ServerGUI gui;
 	private boolean start = false;
 
 	private PrintWriter output = null;
 
-	private ArrayList<Pair> newPlayerWaiting = new ArrayList<Pair>();
+	private ArrayList<Triple> newPlayerWaiting = new ArrayList<Triple>();
 	private int sizeIndex = 0;
 	public static String defaultMap;
 
@@ -44,12 +44,12 @@ public class Server implements Runnable {
 	private boolean closeServer = false;
 
 	private ServerManager manager;
-	
+
 	public Server(ServerManager manager)
 	{
 		this.manager = manager;
 	}
-	
+
 	public ServerManager getManager() {
 		return manager;
 	}
@@ -73,10 +73,10 @@ public class Server implements Runnable {
 		return start;
 	}
 
-	public void addClient(Socket newClient, BufferedReader input) {
+	public void addClient(Socket newClient, BufferedReader input, String name) {
 		while (true) {
 			try {
-				newPlayerWaiting.add(new Pair(newClient, input));
+				newPlayerWaiting.add(new Triple(newClient, input, name));
 				break;
 			} catch (ConcurrentModificationException E) {
 				System.out
@@ -102,7 +102,7 @@ public class Server implements Runnable {
 		return newPlayerWaiting.get(sizeIndex - 1).socket;
 	}
 
-	public Socket nextGameClient() {
+	public Triple nextGameClient() {
 		while (newPlayerWaiting.size() == sizeIndex && !closeServer) {
 			try {
 				Thread.sleep(200);
@@ -117,7 +117,7 @@ public class Server implements Runnable {
 			return null;
 
 		sizeIndex++;
-		return newPlayerWaiting.get(sizeIndex - 1).socket;
+		return newPlayerWaiting.get(sizeIndex - 1);
 	}
 
 	@Override
@@ -184,10 +184,12 @@ public class Server implements Runnable {
 		}
 		while (true) {
 			try {
-				Socket newClient = nextGameClient();
+				Triple next = nextGameClient();
+				Socket newClient = next.socket;
+				String name = next.name;
 				if(closeServer)
 					return;
-				
+
 				try {
 					newClient.setReceiveBufferSize(1024);
 					newClient.setSendBufferSize(1024*16);
@@ -203,12 +205,9 @@ public class Server implements Runnable {
 						new InputStreamReader(newClient.getInputStream()));
 
 				String IP = newClient.getInetAddress().toString();
-				int team = -1;
-				String name = null;
 				ServerLobbyPlayer playerToRemove = null;
 
 				String message = input.readLine();
-				String nameCheck;
 
 				// If someone connects late, get them to start the client
 				if (message.equals("Lobby")) {
@@ -221,61 +220,92 @@ public class Server implements Runnable {
 
 					// Close input and socket
 					continue;
-				} else {
-					nameCheck = message;
 				}
 
-				boolean inServer = false;
-				for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
-					if (player.getIP().equals(IP)) {
-						if (nameCheck.equals(player.getName())) {
-							team = player.getTeam();
-							name = player.getName();
-							engine.broadcast("JO "
-									+ player.getName().split(" ").length + " "
-									+ player.getTeam() + player.getName());
-							playerToRemove = player;
-							inServer = true;
+
+
+				int characterSelection = (int) (Math.random() * playerColours.length);
+				ServerPlayer newPlayer = new ServerPlayer(name, 0, 0,
+						ServerPlayer.DEFAULT_WIDTH,
+						ServerPlayer.DEFAULT_HEIGHT,
+						ServerWorld.GRAVITY, playerColours[characterSelection],
+						newClient, engine, engine.getWorld(), input, output);
+
+
+				newPlayer.setName(name);
+
+				//Check if the player already joined
+				synchronized(engine.getSavedPlayers())
+				{
+					SavedPlayer toRemove = null;
+					for(SavedPlayer p : engine.getSavedPlayers())
+					{
+						if(name.equals(p.name))
+						{
+							newPlayer.increaseMoney(p.money);
+							newPlayer.setKills(p.kills);
+							newPlayer.setDeaths(p.deaths);
+							newPlayer.addTotalDamage(p.totalDmg);
+							newPlayer.addTotalMoneySpent(p.totalMoney);
+							newPlayer.setTeam(p.team);
+							newPlayer.setHair(p.hair);
+							newPlayer.setSkin(p.skinColour);
+							toRemove = p;
 							break;
 						}
 					}
-				}
+					if(toRemove != null)
+						engine.getSavedPlayers().remove(toRemove);
+					//If a new player, initialize them
+					else 
+					{
+						int team = -1;
+						boolean inServer = false;
+						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
+							if (player.getIP().equals(IP)) {
+								if (name.equals(player.getName())) {
+									team = player.getTeam();
+									name = player.getName();
+									engine.broadcast("JO "
+											+ player.getName().split(" ").length + " "
+											+ player.getTeam() + player.getName());
+									playerToRemove = player;
+									inServer = true;
+									break;
+								}
+							}
+						}
 
-				if (!inServer) {
-					team = engine.getNextTeam();
-					name = nameCheck;
-					engine.broadcast("JO " + name.split(" ").length + " "
-							+ team + name);
-				}
+						if (!inServer) {
+							team = engine.getNextTeam();
+							engine.broadcast("JO " + name.split(" ").length + " "
+									+ team + name);
+						}
 
-				if (team == -1) {
-					newClient.close();
-					continue;
+						if (team == -1) {
+							newClient.close();
+							continue;
 
-				}
-				if (playerToRemove != null) {
-					lobbyPlayersToAdd.remove(playerToRemove);
+						}
+						if (playerToRemove != null) {
+							lobbyPlayersToAdd.remove(playerToRemove);
+						}
+						newPlayer.setTeam(team);
+						newPlayer.initPlayer();
+					}
 				}
 
 				int x;
 				int y;
-				if (team == ServerPlayer.RED_TEAM) {
+				if (newPlayer.getTeam() == ServerPlayer.RED_TEAM) {
 					x = engine.getWorld().getRedCastleX();
 					y = engine.getWorld().getRedCastleY();
 				} else {
 					x = engine.getWorld().getBlueCastleX();
 					y = engine.getWorld().getBlueCastleY();
 				}
-
-				int characterSelection = (int) (Math.random() * playerColours.length);
-				ServerPlayer newPlayer = new ServerPlayer(x, y,
-						ServerPlayer.DEFAULT_WIDTH,
-						ServerPlayer.DEFAULT_HEIGHT,
-						ServerWorld.GRAVITY, playerColours[characterSelection],
-						newClient, engine, engine.getWorld(), input, output);
-
-				newPlayer.setName(name);
-				newPlayer.setTeam(team);
+				newPlayer.sendInfo(x,y);
+				
 				engine.addPlayer(newPlayer);
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
@@ -341,7 +371,7 @@ public class Server implements Runnable {
 			}
 			catch (ConcurrentModificationException e)
 			{
-				
+
 			}
 		}
 		if (ServerManager.HAS_FRAME) {
@@ -369,15 +399,17 @@ public class Server implements Runnable {
 	{
 		closeServer = true;
 	}
-	
-	public class Pair{
+
+	public class Triple{
 		Socket socket;
 		BufferedReader reader;
-		
-		public Pair(Socket socket, BufferedReader reader)
+		String name;
+
+		public Triple(Socket socket, BufferedReader reader, String name)
 		{
 			this.socket = socket;
 			this.reader = reader;
+			this.name = name;
 		}
 	}
 }

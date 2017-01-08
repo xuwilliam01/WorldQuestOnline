@@ -293,12 +293,12 @@ public class ServerManager implements Runnable, ActionListener{
 								output.println("CONNECTED");
 								System.out.println("CONNECTED GAME STARTED");
 								output.flush();
-								room.addClient(newClientSocket, input);
+								room.addClient(newClientSocket, input, name);
 							} else {
 								output.println("CONNECTED");
 								System.out.println("CONNECTED TO LOBBY");
 								output.flush();
-								room.addClient(newClientSocket, input);
+								room.addClient(newClientSocket, input, name);
 							}
 							return; // Once the client is added wait for
 							// a new one
@@ -310,7 +310,7 @@ public class ServerManager implements Runnable, ActionListener{
 						System.out.println("CONNECTED NEW ROOM");
 						output.flush();
 						addNewRoom();
-						rooms.get(rooms.size() - 1).addClient(newClientSocket, input);
+						rooms.get(rooms.size() - 1).addClient(newClientSocket, input, name);
 					} else // No More Space
 					{
 						System.out.println("Sent full message to client");

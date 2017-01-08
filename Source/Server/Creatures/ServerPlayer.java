@@ -11,6 +11,7 @@ import java.util.ConcurrentModificationException;
 import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
+import Server.SavedPlayer;
 import Server.ServerObject;
 import Server.ServerObjectShown;
 import Server.ServerWorld;
@@ -50,10 +51,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public static final int PLAYER_BASE_HP = 100;
 	public static final int PLAYER_BASE_MANA = 100;
-	
+
 	public static final int MAX_HP_POTS = 5;
 	public static final int MAX_MANA_POTS = 5;
-	
+
 	private int numHPPots = 0;
 	private int numManaPots = 0;
 
@@ -282,6 +283,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private boolean ignoreClient = false;
 
+	private String skinColour;
+	private String hair;
+
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -302,7 +306,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * @param image
 	 *            the image of the player
 	 */
-	public ServerPlayer(double x, double y, int width, int height,
+	public ServerPlayer(String name, double x, double y, int width, int height,
 			double gravity, String skinColour, Socket socket,
 			ServerEngine engine, ServerWorld world, BufferedReader input,
 			PrintWriter output) {
@@ -312,38 +316,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		// matter since it will
 		// change
 
-		// Set default name of the player
-		setName("Player");
-
-		// Set a random hair style for the player
-		String hair = "HAIR0BEIGE";
-		int randomHair = (int) (Math.random() * 8);
-		switch (randomHair) {
-		case 1:
-			hair = "HAIR1BEIGE";
-			break;
-		case 2:
-			hair = "HAIR0BLACK";
-			break;
-		case 3:
-			hair = "HAIR1BLACK";
-			break;
-		case 4:
-			hair = "HAIR0BLOND";
-			break;
-		case 5:
-			hair = "HAIR1BLOND";
-			break;
-		case 6:
-			hair = "HAIR0GREY";
-			break;
-		case 7:
-			hair = "HAIR1GREY";
-			break;
-		}
-		ServerAccessory newHair = new ServerAccessory(this, hair, 0, world);
-		setHead(newHair);
-		getWorld().add(newHair);
+		// Set the name of the player
+		setName(name);
 
 		// Set the initial variables
 		actionDelay = 20;
@@ -368,14 +342,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		// Send the 2D grid of the world to the client
 		sendMap();
 
-		// Send the player's information
-		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " "
-				+ toChars((int) (y + 0.5)) + " "
-				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
-				+ " " + getTeam());
-
 		// System.out.printf("%.2f %.2f x, y%n", castle.getX(), castle.getY());
-
+		this.skinColour = skinColour;
 		baseImage = "BASE_" + skinColour;
 
 		// Give the player random start weapon(s)
@@ -395,22 +363,80 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			break;
 		}
 
-		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 10, world));
-		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, world));
-		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, world));
-		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, world));
-		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, world));
-
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
 		writer.start();
 
-		forcePlayerPos(getX(), getY());
+	}
+
+	public void sendInfo(int x, int y)
+	{
+		// Send the player's information
+		sendMessage(toChars(getID()) + " " + toChars((int) (x + 0.5)) + " "
+				+ toChars((int) (y + 0.5)) + " "
+				+ Images.getImageIndex("BASE_" + skinColour + "_RIGHT_0_0")
+				+ " " + getTeam());
+
+		forcePlayerPos(x, y);
 		forcePlayerSpeed(getHSpeed(), getVSpeed());
 	}
 
+	public void initPlayer()
+	{
+		// Start the player off with some gold
+		addItem(new ServerMoney(0, 0, 10, getWorld()));
+		addItem(new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, getWorld()));
+		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
+		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
+		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
+
+		// Set a random hair style for the player
+		hair = "HAIR0BEIGE";
+		int randomHair = (int) (Math.random() * 8);
+		switch (randomHair) {
+		case 1:
+			hair = "HAIR1BEIGE";
+			break;
+		case 2:
+			hair = "HAIR0BLACK";
+			break;
+		case 3:
+			hair = "HAIR1BLACK";
+			break;
+		case 4:
+			hair = "HAIR0BLOND";
+			break;
+		case 5:
+			hair = "HAIR1BLOND";
+			break;
+		case 6:
+			hair = "HAIR0GREY";
+			break;
+		case 7:
+			hair = "HAIR1GREY";
+			break;
+		}
+		ServerAccessory newHair = new ServerAccessory(this, hair, 0, getWorld());
+		setHead(newHair);
+		getWorld().add(newHair);
+	}
+	
+	public void setHair(String hair)
+	{
+		ServerAccessory newHair = new ServerAccessory(this, hair, 0, getWorld());
+		setHead(newHair);
+		getWorld().add(newHair);
+	}
+	
+	public void setSkin(String skinColour)
+	{
+		this.skinColour = skinColour;
+		baseImage = "BASE_" + skinColour;
+		setImage("BASE_"
+				+ skinColour + "_RIGHT_0_0");
+	}
+	
 	/**
 	 * Send the player the entire map
 	 */
@@ -527,7 +553,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							break;
 						}
 					}
-					
+
 					switch (randomStartWeapon) {
 					case 0:
 						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
@@ -1411,6 +1437,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			System.out.println("Error closing buffered reader");
 		}
 
+		//Save the players money if they disconnect
+		synchronized(engine.getSavedPlayers())
+		{
+			engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour));
+		}
+
 		output.close();
 		disconnected = true;
 
@@ -1443,7 +1475,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					numHPPots--;
 				else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
 					numManaPots--;
-				
+
 				if (item.getAmount() > 1) {
 					item.decreaseAmount();
 					vendor.addItem(ServerItem.copy(item));
@@ -1474,12 +1506,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void increaseMoney(int amount) {
 		ServerMoney newMoney = new ServerMoney(getX() + getWidth() / 2, getY()
 				+ getHeight() / 2, amount, getWorld());
-		newMoney.makeExist();
 		if (vendor != null) {
 			newMoney.setSource(vendor);
 		}
-		newMoney.startCoolDown(getWorld().getWorldCounter());
-		getWorld().add(newMoney);
+		addItem(newMoney);
 	}
 
 	/**
@@ -1715,7 +1745,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		ServerItem money = null;
 		ServerItem bestWeapon = null;
 		ServerItem bestArmour = null;
-		
+
 		for (ServerItem item : getInventory())
 		{
 			if (item.getType().equals(ServerWorld.MONEY_TYPE)
@@ -1755,7 +1785,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		getInventory().clear();
 		if (money != null)
 			getInventory().add(money);
-		
+
 		for (int item = 0; item < equippedWeapons.length; item++)
 			if (equippedWeapons[item] != null)
 			{
@@ -1780,7 +1810,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			else dropItem(equippedArmour);
 		}
 		equippedArmour = null;
-		
+
 		if(bestWeapon != null)
 		{
 			System.out.println("BEST W: "+bestWeapon.getType());
@@ -1872,7 +1902,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 				setAttackable(false);
 				isDropping = false;
-				
+
 				numHPPots = 0;
 				numManaPots = 0;
 			}
@@ -2103,7 +2133,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			numHPPots+=item.getAmount();
 		else if (item.getType().equals(ServerWorld.MANA_POTION_TYPE))
 			numManaPots+=item.getAmount();
-		
+
 		getInventory().add(item);
 		queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
 				+ item.getAmount() + " " + item.getCost());
@@ -2463,12 +2493,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public int getPing() {
 		return ping;
 	}
-	
+
 	public void decreaseNumHPPots()
 	{
 		numHPPots--;
 	}
-	
+
 	public void decreaseNumManaPots()
 	{
 		numManaPots--;
