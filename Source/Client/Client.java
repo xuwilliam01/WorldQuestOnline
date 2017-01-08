@@ -513,6 +513,7 @@ ActionListener, MouseMotionListener
 									break;
 								case "B":
 									// End the game
+									leaveGame = true;
 									int team = Integer
 									.parseInt(tokens[++token]);
 									String winner = "Red Team";
@@ -529,7 +530,6 @@ ActionListener, MouseMotionListener
 											String.format(
 													"The %s castle has been destroyed, the winner is the %s!",
 													loser, winner));
-									leaveGame = true;
 									input.close();
 									output.close();
 									if (inventory.getMenuButton() != null)

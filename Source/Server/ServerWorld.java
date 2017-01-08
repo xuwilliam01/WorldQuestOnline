@@ -474,7 +474,10 @@ public class ServerWorld
 			{
 				if (object.getType().equals(ServerWorld.CASTLE_TYPE)
 						&& ((ServerCreature) object).getHP() <= 0)
+				{
+					System.out.println("GAME OVER");
 					engine.endGame(((ServerCreature) object).getTeam());
+				}
 
 				// This will remove the object a frame after it stops existing
 				if (object.exists())

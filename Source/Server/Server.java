@@ -336,8 +336,8 @@ public class Server implements Runnable {
 				System.out.println("Error connecting to client");
 				e.printStackTrace();
 			} catch (NullPointerException e) {
-				//e.printStackTrace();
-				System.out.println("Client has disconnected");
+				//manager.addNewRoom();
+				return;
 			}
 		}
 	}

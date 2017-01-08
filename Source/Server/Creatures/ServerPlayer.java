@@ -1379,8 +1379,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					break;
 				}
 			} catch (IOException e) {
+				//e.printStackTrace();
 				break;
 			} catch (NullPointerException e) {
+				//e.printStackTrace();
 				break;
 			} catch (IndexOutOfBoundsException e) {
 				System.out.println("Indexing problem caught");
@@ -1389,7 +1391,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 
 		if (endGame)
+		{
 			return;
+		}
 
 		//Save the players money if they disconnect
 		synchronized(engine.getSavedPlayers())
@@ -2031,9 +2035,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		output.flush();
 
 		if (endGame) {
-			queueMessage("B " + losingTeam);
-			output.println(message);
-			output.flush();
+			sendMessage("B " + losingTeam);
 			output.close();
 			try {
 				input.close();

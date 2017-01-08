@@ -143,6 +143,15 @@ public class ServerManager implements Runnable, ActionListener{
 			while(true)
 			{
 				try {
+					while(!in.ready())
+					{
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					String input = in.readLine();
 					switch(input.charAt(0))
 					{
@@ -278,6 +287,7 @@ public class ServerManager implements Runnable, ActionListener{
 				}
 				catch(Exception e)
 				{
+					//e.printStackTrace();
 					output.println("INVALID");
 					output.flush();
 					input.close();
