@@ -25,7 +25,7 @@ public class ClientFrame extends JFrame
 	/**
 	 * Constructor for the game frame
 	 */
-	public ClientFrame(boolean tooLarge)
+	public ClientFrame(boolean tooLarge, Point pos)
 	{
 
 		setBackground(Color.BLACK);
@@ -36,6 +36,8 @@ public class ClientFrame extends JFrame
 		setTitle("WorldQuest Online");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+		if(tooLarge && pos != null)
+			setLocation(pos.x, pos.y);
 		setLayout(null);
 		setUndecorated(false);
 		if (!tooLarge)

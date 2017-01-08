@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -151,7 +152,7 @@ public class MainMenu implements KeyListener {
 	/**
 	 * Constructor
 	 */
-	public MainMenu() {
+	public MainMenu(Point pos) {
 		main = this;
 		Thread loadImages = new Thread(new LoadImagesAudio());
 		loadImages.start();
@@ -166,20 +167,21 @@ public class MainMenu implements KeyListener {
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
 
+		tooLarge = false;
+
+		if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
+			Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
+			tooLarge = true;
+		}
+		Client.SCREEN_HEIGHT = dm.getHeight();
+		if (Client.SCREEN_HEIGHT > 1080) {
+			Client.SCREEN_HEIGHT = 1080;
+			tooLarge = true;
+		}
+		
 		if(!checkedSettingsAlready)
 		{
 			checkedSettingsAlready = true;
-			tooLarge = false;
-
-			if (Client.SCREEN_WIDTH > 1920 - ClientInventory.INVENTORY_WIDTH) {
-				Client.SCREEN_WIDTH = 1920 - ClientInventory.INVENTORY_WIDTH;
-				tooLarge = true;
-			}
-			Client.SCREEN_HEIGHT = dm.getHeight();
-			if (Client.SCREEN_HEIGHT > 1080) {
-				Client.SCREEN_HEIGHT = 1080;
-				tooLarge = true;
-			}
 
 			// Display results
 			System.out.println(dm.getWidth());
@@ -200,7 +202,7 @@ public class MainMenu implements KeyListener {
 				ClientWorld.NO_OF_CLOUDS = 0;
 			}
 		}
-		mainFrame = new ClientFrame(tooLarge);
+		mainFrame = new ClientFrame(tooLarge, pos);
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 

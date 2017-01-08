@@ -256,18 +256,20 @@ public class ServerEngine implements Runnable, ActionListener {
 	 *            the new player
 	 */
 	public void addPlayer(ServerPlayer newPlayer) {
-		listOfPlayers.add(newPlayer);
-
-		//For the scoreboard
-		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
-				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0 + " " + ServerPlayer.toChars(0) + " " + newPlayer.getPing());
-		for(ServerPlayer player : listOfPlayers)
+		synchronized(listOfPlayers)
 		{
-			if(player.getID() != newPlayer.getID())
-				newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
-						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
-		}
+			listOfPlayers.add(newPlayer);
 
+			//For the scoreboard
+			broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
+					+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ newPlayer.getKills() +" "+ newPlayer.getDeaths() + " " + ServerPlayer.toChars(newPlayer.getScore()) + " " + newPlayer.getPing());
+			for(ServerPlayer player : listOfPlayers)
+			{
+				if(player.getID() != newPlayer.getID())
+					newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
+							+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
+			}
+		}
 		world.add(newPlayer);
 	}
 
@@ -326,15 +328,18 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		// Remove disconnected players and update all player scores/pings
-		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
-		for (ServerPlayer player : listOfPlayers) {
-			broadcast("s "+ServerPlayer.toChars(player.getID())+" "+ServerPlayer.toChars(player.getScore())+" "+player.getPing()+" "+player.getTeam());
-			if (player.isDisconnected()) {
-				listOfRemovedPlayers.add(player);
+		synchronized(listOfPlayers)
+		{
+			ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
+			for (ServerPlayer player : listOfPlayers) {
+				broadcast("s "+ServerPlayer.toChars(player.getID())+" "+ServerPlayer.toChars(player.getScore())+" "+player.getPing()+" "+player.getTeam());
+				if (player.isDisconnected()) {
+					listOfRemovedPlayers.add(player);
+				}
 			}
-		}
-		for (ServerPlayer player : listOfRemovedPlayers) {
-			listOfPlayers.remove(player);
+			for (ServerPlayer player : listOfRemovedPlayers) {
+				listOfPlayers.remove(player);
+			}
 		}
 
 		// Move all the objects around and update them
@@ -432,7 +437,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 		return ServerCreature.BLUE_TEAM;
 	}
-	
+
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
@@ -459,7 +464,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
 	}
-	
+
 	public ArrayList<SavedPlayer> getSavedPlayers()
 	{
 		return savedPlayers;

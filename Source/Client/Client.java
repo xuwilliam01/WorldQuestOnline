@@ -246,10 +246,10 @@ ActionListener, MouseMotionListener
 	private boolean isDropping=false;
 	private boolean inAction = false;
 	private boolean onSurface = false;
-	
+
 	private static long packetNo = 0;
 
-
+	private int respawnTime = 10;
 	/**
 	 * Constructor for the client
 	 */
@@ -588,6 +588,7 @@ ActionListener, MouseMotionListener
 									break;
 								case "e":
 									ClientObject object = world.get(toInt(tokens[++token]));
+									//System.out.println("CHECK: "+(object == null));
 									object.setX(player.getX());
 									object.setY(player.getY());
 									break;
@@ -612,15 +613,25 @@ ActionListener, MouseMotionListener
 									}
 									if (tokens[token + 4].equals("{"))
 									{
-										world.setObject(
-												id,
-												x,
-												y,
-												Images.getImageName(Integer
-														.parseInt(tokens[++token])),
-												Integer.parseInt(tokens[++token]),
-												tokens[++token],
-												tokens[++token], Integer.parseInt(tokens[++token]));
+										try{
+											world.setObject(
+													id,
+													x,
+													y,
+													Images.getImageName(Integer
+															.parseInt(tokens[++token])),
+													Integer.parseInt(tokens[++token]),
+													tokens[++token],
+													tokens[++token], Integer.parseInt(tokens[++token]));
+										}
+										catch(ArrayIndexOutOfBoundsException e)
+										{
+											e.printStackTrace();
+											//System.out.printf("%d %d %d %d %d %s %s %d%n", id, x, y, Integer
+															//.parseInt(tokens[token-1]),Integer
+														//	.parseInt(tokens[token]),tokens[token+1], tokens[token+2], Integer
+														//	.parseInt(tokens[token+3]));
+										}
 									}
 									else
 									{
@@ -915,6 +926,9 @@ ActionListener, MouseMotionListener
 									bluePop = Integer.parseInt(tokens[++token]);
 									bluePopLimit = Integer.parseInt(tokens[++token]);
 									break;
+								case "r":
+									respawnTime = 10 - Integer.parseInt(tokens[++token])/60;
+									break;
 								}
 
 							}
@@ -963,21 +977,21 @@ ActionListener, MouseMotionListener
 		double currVSpeed = 0;
 		if (!inAction)
 		{
-		double gravity = ServerWorld.GRAVITY * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+			double gravity = ServerWorld.GRAVITY * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 
-		// Apply gravity first (DEFINITELY BEFORE CHECKING
-		// VSPEED)
-		if (vSpeed + gravity < ServerWorld.MAX_SPEED)
-		{
-			vSpeed += gravity;
-		}
-		else
-		{
-			vSpeed = ServerWorld.MAX_SPEED;
-		}
-		
-		currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
-		currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+			// Apply gravity first (DEFINITELY BEFORE CHECKING
+			// VSPEED)
+			if (vSpeed + gravity < ServerWorld.MAX_SPEED)
+			{
+				vSpeed += gravity;
+			}
+			else
+			{
+				vSpeed = ServerWorld.MAX_SPEED;
+			}
+
+			currHSpeed = hSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
+			currVSpeed = vSpeed * (timeForTick/(ServerEngine.UPDATE_RATE*1000000.0));
 		}
 		//System.out.println(currHSpeed);
 
@@ -1227,7 +1241,7 @@ ActionListener, MouseMotionListener
 
 		setPos((int)playerX,(int)playerY);
 		printToServer("p " + playerX + " " + playerY);
-		
+
 		char surface = '0';
 		if (onSurface)
 		{
@@ -1446,7 +1460,7 @@ ActionListener, MouseMotionListener
 			graphics.setColor(Color.white);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
 			graphics.drawString(
-					"YOU ARE DEAD. Please wait 10 seconds to respawn", 300, 20);
+					String.format("YOU ARE DEAD. Please wait %d seconds to respawn",respawnTime), 300, 20);
 		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
@@ -2513,10 +2527,10 @@ ActionListener, MouseMotionListener
 	public static synchronized void addPacketNo() {
 		setPacketNo(getPacketNo()+1);
 	}
-	
+
 	public static synchronized void setPacketNo(long no)
 	{
 		packetNo = no;
 	}
-	
+
 }
