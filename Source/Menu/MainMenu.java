@@ -100,8 +100,6 @@ public class MainMenu implements KeyListener {
 	private boolean imagesAudioLoaded = false;
 	private boolean mapsLoaded = false;
 
-	public static String logoutImage;
-
 	private static ClientServerSelection serverList = null;
 	private static ClientAccountWindow newLogin = null;
 	private static Leaderboard leaderboard = null;
@@ -1000,6 +998,7 @@ public class MainMenu implements KeyListener {
 			{
 				ClientAccountWindow.logout();
 				//login.setText("Login");
+				Image logoutImage = Images.getImage("Login");
 				loginLogout.setIcon(new ImageIcon(logoutImage));
 				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!");
 				mainFrame.requestFocus();
