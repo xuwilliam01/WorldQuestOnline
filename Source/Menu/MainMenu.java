@@ -3,12 +3,16 @@ package Menu;
 import java.awt.Color; 
 import java.awt.Component;
 import java.awt.DisplayMode;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,10 +21,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
@@ -30,6 +36,9 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import javafx.scene.effect.DropShadow;
+import javafx.scene.text.Text;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -118,6 +127,8 @@ public class MainMenu implements KeyListener {
 
 	private static boolean tooLarge;
 	private static boolean checkedSettingsAlready = false;
+	
+	private static Font mainFont = null;
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -241,6 +252,20 @@ public class MainMenu implements KeyListener {
 			Images.importImages();
 			Audio.importAudio();
 			imagesAudioLoaded = true;
+			
+			//  load font
+			try {
+				mainFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
+			} catch (FontFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("font not found");
+				e.printStackTrace();
+			}
+			mainFont = mainFont.deriveFont(20f);
+			
 		}
 	}
 
@@ -267,6 +292,7 @@ public class MainMenu implements KeyListener {
 		JButton leaderb;
 		JButton exitButton;
 
+
 		//Image buttonTrayImage = Images.getImage("ButtonTray");
 
 		Image createMapImage = Images.getImage("CreateAMap");
@@ -291,6 +317,9 @@ public class MainMenu implements KeyListener {
 		Image loginOver = Images.getImage("LoginClicked");
 		Image logoutImage = Images.getImage("Logout");
 		Image logoutOver = Images.getImage("LogoutClicked");
+		
+		Image nameGlowImage = Images.getImage("nameGlow");
+
 		
 		
 		private Timer repaintTimer = new Timer(15, this);
@@ -442,6 +471,13 @@ public class MainMenu implements KeyListener {
 		 */
 		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
+			
+			 Graphics2D g2d = (Graphics2D) graphics;
+			g2d.setRenderingHint(
+			        RenderingHints.KEY_TEXT_ANTIALIASING,
+			        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			
+			
 			graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH
 					+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,
 					null);
@@ -482,11 +518,39 @@ public class MainMenu implements KeyListener {
 			
 			graphics.drawImage(profileBackgroundImage,Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null),
 					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2, null);
+			
+			g2d.setFont(mainFont);
+			
+			g2d.drawString("William Xu and Alex Raita", 15, 20);
 
-			graphics.drawString("William Xu and Alex Raita", 15, 20);
+			g2d.drawString("Press 'ESC' to quit",
+					ClientFrame.getScaledWidth(1920) - 180, 20);
+			
+			
+			Font nameFont = mainFont.deriveFont(36.0f);
+			g2d.setFont(nameFont);
+			
+			String displayName = ClientAccountWindow.savedUser;
+			
+			if(ClientAccountWindow.loggedIn) {
+				displayName = ClientAccountWindow.savedUser;
+			} else {
+				displayName = "Guest";
+			}
+			
+			int textWidth = graphics.getFontMetrics().stringWidth(displayName);
+			BufferedImage nameGlowBuffered = toBufferedImage(nameGlowImage);
+			Image nameGlowScaled = nameGlowBuffered.getScaledInstance(textWidth + 40, 120, nameGlowBuffered.SCALE_SMOOTH);
+			g2d.drawImage(nameGlowScaled,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 60,
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 - 10, null);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(displayName,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 60);
+			
 
-			graphics.drawString("Press 'ESC' to quit",
-					ClientFrame.getScaledWidth(1920) - 120, 20);
+
 			//graphics.drawImage(buttonTrayImage,
 					//middle - buttonTrayImage.getWidth(null) / 2,
 					//(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
@@ -1521,6 +1585,25 @@ public class MainMenu implements KeyListener {
 			// instructionPanel.repaint();
 
 		}
+	}
+	
+	public static BufferedImage toBufferedImage(Image img)
+	{
+	    if (img instanceof BufferedImage)
+	    {
+	        return (BufferedImage) img;
+	    }
+
+	    // Create a buffered image with transparency
+	    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+	    // Draw the image on to the buffered image
+	    Graphics2D bGr = bimage.createGraphics();
+	    bGr.drawImage(img, 0, 0, null);
+	    bGr.dispose();
+
+	    // Return the buffered image
+	    return bimage;
 	}
 	
 	private static class ExitGame implements ActionListener {

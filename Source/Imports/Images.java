@@ -1061,6 +1061,9 @@ public class Images {
 			addtoImageArray(new GameImage("ProfileBackground.png",
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(300)), "Interface//"));
+			addtoImageArray(new GameImage("nameGlow.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(200)), "Interface//"));
 			
 			addtoImageArray(new GameImage("Inventory.png",
 					(int) (ClientFrame.getScaledWidth(300)),
