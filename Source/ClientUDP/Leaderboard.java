@@ -147,10 +147,12 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		{
 			int len = Integer.parseInt(tokens[i++]);
 			int rating = Integer.parseInt(tokens[i++]);
+			int wins = Integer.parseInt(tokens[i++]);
+			int losses = Integer.parseInt(tokens[i++]);
 			String name = tokens[i++];
 			for(int j = 1; j < len;j++)
 				name += " "+tokens[i++];
-			leaderboard.add(new LeaderboardPlayer(name, rating));
+			leaderboard.add(new LeaderboardPlayer(name, rating, wins, losses));
 		}
 		repaint();
 	}
@@ -179,7 +181,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 				int delta = 30;
 				for(LeaderboardPlayer player : leaderboard)
 				{
-					graphics.drawString(String.format("%25s %4d", player.getName(), player.getRating()), 50, y+=delta);
+					graphics.drawString(String.format("%-25s R:%4d %3dW %3dL", player.getName(), player.getRating(), player.getWins(), player.getLosses()), 50, y+=delta);
 				}
 			}
 		}

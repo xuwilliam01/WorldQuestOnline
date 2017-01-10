@@ -75,7 +75,7 @@ import WorldCreator.CreatorWorld;
  * @author Alex Raita & William Xu
  *
  */
-public class MainMenu implements KeyListener {
+public class MainMenu implements KeyListener{
 	static MainMenu main;
 
 	/**
@@ -88,6 +88,7 @@ public class MainMenu implements KeyListener {
 	 */
 	public final static int DEF_PORT = 9988;
 	public final static int DEF_UDP_PORT = 9989;
+	public final static int STATS_UDP_PORT = 9990;
 
 	// All the panels
 	public static ClientFrame mainFrame;
@@ -123,11 +124,9 @@ public class MainMenu implements KeyListener {
 	//private static JButton login;
 	private static JButton loginLogout;
 
-
-
 	private static boolean tooLarge;
 	private static boolean checkedSettingsAlready = false;
-	
+
 	private static Font mainFont = null;
 	/**
 	 * Create the initial clouds for the main menu screen
@@ -192,7 +191,7 @@ public class MainMenu implements KeyListener {
 			Client.SCREEN_HEIGHT = 1080;
 			tooLarge = true;
 		}
-		
+
 		if(!checkedSettingsAlready)
 		{
 			checkedSettingsAlready = true;
@@ -243,6 +242,7 @@ public class MainMenu implements KeyListener {
 		mainFrame.setVisible(true);
 		mainMenu.repaint();
 		generateClouds();
+		
 	}
 
 	private class LoadImagesAudio implements Runnable {
@@ -252,7 +252,7 @@ public class MainMenu implements KeyListener {
 			Images.importImages();
 			Audio.importAudio();
 			imagesAudioLoaded = true;
-			
+
 			//  load font
 			try {
 				mainFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
@@ -265,7 +265,7 @@ public class MainMenu implements KeyListener {
 				e.printStackTrace();
 			}
 			mainFont = mainFont.deriveFont(20f);
-			
+
 		}
 	}
 
@@ -276,7 +276,7 @@ public class MainMenu implements KeyListener {
 	 *
 	 */
 	private static class MainPanel extends JPanel implements ActionListener,
-	MouseListener {
+	MouseListener, Runnable {
 
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
@@ -300,7 +300,7 @@ public class MainMenu implements KeyListener {
 
 		Image instructionsImage = Images.getImage("Instructions");
 		Image instructionsOver = Images.getImage("InstructionsClicked");
-		
+
 		Image leaderbImage = Images.getImage("Leaderboards");
 		Image leaderbOver = Images.getImage("LeaderboardsClicked");
 
@@ -309,21 +309,32 @@ public class MainMenu implements KeyListener {
 
 		Image createServerImage = Images.getImage("CreateAServer");
 		Image createServerOver = Images.getImage("CreateAServerClicked");
-		
+
 		Image exitImage = Images.getImage("Exit");
 		Image exitOver = Images.getImage("ExitClicked");
-		
+
 		Image loginImage = Images.getImage("Login");
 		Image loginOver = Images.getImage("LoginClicked");
 		Image logoutImage = Images.getImage("Logout");
 		Image logoutOver = Images.getImage("LogoutClicked");
-		
+
 		Image nameGlowImage = Images.getImage("nameGlow");
 
-		
-		
 		private Timer repaintTimer = new Timer(15, this);
+		
+		private DatagramSocket socket;
+		private DatagramPacket receive;
+		private DatagramPacket send;
 
+		private byte[] receiveData;
+		private byte[] sendData;
+
+		long statsCounter = 0;
+		boolean displayed = true;
+		String rating;
+		String wins;
+		String losses;
+		
 		/**
 		 * Constructor
 		 */
@@ -345,7 +356,7 @@ public class MainMenu implements KeyListener {
 			mainFrame.requestFocus();
 
 			repaintTimer.start();
-			
+
 			int currentButtonY = (int)(Client.SCREEN_HEIGHT*(0.5));
 
 			playOnline = new JButton(new ImageIcon(playGameImage));
@@ -383,7 +394,7 @@ public class MainMenu implements KeyListener {
 			instructions.addMouseListener(this);
 			add(instructions);
 			currentButtonY += instructionsImage.getHeight(null);
-			
+
 			leaderb = new JButton(new ImageIcon(leaderbImage));
 			leaderb.setSize(leaderbImage.getWidth(null),
 					leaderbImage.getHeight(null));
@@ -394,7 +405,7 @@ public class MainMenu implements KeyListener {
 			leaderb.addActionListener(new LeaderboardButton());
 			leaderb.addMouseListener(this);
 			add(leaderb);
-			
+
 			exitButton = new JButton(new ImageIcon(exitImage));
 			exitButton.setSize(exitImage.getWidth(null),
 					exitImage.getHeight(null));
@@ -406,7 +417,7 @@ public class MainMenu implements KeyListener {
 			exitButton.addActionListener(new  ExitGame());
 			exitButton.addMouseListener(this);
 			add(exitButton);
-			
+
 
 			directConnect = new JButton("Direct IP Connect");
 			directConnect.setSize(createServerImage.getWidth(null),
@@ -416,21 +427,21 @@ public class MainMenu implements KeyListener {
 			directConnect.addActionListener(new GameStart());
 			directConnect.addMouseListener(this);
 			add(directConnect);
-			
+
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),
 					createServerImage.getHeight(null));
 			createServer.setLocation(300+middle - instructionsImage.getWidth(null)
-					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
 			createServer.addActionListener(new StartServer());
 			createServer.addMouseListener(this);
 			add(createServer);
-			
 
-			
+
+
 			ClientAccountWindow.checkLogin();
 			if(ClientAccountWindow.loggedIn)
 			{
@@ -438,11 +449,11 @@ public class MainMenu implements KeyListener {
 				loginLogout = new JButton(new ImageIcon(logoutImage));
 			}
 			else {
-			
+
 				loginLogout = new JButton(new ImageIcon(loginImage));
 
 			}
-			
+
 			loginLogout.setSize(loginImage.getWidth(null),
 					loginImage.getHeight(null));
 			loginLogout.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - loginImage.getWidth(null),
@@ -453,7 +464,7 @@ public class MainMenu implements KeyListener {
 			loginLogout.addActionListener(new LoginButton());
 			loginLogout.addMouseListener(this);
 			add(loginLogout);
-			
+
 			/*login.setSize(200, 50);
 			login.setLocation(Client.SCREEN_WIDTH - 200,50);
 			login.setContentAreaFilled(false);
@@ -462,22 +473,47 @@ public class MainMenu implements KeyListener {
 			login.addMouseListener(this);
 			add(login);*/
 
+			try {
+				socket = new DatagramSocket(STATS_UDP_PORT);
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			receiveData = new byte[1024];
+			sendData = new byte[1024];
+			resetStats();
+			
+			Thread thisThread = new Thread(this);
+			thisThread.start();
+			
 			setVisible(true);
 			repaint();
 		}
 
+		public void close()
+		{
+			repaintTimer.stop();
+			displayed = false;
+		}
+		
+		public void resetStats()
+		{
+			rating = "-";
+			wins = "-";
+			losses = "-";
+		}
 		/**
 		 * Draw the clouds
 		 */
 		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
-			
-			 Graphics2D g2d = (Graphics2D) graphics;
+
+			Graphics2D g2d = (Graphics2D) graphics;
 			g2d.setRenderingHint(
-			        RenderingHints.KEY_TEXT_ANTIALIASING,
-			        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-			
-			
+					RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+
+
 			graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH
 					+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,
 					null);
@@ -515,29 +551,29 @@ public class MainMenu implements KeyListener {
 			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 20,
 					(int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
 					null);
-			
+
 			graphics.drawImage(profileBackgroundImage,Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null),
 					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2, null);
-			
+
 			g2d.setFont(mainFont);
-			
+
 			g2d.drawString("William Xu and Alex Raita", 15, 20);
 
 			g2d.drawString("Press 'ESC' to quit",
 					ClientFrame.getScaledWidth(1920) - 180, 20);
-			
-			
+
+
 			Font nameFont = mainFont.deriveFont(36.0f);
 			g2d.setFont(nameFont);
-			
+
 			String displayName = ClientAccountWindow.savedUser;
-			
+
 			if(ClientAccountWindow.loggedIn) {
 				displayName = ClientAccountWindow.savedUser;
 			} else {
 				displayName = "Guest";
 			}
-			
+
 			int textWidth = graphics.getFontMetrics().stringWidth(displayName);
 			BufferedImage nameGlowBuffered = toBufferedImage(nameGlowImage);
 			Image nameGlowScaled = nameGlowBuffered.getScaledInstance(textWidth + 40, 120, nameGlowBuffered.SCALE_SMOOTH);
@@ -548,17 +584,35 @@ public class MainMenu implements KeyListener {
 			g2d.drawString(displayName,
 					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
 					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 60);
-			
+
+			g2d.drawString("Rating: "+rating, 
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 120);
+			g2d.drawString("Wins: "+wins+"  Losses: "+losses, 
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
+					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 180);
 
 
 			//graphics.drawImage(buttonTrayImage,
-					//middle - buttonTrayImage.getWidth(null) / 2,
-					//(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
+			//middle - buttonTrayImage.getWidth(null) / 2,
+			//(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			statsCounter++;
+			if(statsCounter%60 == 0 && ClientAccountWindow.loggedIn && rating.equals("-"))
+			{
+				sendData = ("S "+ClientAccountWindow.savedUser).getBytes();
+				try {
+					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);			
+					socket.send(send);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 			repaint();
 
 		}
@@ -602,7 +656,7 @@ public class MainMenu implements KeyListener {
 					loginLogout.setIcon(new ImageIcon(loginOver));
 				}
 			}
-			
+
 
 		}
 
@@ -628,7 +682,26 @@ public class MainMenu implements KeyListener {
 					loginLogout.setIcon(new ImageIcon(loginImage));
 				}
 			}
-		
+
+		}
+
+		@Override
+		public void run() {
+			while(displayed)
+			{
+				receiveData = new byte[1024];
+				receive = new DatagramPacket(receiveData, receiveData.length);
+				try {
+					socket.receive(receive);
+				} catch (Exception e) {
+					return;
+				}
+				String[] input = (new String(receive.getData()).trim()).split(" ");
+				rating = input[1];
+				wins = input[2];
+				losses = input[3];
+			}
+			
 		}
 
 	}
@@ -968,14 +1041,14 @@ public class MainMenu implements KeyListener {
 				serverList.toFront();
 				return;
 			}
-			
+
 			if(Leaderboard.open)
 			{
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
 			}
-			
+
 			leaderboard = null;
 			try {
 				leaderboard = new Leaderboard(DEF_UDP_PORT);
@@ -986,7 +1059,7 @@ public class MainMenu implements KeyListener {
 			Thread leaderboardThread = new Thread(leaderboard);
 			leaderboardThread.start();	
 		}
-		
+
 	}
 	/**
 	 * Opens the menu to select a server
@@ -1061,6 +1134,9 @@ public class MainMenu implements KeyListener {
 			if(ClientAccountWindow.loggedIn)
 			{
 				ClientAccountWindow.logout();
+				if(mainMenu != null)
+					mainMenu.resetStats();
+				
 				//login.setText("Login");
 				Image logoutImage = Images.getImage("Login");
 				loginLogout.setIcon(new ImageIcon(logoutImage));
@@ -1077,7 +1153,7 @@ public class MainMenu implements KeyListener {
 			}
 			Thread loginThread = new Thread(newLogin);
 			loginThread.start();
-			
+
 			ClientAccountWindow.checkLogin();
 
 		}
@@ -1300,6 +1376,7 @@ public class MainMenu implements KeyListener {
 			port = DEF_PORT;
 
 			mainFrame.remove(mainMenu);
+			mainMenu.close();
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
@@ -1324,6 +1401,7 @@ public class MainMenu implements KeyListener {
 	public static void joinLobby(String IP, int port)
 	{
 		mainFrame.remove(mainMenu);
+		mainMenu.close();
 		mainFrame.invalidate();
 		mainFrame.validate();
 		mainMenu = null;
@@ -1527,6 +1605,7 @@ public class MainMenu implements KeyListener {
 				}
 			}
 			mainFrame.remove(mainMenu);
+			mainMenu.close();
 			mainFrame.invalidate();
 			mainFrame.validate();
 			mainMenu = null;
@@ -1574,6 +1653,7 @@ public class MainMenu implements KeyListener {
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
+			mainMenu.close();
 			// mainFrame.invalidate();
 			// mainFrame.validate();
 			// mainMenu = null;
@@ -1586,30 +1666,30 @@ public class MainMenu implements KeyListener {
 
 		}
 	}
-	
+
 	public static BufferedImage toBufferedImage(Image img)
 	{
-	    if (img instanceof BufferedImage)
-	    {
-	        return (BufferedImage) img;
-	    }
+		if (img instanceof BufferedImage)
+		{
+			return (BufferedImage) img;
+		}
 
-	    // Create a buffered image with transparency
-	    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		// Create a buffered image with transparency
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-	    // Draw the image on to the buffered image
-	    Graphics2D bGr = bimage.createGraphics();
-	    bGr.drawImage(img, 0, 0, null);
-	    bGr.dispose();
+		// Draw the image on to the buffered image
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
 
-	    // Return the buffered image
-	    return bimage;
+		// Return the buffered image
+		return bimage;
 	}
-	
+
 	private static class ExitGame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Object[] options = {"Exit",
-            "Cancel"};
+			"Cancel"};
 			Frame dialogueFrame = new Frame();
 			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame,
 					"Exit the game?",
@@ -1620,7 +1700,7 @@ public class MainMenu implements KeyListener {
 					options,
 					options[0]); //default button title
 			mainFrame.requestFocus();
-			
+
 			if (confirmExit == 0) {
 				System.exit(0);
 			}

@@ -94,9 +94,11 @@ public class CentralServer implements Runnable, ActionListener{
 		for(Element user : root.getChildren("User"))
 		{
 			int elo = Integer.parseInt(user.getChild("Elo").getValue());
+			int wins = Integer.parseInt(user.getChild("Wins").getValue());
+			int losses = Integer.parseInt(user.getChild("Losses").getValue());
 			if(leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
 				continue;
-			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"),elo));
+			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"),elo, wins, losses));
 			if(leaderboard.size() > LEADERBOARD_SIZE)
 				leaderboard.poll();
 		}
@@ -106,7 +108,7 @@ public class CentralServer implements Runnable, ActionListener{
 			while(!leaderboard.isEmpty())
 			{
 				LeaderboardPlayer next = leaderboard.poll();
-				leaderboardS = next.getName().split(" ").length + " "+next.getRating() + " "+next.getName() + " "+leaderboardS;
+				leaderboardS = next.getName().split(" ").length + " "+next.getRating() + " " + next.getWins() +" " + next.getLosses() +" "+next.getName() + " "+leaderboardS;
 			}
 			leaderboardS.trim();
 		}
@@ -178,6 +180,16 @@ public class CentralServer implements Runnable, ActionListener{
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;
+				//Get your own player stats
+				case 'S':
+					name = input.substring(2);
+					int[] stats = getStats(name);
+					if(stats == null)
+						break;
+					sendData = ("S "+stats[0] + " " + stats[1] +" " + stats[2]).getBytes();
+					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+					socket.send(send);
+					break;
 				}
 			}
 			catch(Exception e)
@@ -231,8 +243,11 @@ public class CentralServer implements Runnable, ActionListener{
 				k = 24;
 			else k = 16;
 			double expected = 1/(1+Math.pow(10, (avgEloB - acc.getElo())/400.0));
+			boolean win = false;
+			if(actualR == 1)
+			 win = true;
 			int newElo = Math.max((int)(acc.getElo() + k*(actualR - expected) + acc.getKills() - avgKillsR),BASE_ELO);
-			setElo(acc.getName(), newElo);
+			setElo(acc.getName(), newElo, win);
 		}
 		for(GameResult acc : blue)
 		{
@@ -243,10 +258,12 @@ public class CentralServer implements Runnable, ActionListener{
 				k = 24;
 			else k = 16;
 			double expected = 1/(1+Math.pow(10, (avgEloR - acc.getElo())/400.0));
-
+			boolean win = false;
+			if(actualB == 1)
+			 win = true;
 			//Yes ranking can go up even if you lose
 			int newElo = Math.max((int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB),BASE_ELO);		
-			setElo(acc.getName(), newElo);
+			setElo(acc.getName(), newElo, win);
 		}
 		saveXML();
 
@@ -264,15 +281,30 @@ public class CentralServer implements Runnable, ActionListener{
 		return -1;
 	}
 
-	public void setElo(String name, int value)
+	public void setElo(String name, int value, boolean win)
 	{
 		for(Element username : root.getChildren())
 		{
 			if(username.getAttribute("name").getValue().equals(name))
 			{
 				username.getChild("Elo").setText(Integer.toString(value));
+				if(win)
+					username.getChild("Wins").setText(Integer.parseInt(username.getChild("Wins").getValue())+1+"");
+				else username.getChild("Losses").setText(Integer.parseInt(username.getChild("Losses").getValue())+1+"");
 			}
 		}
+	}
+	
+	public int[] getStats(String name)
+	{
+		for(Element username : root.getChildren())
+		{
+			if(username.getAttribute("name").getValue().equals(name))
+			{
+				return new int[]{Integer.parseInt(username.getChild("Elo").getValue()),Integer.parseInt(username.getChild("Wins").getValue()),Integer.parseInt(username.getChild("Losses").getValue())};
+			}
+		}
+		return null;
 	}
 
 	public boolean login(String user, String key)
@@ -303,7 +335,6 @@ public class CentralServer implements Runnable, ActionListener{
 	}
 	public boolean createAccount(String user, String key)
 	{
-		boolean contains = false;
 		for(Element username : root.getChildren())
 		{
 			if(username.getAttribute("name").getValue().equals(user))
@@ -312,12 +343,9 @@ public class CentralServer implements Runnable, ActionListener{
 				if(key.equals(username.getChild("Key").getValue()))
 					return true;
 
-				contains = true;
-				break;
+				return false;
 			}
 		}
-		if(contains)
-			return false;
 
 		Element newUser = new Element("User");
 		Attribute username = new Attribute("name", user);
@@ -326,7 +354,13 @@ public class CentralServer implements Runnable, ActionListener{
 		newUser.addContent(newKey);
 		Element newElo = new Element("Elo");
 		newElo.setText(Integer.toString(BASE_ELO));
+		Element newWins = new Element("Wins");
+		newWins.setText("0");
+		Element newLosses = new Element("Losses");
+		newLosses.setText("0");
 		newUser.addContent(newElo);
+		newUser.addContent(newWins);
+		newUser.addContent(newLosses);
 		newUser.setAttribute(username);
 		root.addContent(newUser);
 

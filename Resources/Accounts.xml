@@ -3,29 +3,49 @@
   <User name="alex4">
     <Key>alex4hello</Key>
     <Elo>1000</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
   </User>
   <User name="alex hello">
     <Key>alex_hellotest</Key>
+    <Wins>20</Wins>
+    <Losses>15</Losses>
     <Elo>2101</Elo>
   </User>
   <User name="williamxu">
     <Key>williamxu123456</Key>
+    <Wins>14</Wins>
+    <Losses>12</Losses>
     <Elo>1852</Elo>
   </User>
   <User name="Williamxu98">
     <Key>Williamxu98mathwizard2012</Key>
     <Elo>1607</Elo>
+    <Wins>30</Wins>
+    <Losses>28</Losses>
   </User>
   <User name="alex 3">
     <Key>Williamxu98mathwizard2012</Key>
     <Elo>1250</Elo>
+    <Wins>7</Wins>
+    <Losses>5</Losses>
   </User>
   <User name="hola amigo yes">
     <Key>Williamxu98mathwizard2012</Key>
     <Elo>3000</Elo>
+    <Wins>154</Wins>
+    <Losses>101</Losses>
   </User>
   <User name="william">
     <Key>william12345</Key>
     <Elo>1000</Elo>
+    <Wins>3</Wins>
+    <Losses>7</Losses>
+  </User>
+  <User name="new">
+    <Key>newnew</Key>
+    <Elo>1000</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
   </User>
 </Root>

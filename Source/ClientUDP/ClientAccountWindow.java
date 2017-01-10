@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -35,7 +37,7 @@ import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
-public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener {
+public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
 	public static final String CREDS_PATH = "Resources//LoginCredentials.txt";
 	private DatagramSocket socket;
@@ -105,17 +107,20 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		username.setSize(200,40);
 		username.setLocation(x+deltax,y);
 		username.setDocument(new JTextFieldLimit(25));
+		username.addKeyListener(this);
 		add(username);
 
 		password.setSize(200,40);
 		password.setLocation(x+deltax,y+deltay);
 		password.setDocument(new JTextFieldLimit(25));
+		password.addKeyListener(this);
 		add(password);
 
 		confirm.setSize(200,40);
 		confirm.setLocation(x+deltax,y+2*deltay);
 		confirm.setVisible(false);
 		confirm.setDocument(new JTextFieldLimit(25));
+		confirm.addKeyListener(this);
 		add(confirm);
 
 		create.addActionListener(this);
@@ -127,6 +132,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		login.setSize(100,50);
 		login.setLocation(x+deltax,y+(int)(3.5*deltay));
 		add(login);
+	
 	}
 
 	@Override
@@ -349,5 +355,30 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		    }
 		  }
 		}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			if(arg0.getSource() == confirm)
+			{
+				create.doClick();
+			}
+			else login.doClick();
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
