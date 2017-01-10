@@ -71,8 +71,16 @@ public class GameAudio {
 
 	public void play(int dist)
 	{
+		try
+		{
 		gainControl.setValue(Math.max(-dist*Client.Client.distanceConstant,-50));
 		audio.setFramePosition(0);
 		audio.start();
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+		}
 	}
 }
