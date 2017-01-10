@@ -93,7 +93,7 @@ public class GameImage implements Comparable<GameImage> {
 		}
 		if (bufferedImage.getWidth() != width
 				|| bufferedImage.getHeight() != height) {
-			image = bufferedImage.getScaledInstance(width, height, 0);
+			image = bufferedImage.getScaledInstance(width, height, image.SCALE_SMOOTH);
 		} else {
 			image = bufferedImage;
 		}
