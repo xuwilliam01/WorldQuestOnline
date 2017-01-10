@@ -38,6 +38,13 @@ public class GameAudio {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 			System.out.println("Audio not working: " + name);
+		} catch (IllegalArgumentException e){
+			e.printStackTrace();
+			System.out.println("No audio output enabled on this device");
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Unknown issue with audio");
 		}
 
 	}
