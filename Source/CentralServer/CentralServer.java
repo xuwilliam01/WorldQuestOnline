@@ -35,8 +35,8 @@ public class CentralServer implements Runnable, ActionListener{
 	public final static int LEADERBOARD_SIZE = 20;
 	public final static int PORT = 9977;
 	//public final static String IP = "138.197.131.4";
-	public final static String IP = "52.14.41.226";
-	//public final static String IP = "127.0.0.1";
+	//public final static String IP = "52.14.41.226";
+	public final static String IP = "127.0.0.1";
 
 	private DatagramSocket socket;
 	private DatagramPacket receive;
@@ -48,7 +48,6 @@ public class CentralServer implements Runnable, ActionListener{
 	private ArrayList<ServerInfo> servers = new ArrayList<ServerInfo>();
 	private String listServers;
 	private String delayedListServers;
-	boolean clearServers = false;
 
 	private Element root;
 	private Document document;
@@ -185,19 +184,6 @@ public class CentralServer implements Runnable, ActionListener{
 			{
 				System.out.println("Bad Input");
 				e.printStackTrace();
-			}
-
-			// Remove servers when necessary
-			synchronized(servers)
-			{
-				if(clearServers)
-				{
-					//System.out.println("Clearing Servers");
-					delayedListServers = listServers;
-					servers.clear();
-					listServers = "";
-					clearServers = false;
-				}
 			}
 		}
 
@@ -350,7 +336,14 @@ public class CentralServer implements Runnable, ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		clearServers = true;
+		// Remove servers when necessary
+		synchronized(servers)
+		{
+			//System.out.println("Clearing Servers");
+			delayedListServers = listServers;
+			servers.clear();
+			listServers = "";
+		}
 	}
 
 	private class TCPIn implements Runnable
@@ -391,7 +384,7 @@ public class CentralServer implements Runnable, ActionListener{
 				{
 
 					String command = input.readLine();
-					System.out.println(command);
+					//System.out.println(command);
 					switch(command.charAt(0))
 					{
 					//Get info from servers
@@ -430,7 +423,7 @@ public class CentralServer implements Runnable, ActionListener{
 						int rTeam = Integer.parseInt(tokens[2]);
 						int bTeam = Integer.parseInt(tokens[3]);
 						if(bTeam <= 0 || rTeam <= 0)
-							return;
+							break;
 
 						GameResult[] red = new GameResult[rTeam];
 						GameResult[] blue = new GameResult[bTeam];
@@ -464,7 +457,7 @@ public class CentralServer implements Runnable, ActionListener{
 					}
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				//System.out.println("Server Disconnected");
 				return;
 			}
 		}

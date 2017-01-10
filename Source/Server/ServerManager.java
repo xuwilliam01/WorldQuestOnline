@@ -42,7 +42,7 @@ public class ServerManager implements Runnable, ActionListener{
 	private PrintWriter out;
 
 	private int thisPort;
-	
+
 	private ArrayList<AddNewPlayer> listOfNewPlayers;
 	/**
 	 * 
@@ -143,15 +143,6 @@ public class ServerManager implements Runnable, ActionListener{
 			while(true)
 			{
 				try {
-					while(!in.ready())
-					{
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
 					String input = in.readLine();
 					switch(input.charAt(0))
 					{
@@ -180,7 +171,7 @@ public class ServerManager implements Runnable, ActionListener{
 				}
 				catch (IOException e) {
 					System.out.println("Central Server Closed");
-					e.printStackTrace();
+					//e.printStackTrace();
 					return;
 				}
 			}
@@ -369,7 +360,7 @@ public class ServerManager implements Runnable, ActionListener{
 			newServer.setGUI(gui);
 		}
 	}
-	
+
 	public void removeRoom(Server remove)
 	{
 		rooms.remove(remove);
@@ -437,7 +428,7 @@ public class ServerManager implements Runnable, ActionListener{
 
 		}
 	}
-
+	
 	public String getName()
 	{
 		return name;
@@ -447,5 +438,6 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		this.name = name;
 	}
+	
 
 }
