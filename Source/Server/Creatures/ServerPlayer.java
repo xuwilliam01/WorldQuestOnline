@@ -717,7 +717,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										ServerWorld.PLAYER_TYPE)) {
 									if (object.getID() == getID()) {
 										char inAction = '0';
-										if (inAction()) {
+										if (inAction() || !isAlive()) {
 											inAction = '1';
 										}
 
@@ -1197,7 +1197,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					setDirection("LEFT");
 					break;
 				case "p":
-					if (!ignoreClient) {
+					if (!ignoreClient && isAlive()) {
 						setX(Double.parseDouble(tokens[1]));
 						setY(Double.parseDouble(tokens[2]));
 					}

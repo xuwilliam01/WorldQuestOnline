@@ -14,6 +14,7 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import javax.swing.Timer;
@@ -398,6 +399,8 @@ public class CentralServer implements Runnable, ActionListener{
 		}
 	}
 
+	LinkedList<String>pastServers = new LinkedList<String>();
+	
 	private class ReadIn implements Runnable
 	{
 		Socket server;
@@ -433,7 +436,13 @@ public class CentralServer implements Runnable, ActionListener{
 								//System.out.println(newServer.getIP() + " " + newServer.getPort());
 								servers.add(newServer);
 								listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
-								System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+								
+								if (!pastServers.contains(newServer.getName()))
+								{
+									pastServers.add(newServer.getName());
+									System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+								}
+								
 							}
 						}
 						break;

@@ -87,6 +87,7 @@ public class GameAudio {
 		{
 			e.printStackTrace();
 			System.out.println("No sound file available");
+			audioSupported = false;
 		}
 	}
 }

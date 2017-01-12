@@ -1706,7 +1706,7 @@ ActionListener, MouseMotionListener
 		switch (key.getKeyCode())
 		{
 		case KeyEvent.VK_D:
-			if (!currentMessage.equals("R"))
+			if (!currentMessage.equals("R") && !inAction)
 			{
 				// R for right
 				currentMessage = "R";
@@ -1716,7 +1716,7 @@ ActionListener, MouseMotionListener
 			}
 			break;
 		case KeyEvent.VK_A:
-			if (!currentMessage.equals("L"))
+			if (!currentMessage.equals("L") && !inAction)
 			{
 				// L for left
 				currentMessage = "L";
