@@ -27,6 +27,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import ClientUDP.ClientAccountWindow;
 import ClientUDP.ServerInfo;
 import Server.Creatures.ServerCreature;
 
@@ -512,5 +513,17 @@ public class CentralServer implements Runnable, ActionListener{
 			output.println(s);
 			output.flush();
 		}
+	}
+	
+	//Do not use this method
+	public void resetPassowrd()
+	{
+		for(Element username : root.getChildren())
+		{
+			String name = username.getAttribute("name").getValue();
+			String pass = username.getChild("Key").getValue().substring(name.length());
+			username.getChild("Key").setText(ClientAccountWindow.hash(name, pass));
+		}
+		saveXML();
 	}
 }

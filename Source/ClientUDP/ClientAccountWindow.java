@@ -37,6 +37,9 @@ import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
 	public static final String CREDS_PATH = "Resources//LoginCredentials.txt";
@@ -64,6 +67,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public static String savedUser;
 	private static String savedPassword;
 	public static String savedKey;
+	
+	private static MessageDigest messageDigest;
 
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
@@ -132,7 +137,15 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		login.setSize(100,50);
 		login.setLocation(x+deltax,y+(int)(3.5*deltay));
 		add(login);
-	
+		
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	@Override
@@ -226,7 +239,13 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	}
 	public static String hash(String user, String pass)
 	{
-		return (user+pass).replaceAll(" ","_");
+		String toHash = (user+pass).replaceAll(" ","_");
+		int result = 0;
+		for(int i = 0; i < toHash.length();i++)
+		{
+			result += (toHash.charAt(i))*(int)(Math.pow(31, toHash.length()-i-1));
+		}
+		return Integer.toString(result);
 	}
 
 	@Override
