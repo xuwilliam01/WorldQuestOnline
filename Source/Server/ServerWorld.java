@@ -177,6 +177,21 @@ public class ServerWorld
 	public final static char ARROW_SOURCE_TYPE = 'a';
 
 	public final static String HOLOGRAM_TYPE = "HOL";
+
+	//Player stats
+	// The starting mana and hp for the player. Change as castle upgrades
+	private int bluePlayerStartHP = ServerPlayer.PLAYER_BASE_HP;
+	private int redPlayerStartHP = ServerPlayer.PLAYER_BASE_HP;
+	private int bluePlayerStartMana = ServerPlayer.PLAYER_BASE_MANA;
+	private int redPlayerStartMana = ServerPlayer.PLAYER_BASE_MANA;
+	private int blueStartBaseDamage = 0;
+	private int redStartBaseDamage = 0;
+	
+	private int blueMoveSpeed = ServerPlayer.DEFAULT_MOVE_SPEED;
+	private int redMoveSpeed = ServerPlayer.DEFAULT_MOVE_SPEED;
+	private int blueJumpSpeed = ServerPlayer.DEFAULT_JUMP_SPEED;
+	private int redJumpSpeed = ServerPlayer.DEFAULT_JUMP_SPEED;
+
 	/**
 	 * Map name
 	 */
@@ -1443,7 +1458,139 @@ public class ServerWorld
 	{
 		this.worldTime = worldTime;
 	}
+	
+	
 
+	public int getBluePlayerStartHP() {
+		return bluePlayerStartHP;
+	}
+
+	public void setBluePlayerStartHP(int bluePlayerStartHP) {
+		this.bluePlayerStartHP = bluePlayerStartHP;
+	}
+
+	public int getRedPlayerStartHP() {
+		return redPlayerStartHP;
+	}
+
+	public void setRedPlayerStartHP(int redPlayerStartHP) {
+		this.redPlayerStartHP = redPlayerStartHP;
+	}
+
+	public int getBluePlayerStartMana() {
+		return bluePlayerStartMana;
+	}
+
+	public void setBluePlayerStartMana(int bluePlayerStartMana) {
+		this.bluePlayerStartMana = bluePlayerStartMana;
+	}
+
+	public int getRedPlayerStartMana() {
+		return redPlayerStartMana;
+	}
+
+	public void setRedPlayerStartMana(int redPlayerStartMana) {
+		this.redPlayerStartMana = redPlayerStartMana;
+	}
+
+	public int getBlueStartBaseDamage() {
+		return blueStartBaseDamage;
+	}
+
+	public void setBlueStartBaseDamage(int blueStartBaseDamage) {
+		this.blueStartBaseDamage = blueStartBaseDamage;
+	}
+
+	public int getRedStartBaseDamage() {
+		return redStartBaseDamage;
+	}
+
+	public void setRedStartBaseDamage(int redStartBaseDamage) {
+		this.redStartBaseDamage = redStartBaseDamage;
+	}
+
+	public int getBlueMoveSpeed() {
+		return blueMoveSpeed;
+	}
+
+	public void setBlueMoveSpeed(int blueMoveSpeed) {
+		this.blueMoveSpeed = blueMoveSpeed;
+	}
+
+	public int getRedMoveSpeed() {
+		return redMoveSpeed;
+	}
+
+	public void setRedMoveSpeed(int redMoveSpeed) {
+		this.redMoveSpeed = redMoveSpeed;
+	}
+
+	public int getBlueJumpSpeed() {
+		return blueJumpSpeed;
+	}
+
+	public void setBlueJumpSpeed(int blueJumpSpeed) {
+		this.blueJumpSpeed = blueJumpSpeed;
+	}
+
+	public int getRedJumpSpeed() {
+		return redJumpSpeed;
+	}
+
+	public void setRedJumpSpeed(int redJumpSpeed) {
+		this.redJumpSpeed = redJumpSpeed;
+	}
+
+	public void increaseRedMoveSpeed(int amount)
+	{
+		redMoveSpeed += amount;
+	}
+	
+	public void increaseRedJumpSpeed(int amount)
+	{
+		redJumpSpeed += amount;
+	}
+	
+	public void increaseRedPlayerStartHP(int amount)
+	{
+		redPlayerStartHP += amount;
+	}
+	
+	public void increaseRedPlayerStartMana(int amount)
+	{
+		redPlayerStartMana += amount;
+	}
+	
+	public void increaseRedStartBaseDamage(int amount)
+	{
+		redStartBaseDamage += amount;
+	}
+	
+	public void increaseBlueMoveSpeed(int amount)
+	{
+		blueMoveSpeed += amount;
+	}
+	
+	public void increaseBlueJumpSpeed(int amount)
+	{
+		blueJumpSpeed += amount;
+	}
+	
+	public void increaseBluePlayerStartHP(int amount)
+	{
+		bluePlayerStartHP += amount;
+	}
+	
+	public void increaseBluePlayerStartMana(int amount)
+	{
+		bluePlayerStartMana += amount;
+	}
+	
+	public void increaseBlueStartBaseDamage(int amount)
+	{
+		blueStartBaseDamage += amount;
+	}
+	
 	public void setWorldCounter(long worldCounter)
 	{
 		this.worldCounter = worldCounter;

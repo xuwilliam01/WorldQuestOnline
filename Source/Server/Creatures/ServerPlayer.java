@@ -58,21 +58,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int numHPPots = 0;
 	private int numManaPots = 0;
 
-	// The starting mana and hp for the player. Change as castle upgrades
-	public static int bluePlayerStartHP = PLAYER_BASE_HP;
-	public static int redPlayerStartHP = PLAYER_BASE_HP;
-	public static int bluePlayerStartMana = PLAYER_BASE_MANA;
-	public static int redPlayerStartMana = PLAYER_BASE_MANA;
-	public static int blueStartBaseDamage = 0;
-	public static int redStartBaseDamage = 0;
-
+	
 	// Initial jump and move speeds of the player
 	public final static int DEFAULT_MOVE_SPEED = 5;
 	public final static int DEFAULT_JUMP_SPEED = 20;
-	public static int blueMoveSpeed = DEFAULT_MOVE_SPEED;
-	public static int redMoveSpeed = DEFAULT_MOVE_SPEED;
-	public static int blueJumpSpeed = DEFAULT_JUMP_SPEED;
-	public static int redJumpSpeed = DEFAULT_JUMP_SPEED;
 
 	public final static int MAX_HSPEED = 8;
 	public final static int MAX_VSPEED = 24;
@@ -314,7 +303,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			PrintWriter output) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
 				+ skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
-				bluePlayerStartHP, world, true); // player start HP doesn't
+				world.getBluePlayerStartHP(), world, true); // player start HP doesn't
 		// matter since it will
 		// change
 
@@ -599,28 +588,28 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		// Set default player stats
 		if (getTeam() == RED_TEAM) {
-			respawnXSpeed = redMoveSpeed;
-			respawnYSpeed = redJumpSpeed;
-			horizontalMovement = redMoveSpeed;
-			verticalMovement = redJumpSpeed;
-			mana = redPlayerStartMana;
-			maxMana = redPlayerStartMana;
-			setMaxHP(redPlayerStartHP);
+			respawnXSpeed = getWorld().getRedMoveSpeed();
+			respawnYSpeed = getWorld().getRedJumpSpeed();
+			horizontalMovement = getWorld().getRedMoveSpeed();
+			verticalMovement = getWorld().getRedJumpSpeed();
+			mana = getWorld().getRedPlayerStartMana();
+			maxMana = getWorld().getRedPlayerStartMana();
+			setMaxHP(getWorld().getRedPlayerStartHP());
 			setHP(getMaxHP());
-			setBaseDamage(redStartBaseDamage);
+			setBaseDamage(getWorld().getRedStartBaseDamage());
 		} else {
-			respawnXSpeed = blueMoveSpeed;
-			respawnYSpeed = blueJumpSpeed;
-			horizontalMovement = blueMoveSpeed;
-			verticalMovement = blueJumpSpeed;
-			mana = bluePlayerStartMana;
-			maxMana = bluePlayerStartMana;
-			setMaxHP(bluePlayerStartHP);
+			respawnXSpeed = getWorld().getBlueMoveSpeed();
+			respawnYSpeed = getWorld().getBlueJumpSpeed();
+			horizontalMovement = getWorld().getBlueMoveSpeed();
+			verticalMovement = getWorld().getBlueJumpSpeed();
+			mana = getWorld().getBluePlayerStartMana();
+			maxMana = getWorld().getBluePlayerStartMana();
+			setMaxHP(getWorld().getBluePlayerStartHP());
 			setHP(getMaxHP());
-			setBaseDamage(blueStartBaseDamage);
+			setBaseDamage(getWorld().getBlueStartBaseDamage());
 		}
 	}
-
+	
 	/**
 	 * Force a change in the player position
 	 * 

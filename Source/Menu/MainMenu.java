@@ -492,6 +492,7 @@ public class MainMenu implements KeyListener{
 
 		public void close()
 		{
+			socket.close();
 			repaintTimer.stop();
 			displayed = false;
 		}

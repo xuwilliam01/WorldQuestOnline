@@ -367,6 +367,8 @@ public class CentralServer implements Runnable, ActionListener{
 
 		saveXML();
 
+		createLeaderboard();
+		
 		return true;
 	}
 

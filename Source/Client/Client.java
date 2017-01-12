@@ -375,17 +375,10 @@ ActionListener, MouseMotionListener
 			int y = toInt(tokens[2]);
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
-
-			if(team == ServerCreature.RED_TEAM)
-			{
-				HP = ServerPlayer.redPlayerStartHP;
-				mana = ServerPlayer.redPlayerStartMana;
-			}
-			else
-			{
-				HP = ServerPlayer.bluePlayerStartHP;
-				mana = ServerPlayer.bluePlayerStartMana;
-			}			
+	
+			HP = ServerPlayer.PLAYER_BASE_HP;
+			mana = ServerPlayer.PLAYER_BASE_MANA;
+				
 			maxHP = HP;	
 			maxMana = mana;
 
