@@ -379,7 +379,8 @@ public class ClientItem extends JButton implements MouseListener{
 					equipSlot = pos;
 					row = -1;
 					col = -1;
-					setLocation(ClientFrame.getScaledWidth(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+95),ClientFrame.getScaledHeight(865));
+					setLocation(ClientFrame.getScaledWidth(equipSlot*(Images.INVENTORY_IMAGE_SIDELENGTH+23)+51),
+							ClientFrame.getScaledHeight(901));
 
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
 
@@ -421,7 +422,8 @@ public class ClientItem extends JButton implements MouseListener{
 									invGrid[row][col] = inventory.getEquippedArmour();
 									inventory.getEquippedArmour().setRow(row);
 									inventory.getEquippedArmour().setCol(col);
-									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
+									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,
+											row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+375);
 									shouldBreak = true;
 									break;
 
@@ -434,7 +436,7 @@ public class ClientItem extends JButton implements MouseListener{
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(ClientFrame.getScaledWidth(95),ClientFrame.getScaledHeight(923));
+					setLocation(ClientFrame.getScaledWidth(130),ClientFrame.getScaledHeight(989));
 					repaint();
 
 

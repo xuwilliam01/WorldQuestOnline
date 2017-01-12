@@ -1410,8 +1410,8 @@ ActionListener, MouseMotionListener
 
 		if (weaponSelected != 9)
 			inventory.getEquippedWeapons()[weaponSelected]
-					.setBorder(BorderFactory.createLineBorder(new Color(240,
-							240, 240)));
+					.setBorder(BorderFactory.createLineBorder(new Color(244,
+							244, 244)));
 		output.println("W " + weaponSelected);
 		output.flush();
 		this.weaponSelected = weaponSelected;

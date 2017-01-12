@@ -63,6 +63,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		setVisible(true);
 		revalidate();
 		addWindowListener(this);
+		requestFocus();
 		open = true;
 
 		initTable();
@@ -85,6 +86,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		
 		refresh.doClick();
 		repaint();
+
 	}
 
 	public void initTable()

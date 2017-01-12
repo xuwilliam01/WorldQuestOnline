@@ -2,10 +2,14 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -70,15 +74,28 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (menu != null)
 		{
 			mainMenu = menu;
-			mainMenu.setSize(ClientFrame.getScaledWidth(250), ClientFrame.getScaledHeight(50));
-			mainMenu.setLocation(ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(1080- 90));
+			mainMenu.setSize(ClientFrame.getScaledWidth(70), ClientFrame.getScaledHeight(50));
+			mainMenu.setLocation(ClientFrame.getScaledWidth(215), ClientFrame.getScaledHeight(16));
 			mainMenu.setBackground(new Color(240, 240, 240));
 			mainMenu.setForeground(Color.black);
 			add(mainMenu);
 		}
 
 		inventoryImage = Images.getImage("Inventory");
-		inventoryFont = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
+		
+		try {
+			inventoryFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("font not found");
+			e.printStackTrace();
+		}
+		inventoryFont = inventoryFont.deriveFont(18f);
+		
+		//inventoryFont = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
 
 	}
 
@@ -463,72 +480,80 @@ public class ClientInventory extends JPanel implements ActionListener
 		// Background
 		graphics.drawImage(inventoryImage, 0, 0, null);
 
+		
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		
 		// Draw stats
-		graphics.setFont(inventoryFont);
+		g2d.setFont(inventoryFont);
 
 		if (client.getHP() > 0)
 		{
-			graphics.setColor(Color.red);
-			graphics.fillRect(
-					ClientFrame.getScaledWidth(100),
+			g2d.setColor(new Color(210,37,114));
+			g2d.fillRect(
+					ClientFrame.getScaledWidth(95),
 					ClientFrame.getScaledHeight(95),
-					(int) (client.getHP() * ClientFrame.getScaledWidth(180) * 1.0 / client
+					(int) (client.getHP() * ClientFrame.getScaledWidth(170) * 1.0 / client
 							.getMaxHP()), ClientFrame.getScaledHeight(20));
-			graphics.setColor(Color.white);
+			g2d.setColor(Color.white);
 			if (client.getMaxHP() == ServerPlayer.PLAYER_MAX_HP)
-				graphics.setColor(Color.green);
-			graphics.drawString(
+				g2d.setColor(Color.green);
+			g2d.drawString(
 					String.format("%d/%d", client.getHP(), client.getMaxHP()),
 					ClientFrame.getScaledWidth(153), ClientFrame.getScaledHeight(110));
 		}
 
-		graphics.setColor(Color.blue);
-		graphics.fillRect(ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(135),
-				(int) (client.getMana() * ClientFrame.getScaledWidth(180) * 1.0 / client
+		g2d.setColor(new Color(35,162,199));
+		g2d.fillRect(ClientFrame.getScaledWidth(95), ClientFrame.getScaledHeight(135),
+				(int) (client.getMana() * ClientFrame.getScaledWidth(170) * 1.0 / client
 						.getMaxMana()), ClientFrame.getScaledHeight(20));
-		graphics.setColor(Color.white);
+		g2d.setColor(Color.white);
 		if (client.getMaxMana() == ServerPlayer.PLAYER_MAX_MANA)
-			graphics.setColor(Color.green);
-		graphics.drawString(
+			g2d.setColor(Color.green);
+		g2d.drawString(
 				String.format("%d/%d", client.getMana(), client.getMaxMana()),
 				ClientFrame.getScaledWidth(153), ClientFrame.getScaledHeight(150));
 
-		graphics.setColor(RED);
-		graphics.drawString(String.format("%.0f%%", client.getArmour() * 100),
-				ClientFrame.getScaledWidth(115), ClientFrame.getScaledHeight(255));
+		g2d.setColor(RED);
+		g2d.drawString(String.format("%.0f%%", client.getArmour() * 100),
+				ClientFrame.getScaledWidth(105), ClientFrame.getScaledHeight(254));
 
 		if (client.getBaseDamage() == ServerPlayer.MAX_DMGADD)
-			graphics.setColor(Color.green);
+			g2d.setColor(Color.green);
 		if (client.getBaseDamage() > 9)
-			graphics.drawString(
+			g2d.drawString(
 					String.format(
 							"%d(+%d%%)",
 							(int) Math.ceil(client.getDamage()
 									* (1 + client.getBaseDamage() / 100.0)),
-							client.getBaseDamage()), ClientFrame.getScaledWidth(105),
-					ClientFrame.getScaledHeight(215));
+							client.getBaseDamage()),
+							ClientFrame.getScaledWidth(105),
+							ClientFrame.getScaledHeight(219));
 		else
-			graphics.drawString(
+			g2d.drawString(
 					String.format(
 							"%d(+%d%%)",
 							(int) Math.ceil(client.getDamage()
 									* (1 + client.getBaseDamage() / 100.0)),
-							client.getBaseDamage()), ClientFrame.getScaledWidth(109),
-					ClientFrame.getScaledHeight(215));
+							client.getBaseDamage()),
+							ClientFrame.getScaledWidth(105),
+							ClientFrame.getScaledHeight(219));
 
-		graphics.setColor(RED);
+		g2d.setColor(RED);
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
-			graphics.setColor(Color.green);				
-		graphics.drawString(
+			g2d.setColor(Color.green);				
+		g2d.drawString(
 				String.format("%d", client.getSpeed() - ServerPlayer.DEFAULT_MOVE_SPEED
-						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(215));
+						+ 1), ClientFrame.getScaledWidth(225), ClientFrame.getScaledHeight(219));
 
-		graphics.setColor(RED);
+		g2d.setColor(RED);
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
-			graphics.setColor(Color.green);		
-		graphics.drawString(
+			g2d.setColor(Color.green);		
+		g2d.drawString(
 				String.format("%d", client.getJump() - ServerPlayer.DEFAULT_JUMP_SPEED
-						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(255));
+						+ 1), ClientFrame.getScaledWidth(225), ClientFrame.getScaledHeight(254));
 	}
 
 
