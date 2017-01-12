@@ -91,7 +91,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	{
 		System.out.println("INITIALIZING LOBBY");
 		lobbyImage = Images.getImage("Lobby");
-		background = Images.getImage("BACKGROUND");
+		background = Images.getImage("SKY");
 		middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 
 		this.menu = menu;

@@ -281,7 +281,7 @@ public class MainMenu implements KeyListener{
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
 		Image profileBackgroundImage = Images.getImage("ProfileBackground");
-		Image background = Images.getImage("BACKGROUND");
+		Image background = Images.getImage("SKY");
 		JButton playOnline;
 		JButton createServer;
 		JButton createMap;
@@ -419,14 +419,14 @@ public class MainMenu implements KeyListener{
 			add(exitButton);
 
 
-			directConnect = new JButton("Direct IP Connect");
-			directConnect.setSize(createServerImage.getWidth(null),
-					createServerImage.getHeight(null));
-			directConnect.setLocation(middle - instructionsImage.getWidth(null)
-					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
-			directConnect.addActionListener(new GameStart());
-			directConnect.addMouseListener(this);
-			add(directConnect);
+//			directConnect = new JButton("Direct IP Connect");
+//			directConnect.setSize(createServerImage.getWidth(null),
+//					createServerImage.getHeight(null));
+//			directConnect.setLocation(middle - instructionsImage.getWidth(null)
+//					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+//			directConnect.addActionListener(new GameStart());
+//			directConnect.addMouseListener(this);
+//			add(directConnect);
 
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),

@@ -1464,7 +1464,15 @@ ActionListener, MouseMotionListener
 		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		graphics.setColor(Color.black);
+		if (world.getBackgroundChoice()==1)
+		{
+			graphics.setColor(Color.BLUE);
+		}
+		else
+		{
+			graphics.setColor(Color.WHITE);
+		}
+		
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
 		graphics.drawString("FPS: " + Math.min(9999, getCurrentFPS()),
 				Client.SCREEN_WIDTH - 60, 40);

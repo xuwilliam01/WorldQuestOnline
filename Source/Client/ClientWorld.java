@@ -201,6 +201,8 @@ public class ClientWorld {
 	public static final int middle = 11;
 	public static final int edgeright = 12;
 	public static final int edgeleft = 13;
+	
+	private int backgroundChoice = 0;
 
 	/**
 	 * Constructor for the client's side of the world
@@ -561,7 +563,15 @@ public class ClientWorld {
 		// Import tile drawing referenes
 		ImageReferencePair.importReferences();
 
-		backgroundColour = Images.getImage("BACKGROUND");
+		backgroundChoice = (int)(Math.random()*2);
+		if (backgroundChoice ==1)
+		{
+			backgroundColour = Images.getImage("SKY");
+		}
+		else
+		{
+			backgroundColour = Images.getImage("DUSK");
+		}
 
 		// Generate clouds
 		if ((int) (Math.random() * 2) == 0) {
@@ -571,7 +581,7 @@ public class ClientWorld {
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < NO_OF_CLOUDS; no++) {
+		for (int no = 0; no < NO_OF_CLOUDS * backgroundChoice; no++) {
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
 			double y = Math.random() * (Client.SCREEN_HEIGHT)
@@ -833,55 +843,55 @@ public class ClientWorld {
 			// System.out.println(cloud.getX());
 		}
 
-		// Adjust the time of day
-		if (worldTime >= 0 && worldTime < ServerWorld.DAY_COUNTERS / 3) {
-			alphaMultiplier = 0;
-		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
-				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
-			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
-					* 0.92
-					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
-		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
-				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.92;
-		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5) {
-			alphaMultiplier = 0.92
-					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
-					* 0.92
-					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
-		}
-
-		graphics.setColor(Images.blacks[Math.min(254, (int)(alphaMultiplier*255))]);
-		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
-
-		// Add stars when dusk begins
-		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3
-				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
-
-			int noOfStars = (int) (Math.random() * MAX_NO_OF_STARS);
-			for (int no = 0; no < noOfStars; no++) {
-				stars.add(new ClientStar());
-			}
-		}
-
-		ArrayList<ClientStar> removeStars = new ArrayList<ClientStar>();
-
-		for (ClientStar star : stars) {
-			if (star.exists()) {
-				if (star.getAlpha() > 0) {
-
-					graphics.setColor(Images.whites[Math.min(254,(int)(star.getAlpha()*255))]);
-					graphics.fillRect(star.getX(), star.getY(), star.getSize(),
-							star.getSize());
-				}
-				star.update();
-			} else {
-				removeStars.add(star);
-			}
-		}
-		for (ClientStar star : removeStars) {
-			stars.remove(star);
-		}
+//		// Adjust the time of day
+//		if (worldTime >= 0 && worldTime < ServerWorld.DAY_COUNTERS / 3) {
+//			alphaMultiplier = 0;
+//		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 3
+//				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
+//			alphaMultiplier = (worldTime - ServerWorld.DAY_COUNTERS / 3)
+//					* 0.92
+//					/ (ServerWorld.DAY_COUNTERS / 2 - ServerWorld.DAY_COUNTERS / 3.0);
+//		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 2
+//				&& worldTime < ServerWorld.DAY_COUNTERS / 6 * 5) {
+//			alphaMultiplier = 0.92;
+//		} else if (worldTime >= ServerWorld.DAY_COUNTERS / 6 * 5) {
+//			alphaMultiplier = 0.92
+//					- (worldTime - ServerWorld.DAY_COUNTERS / 6 * 5)
+//					* 0.92
+//					/ (ServerWorld.DAY_COUNTERS - ServerWorld.DAY_COUNTERS / 6 * 5.0);
+//		}
+//
+//		graphics.setColor(Images.blacks[Math.min(254, (int)(alphaMultiplier*255))]);
+//		graphics.fillRect(0, 0, Client.SCREEN_WIDTH, Client.SCREEN_HEIGHT);
+//
+//		// Add stars when dusk begins
+//		if (stars.isEmpty() && worldTime >= ServerWorld.DAY_COUNTERS / 3
+//				&& worldTime < ServerWorld.DAY_COUNTERS / 2) {
+//
+//			int noOfStars = (int) (Math.random() * MAX_NO_OF_STARS);
+//			for (int no = 0; no < noOfStars; no++) {
+//				stars.add(new ClientStar());
+//			}
+//		}
+//
+//		ArrayList<ClientStar> removeStars = new ArrayList<ClientStar>();
+//
+//		for (ClientStar star : stars) {
+//			if (star.exists()) {
+//				if (star.getAlpha() > 0) {
+//
+//					graphics.setColor(Images.whites[Math.min(254,(int)(star.getAlpha()*255))]);
+//					graphics.fillRect(star.getX(), star.getY(), star.getSize(),
+//							star.getSize());
+//				}
+//				star.update();
+//			} else {
+//				removeStars.add(star);
+//			}
+//		}
+//		for (ClientStar star : removeStars) {
+//			stars.remove(star);
+//		}
 
 		// Draw tiles (draw based on player's position later)
 		int startRow = (int) ((playerY - Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT) / ServerWorld.TILE_SIZE);
@@ -1257,6 +1267,14 @@ public class ClientWorld {
 
 	public void setCollisionGrid(char[][] collisionGrid) {
 		this.collisionGrid = collisionGrid;
+	}
+
+	public int getBackgroundChoice() {
+		return backgroundChoice;
+	}
+
+	public void setBackgroundChoice(int backgroundChoice) {
+		this.backgroundChoice = backgroundChoice;
 	}
 	
 	
