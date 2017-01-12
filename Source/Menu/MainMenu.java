@@ -88,7 +88,7 @@ public class MainMenu implements KeyListener{
 	 */
 	public final static int DEF_PORT = 9988;
 	public final static int DEF_UDP_PORT = 9989;
-	public final static int STATS_UDP_PORT = 9990;
+	public final static int STATS_UDP_PORT = 9991;
 
 	// All the panels
 	public static ClientFrame mainFrame;
