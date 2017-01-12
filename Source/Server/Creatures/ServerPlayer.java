@@ -560,7 +560,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				}
 			} else if (getHSpeed() != 0 && getVSpeed() == 0) {
 				int checkFrame = (int) (getWorld().getWorldCounter() % 30);
-				if (getDirection().equals("RIGHT") && getHSpeed() >= 0) {
 					if (checkFrame < 5) {
 						setRowCol(new RowCol(0, 1));
 					} else if (checkFrame < 10) {
@@ -574,21 +573,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					} else {
 						setRowCol(new RowCol(0, 6));
 					}
-				} else {
-					if (checkFrame < 5) {
-						setRowCol(new RowCol(0, 6));
-					} else if (checkFrame < 10) {
-						setRowCol(new RowCol(0, 5));
-					} else if (checkFrame < 15) {
-						setRowCol(new RowCol(0, 4));
-					} else if (checkFrame < 20) {
-						setRowCol(new RowCol(0, 3));
-					} else if (checkFrame < 25) {
-						setRowCol(new RowCol(0, 2));
-					} else {
-						setRowCol(new RowCol(0, 1));
-					}
-				}
 			} else if (!isOnSurface()) {
 				if (Math.abs(getVSpeed()) < 5) {
 					setRowCol(new RowCol(1, 8));

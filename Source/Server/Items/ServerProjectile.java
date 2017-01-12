@@ -127,7 +127,7 @@ public class ServerProjectile extends ServerFlyingObject
 			animated = true;
 			animationFrames = 4;
 			faceAngle = false;
-			soundNo = (int) (Math.random() * 10);
+			soundNo = (int) (Math.random() * 7);
 			owner.getWorld().playSound("cut_air" + soundNo,
 					owner.getX(), owner.getY());
 			break;
@@ -139,7 +139,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
-			soundNo = (int) (Math.random() * 10);
+			soundNo = (int) (Math.random() * 7);
 			owner.getWorld().playSound("cut_air" + soundNo,
 					owner.getX(),owner.getY());
 			break;
@@ -151,7 +151,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
-			soundNo = (int) (Math.random() * 10);
+			soundNo = (int) (Math.random() * 7);
 			owner.getWorld().playSound("cut_air" + soundNo,
 					owner.getX(), owner.getY());
 			break;
@@ -172,6 +172,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(15);
 			animated = false;
 			faceAngle = false;
+			soundNo = (int) (Math.random() * 7);
+			owner.getWorld().playSound("cut_air" + soundNo,
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.FIREBALL_TYPE:
 			setImage("FIREBALL_0_0");

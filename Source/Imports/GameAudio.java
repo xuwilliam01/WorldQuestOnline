@@ -79,7 +79,7 @@ public class GameAudio {
 		}
 		try
 		{
-		gainControl.setValue(Math.max(-dist*Client.Client.distanceConstant,-50));
+		gainControl.setValue(Math.max(-3-dist*Client.Client.distanceConstant,-50));
 		audio.setFramePosition(0);
 		audio.start();
 		}

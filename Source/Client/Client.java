@@ -297,7 +297,7 @@ ActionListener, MouseMotionListener
 		add(chat);
 		add(enter);
 
-		distanceConstant = 120.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
+		distanceConstant = 80.0f/(SCREEN_HEIGHT + SCREEN_WIDTH);
 
 	}
 
