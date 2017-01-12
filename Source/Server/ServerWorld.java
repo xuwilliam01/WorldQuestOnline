@@ -1336,17 +1336,6 @@ public class ServerWorld
 		return name;
 	}
 
-	public void playSound(String name, double x, double y,
-			ServerObject objectOne, ServerObject objectTwo)
-	{
-		if (!objectOne.isPlayedSound() && !objectTwo.isPlayedSound())
-		{
-			playSound(name, x, y);
-			objectOne.setPlayedSound(true);
-			objectTwo.setPlayedSound(true);
-		}
-	}
-
 	public void playSound(String name, double x, double y)
 	{
 		add(new ServerSound(x, y, name, getEngine()));

@@ -109,7 +109,7 @@ public class ServerProjectile extends ServerFlyingObject
 		setAngle(angle, true);
 
 		objectsCollided = new ArrayList<Integer>();
-
+		int soundNo = 0;
 		switch (type)
 		{
 		case ServerWorld.NINJASTAR_TYPE:
@@ -127,6 +127,9 @@ public class ServerProjectile extends ServerFlyingObject
 			animated = true;
 			animationFrames = 4;
 			faceAngle = false;
+			soundNo = (int) (Math.random() * 10);
+			owner.getWorld().playSound("cut_air" + soundNo,
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.WOODARROW_TYPE:
 			setImage("WOODARROW_0");
@@ -136,6 +139,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
+			soundNo = (int) (Math.random() * 10);
+			owner.getWorld().playSound("cut_air" + soundNo,
+					owner.getX(),owner.getY());
 			break;
 		case ServerWorld.STEELARROW_TYPE:
 			setImage("STEELARROW_0");
@@ -145,6 +151,9 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(ARROW_SPEED);
 			animated = false;
 			faceAngle = true;
+			soundNo = (int) (Math.random() * 10);
+			owner.getWorld().playSound("cut_air" + soundNo,
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.MEGAARROW_TYPE:
 			setImage("MEGAARROW_0");
@@ -172,6 +181,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(15);
 			animated = true;
 			faceAngle = true;
+			owner.getWorld().playSound("fireball",
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.ICEBALL_TYPE:
 			setImage("ICEBALL_0_0");
@@ -374,6 +385,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setY(getY() - 32);
 			setImage("EXPLOSION2_0");
 			noOfExplosionFrames = 5;
+			owner.getWorld().playSound("fire_explode",
+					owner.getX(), owner.getY());
 		}
 		else if (getType() == ServerWorld.ICEBALL_TYPE)
 		{

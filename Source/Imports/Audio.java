@@ -42,11 +42,14 @@ public class Audio {
 		addToAudioArray(new GameAudio("heartbeat"));
 		addToAudioArray(new GameAudio("gag"));
 		addToAudioArray(new GameAudio("cut"));
+		addToAudioArray(new GameAudio("fireball"));
+		addToAudioArray(new GameAudio("fire_explode"));
 		
-		for (int no = 0; no < 11; no++)
+		for (int no = 0; no < 10; no++)
 		{
 			addToAudioArray(new GameAudio("cut_air"+no));
 		}
+		
 
 		//Configure storage for audio
 		GameAudio[] clone = audioArray;
