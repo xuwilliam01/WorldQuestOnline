@@ -19,6 +19,7 @@ public class GameAudio {
 	private Clip audio;
 	private FloatControl gainControl;
 	public static final float MAX_DISTANCE = 1080;
+	public static boolean audioSupported = true;
 	
 	public GameAudio(String name)
 	{
@@ -41,6 +42,7 @@ public class GameAudio {
 		} catch (IllegalArgumentException e){
 			e.printStackTrace();
 			System.out.println("No audio output enabled on this device");
+			audioSupported = false;
 		} catch (Exception e){
 			e.printStackTrace();
 			System.out.println("Unknown issue with audio");
@@ -71,6 +73,10 @@ public class GameAudio {
 
 	public void play(int dist)
 	{
+		if (!audioSupported)
+		{
+			return;
+		}
 		try
 		{
 		gainControl.setValue(Math.max(-dist*Client.Client.distanceConstant,-50));
