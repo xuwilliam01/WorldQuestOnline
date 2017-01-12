@@ -982,7 +982,7 @@ public class MainMenu implements KeyListener{
 			mainFrame.add(pane);
 			pane.setVisible(true);
 
-			JButton menu = new JButton("Main Menu");
+			JButton menu = new JButton("Quit");
 			menu.addActionListener(new GameMenuButton());
 			inventory = new ClientInventory(menu);
 			mySocket.close();
