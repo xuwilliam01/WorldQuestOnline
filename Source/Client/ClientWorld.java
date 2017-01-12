@@ -804,6 +804,34 @@ public class ClientWorld {
 
 		// Draw the background
 		graphics.drawImage(backgroundColour, 0, 0, null);
+		
+		// Draw and move the clouds
+		for (ClientCloud cloud : clouds) {
+			if (cloud.getX() <= Client.SCREEN_WIDTH
+					&& cloud.getX() + cloud.getWidth() >= 0
+					&& cloud.getY() <= Client.SCREEN_HEIGHT
+					&& cloud.getY() + cloud.getHeight() >= 0) {
+				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
+						(int) cloud.getY(), null);
+			}
+
+			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2) {
+				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
+
+			} else if (cloud.getX() > Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE
+					/ 2) {
+				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
+				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
+						- (Client.SCREEN_HEIGHT / 3));
+				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
+			}
+			cloud.setX(cloud.getX() + cloud.gethSpeed());
+
+			// System.out.println(cloud.getX());
+		}
 
 		// Adjust the time of day
 		if (worldTime >= 0 && worldTime < ServerWorld.DAY_COUNTERS / 3) {
@@ -851,37 +879,8 @@ public class ClientWorld {
 				removeStars.add(star);
 			}
 		}
-
 		for (ClientStar star : removeStars) {
 			stars.remove(star);
-		}
-
-		// Draw and move the clouds
-		for (ClientCloud cloud : clouds) {
-			if (cloud.getX() <= Client.SCREEN_WIDTH
-					&& cloud.getX() + cloud.getWidth() >= 0
-					&& cloud.getY() <= Client.SCREEN_HEIGHT
-					&& cloud.getY() + cloud.getHeight() >= 0) {
-				graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
-						(int) cloud.getY(), null);
-			}
-
-			if (cloud.getX() < Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2) {
-				cloud.setX(Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE / 2);
-				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-						- (Client.SCREEN_HEIGHT / 3));
-				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
-
-			} else if (cloud.getX() > Client.SCREEN_WIDTH / 2 + CLOUD_DISTANCE
-					/ 2) {
-				cloud.setX(Client.SCREEN_WIDTH / 2 - CLOUD_DISTANCE / 2);
-				cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-						- (Client.SCREEN_HEIGHT / 3));
-				cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
-			}
-			cloud.setX(cloud.getX() + cloud.gethSpeed());
-
-			// System.out.println(cloud.getX());
 		}
 
 		// Draw tiles (draw based on player's position later)
@@ -967,7 +966,7 @@ public class ClientWorld {
 
 					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0
 							|| y > Client.SCREEN_HEIGHT
-							|| y + object.getHeight() < 0 || (object.getLastCounter()-Client.getPacketNo()>3 && object.getID()!=player.getID())) // If the object wasn't present in the last update
+							|| y + object.getHeight() < 0 || (Client.getPacketNo()-object.getLastCounter()>=3 && object.getID()!=player.getID())) // If the object wasn't present in the last update
 					{
 						objectsToRemove.add(object);
 						continue;

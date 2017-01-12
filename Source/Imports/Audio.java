@@ -45,7 +45,7 @@ public class Audio {
 		addToAudioArray(new GameAudio("fireball"));
 		addToAudioArray(new GameAudio("fire_explode"));
 		
-		for (int no = 0; no < 10; no++)
+		for (int no = 0; no < 7; no++)
 		{
 			addToAudioArray(new GameAudio("cut_air"+no));
 		}

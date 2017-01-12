@@ -559,10 +559,6 @@ public class MainMenu implements KeyListener{
 
 			g2d.drawString("William Xu and Alex Raita", 15, 20);
 
-			g2d.drawString("Press 'ESC' to quit",
-					ClientFrame.getScaledWidth(1920) - 180, 20);
-
-
 			Font nameFont = mainFont.deriveFont(36.0f);
 			g2d.setFont(nameFont);
 
@@ -1716,9 +1712,6 @@ public class MainMenu implements KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
-		}
 
 	}
 

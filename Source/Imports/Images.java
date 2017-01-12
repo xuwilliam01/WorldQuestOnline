@@ -989,7 +989,11 @@ public class Images {
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH,
 					"Items//"));
 
-			addtoImageArray(new GameImage("BACKGROUND.png",
+//			addtoImageArray(new GameImage("BACKGROUND.png",
+//					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
+//					"Background//"));
+			
+			addtoImageArray(new GameImage("BACKGROUND.jpg",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
 					"Background//"));
 
