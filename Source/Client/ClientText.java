@@ -73,12 +73,16 @@ public class ClientText extends ClientObject
 		this.world = world;
 		char colour = image.charAt(0);
 		this.text = image.substring(1).replace('_', ' ');
+		
 		this.aliveTime = TOTAL_ALIVE_TIME;
 
 		switch (colour)
 		{
 		case ServerText.PURPLE_TEXT:
-			this.text = "NOT ENOUGH MANA";
+			if (!text.equalsIgnoreCase("shop is being used"))
+			{
+				this.text = "NOT ENOUGH MANA";
+			}
 			colorArray = Images.purples;
 			color = Images.PURPLE;
 			break;
