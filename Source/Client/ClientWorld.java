@@ -1124,25 +1124,18 @@ public class ClientWorld {
 				(int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP()),
 				20);
 
-		graphics.setColor(Images.PURPLE);
-		graphics.drawRect(100,
-				980,
-				500,
-				20);
+		graphics.setColor(Color.WHITE);
+		
 		graphics.drawString(
 				String.format("%d/%d", client.getBlueCastleHP(),
 						client.getBlueCastleMaxHP()),
-				ClientFrame.getScaledWidth(325),
-				ClientFrame.getScaledHeight(995));
-		graphics.drawRect(ClientFrame.getScaledWidth(1050),
-				ClientFrame.getScaledHeight(980),
-				ClientFrame.getScaledWidth(500),
-				ClientFrame.getScaledHeight(20));
+				300,
+				Client.SCREEN_HEIGHT-15);
 		graphics.drawString(
 				String.format("%d/%d", client.getRedCastleHP(),
 						client.getRedCastleMaxHP()),
-				ClientFrame.getScaledWidth(1275),
-				ClientFrame.getScaledHeight(995));
+				Client.SCREEN_WIDTH-300,
+				Client.SCREEN_HEIGHT-15);
 
 		graphics.setFont(BIG_NORMAL_FONT);
 
@@ -1151,20 +1144,20 @@ public class ClientWorld {
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
 							client.getBlueCastleTier() + 1),
-					ClientFrame.getScaledWidth(1050),
-					ClientFrame.getScaledHeight(975));
+							Client.SCREEN_WIDTH - 200,
+					Client.SCREEN_HEIGHT - 80);
 		else
 		{
 			graphics.drawString(String.format(
 					"Castle Tier %d (XP For Next Tier  %d/%d)",
 					client.getBlueCastleTier() + 1, client.getBlueCastleXP(),
 					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]),
-					ClientFrame.getScaledWidth(1050), ClientFrame
-					.getScaledHeight(975));
+					Client.SCREEN_WIDTH - 200,
+					Client.SCREEN_HEIGHT - 80);
 			graphics.drawString(String.format(
 					"Housing %d/%d",client.getBluePop(),client.getBluePopLimit()),
-					ClientFrame.getScaledWidth(1050), ClientFrame
-					.getScaledHeight(950));
+					Client.SCREEN_WIDTH - 200,
+					Client.SCREEN_HEIGHT - 80);
 		}
 
 		graphics.setColor(Color.red);
@@ -1172,8 +1165,8 @@ public class ClientWorld {
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
 							client.getRedCastleTier() + 1),
-					ClientFrame.getScaledWidth(100),
-					ClientFrame.getScaledHeight(975));
+					40,
+					Client.SCREEN_HEIGHT - 80);
 		else
 		{
 			graphics.drawString(
@@ -1183,13 +1176,12 @@ public class ClientWorld {
 							.getRedCastleXP(),
 							ServerCastle.CASTLE_TIER_XP[client
 							                               .getRedCastleTier()]), ClientFrame
-					.getScaledWidth(100), ClientFrame
-					.getScaledHeight(975));
+					.getScaledWidth(100),
+					Client.SCREEN_HEIGHT - 80);
 			graphics.drawString(String.format(
 					"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
-					ClientFrame
-					.getScaledWidth(100), ClientFrame
-					.getScaledHeight(950));
+					40,
+					Client.SCREEN_HEIGHT - 80);
 		}
 		
 
