@@ -20,6 +20,7 @@ public class StartServer {
 		System.out.print("Enter server name: ");
 		String name = scan.nextLine();
 		name = name.replace(' ', '_');
+		Imports.Audio.isServer=true;
 		
 		GameImage.hostingServer=true;
 		Images.importImages();

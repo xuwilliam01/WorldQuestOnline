@@ -605,6 +605,7 @@ public class ClientInventory extends JPanel implements ActionListener
 	{
 		client.printToServer("X");
 		client.leaveGame = true;
+		client.inGame = false;
 	}
 
 	public int getNumHP()

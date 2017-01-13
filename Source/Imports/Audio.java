@@ -16,6 +16,8 @@ public class Audio {
 	private static boolean imported = false;
 	
 	private static GameAudio bgm;
+	
+	public static boolean isServer = false;
 
 
 	public static void main(String[] args) throws InterruptedException {
@@ -34,12 +36,17 @@ public class Audio {
 		public void run() {
 			while (true)
 			{
+				if (isServer)
+				{
+					break;
+				}
+				
 				if (!GameAudio.audioSupported)
 				{
 					break;
 				}
 				
-				if (MainMenu.mainMenu==null && bgm!=null)
+				if (Client.Client.inGame && bgm!=null)
 				{
 					if (bgm == audioArray[audioMap.get("bgm_menu")])
 					{
@@ -56,7 +63,7 @@ public class Audio {
 						bgm.play(0);
 					}
 				}
-				else if (MainMenu.mainMenu!=null)
+				else if (!Client.Client.inGame)
 				{
 					if (bgm != audioArray[audioMap.get("bgm_menu")])
 					{
