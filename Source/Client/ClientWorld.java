@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -1119,18 +1121,25 @@ public class ClientWorld {
 		//Draw inventory shadow
 		//graphics.drawImage(inventoryShadowImage,null);
 		
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+
+		
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
+		g2d.setFont(NORMAL_FONT);
 		
 		graphics.setColor(new Color(217,53,53)); //RED
-		graphics.drawImage(Images.getImage("castleBarRed"), 0, Client.SCREEN_HEIGHT-200, null);
+		graphics.drawImage(Images.getImage("castleBarRed"), 0, Client.SCREEN_HEIGHT-40, null);
 		graphics.fillRect(102,
 				Client.SCREEN_HEIGHT-29,
 				(int) (379.0 * client.getRedCastleHP() / client.getRedCastleMaxHP()),
 				20);
 		
 		graphics.setColor(new Color(53,153,227)); //BLUE
-		graphics.drawImage(Images.getImage("castleBarBlue"), Client.SCREEN_WIDTH-500, Client.SCREEN_HEIGHT-200, null);
+		graphics.drawImage(Images.getImage("castleBarBlue"), Client.SCREEN_WIDTH-500, Client.SCREEN_HEIGHT-40, null);
 		graphics.fillRect(
 				Client.SCREEN_WIDTH-481+(379 - (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP())),
 				Client.SCREEN_HEIGHT-29,
@@ -1139,63 +1148,77 @@ public class ClientWorld {
 
 		graphics.setColor(Color.WHITE);
 		
-		graphics.drawString(
+		g2d.drawString(
 				String.format("%d/%d", client.getBlueCastleHP(),
 						client.getBlueCastleMaxHP()),
 				300,
 				Client.SCREEN_HEIGHT-15);
-		graphics.drawString(
+		g2d.drawString(
 				String.format("%d/%d", client.getRedCastleHP(),
 						client.getRedCastleMaxHP()),
 				Client.SCREEN_WIDTH-300,
 				Client.SCREEN_HEIGHT-15);
+		
+		
+		
 
-		graphics.setFont(BIG_NORMAL_FONT);
+		graphics.setFont(CASTLE_FONT);
+		g2d.setFont(CASTLE_FONT);
 
-		graphics.setColor(new Color(53,153,227)); //BLUE
-		if (client.getBlueCastleTier() == 6)
-			graphics.drawString(
-					String.format("Castle Tier %d (Max)",
-							client.getBlueCastleTier() + 1),
-							Client.SCREEN_WIDTH - 200,
-					Client.SCREEN_HEIGHT - 80);
+		g2d.setColor(Color.WHITE);
+		//g2d.setColor(new Color(53,153,227)); //BLUE
+		if (client.getBlueCastleTier() == 6){
+			String printThis = String.format("Team Level %d (Max)",
+					client.getBlueCastleTier() + 1);
+			int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
+			g2d.drawString(printThis,
+					Client.SCREEN_WIDTH - 16 - stringWidth,
+					Client.SCREEN_HEIGHT - 90);
+			}
 		else
 		{
-			graphics.drawString(String.format(
-					"Castle Tier %d (XP For Next Tier  %d/%d)",
+			String printThis = String.format(
+					"Team Level %d (XP For Next Level  %d/%d)",
 					client.getBlueCastleTier() + 1, client.getBlueCastleXP(),
-					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]),
-					Client.SCREEN_WIDTH - 200,
-					Client.SCREEN_HEIGHT - 80);
-			graphics.drawString(String.format(
-					"Housing %d/%d",client.getBluePop(),client.getBluePopLimit()),
-					Client.SCREEN_WIDTH - 200,
-					Client.SCREEN_HEIGHT - 80);
+					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]);
+			int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
+			g2d.drawString(printThis,
+					Client.SCREEN_WIDTH - 16 - stringWidth,
+					Client.SCREEN_HEIGHT - 90);
 		}
+		
+		String printThis = String.format(
+				"Housing %d/%d",client.getBluePop(),client.getBluePopLimit());
+		int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
+		
+		g2d.drawString(printThis,
+				Client.SCREEN_WIDTH - 16 - stringWidth,
+				Client.SCREEN_HEIGHT - 65);
 
-		graphics.setColor(new Color(217,53,53)); //RED
+		
+		
+		
+		//g2d.setColor(new Color(217,53,53)); //RED
 		if (client.getRedCastleTier() == 6)
-			graphics.drawString(
-					String.format("Castle Tier %d (Max)",
+			g2d.drawString(
+					String.format("Team Level %d (Max)",
 							client.getRedCastleTier() + 1),
-					40,
-					Client.SCREEN_HEIGHT - 80);
+					16,
+					Client.SCREEN_HEIGHT - 90);
 		else
 		{
-			graphics.drawString(
-					String.format(
-							"Castle Tier %d (XP For Next Tier  %d/%d)",
-							client.getRedCastleTier() + 1, client
-							.getRedCastleXP(),
-							ServerCastle.CASTLE_TIER_XP[client
-							                               .getRedCastleTier()]), ClientFrame
-					.getScaledWidth(100),
-					Client.SCREEN_HEIGHT - 80);
-			graphics.drawString(String.format(
-					"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
-					40,
-					Client.SCREEN_HEIGHT - 80);
+			g2d.drawString(String.format(
+					"Team Level %d (XP For Next Level  %d/%d)",
+					client.getRedCastleTier() + 1, client.getRedCastleXP(),
+					ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]),
+					16,
+					Client.SCREEN_HEIGHT - 90);
 		}
+		
+		g2d.drawString(String.format(
+				"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
+				16,
+				Client.SCREEN_HEIGHT - 65);
 		
 
 		// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
