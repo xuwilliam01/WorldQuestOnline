@@ -362,6 +362,21 @@ public class CentralServer implements Runnable, ActionListener {
 			while (true) {
 				try {
 					Socket newServer = TCPSocket.accept();
+					
+					//Make sure you can create two servers from the same IP
+					String IP = newServer.getInetAddress().toString();
+					synchronized(servers)
+					{
+						for(ServerInfo server : servers)
+						{
+							if(server.getIP().equals(IP))
+							{
+								newServer.close();
+								continue;
+							}
+						}
+					}
+					
 					Thread inputThread = new Thread(new ReadIn(newServer));
 					inputThread.start();
 				} catch (IOException e) {
