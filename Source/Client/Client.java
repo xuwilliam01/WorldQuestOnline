@@ -246,6 +246,7 @@ ActionListener, MouseMotionListener
 	private static long packetNo = 0;
 
 	private int respawnTime = 10;
+	
 	/**
 	 * Constructor for the client
 	 */
@@ -1467,6 +1468,9 @@ ActionListener, MouseMotionListener
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
 		graphics.drawString("FPS: " + Math.min(9999, getCurrentFPS()),
 				Client.SCREEN_WIDTH - 60, 40);
+		
+		
+		graphics.drawImage(Images.getImage("InventoryShadow"),Client.SCREEN_WIDTH-100,0,null);
 
 		// Set the time of day to be displayed
 		// DAWN: 5AM - 9AM
