@@ -227,6 +227,7 @@ public class ServerCastle extends ServerBuilding {
 
 		if (tier == 3) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
+			
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
@@ -260,7 +261,6 @@ public class ServerCastle extends ServerBuilding {
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
 		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
-
 
 	}
 

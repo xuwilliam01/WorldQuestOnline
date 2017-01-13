@@ -247,7 +247,7 @@ public class Images {
 		imported = true;
 		// Only import if the images haven't been imported already
 		if (imageMap.isEmpty()) {
-			BufferedImage image;
+			BufferedImage image = null;
 
 			// Import sprite sheets to create images with
 			try {
@@ -1281,25 +1281,75 @@ public class Images {
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
 			
-			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
-			addtoImageArray(new GameImage("BARRACKS.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_GOOD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_BAD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BARRACKS.png",image));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
 			
-			addtoImageArray(new GameImage("TOWER_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
-			addtoImageArray(new GameImage("TOWER.png","Buildings//"));
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "TOWER.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("TOWER_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("TOWER.png",image));
 			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("TOWER_VALID.png","Buildings//"));
 			
-			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
-			addtoImageArray(new GameImage("WOOD_HOUSE.png","Buildings//"));
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "WOOD_HOUSE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("WOOD_HOUSE.png",image));
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
 			
-			addtoImageArray(new GameImage("GOLD_MINE_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
-			addtoImageArray(new GameImage("GOLD_MINE.png","Buildings//"));
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "GOLD_MINE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("GOLD_MINE_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("GOLD_MINE.png",image));
 			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "ADV_BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("ADV_BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("ADV_BARRACKS.png",image));
+			addtoImageArray(new GameImage("ADV_BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("ADV_BARRACKS_VALID.png","Buildings//"));
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "GIANT_FACTORY.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("GIANT_FACTORY_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("GIANT_FACTORY.png",image));
+			addtoImageArray(new GameImage("GIANT_FACTORY_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("GIANT_FACTORY_VALID.png","Buildings//"));
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "INN.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("INN_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("INN.png",image));
+			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("INN_VALID.png","Buildings//"));
 			
 			addtoImageArray(new GameImage("RED_CASTLE.png",
 					"Buildings//"));

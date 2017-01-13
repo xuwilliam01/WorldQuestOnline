@@ -211,21 +211,33 @@ public abstract class ServerItem extends ServerObject
 			setImage("DARKWAND_ICON");
 			value = 60;
 			break;
-		case ServerWorld.BARRACK_ITEM_TYPE:
+		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setImage("BARRACKS_ICON");
-			value = ServerBuildingItem.BARRACK_COST; //Change?
+			value = ServerBuildingItem.BASIC_BARRACKS_COST;
+			break;
+		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+			setImage("ADV_BARRACKS_ICON");
+			value = ServerBuildingItem.ADV_BARRACKS_COST;
+			break;
+		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+			setImage("GIANT_FACTORY_ICON");
+			value = ServerBuildingItem.GIANT_FACTORY_COST;
 			break;
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			setImage("WOOD_HOUSE_ICON");
-			value = ServerBuildingItem.WOOD_HOUSE_COST; //Change?
+			value = ServerBuildingItem.WOOD_HOUSE_COST;
+			break;
+		case ServerWorld.INN_ITEM_TYPE:
+			setImage("INN_ICON");
+			value = ServerBuildingItem.INN_COST;
 			break;
 		case ServerWorld.TOWER_ITEM_TYPE:
 			setImage("TOWER_ICON");
-			value = ServerBuildingItem.TOWER_COST; //Change?
+			value = ServerBuildingItem.TOWER_COST;
 			break;
 		case ServerWorld.GOLD_MINE_ITEM_TYPE:
 			setImage("GOLD_MINE_ICON");
-			value = ServerBuildingItem.GOLD_MINE_COST; //Change?
+			value = ServerBuildingItem.GOLD_MINE_COST;
 			break;
 		}
 
@@ -239,15 +251,15 @@ public abstract class ServerItem extends ServerObject
 	 */
 	public static ServerItem randomItem(double x, double y, ServerWorld world)
 	{
-		int randType = (int) (Math.random() * 13 + 1);
+		int randType = (int) (Math.random() * 20 + 1);
 
-		if (randType <= 7)
+		if (randType <= 12)
 			return new ServerMoney(x, y,world);
-		if (randType <= 8)
-			return ServerArmour.randomArmour(x, y,world);
-		if (randType <= 10)
-			return ServerPotion.randomPotion(x, y,world);
 		if (randType <= 13)
+			return ServerArmour.randomArmour(x, y,world);
+		if (randType <= 18)
+			return ServerPotion.randomPotion(x, y,world);
+		if (randType <= 20)
 			return ServerWeapon.randomWeapon(x, y,world);
 
 		// This won't happen

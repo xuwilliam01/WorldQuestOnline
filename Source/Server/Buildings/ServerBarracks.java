@@ -16,10 +16,18 @@ public class ServerBarracks extends ServerBuilding {
 		goblins = new LinkedList<Integer>();
 		switch (type)
 		{
-		case ServerWorld.BARRACK_TYPE:
+		case ServerWorld.BASIC_BARRACKS_TYPE:
 			goblins.add(ServerGoblin.GOBLIN_ARCHER_NO);
 			goblins.add(ServerGoblin.GOBLIN_SOLDIER_NO);
 			goblins.add(ServerGoblin.GOBLIN_SOLDIER_NO);
+			break;
+		case ServerWorld.ADV_BARRACKS_TYPE:
+			goblins.add(ServerGoblin.GOBLIN_KNIGHT_NO);
+			goblins.add(ServerGoblin.GOBLIN_KNIGHT_NO);
+			goblins.add(ServerGoblin.GOBLIN_WIZARD_NO);
+			break;
+		case ServerWorld.GIANT_FACTORY_TYPE:
+			goblins.add(ServerGoblin.GOBLIN_GIANT_NO);
 			break;
 		}
 	}

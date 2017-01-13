@@ -2199,11 +2199,27 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		synchronized(castle)
 		{
 			switch (type) {
-			case ServerWorld.BARRACK_ITEM_TYPE:
+			case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 				if (castle != null
-				&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST) {
-					castle.spendMoney(ServerBuildingItem.BARRACK_COST);
-					addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,
+				&& castle.getMoney() >= ServerBuildingItem.BASIC_BARRACKS_COST) {
+					castle.spendMoney(ServerBuildingItem.BASIC_BARRACKS_COST);
+					addItem(new ServerBuildingItem(ServerWorld.BASIC_BARRACKS_ITEM_TYPE,
+							getWorld()));
+				}
+				break;
+			case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.ADV_BARRACKS_COST) {
+					castle.spendMoney(ServerBuildingItem.ADV_BARRACKS_COST);
+					addItem(new ServerBuildingItem(ServerWorld.ADV_BARRACKS_ITEM_TYPE,
+							getWorld()));
+				}
+				break;
+			case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.GIANT_FACTORY_COST) {
+					castle.spendMoney(ServerBuildingItem.GIANT_FACTORY_COST);
+					addItem(new ServerBuildingItem(ServerWorld.GIANT_FACTORY_ITEM_TYPE,
 							getWorld()));
 				}
 				break;
@@ -2213,7 +2229,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
 					addItem(new ServerBuildingItem(
 							ServerWorld.WOOD_HOUSE_ITEM_TYPE, getWorld()));
-					System.out.println("Added house");
+				}
+				break;
+			case ServerWorld.INN_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.INN_COST) {
+					castle.spendMoney(ServerBuildingItem.INN_COST);
+					addItem(new ServerBuildingItem(
+							ServerWorld.INN_ITEM_TYPE, getWorld()));
 				}
 				break;
 			case ServerWorld.TOWER_ITEM_TYPE:
@@ -2222,7 +2245,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					castle.spendMoney(ServerBuildingItem.TOWER_COST);
 					addItem(new ServerBuildingItem(ServerWorld.TOWER_ITEM_TYPE,
 							getWorld()));
-					System.out.println("Added tower");
 				}
 				break;
 			case ServerWorld.GOLD_MINE_ITEM_TYPE:
@@ -2231,7 +2253,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					castle.spendMoney(ServerBuildingItem.GOLD_MINE_COST);
 					addItem(new ServerBuildingItem(ServerWorld.GOLD_MINE_ITEM_TYPE,
 							getWorld()));
-					System.out.println("Added Gold mine");
 				}
 				break;
 			}

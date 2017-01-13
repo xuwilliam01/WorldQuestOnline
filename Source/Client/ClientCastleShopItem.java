@@ -28,17 +28,35 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 		
 		//Add tooltips and set location:
 		switch(type) {
-		case ServerWorld.BARRACK_ITEM_TYPE:
+		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(100,100);
-			cost = ServerBuildingItem.BARRACK_COST;
-			setToolTipText("Barracks");
+			cost = ServerBuildingItem.BASIC_BARRACKS_COST;
+			setToolTipText("Barracks (Spawns two soldiers and one archer each tick)");
+			break;
+		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("ADV_BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(100,200);
+			cost = ServerBuildingItem.ADV_BARRACKS_COST;
+			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick");
+			break;
+		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("GIANT_FACTORY_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(100,300);
+			cost = ServerBuildingItem.GIANT_FACTORY_COST;
+			setToolTipText("Giant Factory (Spawns two knights and one wizard");
 			break;
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("WOOD_HOUSE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(200,100);
 			cost = ServerBuildingItem.WOOD_HOUSE_COST;
 			setToolTipText("Wooden house (+10 housing space)");
+			break;
+		case ServerWorld.INN_ITEM_TYPE:
+			setIcon(new ImageIcon(Images.getImage("INN_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
+			setLocation(200,200);
+			cost = ServerBuildingItem.INN_COST;
+			setToolTipText("Inn (+25 housing space)");
 			break;
 		case ServerWorld.TOWER_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("TOWER_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
