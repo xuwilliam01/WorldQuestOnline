@@ -268,6 +268,9 @@ public class Server implements Runnable {
 								newPlayer.setHP(0);
 							}	
 							toRemove = p;
+							engine.broadcast("JO "
+									+ newPlayer.getName().split(" ").length + " "
+									+ newPlayer.getTeam() + newPlayer.getName());
 							break;
 						}
 					}
