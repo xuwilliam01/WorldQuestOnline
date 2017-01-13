@@ -603,7 +603,7 @@ public class MainMenu implements KeyListener{
 			{
 				sendData = ("S "+ClientAccountWindow.savedUser).getBytes();
 				try {
-					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);			
+					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);			
 					socket.send(send);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

@@ -65,7 +65,7 @@ public class ServerManager implements Runnable, ActionListener{
 
 		try {
 			this.socket = new ServerSocket(port);
-			centralServer = new Socket(CentralServer.CentralServer.IP, CentralServer.CentralServer.PORT);
+			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, CentralServer.CentralServer.PORT);
 			out = new PrintWriter(centralServer.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {
@@ -99,7 +99,7 @@ public class ServerManager implements Runnable, ActionListener{
 		pingThread.start();
 		try {
 			this.socket = new ServerSocket(port);
-			centralServer = new Socket(CentralServer.CentralServer.IP, CentralServer.CentralServer.PORT);
+			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, CentralServer.CentralServer.PORT);
 			out = new PrintWriter(centralServer.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {

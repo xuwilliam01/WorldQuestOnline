@@ -42,7 +42,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
-	public static final String CREDS_PATH = "Resources//LoginCredentials.txt";
+	public static final String CREDS_PATH = "Resources//savedata";
 	private DatagramSocket socket;
 	private DatagramPacket receive;
 	private DatagramPacket send;
@@ -60,6 +60,9 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JPasswordField confirm  = new JPasswordField();
 	private JButton menuLoginButton;
 	private Image logoutOver;
+	
+	public final static String IP = "52.14.41.226";
+	// public final static String IP = "127.0.0.1";
 
 	public static boolean open = false;
 	public static boolean loggedIn = false;
@@ -263,7 +266,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);
 				socket.send(send);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -292,7 +295,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);
 				socket.send(send);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

@@ -119,7 +119,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	{
 		sendData = out.getBytes();
 		try {
-			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);	
+			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);	
 			socket.send(send);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

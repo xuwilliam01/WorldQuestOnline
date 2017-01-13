@@ -194,10 +194,6 @@ ActionListener, MouseMotionListener
 	 */
 	private long startTime2 = 0;
 
-	/**
-	 * The current FPS of the client (for server reading)
-	 */
-	private int currentFPS2 = 60;
 
 	/**
 	 * A counter updating every repaint and reseting at the expected FPS (for
@@ -461,11 +457,6 @@ ActionListener, MouseMotionListener
 					if (FPScounter2 >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5))
 					{
 						FPScounter2 = 0;
-						currentFPS2 = Math
-								.min((int) ((1000.0
-										/ (System.currentTimeMillis() - startTime2)
-										* (1000.0 / ServerEngine.UPDATE_RATE) + 0.5)),
-										120);
 						startTime2 = System.currentTimeMillis();
 					}
 
