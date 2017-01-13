@@ -151,9 +151,13 @@ public class ServerWorld
 	public final static String BUILDING_ITEM_TYPE = EQUIP_TYPE + "b";
 
 	public final static String BARRACK_ITEM_TYPE = BUILDING_ITEM_TYPE + "B";
+	public final static String BASIC_BARRACKS_ITEM_TYPE = BARRACK_ITEM_TYPE + "B";
+	public final static String ADV_BARRACKS_ITEM_TYPE = BARRACK_ITEM_TYPE + "A";
+	public final static String GIANT_FACTORY_ITEM_TYPE = BARRACK_ITEM_TYPE + "G";
 
 	public final static String HOUSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "H";
 	public final static String WOOD_HOUSE_ITEM_TYPE = HOUSE_ITEM_TYPE + "W";
+	public final static String INN_ITEM_TYPE = HOUSE_ITEM_TYPE + "I";
 
 	public final static String DEFENSE_ITEM_TYPE = BUILDING_ITEM_TYPE + "D";
 	public final static String TOWER_ITEM_TYPE = DEFENSE_ITEM_TYPE + "T";
@@ -162,11 +166,17 @@ public class ServerWorld
 	public final static String GOLD_MINE_ITEM_TYPE = RESOURCE_ITEM_TYPE + "G";
 
 	public final static String BUILDING_TYPE = CREATURE_TYPE + "b";
+	
 	public final static String BARRACK_TYPE = BUILDING_TYPE + "B";
+	public final static String BASIC_BARRACKS_TYPE = BARRACK_TYPE  + "B";
+	public final static String ADV_BARRACKS_TYPE = BARRACK_TYPE  + "A";
+	public final static String GIANT_FACTORY_TYPE = BARRACK_TYPE  + "G";
+	
 	public final static String CASTLE_TYPE = BUILDING_TYPE + "T";
 
 	public final static String HOUSE_TYPE = BUILDING_TYPE + "H";
 	public final static String WOOD_HOUSE_TYPE = HOUSE_TYPE + "W";
+	public final static String INN_TYPE = HOUSE_TYPE + "I";
 
 	public final static String DEFENSE_TYPE = BUILDING_TYPE + "D";
 	public final static String TOWER_TYPE = DEFENSE_TYPE + "T";

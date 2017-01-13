@@ -243,6 +243,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private static long packetNo = 0;
 
 	private int respawnTime = 10;
+	
+	public static boolean inGame = false;
 
 	/**
 	 * Constructor for the client
@@ -262,6 +264,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		redPopLimit = 0;
 		bluePop = 0;
 		bluePopLimit = 0;
+		inGame = true;
 
 		leaveGame = false;
 

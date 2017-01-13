@@ -29,8 +29,11 @@ public class ClientCastleShop extends JPanel{
 		setSize(ClientFrame.getScaledWidth(SHOP_WIDTH), ClientFrame.getScaledHeight(SHOP_HEIGHT));
 		setLocation(200,200);
 		
-		add(new ClientCastleShopItem(ServerWorld.BARRACK_ITEM_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.BASIC_BARRACKS_ITEM_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.ADV_BARRACKS_ITEM_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.GIANT_FACTORY_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.WOOD_HOUSE_ITEM_TYPE,this));
+		add(new ClientCastleShopItem(ServerWorld.INN_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.TOWER_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.GOLD_MINE_ITEM_TYPE,this));
 		

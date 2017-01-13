@@ -116,7 +116,7 @@ public class ServerCastle extends ServerBuilding {
 	public static final int spawnDelay = 1000;
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
-	public final static int[] CASTLE_TIER_XP = {100,500,1000,5000,10000,100000}; 
+	public final static int[] CASTLE_TIER_XP = {1000,2500,5000,10000,15000,25000}; 
 
 	/**
 	 * Constructor
@@ -227,13 +227,14 @@ public class ServerCastle extends ServerBuilding {
 
 		if (tier == 3) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
+			
 		} else if (tier == 5) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
 
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 45,
 				arrowType, targetRange, this, getWorld())));
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 45,
 				arrowType, targetRange, this, getWorld())));
 
 		setPopLimit(getPopLimit()+10);
@@ -255,13 +256,10 @@ public class ServerCastle extends ServerBuilding {
 		else
 			setName("Blue Team's Castle");
 
-
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 90,
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 45,
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 90,
+		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 45,
 				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
-
-
 	}
 
 	@Override

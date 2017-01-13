@@ -105,7 +105,7 @@ public class MainMenu implements KeyListener{
 	public static int cloudDirection = 0;
 
 	private static Client client;
-	private static ClientLobby lobby;
+	public static ClientLobby lobby;
 
 	private static String playerName;
 
