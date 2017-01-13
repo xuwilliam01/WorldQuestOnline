@@ -35,7 +35,6 @@ public class CentralServer implements Runnable, ActionListener {
 
 	public final static int BASE_ELO = 1000;
 	public final static int LEADERBOARD_SIZE = 20;
-	public final static int PORT = 9977;
 	private DatagramSocket socket;
 	private DatagramPacket receive;
 	private DatagramPacket send;
@@ -62,7 +61,7 @@ public class CentralServer implements Runnable, ActionListener {
 	private String leaderboardS = "";
 
 	public CentralServer() throws IOException, JDOMException {
-		socket = new DatagramSocket(PORT);
+		socket = new DatagramSocket(ClientAccountWindow.PORT);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
 		listServers = "";
@@ -74,7 +73,7 @@ public class CentralServer implements Runnable, ActionListener {
 		document = builder.build(new File(FILE_NAME));
 		root = document.getRootElement();
 
-		TCPSocket = new ServerSocket(PORT);
+		TCPSocket = new ServerSocket(ClientAccountWindow.PORT);
 		// System.out.println(login("Alex","uhoh"));
 		// System.out.println(login("Alex","12313ibsdfibsbfhskjdvbfjhs1234234"));
 		// System.out.println(createAccount("Alex3","EasyPass"));
@@ -175,7 +174,7 @@ public class CentralServer implements Runnable, ActionListener {
 					int[] stats = getStats(name);
 					if (stats == null)
 						break;
-					sendData = ("S " + stats[0] + " " + stats[1] + " " + stats[2]).getBytes();
+					sendData = ("S " + stats[0] + " " + stats[1] + " " + stats[2] + " "+name).getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;

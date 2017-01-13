@@ -121,7 +121,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 	public void actionPerformed(ActionEvent arg0) {
 		sendData = "B".getBytes();
 		try {
-			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);
+			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
 			socket.send(send);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
