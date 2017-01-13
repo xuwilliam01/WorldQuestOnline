@@ -202,6 +202,12 @@ public class CentralServer implements Runnable, ActionListener {
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;
+				//Ping the central server to see if it's up
+				case 'P':
+					sendData = "p".getBytes();
+					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+					socket.send(send);
+					break;
 				}
 			} catch (Exception e) {
 				System.out.println("Bad Input");
