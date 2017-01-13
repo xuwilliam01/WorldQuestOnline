@@ -1,6 +1,6 @@
 package CentralServer;
 
-import java.awt.event.ActionEvent; 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,14 +31,14 @@ import ClientUDP.ClientAccountWindow;
 import ClientUDP.ServerInfo;
 import Server.Creatures.ServerCreature;
 
-public class CentralServer implements Runnable, ActionListener{
+public class CentralServer implements Runnable, ActionListener {
 
 	public final static int BASE_ELO = 1000;
 	public final static int LEADERBOARD_SIZE = 20;
 	public final static int PORT = 9977;
-	//public final static String IP = "138.197.131.4";
+	// public final static String IP = "138.197.131.4";
 	public final static String IP = "52.14.41.226";
-	//public final static String IP = "127.0.0.1";
+	// public final static String IP = "127.0.0.1";
 
 	private DatagramSocket socket;
 	private DatagramPacket receive;
@@ -56,7 +56,7 @@ public class CentralServer implements Runnable, ActionListener{
 	private SAXBuilder builder;
 	private String FILE_NAME = "Resources//Accounts.xml";
 
-	//Clear servers after a period of time
+	// Clear servers after a period of time
 	private Timer reset;
 
 	private ServerSocket TCPSocket;
@@ -65,8 +65,7 @@ public class CentralServer implements Runnable, ActionListener{
 
 	private String leaderboardS = "";
 
-	public CentralServer() throws IOException, JDOMException
-	{
+	public CentralServer() throws IOException, JDOMException {
 		socket = new DatagramSocket(PORT);
 		receiveData = new byte[1024];
 		sendData = new byte[1024];
@@ -74,56 +73,51 @@ public class CentralServer implements Runnable, ActionListener{
 		delayedListServers = "";
 		reset = new Timer(2000, this);
 
-		//Build XML
+		// Build XML
 		builder = new SAXBuilder();
 		document = builder.build(new File(FILE_NAME));
 		root = document.getRootElement();
 
 		TCPSocket = new ServerSocket(PORT);
-		//		System.out.println(login("Alex","uhoh"));
-		//		System.out.println(login("Alex","12313ibsdfibsbfhskjdvbfjhs1234234"));
-		//		System.out.println(createAccount("Alex3","EasyPass"));
-		//		System.out.println(createAccount("Alex3","EasyPass"));
-		//		System.out.println(login("Alex3","EasyPass"));
+		// System.out.println(login("Alex","uhoh"));
+		// System.out.println(login("Alex","12313ibsdfibsbfhskjdvbfjhs1234234"));
+		// System.out.println(createAccount("Alex3","EasyPass"));
+		// System.out.println(createAccount("Alex3","EasyPass"));
+		// System.out.println(login("Alex3","EasyPass"));
 
-		//Create the leaderboard
+		// Create the leaderboard
 		createLeaderboard();
 	}
 
-	public void createLeaderboard()
-	{
+	public void createLeaderboard() {
 		leaderboard.clear();
-		for(Element user : root.getChildren("User"))
-		{
+		for (Element user : root.getChildren("User")) {
 			int elo = Integer.parseInt(user.getChild("Elo").getValue());
 			int wins = Integer.parseInt(user.getChild("Wins").getValue());
 			int losses = Integer.parseInt(user.getChild("Losses").getValue());
-			if(leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
+			if (leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
 				continue;
-			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"),elo, wins, losses));
-			if(leaderboard.size() > LEADERBOARD_SIZE)
+			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses));
+			if (leaderboard.size() > LEADERBOARD_SIZE)
 				leaderboard.poll();
 		}
-		synchronized(leaderboardS)
-		{
-			leaderboardS ="";
-			while(!leaderboard.isEmpty())
-			{
+		synchronized (leaderboardS) {
+			leaderboardS = "";
+			while (!leaderboard.isEmpty()) {
 				LeaderboardPlayer next = leaderboard.poll();
-				leaderboardS = next.getName().split(" ").length + " "+next.getRating() + " " + next.getWins() +" " + next.getLosses() +" "+next.getName() + " "+leaderboardS;
+				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
+						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
 			}
 			leaderboardS.trim();
 		}
 
 	}
 
-
 	public void run() {
 		reset.start();
 		Thread TCPThread = new Thread(new TCPIn());
 		TCPThread.start();
-		while(true)
-		{
+		while (true) {
 			receiveData = new byte[1024];
 			receive = new DatagramPacket(receiveData, receiveData.length);
 			try {
@@ -132,15 +126,14 @@ public class CentralServer implements Runnable, ActionListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//Get input
+			// Get input
 			String input = new String(receive.getData()).trim();
 
-			try{
-				switch(input.charAt(0))
-				{
-				//Send clients the list of servers
+			try {
+				switch (input.charAt(0)) {
+				// Send clients the list of servers
 				case 'G':
-					String serversOut = "S "+receive.getAddress().toString()+" "+delayedListServers;
+					String serversOut = "S " + receive.getAddress().toString() + " " + delayedListServers;
 					serversOut.trim();
 					sendData = serversOut.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
@@ -150,10 +143,10 @@ public class CentralServer implements Runnable, ActionListener{
 					String[] tokens = input.split(" ");
 					String key = tokens[1];
 					String name = tokens[2];
-					for(int i = 3; i < tokens.length;i++)
-						name+=" "+tokens[i];
+					for (int i = 3; i < tokens.length; i++)
+						name += " " + tokens[i];
 					String out;
-					if(login(name, key))
+					if (login(name, key))
 						out = "LY";
 					else
 						out = "LN";
@@ -165,13 +158,11 @@ public class CentralServer implements Runnable, ActionListener{
 					tokens = input.split(" ");
 					key = tokens[1];
 					name = tokens[2];
-					for(int i = 3; i < tokens.length;i++)
-						name+=" "+tokens[i];
-					if(createAccount(name, key))
-					{
+					for (int i = 3; i < tokens.length; i++)
+						name += " " + tokens[i];
+					if (createAccount(name, key)) {
 						out = "CY";
-					}
-					else
+					} else
 						out = "CN";
 					sendData = out.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
@@ -182,20 +173,18 @@ public class CentralServer implements Runnable, ActionListener{
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;
-				//Get your own player stats
+				// Get your own player stats
 				case 'S':
 					name = input.substring(2);
 					int[] stats = getStats(name);
-					if(stats == null)
+					if (stats == null)
 						break;
-					sendData = ("S "+stats[0] + " " + stats[1] +" " + stats[2]).getBytes();
+					sendData = ("S " + stats[0] + " " + stats[1] + " " + stats[2]).getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;
 				}
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				System.out.println("Bad Input");
 				e.printStackTrace();
 			}
@@ -203,127 +192,116 @@ public class CentralServer implements Runnable, ActionListener{
 
 	}
 
-	public void updateRating(GameResult[] red, GameResult[] blue, int winner)
-	{
+	public void updateRating(GameResult[] red, GameResult[] blue, int winner) {
 		double avgEloR = 0;
 		double avgKillsR = 0;
 		double avgEloB = 0;
 		double avgKillsB = 0;
-		for(GameResult acc : red)
-		{
+		for (GameResult acc : red) {
 			int elo = getElo(acc.getName());
 			acc.setElo(elo);
 			avgEloR += elo;
 			avgKillsR += acc.getKills();
 		}
-		avgEloR /= 1.0*red.length;
-		avgKillsR /= 1.0*red.length;
-		for(GameResult acc : blue)
-		{
+		avgEloR /= 1.0 * red.length;
+		avgKillsR /= 1.0 * red.length;
+		for (GameResult acc : blue) {
 			int elo = getElo(acc.getName());
 			acc.setElo(elo);
 			avgEloB += elo;
 			avgKillsB += acc.getKills();
 		}
-		avgEloB /= 1.0*blue.length;
-		avgKillsB /= 1.0*blue.length;
+		avgEloB /= 1.0 * blue.length;
+		avgKillsB /= 1.0 * blue.length;
 
 		int actualR = 0;
 		int actualB = 1;
-		if(winner == ServerCreature.RED_TEAM)
-		{
+		if (winner == ServerCreature.RED_TEAM) {
 			actualR = 1;
 			actualB = 0;
 		}
 
-		for(GameResult acc : red)
-		{
+		for (GameResult acc : red) {
 			int k;
-			if(acc.getElo() <= 2100)
+			if (acc.getElo() <= 2100)
 				k = 32;
-			else if(acc.getElo() <= 2400)
+			else if (acc.getElo() <= 2400)
 				k = 24;
-			else k = 16;
-			double expected = 1/(1+Math.pow(10, (avgEloB - acc.getElo())/400.0));
+			else
+				k = 16;
+			double expected = 1 / (1 + Math.pow(10, (avgEloB - acc.getElo()) / 400.0));
 			boolean win = false;
-			if(actualR == 1)
-			 win = true;
-			int newElo = Math.max((int)(acc.getElo() + k*(actualR - expected) + acc.getKills() - avgKillsR),BASE_ELO);
+			if (actualR == 1)
+				win = true;
+			int newElo = Math.max((int) (acc.getElo() + k * (actualR - expected) + acc.getKills() - avgKillsR),
+					BASE_ELO);
 			setElo(acc.getName(), newElo, win);
 		}
-		for(GameResult acc : blue)
-		{
+		for (GameResult acc : blue) {
 			int k;
-			if(acc.getElo() <= 2100)
+			if (acc.getElo() <= 2100)
 				k = 32;
-			else if(acc.getElo() <= 2400)
+			else if (acc.getElo() <= 2400)
 				k = 24;
-			else k = 16;
-			double expected = 1/(1+Math.pow(10, (avgEloR - acc.getElo())/400.0));
+			else
+				k = 16;
+			double expected = 1 / (1 + Math.pow(10, (avgEloR - acc.getElo()) / 400.0));
 			boolean win = false;
-			if(actualB == 1)
-			 win = true;
-			//Yes ranking can go up even if you lose
-			int newElo = Math.max((int)(acc.getElo() + k*(actualB - expected) + acc.getKills() - avgKillsB),BASE_ELO);		
+			if (actualB == 1)
+				win = true;
+			// Yes ranking can go up even if you lose
+			int newElo = Math.max((int) (acc.getElo() + k * (actualB - expected) + acc.getKills() - avgKillsB),
+					BASE_ELO);
 			setElo(acc.getName(), newElo, win);
 		}
 		saveXML();
 
 	}
 
-	public int getElo(String name)
-	{
-		for(Element username : root.getChildren())
-		{
-			if(username.getAttribute("name").getValue().equals(name))
-			{
+	public int getElo(String name) {
+		for (Element username : root.getChildren()) {
+			if (username.getAttribute("name").getValue().equals(name)) {
 				return Integer.parseInt(username.getChild("Elo").getValue());
 			}
 		}
 		return -1;
 	}
 
-	public void setElo(String name, int value, boolean win)
-	{
-		for(Element username : root.getChildren())
-		{
-			if(username.getAttribute("name").getValue().equals(name))
-			{
+	public void setElo(String name, int value, boolean win) {
+		for (Element username : root.getChildren()) {
+			if (username.getAttribute("name").getValue().equals(name)) {
 				username.getChild("Elo").setText(Integer.toString(value));
-				if(win)
-					username.getChild("Wins").setText(Integer.parseInt(username.getChild("Wins").getValue())+1+"");
-				else username.getChild("Losses").setText(Integer.parseInt(username.getChild("Losses").getValue())+1+"");
+				if (win)
+					username.getChild("Wins").setText(Integer.parseInt(username.getChild("Wins").getValue()) + 1 + "");
+				else
+					username.getChild("Losses")
+							.setText(Integer.parseInt(username.getChild("Losses").getValue()) + 1 + "");
 			}
 		}
 	}
-	
-	public int[] getStats(String name)
-	{
-		for(Element username : root.getChildren())
-		{
-			if(username.getAttribute("name").getValue().equals(name))
-			{
-				return new int[]{Integer.parseInt(username.getChild("Elo").getValue()),Integer.parseInt(username.getChild("Wins").getValue()),Integer.parseInt(username.getChild("Losses").getValue())};
+
+	public int[] getStats(String name) {
+		for (Element username : root.getChildren()) {
+			if (username.getAttribute("name").getValue().equals(name)) {
+				return new int[] { Integer.parseInt(username.getChild("Elo").getValue()),
+						Integer.parseInt(username.getChild("Wins").getValue()),
+						Integer.parseInt(username.getChild("Losses").getValue()) };
 			}
 		}
 		return null;
 	}
 
-	public boolean login(String user, String key)
-	{
-		for(Element username : root.getChildren())
-		{
-			if(username.getAttribute("name").getValue().equals(user))
-			{
+	public boolean login(String user, String key) {
+		for (Element username : root.getChildren()) {
+			if (username.getAttribute("name").getValue().equals(user)) {
 				return key.equals(username.getChild("Key").getValue());
 			}
 		}
 		return false;
 	}
 
-	public void saveXML()
-	{
-		//Save with new username + key
+	public void saveXML() {
+		// Save with new username + key
 		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
 		try {
 			xmlOutputter.output(document, new FileOutputStream(new File(FILE_NAME)));
@@ -335,14 +313,13 @@ public class CentralServer implements Runnable, ActionListener{
 			e.printStackTrace();
 		}
 	}
-	public boolean createAccount(String user, String key)
-	{
-		for(Element username : root.getChildren())
-		{
-			if(username.getAttribute("name").getValue().equals(user))
-			{
-				//If account already exists, but the username and password match, then pretend we made a new account
-				if(key.equals(username.getChild("Key").getValue()))
+
+	public boolean createAccount(String user, String key) {
+		for (Element username : root.getChildren()) {
+			if (username.getAttribute("name").getValue().equals(user)) {
+				// If account already exists, but the username and password
+				// match, then pretend we made a new account
+				if (key.equals(username.getChild("Key").getValue()))
 					return true;
 
 				return false;
@@ -369,27 +346,24 @@ public class CentralServer implements Runnable, ActionListener{
 		saveXML();
 
 		createLeaderboard();
-		
+
 		return true;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
 		// Remove servers when necessary
-		synchronized(servers)
-		{
-			//System.out.println("Clearing Servers");
+		synchronized (servers) {
+			// System.out.println("Clearing Servers");
 			delayedListServers = listServers;
 			servers.clear();
 			listServers = "";
 		}
 	}
 
-	private class TCPIn implements Runnable
-	{
+	private class TCPIn implements Runnable {
 		@Override
 		public void run() {
-			while(true)
-			{
+			while (true) {
 				try {
 					Socket newServer = TCPSocket.accept();
 					Thread inputThread = new Thread(new ReadIn(newServer));
@@ -402,124 +376,115 @@ public class CentralServer implements Runnable, ActionListener{
 		}
 	}
 
-	LinkedList<String>pastServers = new LinkedList<String>();
-	
-	private class ReadIn implements Runnable
-	{
+	LinkedList<String> pastServers = new LinkedList<String>();
+
+	private class ReadIn implements Runnable {
 		Socket server;
 		BufferedReader input;
 		PrintWriter output;
 
-		public ReadIn(Socket server)
-		{
+		public ReadIn(Socket server) {
 			this.server = server;
 		}
 
-		public void run()
-		{
+		public void run() {
 			try {
-				input= new BufferedReader(new InputStreamReader(server.getInputStream()));
+				input = new BufferedReader(new InputStreamReader(server.getInputStream()));
 				output = new PrintWriter(server.getOutputStream());
-				while(true)
-				{
+				while (true) {
+					try {
+						String command = input.readLine();
+						// System.out.println(command);
+						switch (command.charAt(0)) {
+						// Get info from servers
+						case 'A':
+							String[] tokens = command.split(" ");
+							ServerInfo newServer = new ServerInfo(tokens[1], server.getInetAddress().toString(),
+									Integer.parseInt(tokens[3]), Integer.parseInt(tokens[2]));
+							synchronized (servers) {
+								if (!servers.contains(newServer)) {
+									// System.out.println(newServer.getIP() + "
+									// " + newServer.getPort());
+									servers.add(newServer);
+									listServers += newServer.getName() + " " + newServer.getIP() + " "
+											+ newServer.getPort() + " " + newServer.getNumPlayers() + " ";
 
-					String command = input.readLine();
-					//System.out.println(command);
-					switch(command.charAt(0))
-					{
-					//Get info from servers
-					case 'A':
-						String[] tokens = command.split(" ");
-						ServerInfo newServer = new ServerInfo(tokens[1], server.getInetAddress().toString(), Integer.parseInt(tokens[3]), 
-								Integer.parseInt(tokens[2]));
-						synchronized(servers)
-						{
-							if(!servers.contains(newServer))
-							{
-								//System.out.println(newServer.getIP() + " " + newServer.getPort());
-								servers.add(newServer);
-								listServers += newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers() + " ";
-								
-								if (!pastServers.contains(newServer.getName()))
-								{
-									pastServers.add(newServer.getName());
-									System.out.println("Server added: " +  newServer.getName() + " " + newServer.getIP() + " " + newServer.getPort() + " " + newServer.getNumPlayers());
+									if (!pastServers.contains(newServer.getName())) {
+										pastServers.add(newServer.getName());
+										System.out.println(
+												"Server added: " + newServer.getName() + " " + newServer.getIP() + " "
+														+ newServer.getPort() + " " + newServer.getNumPlayers());
+									}
+
 								}
-								
 							}
-						}
-						break;
-					case 'l':
-						tokens = command.split(" ");
-						String key = tokens[1];
-						String name = tokens[2];
-						for(int i = 3; i < tokens.length;i++)
-							name+=" "+tokens[i];
-						String out;
-						if(login(name, key))
-						{
-							out = "L "+key+" "+name;
-							send(out);
-						}
-						break;
-					case 'E':
-						System.out.println("A Game ended");
-						tokens = command.split(" ");
-						int winner = Integer.parseInt(tokens[1]);
-						int rTeam = Integer.parseInt(tokens[2]);
-						int bTeam = Integer.parseInt(tokens[3]);
-						if(bTeam <= 0 || rTeam <= 0)
 							break;
-
-						GameResult[] red = new GameResult[rTeam];
-						GameResult[] blue = new GameResult[bTeam];
-
-						int index = 4;
-						for(int i = 0; i < rTeam;i++)
-						{
-							int len = Integer.parseInt(tokens[index++]);
-							String playerName = tokens[index++];
-							for(int j = 1; j < len;j++)
-							{
-								playerName+=" "+tokens[index++];
+						case 'l':
+							tokens = command.split(" ");
+							String key = tokens[1];
+							String name = tokens[2];
+							for (int i = 3; i < tokens.length; i++)
+								name += " " + tokens[i];
+							String out;
+							if (login(name, key)) {
+								out = "L " + key + " " + name;
+								send(out);
 							}
-							int kills = Integer.parseInt(tokens[index++]);
-							red[i] = new GameResult(playerName, kills);
-						}
-						for(int i = 0; i < bTeam;i++)
-						{
-							int len = Integer.parseInt(tokens[index++]);
-							String playerName = tokens[index++];
-							for(int j = 1; j < len;j++)
-							{
-								playerName+=" "+tokens[index++];
+							break;
+						case 'E':
+							System.out.println("A Game ended");
+							tokens = command.split(" ");
+							int winner = Integer.parseInt(tokens[1]);
+							int rTeam = Integer.parseInt(tokens[2]);
+							int bTeam = Integer.parseInt(tokens[3]);
+							if (bTeam <= 0 || rTeam <= 0)
+								break;
+
+							GameResult[] red = new GameResult[rTeam];
+							GameResult[] blue = new GameResult[bTeam];
+
+							int index = 4;
+							for (int i = 0; i < rTeam; i++) {
+								int len = Integer.parseInt(tokens[index++]);
+								String playerName = tokens[index++];
+								for (int j = 1; j < len; j++) {
+									playerName += " " + tokens[index++];
+								}
+								int kills = Integer.parseInt(tokens[index++]);
+								red[i] = new GameResult(playerName, kills);
 							}
-							int kills = Integer.parseInt(tokens[index++]);
-							blue[i] = new GameResult(playerName, kills);
+							for (int i = 0; i < bTeam; i++) {
+								int len = Integer.parseInt(tokens[index++]);
+								String playerName = tokens[index++];
+								for (int j = 1; j < len; j++) {
+									playerName += " " + tokens[index++];
+								}
+								int kills = Integer.parseInt(tokens[index++]);
+								blue[i] = new GameResult(playerName, kills);
+							}
+							updateRating(red, blue, winner);
+							createLeaderboard();
+							break;
 						}
-						updateRating(red,blue, winner);
-						createLeaderboard();
-						break;
+					} catch (NullPointerException e) {
+						e.printStackTrace();
 					}
 				}
 			} catch (IOException e) {
-				//System.out.println("Server Disconnected");
+				// System.out.println("Server Disconnected");
 				return;
 			}
 		}
 
-		public void send(String s)
-		{
+		public void send(String s) {
 			output.println(s);
 			output.flush();
 		}
 	}
-	
-	//Do not use this method
-	public void resetPassowrd()
-	{
-		for(Element username : root.getChildren())
-		{
+
+	// Do not use this method
+	public void resetPassowrd() {
+		for (Element username : root.getChildren()) {
 			String name = username.getAttribute("name").getValue();
 			String pass = username.getChild("Key").getValue().substring(name.length());
 			username.getChild("Key").setText(ClientAccountWindow.hash(name, pass));

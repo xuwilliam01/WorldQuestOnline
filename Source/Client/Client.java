@@ -580,10 +580,17 @@ ActionListener, MouseMotionListener
 									setPos((int)playerX, (int)playerY);
 									break;
 								case "e":
-									ClientObject object = world.get(toInt(tokens[++token]));
-									//System.out.println("CHECK: "+(object == null));
-									object.setX(player.getX());
-									object.setY(player.getY());
+									try
+									{
+										ClientObject object = world.get(toInt(tokens[++token]));
+										//System.out.println("CHECK: "+(object == null));
+										object.setX(player.getX());
+										object.setY(player.getY());
+									} catch (NullPointerException e)
+									{
+										e.printStackTrace();
+									}
+
 									break;
 								case "*":
 									hSpeed = Double.parseDouble(tokens[++token]);
