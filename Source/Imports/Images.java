@@ -1351,6 +1351,11 @@ public class Images {
 			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("INN_VALID.png","Buildings//"));
 			
+			for (int i = 0; i < 6; i++)
+			{
+				addtoImageArray(new GameImage("INN_"+i+".png","Buildings//"));
+			}
+			
 			addtoImageArray(new GameImage("RED_CASTLE.png",
 					"Buildings//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
