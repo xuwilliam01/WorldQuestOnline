@@ -101,8 +101,8 @@ public abstract class ServerBuilding extends ServerCreature {
 	public void destroy()
 	{
 		super.destroy();
-		getWorld().add(new ServerSmoke(getX(),getY()+getHeight()-180,true,getWorld()));
-		getWorld().add(new ServerSmoke(getX()+getWidth()-320,getY()+getHeight()-180,false,getWorld()));
+		getWorld().add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,getWorld()));
+		getWorld().add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,getWorld()));
 	}
 
 }

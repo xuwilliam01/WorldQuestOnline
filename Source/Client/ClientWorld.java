@@ -1149,13 +1149,13 @@ public class ClientWorld {
 		graphics.setColor(Color.WHITE);
 		
 		g2d.drawString(
-				String.format("%d/%d", client.getBlueCastleHP(),
-						client.getBlueCastleMaxHP()),
+				String.format("%d/%d", client.getRedCastleHP(),
+						client.getRedCastleMaxHP()),
 				300,
 				Client.SCREEN_HEIGHT-15);
 		g2d.drawString(
-				String.format("%d/%d", client.getRedCastleHP(),
-						client.getRedCastleMaxHP()),
+				String.format("%d/%d", client.getBlueCastleHP(),
+						client.getBlueCastleMaxHP()),
 				Client.SCREEN_WIDTH-300,
 				Client.SCREEN_HEIGHT-15);
 		
@@ -1167,9 +1167,9 @@ public class ClientWorld {
 
 		g2d.setColor(Color.WHITE);
 		//g2d.setColor(new Color(53,153,227)); //BLUE
-		if (client.getBlueCastleTier() == 6){
+		if (client.getRedCastleTier() == 6){
 			String printThis = String.format("Team Level %d (Max)",
-					client.getBlueCastleTier() + 1);
+					client.getRedCastleTier() + 1);
 			int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
 			g2d.drawString(printThis,
 					Client.SCREEN_WIDTH - 16 - stringWidth,
@@ -1179,8 +1179,8 @@ public class ClientWorld {
 		{
 			String printThis = String.format(
 					"Team Level %d (XP For Next Level  %d/%d)",
-					client.getBlueCastleTier() + 1, client.getBlueCastleXP(),
-					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]);
+					client.getRedCastleTier() + 1, client.getRedCastleXP(),
+					ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]);
 			int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
 			g2d.drawString(printThis,
 					Client.SCREEN_WIDTH - 16 - stringWidth,
@@ -1188,7 +1188,7 @@ public class ClientWorld {
 		}
 		
 		String printThis = String.format(
-				"Housing %d/%d",client.getBluePop(),client.getBluePopLimit());
+				"Housing %d/%d",client.getRedPop(),client.getRedPopLimit());
 		int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
 		
 		g2d.drawString(printThis,
@@ -1198,25 +1198,25 @@ public class ClientWorld {
 		
 		
 		
-		//g2d.setColor(new Color(217,53,53)); //RED
-		if (client.getRedCastleTier() == 6)
+		//g2d.setColor(new Color(217,53,53)); //Blue
+		if (client.getBlueCastleTier() == 6)
 			g2d.drawString(
 					String.format("Team Level %d (Max)",
-							client.getRedCastleTier() + 1),
+							client.getBlueCastleTier() + 1),
 					16,
 					Client.SCREEN_HEIGHT - 90);
 		else
 		{
 			g2d.drawString(String.format(
 					"Team Level %d (XP For Next Level  %d/%d)",
-					client.getRedCastleTier() + 1, client.getRedCastleXP(),
-					ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]),
+					client.getBlueCastleTier() + 1, client.getBlueCastleXP(),
+					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]),
 					16,
 					Client.SCREEN_HEIGHT - 90);
 		}
 		
 		g2d.drawString(String.format(
-				"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
+				"Housing %d/%d",client.getBluePop(),client.getBluePopLimit()),
 				16,
 				Client.SCREEN_HEIGHT - 65);
 		
