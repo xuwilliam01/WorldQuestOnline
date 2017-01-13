@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Menu.MainMenu;
 import Server.ServerEngine;
 
 public class Audio {
@@ -13,6 +14,8 @@ public class Audio {
 	private static int numAudioClips = 0;
 
 	private static boolean imported = false;
+	
+	private static GameAudio bgm;
 
 
 	public static void main(String[] args) throws InterruptedException {
@@ -22,6 +25,56 @@ public class Audio {
 		{
 			//playAudio("gag",0);
 			Thread.sleep(500);
+		}
+	}
+	
+	private static class bgmClass implements Runnable
+	{
+		@Override
+		public void run() {
+			while (true)
+			{
+				if (!GameAudio.audioSupported)
+				{
+					break;
+				}
+				
+				if (MainMenu.mainMenu==null && bgm!=null)
+				{
+					if (bgm == audioArray[audioMap.get("bgm_menu")])
+					{
+						bgm.stop();
+						int random = (int)(Math.random()*5);
+						bgm = audioArray[audioMap.get("bgm_game"+random)];
+						bgm.play(0);
+					}
+					else if (!bgm.isRunning())
+					{
+						bgm.stop();
+						int random = (int)(Math.random()*5);
+						bgm = audioArray[audioMap.get("bgm_game"+random)];
+						bgm.play(0);
+					}
+				}
+				else if (MainMenu.mainMenu!=null)
+				{
+					if (bgm != audioArray[audioMap.get("bgm_menu")])
+					{
+						if (bgm!=null)
+						{
+							bgm.stop();
+						}
+						bgm = audioArray[audioMap.get("bgm_menu")];
+						bgm.loop();
+					}
+				}
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -50,6 +103,13 @@ public class Audio {
 			addToAudioArray(new GameAudio("cut_air"+no));
 		}
 		
+		addToAudioArray(new GameAudio("bgm_menu"));
+		
+		for (int no = 0; no < 5; no++)
+		{
+			addToAudioArray(new GameAudio("bgm_game"+no));
+		}
+		
 
 		//Configure storage for audio
 		GameAudio[] clone = audioArray;
@@ -59,6 +119,9 @@ public class Audio {
 			audioArray[i] = clone[i];
 			audioMap.put(audioArray[i].getName(),i);
 		}
+		
+		Thread bgmThread = new Thread(new bgmClass());
+		bgmThread.start();
 	}
 
 //	public static void playAudio(String name, int dist)
@@ -74,7 +137,7 @@ public class Audio {
 	// Make an exception for closer sounds (compared to the farthest sound currently playing)
 	public final static int MIN_EXCEPTION_DIST = 32;
 	
-	public synchronized static void playAudio(int index, int dist)
+	public synchronized static void playAudio(int index, float dist)
 	{
 		audioArray[index].play(dist);
 		
@@ -109,6 +172,8 @@ public class Audio {
 //		
 //		}
 	}
+	
+	
 	
 	public static int getIndex(String name)
 	{

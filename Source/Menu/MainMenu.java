@@ -94,7 +94,7 @@ public class MainMenu implements KeyListener{
 
 	// All the panels
 	public static ClientFrame mainFrame;
-	private static MainPanel mainMenu;
+	public static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
 	private static InstructionPanel instructionPanel;
@@ -205,16 +205,6 @@ public class MainMenu implements KeyListener{
 			if (tooLarge)
 			{
 				JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
-			}
-
-			int enableCloudsAndStars = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
-							"Select Game Quality",
-							JOptionPane.YES_NO_OPTION);
-			if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
-				ClientWorld.NO_OF_CLOUDS = 0;
 			}
 		}
 		mainFrame = new ClientFrame(tooLarge, pos);
