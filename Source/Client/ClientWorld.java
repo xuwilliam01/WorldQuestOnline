@@ -1123,14 +1123,14 @@ public class ClientWorld {
 		graphics.setFont(NORMAL_FONT);
 		
 		graphics.setColor(new Color(217,53,53)); //RED
-		graphics.drawImage(Images.getImage("castleBarRed"), 0, Client.SCREEN_HEIGHT-40, null);
+		graphics.drawImage(Images.getImage("castleBarRed"), 0, Client.SCREEN_HEIGHT-300, null);
 		graphics.fillRect(102,
 				Client.SCREEN_HEIGHT-29,
 				(int) (379.0 * client.getRedCastleHP() / client.getRedCastleMaxHP()),
 				20);
 		
 		graphics.setColor(new Color(53,153,227)); //BLUE
-		graphics.drawImage(Images.getImage("castleBarBlue"), Client.SCREEN_WIDTH-500, Client.SCREEN_HEIGHT-40, null);
+		graphics.drawImage(Images.getImage("castleBarBlue"), Client.SCREEN_WIDTH-500, Client.SCREEN_HEIGHT-300, null);
 		graphics.fillRect(
 				Client.SCREEN_WIDTH-481+(379 - (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP())),
 				Client.SCREEN_HEIGHT-29,

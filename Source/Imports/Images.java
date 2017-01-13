@@ -1077,10 +1077,10 @@ public class Images {
 			
 			addtoImageArray(new GameImage("castleBarRed.png",
 					(int) (ClientFrame.getScaledWidth(500)),
-					(int) (ClientFrame.getScaledWidth(40)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(200)), "Interface//"));
 			addtoImageArray(new GameImage("castleBarBlue.png",
 					(int) (ClientFrame.getScaledWidth(500)),
-					(int) (ClientFrame.getScaledWidth(40)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(200)), "Interface//"));
 			
 			addtoImageArray(new GameImage("scoreboard.png",
 					(int) (ClientFrame.getScaledWidth(1366)),
