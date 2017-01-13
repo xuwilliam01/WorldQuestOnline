@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -15,14 +17,18 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import CentralServer.LeaderboardPlayer;
 import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
-public class Leaderboard extends JFrame implements Runnable, ActionListener, WindowListener{
+public class Leaderboard extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener{
+
+	public static final int LEADERBOARD_DISPLAY_SIZE = 20;
 
 	private DatagramSocket socket;
 	private DatagramPacket receive;
@@ -36,6 +42,10 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 	private JButton refresh = new JButton("Refresh");
 
 	private ArrayList<LeaderboardPlayer> leaderboard = new ArrayList<LeaderboardPlayer>();
+	private ArrayList<LeaderboardPlayer> displayboard = new ArrayList<LeaderboardPlayer>();
+
+	private JTextField search = new JTextField();
+	private JLabel searchL = new JLabel("Search");
 
 	public Leaderboard(int port) throws SocketException
 	{
@@ -56,7 +66,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		sendData = new byte[1024];
 
 		open = true;
-		
+
 		Panel panel = new Panel();
 		panel.setSize(getWidth(),getHeight());
 		panel.setLocation(0,0);
@@ -119,15 +129,17 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		sendData = "B".getBytes();
-		try {
-			send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
-			socket.send(send);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(arg0.getSource() == refresh)
+		{
+			sendData = "B".getBytes();
+			try {
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+				socket.send(send);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	@Override
@@ -142,8 +154,10 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		//Get input
 		String input = new String(receive.getData()).trim();
 		leaderboard.clear();
+		displayboard.clear();
+		search.setText("");
 		String[] tokens = input.split(" ");
-		for(int i = 0; i < tokens.length;)
+		for(int i = 0, rank = 1; i < tokens.length; rank++)
 		{
 			int len = Integer.parseInt(tokens[i++]);
 			int rating = Integer.parseInt(tokens[i++]);
@@ -152,7 +166,8 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 			String name = tokens[i++];
 			for(int j = 1; j < len;j++)
 				name += " "+tokens[i++];
-			leaderboard.add(new LeaderboardPlayer(name, rating, wins, losses));
+			leaderboard.add(new LeaderboardPlayer(name, rating, wins, losses,rank));
+			displayboard.add(new LeaderboardPlayer(name, rating, wins, losses, rank));
 		}
 		repaint();
 	}
@@ -162,14 +177,23 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		public Panel()
 		{
 			setLayout(null);
-			
+
 			refresh.setSize(150,50);
 			refresh.setLocation(Leaderboard.this.getWidth()-200,Leaderboard.this.getHeight()-100);
 			refresh.addActionListener(Leaderboard.this);
 			add(refresh);
 			refresh.doClick();
+
+			search.setSize(300,20);
+			search.setLocation(70,5);
+			search.addKeyListener(Leaderboard.this);
+			add(search);
+			
+			searchL.setSize(60,20);
+			searchL.setLocation(10,5);
+			add(searchL);
 		}
-		
+
 		@Override
 		public void paintComponent(Graphics graphics)
 		{
@@ -178,12 +202,37 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 			synchronized(leaderboard)
 			{
 				int y = 30;
-				int delta = 30;
-				for(LeaderboardPlayer player : leaderboard)
+				int delta = 20;
+				for(int i = 0; i < LEADERBOARD_DISPLAY_SIZE && i < displayboard.size();i++)
 				{
-					graphics.drawString(String.format("%-25s R:%4d %3dW %3dL", player.getName(), player.getRating(), player.getWins(), player.getLosses()), 50, y+=delta);
+					graphics.drawString(String.format("%3d. %-25s R:%4d %3dW %3dL", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50, y+=delta);
 				}
 			}
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		String text = search.getText().trim();
+		System.out.println(text);
+		displayboard.clear();
+		for(LeaderboardPlayer player : leaderboard)
+		{
+			if(player.getName().contains(text))
+				displayboard.add(player);
+			if(displayboard.size() > LEADERBOARD_DISPLAY_SIZE)
+				return;
+		}
+		repaint();	
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {	
 	}
 }
