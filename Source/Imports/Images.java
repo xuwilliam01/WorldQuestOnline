@@ -329,7 +329,7 @@ public class Images {
 							82), 82, 82));
 				}
 				
-				for (int no = 0; no < 6; no++)
+				for (int no = 0; no < 14; no++)
 				{
 					BufferedImage buffImage= ImageIO.read(new File("Images//Effects//"
 							+ "SMOKE_" + no + ".png"));
