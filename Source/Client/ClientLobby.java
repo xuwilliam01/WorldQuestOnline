@@ -709,6 +709,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	public void close()
 	{
 		try{
+			centralSocket.close();
 			goToMenu = true;
 			socket.close();
 			input.close();
