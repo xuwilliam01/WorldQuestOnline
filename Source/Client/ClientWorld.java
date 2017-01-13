@@ -108,7 +108,7 @@ public class ClientWorld {
 	     System.out.println("font not loaded");
 	}*/
 	public final static Font NORMAL_FONT = new Font("Berlin Sans FB", Font.PLAIN, 14);
-
+	public static Font CASTLE_FONT;
 	/**
 	 * The bold normal font for text
 	 */
@@ -552,6 +552,19 @@ public class ClientWorld {
 				}
 			}
 		}
+		
+		// Import font
+		try {
+			CASTLE_FONT = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("font not found");
+			e.printStackTrace();
+		}
+		CASTLE_FONT = CASTLE_FONT.deriveFont(18f);
 
 		// Copy the new and improved tiles to the foreground grid
 		foregroundGrid = newGrid;
@@ -1139,7 +1152,7 @@ public class ClientWorld {
 
 		graphics.setFont(BIG_NORMAL_FONT);
 
-		graphics.setColor(Color.blue);
+		graphics.setColor(new Color(53,153,227)); //BLUE
 		if (client.getBlueCastleTier() == 6)
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
@@ -1160,7 +1173,7 @@ public class ClientWorld {
 					Client.SCREEN_HEIGHT - 80);
 		}
 
-		graphics.setColor(Color.red);
+		graphics.setColor(new Color(217,53,53)); //RED
 		if (client.getRedCastleTier() == 6)
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
