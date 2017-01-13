@@ -1288,12 +1288,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				case 'B':
 					if (vendor != null) {
 						ServerItem vendorItem = null;
-						String itemName = "";
-						try {
-							itemName = command.substring(2);
-						} catch (Exception E) {
-							continue;
-						}
+						tokens = command.split(" ");
+						String itemName = tokens[1];
 						for (ServerItem item : vendor.getInventory())
 							if (item.getType().equals(itemName))
 								vendorItem = item;
@@ -1304,6 +1300,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							{
 								decreaseMoney(vendorItem.getCost());
 								vendor.drop(vendorItem.getType());
+								queueMessage("Vb "+tokens[2]+" "+tokens[3]);
 							}
 						}
 					}

@@ -438,7 +438,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					if (message != null) {
 						addPacketNo();
 						String[] tokens = message.split(" ");
-						
+
 						for (int token = 1; token < tokens.length && !leaveGame; token++) {
 							if(tokens[token].equals(""))
 								continue;
@@ -620,8 +620,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 									break;
 								case 'V':
-									if(tokens[token].charAt(1) == 'B')
+									switch(tokens[token].charAt(1))
 									{
+									case 'B':
 										if (shop != null) {
 											shop.setVisible(false);
 											frame.remove(shop);
@@ -637,13 +638,21 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										frame.add(shop, JLayeredPane.PALETTE_LAYER);
 										shop.revalidate();
 										frame.setVisible(true);
-									}
-									else if(tokens[token].charAt(1) == 'S')
-									{
+										break;
+									case 'S':
 										if (shop != null)
 											shop.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
 													tokens[++token], Integer.parseInt(tokens[++token]),
 													Integer.parseInt(tokens[++token]));
+										break;
+									case 'b':
+										if (shop != null)
+										{
+											int row = Integer.parseInt(tokens[++token]);
+											int col = Integer.parseInt(tokens[++token]);
+											shop.getItems()[row][col].sell();
+										}
+										break;
 									}
 									break;
 								case 'c':
