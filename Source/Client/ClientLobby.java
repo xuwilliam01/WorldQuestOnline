@@ -34,6 +34,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -83,10 +84,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private DatagramPacket receive;
 	private DatagramPacket send;
 
-
 	private byte[] receiveData;
 	private byte[] sendData;
 
+	private Timer startTimer = new Timer(1000,new GameStartTimer());
+	private int startCounter = 5;
 	/**
 	 * 
 	 * @param socket
@@ -118,7 +120,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		String message = input.readLine();
 		if (message.equals("Start"))
 		{
-			centralSocket.close();
 			socket.close();
 			output.close();
 			input.close();
@@ -368,8 +369,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						socket.close();
 						output.close();
 						input.close();
-						panel.startGame(lobby);
-						System.out.println("Break");
+						mapBox.setEnabled(false);
+						switchTeams.setEnabled(false);
+						start.setEnabled(false);
+						repaint();
+						startTimer.start();
 						break;
 					}
 					else if (tokens[token].equals("L"))
@@ -585,6 +589,10 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.GREEN);
 					graphics.fillOval(redX - 30, redStart - 20, 20, 20);
 					graphics.setColor(Color.RED);
+					
+					//Write the leader name under the menu button
+					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
+							(int) (ClientFrame.getScaledHeight(370)));
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), redX + 5,
@@ -603,12 +611,23 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.GREEN);
 					graphics.fillOval(blueX - 30, blueStart - 20, 20, 20);
 					graphics.setColor(Color.BLUE);
+					
+					//Write the leader name under the menu button
+					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
+							(int) (ClientFrame.getScaledHeight(370)));
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), blueX + 5,
 						blueStart);
 				blueStart += 40;
 			}
+		}
+		
+		graphics.setColor(Color.black);
+		if(startTimer.isRunning())
+		{
+			graphics.drawString("Starting in: "+startCounter, (int) (ClientFrame.getScaledWidth(337)),
+					(int) (ClientFrame.getScaledHeight(410)));
 		}
 
 		// if(!chat.hasFocus() && !mapBox.hasFocus())
@@ -709,6 +728,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	public void close()
 	{
 		try{
+			startTimer.stop();
 			centralSocket.close();
 			goToMenu = true;
 			socket.close();
@@ -799,5 +819,26 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		{
 			this.name = name;
 		}
+	}
+	
+	private class GameStartTimer implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0) {
+			startCounter--;
+			if(startCounter == 0)
+			{
+				startTimer.stop();
+				try {
+					panel.startGame(lobby);
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 }

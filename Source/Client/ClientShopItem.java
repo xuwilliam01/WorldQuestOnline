@@ -194,19 +194,23 @@ public class ClientShopItem extends JButton implements ActionListener{
 		
 		if(inventory.getClient().getMoney() >= cost)
 		{
-			inventory.getClient().printToServer("B "+type);
-			inventory.getClient().decreaseMoney(cost);
-
-			if(amount > 1)
-			{
-				amount--;
-			}
-			else 
-				inventory.removeItem(this);
+			inventory.getClient().printToServer("B "+type+" "+ row + " "+col);
 		}	
-		repaint();
 	}
 
+	public void sell()
+	{
+		inventory.getClient().decreaseMoney(cost);
+
+		if(amount > 1)
+		{
+			amount--;
+		}
+		else 
+			inventory.removeItem(this);
+		repaint();
+	}
+	
 	/**
 	 * Paint the amount of the item
 	 */

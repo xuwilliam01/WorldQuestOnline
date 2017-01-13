@@ -32,7 +32,7 @@ public class ServerManager implements Runnable, ActionListener{
 	private String name = "Default";
 
 	//Variables for central server comm
-	private DatagramSocket centralSocket;
+	private DatagramSocket UDPSocket;
 	private DatagramPacket send;
 	private DatagramPacket receive;
 	private byte[] sendData;
@@ -45,6 +45,8 @@ public class ServerManager implements Runnable, ActionListener{
 	private int thisPort;
 
 	private ArrayList<AddNewPlayer> listOfNewPlayers;
+	
+	private boolean canConnectCentral = false;
 	/**
 	 * 
 	 * @param port
@@ -58,25 +60,23 @@ public class ServerManager implements Runnable, ActionListener{
 		this.mainFrame = mainFrame;	
 		thisPort = port;
 		addNewRoom();
-		centralSocket = new DatagramSocket(port);
+		UDPSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
 		PingReceiver ping = new PingReceiver();
 		Thread pingThread = new Thread(ping);
 		pingThread.start();
 
 		try {
-			this.socket = new ServerSocket(port);
-			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
-			out = new PrintWriter(centralServer.getOutputStream());
-			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
+			socket = new ServerSocket(thisPort);
 		} catch (IOException e) {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
 		}
 
-		updateCentral.start();
 		Thread centralServerThread = new Thread(new CentralServerReceive());
 		centralServerThread.start();
+
+		updateCentral.start();
 	}
 
 	/**
@@ -92,17 +92,13 @@ public class ServerManager implements Runnable, ActionListener{
 		thisPort = port;
 		HAS_FRAME = false;
 		addNewRoom();
-		updateCentral.start();
-		centralSocket = new DatagramSocket(port);
+		UDPSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
 		PingReceiver ping = new PingReceiver();
 		Thread pingThread = new Thread(ping);
 		pingThread.start();
 		try {
-			this.socket = new ServerSocket(port);
-			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
-			out = new PrintWriter(centralServer.getOutputStream());
-			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
+			socket = new ServerSocket(thisPort);
 		} catch (IOException e) {
 			System.out.println("Server cannot be created with given port");
 			e.printStackTrace();
@@ -110,6 +106,8 @@ public class ServerManager implements Runnable, ActionListener{
 
 		Thread centralServerThread = new Thread(new CentralServerReceive());
 		centralServerThread.start();
+
+		updateCentral.start();
 		Maps.importMaps();
 	}
 
@@ -143,37 +141,78 @@ public class ServerManager implements Runnable, ActionListener{
 		public void run() {
 			while(true)
 			{
-				try {
-					String input = in.readLine();
-					switch(input.charAt(0))
-					{
-					case 'L':
-						String[] tokens = input.split(" ");
-						String key = tokens[1];
-						String name = tokens[2];
-						for(int i = 3; i < tokens.length;i++)
-						{
-							name += " "+tokens[i];
-						}
-						AddNewPlayer toRemove = null;
-						synchronized(listOfNewPlayers){
-							for(AddNewPlayer player : listOfNewPlayers)
-							{
-								if(player.key != null && player.name != null && player.key.equals(key) && player.name.equals(name))
-								{
-									player.validCredentials = true;
-									toRemove = player;
-								}
-							}
-							listOfNewPlayers.remove(toRemove);
-						}
-						break;
+				while(!canConnectCentral)
+				{
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					sendData = "P".getBytes();
+					try {
+						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+						UDPSocket.send(send);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-				catch (IOException e) {
-					System.out.println("Central Server Closed");
-					//e.printStackTrace();
-					return;
+				try {
+					centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
+					out = new PrintWriter(centralServer.getOutputStream());
+					in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				while(true)
+				{
+					try {
+						String input = in.readLine();
+						switch(input.charAt(0))
+						{
+						case 'L':
+							String[] tokens = input.split(" ");
+							String key = tokens[1];
+							String name = tokens[2];
+							for(int i = 3; i < tokens.length;i++)
+							{
+								name += " "+tokens[i];
+							}
+							AddNewPlayer toRemove = null;
+							synchronized(listOfNewPlayers){
+								for(AddNewPlayer player : listOfNewPlayers)
+								{
+									if(player.key != null && player.name != null && player.key.equals(key) && player.name.equals(name))
+									{
+										player.validCredentials = true;
+										toRemove = player;
+									}
+								}
+								listOfNewPlayers.remove(toRemove);
+							}
+							break;
+						}
+					}
+					catch (IOException e) {
+						canConnectCentral = false;
+						try {
+							in.close();
+							in = null;
+							out.close();
+							out = null;
+							centralServer.close();
+							centralServer = null;
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						System.out.println("Central Server Closed");
+						//e.printStackTrace();
+						break;
+					}
 				}
 			}
 		}
@@ -340,6 +379,8 @@ public class ServerManager implements Runnable, ActionListener{
 
 	public void send(String s)
 	{
+		if(out == null)
+			return;
 		out.println(s);
 		out.flush();
 	}
@@ -392,7 +433,7 @@ public class ServerManager implements Runnable, ActionListener{
 				receiveData = new byte[1024];
 				receive = new DatagramPacket(receiveData, receiveData.length);
 				try {
-					centralSocket.receive(receive);
+					UDPSocket.receive(receive);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -406,7 +447,7 @@ public class ServerManager implements Runnable, ActionListener{
 						sendData = "P".getBytes();
 						send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 						try {
-							centralSocket.send(send);
+							UDPSocket.send(send);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -416,11 +457,14 @@ public class ServerManager implements Runnable, ActionListener{
 						sendData = "C".getBytes();
 						send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 						try {
-							centralSocket.send(send);
+							UDPSocket.send(send);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						break;
+					case 'p':
+						canConnectCentral = true;
 						break;
 					}
 				}
@@ -429,7 +473,7 @@ public class ServerManager implements Runnable, ActionListener{
 
 		}
 	}
-	
+
 	public String getName()
 	{
 		return name;
@@ -439,6 +483,6 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		this.name = name;
 	}
-	
+
 
 }

@@ -930,7 +930,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 											&& hologram.canPlace()) {
 										getWorld().add(
 												hologram.toBuilding(getTeam()));
-										queueMessage("PB");
+										queueMessage("b");
 										equippedWeapons[weaponSelected - '0'] = null;
 										hologram.destroy();
 										hologram = null;
@@ -982,20 +982,20 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			queueMessage("K " + maxMana);
 			queueMessage("L " + getHP());
 			queueMessage("M " + getMaxHP());
-			queueMessage("XPR " + toChars(getWorld().getRedCastle().getXP()));
-			queueMessage("XPB " + toChars(getWorld().getBlueCastle().getXP()));
 			if (isAlive()) {
 				queueMessage("S " + horizontalMovement);
 				queueMessage("J " + verticalMovement);
 			}
-			queueMessage("XB " + getWorld().getBlueCastle().getHP() + " "
+			queueMessage("x " + getWorld().getBlueCastle().getHP() + " "
 					+ getWorld().getBlueCastle().getTier() + " "
 					+ getWorld().getBlueCastle().getMoney() + " "
-					+ getWorld().getBlueCastle().getMaxHP());
-			queueMessage("XR " + getWorld().getRedCastle().getHP() + " "
+					+ getWorld().getBlueCastle().getMaxHP() + " "
+					+ toChars(getWorld().getBlueCastle().getXP()));
+			queueMessage("X " + getWorld().getRedCastle().getHP() + " "
 					+ getWorld().getRedCastle().getTier() + " "
 					+ getWorld().getRedCastle().getMoney() + " "
-					+ getWorld().getRedCastle().getMaxHP());
+					+ getWorld().getRedCastle().getMaxHP() + " "
+					+ toChars(getWorld().getRedCastle().getXP()));
 			if (equippedArmour != null)
 				queueMessage(String
 						.format("A %.2f", equippedArmour.getArmour()));
@@ -1024,9 +1024,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			queueMessage("T " + toChars(getWorld().getWorldTime()));
 
 			// Send population for red and blue castles
-			queueMessage("rp " + getWorld().getRedCastle().getPopulation()
+			queueMessage("w " + getWorld().getRedCastle().getPopulation()
 					+ " " + getWorld().getRedCastle().getPopLimit());
-			queueMessage("bp " + getWorld().getBlueCastle().getPopulation()
+			queueMessage("u " + getWorld().getBlueCastle().getPopulation()
 					+ " " + getWorld().getBlueCastle().getPopLimit());
 
 			if (body != null) {
@@ -1087,8 +1087,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 				// Execute the player's action based on the command received
 				// from the client
-				switch (tokens[0]) {
-				case "&":
+				switch (tokens[0].charAt(0)) {
+				case '&':
 					setHSpeed(Double.parseDouble(tokens[1]));
 					setVSpeed(Double.parseDouble(tokens[2]));
 					if (tokens[3].charAt(0) == '1') {
@@ -1097,8 +1097,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						setOnSurface(false);
 					}
 					break;
-				case "A":
-				case "a":
+				case 'A':
+				case 'a':
 					try {
 						newMouseX = Integer.parseInt(tokens[1]);
 						newMouseY = Integer.parseInt(tokens[2]);
@@ -1117,81 +1117,81 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					} catch (Exception e) {
 					}
 					break;
-				case "!a":
+				case 'c':
 					if (isAlive()) {
 						actionCounter = actionDelay;
 					}
 					break;
-				case "D":
+				case 'D':
 					if (isAlive()) {
 						isDropping = true;
 					}
 					break;
-				case "!D":
+				case 'd':
 					if (isAlive()) {
 						isDropping = false;
 					}
 					break;
-				case "R":
+				case 'R':
 					if (isAlive()) {
 						setHSpeed(horizontalMovement);
 						movingDirection = 1;
 					}
 					break;
-				case "!R":
+				case 'r':
 					movingDirection = 0;
 					if (getHSpeed() > 0) {
 						setHSpeed(0);
 					}
 					break;
-				case "L":
+				case 'L':
 					if (isAlive()) {
 						movingDirection = -1;
 						setHSpeed(-horizontalMovement);
 					}
 					break;
-				case "!L":
+				case 'l':
 					movingDirection = 0;
 					if (getHSpeed() < 0) {
 						setHSpeed(0);
 					}
 					break;
-				case "U":
+				case 'U':
 					if (isOnSurface() && isAlive() && !inAction()) {
 						setVSpeed(-verticalMovement);
 						setOnSurface(false);
 					}
 					break;
-				case "DR":
+				case 'Q':
 					setDirection("RIGHT");
 					break;
-				case "DL":
+				case 'q':
 					setDirection("LEFT");
 					break;
-				case "p":
+				case 'p':
 					if (!ignoreClient && isAlive()) {
 						setX(Double.parseDouble(tokens[1]));
 						setY(Double.parseDouble(tokens[2]));
 					}
 					break;
-				case "P":
+				case 'P':
 					sendMessage("P");
 					break;
-				case "y":
+				case 'y':
 					ping = Integer.parseInt(command.substring(2));
 					break;
-				case "C":
+				case 'C':
 					// Player uses the chat
 					if (command.length() >= 3) {
 						String message = command.substring(2);
 						String[] tokens2 = message.split(" ");
 						if (tokens2[0].equals("/t")) {
-							engine.broadCastTeam("CH " + "T "
+							engine.broadCastTeam("l " + "T "
 									+ (getTeam() + getName()).split(" ").length
 									+ " " + getTeam() + getName() + " "
 									+ tokens2.length + " " + message, getTeam());
 						} else {
-							engine.broadcast("CH " + "E "
+							engine.broadcast("l " + "E "
 									+ (getTeam() + getName()).split(" ").length
 									+ " " + getTeam() + getName() + " "
 									+ tokens2.length + " " + message);
@@ -1214,20 +1214,20 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						}
 					}
 					break;
-				case "Dr":
+				case 'v':
 					try {
-						switch (command.charAt(3)) {
+						switch (command.charAt(2)) {
 						case 'I':
 							// If dropping from inventory
-							super.drop(command.substring(5));
+							super.drop(command.substring(4));
 							break;
 						case 'W':
 							// If dropping from equipped
-							drop(Integer.parseInt(command.substring(5)));
+							drop(Integer.parseInt(command.substring(4)));
 							break;
 						case 'U':
 							// If using a potion
-							super.use(command.substring(5));
+							super.use(command.substring(4));
 							break;
 						}
 					}
@@ -1236,7 +1236,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 					break;
 
-				case "M":
+				case 'M':
 					try {
 						switch (command.charAt(2)) {
 						// Move to inventory
@@ -1256,7 +1256,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 					break;
 
-				case "W":
+				case 'W':
 					try {
 						weaponSelected = command.charAt(2);
 						int weap = weaponSelected - '0';
@@ -1285,15 +1285,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						E.printStackTrace();
 					}
 					break;
-				case "B":
+				case 'B':
 					if (vendor != null) {
 						ServerItem vendorItem = null;
-						String itemName = "";
-						try {
-							itemName = command.substring(2);
-						} catch (Exception E) {
-							continue;
-						}
+						tokens = command.split(" ");
+						String itemName = tokens[1];
 						for (ServerItem item : vendor.getInventory())
 							if (item.getType().equals(itemName))
 								vendorItem = item;
@@ -1304,21 +1300,22 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							{
 								decreaseMoney(vendorItem.getCost());
 								vendor.drop(vendorItem.getType());
+								queueMessage("Vb "+tokens[2]+" "+tokens[3]);
 							}
 						}
 					}
 					break;
-				case "BC":
+				case 'b':
 					try {
-						buyCastleItem(command.substring(3));
+						buyCastleItem(command.substring(2));
 					} catch (Exception e) {
 						continue;
 					}
 					break;
-				case "E":
+				case 'E':
 					interact();
 					break;
-				case "S":
+				case 'S':
 					if (vendor != null) {
 						String type = "";
 						try {
@@ -1329,19 +1326,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						if (!type.equals(ServerWorld.MONEY_TYPE)
 								&& !type.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
 							sell(type);
-							queueMessage("SI " + type);
+							queueMessage("i " + type);
 						}
 					}
 					break;
-				case "Na":
-					try {
-						setName(command.substring(3));
-					} catch (Exception E) {
-						continue;
-					}
-					// Maybe broadcast name change later
-					break;
-				case "s":
+				case 's':
 					try {
 						playerScreenWidth = Integer.parseInt(tokens[1]);
 						playerScreenHeight = Integer.parseInt(tokens[2]);
@@ -1815,23 +1804,23 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				if(source != this)
 				{
 					if (source.getType().equals(ServerWorld.PLAYER_TYPE)) {
-						engine.broadcast("SK " + toChars(source.getID()) + " "
+						engine.broadcast("@ " + toChars(source.getID()) + " "
 								+ source.getTeam());
 						((ServerPlayer) source).kills++;
 					}
-					engine.broadcast("SD " + toChars(getID()) + " " + getTeam());
+					engine.broadcast("! " + toChars(getID()) + " " + getTeam());
 
 					if (source.getTeam() == ServerCreature.NEUTRAL) {
 						String firstName = getTeam() + getName();
 						String secondName = ServerCreature.NEUTRAL
 								+ source.getName();
-						engine.broadcast("KF1 " + firstName.split(" ").length + " "
+						engine.broadcast("k " + firstName.split(" ").length + " "
 								+ firstName + " " + secondName.split(" ").length
 								+ " " + secondName);
 					} else {
 						String firstName = source.getTeam() + source.getName();
 						String secondName = getTeam() + getName();
-						engine.broadcast("KF2 " + firstName.split(" ").length + " "
+						engine.broadcast("f " + firstName.split(" ").length + " "
 								+ firstName + " " + secondName.split(" ").length
 								+ " " + secondName);
 					}
@@ -1928,7 +1917,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 										else
 											castle = getWorld().getBlueCastle();
 									if (!castleOpen) {
-										queueMessage("CS");
+										queueMessage("c");
 										castleOpen = true;
 									} else if (castleOpen) {
 										castleOpen = false;

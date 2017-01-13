@@ -2,15 +2,15 @@
 <Root>
   <User name="alex4">
     <Key>714137188</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
+    <Elo>1031</Elo>
+    <Wins>1</Wins>
+    <Losses>1</Losses>
   </User>
   <User name="alex hello">
     <Key>264164651</Key>
-    <Wins>20</Wins>
-    <Losses>16</Losses>
-    <Elo>2077</Elo>
+    <Wins>21</Wins>
+    <Losses>17</Losses>
+    <Elo>2045</Elo>
   </User>
   <User name="williamxu">
     <Key>61806513</Key>

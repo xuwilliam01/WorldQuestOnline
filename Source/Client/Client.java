@@ -440,30 +440,26 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 						String[] tokens = message.split(" ");
 
 						for (int token = 1; token < tokens.length && !leaveGame; token++) {
+							if(tokens[token].equals(""))
+								continue;
 							try {
-								switch (tokens[token]) {
-								case "L":
+								switch (tokens[token].charAt(0)) {
+								case 'L':
 									HP = Integer.parseInt(tokens[++token]);
 									break;
-								case "A":
+								case 'A':
 									armour = Double.parseDouble(tokens[++token]);
 									break;
-								case "M":
+								case 'M':
 									maxHP = Integer.parseInt(tokens[++token]);
 									break;
-								case "Q":
+								case 'Q':
 									mana = Integer.parseInt(tokens[++token]);
 									break;
-								case "K":
+								case 'K':
 									maxMana = Integer.parseInt(tokens[++token]);
 									break;
-								case "XPR":
-									redCastleXP = toInt(tokens[++token]);
-									break;
-								case "XPB":
-									blueCastleXP = toInt(tokens[++token]);
-									break;
-								case "B":
+								case 'B':
 									// End the game
 									leaveGame = true;
 									int team = Integer.parseInt(tokens[++token]);
@@ -482,11 +478,11 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										inventory.getMenuButton().doClick();
 									}
 									break;
-								case "U":
+								case 'U':
 									// startPaint = System.currentTimeMillis();
 									// repaint();
 									break;
-								case "H":
+								case 'H':
 									if (world.getHologram() == null) {
 										int image = Integer.parseInt(tokens[++token]);
 										int y = Integer.parseInt(tokens[++token]);
@@ -507,15 +503,15 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										}
 									}
 									break;
-								case "h":
+								case 'h':
 									world.removeHologram();
 									break;
-								case "p":
+								case 'p':
 									playerX = Double.parseDouble(tokens[++token]);
 									playerY = Double.parseDouble(tokens[++token]);
 									setPos((int) playerX, (int) playerY);
 									break;
-								case "e":
+								case 'e':
 									try {
 										ClientObject object = world.get(toInt(tokens[++token]));
 										// System.out.println("CHECK: "+(object
@@ -527,11 +523,11 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									}
 
 									break;
-								case "*":
+								case '*':
 									hSpeed = Double.parseDouble(tokens[++token]);
 									vSpeed = Double.parseDouble(tokens[++token]);
 									break;
-								case "O":
+								case 'O':
 									int id = toInt(tokens[++token]);
 									int x = toInt(tokens[++token]);
 									int y = toInt(tokens[++token]);
@@ -583,38 +579,38 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									}
 
 									break;
-								case "t":
+								case 't':
 									world.setObject(new ClientText(toInt(tokens[++token]), toInt(tokens[++token]),
 											toInt(tokens[++token]), tokens[++token], ServerPlayer.NEUTRAL, world));
 									break;
-								case "P":
+								case 'P':
 									long calcPing = System.currentTimeMillis() - ping;
 									pingString = "Ping: " + calcPing;
 									printToServer("y " + calcPing);
 									startTimer = System.currentTimeMillis();
 									break;
-								case "R":
+								case 'R':
 									int ID = toInt(tokens[++token]);
 									world.remove(ID);
 									break;
-								case "I":
+								case 'I':
 									System.out.println("Received an item");
 									inventory.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
 											tokens[++token], Integer.parseInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]));
 									inventory.repaint();
 									break;
-								case "D":
+								case 'D':
 									damage = Integer.parseInt(tokens[++token]);
 									baseDamage = Integer.parseInt(tokens[++token]);
 									break;
-								case "S":
+								case 'S':
 									speed = Integer.parseInt(tokens[++token]);
 									break;
-								case "J":
+								case 'J':
 									jump = Integer.parseInt(tokens[++token]);
 									break;
-								case "a":
+								case 'a':
 
 									Audio.playAudio(Integer.parseInt(tokens[++token]),
 											(float)(Math.sqrt((toInt(tokens[++token]) - playerX)
@@ -623,30 +619,43 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 													*(toInt(tokens[token]) - playerY))));
 
 									break;
-								case "VB":
-									if (shop != null) {
-										shop.setVisible(false);
-										frame.remove(shop);
-										frame.invalidate();
-										shop = null;
+								case 'V':
+									switch(tokens[token].charAt(1))
+									{
+									case 'B':
+										if (shop != null) {
+											shop.setVisible(false);
+											frame.remove(shop);
+											frame.invalidate();
+											shop = null;
+										}
+										shop = new ClientShop(Client.this);
+										int numItems = Integer.parseInt(tokens[++token]);
+										for (int item = 0; item < numItems; item++)
+											shop.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
+													tokens[++token], Integer.parseInt(tokens[++token]),
+													Integer.parseInt(tokens[++token]));
+										frame.add(shop, JLayeredPane.PALETTE_LAYER);
+										shop.revalidate();
+										frame.setVisible(true);
+										break;
+									case 'S':
+										if (shop != null)
+											shop.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
+													tokens[++token], Integer.parseInt(tokens[++token]),
+													Integer.parseInt(tokens[++token]));
+										break;
+									case 'b':
+										if (shop != null)
+										{
+											int row = Integer.parseInt(tokens[++token]);
+											int col = Integer.parseInt(tokens[++token]);
+											shop.getItems()[row][col].sell();
+										}
+										break;
 									}
-									shop = new ClientShop(Client.this);
-									int numItems = Integer.parseInt(tokens[++token]);
-									for (int item = 0; item < numItems; item++)
-										shop.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
-												tokens[++token], Integer.parseInt(tokens[++token]),
-												Integer.parseInt(tokens[++token]));
-									frame.add(shop, JLayeredPane.PALETTE_LAYER);
-									shop.revalidate();
-									frame.setVisible(true);
 									break;
-								case "VS":
-									if (shop != null)
-										shop.addItem(Images.getImageName(Integer.parseInt(tokens[++token])),
-												tokens[++token], Integer.parseInt(tokens[++token]),
-												Integer.parseInt(tokens[++token]));
-									break;
-								case "CS":
+								case 'c':
 									if (castleShop != null) {
 										castleShop.setVisible(false);
 										frame.remove(castleShop);
@@ -661,20 +670,20 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									castleShop.revalidate();
 									frame.setVisible(true);
 									break;
-								case "C":
+								case 'C':
 									if (shop != null)
 										closeShop();
 									if (castleShop != null)
 										closeCastleShop();
 									break;
-								case "T":
+								case 'T':
 									world.setWorldTime(toInt(tokens[++token]));
 									break;
-								case "SI":
+								case 'i':
 									String type = tokens[++token];
 									inventory.removeThis(type);
 									break;
-								case "SP":
+								case '^':
 									int l = Integer.parseInt(tokens[++token]);
 									String n = tokens[++token];
 									for (int i = 1; i < l; i++)
@@ -684,23 +693,23 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 											toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
-								case "SK":
+								case '@':
 									scoreboard.addKill(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
-								case "SD":
+								case '!':
 									scoreboard.addDeath(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
-								case "s":
+								case 's':
 									scoreboard.update(toInt(tokens[++token]), toInt(tokens[++token]),
 											Integer.parseInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									break;
-								case "RP":
+								case 'n':
 									scoreboard.removePlayer(toInt(tokens[++token]), Integer.parseInt(tokens[++token]));
 									scoreboard.repaint();
 									break;
-								case "CH":
+								case 'l':
 									char who = tokens[++token].charAt(0);
 									int nameLen = Integer.parseInt(tokens[++token]);
 									String name = tokens[++token];
@@ -721,8 +730,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										chatQueue.add("CH " + name + "[TEAM]: " + text.substring(2).trim());
 
 									break;
-								case "KF1":
-								case "KF2":
+								case 'k':
+								case 'f':
 									if (chatQueue.size() >= MAX_MESSAGES)
 										chatQueue.remove(0);
 									String text2 = "";
@@ -737,7 +746,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									}
 									chatQueue.add(text2.trim());
 									break;
-								case "JO":
+								case 'd':
 									int len = Integer.parseInt(tokens[++token]);
 									String name2 = "";
 
@@ -745,7 +754,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										name2 += tokens[++token] + " ";
 									chatQueue.add("JO " + name2.trim());
 									break;
-								case "RO":
+								case 'o':
 									int len2 = Integer.parseInt(tokens[++token]);
 									String name3 = "";
 
@@ -753,40 +762,42 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										name3 += tokens[++token] + " ";
 									chatQueue.add("RO " + name3.trim());
 									break;
-								case "XR":
+								case 'X':
 									redCastleHP = Integer.parseInt(tokens[++token]);
 									redCastleTier = Integer.parseInt(tokens[++token]);
 									redCastleMoney = Integer.parseInt(tokens[++token]);
 									if (castleShop != null && player.getTeam() == ServerCreature.RED_TEAM)
 										castleShop.setMoney(redCastleMoney);
 									redCastleMaxHP = Integer.parseInt(tokens[++token]);
+									redCastleXP = toInt(tokens[++token]);
 									break;
-								case "XB":
+								case 'x':
 									blueCastleHP = Integer.parseInt(tokens[++token]);
 									blueCastleTier = Integer.parseInt(tokens[++token]);
 									blueCastleMoney = Integer.parseInt(tokens[++token]);
 									if (castleShop != null && player.getTeam() == ServerCreature.BLUE_TEAM)
 										castleShop.setMoney(blueCastleMoney);
 									blueCastleMaxHP = Integer.parseInt(tokens[++token]);
+									blueCastleXP = toInt(tokens[++token]);
 									break;
-								case "PB":
+								case 'b':
 									for (int weap = 0; weap < inventory.getEquippedWeapons().length; weap++)
 										if (inventory.getEquippedWeapons()[weap] != null
-												&& inventory.getEquippedWeapons()[weap].getType()
-														.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
+										&& inventory.getEquippedWeapons()[weap].getType()
+										.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
 											inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
 											break;
 										}
 									break;
-								case "rp":
+								case 'w':
 									redPop = Integer.parseInt(tokens[++token]);
 									redPopLimit = Integer.parseInt(tokens[++token]);
 									break;
-								case "bp":
+								case 'u':
 									bluePop = Integer.parseInt(tokens[++token]);
 									bluePopLimit = Integer.parseInt(tokens[++token]);
 									break;
-								case "r":
+								case 'r':
 									respawnTime = 10 - Integer.parseInt(tokens[++token]) / 60;
 									break;
 								}
@@ -1123,7 +1134,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			while (gridSize == null) {
 				gridSize = input.readLine();
 			}
-			System.out.println("gridside " + gridSize);
+			System.out.println("gridsize " + gridSize);
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
 			int width = Integer.parseInt(dimensions[1]);
@@ -1141,6 +1152,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			world = new ClientWorld(grid, tileSize, this);
 		} catch (IOException e) {
 			serverClosed();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
 
 		System.out.println("Map import has finished");
@@ -1178,13 +1191,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		super.paintComponent(graphics);
 
 		// Update the map
-		try {
+		if(getWorld() != null)
 			getWorld().update(graphics, getPlayer());
-		} catch (NullPointerException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			System.out.println(sw.toString());
-		}
 
 		// Draw death message if applicable
 		if (getHP() > 0) {
@@ -1211,7 +1219,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		if (getWorld().getBackgroundChoice() == 1) {
+		if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
 			graphics.setColor(Color.BLUE);
 		} else {
 			graphics.setColor(Color.WHITE);
@@ -1351,7 +1359,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 						String killWord = "slain";
 						String secondKillWord = "defeated";
 
-						if (str.substring(0, 3).equals("KF1"))
+						if (str.charAt(0) == 'k')
 							graphics.drawString("was " + killWord + " by a ",
 									5 + graphics.getFontMetrics().stringWidth(firstName), textY);
 						else
@@ -1365,7 +1373,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 						else
 							graphics.setColor(Color.GREEN);
 
-						if (str.substring(0, 3).equals("KF1"))
+						if (str.charAt(0) == 'k')
 							graphics.drawString(lastName.substring(1),
 									8 + graphics.getFontMetrics().stringWidth(firstName + "was " + killWord + " by a "),
 									textY);
@@ -1515,16 +1523,16 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			revalidate();
 			break;
 		case KeyEvent.VK_D:
-			if (!currentMessage.equals("!R")) {
-				currentMessage = "!R";
+			if (!currentMessage.equals("r")) {
+				currentMessage = "r";
 				if (hSpeed > 0) {
 					hSpeed = 0;
 				}
 			}
 			break;
 		case KeyEvent.VK_A:
-			if (!currentMessage.equals("!L")) {
-				currentMessage = "!L";
+			if (!currentMessage.equals("l")) {
+				currentMessage = "l";
 				if (hSpeed < 0) {
 					hSpeed = 0;
 				}
@@ -1532,14 +1540,10 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			break;
 		case KeyEvent.VK_W:
 		case KeyEvent.VK_SPACE:
-			if (!currentMessage.equals("!U")) {
-				currentMessage = "!U";
-			}
+			currentMessage = "!U";
 			break;
 		case KeyEvent.VK_S:
-			if (!currentMessage.equals("!D")) {
-				currentMessage = "!D";
-			}
+			currentMessage = "d";
 			isDropping = false;
 			break;
 		}
@@ -1552,10 +1556,10 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public void mousePressed(MouseEvent event) {
 		// Make sure the player changes direction
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_HEIGHT / 2) {
-			printToServer("DR");
+			printToServer("Q");
 			direction = 'R';
 		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2) {
-			printToServer("DL");
+			printToServer("q");
 			direction = 'L';
 		}
 
@@ -1585,8 +1589,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			currentMessage = "!A";
 
 			printToServer(currentMessage);
-		} else if (event.getButton() == MouseEvent.BUTTON3 && !currentMessage.equals("!a")) {
-			currentMessage = "!a";
+		} else if (event.getButton() == MouseEvent.BUTTON3 && !currentMessage.equals("c")) {
+			currentMessage = "c";
 
 			printToServer(currentMessage);
 		}
@@ -1619,10 +1623,10 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		printToServer("A " + mouseX + " " + mouseY + " f");
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'R') {
-			printToServer("DR");
+			printToServer("Q");
 			direction = 'R';
 		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'L') {
-			printToServer("DL");
+			printToServer("q");
 			direction = 'L';
 		}
 
@@ -1635,10 +1639,10 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		printToServer("A " + mouseX + " " + mouseY + " f");
 		// Make the player face the direction of the mouse
 		if (event.getX() > SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'R') {
-			printToServer("DR");
+			printToServer("Q");
 			direction = 'R';
 		} else if (event.getX() < SCREEN_WIDTH / 2 + ServerPlayer.DEFAULT_WIDTH / 2 && direction != 'L') {
-			printToServer("DL");
+			printToServer("q");
 			direction = 'L';
 		}
 	}

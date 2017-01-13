@@ -6,13 +6,15 @@ public class LeaderboardPlayer implements Comparable<LeaderboardPlayer>{
 	private String name;
 	private int wins;
 	private int losses;
+	private int rank;
 	
-	public LeaderboardPlayer(String name, int rating, int wins, int losses)
+	public LeaderboardPlayer(String name, int rating, int wins, int losses, int rank)
 	{
 		this.name = name;
 		this.rating = rating;
 		this.wins = wins;
 		this.losses = losses;
+		this.rank = rank;
 	}
 	@Override
 	public int compareTo(LeaderboardPlayer o) {
@@ -42,6 +44,12 @@ public class LeaderboardPlayer implements Comparable<LeaderboardPlayer>{
 	}
 	public void setLosses(int losses) {
 		this.losses = losses;
+	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	
 	

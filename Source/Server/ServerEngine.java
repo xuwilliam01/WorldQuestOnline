@@ -250,10 +250,10 @@ public class ServerEngine implements Runnable, ActionListener {
 		world.remove(remove);
 		server.decreaseNumPlayer();
 		broadcast("R " + ServerPlayer.toChars(remove.getID()));
-		broadcast("RO " + remove.getName().split(" ").length + " "
+		broadcast("o " + remove.getName().split(" ").length + " "
 				+ remove.getTeam() + remove.getName());
 		//Remove from the scoreboard
-		broadcast("RP " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
+		broadcast("n " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
 	}
 
 	/**
@@ -268,12 +268,12 @@ public class ServerEngine implements Runnable, ActionListener {
 			listOfPlayers.add(newPlayer);
 
 			//For the scoreboard
-			broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
+			broadcast("^ " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
 					+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ newPlayer.getKills() +" "+ newPlayer.getDeaths() + " " + ServerPlayer.toChars(newPlayer.getScore()) + " " + newPlayer.getPing());
 			for(ServerPlayer player : listOfPlayers)
 			{
 				if(player.getID() != newPlayer.getID())
-					newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
+					newPlayer.sendMessage("^ " + player.getName().split(" ").length + " " + player.getName() + " "
 							+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
 			}
 		}

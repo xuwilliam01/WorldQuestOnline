@@ -34,7 +34,10 @@ import Server.Creatures.ServerCreature;
 public class CentralServer implements Runnable, ActionListener {
 
 	public final static int BASE_ELO = 1000;
+	
+	//Not currently used
 	public final static int LEADERBOARD_SIZE = 20;
+	
 	private DatagramSocket socket;
 	private DatagramPacket receive;
 	private DatagramPacket send;
@@ -84,7 +87,8 @@ public class CentralServer implements Runnable, ActionListener {
 		createLeaderboard();
 	}
 
-	public void createLeaderboard() {
+	//No currently using this method
+	public void createLeaderboard2() {
 		leaderboard.clear();
 		for (Element user : root.getChildren("User")) {
 			int elo = Integer.parseInt(user.getChild("Elo").getValue());
@@ -92,7 +96,7 @@ public class CentralServer implements Runnable, ActionListener {
 			int losses = Integer.parseInt(user.getChild("Losses").getValue());
 			if (leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
 				continue;
-			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses));
+			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses, leaderboard.size()+1));
 			if (leaderboard.size() > LEADERBOARD_SIZE)
 				leaderboard.poll();
 		}
@@ -108,6 +112,26 @@ public class CentralServer implements Runnable, ActionListener {
 
 	}
 
+	public void createLeaderboard()
+	{
+		leaderboard.clear();
+		for (Element user : root.getChildren("User")) {
+			int elo = Integer.parseInt(user.getChild("Elo").getValue());
+			int wins = Integer.parseInt(user.getChild("Wins").getValue());
+			int losses = Integer.parseInt(user.getChild("Losses").getValue());
+			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses, leaderboard.size()+1));
+		}
+		synchronized (leaderboardS) {
+			leaderboardS = "";
+			while (!leaderboard.isEmpty()) {
+				LeaderboardPlayer next = leaderboard.poll();
+				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
+						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
+			}
+			leaderboardS.trim();
+		}
+	}
+	
 	public void run() {
 		reset.start();
 		Thread TCPThread = new Thread(new TCPIn());
@@ -175,6 +199,12 @@ public class CentralServer implements Runnable, ActionListener {
 					if (stats == null)
 						break;
 					sendData = ("S " + stats[0] + " " + stats[1] + " " + stats[2] + " "+name).getBytes();
+					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
+					socket.send(send);
+					break;
+				//Ping the central server to see if it's up
+				case 'P':
+					sendData = "p".getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
 					break;

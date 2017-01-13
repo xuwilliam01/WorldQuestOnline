@@ -88,14 +88,13 @@ public class ClientShop extends JPanel{
 	 */
 	public void removeItem(ClientShopItem item)
 	{
-
 		item.setVisible(false);
 		remove(item);
 		invalidate();
 		shopItems[item.getRow()][item.getCol()] = null;
 
 	}
-
+	
 	public Client getClient()
 	{
 		return client;
@@ -144,5 +143,9 @@ public class ClientShop extends JPanel{
 			}
 	}
 	
+	public ClientShopItem[][] getItems()
+	{
+		return shopItems;
+	}
 	
 }
