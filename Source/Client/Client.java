@@ -1134,7 +1134,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			while (gridSize == null) {
 				gridSize = input.readLine();
 			}
-			System.out.println("gridside " + gridSize);
+			System.out.println("gridsize " + gridSize);
 			String dimensions[] = gridSize.split(" ");
 			int height = Integer.parseInt(dimensions[0]);
 			int width = Integer.parseInt(dimensions[1]);
@@ -1152,6 +1152,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			world = new ClientWorld(grid, tileSize, this);
 		} catch (IOException e) {
 			serverClosed();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
 
 		System.out.println("Map import has finished");

@@ -1,6 +1,6 @@
 package ClientUDP;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,9 +37,6 @@ import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
 	public static final String CREDS_PATH = "Resources//savedata";
@@ -71,8 +68,6 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public static String savedUser;
 	private static String savedPassword;
 	public static String savedKey;
-	
-	private static MessageDigest messageDigest;
 
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
@@ -141,15 +136,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		login.setSize(100,50);
 		login.setLocation(x+deltax,y+(int)(3.5*deltay));
 		add(login);
-		
-		try {
-			messageDigest = MessageDigest.getInstance("SHA-256");
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+
 	}
 
 	@Override
