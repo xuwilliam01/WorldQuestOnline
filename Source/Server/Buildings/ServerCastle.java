@@ -351,19 +351,19 @@ public class ServerCastle extends ServerBuilding {
 			//Update default player stats
 			if(getTeam() == RED_TEAM)
 			{
-				ServerPlayer.redMoveSpeed += ServerPotion.SPEED_AMOUNT;
-				ServerPlayer.redJumpSpeed += ServerPotion.JUMP_AMOUNT;
-				ServerPlayer.redPlayerStartHP += ServerPotion.MAX_HP_INCREASE;
-				ServerPlayer.redPlayerStartMana += ServerPotion.MAX_MANA_INCREASE;
-				ServerPlayer.redStartBaseDamage += ServerPotion.DMG_AMOUNT;
+				getWorld().increaseRedMoveSpeed(ServerPotion.SPEED_AMOUNT);
+				getWorld().increaseRedJumpSpeed(ServerPotion.JUMP_AMOUNT);
+				getWorld().increaseRedPlayerStartHP(ServerPotion.MAX_HP_INCREASE);
+				getWorld().increaseRedPlayerStartMana(ServerPotion.MAX_MANA_INCREASE);
+				getWorld().increaseRedStartBaseDamage(ServerPotion.DMG_AMOUNT);
 			}
 			else
 			{
-				ServerPlayer.blueMoveSpeed += ServerPotion.SPEED_AMOUNT;
-				ServerPlayer.blueJumpSpeed += ServerPotion.JUMP_AMOUNT;
-				ServerPlayer.bluePlayerStartHP += ServerPotion.MAX_HP_INCREASE;
-				ServerPlayer.bluePlayerStartMana += ServerPotion.MAX_MANA_INCREASE;
-				ServerPlayer.blueStartBaseDamage += ServerPotion.DMG_AMOUNT;
+				getWorld().increaseBlueMoveSpeed(ServerPotion.SPEED_AMOUNT);
+				getWorld().increaseBlueJumpSpeed(ServerPotion.JUMP_AMOUNT);
+				getWorld().increaseBluePlayerStartHP(ServerPotion.MAX_HP_INCREASE);
+				getWorld().increaseBluePlayerStartMana(ServerPotion.MAX_MANA_INCREASE);
+				getWorld().increaseBlueStartBaseDamage(ServerPotion.DMG_AMOUNT);
 			}
 
 			//Upgrade all players

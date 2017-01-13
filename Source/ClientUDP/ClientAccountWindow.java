@@ -37,9 +37,12 @@ import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
-	public static final String CREDS_PATH = "Resources//LoginCredentials.txt";
+	public static final String CREDS_PATH = "Resources//savedata";
 	private DatagramSocket socket;
 	private DatagramPacket receive;
 	private DatagramPacket send;
@@ -57,6 +60,9 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JPasswordField confirm  = new JPasswordField();
 	private JButton menuLoginButton;
 	private Image logoutOver;
+	
+	public final static String IP = "52.14.41.226";
+	// public final static String IP = "127.0.0.1";
 
 	public static boolean open = false;
 	public static boolean loggedIn = false;
@@ -64,6 +70,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public static String savedUser;
 	private static String savedPassword;
 	public static String savedKey;
+	
+	private static MessageDigest messageDigest;
 
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
@@ -132,7 +140,15 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		login.setSize(100,50);
 		login.setLocation(x+deltax,y+(int)(3.5*deltay));
 		add(login);
-	
+		
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	@Override
@@ -226,7 +242,13 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	}
 	public static String hash(String user, String pass)
 	{
-		return (user+pass).replaceAll(" ","_");
+		String toHash = (user+pass).replaceAll(" ","_");
+		int result = 0;
+		for(int i = 0; i < toHash.length();i++)
+		{
+			result += (toHash.charAt(i))*(int)(Math.pow(31, toHash.length()-i-1));
+		}
+		return Integer.toString(result);
 	}
 
 	@Override
@@ -244,7 +266,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);
 				socket.send(send);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -273,7 +295,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(CentralServer.CentralServer.IP), CentralServer.CentralServer.PORT);
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);
 				socket.send(send);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
