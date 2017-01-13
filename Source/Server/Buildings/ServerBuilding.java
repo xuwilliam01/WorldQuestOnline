@@ -3,6 +3,7 @@ package Server.Buildings;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
+import Server.Effects.ServerSmoke;
 
 public abstract class ServerBuilding extends ServerCreature {
 
@@ -73,6 +74,14 @@ public abstract class ServerBuilding extends ServerCreature {
 	public void update() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void destroy()
+	{
+		super.destroy();
+		getWorld().add(new ServerSmoke(getX()+getWidth()/3,getY(),true,getWorld()));
+		getWorld().add(new ServerSmoke(getX()+2*getWidth()/3-320,getY(),false,getWorld()));
 	}
 
 }

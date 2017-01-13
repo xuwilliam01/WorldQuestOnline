@@ -328,6 +328,30 @@ public class Images {
 							+ IMAGE_FORMAT, image.getSubimage(no * 82, 0, 82,
 							82), 82, 82));
 				}
+				
+				for (int no = 0; no < 6; no++)
+				{
+					BufferedImage buffImage= ImageIO.read(new File("Images//Effects//"
+							+ "SMOKE_" + no + ".png"));
+					addtoImageArray(new GameImage("SMOKE_RIGHT_" + no
+							+ IMAGE_FORMAT, buffImage,320,180));
+					
+					AffineTransform tx;
+					tx = AffineTransform.getScaleInstance(-1, 1);
+					tx.translate(-buffImage.getWidth(null), 0);
+					AffineTransformOp op = new AffineTransformOp(tx,
+							AffineTransformOp.TYPE_BILINEAR);
+					addtoImageArray(new GameImage("SMOKE_LEFT_" + no
+							+ IMAGE_FORMAT,
+							op.filter(buffImage, null).getSubimage(
+									0, 0, buffImage.getWidth(),
+									buffImage.getHeight()),320,180));
+					
+				}
+				
+				
+
+
 
 				image = ImageIO
 						.read(new File("Images//Weapons//" + "STAR0.png"));

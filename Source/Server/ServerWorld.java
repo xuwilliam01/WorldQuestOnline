@@ -177,6 +177,7 @@ public class ServerWorld
 	public final static char ARROW_SOURCE_TYPE = 'a';
 
 	public final static String HOLOGRAM_TYPE = "HOL";
+	public final static String SMOKE_TYPE = "SMO";
 
 	//Player stats
 	// The starting mana and hp for the player. Change as castle upgrades
