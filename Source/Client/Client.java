@@ -702,7 +702,8 @@ ActionListener, MouseMotionListener
 									jump = Integer.parseInt(tokens[++token]);
 									break;
 								case "a":
-									Audio.playAudio(Integer.parseInt(tokens[++token]), Math.abs(toInt(tokens[++token]) - player.getX()+ Math.abs(toInt(tokens[++token]) - player.getY())));
+									
+									Audio.playAudio(Integer.parseInt(tokens[++token]), Math.abs(toInt(tokens[++token]) - player.getX())+ Math.abs(toInt(tokens[++token]) - player.getY()));
 									break;
 								case "VB":
 									if (shop != null)

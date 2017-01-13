@@ -92,7 +92,7 @@ public class MainMenu implements KeyListener{
 
 	// All the panels
 	public static ClientFrame mainFrame;
-	private static MainPanel mainMenu;
+	public static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
 	private static InstructionPanel instructionPanel;
