@@ -48,7 +48,8 @@ public class Server implements Runnable {
 
 	//Use this to keep track of all the players who joined
 	private ArrayList<ServerPlayer> allConnectedPlayers = new ArrayList<ServerPlayer>();
-	
+	private ArrayList<String> allowedPlayers = new ArrayList<String>();
+
 	public Server(ServerManager manager)
 	{
 		this.manager = manager;
@@ -157,6 +158,13 @@ public class Server implements Runnable {
 			}
 		}
 
+		long startTime = System.currentTimeMillis();
+
+		//Set up the allowed players
+		for(ServerLobbyPlayer p : lobbyPlayers)
+		{
+			allowedPlayers.add(p.getName());
+		}
 		if (map == null) {
 			map = defaultMap;
 		}
@@ -215,8 +223,27 @@ public class Server implements Runnable {
 
 				// If someone connects late, get them to start the client
 				if (message.equals("Lobby")) {
-					System.out.println("Checkpoint 2");
-					output.println("Start");
+					if(System.currentTimeMillis() - startTime < 5000)
+					{
+						boolean isNew = true;
+						for(String s : allowedPlayers)
+						{
+							if(s.equals(name))
+							{
+								isNew = false;
+							}
+						}
+						if(allowedPlayers.size() >= MAX_PLAYERS && isNew)
+							output.println("Full");
+						else
+						{
+							if(isNew)
+								allowedPlayers.add(name);
+							output.println("Start");
+						}
+					}
+					else
+						output.println("Start");
 					output.flush();
 					output.close();
 					input.close();
@@ -244,13 +271,13 @@ public class Server implements Runnable {
 								x = engine.getWorld().getRedCastleX();
 								y = engine.getWorld().getRedCastleY();
 							}
-							
+
 							newPlayer = new ServerPlayer(name, x, y,
 									ServerPlayer.DEFAULT_WIDTH,
 									ServerPlayer.DEFAULT_HEIGHT,
 									ServerWorld.GRAVITY, p.skinColour, p.hair,
 									newClient, engine, engine.getWorld(), input, output);
-							
+
 							newPlayer.increaseMoney(p.money);
 							newPlayer.setKills(p.kills);
 							newPlayer.setDeaths(p.deaths);
@@ -283,7 +310,7 @@ public class Server implements Runnable {
 					{
 						int characterSelection = (int) (Math.random() * playerColours.length);
 						int randomHair = (int)(Math.random() * playerHairs.length);
-						
+
 						int team = -1;
 						boolean inServer = false;
 						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
@@ -315,14 +342,14 @@ public class Server implements Runnable {
 						if (playerToRemove != null) {
 							lobbyPlayersToAdd.remove(playerToRemove);
 						}
-						
+
 						int x = engine.getWorld().getBlueCastleX();
 						int y = engine.getWorld().getBlueCastleY();
 						if (team == ServerPlayer.RED_TEAM) {
 							x = engine.getWorld().getRedCastleX();
 							y = engine.getWorld().getRedCastleY();
 						}
-						
+
 						newPlayer = new ServerPlayer(name, x, y,
 								ServerPlayer.DEFAULT_WIDTH,
 								ServerPlayer.DEFAULT_HEIGHT,
@@ -332,9 +359,9 @@ public class Server implements Runnable {
 						newPlayer.initPlayer();
 					}
 				}
-				
+
 				engine.addPlayer(newPlayer);
-				
+
 				//This is to keep track of all players who joined
 				ServerPlayer toRemove = null;
 				for(ServerPlayer player : allConnectedPlayers)
@@ -347,7 +374,7 @@ public class Server implements Runnable {
 				if(toRemove != null)
 					allConnectedPlayers.remove(toRemove);
 				allConnectedPlayers.add(newPlayer);
-				
+
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
 
@@ -366,7 +393,7 @@ public class Server implements Runnable {
 	{
 		return allConnectedPlayers;
 	}
-	
+
 	public void setGUI(ServerGUI gui) {
 		this.gui = gui;
 		gui.setMap(map);
@@ -457,5 +484,10 @@ public class Server implements Runnable {
 			this.reader = reader;
 			this.name = name;
 		}
+	}
+
+	public ArrayList<String> getAllowedPlayers()
+	{
+		return allowedPlayers;
 	}
 }

@@ -148,7 +148,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		if(row > -1 && row < servers.size())
 		{
 			ServerInfo destination = servers.get(row);
-			if(destination.getNumPlayers() >= 10)
+			if(destination.getNumPlayers() >= Server.Server.MAX_PLAYERS)
 				return;
 			String IP = destination.getIP();
 			//Checks if server IP is the same as your external IP
@@ -188,7 +188,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 					for(int i = 0; i < tokens.length-2;i+=numInputs)
 					{
 						serversData[i/numInputs][0] = tokens[i+2];
-						serversData[i/numInputs][1] = tokens[i+5] +"/10";
+						serversData[i/numInputs][1] = tokens[i+5] +"/"+Server.Server.MAX_PLAYERS;
 						serversData[i/numInputs][3] = tokens[i+3];
 						serversData[i/numInputs][4] = tokens[i+4];
 						

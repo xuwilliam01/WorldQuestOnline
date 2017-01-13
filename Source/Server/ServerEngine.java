@@ -146,13 +146,14 @@ public class ServerEngine implements Runnable, ActionListener {
 				listOfPlayers.remove(player);
 			toRemove.clear();
 		}
-		
+
 		//Everyone left the game, so end it
 		if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
 		{
+			server.getAllConnectedPlayers().clear();
 			endGame(ServerCreature.RED_TEAM);
 		}
-		
+
 		try {
 			for (ServerPlayer player : listOfPlayers) {
 				player.updateClient();
@@ -179,7 +180,8 @@ public class ServerEngine implements Runnable, ActionListener {
 						bluePlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
 					}
 				}
-				server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
+				if(server.getAllConnectedPlayers().size() > 1)
+					server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
 				server.getManager().removeRoom(server);
 				close();
 				server.close();

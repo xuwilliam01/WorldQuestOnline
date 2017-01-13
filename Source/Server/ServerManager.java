@@ -415,6 +415,7 @@ public class ServerManager implements Runnable, ActionListener{
 			if(rooms.size() != 0)
 			{
 				numPlayers = rooms.get(0).noOfPlayers;
+				//numPlayers = rooms.get(0).getAllowedPlayers().size();
 				if(!rooms.get(0).started())
 					numPlayers = rooms.get(0).getPlayers().size();
 			}
