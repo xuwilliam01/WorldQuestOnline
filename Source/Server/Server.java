@@ -268,7 +268,7 @@ public class Server implements Runnable {
 								newPlayer.setHP(0);
 							}	
 							toRemove = p;
-							engine.broadcast("JO "
+							engine.broadcast("d "
 									+ newPlayer.getName().split(" ").length + " "
 									+ newPlayer.getTeam() + newPlayer.getName());
 							break;
@@ -291,7 +291,7 @@ public class Server implements Runnable {
 								if (name.equals(player.getName())) {
 									team = player.getTeam();
 									name = player.getName();
-									engine.broadcast("JO "
+									engine.broadcast("d "
 											+ player.getName().split(" ").length + " "
 											+ player.getTeam() + player.getName());
 									playerToRemove = player;
@@ -303,7 +303,7 @@ public class Server implements Runnable {
 
 						if (!inServer) {
 							team = engine.getNextTeam();
-							engine.broadcast("JO " + name.split(" ").length + " "
+							engine.broadcast("d " + name.split(" ").length + " "
 									+ team + name);
 						}
 

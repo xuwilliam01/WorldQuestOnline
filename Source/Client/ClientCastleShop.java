@@ -52,7 +52,7 @@ public class ClientCastleShop extends JPanel{
 	public void buy(String type, int cost)
 	{
 		money -= cost;
-		client.printToServer("BC "+ type);
+		client.printToServer("b "+ type);
 		repaint();
 	}
 	

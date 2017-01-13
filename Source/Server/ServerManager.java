@@ -340,6 +340,8 @@ public class ServerManager implements Runnable, ActionListener{
 
 	public void send(String s)
 	{
+		if(out == null)
+			return;
 		out.println(s);
 		out.flush();
 	}
