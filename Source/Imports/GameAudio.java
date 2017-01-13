@@ -71,7 +71,7 @@ public class GameAudio {
 		return audio.isActive();
 	}
 
-	public void play(int dist)
+	public void play(float dist)
 	{
 		if (!audioSupported)
 		{

@@ -204,16 +204,6 @@ public class MainMenu implements KeyListener{
 			{
 				JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
 			}
-
-			int enableCloudsAndStars = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
-							"Select Game Quality",
-							JOptionPane.YES_NO_OPTION);
-			if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
-				ClientWorld.NO_OF_CLOUDS = 0;
-			}
 		}
 		mainFrame = new ClientFrame(tooLarge, pos);
 		mainFrame.addKeyListener(this);

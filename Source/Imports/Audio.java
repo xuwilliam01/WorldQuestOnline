@@ -137,7 +137,7 @@ public class Audio {
 	// Make an exception for closer sounds (compared to the farthest sound currently playing)
 	public final static int MIN_EXCEPTION_DIST = 32;
 	
-	public synchronized static void playAudio(int index, int dist)
+	public synchronized static void playAudio(int index, float dist)
 	{
 		audioArray[index].play(dist);
 		
