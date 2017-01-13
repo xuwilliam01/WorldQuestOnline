@@ -66,7 +66,7 @@ public class CentralServer implements Runnable, ActionListener {
 		sendData = new byte[1024];
 		listServers = "";
 		delayedListServers = "";
-		reset = new Timer(2000, this);
+		reset = new Timer(200, this);
 
 		// Build XML
 		builder = new SAXBuilder();
