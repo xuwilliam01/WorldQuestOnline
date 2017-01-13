@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 
 import Client.ClientFrame;
+import ClientUDP.ClientAccountWindow;
 import Imports.Maps;
 import Server.Creatures.ServerPlayer;
 
@@ -65,7 +66,7 @@ public class ServerManager implements Runnable, ActionListener{
 
 		try {
 			this.socket = new ServerSocket(port);
-			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, CentralServer.CentralServer.PORT);
+			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
 			out = new PrintWriter(centralServer.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {
@@ -99,7 +100,7 @@ public class ServerManager implements Runnable, ActionListener{
 		pingThread.start();
 		try {
 			this.socket = new ServerSocket(port);
-			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, CentralServer.CentralServer.PORT);
+			centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
 			out = new PrintWriter(centralServer.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 		} catch (IOException e) {

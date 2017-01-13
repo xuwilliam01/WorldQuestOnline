@@ -154,6 +154,7 @@ public class ServerProjectile extends ServerFlyingObject
 			soundNo = (int) (Math.random() * 7);
 			owner.getWorld().playSound("cut_air" + soundNo,
 					owner.getX(), owner.getY());
+			System.out.println(owner.getX()+ " " + owner.getY());
 			break;
 		case ServerWorld.MEGAARROW_TYPE:
 			setImage("MEGAARROW_0");

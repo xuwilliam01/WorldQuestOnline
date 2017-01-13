@@ -71,7 +71,7 @@ public class GameAudio {
 		return audio.isActive();
 	}
 
-	public void play(int dist)
+	public void play(float dist)
 	{
 		if (!audioSupported)
 		{
@@ -90,4 +90,48 @@ public class GameAudio {
 			audioSupported = false;
 		}
 	}
+	
+	public void loop()
+	{
+		if (!audioSupported)
+		{
+			return;
+		}
+		try
+		{
+		audio.setFramePosition(0);
+		audio.loop(99);
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+			audioSupported = false;
+		}
+	}
+	
+	public void stop()
+	{
+		if (!audioSupported)
+		{
+			return;
+		}
+		try
+		{
+			audio.setFramePosition(0);
+			audio.stop();
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+			audioSupported = false;
+		}
+	}
+	
+	public boolean isRunning()
+	{
+		return audio.isRunning();
+	}
+
 }

@@ -88,11 +88,13 @@ public class MainMenu implements KeyListener{
 	 */
 	public final static int DEF_PORT = 9988;
 	public final static int DEF_UDP_PORT = 9989;
+	public final static int LOBBY_UDP_PORT = 9987;
+	public final static int CONFIRM_UDP_PORT = 9990;
 	public final static int STATS_UDP_PORT = 9991;
 
 	// All the panels
 	public static ClientFrame mainFrame;
-	private static MainPanel mainMenu;
+	public static MainPanel mainMenu;
 	private static CreatorPanel creatorPanel;
 	private static GamePanel gamePanel;
 	private static InstructionPanel instructionPanel;
@@ -203,16 +205,6 @@ public class MainMenu implements KeyListener{
 			if (tooLarge)
 			{
 				JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
-			}
-
-			int enableCloudsAndStars = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Is your computer terrible? (Reduce graphical quality ---> Increase performance)",
-							"Select Game Quality",
-							JOptionPane.YES_NO_OPTION);
-			if (enableCloudsAndStars == JOptionPane.YES_OPTION) {
-				ClientWorld.NO_OF_CLOUDS = 0;
 			}
 		}
 		mainFrame = new ClientFrame(tooLarge, pos);
@@ -603,7 +595,7 @@ public class MainMenu implements KeyListener{
 			{
 				sendData = ("S "+ClientAccountWindow.savedUser).getBytes();
 				try {
-					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), CentralServer.CentralServer.PORT);			
+					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);			
 					socket.send(send);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -786,7 +778,7 @@ public class MainMenu implements KeyListener{
 			while(true)
 			{
 				try {
-					socket = new DatagramSocket(DEF_UDP_PORT+1);
+					socket = new DatagramSocket(CONFIRM_UDP_PORT);
 					receiveData = new byte[1024];
 					sendData = "C".getBytes();
 					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), port);
@@ -803,6 +795,7 @@ public class MainMenu implements KeyListener{
 					if (input.length() == 1 && input.charAt(0) == 'C')
 					{
 						canConnect = true;
+						socket.close();
 						return;
 					}
 				} catch (Exception e) {
