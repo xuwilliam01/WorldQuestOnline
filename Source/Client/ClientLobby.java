@@ -89,6 +89,8 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	private Timer startTimer = new Timer(1000,new GameStartTimer());
 	private int startCounter = 5;
+
+	public boolean cancelled;
 	/**
 	 * 
 	 * @param socket
@@ -124,6 +126,12 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			output.close();
 			input.close();
 			panel.startGame(this);
+		}
+		else if(message.equals("Full"))
+		{
+			JOptionPane.showMessageDialog(MainMenu.mainFrame, "This game is full");
+			cancelled = true;
+			return;
 		}
 		else
 		{
@@ -369,6 +377,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						socket.close();
 						output.close();
 						input.close();
+						//menu.setEnabled(false);
 						mapBox.setEnabled(false);
 						switchTeams.setEnabled(false);
 						start.setEnabled(false);
@@ -589,7 +598,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.GREEN);
 					graphics.fillOval(redX - 30, redStart - 20, 20, 20);
 					graphics.setColor(Color.RED);
-					
+
 					//Write the leader name under the menu button
 					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
 							(int) (ClientFrame.getScaledHeight(370)));
@@ -611,7 +620,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.GREEN);
 					graphics.fillOval(blueX - 30, blueStart - 20, 20, 20);
 					graphics.setColor(Color.BLUE);
-					
+
 					//Write the leader name under the menu button
 					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
 							(int) (ClientFrame.getScaledHeight(370)));
@@ -622,7 +631,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				blueStart += 40;
 			}
 		}
-		
+
 		graphics.setColor(Color.black);
 		if(startTimer.isRunning())
 		{
@@ -729,11 +738,15 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	{
 		try{
 			startTimer.stop();
-			centralSocket.close();
+			if(centralSocket != null)
+				centralSocket.close();
 			goToMenu = true;
-			socket.close();
-			input.close();
-			output.close();
+			if(socket != null)
+			{
+				socket.close();
+				input.close();
+				output.close();
+			}
 		}
 		catch(Exception E)
 		{
@@ -820,7 +833,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			this.name = name;
 		}
 	}
-	
+
 	private class GameStartTimer implements ActionListener
 	{
 		public void actionPerformed(ActionEvent arg0) {
@@ -839,6 +852,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				}
 			}
 		}
-		
+
 	}
 }

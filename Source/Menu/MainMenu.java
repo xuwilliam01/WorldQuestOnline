@@ -234,7 +234,7 @@ public class MainMenu implements KeyListener{
 		mainFrame.setVisible(true);
 		mainMenu.repaint();
 		generateClouds();
-		
+
 	}
 
 	private class LoadImagesAudio implements Runnable {
@@ -313,7 +313,7 @@ public class MainMenu implements KeyListener{
 		Image nameGlowImage = Images.getImage("nameGlow");
 
 		private Timer repaintTimer = new Timer(15, this);
-		
+
 		private DatagramSocket socket;
 		private DatagramPacket receive;
 		private DatagramPacket send;
@@ -326,7 +326,7 @@ public class MainMenu implements KeyListener{
 		String rating;
 		String wins;
 		String losses;
-		
+
 		/**
 		 * Constructor
 		 */
@@ -411,14 +411,14 @@ public class MainMenu implements KeyListener{
 			add(exitButton);
 
 
-//			directConnect = new JButton("Direct IP Connect");
-//			directConnect.setSize(createServerImage.getWidth(null),
-//					createServerImage.getHeight(null));
-//			directConnect.setLocation(middle - instructionsImage.getWidth(null)
-//					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
-//			directConnect.addActionListener(new GameStart());
-//			directConnect.addMouseListener(this);
-//			add(directConnect);
+			//			directConnect = new JButton("Direct IP Connect");
+			//			directConnect.setSize(createServerImage.getWidth(null),
+			//					createServerImage.getHeight(null));
+			//			directConnect.setLocation(middle - instructionsImage.getWidth(null)
+			//					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			//			directConnect.addActionListener(new GameStart());
+			//			directConnect.addMouseListener(this);
+			//			add(directConnect);
 
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null),
@@ -474,10 +474,10 @@ public class MainMenu implements KeyListener{
 			receiveData = new byte[1024];
 			sendData = new byte[1024];
 			resetStats();
-			
+
 			Thread thisThread = new Thread(this);
 			thisThread.start();
-			
+
 			setVisible(true);
 			repaint();
 		}
@@ -488,7 +488,7 @@ public class MainMenu implements KeyListener{
 			repaintTimer.stop();
 			displayed = false;
 		}
-		
+
 		public void resetStats()
 		{
 			rating = "-";
@@ -690,7 +690,7 @@ public class MainMenu implements KeyListener{
 				wins = input[2];
 				losses = input[3];
 			}
-			
+
 		}
 
 	}
@@ -926,7 +926,7 @@ public class MainMenu implements KeyListener{
 			if (exit) {
 				if (full)
 					JOptionPane.showMessageDialog(null,
-							"All Rooms are full. Please try again later");
+							"This game is full");
 
 				setVisible(false);
 				mainFrame.remove(this);
@@ -945,13 +945,20 @@ public class MainMenu implements KeyListener{
 
 				lobby = new ClientLobby(mySocket, input, output, this,
 						clouds, menu);
-				lobby.setLocation(0, 0);
-				lobby.setLayout(null);
-				lobby.setSize(Client.SCREEN_WIDTH
-						+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
-				lobby.setDoubleBuffered(true);
-				mainFrame.add(lobby);
-				lobby.repaint();
+				if(lobby.cancelled)
+				{
+					menu.doClick();
+				}
+				else
+				{
+					lobby.setLocation(0, 0);
+					lobby.setLayout(null);
+					lobby.setSize(Client.SCREEN_WIDTH
+							+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
+					lobby.setDoubleBuffered(true);
+					mainFrame.add(lobby);
+					lobby.repaint();
+				}
 
 			}
 		}
@@ -1126,7 +1133,7 @@ public class MainMenu implements KeyListener{
 				ClientAccountWindow.logout();
 				if(mainMenu != null)
 					mainMenu.resetStats();
-				
+
 				//login.setText("Login");
 				Image logoutImage = Images.getImage("Login");
 				loginLogout.setIcon(new ImageIcon(logoutImage));
