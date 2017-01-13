@@ -288,7 +288,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 												toRemove = p;
 										}					
 										redTeam.remove(toRemove);
-										redTeam.remove(name);
 									}
 									blueTeam.add(new Pair(name));
 								}
@@ -343,11 +342,23 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 						if (name.charAt(0) - '0' == ServerCreature.RED_TEAM)
 						{
-							redTeam.remove(name.substring(1));
+							Pair toRemove = null;
+							for(Pair p : redTeam)
+							{
+								if(p.name.equals(name.substring(1)))
+									toRemove = p;
+							}					
+							redTeam.remove(toRemove);
 						}
 						else
 						{
-							blueTeam.remove(name.substring(1));
+							Pair toRemove = null;
+							for(Pair p : blueTeam)
+							{
+								if(p.name.equals(name.substring(1)))
+									toRemove = p;
+							}					
+							blueTeam.remove(toRemove);
 						}
 					}
 					else if (tokens[token].equals("Start"))
@@ -576,7 +587,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.RED);
 				}
 
-				graphics.drawString(String.format("%s[%s]", player.name, player.rating), redX + 5,
+				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), redX + 5,
 						redStart);
 				redStart += 40;
 			}
@@ -594,7 +605,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					graphics.setColor(Color.BLUE);
 				}
 
-				graphics.drawString(String.format("%s[%s]", player.name, player.rating), blueX + 5,
+				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), blueX + 5,
 						blueStart);
 				blueStart += 40;
 			}
@@ -738,7 +749,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					switch(input.charAt(0))
 					{
 					case 'S':
-						System.out.println(input);
+						//System.out.println(input);
 						String tokens[] = input.split(" ");
 						String rating = tokens[1];
 						//tokens[2] and tokens[3] are wins and losses. We can ignore those
