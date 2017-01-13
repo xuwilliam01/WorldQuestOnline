@@ -1455,7 +1455,7 @@ ActionListener, MouseMotionListener
 		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
-		if (world.getBackgroundChoice()==1)
+		if (getWorld().getBackgroundChoice()==1)
 		{
 			graphics.setColor(Color.BLUE);
 		}
