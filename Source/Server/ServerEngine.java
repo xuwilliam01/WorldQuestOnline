@@ -161,7 +161,7 @@ public class ServerEngine implements Runnable, ActionListener {
 					winner = ServerCreature.RED_TEAM;
 				int numRed = 0;
 				int numBlue = 0;
-				for (ServerPlayer player : listOfPlayers) {
+				for (ServerPlayer player : server.getAllConnectedPlayers()) {
 					if(player.getTeam() == ServerCreature.RED_TEAM)
 					{
 						numRed++;

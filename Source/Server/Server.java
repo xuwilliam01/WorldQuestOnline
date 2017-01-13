@@ -46,6 +46,9 @@ public class Server implements Runnable {
 
 	private ServerManager manager;
 
+	//Use this to keep track of all the players who joined
+	private ArrayList<ServerPlayer> allConnectedPlayers = new ArrayList<ServerPlayer>();
+	
 	public Server(ServerManager manager)
 	{
 		this.manager = manager;
@@ -328,6 +331,20 @@ public class Server implements Runnable {
 				}
 				
 				engine.addPlayer(newPlayer);
+				
+				//This is to keep track of all players who joined
+				ServerPlayer toRemove = null;
+				for(ServerPlayer player : allConnectedPlayers)
+				{
+					if(player.getName().equals(newPlayer.getName()))
+					{
+						toRemove = player;
+					}
+				}
+				if(toRemove != null)
+					allConnectedPlayers.remove(toRemove);
+				allConnectedPlayers.add(newPlayer);
+				
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
 
@@ -342,6 +359,11 @@ public class Server implements Runnable {
 		}
 	}
 
+	public ArrayList<ServerPlayer> getAllConnectedPlayers()
+	{
+		return allConnectedPlayers;
+	}
+	
 	public void setGUI(ServerGUI gui) {
 		this.gui = gui;
 		gui.setMap(map);

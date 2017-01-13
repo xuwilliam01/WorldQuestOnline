@@ -9,8 +9,8 @@
   <User name="alex hello">
     <Key>264164651</Key>
     <Wins>20</Wins>
-    <Losses>15</Losses>
-    <Elo>2101</Elo>
+    <Losses>16</Losses>
+    <Elo>2077</Elo>
   </User>
   <User name="williamxu">
     <Key>61806513</Key>
@@ -44,8 +44,8 @@
   </User>
   <User name="new">
     <Key>-1048830976</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
+    <Elo>1031</Elo>
+    <Wins>1</Wins>
     <Losses>0</Losses>
   </User>
   <User name="hello123">

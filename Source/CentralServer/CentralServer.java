@@ -37,8 +37,8 @@ public class CentralServer implements Runnable, ActionListener{
 	public final static int LEADERBOARD_SIZE = 20;
 	public final static int PORT = 9977;
 	//public final static String IP = "138.197.131.4";
-	public final static String IP = "52.14.41.226";
-	//public final static String IP = "127.0.0.1";
+	//public final static String IP = "52.14.41.226";
+	public final static String IP = "127.0.0.1";
 
 	private DatagramSocket socket;
 	private DatagramPacket receive;
