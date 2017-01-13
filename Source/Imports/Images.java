@@ -1071,6 +1071,16 @@ public class Images {
 			addtoImageArray(new GameImage("Inventory.png",
 					(int) (ClientFrame.getScaledWidth(300)),
 					Client.Client.SCREEN_HEIGHT, "Interface//"));
+			addtoImageArray(new GameImage("InventoryShadow.png",
+					(int) (ClientFrame.getScaledWidth(100)),
+					Client.Client.SCREEN_HEIGHT, "Interface//"));
+			
+			addtoImageArray(new GameImage("castleBarRed.png",
+					(int) (ClientFrame.getScaledWidth(500)),
+					(int) (ClientFrame.getScaledWidth(40)), "Interface//"));
+			addtoImageArray(new GameImage("castleBarBlue.png",
+					(int) (ClientFrame.getScaledWidth(500)),
+					(int) (ClientFrame.getScaledWidth(40)), "Interface//"));
 			
 			addtoImageArray(new GameImage("scoreboard.png",
 					(int) (ClientFrame.getScaledWidth(1366)),

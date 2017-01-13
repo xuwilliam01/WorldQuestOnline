@@ -1103,26 +1103,32 @@ public class ClientWorld {
 		if(hologram != null)
 			graphics.drawImage(hologram.getImage(), hologram.getX() - hologram.getImage().getWidth(null)/2, hologram.getY() - hologram.getImage().getHeight(null)/2, null);
 
+		//Draw inventory shadow
+		//graphics.drawImage(inventoryShadowImage,null);
+		
 		// Draw the castle hp bars
 		graphics.setFont(NORMAL_FONT);
-		graphics.setColor(Color.CYAN);
-		graphics.fillRect(ClientFrame.getScaledWidth(100), ClientFrame
-				.getScaledHeight(980),
-				ClientFrame.getScaledWidth((int) (500.0 * client
-						.getBlueCastleHP() / (client.getBlueCastleMaxHP()))),
-				ClientFrame.getScaledHeight(20));
-		graphics.setColor(Color.PINK);
-		graphics.fillRect(ClientFrame.getScaledWidth(1050), ClientFrame
-				.getScaledHeight(980),
-				ClientFrame.getScaledWidth((int) (500.0 * client
-						.getRedCastleHP() / (client.getRedCastleMaxHP()))),
-				ClientFrame.getScaledHeight(20));
+		
+		graphics.setColor(new Color(217,53,53)); //RED
+		graphics.drawImage(Images.getImage("castleBarRed"), 0, Client.SCREEN_HEIGHT-40, null);
+		graphics.fillRect(102,
+				Client.SCREEN_HEIGHT-29,
+				(int) (379.0 * client.getRedCastleHP() / client.getRedCastleMaxHP()),
+				20);
+		
+		graphics.setColor(new Color(53,153,227)); //BLUE
+		graphics.drawImage(Images.getImage("castleBarBlue"), Client.SCREEN_WIDTH-500, Client.SCREEN_HEIGHT-40, null);
+		graphics.fillRect(
+				Client.SCREEN_WIDTH-481+(379 - (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP())),
+				Client.SCREEN_HEIGHT-29,
+				(int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP()),
+				20);
 
 		graphics.setColor(Images.PURPLE);
-		graphics.drawRect(ClientFrame.getScaledWidth(100),
-				ClientFrame.getScaledHeight(980),
-				ClientFrame.getScaledWidth(500),
-				ClientFrame.getScaledHeight(20));
+		graphics.drawRect(100,
+				980,
+				500,
+				20);
 		graphics.drawString(
 				String.format("%d/%d", client.getBlueCastleHP(),
 						client.getBlueCastleMaxHP()),
@@ -1140,32 +1146,32 @@ public class ClientWorld {
 
 		graphics.setFont(BIG_NORMAL_FONT);
 
-		graphics.setColor(Color.red);
-		if (client.getRedCastleTier() == 6)
+		graphics.setColor(Color.blue);
+		if (client.getBlueCastleTier() == 6)
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
-							client.getRedCastleTier() + 1),
+							client.getBlueCastleTier() + 1),
 					ClientFrame.getScaledWidth(1050),
 					ClientFrame.getScaledHeight(975));
 		else
 		{
 			graphics.drawString(String.format(
 					"Castle Tier %d (XP For Next Tier  %d/%d)",
-					client.getRedCastleTier() + 1, client.getRedCastleXP(),
-					ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]),
+					client.getBlueCastleTier() + 1, client.getBlueCastleXP(),
+					ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]),
 					ClientFrame.getScaledWidth(1050), ClientFrame
 					.getScaledHeight(975));
 			graphics.drawString(String.format(
-					"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
+					"Housing %d/%d",client.getBluePop(),client.getBluePopLimit()),
 					ClientFrame.getScaledWidth(1050), ClientFrame
 					.getScaledHeight(950));
 		}
 
-		graphics.setColor(Color.blue);
-		if (client.getBlueCastleTier() == 6)
+		graphics.setColor(Color.red);
+		if (client.getRedCastleTier() == 6)
 			graphics.drawString(
 					String.format("Castle Tier %d (Max)",
-							client.getBlueCastleTier() + 1),
+							client.getRedCastleTier() + 1),
 					ClientFrame.getScaledWidth(100),
 					ClientFrame.getScaledHeight(975));
 		else
@@ -1173,14 +1179,14 @@ public class ClientWorld {
 			graphics.drawString(
 					String.format(
 							"Castle Tier %d (XP For Next Tier  %d/%d)",
-							client.getBlueCastleTier() + 1, client
-							.getBlueCastleXP(),
+							client.getRedCastleTier() + 1, client
+							.getRedCastleXP(),
 							ServerCastle.CASTLE_TIER_XP[client
-							                               .getBlueCastleTier()]), ClientFrame
+							                               .getRedCastleTier()]), ClientFrame
 					.getScaledWidth(100), ClientFrame
 					.getScaledHeight(975));
 			graphics.drawString(String.format(
-					"Housing %d/%d",client.getBluePop(),client.getBluePopLimit()),
+					"Housing %d/%d",client.getRedPop(),client.getRedPopLimit()),
 					ClientFrame
 					.getScaledWidth(100), ClientFrame
 					.getScaledHeight(950));

@@ -58,7 +58,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int numHPPots = 0;
 	private int numManaPots = 0;
 
-	
+
 	// Initial jump and move speeds of the player
 	public final static int DEFAULT_MOVE_SPEED = 5;
 	public final static int DEFAULT_JUMP_SPEED = 20;
@@ -85,7 +85,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int playerScreenHeight = 1080;
 
 	private ServerCastle castle = null;
-	private boolean weOpened = false;
 
 	/**
 	 * Whether the game is over or not
@@ -277,6 +276,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private ServerItem bestWeapon = null;
 	private ServerItem bestArmour = null;
+	
+	private boolean castleOpen = false;
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -549,19 +550,19 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				}
 			} else if (getHSpeed() != 0 && getVSpeed() == 0) {
 				int checkFrame = (int) (getWorld().getWorldCounter() % 30);
-					if (checkFrame < 5) {
-						setRowCol(new RowCol(0, 1));
-					} else if (checkFrame < 10) {
-						setRowCol(new RowCol(0, 2));
-					} else if (checkFrame < 15) {
-						setRowCol(new RowCol(0, 3));
-					} else if (checkFrame < 20) {
-						setRowCol(new RowCol(0, 4));
-					} else if (checkFrame < 25) {
-						setRowCol(new RowCol(0, 5));
-					} else {
-						setRowCol(new RowCol(0, 6));
-					}
+				if (checkFrame < 5) {
+					setRowCol(new RowCol(0, 1));
+				} else if (checkFrame < 10) {
+					setRowCol(new RowCol(0, 2));
+				} else if (checkFrame < 15) {
+					setRowCol(new RowCol(0, 3));
+				} else if (checkFrame < 20) {
+					setRowCol(new RowCol(0, 4));
+				} else if (checkFrame < 25) {
+					setRowCol(new RowCol(0, 5));
+				} else {
+					setRowCol(new RowCol(0, 6));
+				}
 			} else if (!isOnSurface()) {
 				if (Math.abs(getVSpeed()) < 5) {
 					setRowCol(new RowCol(1, 8));
@@ -609,7 +610,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			setBaseDamage(getWorld().getBlueStartBaseDamage());
 		}
 	}
-	
+
 	/**
 	 * Force a change in the player position
 	 * 
@@ -969,11 +970,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 
 			if (castle != null
-					&& castle.isOpen()
-					&& weOpened
+					&& castleOpen
 					&& (!collidesWith(castle) || getHP() <= 0 || isDisconnected())) {
-				castle.close();
-				weOpened = false;
+				castleOpen = false;
 				System.out.println("closing: " + collidesWith(castle));
 				queueMessage("C");
 			}
@@ -1796,7 +1795,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			if(source != this)
 				addCastleXP(Math.min(amount, getHP()), source);
-			
+
 			setHP(getHP() - amount);
 
 			double damageX = Math.random() * getWidth() + getX();
@@ -1811,7 +1810,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// below, and eventually respawn the player
 			if (getHP() <= 0) {
 				deaths++;
-				
+
 				// For the scoreboard
 				if(source != this)
 				{
@@ -1821,7 +1820,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						((ServerPlayer) source).kills++;
 					}
 					engine.broadcast("SD " + toChars(getID()) + " " + getTeam());
-					
+
 					if (source.getTeam() == ServerCreature.NEUTRAL) {
 						String firstName = getTeam() + getName();
 						String secondName = ServerCreature.NEUTRAL
@@ -1892,22 +1891,28 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								// If vendor send shop to client
 								if (object.getType().equals(
 										ServerWorld.VENDOR_TYPE)) {
-									if (vendor == null
-											&& !((ServerVendor) object)
-											.isBusy()) {
-										vendor = (ServerVendor) object;
-										vendor.setIsBusy(true);
-										String newMessage = "VB "
-												+ vendor.getInventory().size();
-										for (ServerItem item : vendor
-												.getInventory())
-											newMessage += String.format(
-													" %d %s %d %d",
-													item.getImageIndex(),
-													item.getType(),
-													item.getAmount(),
-													item.getCost());
-										queueMessage(newMessage);
+									if (vendor == null) {
+										if(!((ServerVendor) object)
+												.isBusy())
+										{
+											vendor = (ServerVendor) object;
+											vendor.setIsBusy(true);
+											String newMessage = "VB "
+													+ vendor.getInventory().size();
+											for (ServerItem item : vendor
+													.getInventory())
+												newMessage += String.format(
+														" %d %s %d %d",
+														item.getImageIndex(),
+														item.getType(),
+														item.getAmount(),
+														item.getCost());
+											queueMessage(newMessage);
+										}
+										else
+										{
+											getWorld().add(new ServerText(getX()+getWidth()/2, getY()-20, "Shop is being used", 'p', getWorld()));
+										}
 									} else if (vendor != null) {
 										vendor.setIsBusy(false);
 										vendor = null;
@@ -1922,13 +1927,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 											castle = getWorld().getRedCastle();
 										else
 											castle = getWorld().getBlueCastle();
-									if (!castle.isOpen()) {
+									if (!castleOpen) {
 										queueMessage("CS");
-										castle.open();
-										weOpened = true;
-									} else if (castle.isOpen() && weOpened) {
-										castle.close();
-										weOpened = false;
+										castleOpen = true;
+									} else if (castleOpen) {
+										castleOpen = false;
 									}
 									return;
 								}
@@ -2193,44 +2196,46 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	}
 
 	public void buyCastleItem(String type) {
-		switch (type) {
-		case ServerWorld.BARRACK_ITEM_TYPE:
-			if (castle != null
-			&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST) {
-				castle.spendMoney(ServerBuildingItem.BARRACK_COST);
-				addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,
-						getWorld()));
+		synchronized(castle)
+		{
+			switch (type) {
+			case ServerWorld.BARRACK_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.BARRACK_COST) {
+					castle.spendMoney(ServerBuildingItem.BARRACK_COST);
+					addItem(new ServerBuildingItem(ServerWorld.BARRACK_ITEM_TYPE,
+							getWorld()));
+				}
+				break;
+			case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.WOOD_HOUSE_COST) {
+					castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
+					addItem(new ServerBuildingItem(
+							ServerWorld.WOOD_HOUSE_ITEM_TYPE, getWorld()));
+					System.out.println("Added house");
+				}
+				break;
+			case ServerWorld.TOWER_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.TOWER_COST) {
+					castle.spendMoney(ServerBuildingItem.TOWER_COST);
+					addItem(new ServerBuildingItem(ServerWorld.TOWER_ITEM_TYPE,
+							getWorld()));
+					System.out.println("Added tower");
+				}
+				break;
+			case ServerWorld.GOLD_MINE_ITEM_TYPE:
+				if (castle != null
+				&& castle.getMoney() >= ServerBuildingItem.GOLD_MINE_COST) {
+					castle.spendMoney(ServerBuildingItem.GOLD_MINE_COST);
+					addItem(new ServerBuildingItem(ServerWorld.GOLD_MINE_ITEM_TYPE,
+							getWorld()));
+					System.out.println("Added Gold mine");
+				}
+				break;
 			}
-			break;
-		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
-			if (castle != null
-			&& castle.getMoney() >= ServerBuildingItem.WOOD_HOUSE_COST) {
-				castle.spendMoney(ServerBuildingItem.WOOD_HOUSE_COST);
-				addItem(new ServerBuildingItem(
-						ServerWorld.WOOD_HOUSE_ITEM_TYPE, getWorld()));
-				System.out.println("Added house");
-			}
-			break;
-		case ServerWorld.TOWER_ITEM_TYPE:
-			if (castle != null
-			&& castle.getMoney() >= ServerBuildingItem.TOWER_COST) {
-				castle.spendMoney(ServerBuildingItem.TOWER_COST);
-				addItem(new ServerBuildingItem(ServerWorld.TOWER_ITEM_TYPE,
-						getWorld()));
-				System.out.println("Added tower");
-			}
-			break;
-		case ServerWorld.GOLD_MINE_ITEM_TYPE:
-			if (castle != null
-			&& castle.getMoney() >= ServerBuildingItem.GOLD_MINE_COST) {
-				castle.spendMoney(ServerBuildingItem.GOLD_MINE_COST);
-				addItem(new ServerBuildingItem(ServerWorld.GOLD_MINE_ITEM_TYPE,
-						getWorld()));
-				System.out.println("Added Gold mine");
-			}
-			break;
 		}
-
 	}
 
 	// ///////////////////////
@@ -2452,7 +2457,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	{
 		numManaPots--;
 	}
-	
+
 	public void setDeathCounter(long amount)
 	{
 		deathCounter = amount;

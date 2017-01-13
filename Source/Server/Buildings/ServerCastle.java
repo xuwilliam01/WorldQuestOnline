@@ -61,10 +61,6 @@ public class ServerCastle extends ServerBuilding {
 	private String arrowType = ServerWorld.WOODARROW_TYPE;
 
 	/**
-	 * Whether the castle shop is open or not
-	 */
-	private boolean open = false;
-	/**
 	 * To prices to advance from each tier
 	 */
 
@@ -279,22 +275,6 @@ public class ServerCastle extends ServerBuilding {
 		arrowSources.clear();
 	}
 
-
-	//Methods for the castle shop
-	public boolean isOpen()
-	{
-		return open;
-	}
-
-	public void close()
-	{
-		open = false;
-	}
-
-	public void open()
-	{
-		open = true;
-	}
 
 	// ///////////////////////
 	// GETTERS AND SETTERS //
