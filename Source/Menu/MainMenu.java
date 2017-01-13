@@ -1213,7 +1213,6 @@ public class MainMenu implements KeyListener{
 			mainFrame.requestFocus();
 			mainMenu.revalidate();
 		}
-
 	}
 
 	/**

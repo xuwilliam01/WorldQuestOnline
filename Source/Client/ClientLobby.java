@@ -739,12 +739,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				{
 					receiveData = new byte[1024];
 					receive = new DatagramPacket(receiveData, receiveData.length);
-					try {
-						centralSocket.receive(receive);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					centralSocket.receive(receive);
 
 					String input = new String(receive.getData()).trim();
 					switch(input.charAt(0))

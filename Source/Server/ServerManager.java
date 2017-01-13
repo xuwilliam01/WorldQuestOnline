@@ -28,7 +28,7 @@ public class ServerManager implements Runnable, ActionListener{
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
-	private Timer updateCentral = new Timer(500,this);
+	private Timer updateCentral = new Timer(50,this);
 	private String name = "Default";
 
 	//Variables for central server comm
