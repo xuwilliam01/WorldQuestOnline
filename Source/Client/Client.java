@@ -1233,7 +1233,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		}
 
 		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(9999, getCurrentFPS()), Client.SCREEN_WIDTH - 60, 40);
+		graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()), Client.SCREEN_WIDTH - 60, 40);
 
 		graphics.drawImage(Images.getImage("InventoryShadow"), Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
 
