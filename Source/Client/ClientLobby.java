@@ -695,7 +695,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		public void keyPressed(KeyEvent e)
 		{
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+			{
 				enter.doClick();
+			}
 
 		}
 
