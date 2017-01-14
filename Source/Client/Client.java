@@ -815,6 +815,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 											JOptionPane.ERROR_MESSAGE);
 									inventory.mainMenu.doClick();
 									break;
+								case '~':
+									JOptionPane.showMessageDialog(null, tokens[++token]);
+									break;
 								}
 
 							} catch (NumberFormatException e) {
