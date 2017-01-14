@@ -440,6 +440,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		else if ((time=System.currentTimeMillis()-lastCheck) >= 3000)
 		{
+			double x = getX()+getWidth()/2;
+			double y = getY()+getHeight()/2;
+			
+			
+			if (getWorld().getCollisionGrid()[(int)(y/ServerWorld.TILE_SIZE)][(int)(x/ServerWorld.TILE_SIZE)]==ServerWorld.SOLID_TILE)
+			{
+				disconnect = true;
+			}
 			if (lastX != -1 && isAlive() && Math.abs(lastX-getX())>1.5* horizontalMovement*((1.0*time)/ServerEngine.UPDATE_RATE))
 			{
 				disconnect = true;
@@ -449,6 +457,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			lastCheck = System.currentTimeMillis();
 		}
 		
+		
+
 		
 		
 		if (exists()) {
@@ -1388,6 +1398,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					} catch (Exception E) {
 						continue;
 					}
+					break;
+				case 'm':
+					castle.hireMerc();
 					break;
 				}
 			} catch (IOException e) {

@@ -11,6 +11,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
 import Server.Effects.ServerText;
+import Server.Items.ServerBuildingItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
@@ -114,6 +115,8 @@ public class ServerCastle extends ServerBuilding {
 	 * Delay between each spawning session
 	 */
 	public static final int spawnDelay = 1000;
+	
+	
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
 	public final static int[] CASTLE_TIER_XP = {500,1000,2000,3000,4000,5000}; 
@@ -363,6 +366,19 @@ public class ServerCastle extends ServerBuilding {
 					player.setVerticalMovement(player
 							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
 				}
+			}
+		}
+	}
+	
+	public synchronized void hireMerc()
+	{
+		if (getMoney()>= ServerBuildingItem.MERC_COST)
+		{
+			spendMoney(ServerBuildingItem.MERC_COST);
+			for (int no = 0; no < 10; no++)
+			{
+				spawnGoblin(ServerGoblin.GOBLIN_NINJA_NO);
+				spawnGoblin(ServerGoblin.GOBLIN_SAMURAI_NO);
 			}
 		}
 	}
