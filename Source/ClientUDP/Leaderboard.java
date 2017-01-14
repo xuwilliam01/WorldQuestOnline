@@ -220,18 +220,12 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		String text = search.getText().trim().toLowerCase();
 		System.out.println(text);
 		displayboard.clear();
-		if(text.equals(""))
-		{
-			displayboard = (ArrayList<LeaderboardPlayer>) leaderboard.clone();
-			repaint();
-			return;
-		}
 		for(LeaderboardPlayer player : leaderboard)
 		{
 			if(player.getName().toLowerCase().contains(text))
 				displayboard.add(player);
 			if(displayboard.size() > LEADERBOARD_DISPLAY_SIZE)
-				return;
+				break;
 		}
 		repaint();	
 		
