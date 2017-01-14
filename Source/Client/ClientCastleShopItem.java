@@ -32,43 +32,43 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(100,100);
 			cost = ServerBuildingItem.BASIC_BARRACKS_COST;
-			setToolTipText("Barracks (Spawns two soldiers and one archer each tick)");
+			setToolTipText("Barracks (Spawns two soldiers and one archer each tick) Cost: 10 gold");
 			break;
 		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("ADV_BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(100,200);
 			cost = ServerBuildingItem.ADV_BARRACKS_COST;
-			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick");
+			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick) Cost: 20 gold");
 			break;
 		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("GIANT_FACTORY_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(100,300);
 			cost = ServerBuildingItem.GIANT_FACTORY_COST;
-			setToolTipText("Giant Factory (Spawns two knights and one wizard");
+			setToolTipText("Giant Factory (Spawns a giant each tick) Cost: 25 gold");
 			break;
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("WOOD_HOUSE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(200,100);
 			cost = ServerBuildingItem.WOOD_HOUSE_COST;
-			setToolTipText("Wooden house (+10 housing space)");
+			setToolTipText("Wooden house (+10 housing space) Cost: 5 gold");
 			break;
 		case ServerWorld.INN_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("INN_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(200,200);
 			cost = ServerBuildingItem.INN_COST;
-			setToolTipText("Inn (+25 housing space)");
+			setToolTipText("Inn (+25 housing space) Cost: 8 gold");
 			break;
 		case ServerWorld.TOWER_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("TOWER_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(300,100);
 			cost = ServerBuildingItem.TOWER_COST;
-			setToolTipText("Arrow Tower");
+			setToolTipText("Arrow Tower (Defends against enemy units) Cost: 10 gold");
 			break;
 		case ServerWorld.GOLD_MINE_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("GOLD_MINE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(400,100);
 			cost = ServerBuildingItem.GOLD_MINE_COST;
-			setToolTipText("Gold Mine");
+			setToolTipText("Gold Mine (Produces gold that players can collect for the team by passing by) Cost: 20 gold");
 			break;
 		}
 		setVisible(true);
