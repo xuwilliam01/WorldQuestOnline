@@ -1309,6 +1309,32 @@ public class Images {
 			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("TOWER_VALID.png","Buildings//"));
 			
+			
+			int height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("TOWER_"+i+".png",image));
+			}
+			
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BARRACKS.png",image));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("BARRACKS_"+i+".png",image));
+			}
+
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "WOOD_HOUSE.png"));
 			} catch (IOException e) {
@@ -1322,6 +1348,13 @@ public class Images {
 			addtoImageArray(new GameImage("WOOD_HOUSE.png",image));
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("WOOD_HOUSE_"+i+".png",image));
+			}
 			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "GOLD_MINE.png"));
@@ -1337,6 +1370,13 @@ public class Images {
 			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
 			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("GOLD_MINE_"+i+".png",image));
+			}
+			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "ADV_BARRACKS.png"));
 			} catch (IOException e) {
@@ -1350,6 +1390,13 @@ public class Images {
 			addtoImageArray(new GameImage("ADV_BARRACKS.png",image));
 			addtoImageArray(new GameImage("ADV_BARRACKS_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("ADV_BARRACKS_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("ADV_BARRACKS_"+i+".png",image));
+			}
 			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "GIANT_FACTORY.png"));
@@ -1365,6 +1412,14 @@ public class Images {
 			addtoImageArray(new GameImage("GIANT_FACTORY_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GIANT_FACTORY_VALID.png","Buildings//"));
 			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("GIANT_FACTORY_"+i+".png",image));
+			}
+			
+			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "INN.png"));
 			} catch (IOException e) {
@@ -1378,6 +1433,13 @@ public class Images {
 			addtoImageArray(new GameImage("INN.png",image));
 			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("INN_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(null),image.getHeight(null)-(height/20));
+				addtoImageArray(new GameImage("INN_"+i+".png",image));
+			}
 			
 			addtoImageArray(new GameImage("RED_CASTLE.png",
 					"Buildings//"));

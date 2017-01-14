@@ -3,6 +3,7 @@ package Server.Buildings;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
+import Server.Effects.ServerDemolition;
 import Server.Effects.ServerSmoke;
 
 public abstract class ServerBuilding extends ServerCreature {
@@ -115,8 +116,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public void destroy()
 	{
 		super.destroy();
-		getWorld().add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,getWorld()));
-		getWorld().add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,getWorld()));
+		getWorld().add(new ServerDemolition(getX(),getY(),getWidth(),getHeight(),getType(),getWorld()));
 	}
 
 }
