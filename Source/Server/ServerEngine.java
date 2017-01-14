@@ -140,56 +140,59 @@ public class ServerEngine implements Runnable, ActionListener {
 	/**
 	 * Send messages to all the clients updating their player's data
 	 */
-	public synchronized void updateClients() {
-		if (!toRemove.isEmpty()) {
-			for (ServerPlayer player : toRemove)
-				listOfPlayers.remove(player);
-			toRemove.clear();
-		}
-
-		//Everyone left the game, so end it
-		if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
+	public void updateClients() {
+		synchronized(listOfPlayers)
 		{
-			server.getAllConnectedPlayers().clear();
-			endGame(ServerCreature.RED_TEAM);
-		}
-
-		try {
-			for (ServerPlayer player : listOfPlayers) {
-				player.updateClient();
-				if (endGame) {
-					player.setEndGame(true, losingTeam);
-				}
+			if (!toRemove.isEmpty()) {
+				for (ServerPlayer player : toRemove)
+					listOfPlayers.remove(player);
+				toRemove.clear();
 			}
-			if (endGame) {
-				String redPlayers ="";
-				String bluePlayers ="";
-				int winner = ServerCreature.BLUE_TEAM;
-				if(losingTeam == ServerCreature.BLUE_TEAM)
-					winner = ServerCreature.RED_TEAM;
-				int numRed = 0;
-				int numBlue = 0;
-				for (ServerPlayer player : server.getAllConnectedPlayers()) {
-					if(player.getTeam() == ServerCreature.RED_TEAM)
-					{
-						numRed++;
-						redPlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
-					} else 
-					{
-						numBlue++;
-						bluePlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+
+			//Everyone left the game, so end it
+			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
+			{
+				server.getAllConnectedPlayers().clear();
+				endGame(ServerCreature.RED_TEAM);
+			}
+
+			try {
+				for (ServerPlayer player : listOfPlayers) {
+					player.updateClient();
+					if (endGame) {
+						player.setEndGame(true, losingTeam);
 					}
 				}
-				if(server.getAllConnectedPlayers().size() > 1)
-					server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
-				server.getManager().removeRoom(server);
-				close();
-				server.close();
-			}
+				if (endGame) {
+					String redPlayers ="";
+					String bluePlayers ="";
+					int winner = ServerCreature.BLUE_TEAM;
+					if(losingTeam == ServerCreature.BLUE_TEAM)
+						winner = ServerCreature.RED_TEAM;
+					int numRed = 0;
+					int numBlue = 0;
+					for (ServerPlayer player : server.getAllConnectedPlayers()) {
+						if(player.getTeam() == ServerCreature.RED_TEAM)
+						{
+							numRed++;
+							redPlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+						} else 
+						{
+							numBlue++;
+							bluePlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+						}
+					}
+					if(server.getAllConnectedPlayers().size() > 1)
+						server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
+					server.getManager().removeRoom(server);
+					close();
+					server.close();
+				}
 
-		} catch (ConcurrentModificationException e) {
-			System.out.println("Concurrent modification occured");
-			e.printStackTrace();
+			} catch (ConcurrentModificationException e) {
+				System.out.println("Concurrent modification occured");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -248,7 +251,10 @@ public class ServerEngine implements Runnable, ActionListener {
 	public synchronized void removePlayer(ServerPlayer remove) {
 		toRemove.add(remove);
 		lastTeam--;
-		listOfPlayers.remove(remove);
+		synchronized(listOfPlayers)
+		{
+			listOfPlayers.remove(remove);
+		}
 		world.remove(remove);
 		server.decreaseNumPlayer();
 		broadcast("R " + ServerPlayer.toChars(remove.getID()));
@@ -428,14 +434,16 @@ public class ServerEngine implements Runnable, ActionListener {
 	public int getNextTeam() {
 		int noOfBlue = 0;
 		int noOfRed = 0;
-		for (ServerPlayer player : listOfPlayers) {
-			if (player.getTeam() == ServerCreature.RED_TEAM) {
-				noOfRed++;
-			} else {
-				noOfBlue++;
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				if (player.getTeam() == ServerCreature.RED_TEAM) {
+					noOfRed++;
+				} else {
+					noOfBlue++;
+				}
 			}
 		}
-
 		if (noOfBlue == noOfRed) {
 			if (Math.random() < 0.5) {
 				return ServerCreature.BLUE_TEAM;
