@@ -22,7 +22,7 @@ import Imports.Images;
  */
 public class CreatorObject extends JButton implements MouseListener
 {
-	public final static int SCALE = 1;
+	public final static double SCALE = 1.5;
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
 	private boolean isTile;
@@ -114,12 +114,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public void setPosition(int row, int col)
 	{
 		if (isTile)
-			setLocation(ClientFrame.getScaledWidth(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
-					* 12)),ClientFrame.getScaledHeight(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
-					+ 80));
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
+					* 12))),ClientFrame.getScaledHeight((int)(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
+					+ 80)));
 		else
-			setLocation(ClientFrame.getScaledWidth(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12)), ClientFrame.getScaledHeight(SCALE*(row
-					* getIcon().getIconHeight()/SCALE + row * 10) + 500));
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12))), ClientFrame.getScaledHeight((int)(SCALE*(row
+					* getIcon().getIconHeight()/SCALE + row * 10) + 425)));
 	}
 
 	@Override

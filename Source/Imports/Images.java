@@ -769,169 +769,169 @@ public class Images {
 
 			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			GameImage newImage = new GameImage("BRICK.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			GameImage newImage = new GameImage("BRICK.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BRICK_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("GRASS.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("GRASS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("GRASS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("GRASS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("WATER.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("WATER.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("WATER.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("WATER_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("DIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("DIRT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("DIRT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("DIRT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("DIRTGRASS.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("DIRTGRASS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("DIRTGRASS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("DIRTGRASS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("COBBLESTONE.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("COBBLESTONE.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("COBBLESTONE.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("COBBLESTONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("STONEBRICKS.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("STONEBRICKS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("STONEBRICKS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("STONEBRICKS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("NOTHING.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("NOTHING.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("NOTHING_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BLACK.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BLACK.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BLACK.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BLACK_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BDIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BDIRT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BDIRT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BDIRT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BDIRTPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BDIRTPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BDIRTPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BDIRTPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("PLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("PLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("PLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("PLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("WATERPLAT.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("WATERPLAT.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("WATERPLAT.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("WATERPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("SAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("SAND.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("SAND.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("SAND_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSAND.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSAND.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSAND_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSANDPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSANDPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSANDPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSANDPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSTONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONE.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSTONE.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSTONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSTONEPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONEPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSTONEPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSTONEPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("PLANKS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("PLANKS.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("PLANKS.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("PLANKS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("STONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("STONE.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("STONE.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("STONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("SANDSTONE.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("SANDSTONE.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("SANDSTONE.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("SANDSTONE_ICON");
 			addtoImageArray(newImage);
 
@@ -945,9 +945,9 @@ public class Images {
 			addtoImageArray(new GameImage("BLUE_CASTLE_ICON.png",
 					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
 					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
-			addtoImageArray(new GameImage("CHEST_ICON.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Creatures//"));
+			addtoImageArray(new GameImage("CHEST_ICON.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("VENDOR_LEFT_ICON.png",
 					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
 					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
