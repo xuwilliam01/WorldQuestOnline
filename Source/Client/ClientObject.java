@@ -127,7 +127,7 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Destroy the chest and it will drop items";
 			break;
 		case ServerWorld.CASTLE_TYPE:
-			hint = "Drop money on the castle to upgrade your goblins";
+			hint = "Drop money on your castle to buy buildings. Press 'E' to open/close the castle shop";
 			break;
 		}
 		
@@ -175,7 +175,7 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Destroy the chest and it will drop items";
 			break;
 		case ServerWorld.CASTLE_TYPE:
-			hint = "Drop money on the castle to upgrade your goblins";
+			hint = "Drop money on your castle to buy buildings. Press 'E' to open/close the castle shop";
 			break;
 		}
 		
@@ -222,7 +222,7 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Destroy the chest and it will drop items";
 			break;
 		case ServerWorld.CASTLE_TYPE:
-			hint = "Drop money on the castle to upgrade your goblins";
+			hint = "Drop money on your castle to buy buildings. Press 'E' to open/close the castle shop";
 			break;
 		}
 		
