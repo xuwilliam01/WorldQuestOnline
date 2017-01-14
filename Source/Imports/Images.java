@@ -1281,19 +1281,7 @@ public class Images {
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
 			
-			try {
-				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			addtoImageArray(new GameImage("BLUE_BARRACKS.png", image));
-			addtoImageArray(new GameImage("RED_BARRACKS.png", image));
-			addtoImageArray(new GameImage("BLUE_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
-			addtoImageArray(new GameImage("RED_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
-			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
-			addtoImageArray(new GameImage("BARRACKS.png",image));
-			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+
 			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "TOWER.png"));
@@ -1323,16 +1311,20 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_BARRACKS.png", image));
+			addtoImageArray(new GameImage("RED_BARRACKS.png", image));
+			addtoImageArray(new GameImage("BLUE_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
-			addtoImageArray(new GameImage("BARRACKS.png",image));
-			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS.png",image, 10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
 			
 			height = image.getHeight();
 			for (int i = 0; i < 20; i++)
 			{
 				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
-				addtoImageArray(new GameImage("BARRACKS_"+i+".png",image));
+				addtoImageArray(new GameImage("BARRACKS_"+i+".png",image,10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE));
 			}
 
 			try {

@@ -120,8 +120,8 @@ public class ServerSlime extends ServerEnemy
 			setImage("DARKSLIME_6");
 			setWidth(-1);
 			setHeight(-1);
-			setDamage(30);
-			setHP(100);
+			setDamage(20);
+			setHP(50);
 			setName("Dark Slime");
 			addItem(ServerItem.randomItem(getX(), getY(),world));
 			addItem(ServerItem.randomItem(getX(), getY(),world));
