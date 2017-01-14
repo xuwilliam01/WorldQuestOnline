@@ -1,6 +1,6 @@
 package Menu;
 
-import java.awt.Color; 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.DisplayMode;
 import java.awt.Font;
@@ -75,7 +75,7 @@ import WorldCreator.CreatorWorld;
  * @author Alex Raita & William Xu
  *
  */
-public class MainMenu implements KeyListener{
+public class MainMenu implements KeyListener {
 	static MainMenu main;
 
 	/**
@@ -123,13 +123,14 @@ public class MainMenu implements KeyListener{
 
 	private static boolean canConnect = false;
 
-	//private static JButton login;
+	// private static JButton login;
 	private static JButton loginLogout;
 
 	private static boolean tooLarge;
 	private static boolean checkedSettingsAlready = false;
 
 	private static Font mainFont = null;
+
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -143,10 +144,8 @@ public class MainMenu implements KeyListener{
 
 		clouds = new ArrayList<ClientCloud>();
 		for (int no = 0; no < 20; no++) {
-			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
-					- (CLOUD_DISTANCE / 2);
-			double y = Math.random() * (Client.SCREEN_HEIGHT * 1)
-					- (2 * Client.SCREEN_HEIGHT / 3);
+			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE - (CLOUD_DISTANCE / 2);
+			double y = Math.random() * (Client.SCREEN_HEIGHT * 1) - (2 * Client.SCREEN_HEIGHT / 3);
 
 			double hSpeed = 0;
 
@@ -174,12 +173,11 @@ public class MainMenu implements KeyListener{
 		loadImages.start();
 
 		// Set up the dimensions of the screen
-		GraphicsEnvironment ge = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
 		DisplayMode dm = gs.getDisplayMode();
 
-		ClientInventory.INVENTORY_WIDTH = (int) (300 * (Math.min(dm.getWidth(),1920) / 1920.0));
+		ClientInventory.INVENTORY_WIDTH = (int) (300 * (Math.min(dm.getWidth(), 1920) / 1920.0));
 
 		Client.SCREEN_WIDTH = dm.getWidth() - ClientInventory.INVENTORY_WIDTH;
 
@@ -195,17 +193,16 @@ public class MainMenu implements KeyListener{
 			tooLarge = true;
 		}
 
-		if(!checkedSettingsAlready)
-		{
+		if (!checkedSettingsAlready) {
 			checkedSettingsAlready = true;
 
 			// Display results
 			System.out.println(dm.getWidth());
 			System.out.println(dm.getHeight());
 
-			if (tooLarge)
-			{
-				JOptionPane.showMessageDialog(null, "Please set your monitor to 1920x1080 or smaller for an optimized experience");
+			if (tooLarge) {
+				JOptionPane.showMessageDialog(null,
+						"Please set your monitor to 1920x1080 or smaller for an optimized experience");
 			}
 		}
 		mainFrame = new ClientFrame(tooLarge, pos);
@@ -216,9 +213,7 @@ public class MainMenu implements KeyListener{
 			try {
 				Thread.sleep(10);
 				if (imageLoadFailed) {
-					JOptionPane
-					.showMessageDialog(
-							null,
+					JOptionPane.showMessageDialog(null,
 							"Failed to load images. Perhaps you are running the jar directly from Eclipse? Or perhaps you need to extract the zip first",
 							"Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
@@ -246,7 +241,7 @@ public class MainMenu implements KeyListener{
 			Audio.importAudio();
 			imagesAudioLoaded = true;
 
-			//  load font
+			// load font
 			try {
 				mainFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
 			} catch (FontFormatException e) {
@@ -268,8 +263,7 @@ public class MainMenu implements KeyListener{
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class MainPanel extends JPanel implements ActionListener,
-	MouseListener, Runnable {
+	private static class MainPanel extends JPanel implements ActionListener, MouseListener, Runnable {
 
 		int middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 		Image titleImage = Images.getImage("WorldQuestOnline");
@@ -279,14 +273,13 @@ public class MainMenu implements KeyListener{
 		JButton createServer;
 		JButton createMap;
 		JButton instructions;
-		//JButton loginLogout;
+		// JButton loginLogout;
 
 		JButton directConnect;
 		JButton leaderb;
 		JButton exitButton;
 
-
-		//Image buttonTrayImage = Images.getImage("ButtonTray");
+		// Image buttonTrayImage = Images.getImage("ButtonTray");
 
 		Image createMapImage = Images.getImage("CreateAMap");
 		Image createMapOver = Images.getImage("CreateAMapClicked");
@@ -343,18 +336,16 @@ public class MainMenu implements KeyListener{
 			setLayout(null);
 			setLocation(0, 0);
 			requestFocusInWindow();
-			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
-					Client.SCREEN_HEIGHT);
+			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
 
 			mainFrame.requestFocus();
 
 			repaintTimer.start();
 
-			int currentButtonY = (int)(Client.SCREEN_HEIGHT*(0.5));
+			int currentButtonY = (int) (Client.SCREEN_HEIGHT * (0.35));
 
 			playOnline = new JButton(new ImageIcon(playGameImage));
-			playOnline.setSize(playGameImage.getWidth(null),
-					playGameImage.getHeight(null));
+			playOnline.setSize(playGameImage.getWidth(null), playGameImage.getHeight(null));
 			playOnline.setLocation(0, currentButtonY);
 			playOnline.setBorder(BorderFactory.createEmptyBorder());
 			playOnline.setContentAreaFilled(false);
@@ -365,8 +356,7 @@ public class MainMenu implements KeyListener{
 			currentButtonY += playGameImage.getHeight(null);
 
 			createMap = new JButton(new ImageIcon(createMapImage));
-			createMap.setSize(createMapImage.getWidth(null),
-					createMapImage.getHeight(null));
+			createMap.setSize(createMapImage.getWidth(null), createMapImage.getHeight(null));
 			createMap.setLocation(0, currentButtonY);
 			createMap.setBorder(BorderFactory.createEmptyBorder());
 			createMap.setContentAreaFilled(false);
@@ -377,8 +367,7 @@ public class MainMenu implements KeyListener{
 			currentButtonY += createMapImage.getHeight(null);
 
 			instructions = new JButton(new ImageIcon(instructionsImage));
-			instructions.setSize(instructionsImage.getWidth(null),
-					instructionsImage.getHeight(null));
+			instructions.setSize(instructionsImage.getWidth(null), instructionsImage.getHeight(null));
 			instructions.setLocation(0, currentButtonY);
 			instructions.setBorder(BorderFactory.createEmptyBorder());
 			instructions.setContentAreaFilled(false);
@@ -389,8 +378,7 @@ public class MainMenu implements KeyListener{
 			currentButtonY += instructionsImage.getHeight(null);
 
 			leaderb = new JButton(new ImageIcon(leaderbImage));
-			leaderb.setSize(leaderbImage.getWidth(null),
-					leaderbImage.getHeight(null));
+			leaderb.setSize(leaderbImage.getWidth(null), leaderbImage.getHeight(null));
 			leaderb.setLocation(0, currentButtonY);
 			leaderb.setBorder(BorderFactory.createEmptyBorder());
 			leaderb.setContentAreaFilled(false);
@@ -400,32 +388,30 @@ public class MainMenu implements KeyListener{
 			add(leaderb);
 
 			exitButton = new JButton(new ImageIcon(exitImage));
-			exitButton.setSize(exitImage.getWidth(null),
-					exitImage.getHeight(null));
+			exitButton.setSize(exitImage.getWidth(null), exitImage.getHeight(null));
 			exitButton.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - exitImage.getWidth(null),
-					Client.SCREEN_HEIGHT-exitImage.getHeight(null)-20);
+					currentButtonY + 20);
 			exitButton.setBorder(BorderFactory.createEmptyBorder());
 			exitButton.setContentAreaFilled(false);
 			exitButton.setOpaque(false);
-			exitButton.addActionListener(new  ExitGame());
+			exitButton.addActionListener(new ExitGame());
 			exitButton.addMouseListener(this);
 			add(exitButton);
 
-
-			//			directConnect = new JButton("Direct IP Connect");
-			//			directConnect.setSize(createServerImage.getWidth(null),
-			//					createServerImage.getHeight(null));
-			//			directConnect.setLocation(middle - instructionsImage.getWidth(null)
-			//					/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
-			//			directConnect.addActionListener(new GameStart());
-			//			directConnect.addMouseListener(this);
-			//			add(directConnect);
+			// directConnect = new JButton("Direct IP Connect");
+			// directConnect.setSize(createServerImage.getWidth(null),
+			// createServerImage.getHeight(null));
+			// directConnect.setLocation(middle -
+			// instructionsImage.getWidth(null)
+			// / 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			// directConnect.addActionListener(new GameStart());
+			// directConnect.addMouseListener(this);
+			// add(directConnect);
 
 			createServer = new JButton(new ImageIcon(createServerImage));
-			createServer.setSize(createServerImage.getWidth(null),
-					createServerImage.getHeight(null));
-			createServer.setLocation(300+middle - instructionsImage.getWidth(null)
-			/ 2, (int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			createServer.setSize(createServerImage.getWidth(null), createServerImage.getHeight(null));
+			createServer.setLocation(300 + middle - instructionsImage.getWidth(null) / 2,
+					(int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
@@ -433,24 +419,21 @@ public class MainMenu implements KeyListener{
 			createServer.addMouseListener(this);
 			add(createServer);
 
-
-
 			ClientAccountWindow.checkLogin();
-			if(ClientAccountWindow.loggedIn)
-			{
-				//login = new JButton(String.format("Logout(%s)", ClientAccountWindow.savedUser));
+			if (ClientAccountWindow.loggedIn) {
+				// login = new JButton(String.format("Logout(%s)",
+				// ClientAccountWindow.savedUser));
 				loginLogout = new JButton(new ImageIcon(logoutImage));
-			}
-			else {
+			} else {
 
 				loginLogout = new JButton(new ImageIcon(loginImage));
 
 			}
 
-			loginLogout.setSize(loginImage.getWidth(null),
-					loginImage.getHeight(null));
+			loginLogout.setSize(loginImage.getWidth(null), loginImage.getHeight(null));
 			loginLogout.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - loginImage.getWidth(null),
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 - loginImage.getHeight(null));
+					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 - loginImage.getHeight(null)
+							- 80);
 			loginLogout.setBorder(BorderFactory.createEmptyBorder());
 			loginLogout.setContentAreaFilled(false);
 			loginLogout.setOpaque(false);
@@ -458,13 +441,12 @@ public class MainMenu implements KeyListener{
 			loginLogout.addMouseListener(this);
 			add(loginLogout);
 
-			/*login.setSize(200, 50);
-			login.setLocation(Client.SCREEN_WIDTH - 200,50);
-			login.setContentAreaFilled(false);
-			login.setOpaque(false);
-			login.addActionListener(new LoginButton());
-			login.addMouseListener(this);
-			add(login);*/
+			/*
+			 * login.setSize(200, 50); login.setLocation(Client.SCREEN_WIDTH -
+			 * 200,50); login.setContentAreaFilled(false);
+			 * login.setOpaque(false); login.addActionListener(new
+			 * LoginButton()); login.addMouseListener(this); add(login);
+			 */
 
 			try {
 				socket = new DatagramSocket(STATS_UDP_PORT);
@@ -483,19 +465,18 @@ public class MainMenu implements KeyListener{
 			repaint();
 		}
 
-		public void close()
-		{
+		public void close() {
 			socket.close();
 			repaintTimer.stop();
 			displayed = false;
 		}
 
-		public void resetStats()
-		{
+		public void resetStats() {
 			rating = "-";
 			wins = "-";
 			losses = "-";
 		}
+
 		/**
 		 * Draw the clouds
 		 */
@@ -503,53 +484,42 @@ public class MainMenu implements KeyListener{
 			super.paintComponent(graphics);
 
 			Graphics2D g2d = (Graphics2D) graphics;
-			g2d.setRenderingHint(
-					RenderingHints.KEY_TEXT_ANTIALIASING,
-					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
-
-			graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH
-					+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT,
-					null);
+			graphics.drawImage(background, 0, 0, Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
+					Client.SCREEN_HEIGHT, null);
 
 			// Draw and move the clouds
 			for (ClientCloud cloud : clouds) {
-				if (cloud.getX() <= Client.SCREEN_WIDTH
-						+ ClientInventory.INVENTORY_WIDTH
-						&& cloud.getX() + cloud.getWidth() >= -64
-						&& cloud.getY() <= Client.SCREEN_HEIGHT
+				if (cloud.getX() <= Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH
+						&& cloud.getX() + cloud.getWidth() >= -64 && cloud.getY() <= Client.SCREEN_HEIGHT
 						&& cloud.getY() + cloud.getHeight() >= 0) {
-					graphics.drawImage(cloud.getImage(), (int) cloud.getX(),
-							(int) cloud.getY(), null);
+					graphics.drawImage(cloud.getImage(), (int) cloud.getX(), (int) cloud.getY(), null);
 				}
 
 				if (cloud.getX() < middle - CLOUD_DISTANCE / 2) {
 					cloud.setX(middle + CLOUD_DISTANCE / 2);
-					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-							- (2 * Client.SCREEN_HEIGHT / 3));
-					cloud.sethSpeed((Math.random() * 0.8 + 0.2)
-							* cloudDirection);
+					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2 * Client.SCREEN_HEIGHT / 3));
+					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 
 				} else if (cloud.getX() > middle + CLOUD_DISTANCE / 2) {
 					cloud.setX(middle - CLOUD_DISTANCE / 2);
-					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT)
-							- (2 * Client.SCREEN_HEIGHT / 3));
-					cloud.sethSpeed((Math.random() * 0.8 + 0.2)
-							* cloudDirection);
+					cloud.setY(Math.random() * (Client.SCREEN_HEIGHT) - (2 * Client.SCREEN_HEIGHT / 3));
+					cloud.sethSpeed((Math.random() * 0.8 + 0.2) * cloudDirection);
 				}
 				cloud.setX(cloud.getX() + cloud.gethSpeed());
 
 			}
-			
-			graphics.drawImage(Images.getImage("menuBackground"),0,0,null);
+
+			graphics.drawImage(Images.getImage("menuBackground"), 0, 0, null);
 
 			// Draw the title image
 			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 25,
-					(int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
-					null);
+					(int) (75 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
-			graphics.drawImage(profileBackgroundImage,Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null),
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2, null);
+			graphics.drawImage(profileBackgroundImage,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null),
+					(int) (Client.SCREEN_HEIGHT * 0.4 - profileBackgroundImage.getHeight(null) / 2 + 25), null);
 
 			g2d.setFont(mainFont);
 
@@ -560,7 +530,7 @@ public class MainMenu implements KeyListener{
 
 			String displayName = ClientAccountWindow.savedUser;
 
-			if(ClientAccountWindow.loggedIn) {
+			if (ClientAccountWindow.loggedIn) {
 				displayName = ClientAccountWindow.savedUser;
 			} else {
 				displayName = "Guest";
@@ -568,37 +538,37 @@ public class MainMenu implements KeyListener{
 
 			int textWidth = graphics.getFontMetrics().stringWidth(displayName);
 			BufferedImage nameGlowBuffered = toBufferedImage(nameGlowImage);
-			Image nameGlowScaled = nameGlowBuffered.getScaledInstance(textWidth + 40, 120, nameGlowBuffered.SCALE_SMOOTH);
+			Image nameGlowScaled = nameGlowBuffered.getScaledInstance(textWidth + 40, 120,
+					Image.SCALE_SMOOTH);
 			g2d.drawImage(nameGlowScaled,
-					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 60,
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 - 10, null);
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
+					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 - 35 - 20, null);
 			g2d.setColor(Color.WHITE);
 			g2d.drawString(displayName,
-					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 60);
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 110,
+					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 35 - 20);
 
-			g2d.drawString("Rating: "+rating, 
+			g2d.drawString("Rating: " + rating,
 					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 120);
-			g2d.drawString("Wins: "+wins+"  Losses: "+losses, 
-					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
-					Client.SCREEN_HEIGHT/2-profileBackgroundImage.getHeight(null)/2 + 180);
+					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 95 - 20);
+			g2d.drawString("Wins: " + wins + "  Losses: " + losses,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 70,
+					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 155 - 20);
 
-
-			//graphics.drawImage(buttonTrayImage,
-			//middle - buttonTrayImage.getWidth(null) / 2,
-			//(int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
+			// graphics.drawImage(buttonTrayImage,
+			// middle - buttonTrayImage.getWidth(null) / 2,
+			// (int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
 
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			statsCounter++;
-			if(statsCounter%60 == 0 && ClientAccountWindow.loggedIn && rating.equals("-"))
-			{
-				sendData = ("S "+ClientAccountWindow.savedUser).getBytes();
+			if (statsCounter % 60 == 0 && ClientAccountWindow.loggedIn && rating.equals("-")) {
+				sendData = ("S " + ClientAccountWindow.savedUser).getBytes();
 				try {
-					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);			
+					send = new DatagramPacket(sendData, sendData.length,
+							InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
 					socket.send(send);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -641,14 +611,12 @@ public class MainMenu implements KeyListener{
 			} else if (e.getSource() == exitButton) {
 				exitButton.setIcon(new ImageIcon(exitOver));
 			} else if (e.getSource() == loginLogout) {
-				if(ClientAccountWindow.loggedIn)
-				{
+				if (ClientAccountWindow.loggedIn) {
 					loginLogout.setIcon(new ImageIcon(logoutOver));
 				} else {
 					loginLogout.setIcon(new ImageIcon(loginOver));
 				}
 			}
-
 
 		}
 
@@ -667,8 +635,7 @@ public class MainMenu implements KeyListener{
 			} else if (e.getSource() == exitButton) {
 				exitButton.setIcon(new ImageIcon(exitImage));
 			} else if (e.getSource() == loginLogout) {
-				if(ClientAccountWindow.loggedIn)
-				{
+				if (ClientAccountWindow.loggedIn) {
 					loginLogout.setIcon(new ImageIcon(logoutImage));
 				} else {
 					loginLogout.setIcon(new ImageIcon(loginImage));
@@ -679,8 +646,7 @@ public class MainMenu implements KeyListener{
 
 		@Override
 		public void run() {
-			while(displayed)
-			{
+			while (displayed) {
 				receiveData = new byte[1024];
 				receive = new DatagramPacket(receiveData, receiveData.length);
 				try {
@@ -718,8 +684,7 @@ public class MainMenu implements KeyListener{
 			setLayout(null);
 			setLocation(0, 0);
 			requestFocusInWindow();
-			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
-					Client.SCREEN_HEIGHT);
+			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
 
 			StringBuilder newFileName = new StringBuilder(fileName);
 			while (newFileName.indexOf(" ") >= 0)
@@ -752,8 +717,7 @@ public class MainMenu implements KeyListener{
 		}
 	}
 
-	private static class ConnectionTimer implements Runnable
-	{
+	private static class ConnectionTimer implements Runnable {
 		DatagramSocket socket;
 		DatagramPacket receive;
 		DatagramPacket send;
@@ -764,22 +728,20 @@ public class MainMenu implements KeyListener{
 		private int port;
 		private String IP;
 
-		public ConnectionTimer(String IP, int port)
-		{
+		public ConnectionTimer(String IP, int port) {
 			this.IP = IP;
 			this.port = port;
 			canConnect = false;
 		}
 
-		public void close()
-		{
-			if(socket != null)
+		public void close() {
+			if (socket != null)
 				socket.close();
 		}
+
 		@Override
 		public void run() {
-			while(true)
-			{
+			while (true) {
 				try {
 					socket = new DatagramSocket(CONFIRM_UDP_PORT);
 					receiveData = new byte[1024];
@@ -787,16 +749,14 @@ public class MainMenu implements KeyListener{
 					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), port);
 					socket.send(send);
 
-
 					receiveData = new byte[1024];
 					receive = new DatagramPacket(receiveData, receiveData.length);
 
 					socket.receive(receive);
 
-					//Get input
+					// Get input
 					String input = new String(receive.getData()).trim();
-					if (input.length() == 1 && input.charAt(0) == 'C')
-					{
+					if (input.length() == 1 && input.charAt(0) == 'C') {
 						canConnect = true;
 						socket.close();
 						return;
@@ -809,6 +769,7 @@ public class MainMenu implements KeyListener{
 		}
 
 	}
+
 	/**
 	 * The panel to run the actual game
 	 * 
@@ -836,8 +797,7 @@ public class MainMenu implements KeyListener{
 		 * @throws IOException
 		 * @throws NumberFormatException
 		 */
-		public GamePanel(String serverIPIn, int portIn)
-				throws NumberFormatException, IOException {
+		public GamePanel(String serverIPIn, int portIn) throws NumberFormatException, IOException {
 			serverIP = serverIPIn;
 			this.port = portIn;
 			boolean connected = false;
@@ -854,14 +814,11 @@ public class MainMenu implements KeyListener{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				if (!canConnect)
-				{
-					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please re-enter the IP.");
+				if (!canConnect) {
+					serverIP = JOptionPane.showInputDialog("Connection Failed. Please re-enter the IP.");
 					if (serverIP == null)
 						exit = true;
-					else 
-					{
+					else {
 						con.close();
 						continue;
 					}
@@ -874,11 +831,10 @@ public class MainMenu implements KeyListener{
 
 					// Set up the output
 					output = new PrintWriter(mySocket.getOutputStream());
-					output.println("Na " + ClientAccountWindow.savedKey + " "+ClientAccountWindow.savedUser);
+					output.println("Na " + ClientAccountWindow.savedKey + " " + ClientAccountWindow.savedUser);
 					output.flush();
 
-					input = new BufferedReader(new InputStreamReader(
-							mySocket.getInputStream()));
+					input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
 
 					String line = input.readLine();
 
@@ -889,25 +845,20 @@ public class MainMenu implements KeyListener{
 						input.close();
 						output.close();
 						mySocket.close();
-					}
-					else if(line.equals("DOUBLEACC"))
-					{
+					} else if (line.equals("DOUBLEACC")) {
 						JOptionPane.showMessageDialog(this, "You are already playing a game on this account!");
 						exit = true;
 						input.close();
 						output.close();
 						mySocket.close();
-					}
-					else if(line.equals("INVALID"))
-					{
-						JOptionPane.showMessageDialog(this, "Invalid login credentials. Try to logout and login again.");
+					} else if (line.equals("INVALID")) {
+						JOptionPane.showMessageDialog(this,
+								"Invalid login credentials. Try to logout and login again.");
 						exit = true;
 						input.close();
 						output.close();
 						mySocket.close();
-					}
-					else if(line.equals("ERROR"))
-					{
+					} else if (line.equals("ERROR")) {
 						JOptionPane.showMessageDialog(this, "Error Connecting");
 						exit = true;
 						input.close();
@@ -917,8 +868,7 @@ public class MainMenu implements KeyListener{
 
 					connected = true;
 				} catch (IOException e) {
-					serverIP = JOptionPane
-							.showInputDialog("Connection Failed. Please re-enter the IP.");
+					serverIP = JOptionPane.showInputDialog("Connection Failed. Please re-enter the IP.");
 					if (serverIP == null)
 						exit = true;
 				}
@@ -928,8 +878,7 @@ public class MainMenu implements KeyListener{
 
 			if (exit) {
 				if (full)
-					JOptionPane.showMessageDialog(null,
-							"This game is full");
+					JOptionPane.showMessageDialog(null, "This game is full");
 
 				setVisible(false);
 				mainFrame.remove(this);
@@ -946,18 +895,13 @@ public class MainMenu implements KeyListener{
 				JButton menu = new JButton("Main Menu");
 				menu.addActionListener(new LobbyMenuButton());
 
-				lobby = new ClientLobby(mySocket, input, output, this,
-						clouds, menu);
-				if(lobby.cancelled)
-				{
+				lobby = new ClientLobby(mySocket, input, output, this, clouds, menu);
+				if (lobby.cancelled) {
 					menu.doClick();
-				}
-				else
-				{
+				} else {
 					lobby.setLocation(0, 0);
 					lobby.setLayout(null);
-					lobby.setSize(Client.SCREEN_WIDTH
-							+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
+					lobby.setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
 					lobby.setDoubleBuffered(true);
 					mainFrame.add(lobby);
 					lobby.repaint();
@@ -966,8 +910,7 @@ public class MainMenu implements KeyListener{
 			}
 		}
 
-		public void startGame(ClientLobby lobby) throws UnknownHostException,
-		IOException {
+		public void startGame(ClientLobby lobby) throws UnknownHostException, IOException {
 			lobby.setVisible(false);
 			mainFrame.remove(lobby);
 			mainFrame.invalidate();
@@ -989,7 +932,7 @@ public class MainMenu implements KeyListener{
 			mySocket = new Socket(serverIP, port);
 
 			try {
-				mySocket.setReceiveBufferSize(1024*16);
+				mySocket.setReceiveBufferSize(1024 * 16);
 				mySocket.setSendBufferSize(1024);
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
@@ -998,7 +941,7 @@ public class MainMenu implements KeyListener{
 
 			// Set up the output
 			output = new PrintWriter(mySocket.getOutputStream());
-			output.println("Na " + ClientAccountWindow.savedKey + " "+ClientAccountWindow.savedUser);
+			output.println("Na " + ClientAccountWindow.savedKey + " " + ClientAccountWindow.savedUser);
 			output.flush();
 
 			client = new Client(mySocket, output, inventory, pane);
@@ -1024,26 +967,23 @@ public class MainMenu implements KeyListener{
 	/**
 	 * Opens the leaderboard
 	 */
-	private static class LeaderboardButton implements ActionListener{
+	private static class LeaderboardButton implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
 
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
 
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
@@ -1057,37 +997,34 @@ public class MainMenu implements KeyListener{
 				e.printStackTrace();
 			}
 			Thread leaderboardThread = new Thread(leaderboard);
-			leaderboardThread.start();	
+			leaderboardThread.start();
 		}
 
 	}
+
 	/**
 	 * Opens the menu to select a server
 	 */
 	private static class OnlineButton implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
 
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
 			}
-			if(!ClientAccountWindow.loggedIn)
-			{
+			if (!ClientAccountWindow.loggedIn) {
 				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
@@ -1101,7 +1038,6 @@ public class MainMenu implements KeyListener{
 			Thread listThread = new Thread(serverList);
 			listThread.start();
 
-
 		}
 
 	}
@@ -1109,35 +1045,31 @@ public class MainMenu implements KeyListener{
 	/**
 	 * Reacts to login/logout
 	 */
-	private static class LoginButton implements ActionListener{
+	private static class LoginButton implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
 			}
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			if(ClientAccountWindow.loggedIn)
-			{
+			if (ClientAccountWindow.loggedIn) {
 				ClientAccountWindow.logout();
-				if(mainMenu != null)
+				if (mainMenu != null)
 					mainMenu.resetStats();
 
-				//login.setText("Login");
+				// login.setText("Login");
 				Image logoutImage = Images.getImage("Login");
 				loginLogout.setIcon(new ImageIcon(logoutImage));
 				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!");
@@ -1159,6 +1091,7 @@ public class MainMenu implements KeyListener{
 		}
 
 	}
+
 	/**
 	 * Reacts when the menu button in the creator is pressed
 	 * 
@@ -1175,8 +1108,7 @@ public class MainMenu implements KeyListener{
 		public void actionPerformed(ActionEvent e) {
 			int dialogResult = JOptionPane.NO_OPTION;
 			if (!creator.justSaved())
-				dialogResult = JOptionPane.showConfirmDialog(null,
-						"Do you want to save your map?", "Warning",
+				dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to save your map?", "Warning",
 						JOptionPane.YES_NO_CANCEL_OPTION);
 			if (dialogResult == JOptionPane.YES_OPTION)
 				try {
@@ -1231,8 +1163,7 @@ public class MainMenu implements KeyListener{
 	 * @author Alex Raita & William Xu
 	 *
 	 */
-	private static class InstructionPanel extends JPanel implements
-	ActionListener {
+	private static class InstructionPanel extends JPanel implements ActionListener {
 		int currentPanel = 0;
 		JButton next;
 		JButton previous;
@@ -1251,15 +1182,12 @@ public class MainMenu implements KeyListener{
 			setLayout(null);
 			setLocation(0, 0);
 			requestFocusInWindow();
-			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
-					Client.SCREEN_HEIGHT);
+			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT);
 
 			Image nextImage = Images.getImage("Next");
 			next = new JButton(new ImageIcon(nextImage));
 			next.setSize(nextImage.getWidth(null), nextImage.getHeight(null));
-			next.setLocation(Client.SCREEN_WIDTH
-					+ ClientInventory.INVENTORY_WIDTH - 350,
-					Client.SCREEN_HEIGHT - 200);
+			next.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - 350, Client.SCREEN_HEIGHT - 200);
 			next.setBorder(BorderFactory.createEmptyBorder());
 			next.setContentAreaFilled(false);
 			next.setOpaque(false);
@@ -1334,26 +1262,22 @@ public class MainMenu implements KeyListener{
 	 */
 	private static class GameStart implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
 			}
-			if(!ClientAccountWindow.loggedIn)
-			{
+			if (!ClientAccountWindow.loggedIn) {
 				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
@@ -1363,8 +1287,7 @@ public class MainMenu implements KeyListener{
 			int port = DEF_PORT;
 			// String playerName;
 
-			serverIP = JOptionPane
-					.showInputDialog("Enter the server IP or leave blank for a server on this machine");
+			serverIP = JOptionPane.showInputDialog("Enter the server IP or leave blank for a server on this machine");
 			if (serverIP == null) {
 				mainFrame.requestFocus();
 				return;
@@ -1397,8 +1320,7 @@ public class MainMenu implements KeyListener{
 
 	}
 
-	public static void joinLobby(String IP, int port)
-	{
+	public static void joinLobby(String IP, int port) {
 		mainFrame.remove(mainMenu);
 		mainMenu.close();
 		mainFrame.invalidate();
@@ -1427,20 +1349,17 @@ public class MainMenu implements KeyListener{
 	 */
 	private static class StartServer implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
@@ -1454,8 +1373,7 @@ public class MainMenu implements KeyListener{
 				try {
 					String maxRoomsStr = JOptionPane
 							.showInputDialog("What is the maximum number of gamerooms you would like?");
-					if (maxRoomsStr == null)
-					{
+					if (maxRoomsStr == null) {
 						mainFrame.requestFocus();
 						return;
 					}
@@ -1470,10 +1388,8 @@ public class MainMenu implements KeyListener{
 
 			while (true) {
 				try {
-					name = JOptionPane
-							.showInputDialog("What would you like to name the room? (No spaces)");
-					if (name == null)
-					{
+					name = JOptionPane.showInputDialog("What would you like to name the room? (No spaces)");
+					if (name == null) {
 						mainFrame.requestFocus();
 						return;
 					}
@@ -1489,7 +1405,8 @@ public class MainMenu implements KeyListener{
 			// while (true)
 			// {
 			// String port = JOptionPane
-			// .showInputDialog("Please enter the port you want to use for the server (Default "
+			// .showInputDialog("Please enter the port you want to use for the
+			// server (Default "
 			// + DEF_PORT + ")");
 			// if (port == null)
 			// return;
@@ -1511,8 +1428,7 @@ public class MainMenu implements KeyListener{
 			System.out.println("rooms " + maxRooms);
 			ServerManager server = null;
 			try {
-				server = new ServerManager(name, portNum, maxRooms,
-						mainFrame);
+				server = new ServerManager(name, portNum, maxRooms, mainFrame);
 			} catch (SocketException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -1535,20 +1451,17 @@ public class MainMenu implements KeyListener{
 	private static class StartCreator implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// Get filename. If it is invalid, exit
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
@@ -1557,8 +1470,7 @@ public class MainMenu implements KeyListener{
 			String[] mapNames = null;
 			final String DEFAULT_MAP_NAME = "New Map Name";
 			try {
-				BufferedReader maps = new BufferedReader(new FileReader(
-						new File("Resources", "Maps")));
+				BufferedReader maps = new BufferedReader(new FileReader(new File("Resources", "Maps")));
 				int numMaps = Integer.parseInt(maps.readLine());
 				mapNames = new String[numMaps + 1];
 				mapNames[0] = DEFAULT_MAP_NAME;
@@ -1572,26 +1484,21 @@ public class MainMenu implements KeyListener{
 
 			while (true) {
 				try {
-					final JComboBox<String> jcb = new JComboBox<String>(
-							mapNames);
+					final JComboBox<String> jcb = new JComboBox<String>(mapNames);
 					jcb.setEditable(true);
 					jcb.addItemListener(new ItemListener() {
 						@Override
 						public void itemStateChanged(ItemEvent e) {
-							String selectedItem = (String) jcb
-									.getSelectedItem();
+							String selectedItem = (String) jcb.getSelectedItem();
 							boolean editable = selectedItem instanceof String
-									&& ((String) selectedItem)
-									.equals(DEFAULT_MAP_NAME);
+									&& ((String) selectedItem).equals(DEFAULT_MAP_NAME);
 							jcb.setEditable(editable);
 						}
 					});
-					int result = JOptionPane.showOptionDialog(null, jcb,
-							"Choose A Map To Edit", JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE, null, new String[] {
-									"Next", "Cancel" }, null);
-					if (result == JOptionPane.NO_OPTION
-							|| result == JOptionPane.CLOSED_OPTION)
+					int result = JOptionPane.showOptionDialog(null, jcb, "Choose A Map To Edit",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+							new String[] { "Next", "Cancel" }, null);
+					if (result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION)
 						throw new NullPointerException();
 					fileName = ((String) jcb.getSelectedItem()).trim();
 				} catch (NullPointerException e2) {
@@ -1626,29 +1533,24 @@ public class MainMenu implements KeyListener{
 	 */
 	private static class OpenInstructions implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(ClientServerSelection.open)
-			{
+			if (ClientServerSelection.open) {
 				serverList.setVisible(true);
 				serverList.toFront();
 				return;
 			}
-			if(ClientAccountWindow.open)
-			{
+			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
 				return;
 			}
-			if(Leaderboard.open)
-			{
+			if (Leaderboard.open) {
 				leaderboard.setVisible(true);
 				leaderboard.toFront();
 				return;
 			}
-			JOptionPane
-			.showMessageDialog(
-					null,
-					"We are updating the instructions! The controls are shown in the lobby.",
-					"Sorry", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"We are updating the instructions! The controls are shown in the lobby.", "Sorry",
+					JOptionPane.ERROR_MESSAGE);
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
@@ -1666,10 +1568,8 @@ public class MainMenu implements KeyListener{
 		}
 	}
 
-	public static BufferedImage toBufferedImage(Image img)
-	{
-		if (img instanceof BufferedImage)
-		{
+	public static BufferedImage toBufferedImage(Image img) {
+		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}
 
@@ -1687,17 +1587,12 @@ public class MainMenu implements KeyListener{
 
 	private static class ExitGame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Object[] options = {"Exit",
-			"Cancel"};
+			Object[] options = { "Exit", "Cancel" };
 			Frame dialogueFrame = new Frame();
-			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame,
-					"Exit the game?",
-					"Confirm Exit",
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE,
-					null,
-					options,
-					options[0]); //default button title
+			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame, "Exit the game?", "Confirm Exit",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); // default
+																											// button
+																											// title
 			mainFrame.requestFocus();
 
 			if (confirmExit == 0) {

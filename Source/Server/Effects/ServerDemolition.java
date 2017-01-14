@@ -72,8 +72,8 @@ public class ServerDemolition extends ServerObject{
 			setImage(base + "_4");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
-			world.add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,world));
-			world.add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,world));
+			world.add(new ServerSmoke(getX()+getWidth()/2,getY()+getHeight()-180,true,world));
+			world.add(new ServerSmoke(getX()+getWidth()/2-320,getY()+getHeight()-180,false,world));
 			break;
 		case 10:
 			setImage(base + "_5");

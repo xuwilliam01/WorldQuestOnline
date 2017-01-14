@@ -76,8 +76,8 @@ public class ClientInventory extends JPanel implements ActionListener
 			mainMenu = menu;
 			mainMenu.setSize(ClientFrame.getScaledWidth(70), ClientFrame.getScaledHeight(50));
 			mainMenu.setLocation(ClientFrame.getScaledWidth(215), ClientFrame.getScaledHeight(16));
-			mainMenu.setBackground(new Color(240, 240, 240));
-			mainMenu.setForeground(Color.black);
+			mainMenu.setBackground(Color.black);
+			mainMenu.setForeground(new Color(240, 240, 240));
 			add(mainMenu);
 		}
 

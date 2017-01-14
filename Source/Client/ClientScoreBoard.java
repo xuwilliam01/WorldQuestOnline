@@ -21,8 +21,9 @@ public class ClientScoreBoard extends JPanel{
 	private boolean gameover = false;
 	private String winner = "Red Team";
 	private int team = 0;
-
-	public ClientScoreBoard()
+	private Client client;
+	
+	public ClientScoreBoard(Client client)
 	{
 		setDoubleBuffered(true);
 		setFocusable(false);
@@ -31,6 +32,7 @@ public class ClientScoreBoard extends JPanel{
 		setSize(Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2);
 		setLocation(Client.SCREEN_WIDTH/4, Client.SCREEN_HEIGHT/4);
 		scoreboardImage = Images.getImage("scoreboard");
+		this.client = client;
 	}
 
 	public void setWinner(int loser)
@@ -38,7 +40,10 @@ public class ClientScoreBoard extends JPanel{
 		gameover = true;
 		this.team = loser;
 		if (team == ServerPlayer.RED_TEAM) 
+		{
 			winner = "Blue Team";
+		}
+		//client.getInventory().mainMenu.setLocation(Client.SCREEN_WIDTH/2-50, Client.SCREEN_HEIGHT/2+300);
 		repaint();
 	}
 	
@@ -47,6 +52,7 @@ public class ClientScoreBoard extends JPanel{
 		
 		int yPos = 100;
 		int xPos = (int)(0.5*Client.SCREEN_WIDTH/8);
+
 		graphics.drawImage(scoreboardImage, 0, 0, Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2, null);
 
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);

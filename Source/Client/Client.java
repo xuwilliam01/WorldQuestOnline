@@ -151,7 +151,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private ArrayList<String> chatQueue = new ArrayList<String>();
 
 	// Scoreboard
-	ClientScoreBoard scoreboard = new ClientScoreBoard();
+	ClientScoreBoard scoreboard;
 	/**
 	 * Mouse's x coordinate
 	 */
@@ -290,6 +290,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		enter.addActionListener(this);
 		enter.setBackground(new Color(240, 240, 240));
 
+		scoreboard = new ClientScoreBoard(this);
 		scoreboard.setVisible(false);
 		setFocusTraversalKeysEnabled(false);
 
@@ -299,6 +300,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 		distanceConstant = 80.0f / (SCREEN_HEIGHT + SCREEN_WIDTH);
 
+		
 	}
 
 	/**
@@ -1237,11 +1239,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 						ClientFrame.getScaledWidth(600), ClientFrame.getScaledHeight(450));
 			}
 
+			graphics.setColor(Color.WHITE);
 			graphics.setFont(ClientWorld.NORMAL_FONT);
+			graphics.drawString("'TAB' to show scoreboard", 270, 15);
+			
 			if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
 				graphics.setColor(Color.BLUE);
-			} else {
-				graphics.setColor(Color.WHITE);
 			}
 
 			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
