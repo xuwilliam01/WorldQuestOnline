@@ -1699,7 +1699,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					if (getDirection().equals("LEFT")) {
 						x -= 90 - 64;
 					}
-					actionDelay = 30;
+					actionDelay = 10;
 					break;
 				}
 

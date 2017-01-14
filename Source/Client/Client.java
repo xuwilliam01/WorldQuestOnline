@@ -113,6 +113,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 	// Stores the HP, mana, jump,and speed of the player
 	private int HP;
+	public static int staticHP=0;
+	
 	private int maxHP;
 	private int mana;
 	private int maxMana;
@@ -366,7 +368,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
 
-			HP = ServerPlayer.PLAYER_BASE_HP;
+			setHP(ServerPlayer.PLAYER_BASE_HP);
 			mana = ServerPlayer.PLAYER_BASE_MANA;
 
 			maxHP = HP;
@@ -454,7 +456,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 							try {
 								switch (tokens[token].charAt(0)) {
 								case 'L':
-									HP = Integer.parseInt(tokens[++token]);
+									setHP(Integer.parseInt(tokens[++token]));
 									break;
 								case 'A':
 									armour = Double.parseDouble(tokens[++token]);
@@ -1698,6 +1700,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 	public void setHP(int hP) {
 		HP = hP;
+		staticHP = hP;
 	}
 
 	public int getMaxHP() {
@@ -2137,4 +2140,5 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	{
 		return leaveGame;
 	}
+
 }

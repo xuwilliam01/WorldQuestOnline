@@ -182,7 +182,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.FIREWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(15);
+			setSpeed(17);
 			animated = true;
 			faceAngle = true;
 			owner.getWorld().playSound("fireball",
@@ -193,7 +193,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.ICEWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(6);
+			setSpeed(10);
 			animated = true;
 			faceAngle = true;
 			break;
@@ -202,9 +202,11 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.DARKWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(12);
+			setSpeed(20);
 			animated = true;
 			faceAngle = true;
+			owner.getWorld().playSound("fireball",
+					owner.getX(), owner.getY());
 			break;
 		}
 		if (faceAngle)

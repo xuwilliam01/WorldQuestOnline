@@ -45,7 +45,7 @@ public class Audio {
 				{
 					break;
 				}
-				
+
 				if (Client.Client.inGame && bgm!=null)
 				{
 					if (bgm == audioArray[audioMap.get("bgm_menu")])
