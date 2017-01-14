@@ -116,7 +116,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public void destroy()
 	{
 		super.destroy();
-		getWorld().add(new ServerDemolition(getX(),getY(),getWidth(),getHeight(),getType(),getWorld()));
+		getWorld().add(new ServerDemolition(getX(),getY(),getWidth(),getHeight(),getType(),getWorld(),getTeam()));
 	}
 
 }

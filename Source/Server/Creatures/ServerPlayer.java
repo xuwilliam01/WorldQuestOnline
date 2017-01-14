@@ -450,6 +450,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		
 		
+		
 		if (exists()) {
 			// Change the player's facing direction after its current action
 			if (actionCounter < 0 && action == NOTHING) {

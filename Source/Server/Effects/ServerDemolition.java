@@ -2,6 +2,8 @@ package Server.Effects;
 
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 
 public class ServerDemolition extends ServerObject{
 
@@ -9,9 +11,11 @@ public class ServerDemolition extends ServerObject{
 	private ServerWorld world;
 	int moveAmount;
 	private String base = "INN";
+	private int team = -5;
 	
-	public ServerDemolition(double x, double y, int width, int height, String building, ServerWorld world) {
+	public ServerDemolition(double x, double y, int width, int height, String building, ServerWorld world, int team) {
 		super(x, y, width, height, 0, "INN_0", ServerWorld.DEMOLITION_TYPE, world.getEngine());
+		
 		
 		switch(building)
 		{
@@ -35,6 +39,17 @@ public class ServerDemolition extends ServerObject{
 			break;
 		case ServerWorld.WOOD_HOUSE_TYPE:
 			base = "WOOD_HOUSE";
+			break;
+		case ServerWorld.CASTLE_TYPE:
+			this.team = team;
+			if (team==ServerPlayer.RED_TEAM)
+			{
+				base = "RED_CASTLE";
+			}
+			else
+			{
+				base = "BLUE_CASTLE";
+			}
 			break;
 		}
 		
@@ -72,8 +87,8 @@ public class ServerDemolition extends ServerObject{
 			setImage(base + "_4");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
-			world.add(new ServerSmoke(getX()+getWidth()/2,getY()+getHeight()-180,true,world));
-			world.add(new ServerSmoke(getX()+getWidth()/2-320,getY()+getHeight()-180,false,world));
+			world.add(new ServerSmoke(getX()+getWidth()/2 + Math.max(0, getWidth()-500),getY()+getHeight()-180,true,world));
+			world.add(new ServerSmoke(getX()+getWidth()/2-320 - + Math.max(0, getWidth()-500),getY()+getHeight()-180,false,world));
 			break;
 		case 10:
 			setImage(base + "_5");
@@ -136,8 +151,17 @@ public class ServerDemolition extends ServerObject{
 			setY(getY()+moveAmount);
 			break;
 		case 40:
-			destroy();
+			if (team == -5)
+			{
+				destroy();
+			}
 			break;
+		}
+		
+		if (team>-5 && world.getWorldCounter()-counter > 90)
+		{
+			world.getEngine().endGame(team);
+			destroy();
 		}
 		
 	}

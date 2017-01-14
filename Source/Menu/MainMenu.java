@@ -558,7 +558,6 @@ public class MainMenu implements KeyListener {
 			// graphics.drawImage(buttonTrayImage,
 			// middle - buttonTrayImage.getWidth(null) / 2,
 			// (int) (605 * (Client.SCREEN_HEIGHT / 1080.0)), null);
-
 		}
 
 		@Override

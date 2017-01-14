@@ -1443,10 +1443,33 @@ public class Images {
 				addtoImageArray(new GameImage("INN_"+i+".png",image));
 			}
 			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "RED_CASTLE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			addtoImageArray(new GameImage("RED_CASTLE.png",
-					"Buildings//"));
+					image));
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("RED_CASTLE_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BLUE_CASTLE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			addtoImageArray(new GameImage("BLUE_CASTLE.png",
-					"Buildings//"));
+					image));
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("BLUE_CASTLE_"+i+".png",image));
+			}
 
 			image = null;
 		}
