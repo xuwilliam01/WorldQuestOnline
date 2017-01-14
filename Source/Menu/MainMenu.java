@@ -540,9 +540,11 @@ public class MainMenu implements KeyListener{
 				cloud.setX(cloud.getX() + cloud.gethSpeed());
 
 			}
+			
+			graphics.drawImage(Images.getImage("menuBackground"),0,0,null);
 
 			// Draw the title image
-			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 20,
+			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 25,
 					(int) (75 * (Client.SCREEN_HEIGHT / 1080.0)),
 					null);
 

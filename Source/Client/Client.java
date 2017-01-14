@@ -109,6 +109,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 */
 	public final static int FRAME_DELAY = 0;
 
+	public boolean hideGUI = false;
+
 	// Stores the HP, mana, jump,and speed of the player
 	private int HP;
 	private int maxHP;
@@ -243,7 +245,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private static long packetNo = 0;
 
 	private int respawnTime = 10;
-	
+
 	public static boolean inGame = false;
 
 	/**
@@ -443,7 +445,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 						String[] tokens = message.split(" ");
 
 						for (int token = 1; token < tokens.length && !leaveGame; token++) {
-							if(tokens[token].equals(""))
+							if (tokens[token].equals(""))
 								continue;
 							try {
 								switch (tokens[token].charAt(0)) {
@@ -616,15 +618,14 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								case 'a':
 
 									Audio.playAudio(Integer.parseInt(tokens[++token]),
-											(float)(Math.sqrt((toInt(tokens[++token]) - playerX)
+											(float) (Math.sqrt((toInt(tokens[++token]) - playerX)
 													* (toInt(tokens[token]) - playerX)
 													+ (toInt(tokens[++token]) - playerY)
-													*(toInt(tokens[token]) - playerY))));
+															* (toInt(tokens[token]) - playerY))));
 
 									break;
 								case 'V':
-									switch(tokens[token].charAt(1))
-									{
+									switch (tokens[token].charAt(1)) {
 									case 'B':
 										if (shop != null) {
 											shop.setVisible(false);
@@ -649,8 +650,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 													Integer.parseInt(tokens[++token]));
 										break;
 									case 'b':
-										if (shop != null)
-										{
+										if (shop != null) {
 											int row = Integer.parseInt(tokens[++token]);
 											int col = Integer.parseInt(tokens[++token]);
 											shop.getItems()[row][col].sell();
@@ -786,8 +786,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								case 'b':
 									for (int weap = 0; weap < inventory.getEquippedWeapons().length; weap++)
 										if (inventory.getEquippedWeapons()[weap] != null
-										&& inventory.getEquippedWeapons()[weap].getType()
-										.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
+												&& inventory.getEquippedWeapons()[weap].getType()
+														.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
 											inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
 											break;
 										}
@@ -804,7 +804,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									respawnTime = 10 - Integer.parseInt(tokens[++token]) / 60;
 									break;
 								case '-':
-									JOptionPane.showMessageDialog(null, "Kicked from server (cheating or *very* high ping)", "Sorry", JOptionPane.ERROR_MESSAGE);
+									JOptionPane.showMessageDialog(null,
+											"Kicked from server (cheating or *very* high ping)", "Sorry",
+											JOptionPane.ERROR_MESSAGE);
 									inventory.mainMenu.doClick();
 									break;
 								}
@@ -816,7 +818,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 							} catch (IOException e) {
 								e.printStackTrace();
 								break;
-							} catch (Exception e){
+							} catch (Exception e) {
 								e.printStackTrace();
 								System.out.println("Something got fucked in the client input comms");
 								break;
@@ -1204,212 +1206,218 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		super.paintComponent(graphics);
 
 		// Update the map
-		if(getWorld() != null)
+		if (getWorld() != null)
 			getWorld().update(graphics, getPlayer());
 
-		// Draw death message if applicable
-		if (getHP() > 0) {
-			setJustDied(true);
-			deathTime = 1;
-			fillAmount = 0;
-		} else {
-			if (isJustDied()) {
-				getInventory().clear();
-				setJustDied(false);
-			}
-			// deathTime++;
-			// fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
+		if (!hideGUI) {
 
-			// Causes lag
-			// graphics.setColor(Images.darkReds[(int) Math.min(100,
-			// fillAmount)]);
-			// graphics.fillRect(0, 0, Client.SCREEN_WIDTH,
-			// Client.SCREEN_HEIGHT);
-
-			graphics.setColor(Color.white);
-			graphics.setFont(ClientWorld.MESSAGE_FONT);
-			graphics.drawString(String.format("YOU ARE DEAD. Wait %d seconds to respawn", respawnTime), ClientFrame.getScaledWidth(600), ClientFrame.getScaledHeight(450));
-		}
-
-		graphics.setFont(ClientWorld.NORMAL_FONT);
-		if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
-			graphics.setColor(Color.BLUE);
-		} else {
-			graphics.setColor(Color.WHITE);
-		}
-
-		graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-		graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()), Client.SCREEN_WIDTH - 60, 40);
-
-		graphics.drawImage(Images.getImage("InventoryShadow"), Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
-
-		// Set the time of day to be displayed
-		// DAWN: 5AM - 9AM
-		// DAY: 9AM - 5PM
-		// DUSK: 5PM - 9PM
-		// NIGHT: 9PM - 5AM
-
-		if (getWorld() != null) {
-
-			String timeOfDay = "DAY";
-
-			if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5) {
-				timeOfDay = "DAWN";
-			} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 2) {
-				timeOfDay = "NIGHT";
-			} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 3) {
-				timeOfDay = "DUSK";
-			}
-
-			int hour = (getWorld().getWorldTime() / 60) + 9;
-			if (hour >= 24) {
-				hour -= 24;
-			}
-			int minute = getWorld().getWorldTime() % 60;
-
-			String amPm = "AM";
-
-			if (hour >= 12) {
-				hour -= 12;
-				amPm = "PM";
-			}
-
-			if (hour == 0) {
-				hour = 12;
-			}
-
-			String hourString = "";
-			String minuteString = "";
-
-			if (hour < 10) {
-				hourString = "0";
-			}
-			if (minute < 10) {
-				minuteString = "0";
-			}
-			hourString += hour;
-			minuteString += minute;
-
-			graphics.drawString(hourString + ":" + minuteString + " " + amPm, Client.SCREEN_WIDTH - 60, 60);
-			graphics.drawString(timeOfDay, Client.SCREEN_WIDTH - 60, 80);
-		}
-
-		// Draw the chat
-		graphics.setFont(ClientWorld.NORMAL_FONT);
-
-		while (!leaveGame) {
-			try {
-				int textY = 40;
-				for (String str : getChatQueue()) {
-					boolean done = false;
-					switch (str.substring(0, 2)) {
-					case "CH":
-						String newStr = str.substring(3);
-						int space = newStr.indexOf(':');
-						String coloured = newStr.substring(1, space + 1);
-						String mssg = newStr.substring(space + 2);
-						if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (newStr.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(coloured + " ", 10, textY);
-						graphics.setColor(Color.YELLOW);
-						graphics.drawString(mssg, 10 + graphics.getFontMetrics().stringWidth(coloured + " "), textY);
-						done = true;
-						break;
-					case "JO":
-						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(str.substring(4) + " ", 10, textY);
-						graphics.setColor(Color.ORANGE);
-						graphics.drawString("joined the game",
-								10 + graphics.getFontMetrics().stringWidth(str.substring(4) + " "), textY);
-						done = true;
-						break;
-					case "RO":
-						if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GRAY);
-						graphics.drawString(str.substring(4) + " ", 10, textY);
-						graphics.setColor(Color.ORANGE);
-						graphics.drawString("left the game",
-								10 + graphics.getFontMetrics().stringWidth(str.substring(4) + " "), textY);
-						done = true;
-						break;
-
-					}
-					if (!done) {
-						String[] split = str.split(" ");
-						int firstLen = Integer.parseInt(split[1]);
-						String firstName = "";
-						for (int i = 0; i < firstLen; i++)
-							firstName += split[i + 2] + " ";
-
-						int secondLen = Integer.parseInt(split[firstLen + 2]);
-						String lastName = "";
-						for (int i = 0; i < secondLen; i++)
-							lastName += split[firstLen + 3 + i] + " ";
-
-						if (firstName.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (firstName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.DARK_GRAY);
-						graphics.drawString(firstName.substring(1), 10, textY);
-
-						graphics.setColor(Color.ORANGE);
-
-						String killWord = "slain";
-						String secondKillWord = "defeated";
-
-						if (str.charAt(0) == 'k')
-							graphics.drawString("was " + killWord + " by a ",
-									5 + graphics.getFontMetrics().stringWidth(firstName), textY);
-						else
-							graphics.drawString(secondKillWord + " ",
-									5 + graphics.getFontMetrics().stringWidth(firstName), textY);
-
-						if (lastName.charAt(0) - '0' == ServerCreature.RED_TEAM)
-							graphics.setColor(Color.RED);
-						else if (lastName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
-							graphics.setColor(Color.BLUE);
-						else
-							graphics.setColor(Color.GREEN);
-
-						if (str.charAt(0) == 'k')
-							graphics.drawString(lastName.substring(1),
-									8 + graphics.getFontMetrics().stringWidth(firstName + "was " + killWord + " by a "),
-									textY);
-						else
-							graphics.drawString(lastName.substring(1),
-									8 + graphics.getFontMetrics().stringWidth(firstName + secondKillWord + " "), textY);
-					}
-					textY += 20;
+			// Draw death message if applicable
+			if (getHP() > 0) {
+				setJustDied(true);
+				deathTime = 1;
+				fillAmount = 0;
+			} else {
+				if (isJustDied()) {
+					getInventory().clear();
+					setJustDied(false);
 				}
-				break;
-			} catch (ConcurrentModificationException E) {
+				// deathTime++;
+				// fillAmount += Math.max(0.5, 1.5 - deathTime / 15.0);
 
+				// Causes lag
+				// graphics.setColor(Images.darkReds[(int) Math.min(100,
+				// fillAmount)]);
+				// graphics.fillRect(0, 0, Client.SCREEN_WIDTH,
+				// Client.SCREEN_HEIGHT);
+
+				graphics.setColor(Color.white);
+				graphics.setFont(ClientWorld.MESSAGE_FONT);
+				graphics.drawString(String.format("YOU ARE DEAD. Wait %d seconds to respawn", respawnTime),
+						ClientFrame.getScaledWidth(600), ClientFrame.getScaledHeight(450));
 			}
-		}
 
-		// Repaint the inventory
-		getInventory().repaint();
+			graphics.setFont(ClientWorld.NORMAL_FONT);
+			if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
+				graphics.setColor(Color.BLUE);
+			} else {
+				graphics.setColor(Color.WHITE);
+			}
 
-		if (!writingMessage) {
-			requestFocusInWindow();
+			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
+			graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()), Client.SCREEN_WIDTH - 60, 40);
 
-		} else {
-			chat.requestFocus();
+			graphics.drawImage(Images.getImage("InventoryShadow"),
+					Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
+
+			// Set the time of day to be displayed
+			// DAWN: 5AM - 9AM
+			// DAY: 9AM - 5PM
+			// DUSK: 5PM - 9PM
+			// NIGHT: 9PM - 5AM
+
+			if (getWorld() != null) {
+
+				String timeOfDay = "DAY";
+
+				if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 6 * 5) {
+					timeOfDay = "DAWN";
+				} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 2) {
+					timeOfDay = "NIGHT";
+				} else if (getWorld().getWorldTime() >= ServerWorld.DAY_COUNTERS / 3) {
+					timeOfDay = "DUSK";
+				}
+
+				int hour = (getWorld().getWorldTime() / 60) + 9;
+				if (hour >= 24) {
+					hour -= 24;
+				}
+				int minute = getWorld().getWorldTime() % 60;
+
+				String amPm = "AM";
+
+				if (hour >= 12) {
+					hour -= 12;
+					amPm = "PM";
+				}
+
+				if (hour == 0) {
+					hour = 12;
+				}
+
+				String hourString = "";
+				String minuteString = "";
+
+				if (hour < 10) {
+					hourString = "0";
+				}
+				if (minute < 10) {
+					minuteString = "0";
+				}
+				hourString += hour;
+				minuteString += minute;
+
+				graphics.drawString(hourString + ":" + minuteString + " " + amPm, Client.SCREEN_WIDTH - 60, 60);
+				graphics.drawString(timeOfDay, Client.SCREEN_WIDTH - 60, 80);
+			}
+
+			// Draw the chat
+			graphics.setFont(ClientWorld.NORMAL_FONT);
+
+			while (!leaveGame) {
+				try {
+					int textY = 40;
+					for (String str : getChatQueue()) {
+						boolean done = false;
+						switch (str.substring(0, 2)) {
+						case "CH":
+							String newStr = str.substring(3);
+							int space = newStr.indexOf(':');
+							String coloured = newStr.substring(1, space + 1);
+							String mssg = newStr.substring(space + 2);
+							if (newStr.charAt(0) - '0' == ServerCreature.RED_TEAM)
+								graphics.setColor(Color.RED);
+							else if (newStr.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
+								graphics.setColor(Color.BLUE);
+							else
+								graphics.setColor(Color.GRAY);
+							graphics.drawString(coloured + " ", 10, textY);
+							graphics.setColor(Color.YELLOW);
+							graphics.drawString(mssg, 10 + graphics.getFontMetrics().stringWidth(coloured + " "),
+									textY);
+							done = true;
+							break;
+						case "JO":
+							if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
+								graphics.setColor(Color.RED);
+							else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
+								graphics.setColor(Color.BLUE);
+							else
+								graphics.setColor(Color.GRAY);
+							graphics.drawString(str.substring(4) + " ", 10, textY);
+							graphics.setColor(Color.ORANGE);
+							graphics.drawString("joined the game",
+									10 + graphics.getFontMetrics().stringWidth(str.substring(4) + " "), textY);
+							done = true;
+							break;
+						case "RO":
+							if (str.charAt(3) - '0' == ServerCreature.RED_TEAM)
+								graphics.setColor(Color.RED);
+							else if (str.charAt(3) - '0' == ServerCreature.BLUE_TEAM)
+								graphics.setColor(Color.BLUE);
+							else
+								graphics.setColor(Color.GRAY);
+							graphics.drawString(str.substring(4) + " ", 10, textY);
+							graphics.setColor(Color.ORANGE);
+							graphics.drawString("left the game",
+									10 + graphics.getFontMetrics().stringWidth(str.substring(4) + " "), textY);
+							done = true;
+							break;
+
+						}
+						if (!done) {
+							String[] split = str.split(" ");
+							int firstLen = Integer.parseInt(split[1]);
+							String firstName = "";
+							for (int i = 0; i < firstLen; i++)
+								firstName += split[i + 2] + " ";
+
+							int secondLen = Integer.parseInt(split[firstLen + 2]);
+							String lastName = "";
+							for (int i = 0; i < secondLen; i++)
+								lastName += split[firstLen + 3 + i] + " ";
+
+							if (firstName.charAt(0) - '0' == ServerCreature.RED_TEAM)
+								graphics.setColor(Color.RED);
+							else if (firstName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
+								graphics.setColor(Color.BLUE);
+							else
+								graphics.setColor(Color.DARK_GRAY);
+							graphics.drawString(firstName.substring(1), 10, textY);
+
+							graphics.setColor(Color.ORANGE);
+
+							String killWord = "slain";
+							String secondKillWord = "defeated";
+
+							if (str.charAt(0) == 'k')
+								graphics.drawString("was " + killWord + " by a ",
+										5 + graphics.getFontMetrics().stringWidth(firstName), textY);
+							else
+								graphics.drawString(secondKillWord + " ",
+										5 + graphics.getFontMetrics().stringWidth(firstName), textY);
+
+							if (lastName.charAt(0) - '0' == ServerCreature.RED_TEAM)
+								graphics.setColor(Color.RED);
+							else if (lastName.charAt(0) - '0' == ServerCreature.BLUE_TEAM)
+								graphics.setColor(Color.BLUE);
+							else
+								graphics.setColor(Color.GREEN);
+
+							if (str.charAt(0) == 'k')
+								graphics.drawString(lastName.substring(1), 8 + graphics.getFontMetrics()
+										.stringWidth(firstName + "was " + killWord + " by a "), textY);
+							else
+								graphics.drawString(lastName.substring(1),
+										8 + graphics.getFontMetrics().stringWidth(firstName + secondKillWord + " "),
+										textY);
+						}
+						textY += 20;
+					}
+					break;
+				} catch (ConcurrentModificationException E) {
+
+				}
+			}
+
+			// Repaint the inventory
+			getInventory().repaint();
+
+			if (!writingMessage) {
+				requestFocusInWindow();
+
+			} else {
+				chat.requestFocus();
+			}
 		}
 
 		// Update the FPS counter
@@ -1432,10 +1440,22 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void keyPressed(KeyEvent key) {
 
 		switch (key.getKeyCode()) {
+		case KeyEvent.VK_F5:
+			if (!hideGUI) {
+				hideGUI = true;
+				chat.hide();
+				enter.hide();
+			} else {
+				hideGUI = false;
+				chat.show();
+				enter.show();
+			}
+			break;
 		case KeyEvent.VK_D:
 			if (!currentMessage.equals("R") && !inAction) {
 				// R for right
@@ -1466,7 +1486,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			}
 			break;
 		case KeyEvent.VK_S:
-
 			if (!currentMessage.equals("D") && !inAction) {
 				// D for down
 				currentMessage = "D";
