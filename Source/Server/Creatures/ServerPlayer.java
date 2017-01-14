@@ -1135,8 +1135,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
-				if(command == null)
-					continue;
 				
 				String[] tokens = command.split(" ");
 
