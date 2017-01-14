@@ -235,6 +235,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			Timer repaintTimer = new Timer(15, this);
 			repaintTimer.start();
 
+			requestFocusInWindow();
 		}
 
 	}
@@ -381,6 +382,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						mapBox.setEnabled(false);
 						switchTeams.setEnabled(false);
 						start.setEnabled(false);
+						enter.setEnabled(false);
 						repaint();
 						startTimer.start();
 						break;
@@ -645,7 +647,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == enter)
+		if (e.getSource() == enter && !startTimer.isRunning())
 		{
 			// Send the message
 			String message = chat.getText();
@@ -720,8 +722,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		{
 			chat.requestFocus();
 		}
-
-
 	}
 
 	@Override
