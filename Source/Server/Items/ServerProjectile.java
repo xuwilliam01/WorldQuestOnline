@@ -162,6 +162,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setDamage((int) Math.ceil(ServerWeapon.MEGABOW_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(30);
+			owner.getWorld().playSound("megabow",
+					owner.getX(), owner.getY());
 			animated = false;
 			faceAngle = true;
 			break;
@@ -196,6 +198,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setSpeed(10);
 			animated = true;
 			faceAngle = true;
+			owner.getWorld().playSound("fireball",
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0");
@@ -407,6 +411,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setY(getY() - 41);
 			setImage("EXPLOSION3_0");
 			noOfExplosionFrames = 4;
+			owner.getWorld().playSound("ice_break",
+					owner.getX(), owner.getY());
 		}
 		else if (getType() == ServerWorld.MEGAARROW_TYPE)
 		{
@@ -435,6 +441,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setY(getY() - 50);
 			setImage("EXPLOSION1_0");
 			noOfExplosionFrames = 10;
+			owner.getWorld().playSound("fire_explode",
+					owner.getX(), owner.getY());
 		}
 		else
 		{

@@ -1174,6 +1174,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							}
 						}
 					} catch (Exception e) {
+						break;
 					}
 					break;
 				case 'c':

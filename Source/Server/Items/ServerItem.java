@@ -197,19 +197,19 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON");
-			value = 50;
+			value = 5;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON");
-			value = 30;
+			value = 3;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			setImage("ICEWAND_ICON");
-			value = 15;
+			value = 1;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			setImage("DARKWAND_ICON");
-			value = 60;
+			value = 6;
 			break;
 		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setImage("BARRACKS_ICON");
