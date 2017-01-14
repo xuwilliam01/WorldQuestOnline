@@ -1280,7 +1280,6 @@ public class Images {
 					ServerWorld.TILE_SIZE, "Tiles//"));
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
-
 			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
@@ -1318,6 +1317,24 @@ public class Images {
 				addtoImageArray(new GameImage("TOWER_"+i+".png",image));
 			}
 			
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BARRACKS.png",image));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("BARRACKS_"+i+".png",image));
+			}
+
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "WOOD_HOUSE.png"));
 			} catch (IOException e) {

@@ -519,7 +519,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						else
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(coloured + " ", 10, textY);
-						graphics.setColor(Color.YELLOW);
+						graphics.setColor(Color.BLACK);
 						graphics.drawString(mssg, 10 + graphics
 								.getFontMetrics().stringWidth(coloured + " "),
 								textY);
