@@ -100,8 +100,8 @@ public class ClientText extends ClientObject
 			color = Images.YELLOW;
 			break;
 		case ServerText.LIGHT_YELLOW_TEXT:
-			colorArray = Images.lightYellows;
-			color = Images.LIGHT_YELLOW;
+			colorArray = Images.yellows;
+			color = Images.YELLOW;
 			vSpeed /= 2;
 			aliveTime *= 2;
 			break;

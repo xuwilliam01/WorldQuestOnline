@@ -1050,7 +1050,7 @@ public class ClientWorld {
 								if (tokens.length > 1) {
 									String currentText = tokens[1];
 
-									graphics.setColor(Color.YELLOW);
+									graphics.setColor(Images.YELLOW);
 
 									graphics.drawString(
 											currentText,
@@ -1151,7 +1151,7 @@ public class ClientWorld {
 		g2d.drawString(
 				String.format("%d/%d", client.getRedCastleHP(),
 						client.getRedCastleMaxHP()),
-				300,
+				270,
 				Client.SCREEN_HEIGHT-15);
 		g2d.drawString(
 				String.format("%d/%d", client.getBlueCastleHP(),

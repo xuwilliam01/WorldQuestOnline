@@ -38,9 +38,9 @@ public class ClientScoreBoard extends JPanel{
 
 		graphics.drawImage(scoreboardImage, 0, 0, Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2, null);
 
-		graphics.setColor(Color.blue);
+		graphics.setColor(Color.red);
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
-		for(ClientPlayerScore player: blueTeam)
+		for(ClientPlayerScore player: redTeam)
 		{
 			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			yPos += 30;
@@ -48,8 +48,8 @@ public class ClientScoreBoard extends JPanel{
 
 		yPos = 100;
 		xPos = (int)(Client.SCREEN_WIDTH/4);
-		graphics.setColor(Color.red);
-		for(ClientPlayerScore player: redTeam)
+		graphics.setColor(Color.blue);
+		for(ClientPlayerScore player: blueTeam)
 		{
 			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			yPos += 30;

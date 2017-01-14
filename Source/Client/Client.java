@@ -804,7 +804,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									respawnTime = 10 - Integer.parseInt(tokens[++token]) / 60;
 									break;
 								case '-':
-									JOptionPane.showMessageDialog(null, "Kicked from server (cheating or high ping)", "Sorry", JOptionPane.ERROR_MESSAGE);
+									JOptionPane.showMessageDialog(null, "Kicked from server (cheating or *very* high ping)", "Sorry", JOptionPane.ERROR_MESSAGE);
 									inventory.mainMenu.doClick();
 									break;
 								}

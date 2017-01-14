@@ -436,7 +436,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			lastX = getX();
 			lastY = getY();
 		}
-		else if ((time=System.currentTimeMillis()-lastCheck) >= 1000)
+		else if ((time=System.currentTimeMillis()-lastCheck) >= 3000)
 		{
 			if (lastX != -1 && isAlive() && Math.abs(lastX-getX())>1.5* horizontalMovement*((1.0*time)/ServerEngine.UPDATE_RATE))
 			{
