@@ -50,8 +50,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 	public Leaderboard(int port) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2);
+		setSize(960, 540);
 		setResizable(false);
 		setTitle("Leaderboard");
 		setLocationRelativeTo(null);

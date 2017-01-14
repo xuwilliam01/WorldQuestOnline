@@ -18,7 +18,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public final static int GOLD_MINE_HP = 1000;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
-		super(x, y, 0, 0, 0, 0, 1, "SERVERBUILDING", type, 0, world, true);
+		super(x, y, 0, 0, 0, 0, 0, "SERVERBUILDING", type, 0, world, true);
 		switch (type)
 		{
 		case ServerWorld.CASTLE_TYPE:

@@ -201,7 +201,9 @@ public class ServerLobbyPlayer implements Runnable
 		}
 
 		if (!started)
+		{
 			server.remove(this);
+		}
 
 	}
 

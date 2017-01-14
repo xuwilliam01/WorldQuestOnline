@@ -159,7 +159,9 @@ public class Server implements Runnable {
 		}
 
 		long startTime = System.currentTimeMillis();
-
+		ServerLobbyPlayer.numRed = 0;
+		ServerLobbyPlayer.numBlue = 0;
+		
 		//Set up the allowed players
 		for(ServerLobbyPlayer p : lobbyPlayers)
 		{

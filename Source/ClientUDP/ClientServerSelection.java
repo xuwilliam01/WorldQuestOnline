@@ -53,8 +53,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	public ClientServerSelection(int port) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2);
+		setSize(960, 540);
 		setResizable(false);
 		setTitle("Server Selection");
 		setLocationRelativeTo(null);

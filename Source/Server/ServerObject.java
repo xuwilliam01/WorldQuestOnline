@@ -410,14 +410,14 @@ public abstract class ServerObject implements Comparable<ServerObject>
 			return new ServerBarracks(barracks.getX(), barracks.getY(), barracks.getType(), barracks.getTeam(), barracks.getWorld());
 		case ServerWorld.GOLD_MINE_TYPE:
 			ServerMine mine = (ServerMine) original;
-			return new ServerBarracks(mine.getX(), mine.getY(), mine.getType(), mine.getTeam(), mine.getWorld());
+			return new ServerMine(mine.getX(), mine.getY(), mine.getType(), mine.getTeam(), mine.getWorld());
 		case ServerWorld.WOOD_HOUSE_TYPE:
 		case ServerWorld.INN_TYPE:
 			ServerHouse house = (ServerHouse) original;
-			return new ServerBarracks(house.getX(), house.getY(), house.getType(), house.getTeam(), house.getWorld());
+			return new ServerHouse(house.getX(), house.getY(), house.getType(), house.getTeam(), house.getWorld());
 		case ServerWorld.TOWER_TYPE:
 			ServerDefense defense = (ServerDefense) original;
-			return new ServerBarracks(defense.getX(), defense.getY(), defense.getType(), defense.getTeam(), defense.getWorld());
+			return new ServerDefense(defense.getX(), defense.getY(), defense.getType(), defense.getTeam(), defense.getWorld());
 		}
 
 		// case ServerWorld.SLIME_TYPE:

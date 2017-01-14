@@ -14,6 +14,7 @@ public class ServerDefense extends ServerBuilding {
 	
 	public ServerDefense(double x, double y, String type, int team, ServerWorld world) {
 		super(x, y, type, team, world);
+		
 		arrowSources = new ArrayList<ServerObject>();
 		
 		switch(type)
@@ -22,6 +23,26 @@ public class ServerDefense extends ServerBuilding {
 			arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 25,
 					ServerWorld.STEELARROW_TYPE, TOWER_RANGE, this, world)));
 			break;
+		}
+	}
+	
+	@Override
+	public void setX(double x)
+	{
+		super.setX(x);
+		for (ServerObject object:arrowSources)
+		{
+			object.setX(x);
+		}
+	}
+	
+	@Override
+	public void setY(double y)
+	{
+		super.setY(y);
+		for (ServerObject object:arrowSources)
+		{
+			object.setY(y);
 		}
 	}
 	
