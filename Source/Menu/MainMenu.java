@@ -142,10 +142,10 @@ public class MainMenu implements KeyListener{
 		}
 
 		clouds = new ArrayList<ClientCloud>();
-		for (int no = 0; no < 24; no++) {
+		for (int no = 0; no < 20; no++) {
 			double x = Client.SCREEN_WIDTH / 2 + Math.random() * CLOUD_DISTANCE
 					- (CLOUD_DISTANCE / 2);
-			double y = Math.random() * (Client.SCREEN_HEIGHT * 1.5)
+			double y = Math.random() * (Client.SCREEN_HEIGHT * 1)
 					- (2 * Client.SCREEN_HEIGHT / 3);
 
 			double hSpeed = 0;
