@@ -49,7 +49,7 @@ public class ClientInventory extends JPanel implements ActionListener
 
 	private Client client;
 
-	private JButton mainMenu;
+	public JButton mainMenu;
 	private JButton switchTeams;
 
 	private ArrayList<ClientItem> removeList = new ArrayList<ClientItem>();
@@ -605,7 +605,7 @@ public class ClientInventory extends JPanel implements ActionListener
 	{
 		client.printToServer("X");
 		client.leaveGame = true;
-		client.inGame = false;
+		Client.inGame = false;
 	}
 
 	public int getNumHP()

@@ -63,7 +63,7 @@ public class Audio {
 						bgm.play(0);
 					}
 				}
-				else if (!Client.Client.inGame)
+				else
 				{
 					if (bgm != audioArray[audioMap.get("bgm_menu")])
 					{

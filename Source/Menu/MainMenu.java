@@ -168,6 +168,7 @@ public class MainMenu implements KeyListener{
 	 * Constructor
 	 */
 	public MainMenu(Point pos) {
+		Client.inGame = false;
 		main = this;
 		Thread loadImages = new Thread(new LoadImagesAudio());
 		loadImages.start();

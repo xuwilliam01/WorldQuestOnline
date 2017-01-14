@@ -335,7 +335,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void removeID(int id) {
 		usedIDs[id] = false;
 	}
-
+	
 	@Override
 	/**
 	 * Update the game after every game tick (15 milliseconds)
@@ -356,7 +356,7 @@ public class ServerEngine implements Runnable, ActionListener {
 				listOfPlayers.remove(player);
 			}
 		}
-
+		
 		// Move all the objects around and update them
 		world.update();
 
@@ -369,24 +369,7 @@ public class ServerEngine implements Runnable, ActionListener {
 				gui.update();
 			}
 		}
-		// if (checkObjects)
-		// {
-		// int noOfObjects = 0;
-		//
-		// // Clear the object grid
-		// for (int row = 0; row < world.getObjectGrid().length; row++)
-		// {
-		// for (int column = 0; column < world.getObjectGrid()[0].length;
-		// column++)
-		// {
-		// noOfObjects += world.getObjectGrid()[row][column].size();
-		// world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
-		// }
-		// }
-		// System.out.println("Number of objects without lag: " + noOfObjects);
-		// checkObjects = false;
-		// }
-
+		
 		// Parameters to fix the lag spike
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
 			System.out.println("~LAG DETECTED~");
@@ -409,18 +392,6 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 
 		startTime = System.nanoTime();
-
-		// // Add free IDs to free ID list
-		// for (int ID : IDsToAdd) {
-		// freeIDs.add(ID);
-		// }
-		// IDsToAdd.clear();
-		//
-		// // Second rounds of adding
-		// for (int ID : IDsToAdd2) {
-		// IDsToAdd.add(ID);
-		// }
-		// IDsToAdd2.clear();
 	}
 
 	boolean lagSpike = false;

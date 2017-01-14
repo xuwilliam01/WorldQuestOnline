@@ -278,6 +278,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private ServerItem bestArmour = null;
 	
 	private boolean castleOpen = false;
+	
+	private boolean disconnect = false;
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -307,7 +309,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				world.getBluePlayerStartHP(), world, true); // player start HP doesn't
 		// matter since it will
 		// change
-
+		disconnect = false;
 		// Set the name of the player
 		setName(name);
 
@@ -416,11 +418,36 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		flush();
 	}
 
+	private long lastCheck = 0;
+	private double lastX = 0;
+	private double lastY = 0;
+	
+	
 	/**
 	 * Update the player after each tick
 	 */
 	@Override
 	public void update() {
+		
+		long time = 0;
+		if (lastCheck == 0)
+		{
+			lastCheck = System.currentTimeMillis();
+			lastX = getX();
+			lastY = getY();
+		}
+		else if ((time=System.currentTimeMillis()-lastCheck) >= 1000)
+		{
+			if (lastX != -1 && isAlive() && Math.abs(lastX-getX())>1.5* horizontalMovement*((1.0*time)/ServerEngine.UPDATE_RATE))
+			{
+				disconnect = true;
+			}
+			lastX = getX();
+			lastY = getY();
+			lastCheck = System.currentTimeMillis();
+		}
+		
+		
 		if (exists()) {
 			// Change the player's facing direction after its current action
 			if (actionCounter < 0 && action == NOTHING) {
@@ -550,6 +577,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 					setAttackable(true);
 					deathCounter = -1;
+					lastX = -1;
 				}
 			} else if (getHSpeed() != 0 && getVSpeed() == 0) {
 				int checkFrame = (int) (getWorld().getWorldCounter() % 30);
@@ -586,6 +614,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 		}
 	}
+	
+	
 
 	public void setTeam(int team) {
 		super.setTeam(team);
@@ -1079,6 +1109,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 */
 	public void run() {
 		while (!endGame) {
+			
+			if (disconnect)
+			{
+				disconnect = false;
+				sendMessage("-");
+				break;
+			}
+			
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
@@ -1173,8 +1211,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					break;
 				case 'p':
 					if (!ignoreClient && isAlive()) {
-						setX(Double.parseDouble(tokens[1]));
-						setY(Double.parseDouble(tokens[2]));
+						double x =Double.parseDouble(tokens[1]);
+						double y = Double.parseDouble(tokens[2]);
+						if (x > 0 && x < getWorld().getCollisionGrid()[0].length*ServerWorld.TILE_SIZE-50 && y > 0 && y < getWorld().getCollisionGrid().length*ServerWorld.TILE_SIZE-50)
+						{
+							setX(x);
+							setY(y);
+						}
 					}
 					break;
 				case 'P':
@@ -1346,11 +1389,16 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				//e.printStackTrace();
 				break;
 			} catch (NullPointerException e) {
-				//e.printStackTrace();
+				e.printStackTrace();
 				break;
 			} catch (IndexOutOfBoundsException e) {
 				System.out.println("Indexing problem caught");
 				e.printStackTrace();
+				break;
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Something broke for this player");
+				break;
 			}
 		}
 
@@ -1391,8 +1439,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			getBody().destroy();
 			setBody(null);
 		}
-		setX(0);
-		setY(0);
 		destroy();
 		engine.removePlayer(this);
 	}

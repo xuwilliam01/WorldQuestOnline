@@ -803,17 +803,23 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								case 'r':
 									respawnTime = 10 - Integer.parseInt(tokens[++token]) / 60;
 									break;
+								case '-':
+									JOptionPane.showMessageDialog(null, "Kicked from server (cheating or high ping)", "Sorry", JOptionPane.ERROR_MESSAGE);
+									inventory.mainMenu.doClick();
+									break;
 								}
 
 							} catch (NumberFormatException e) {
 								System.out.println(message);
 								e.printStackTrace();
+								break;
 							} catch (IOException e) {
 								e.printStackTrace();
-							} catch (Exception e)
-							{
+								break;
+							} catch (Exception e){
 								e.printStackTrace();
 								System.out.println("Something got fucked in the client input comms");
+								break;
 							}
 						}
 					}
