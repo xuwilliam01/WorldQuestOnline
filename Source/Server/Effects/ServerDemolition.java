@@ -8,6 +8,7 @@ public class ServerDemolition extends ServerObject{
 	private long counter;
 	private ServerWorld world;
 	int moveAmount;
+	private String base = "INN";
 	
 	public ServerDemolition(double x, double y, int width, int height, String building, ServerWorld world) {
 		super(x, y, width, height, 0, "INN_0", ServerWorld.DEMOLITION_TYPE, world.getEngine());
@@ -15,27 +16,29 @@ public class ServerDemolition extends ServerObject{
 		switch(building)
 		{
 		case ServerWorld.INN_TYPE:
-			setImage("INN_0");
+			base = "INN";
 			break;
 		case ServerWorld.TOWER_TYPE:
-			setImage("TOWER_0");
+			base = "TOWER";
 			break;
 		case ServerWorld.BASIC_BARRACKS_TYPE:
-			setImage("BARRACKS_0");
+			base = "BARRACKS";
 			break;
 		case ServerWorld.ADV_BARRACKS_TYPE:
-			setImage("ADV_BARRACKS_0");
+			base = "ADV_BARRACKS";
 			break;
 		case ServerWorld.GIANT_FACTORY_TYPE:
-			setImage("GIANT_FACTORY_0");
+			base = "GIANT_FACTORY";
 			break;
 		case ServerWorld.GOLD_MINE_TYPE:
-			setImage("GOLD_MINE_0");
+			base = "GOLD_MINE";
 			break;
 		case ServerWorld.WOOD_HOUSE_TYPE:
-			setImage("WOOD_HOUSE_0");
+			base = "WOOD_HOUSE";
 			break;
 		}
+		
+		setImage(base+"_0");
 		
 		this.world = world;
 		counter = world.getWorldCounter();
@@ -51,85 +54,85 @@ public class ServerDemolition extends ServerObject{
 		switch((int)(world.getWorldCounter()-counter))
 		{
 		case 2:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"1");
+			setImage(base + "_1");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
 			break;
 		case 4:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"2");
+			setImage(base + "_2");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
 			break;
 		case 6:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"3");
+			setImage(base + "_3");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
 			break;
 		case 8:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"4");
+			setImage(base + "_4");
 			setY(getY()+moveAmount);
 			setHeight(getHeight()-moveAmount);
 			world.add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,world));
 			world.add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,world));
 			break;
 		case 10:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"5");
+			setImage(base + "_5");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 12:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"6");
+			setImage(base + "_6");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 14:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"7");
+			setImage(base + "_7");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 16:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"8");
+			setImage(base + "_8");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 18:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"9");
+			setImage(base + "_9");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 20:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"10");
+			setImage(base + "_10");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 22:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"11");
+			setImage(base + "_11");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 24:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"12");
+			setImage(base + "_12");
 			setY(getY()+moveAmount);setHeight(getHeight()-moveAmount);
 			break;
 		case 26:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"13");
+			setImage(base + "_13");
 			setY(getY()+moveAmount);
 			break;
 		case 28:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"14");
+			setImage(base + "_14");
 			setY(getY()+moveAmount);
 			break;
 		case 30:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"15");
+			setImage(base + "_15");
 			setY(getY()+moveAmount);
 			break;
 		case 32:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"16");
+			setImage(base + "_16");
 			setY(getY()+moveAmount);
 			break;
 		case 34:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"17");
+			setImage(base + "_17");
 			setY(getY()+moveAmount);
 			break;
 		case 36:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"18");
+			setImage(base + "_18");
 			setY(getY()+moveAmount);
 			break;
 		case 38:
-			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"19");
+			setImage(base + "_19");
 			setY(getY()+moveAmount);
 			break;
 		case 40:
