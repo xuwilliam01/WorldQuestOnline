@@ -59,6 +59,8 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private Image logoutOver;
 	
 	//public final static String IP = "52.14.41.226";
+	
+	//public final static String IP = "74.12.138.159";
 	public final static String IP = "127.0.0.1";
 	public final static int PORT = 9977;
 

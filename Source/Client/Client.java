@@ -1218,7 +1218,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 			graphics.setColor(Color.white);
 			graphics.setFont(ClientWorld.MESSAGE_FONT);
-			graphics.drawString(String.format("YOU ARE DEAD. Please wait %d seconds to respawn", respawnTime), 300, 20);
+			graphics.drawString(String.format("YOU ARE DEAD. Wait %d seconds to respawn", respawnTime), ClientFrame.getScaledWidth(600), ClientFrame.getScaledHeight(450));
 		}
 
 		graphics.setFont(ClientWorld.NORMAL_FONT);
