@@ -74,8 +74,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/4, (int)(Client.SCREEN_HEIGHT/3.5));
+		setSize(480, 308);
 		setResizable(false);
 		setTitle("Account Login");
 		setLocationRelativeTo(null);
