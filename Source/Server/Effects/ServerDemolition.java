@@ -17,6 +17,9 @@ public class ServerDemolition extends ServerObject{
 		case ServerWorld.INN_TYPE:
 			setImage("INN_0");
 			break;
+		case ServerWorld.TOWER_TYPE:
+			setImage("TOWER_0");
+			break;
 		}
 		
 		this.world = world;
@@ -36,6 +39,8 @@ public class ServerDemolition extends ServerObject{
 			break;
 		case 12:
 			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"3");
+			world.add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,world));
+			world.add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,world));
 			break;
 		case 16:
 			setImage(getImage().substring(0,getImage().indexOf('_')+1)+"4");
@@ -60,8 +65,6 @@ public class ServerDemolition extends ServerObject{
 	public void destroy()
 	{
 		super.destroy();
-		world.add(new ServerSmoke(getX()+getWidth()+getWidth()/2-320,getY()+getHeight()-180,true,world));
-		world.add(new ServerSmoke(getX()-getWidth()/2,getY()+getHeight()-180,false,world));
 	}
 
 }

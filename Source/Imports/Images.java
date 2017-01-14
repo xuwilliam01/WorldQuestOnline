@@ -1301,6 +1301,11 @@ public class Images {
 			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("TOWER_VALID.png","Buildings//"));
 			
+			for (int i = 0; i < 8; i++)
+			{
+				addtoImageArray(new GameImage("TOWER_"+i+".png","Buildings//"));
+			}
+			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "WOOD_HOUSE.png"));
 			} catch (IOException e) {
@@ -1351,7 +1356,7 @@ public class Images {
 			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("INN_VALID.png","Buildings//"));
 			
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 8; i++)
 			{
 				addtoImageArray(new GameImage("INN_"+i+".png","Buildings//"));
 			}
