@@ -305,45 +305,45 @@ public class ClientWorld {
 					case top:
 						if (Math.random() > 0.05) {
 							newGrid[row][col] = (char) (141 + (int) (Math.random() * 2)); // dirt_top
-																							// 0-1
+							// 0-1
 							if (Math.random() > 0.9) {
 								newGrid[row - 1][col] = (char) (193 + (int) (Math.random() * 6)); // drocks
 							}
 						} else {
 							newGrid[row][col] = (char) (143 + (int) (Math.random() * 2)); // dirt_top
-																							// 2-3
+							// 2-3
 						}
 
 						break;
 					case topWithSky:
 						if (Math.random() > 0.05) {
 							newGrid[row][col] = (char) (141 + (int) (Math.random() * 2)); // dirt_top
-																							// 0-1
+							// 0-1
 							double random = Math.random();
 							if (random > 0.10) {
 								newGrid[row - 1][col] = (char) (173 + (int) (Math.random() * 4)); // grass
-																									// 0-3
+								// 0-3
 							} else if (random > 0.05) {
 								newGrid[row - 1][col] = (char) (179 + (int) (Math.random() * 3)); // grass
-																									// 6-8
+								// 6-8
 							} else if (random > 0.025) {
 								newGrid[row - 1][col] = (char) (182 + (int) (Math.random() * 4)); // grass
-																									// 9-12
+								// 9-12
 							} else {
 								newGrid[row - 1][col] = (char) (202 + (int) (Math.random() * 5)); // tree
 							}
 						} else {
 							newGrid[row][col] = (char) (143 + (int) (Math.random() * 2)); // dirt_top
-																							// 2-3
+							// 2-3
 						}
 						break;
 					case bottom:
 						if (Math.random() > 0.5) {
 							newGrid[row][col] = (char) (133 + (int) (Math.random() * 2)); // dirt_bottom
-																							// 0-1
+							// 0-1
 						} else {
 							newGrid[row][col] = (char) (300 + (int) (Math.random() * 2)); // dirt_bottom
-																							// 2-3
+							// 2-3
 						}
 						break;
 					case right:
@@ -358,7 +358,7 @@ public class ClientWorld {
 					}
 					break;
 
-				// Sand tile
+					// Sand tile
 				case 'S':
 					int situation2 = checkTileSituation(row, col, grid);
 
@@ -378,7 +378,7 @@ public class ClientWorld {
 								newGrid[row - 1][col] = (char) 209; // skull
 							} else {
 								newGrid[row - 1][col] = (char) (207 + (int) (Math.random() * 2)); // tree
-																									// 5-6
+								// 5-6
 							}
 						}
 						break;
@@ -396,7 +396,7 @@ public class ClientWorld {
 								newGrid[row - 1][col] = (char) 209; // skull
 							} else {
 								newGrid[row - 1][col] = (char) (207 + (int) (Math.random() * 2)); // tree
-																									// 5-6
+								// 5-6
 							}
 						}
 						break;
@@ -423,7 +423,7 @@ public class ClientWorld {
 					case top:
 						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (156 + (int) (Math.random() * 2)); // sand_top
-																							// 0-1
+							// 0-1
 							if (Math.random() > 0.99) {
 								newGrid[row - 1][col] = (char) 209; // skull
 							}
@@ -435,14 +435,14 @@ public class ClientWorld {
 					case topWithSky:
 						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (156 + (int) (Math.random() * 2)); // sand_top
-																							// 0-1
+							// 0-1
 							double random2 = Math.random();
 							if (random2 > 0.97) {
 								if (random2 < 0.98) {
 									newGrid[row - 1][col] = (char) 209; // skull
 								} else {
 									newGrid[row - 1][col] = (char) (207 + (int) (Math.random() * 2)); // tree
-																										// 5-6
+									// 5-6
 								}
 							}
 						} else {
@@ -466,7 +466,7 @@ public class ClientWorld {
 
 					break;
 
-				// Stone tile
+					// Stone tile
 				case 'E':
 					int situation3 = checkTileSituation(row, col, grid);
 
@@ -509,7 +509,7 @@ public class ClientWorld {
 					case topWithSky:
 						if (Math.random() > 0.02) {
 							newGrid[row][col] = (char) (170 + (int) (Math.random() * 2)); // stone_top
-																							// 0-1
+							// 0-1
 							if (Math.random() > 0.92) {
 								newGrid[row - 1][col] = (char) (189 + (int) (Math.random() * 4)); // srocks
 							}
@@ -727,6 +727,7 @@ public class ClientWorld {
 				}
 				objects[id].setLastCounter(Client.getPacketNo());
 				objects[id].setHP(hp);
+
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -924,14 +925,17 @@ public class ClientWorld {
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
 
-				if (object.getID() == player.getID()) {
-					player.setX(object.getX());
-					player.setY(object.getY());
-					x = centreX;
-					y = centreY;
-				} else if (object.getX() == player.getX() && object.getY() == player.getY()) {
-					x = centreX;
-					y = centreY;
+				if(!client.leaveGame())
+				{
+					if (object.getID() == player.getID()) {
+						player.setX(object.getX());
+						player.setY(object.getY());
+						x = centreX;
+						y = centreY;
+					} else if (object.getX() == player.getX() && object.getY() == player.getY()) {
+						x = centreX;
+						y = centreY;
+					}
 				}
 
 				if (object.getType().equals(ServerWorld.TEXT_TYPE + "")) {
@@ -949,15 +953,15 @@ public class ClientWorld {
 					if (x > Client.SCREEN_WIDTH || x + object.getWidth() < 0 || y > Client.SCREEN_HEIGHT
 							|| y + object.getHeight() < 0
 							|| (Client.getPacketNo() > 600 && Client.getPacketNo() - object.getLastCounter() >= 99
-									&& object.getID() != player.getID())) // If
-																			// the
-																			// object
-																			// wasn't
-																			// present
-																			// in
-																			// the
-																			// last
-																			// update
+							&& object.getID() != player.getID())) // If
+						// the
+						// object
+						// wasn't
+						// present
+						// in
+						// the
+						// last
+						// update
 					{
 						objectsToRemove.add(object);
 						continue;
@@ -1086,7 +1090,7 @@ public class ClientWorld {
 					null);
 			graphics.fillRect(
 					Client.SCREEN_WIDTH - 481
-							+ (379 - (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP())),
+					+ (379 - (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP())),
 					Client.SCREEN_HEIGHT - 29, (int) (379.0 * client.getBlueCastleHP() / client.getBlueCastleMaxHP()),
 					20);
 
@@ -1102,36 +1106,67 @@ public class ClientWorld {
 
 			g2d.setColor(Color.WHITE);
 
+			int redX = Client.SCREEN_WIDTH - 16;
+			int blueX = 16;
+			if(client.getRedX() < client.getBlueX())
+			{
+				blueX = Client.SCREEN_WIDTH - 16;
+				redX = 16;
+			}
+
 			// g2d.setColor(new Color(53,153,227)); //BLUE
 			if (client.getRedCastleTier() == 6) {
 				String printThis = String.format("Team Level %d (Max)", client.getRedCastleTier() + 1);
-				int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
-				g2d.drawString(printThis, Client.SCREEN_WIDTH - 16 - stringWidth, Client.SCREEN_HEIGHT - 90);
+				if(client.getRedX() < client.getBlueX())
+					redX = 16;
+				else
+					redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 90);
 			} else {
 				String printThis = String.format("Team Level %d (XP For Next Level  %d/%d)",
 						client.getRedCastleTier() + 1, client.getRedCastleXP(),
 						ServerCastle.CASTLE_TIER_XP[client.getRedCastleTier()]);
-				int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
-				g2d.drawString(printThis, Client.SCREEN_WIDTH - 16 - stringWidth, Client.SCREEN_HEIGHT - 90);
+				if(client.getRedX() < client.getBlueX())
+					redX = 16;
+				else
+					redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 90);
 			}
 
 			String printThis = String.format("Housing %d/%d", client.getRedPop(), client.getRedPopLimit());
-			int stringWidth = g2d.getFontMetrics().stringWidth(printThis);
-
-			g2d.drawString(printThis, Client.SCREEN_WIDTH - 16 - stringWidth, Client.SCREEN_HEIGHT - 65);
+			if(client.getRedX() < client.getBlueX())
+				redX = 16;
+			else
+				redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+			g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 65);
 
 			// g2d.setColor(new Color(217,53,53)); //Blue
 			if (client.getBlueCastleTier() == 6)
-				g2d.drawString(String.format("Team Level %d (Max)", client.getBlueCastleTier() + 1), 16,
+			{
+				printThis = String.format("Team Level %d (Max)", client.getBlueCastleTier() + 1);
+				if(client.getBlueX() < client.getRedX())
+					blueX = 16;
+				else
+					blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+				g2d.drawString(printThis, blueX,
 						Client.SCREEN_HEIGHT - 90);
-			else {
-				g2d.drawString(
-						String.format("Team Level %d (XP For Next Level  %d/%d)", client.getBlueCastleTier() + 1,
-								client.getBlueCastleXP(), ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]),
-						16, Client.SCREEN_HEIGHT - 90);
 			}
-
-			g2d.drawString(String.format("Housing %d/%d", client.getBluePop(), client.getBluePopLimit()), 16,
+			else {
+				printThis = String.format("Team Level %d (XP For Next Level  %d/%d)", client.getBlueCastleTier() + 1,
+						client.getBlueCastleXP(), ServerCastle.CASTLE_TIER_XP[client.getBlueCastleTier()]);
+				if(client.getBlueX() < client.getRedX())
+					blueX = 16;
+				else
+					blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+				g2d.drawString(printThis,
+						blueX, Client.SCREEN_HEIGHT - 90);
+			}
+			printThis = String.format("Housing %d/%d", client.getBluePop(), client.getBluePopLimit());
+			if(client.getBlueX() < client.getRedX())
+				blueX = 16;
+			else
+				blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
+			g2d.drawString(printThis, blueX,
 					Client.SCREEN_HEIGHT - 65);
 
 			// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)

@@ -11,13 +11,16 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 
 public class ClientScoreBoard extends JPanel{
 
 	private PriorityQueue<ClientPlayerScore> redTeam = new PriorityQueue<ClientPlayerScore>();
 	private PriorityQueue<ClientPlayerScore> blueTeam = new PriorityQueue<ClientPlayerScore>();
 	Image scoreboardImage;
-
+	private boolean gameover = false;
+	private String winner = "Red Team";
+	private int team = 0;
 
 	public ClientScoreBoard()
 	{
@@ -30,16 +33,34 @@ public class ClientScoreBoard extends JPanel{
 		scoreboardImage = Images.getImage("scoreboard");
 	}
 
+	public void setWinner(int loser)
+	{
+		gameover = true;
+		this.team = loser;
+		if (team == ServerPlayer.RED_TEAM) 
+			winner = "Blue Team";
+		repaint();
+	}
+	
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
+		
 		int yPos = 100;
 		int xPos = (int)(0.5*Client.SCREEN_WIDTH/8);
-
-
 		graphics.drawImage(scoreboardImage, 0, 0, Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2, null);
 
-		graphics.setColor(Color.red);
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
+		if(gameover)
+		{
+			graphics.setColor(Color.red);
+			if(team == ServerPlayer.RED_TEAM)
+				graphics.setColor(Color.blue);
+			String toDraw = String.format("%s won!", winner);
+			graphics.drawString(toDraw, Client.SCREEN_WIDTH/4 - graphics.getFontMetrics().stringWidth(toDraw)/2,50);
+		}
+		
+		graphics.setColor(Color.red);
+		
 		for(ClientPlayerScore player: redTeam)
 		{
 			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);

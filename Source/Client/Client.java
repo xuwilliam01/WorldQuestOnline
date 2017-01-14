@@ -132,6 +132,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private int redCastleXP;
 	private int redPop;
 	private int redPopLimit;
+	private int redCastleX;
 
 	private int blueCastleHP;
 	private int blueCastleTier;
@@ -140,6 +141,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private int blueCastleXP;
 	private int bluePop;
 	private int bluePopLimit;
+	private int blueCastleX;
 
 	// Chat Components
 	public final static int MAX_MESSAGES = 15;
@@ -468,20 +470,20 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									// End the game
 									leaveGame = true;
 									int team = Integer.parseInt(tokens[++token]);
-									String winner = "Red Team";
-									String loser = "Blue Team";
-									if (team == ServerPlayer.RED_TEAM) {
-										winner = "Blue Team";
-										loser = "Red Team";
-									}
 
-									JOptionPane.showMessageDialog(Client.this, String.format(
-											"The %s castle has been destroyed, the winner is the %s!", loser, winner));
-									input.close();
-									output.close();
-									if (inventory.getMenuButton() != null) {
-										inventory.getMenuButton().doClick();
+									//JOptionPane.showMessageDialog(Client.this, String.format(
+										//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
+									scoreboard.setWinner(team);
+									chat.setEnabled(false);
+									if (!scoreboard.isVisible()) {
+										scoreboard.setVisible(true);
+										add(scoreboard);
+										revalidate();
 									}
+									repaint();
+									//if (inventory.getMenuButton() != null) {
+									//	inventory.getMenuButton().doClick();
+									//}
 									break;
 								case 'U':
 									// startPaint = System.currentTimeMillis();
@@ -621,7 +623,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 											(float) (Math.sqrt((toInt(tokens[++token]) - playerX)
 													* (toInt(tokens[token]) - playerX)
 													+ (toInt(tokens[++token]) - playerY)
-															* (toInt(tokens[token]) - playerY))));
+													* (toInt(tokens[token]) - playerY))));
 
 									break;
 								case 'V':
@@ -766,28 +768,30 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									chatQueue.add("RO " + name3.trim());
 									break;
 								case 'X':
-									redCastleHP = Integer.parseInt(tokens[++token]);
+									redCastleHP = Math.max(Integer.parseInt(tokens[++token]),0);
 									redCastleTier = Integer.parseInt(tokens[++token]);
 									redCastleMoney = Integer.parseInt(tokens[++token]);
 									if (castleShop != null && player.getTeam() == ServerCreature.RED_TEAM)
 										castleShop.setMoney(redCastleMoney);
 									redCastleMaxHP = Integer.parseInt(tokens[++token]);
 									redCastleXP = toInt(tokens[++token]);
+									redCastleX =  toInt(tokens[++token]);
 									break;
 								case 'x':
-									blueCastleHP = Integer.parseInt(tokens[++token]);
+									blueCastleHP = Math.max(Integer.parseInt(tokens[++token]),0);
 									blueCastleTier = Integer.parseInt(tokens[++token]);
 									blueCastleMoney = Integer.parseInt(tokens[++token]);
 									if (castleShop != null && player.getTeam() == ServerCreature.BLUE_TEAM)
 										castleShop.setMoney(blueCastleMoney);
 									blueCastleMaxHP = Integer.parseInt(tokens[++token]);
 									blueCastleXP = toInt(tokens[++token]);
+									blueCastleX =  toInt(tokens[++token]);
 									break;
 								case 'b':
 									for (int weap = 0; weap < inventory.getEquippedWeapons().length; weap++)
 										if (inventory.getEquippedWeapons()[weap] != null
-												&& inventory.getEquippedWeapons()[weap].getType()
-														.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
+										&& inventory.getEquippedWeapons()[weap].getType()
+										.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
 											inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
 											break;
 										}
@@ -815,12 +819,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								System.out.println(message);
 								e.printStackTrace();
 								break;
-							} catch (IOException e) {
-								e.printStackTrace();
-								break;
 							} catch (Exception e) {
 								e.printStackTrace();
-								System.out.println("Something got fucked in the client input comms");
+								System.out.println("Something messed up in the client input comms");
 								break;
 							}
 						}
@@ -1204,7 +1205,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 */
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-
+		
 		// Update the map
 		if (getWorld() != null)
 			getWorld().update(graphics, getPlayer());
@@ -1395,7 +1396,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 							if (str.charAt(0) == 'k')
 								graphics.drawString(lastName.substring(1), 8 + graphics.getFontMetrics()
-										.stringWidth(firstName + "was " + killWord + " by a "), textY);
+								.stringWidth(firstName + "was " + killWord + " by a "), textY);
 							else
 								graphics.drawString(lastName.substring(1),
 										8 + graphics.getFontMetrics().stringWidth(firstName + secondKillWord + " "),
@@ -1550,9 +1551,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 		switch (key.getKeyCode()) {
 		case KeyEvent.VK_TAB:
-			scoreboard.setVisible(false);
-			remove(scoreboard);
-			revalidate();
+			if(!leaveGame)
+			{
+				scoreboard.setVisible(false);
+				remove(scoreboard);
+				revalidate();
+			}
 			break;
 		case KeyEvent.VK_D:
 			if (!currentMessage.equals("r")) {
@@ -2117,5 +2121,19 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public static synchronized void setPacketNo(long no) {
 		packetNo = no;
 	}
+	
+	public int getRedX()
+	{
+		return redCastleX;
+	}
+	
+	public int getBlueX()
+	{
+		return blueCastleX;
+	}
 
+	public boolean leaveGame()
+	{
+		return leaveGame;
+	}
 }

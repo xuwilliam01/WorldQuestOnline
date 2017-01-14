@@ -388,6 +388,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
+		for(int i = 0; i < 5;i++)
+			addItem(new ServerPotion(0,0, ServerWorld.SPEED_POTION_TYPE, getWorld()));
 	}
 
 	public void setHair(String hair)
@@ -1023,12 +1025,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					+ getWorld().getBlueCastle().getTier() + " "
 					+ getWorld().getBlueCastle().getMoney() + " "
 					+ getWorld().getBlueCastle().getMaxHP() + " "
-					+ toChars(getWorld().getBlueCastle().getXP()));
+					+ toChars(getWorld().getBlueCastle().getXP()) + " "
+					+ toChars((int)(getWorld().getBlueCastle().getX())));
 			queueMessage("X " + getWorld().getRedCastle().getHP() + " "
 					+ getWorld().getRedCastle().getTier() + " "
 					+ getWorld().getRedCastle().getMoney() + " "
 					+ getWorld().getRedCastle().getMaxHP() + " "
-					+ toChars(getWorld().getRedCastle().getXP()));
+					+ toChars(getWorld().getRedCastle().getXP()) + " "
+					+ toChars((int)(getWorld().getRedCastle().getX())));
 			if (equippedArmour != null)
 				queueMessage(String
 						.format("A %.2f", equippedArmour.getArmour()));
@@ -2050,6 +2054,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		if (endGame) {
 			sendMessage("B " + losingTeam);
+			//forcePlayerPos(getX(), getY());
+			//Make sure the message reaches the player before we close the connection
+			try {
+				Thread.sleep(ping);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			output.close();
 			try {
 				input.close();
