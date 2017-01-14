@@ -379,7 +379,21 @@ public class ServerWorld
 				new ServerSlimeSpawner(0, 0, this),
 				new ServerBatSpawner(0, 0, this),
 				new ServerGoblinSpawner(0, 0, this, ServerPlayer.BLUE_TEAM),
-				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM) };
+				new ServerGoblinSpawner(0, 0, this, ServerPlayer.RED_TEAM),
+				new ServerBarracks(0,0, BASIC_BARRACKS_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerBarracks(0,0, ADV_BARRACKS_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerBarracks(0,0, GIANT_FACTORY_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerDefense(0,0, TOWER_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerHouse(0,0, WOOD_HOUSE_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerHouse(0,0, INN_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerMine(0,0, GOLD_MINE_TYPE, ServerPlayer.BLUE_TEAM, this),
+				new ServerBarracks(0,0, BASIC_BARRACKS_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerBarracks(0,0, ADV_BARRACKS_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerBarracks(0,0, GIANT_FACTORY_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerDefense(0,0, TOWER_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerHouse(0,0, WOOD_HOUSE_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerHouse(0,0, INN_TYPE, ServerPlayer.RED_TEAM, this),
+				new ServerMine(0,0, GOLD_MINE_TYPE, ServerPlayer.RED_TEAM, this)};
 		newWorld();
 	}
 

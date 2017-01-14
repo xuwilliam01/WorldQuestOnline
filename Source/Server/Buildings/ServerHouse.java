@@ -31,8 +31,8 @@ public class ServerHouse extends ServerBuilding {
 		}
 		
 
-		
-		castle.increasePopLimit(population);
+		if(castle != null)
+			castle.increasePopLimit(population);
 	}
 	
 	@Override

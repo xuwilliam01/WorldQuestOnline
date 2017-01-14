@@ -182,6 +182,9 @@ public class ServerCastle extends ServerBuilding {
 	 */
 	public synchronized void spawnGoblin(int goblinNo)
 	{
+		if(spawners.size() == 0)
+			return;
+		
 		ServerGoblinSpawner spawner = spawners.get(spawnerNo);
 		getWorld().add(new ServerGoblin(spawner.getX(), spawner.getY() - spawner.getHeight() - ServerWorld.TILE_SIZE, getWorld(), getTeam(), goblinNo));
 

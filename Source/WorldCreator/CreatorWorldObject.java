@@ -25,7 +25,8 @@ public class CreatorWorldObject
 	private int height;
 	private Image image;
 	private char ref;
-
+	private String name;
+	
 	/**
 	 * Constructor
 	 */
@@ -35,6 +36,7 @@ public class CreatorWorldObject
 		this.row = row;
 		this.ref = ref;
 		this.image = ImageReferencePair.getImages()[ref].getImage();
+		this.name = ImageReferencePair.getImages()[ref].getImageName();
 		this.width = image.getWidth(null) / ServerWorld.TILE_SIZE;
 		this.height = image.getHeight(null) / ServerWorld.TILE_SIZE;
 	}
@@ -97,5 +99,9 @@ public class CreatorWorldObject
 	public void setImage(Image image)
 	{
 		this.image = image;
+	}
+	public String getName()
+	{
+		return name;
 	}
 }

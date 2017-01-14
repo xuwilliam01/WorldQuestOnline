@@ -17,7 +17,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public final static int GOLD_MINE_HP = 600;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
-		super(x, y, 0, 0, 0, 0, 0, "SERVERBUILDING", type, 0, world, true);
+		super(x, y, 0, 0, 0, 0, 1, "SERVERBUILDING", type, 0, world, true);
 		switch (type)
 		{
 		case ServerWorld.CASTLE_TYPE:
@@ -32,37 +32,51 @@ public abstract class ServerBuilding extends ServerCreature {
 			setHP(CASTLE_HP);
 			break;
 		case ServerWorld.BASIC_BARRACKS_TYPE:
-			setImage("BARRACKS");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_BARRACKS");
+			else setImage("BLUE_BARRACKS");
 			setMaxHP(BARRACKS_HP);
 			setHP(BARRACKS_HP);
 			break;
 		case ServerWorld.ADV_BARRACKS_TYPE:
-			setImage("ADV_BARRACKS");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_ADV_BARRACKS");
+			else setImage("BLUE_ADV_BARRACKS");
 			setMaxHP(ADV_BARRACKS_HP);
 			setHP(ADV_BARRACKS_HP);
 			break;
 		case ServerWorld.GIANT_FACTORY_TYPE:
-			setImage("GIANT_FACTORY");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_GIANT_FACTORY");
+			else setImage("BLUE_GIANT_FACTORY");
 			setMaxHP(GIANT_FACTORY_HP);
 			setHP(GIANT_FACTORY_HP);
 			break;
 		case ServerWorld.WOOD_HOUSE_TYPE:
-			setImage("WOOD_HOUSE");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_WOOD_HOUSE");
+			else setImage("BLUE_WOOD_HOUSE");
 			setMaxHP(WOOD_HOUSE_HP);
 			setHP(WOOD_HOUSE_HP);
 			break;
 		case ServerWorld.INN_TYPE:
-			setImage("INN");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_INN");
+			else setImage("BLUE_INN");
 			setMaxHP(INN_HP);
 			setHP(INN_HP);
 			break;
 		case ServerWorld.TOWER_TYPE:
-			setImage("TOWER");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_TOWER");
+			else setImage("BLUE_TOWER");
 			setMaxHP(TOWER_HP);
 			setHP(TOWER_HP);
 			break;
 		case ServerWorld.GOLD_MINE_TYPE:
-			setImage("GOLD_MINE");
+			if(team == ServerCreature.RED_TEAM)
+				setImage("RED_GOLD_MINE");
+			else setImage("BLUE_GOLD_MINE");
 			setMaxHP(GOLD_MINE_HP);
 			setHP(GOLD_MINE_HP);
 			break;

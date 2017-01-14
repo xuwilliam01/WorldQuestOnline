@@ -1286,6 +1286,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_BARRACKS.png", image));
+			addtoImageArray(new GameImage("RED_BARRACKS.png", image));
+			addtoImageArray(new GameImage("BLUE_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("BARRACKS.png",image));
 			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
@@ -1296,6 +1300,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_TOWER.png", image));
+			addtoImageArray(new GameImage("RED_TOWER.png", image));
+			addtoImageArray(new GameImage("BLUE_TOWER_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_TOWER_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("TOWER_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("TOWER.png",image));
 			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
@@ -1306,6 +1314,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_WOOD_HOUSE.png", image));
+			addtoImageArray(new GameImage("RED_WOOD_HOUSE.png", image));
+			addtoImageArray(new GameImage("BLUE_WOOD_HOUSE_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_WOOD_HOUSE_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("WOOD_HOUSE.png",image));
 			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
@@ -1316,7 +1328,11 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			addtoImageArray(new GameImage("GOLD_MINE_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BLUE_GOLD_MINE.png", image));
+			addtoImageArray(new GameImage("RED_GOLD_MINE.png", image));
+			addtoImageArray(new GameImage("BLUE_GOLD_MINE_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_GOLD_MINE_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("GOLD_MINE_ICON.png",image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("GOLD_MINE.png",image));
 			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
@@ -1326,6 +1342,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_ADV_BARRACKS.png", image));
+			addtoImageArray(new GameImage("RED_ADV_BARRACKS.png", image));
+			addtoImageArray(new GameImage("BLUE_ADV_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_ADV_BARRACKS_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("ADV_BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("ADV_BARRACKS.png",image));
 			addtoImageArray(new GameImage("ADV_BARRACKS_INVALID.png","Buildings//"));
@@ -1336,6 +1356,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_GIANT_FACTORY.png", image));
+			addtoImageArray(new GameImage("RED_GIANT_FACTORY.png", image));
+			addtoImageArray(new GameImage("BLUE_GIANT_FACTORY_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_GIANT_FACTORY_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("GIANT_FACTORY_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("GIANT_FACTORY.png",image));
 			addtoImageArray(new GameImage("GIANT_FACTORY_INVALID.png","Buildings//"));
@@ -1346,6 +1370,10 @@ public class Images {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			addtoImageArray(new GameImage("BLUE_INN.png", image));
+			addtoImageArray(new GameImage("RED_INN.png", image));
+			addtoImageArray(new GameImage("BLUE_INN_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
+			addtoImageArray(new GameImage("RED_INN_ICON.png", image,CreatorObject.SCALE * ServerWorld.TILE_SIZE,CreatorObject.SCALE * ServerWorld.TILE_SIZE));
 			addtoImageArray(new GameImage("INN_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
 			addtoImageArray(new GameImage("INN.png",image));
 			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));

@@ -3,7 +3,11 @@ package Server;
 import java.util.ArrayList;
 
 import Imports.Images;
+import Server.Buildings.ServerBarracks;
 import Server.Buildings.ServerCastle;
+import Server.Buildings.ServerDefense;
+import Server.Buildings.ServerHouse;
+import Server.Buildings.ServerMine;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
@@ -399,6 +403,21 @@ public abstract class ServerObject implements Comparable<ServerObject>
 			ServerBatSpawner newBatSpawner = (ServerBatSpawner) original;
 			return new ServerBatSpawner(original.getX(), original.getY(),
 					newBatSpawner.getWorld());
+		case ServerWorld.BASIC_BARRACKS_TYPE:
+		case ServerWorld.ADV_BARRACKS_TYPE:
+		case ServerWorld.GIANT_FACTORY_TYPE:
+			ServerBarracks barracks = (ServerBarracks) original;
+			return new ServerBarracks(barracks.getX(), barracks.getY(), barracks.getType(), barracks.getTeam(), barracks.getWorld());
+		case ServerWorld.GOLD_MINE_TYPE:
+			ServerMine mine = (ServerMine) original;
+			return new ServerBarracks(mine.getX(), mine.getY(), mine.getType(), mine.getTeam(), mine.getWorld());
+		case ServerWorld.WOOD_HOUSE_TYPE:
+		case ServerWorld.INN_TYPE:
+			ServerHouse house = (ServerHouse) original;
+			return new ServerBarracks(house.getX(), house.getY(), house.getType(), house.getTeam(), house.getWorld());
+		case ServerWorld.TOWER_TYPE:
+			ServerDefense defense = (ServerDefense) original;
+			return new ServerBarracks(defense.getX(), defense.getY(), defense.getType(), defense.getTeam(), defense.getWorld());
 		}
 
 		// case ServerWorld.SLIME_TYPE:

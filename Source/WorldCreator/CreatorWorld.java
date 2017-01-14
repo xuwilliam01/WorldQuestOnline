@@ -332,9 +332,23 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(CreatorWorldObject object : objects)
 		{
 			if(isEditable)
-				graphics.drawImage(object.getImage(), (int) (CENTRE_X + object.getCol()
-						* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (CENTRE_Y + object.getRow()
-								* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			{
+				int x = (int) (CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX);
+				int y = (int) (CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY);
+				graphics.drawImage(object.getImage(), x,y,(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+				if(object.getName().contains("RED"))
+				{
+					graphics.setColor(Color.red);
+					graphics.fillRect(x+ object.getWidth()*ServerWorld.TILE_SIZE/4, y, 10, 10);
+				}
+				else if(object.getName().contains("BLUE"))
+				{
+					graphics.setColor(Color.blue);
+					graphics.fillRect(x+ object.getWidth()*ServerWorld.TILE_SIZE/4, y, 10, 10);
+				}
+			}
 			else
 			{
 				graphics.setColor(tiles[object.getRef()].getColor());
