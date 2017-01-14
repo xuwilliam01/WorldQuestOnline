@@ -32,7 +32,7 @@ public class ServerDefense extends ServerBuilding {
 		super.setX(x);
 		for (ServerObject object:arrowSources)
 		{
-			object.setX(x);
+			object.setX(x + getWidth()/2);
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class ServerDefense extends ServerBuilding {
 		super.setY(y);
 		for (ServerObject object:arrowSources)
 		{
-			object.setY(y);
+			object.setY(y + getHeight()/4);
 		}
 	}
 	
