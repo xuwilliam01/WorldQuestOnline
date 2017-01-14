@@ -205,10 +205,19 @@ public class MainMenu implements KeyListener {
 						"Please set your monitor to 1920x1080 or smaller for an optimized experience");
 			}
 		}
+		if(tooLarge)
+		{
+			Client.SCREEN_HEIGHT+=40;
+		}
 		mainFrame = new ClientFrame(tooLarge, pos);
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 
+		if(tooLarge)
+		{
+			Client.SCREEN_HEIGHT-=40;
+		}
+		
 		while (!(imagesAudioLoaded)) {
 			try {
 				Thread.sleep(10);
