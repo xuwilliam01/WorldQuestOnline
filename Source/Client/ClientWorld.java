@@ -1165,7 +1165,17 @@ public class ClientWorld {
 		graphics.setFont(CASTLE_FONT);
 		g2d.setFont(CASTLE_FONT);
 
-		g2d.setColor(Color.WHITE);
+		
+		if (backgroundChoice==0)
+		{
+			g2d.setColor(Color.WHITE);
+		}
+		else
+		{
+			g2d.setColor(Color.BLACK);
+		}
+		
+		
 		//g2d.setColor(new Color(53,153,227)); //BLUE
 		if (client.getRedCastleTier() == 6){
 			String printThis = String.format("Team Level %d (Max)",

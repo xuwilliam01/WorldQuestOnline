@@ -31,46 +31,46 @@ public class ServerSmoke extends ServerObject{
 		
 		switch((int)(world.getWorldCounter()-counter))
 		{
-		case 4:
+		case 5:
 			setImage("SMOKE_"+direction+"_1");
 			break;
-		case 8:
+		case 10:
 			setImage("SMOKE_"+direction+"_2");
 			break;
-		case 12:
+		case 15:
 			setImage("SMOKE_"+direction+"_3");
 			break;
-		case 16:
+		case 20:
 			setImage("SMOKE_"+direction+"_4");
 			break;
-		case 20:
+		case 25:
 			setImage("SMOKE_"+direction+"_5");
 			break;
-		case 24:
+		case 30:
 			setImage("SMOKE_"+direction+"_6");
 			break;
-		case 28:
+		case 35:
 			setImage("SMOKE_"+direction+"_7");
 			break;
-		case 32:
+		case 40:
 			setImage("SMOKE_"+direction+"_8");
 			break;
-		case 36:
+		case 45:
 			setImage("SMOKE_"+direction+"_9");
 			break;
-		case 40:
+		case 50:
 			setImage("SMOKE_"+direction+"_10");
 			break;
-		case 44:
+		case 55:
 			setImage("SMOKE_"+direction+"_11");
 			break;
-		case 48:
+		case 60:
 			setImage("SMOKE_"+direction+"_12");
 			break;
-		case 52:
+		case 65:
 			setImage("SMOKE_"+direction+"_13");
 			break;
-		case 56:
+		case 70:
 			destroy();
 			break;
 		}
