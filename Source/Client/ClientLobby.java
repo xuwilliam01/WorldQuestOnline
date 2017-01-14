@@ -196,7 +196,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
 					Client.SCREEN_HEIGHT);
-			addKeyListener(this);
+			
 			this.setBackground(Color.BLACK);
 
 			// Add maps on server (first thing read)
@@ -235,7 +235,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			Timer repaintTimer = new Timer(15, this);
 			repaintTimer.start();
 
+			setFocusable(true);
 			requestFocusInWindow();
+			addKeyListener(this);
 		}
 
 	}
@@ -723,6 +725,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		System.out.println("key pressed");
 		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
 			chat.requestFocus();
