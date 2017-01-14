@@ -647,16 +647,19 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == enter && !startTimer.isRunning())
+		if (e.getSource() == enter)
 		{
 			// Send the message
-			String message = chat.getText();
-			if (message.length() > 0)
+			if(!startTimer.isRunning())
 			{
-				printToServer("C " + message);
+				String message = chat.getText();
+				if (message.length() > 0)
+				{
+					printToServer("C " + message);
+				}
+				chat.setForeground(Color.GRAY);
+				chat.setText("");
 			}
-			chat.setForeground(Color.GRAY);
-			chat.setText("");
 			requestFocusInWindow();
 		}
 		else if (e.getSource() == start && isLeader)
