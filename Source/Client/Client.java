@@ -810,6 +810,10 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								e.printStackTrace();
 							} catch (IOException e) {
 								e.printStackTrace();
+							} catch (Exception e)
+							{
+								e.printStackTrace();
+								System.out.println("Something got fucked in the client input comms");
 							}
 						}
 					}

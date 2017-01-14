@@ -1166,14 +1166,7 @@ public class ClientWorld {
 		g2d.setFont(CASTLE_FONT);
 
 		
-		if (backgroundChoice==0)
-		{
-			g2d.setColor(Color.WHITE);
-		}
-		else
-		{
-			g2d.setColor(Color.BLACK);
-		}
+		g2d.setColor(Color.WHITE);
 		
 		
 		//g2d.setColor(new Color(53,153,227)); //BLUE
