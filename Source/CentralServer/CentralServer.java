@@ -388,12 +388,19 @@ public class CentralServer implements Runnable, ActionListener {
 	private class TCPIn implements Runnable {
 		@Override
 		public void run() {
+			outer:
 			while (true) {
 				try {
 					Socket newServer = TCPSocket.accept();
 					
 					//Make sure you can create two servers from the same IP
 					String IP = newServer.getInetAddress().toString();
+					if(IP == null)
+					{
+						newServer.close();
+						continue;
+					}
+					
 					synchronized(servers)
 					{
 						for(ServerInfo server : servers)
@@ -401,7 +408,7 @@ public class CentralServer implements Runnable, ActionListener {
 							if(server.getIP().equals(IP))
 							{
 								newServer.close();
-								continue;
+								continue outer;
 							}
 						}
 					}
@@ -507,11 +514,12 @@ public class CentralServer implements Runnable, ActionListener {
 							break;
 						}
 					} catch (NullPointerException e) {
+						System.out.println("NULL POINTER");
 						e.printStackTrace();
 					}
 				}
 			} catch (IOException e) {
-				// System.out.println("Server Disconnected");
+				System.out.println("Server Disconnected");
 				return;
 			}
 		}
