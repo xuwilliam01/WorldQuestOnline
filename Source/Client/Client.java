@@ -300,7 +300,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 		distanceConstant = 80.0f / (SCREEN_HEIGHT + SCREEN_WIDTH);
 
-		
+
 	}
 
 	/**
@@ -474,7 +474,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									int team = Integer.parseInt(tokens[++token]);
 
 									//JOptionPane.showMessageDialog(Client.this, String.format(
-										//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
+									//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
 									scoreboard.setWinner(team);
 									chat.setEnabled(false);
 									if (!scoreboard.isVisible()) {
@@ -520,17 +520,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									playerY = Double.parseDouble(tokens[++token]);
 									setPos((int) playerX, (int) playerY);
 									break;
-								case 'e':
-									try {
-										ClientObject object = world.get(toInt(tokens[++token]));
-										// System.out.println("CHECK: "+(object
-										// == null));
-										object.setX(player.getX());
-										object.setY(player.getY());
-									} catch (NullPointerException e) {
-										e.printStackTrace();
-									}
-
+								case 'e':			
+									ClientObject object = world.get(toInt(tokens[++token]));
+									if(object == null)
+										break;
+									object.setX(player.getX());
+									object.setY(player.getY());
 									break;
 								case '*':
 									hSpeed = Double.parseDouble(tokens[++token]);
@@ -1207,7 +1202,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 */
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-		
+
 		// Update the map
 		if (getWorld() != null)
 			getWorld().update(graphics, getPlayer());
@@ -1242,7 +1237,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			graphics.setColor(Color.WHITE);
 			graphics.setFont(ClientWorld.NORMAL_FONT);
 			graphics.drawString("'TAB' to show scoreboard", 270, 15);
-			
+
 			if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
 				graphics.setColor(Color.BLUE);
 			}
@@ -2124,12 +2119,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public static synchronized void setPacketNo(long no) {
 		packetNo = no;
 	}
-	
+
 	public int getRedX()
 	{
 		return redCastleX;
 	}
-	
+
 	public int getBlueX()
 	{
 		return blueCastleX;
