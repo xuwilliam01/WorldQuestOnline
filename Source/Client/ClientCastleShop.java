@@ -2,20 +2,26 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerCreature;
+import Server.Items.ServerBuildingItem;
 
-public class ClientCastleShop extends JPanel{
+public class ClientCastleShop extends JPanel implements ActionListener{
 	
 	public final static int SHOP_WIDTH = 1000;
 	public final static int SHOP_HEIGHT = 500;
 
 	private Client client; //Maybe not needed
 	private int money;
+	
+	private JButton hireMerc;
 	
 	public ClientCastleShop(Client client, int money)
 	{
@@ -37,7 +43,12 @@ public class ClientCastleShop extends JPanel{
 		add(new ClientCastleShopItem(ServerWorld.TOWER_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.GOLD_MINE_ITEM_TYPE,this));
 		
-		
+		hireMerc = new JButton("HIRE");
+		hireMerc.setToolTipText(String.format("Hire Mercenaries (Cost: %d)", ServerBuildingItem.MERC_COST));
+		hireMerc.setLocation(ClientFrame.getScaledWidth(200),ClientFrame.getScaledHeight(400));
+		hireMerc.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
+		hireMerc.addActionListener(this);
+		add(hireMerc);
 		
 	}
 	
@@ -52,9 +63,8 @@ public class ClientCastleShop extends JPanel{
 		repaint();
 	}
 	
-	public void buy(String type, int cost)
+	public void buy(String type)
 	{
-		money -= cost;
 		client.printToServer("b "+ type);
 		repaint();
 	}
@@ -69,5 +79,10 @@ public class ClientCastleShop extends JPanel{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
 		graphics.drawString("Money: "+money, 400, 400);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		client.printToServer("m");
 	}
 }
