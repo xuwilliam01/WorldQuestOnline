@@ -175,7 +175,7 @@ public class ClientObject implements Comparable<ClientObject>
 			hint = "Destroy the chest and it will drop items";
 			break;
 		case ServerWorld.CASTLE_TYPE:
-			hint = "Drop money on your castle to buy buildings. Press 'E' to open/close the castle shop";
+			hint = "Drop money on your castle add money to your team bank. Press 'E' to open/close the castle shop";
 			break;
 		}
 		
