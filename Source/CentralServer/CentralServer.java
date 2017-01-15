@@ -107,7 +107,7 @@ public class CentralServer implements Runnable, ActionListener {
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
 			}
-			leaderboardS.trim();
+			//leaderboardS.trim();
 		}
 
 	}

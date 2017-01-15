@@ -1,6 +1,7 @@
 package ClientUDP;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,7 +51,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 	public Leaderboard(int port) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize(960, 540);
+		setSize(1200, 480);
 		setResizable(false);
 		setTitle("Leaderboard");
 		setLocationRelativeTo(null);
@@ -143,32 +144,41 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 
 	@Override
 	public void run() {
-		receiveData = new byte[1024];
-		receive = new DatagramPacket(receiveData, receiveData.length);
-		try {
-			socket.receive(receive);
-		} catch (Exception e) {
-			return;
-		}
-		//Get input
-		String input = new String(receive.getData()).trim();
-		leaderboard.clear();
-		displayboard.clear();
-		search.setText("");
-		String[] tokens = input.split(" ");
-		for(int i = 0, rank = 1; i < tokens.length; rank++)
+		while(true)
 		{
-			int len = Integer.parseInt(tokens[i++]);
-			int rating = Integer.parseInt(tokens[i++]);
-			int wins = Integer.parseInt(tokens[i++]);
-			int losses = Integer.parseInt(tokens[i++]);
-			String name = tokens[i++];
-			for(int j = 1; j < len;j++)
-				name += " "+tokens[i++];
-			leaderboard.add(new LeaderboardPlayer(name, rating, wins, losses,rank));
-			displayboard.add(new LeaderboardPlayer(name, rating, wins, losses, rank));
+			receiveData = new byte[1024];
+			receive = new DatagramPacket(receiveData, receiveData.length);
+			try {
+				socket.receive(receive);
+			} catch (Exception e) {
+				return;
+			}
+			//Get input
+			String input = new String(receive.getData()).trim();
+			leaderboard.clear();
+			displayboard.clear();
+			search.setText("");
+			String[] tokens = input.split(" ");
+			try
+			{
+				for(int i = 0, rank = 1; i < tokens.length; rank++)
+				{
+					int len = Integer.parseInt(tokens[i++]);
+					int rating = Integer.parseInt(tokens[i++]);
+					int wins = Integer.parseInt(tokens[i++]);
+					int losses = Integer.parseInt(tokens[i++]);
+					String name = tokens[i++];
+					for(int j = 1; j < len;j++)
+						name += " "+tokens[i++];
+					leaderboard.add(new LeaderboardPlayer(name, rating, wins, losses,rank));
+					displayboard.add(new LeaderboardPlayer(name, rating, wins, losses, rank));
+				}
+			} catch(Exception e)
+			{
+
+			}
+			repaint();
 		}
-		repaint();
 	}
 
 	private class Panel extends JPanel
@@ -177,8 +187,8 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		{
 			setLayout(null);
 
-			refresh.setSize(150,50);
-			refresh.setLocation(Leaderboard.this.getWidth()-200,Leaderboard.this.getHeight()-100);
+			refresh.setSize(100,20);
+			refresh.setLocation(380,5);
 			refresh.addActionListener(Leaderboard.this);
 			add(refresh);
 			refresh.doClick();
@@ -187,7 +197,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 			search.setLocation(70,5);
 			search.addKeyListener(Leaderboard.this);
 			add(search);
-			
+
 			searchL.setSize(60,20);
 			searchL.setLocation(10,5);
 			add(searchL);
@@ -197,7 +207,10 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
+			graphics.setColor(Color.white);
+			graphics.fillRect(25, 28, 1140, 416);
 			graphics.setColor(Color.black);
+			graphics.setFont(new Font("Consolas", Font.BOLD, 10)); //Monospace font
 			synchronized(leaderboard)
 			{
 				int y = 30;
@@ -206,7 +219,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 				{
 					if(i%LEADERBOARD_DISPLAY_SIZE == 0)
 						y = 30;
-					graphics.drawString(String.format("%3d. %-25s R:%4d %3dW %3dL", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50 + 400*(i/LEADERBOARD_DISPLAY_SIZE), y+=delta);
+					graphics.drawString(String.format("%3d. %-25s R:%-4d W:%-3d L:%-3d", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50 + 375*(i/LEADERBOARD_DISPLAY_SIZE), y+=delta);
 				}
 			}
 		}
@@ -226,11 +239,11 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		{
 			if(player.getName().toLowerCase().contains(text))
 				displayboard.add(player);
-			if(displayboard.size() > LEADERBOARD_DISPLAY_SIZE)
+			if(displayboard.size() >= 3*LEADERBOARD_DISPLAY_SIZE)
 				break;
 		}
 		repaint();	
-		
+
 	}
 
 	@Override

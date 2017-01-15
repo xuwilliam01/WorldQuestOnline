@@ -56,10 +56,10 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JButton menuLoginButton;
 	private Image logoutOver;
 	
-	public final static String IP = "52.14.41.226";
+	//public final static String IP = "52.14.41.226";
 	
 	//public final static String IP = "74.12.138.159";
-	//public final static String IP = "127.0.0.1";
+	public final static String IP = "127.0.0.1";
 	public final static int PORT = 9977;
 
 	public static boolean open = false;
@@ -69,7 +69,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private static String savedPassword;
 	public static String savedKey;
 
-	public static final int MAX_NAME_LEN = 25;
+	public static final int MAX_NAME_LEN = 20;
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		setBackground(Color.BLACK);
