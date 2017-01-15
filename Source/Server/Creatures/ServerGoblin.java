@@ -221,7 +221,7 @@ public class ServerGoblin extends ServerCreature {
 			isMelee = false;
 			movementSpeed = 5;
 			jumpSpeed = 16;
-			housingSpace = 2;
+			housingSpace = 0;
 
 			setName("A Ninja Goblin");
 			break;
@@ -237,7 +237,7 @@ public class ServerGoblin extends ServerCreature {
 			movementSpeed = 4;
 			jumpSpeed = 14;
 			weapon = "HAIRON_0";
-			housingSpace = 2;
+			housingSpace = 0;
 
 			setName("A Goblin Samurai");
 			break;
