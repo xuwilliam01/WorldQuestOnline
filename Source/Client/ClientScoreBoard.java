@@ -29,8 +29,8 @@ public class ClientScoreBoard extends JPanel{
 		setFocusable(false);
 		setOpaque(false);
 		//setBorder(BorderFactory.createLineBorder(Color.black, 10));
-		setSize(Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2);
-		setLocation(Client.SCREEN_WIDTH/4, Client.SCREEN_HEIGHT/4);
+		setSize((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2);
+		setLocation((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/4 - ClientInventory.INVENTORY_WIDTH/2, Client.SCREEN_HEIGHT/4);
 		scoreboardImage = Images.getImage("scoreboard");
 		this.client = client;
 	}
@@ -53,7 +53,7 @@ public class ClientScoreBoard extends JPanel{
 		int yPos = 100;
 		int xPos = (int)(0.5*Client.SCREEN_WIDTH/8);
 
-		graphics.drawImage(scoreboardImage, 0, 0, Client.SCREEN_WIDTH/2, Client.SCREEN_HEIGHT/2, null);
+		graphics.drawImage(scoreboardImage, 0, 0, (Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2, null);
 
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		if(gameover)
@@ -65,23 +65,57 @@ public class ClientScoreBoard extends JPanel{
 			graphics.drawString(toDraw, Client.SCREEN_WIDTH/4 - graphics.getFontMetrics().stringWidth(toDraw)/2,50);
 		}
 		
-		graphics.setColor(Color.red);
+		graphics.setColor(Color.WHITE);
+		yPos = 100;
+		xPos = ClientFrame.getScaledWidth(58);
 		
 		for(ClientPlayerScore player: redTeam)
 		{
-			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
+			
+			int fieldWidth = 80;
+			String name = player.getName();
+			int currentWidth = graphics.getFontMetrics().stringWidth("...");
+			int endIndex = 0;
+			for (int i=0; i<name.length(); i++){
+				int letterWidth = graphics.getFontMetrics().stringWidth(name.substring(i, i+1));
+				currentWidth += letterWidth;
+				if (currentWidth > fieldWidth){
+					name = name.substring(0, i) + "...";
+					break;
+				}
+			}
+			
+			
+			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
+			graphics.drawString(name, ClientFrame.getScaledWidth(58), yPos);
+			graphics.drawString(String.format("%15d%15d%15d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(146), yPos);
 			yPos += 30;
 		}
 
 		yPos = 100;
-		xPos = (int)(Client.SCREEN_WIDTH/4);
-		graphics.setColor(Color.blue);
+		xPos = ClientFrame.getScaledWidth(440);
+		graphics.setColor(Color.WHITE);
 		for(ClientPlayerScore player: blueTeam)
 		{
-			graphics.drawString(String.format("%20s%3d%3d%7d%4d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
+			int fieldWidth = 80;
+			String name = player.getName();
+			int currentWidth = graphics.getFontMetrics().stringWidth("...");
+			int endIndex = 0;
+			for (int i=0; i<name.length(); i++){
+				int letterWidth = graphics.getFontMetrics().stringWidth(name.substring(i, i+1));
+				currentWidth += letterWidth;
+				if (currentWidth > fieldWidth){
+					name = name.substring(0, i) + "...";
+					break;
+				}
+			}
+			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
+			graphics.drawString(name, ClientFrame.getScaledWidth(560), yPos);
+			graphics.drawString(String.format("%15d%15d%15d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(648), yPos);
 			yPos += 30;
 		}
 	}
+
 
 	public void addPlayer(String name, int id, int team, int kills, int deaths, int score, int ping)
 	{
