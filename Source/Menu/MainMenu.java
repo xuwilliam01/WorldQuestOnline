@@ -426,7 +426,7 @@ public class MainMenu implements KeyListener {
 			createServer.setOpaque(false);
 			createServer.addActionListener(new StartServer());
 			createServer.addMouseListener(this);
-			add(createServer);
+			//add(createServer);
 
 			ClientAccountWindow.checkLogin();
 			if (ClientAccountWindow.loggedIn) {
