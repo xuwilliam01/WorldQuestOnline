@@ -12,7 +12,7 @@ public class ServerMine extends ServerBuilding {
 	 */
 	public final static int GOLD_PER_TICK = 1;
 	public final static int MAX_GOLD = 25;
-	public final static int TICK_DELAY = 60;
+	public final static int TICK_DELAY = 120;
 	
 	private int gold = 0;
 	private int counter = 0;

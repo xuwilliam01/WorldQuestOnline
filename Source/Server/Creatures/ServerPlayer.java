@@ -381,6 +381,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			break;
 		}
 
+		/*
 		addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 				+ ServerWorld.IRON_TIER, getWorld()));
 		addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR, getWorld()));
@@ -388,6 +389,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
+		*/
 	}
 
 	public void setHair(String hair)
