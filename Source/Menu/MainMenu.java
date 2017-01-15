@@ -550,11 +550,11 @@ public class MainMenu implements KeyListener {
 			Image nameGlowScaled = nameGlowBuffered.getScaledInstance(textWidth + 40, 120,
 					Image.SCALE_SMOOTH);
 			g2d.drawImage(nameGlowScaled,
-					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 70,
 					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 - 35 - 20, null);
 			g2d.setColor(Color.WHITE);
 			g2d.drawString(displayName,
-					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 110,
+					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 90,
 					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 35 - 20);
 			mainFont = mainFont.deriveFont(22f);
 			g2d.setFont(mainFont);
