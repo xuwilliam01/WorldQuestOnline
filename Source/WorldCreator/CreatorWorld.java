@@ -128,9 +128,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
-	{	
-		Images.importImages();
-		Audio.importAudio();
+	{
 		ImageReferencePair.importReferences();
 
 		setDoubleBuffered(true);

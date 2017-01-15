@@ -13,6 +13,7 @@ import Server.ServerWorld;
 
 public class Maps 
 {
+	static boolean imported = false;
 	/**
 	 * ArrayList of maps
 	 */
@@ -20,6 +21,10 @@ public class Maps
 	
 	public static void importMaps()
 	{
+		if (imported)
+			return;
+		imported = true;
+		
 		BufferedReader mapCheck = null;
 		try {
 			mapCheck = new BufferedReader(new FileReader(new File("Resources","Maps")));

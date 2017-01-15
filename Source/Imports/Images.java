@@ -116,7 +116,7 @@ public class Images {
 	/**
 	 * Determines whether images were already imported or not
 	 */
-	private static boolean imported = false;
+	static boolean imported = false;
 
 	/**
 	 * Modify images using java and write them to the file
@@ -767,7 +767,7 @@ public class Images {
 
 			addtoImageArray(new GameImage("WorldQuestIcon.png", "Interface////"));
 			
-			addtoImageArray(new GameImage("menuBackground.png", ClientFrame.getScaledWidth(1920+ ClientInventory.INVENTORY_WIDTH), ClientFrame.getScaledHeight(1080), "Interface////"));
+			addtoImageArray(new GameImage("menuBackground.png", ClientFrame.getScaledWidth(1920), ClientFrame.getScaledHeight(1080), "Interface////"));
 
 			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
@@ -1371,6 +1371,10 @@ public class Images {
 			addtoImageArray(new GameImage("GOLD_MINE.png",image));
 			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("GOLD_MINE_0.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_1.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_2.png","Buildings//"));
 			
 			height = image.getHeight();
 			for (int i = 0; i < 20; i++)

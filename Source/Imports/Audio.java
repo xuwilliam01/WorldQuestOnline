@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import Menu.MainMenu;
 import Server.ServerEngine;
 
@@ -21,7 +23,7 @@ public class Audio {
 
 
 	public static void main(String[] args) throws InterruptedException {
-		importAudio();
+		importAudio(false);
 		//playAudio("Damage",0);
 		for(int i =0; i < 10;i++)
 		{
@@ -91,11 +93,22 @@ public class Audio {
 		numAudioClips++;
 	}
 
-	public static void importAudio()
+	public static void importAudio(boolean isClient)
 	{
 		if (imported)
 			return;
 		imported = true;
+		
+		if (isClient && GameAudio.audioSupported)
+		{
+			int willImport = JOptionPane.showConfirmDialog(null, "Import audio?", "Wanna hear music or not", JOptionPane.YES_NO_OPTION);
+			if (willImport != JOptionPane.YES_OPTION)
+			{
+				GameAudio.audioSupported = false;
+				return;
+			}
+		}
+		
 		audioArray = new GameAudio[1000];
 
 		//Import all audio

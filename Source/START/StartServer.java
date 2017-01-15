@@ -24,7 +24,7 @@ public class StartServer {
 		
 		GameImage.hostingServer=true;
 		Images.importImages();
-		Audio.importAudio();
+		Audio.importAudio(false);
 		Maps.importMaps();
 
 		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);

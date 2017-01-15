@@ -227,7 +227,7 @@ public class ClientWorld {
 				}
 
 				// Non-solid tiles
-				if (grid[row][column] < 'A') {
+				if (grid[row][column] < 'A' && grid[row][column]!='_') {
 					backgroundGrid[row][column] = grid[row][column];
 					foregroundGrid[row][column] = ' ';
 

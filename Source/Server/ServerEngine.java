@@ -15,6 +15,7 @@ import javax.swing.Timer;
 import Imports.Audio;
 import Imports.ImageReferencePair;
 import Imports.Images;
+import Imports.Maps;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -110,7 +111,8 @@ public class ServerEngine implements Runnable, ActionListener {
 		// Start importing the images from the file (place in a loading screen
 		// or something later)
 		Images.importImages();
-		Audio.importAudio();
+		Audio.importAudio(false);
+		Maps.importMaps();
 		this.server = server;
 		ImageReferencePair.importReferences();
 

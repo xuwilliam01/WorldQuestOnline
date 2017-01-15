@@ -250,7 +250,7 @@ public class MainMenu implements KeyListener {
 		@Override
 		public void run() {
 			Images.importImages();
-			Audio.importAudio();
+			Audio.importAudio(true);
 			imagesAudioLoaded = true;
 
 			// load font
