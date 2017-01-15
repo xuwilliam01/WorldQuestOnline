@@ -90,7 +90,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private Timer startTimer = new Timer(1000,new GameStartTimer());
 	private int startCounter = 5;
 
+	//If the lobby creation get's cancelled during intialization
 	public boolean cancelled;
+	
+	//When you switched teams last
+	private long switchTime = 0;
 	/**
 	 * 
 	 * @param socket
@@ -670,7 +674,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		}
 		else if (e.getSource() == switchTeams)
 		{
-			printToServer("X");
+			if(System.currentTimeMillis() - switchTime >= 1000)
+			{
+				printToServer("X");
+				switchTime = System.currentTimeMillis();
+			}
 		}
 		else if (e.getSource() == mapBox)
 		{
