@@ -33,7 +33,7 @@ import Server.Creatures.ServerCreature;
 
 public class CentralServer implements Runnable, ActionListener {
 
-	public final static int BASE_ELO = 1000;
+	public final static int BASE_ELO = 0;
 	
 	//Not currently used
 	public final static int LEADERBOARD_SIZE = 20;
@@ -264,9 +264,9 @@ public class CentralServer implements Runnable, ActionListener {
 		}
 		for (GameResult acc : blue) {
 			int k;
-			if (acc.getElo() <= 2100)
+			if (acc.getElo() <= 400)
 				k = 32;
-			else if (acc.getElo() <= 2400)
+			else if (acc.getElo() <= 1000)
 				k = 24;
 			else
 				k = 16;
