@@ -55,7 +55,7 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_KNIGHT_NO = 8;
 	
-	public final static int GOBLIN_GIANT_HP = 500;
+	public final static int GOBLIN_GIANT_HP = 650;
 	public final static int GOBLIN_GIANT_NO = 9;
 	
 	public final static int GOBLIN_GENERAL_HP = 150;
@@ -221,7 +221,7 @@ public class ServerGoblin extends ServerCreature {
 			isMelee = false;
 			movementSpeed = 5;
 			jumpSpeed = 16;
-			housingSpace = 0;
+			housingSpace = 1;
 
 			setName("A Ninja Goblin");
 			break;
@@ -237,7 +237,7 @@ public class ServerGoblin extends ServerCreature {
 			movementSpeed = 4;
 			jumpSpeed = 14;
 			weapon = "HAIRON_0";
-			housingSpace = 0;
+			housingSpace = 1;
 
 			setName("A Goblin Samurai");
 			break;
