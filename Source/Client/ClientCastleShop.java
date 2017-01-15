@@ -82,6 +82,7 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 		graphics.drawString("Defence", 20, 300);
 		graphics.drawString("Resource", 20, 400);
 		graphics.drawString("Mercenaries", 460, 100);
+		graphics.drawString("Uses 20 housing", 440, 130);
 		String mon = "Team Gold: "+money;
 		graphics.drawString(mon, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
 		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + graphics.getFontMetrics().stringWidth(mon)+5, ClientFrame.getScaledHeight(450)-10,this);

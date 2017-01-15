@@ -372,7 +372,7 @@ public class ServerCastle extends ServerBuilding {
 	
 	public synchronized void hireMerc()
 	{
-		if (getMoney()>= ServerBuildingItem.MERC_COST)
+		if (getMoney()>= ServerBuildingItem.MERC_COST && population < popLimit)
 		{
 			spendMoney(ServerBuildingItem.MERC_COST);
 			for (int no = 0; no < 10; no++)

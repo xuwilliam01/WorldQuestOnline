@@ -33,6 +33,7 @@ public class ServerBarracks extends ServerBuilding {
 		case ServerWorld.GIANT_FACTORY_TYPE:
 			goblins.add(ServerGoblin.GOBLIN_GIANT_NO);
 			goblins.add(ServerGoblin.GOBLIN_GIANT_NO);
+			goblins.add(ServerGoblin.GOBLIN_GIANT_NO);
 			break;
 		}
 	}
