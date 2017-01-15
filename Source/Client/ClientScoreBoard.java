@@ -66,7 +66,7 @@ public class ClientScoreBoard extends JPanel{
 		}
 		
 		graphics.setColor(Color.WHITE);
-		yPos = 100;
+		yPos = ClientFrame.getScaledHeight(140);
 		xPos = ClientFrame.getScaledWidth(58);
 		
 		for(ClientPlayerScore player: redTeam)
@@ -88,11 +88,11 @@ public class ClientScoreBoard extends JPanel{
 			
 			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			graphics.drawString(name, ClientFrame.getScaledWidth(58), yPos);
-			graphics.drawString(String.format("%15d%15d%15d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(146), yPos);
-			yPos += 30;
+			graphics.drawString(String.format("%14d%14d%14d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(131), yPos);
+			yPos += ClientFrame.getScaledHeight(140);
 		}
 
-		yPos = 100;
+		yPos = ClientFrame.getScaledHeight(140);
 		xPos = ClientFrame.getScaledWidth(440);
 		graphics.setColor(Color.WHITE);
 		for(ClientPlayerScore player: blueTeam)
@@ -111,8 +111,8 @@ public class ClientScoreBoard extends JPanel{
 			}
 			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			graphics.drawString(name, ClientFrame.getScaledWidth(560), yPos);
-			graphics.drawString(String.format("%15d%15d%15d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(648), yPos);
-			yPos += 30;
+			graphics.drawString(String.format("%14d%14d%14d%14d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(633), yPos);
+			yPos += ClientFrame.getScaledHeight(40);
 		}
 	}
 
