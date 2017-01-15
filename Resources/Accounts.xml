@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root>
-<<<<<<< HEAD
-  <User name="alex4">
-    <Key>714137188</Key>
-    <Elo>0</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="alexsayshi">
-    <Key>714137188</Key>
-    <Elo>0</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="alex4">
-    <Key>714137188</Key>
-    <Elo>0</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
   <User name="William">
     <Key>165087741</Key>
     <Elo>0</Elo>
     <Wins>0</Wins>
     <Losses>0</Losses>
-  </User>
-=======
->>>>>>> branch 'master' of https://github.com/Williamxu98/WorldQuestOnline.git
-</Root>
+  </User></Root>
