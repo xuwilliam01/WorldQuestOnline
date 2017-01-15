@@ -107,7 +107,7 @@ public class CentralServer implements Runnable, ActionListener {
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
 			}
-			//leaderboardS.trim();
+			leaderboardS.trim();
 		}
 
 	}
@@ -190,6 +190,8 @@ public class CentralServer implements Runnable, ActionListener {
 					socket.send(send);
 					break;
 				case 'B':
+					if(leaderboardS.length() == 0)
+						break;
 					sendData = leaderboardS.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
@@ -226,6 +228,9 @@ public class CentralServer implements Runnable, ActionListener {
 		double avgKillsB = 0;
 		for (GameResult acc : red) {
 			int elo = getElo(acc.getName());
+			//Account does not exist
+			if(elo < 0)
+				continue;
 			acc.setElo(elo);
 			avgEloR += elo;
 			avgKillsR += acc.getKills();
@@ -234,6 +239,8 @@ public class CentralServer implements Runnable, ActionListener {
 		avgKillsR /= 1.0 * red.length;
 		for (GameResult acc : blue) {
 			int elo = getElo(acc.getName());
+			if(elo < 0)
+				continue;
 			acc.setElo(elo);
 			avgEloB += elo;
 			avgKillsB += acc.getKills();
