@@ -556,7 +556,8 @@ public class MainMenu implements KeyListener {
 			g2d.drawString(displayName,
 					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 110,
 					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 35 - 20);
-
+			mainFont = mainFont.deriveFont(22f);
+			g2d.setFont(mainFont);
 			g2d.drawString("Rating: " + rating,
 					Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - profileBackgroundImage.getWidth(null) + 80,
 					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 + 95 - 20);
