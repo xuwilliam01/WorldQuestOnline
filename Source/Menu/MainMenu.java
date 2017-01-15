@@ -131,6 +131,9 @@ public class MainMenu implements KeyListener {
 
 	private static Font mainFont = null;
 
+	//Number of times you tried to get stats
+	static int numTries = 0;
+
 	/**
 	 * Create the initial clouds for the main menu screen
 	 */
@@ -169,10 +172,11 @@ public class MainMenu implements KeyListener {
 	public MainMenu(Point pos) {
 		Client.inGame = false;
 		main = this;
+		numTries = 0;
 
 		Thread loadImages = new Thread(new LoadImagesAudio());
 		loadImages.start();
-		
+
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -193,7 +197,7 @@ public class MainMenu implements KeyListener {
 			Client.SCREEN_HEIGHT = 1080;
 			tooLarge = true;
 		}
-		
+
 
 
 		if (!checkedSettingsAlready) {
@@ -220,7 +224,7 @@ public class MainMenu implements KeyListener {
 		{
 			Client.SCREEN_HEIGHT-=40;
 		}
-		
+
 		while (!(imagesAudioLoaded)) {
 			try {
 				Thread.sleep(10);
@@ -339,7 +343,7 @@ public class MainMenu implements KeyListener {
 		public MainPanel() {
 			// Set the Icon
 			mainFrame.setIconImage(Images.getImage("WorldQuestIcon"));
-
+			numTries = 0;
 			setDoubleBuffered(true);
 			// setBackground(Color.white);
 
@@ -445,7 +449,7 @@ public class MainMenu implements KeyListener {
 			loginLogout.setSize(loginImage.getWidth(null), loginImage.getHeight(null));
 			loginLogout.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - loginImage.getWidth(null),
 					Client.SCREEN_HEIGHT / 2 - profileBackgroundImage.getHeight(null) / 2 - loginImage.getHeight(null)
-							- 80);
+					- 80);
 			loginLogout.setBorder(BorderFactory.createEmptyBorder());
 			loginLogout.setContentAreaFilled(false);
 			loginLogout.setOpaque(false);
@@ -579,8 +583,20 @@ public class MainMenu implements KeyListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			statsCounter++;
-			if (statsCounter % 60 == 0 && ClientAccountWindow.loggedIn && rating.equals("-")) {
-				sendData = ("S " + ClientAccountWindow.savedUser).getBytes();
+			if (statsCounter % 60 == 0)
+			{
+				if (ClientAccountWindow.loggedIn && rating.equals("-")) {
+					sendData = ("S " + ClientAccountWindow.savedUser).getBytes();
+					try {
+						send = new DatagramPacket(sendData, sendData.length,
+								InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+						socket.send(send);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				sendData = "P".getBytes();
 				try {
 					send = new DatagramPacket(sendData, sendData.length,
 							InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
@@ -588,6 +604,12 @@ public class MainMenu implements KeyListener {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
+				numTries++;
+				if(numTries > 5)
+				{
+					JOptionPane.showMessageDialog(this, "Could not connect to the Central Server\n(Check online for an update?)");
+					numTries = 0;
 				}
 			}
 			repaint();
@@ -670,9 +692,16 @@ public class MainMenu implements KeyListener {
 					return;
 				}
 				String[] input = (new String(receive.getData()).trim()).split(" ");
-				rating = input[1];
-				wins = input[2];
-				losses = input[3];
+				if(input[0].equals("S"))
+				{
+					rating = input[1];
+					wins = input[2];
+					losses = input[3];
+				}
+				else if(input[0].equals("p"))
+				{
+					numTries = 0;
+				}
 			}
 
 		}
@@ -1382,7 +1411,7 @@ public class MainMenu implements KeyListener {
 			}
 			int maxRooms;
 			String name;
-			
+
 			Maps.importMaps();
 			while (true) {
 				try {
@@ -1569,7 +1598,7 @@ public class MainMenu implements KeyListener {
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
-			mainMenu.close();
+			//mainMenu.close();
 			// mainFrame.invalidate();
 			// mainFrame.validate();
 			// mainMenu = null;
@@ -1606,8 +1635,8 @@ public class MainMenu implements KeyListener {
 			Frame dialogueFrame = new Frame();
 			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame, "Exit the game?", "Confirm Exit",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); // default
-																											// button
-																											// title
+			// button
+			// title
 			mainFrame.requestFocus();
 
 			if (confirmExit == 0) {
