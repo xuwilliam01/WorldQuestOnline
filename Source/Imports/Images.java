@@ -1475,6 +1475,8 @@ public class Images {
 			{
 				addtoImageArray(new GameImage("goldCoin" + i + ".png","Items//"));
 			}
+			
+			addtoImageArray(new GameImage("MERC.png","Interface//"));
 
 			image = null;
 		}
