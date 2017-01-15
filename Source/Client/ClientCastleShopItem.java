@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
+import Server.Buildings.ServerHouse;
 import Server.Items.ServerBuildingItem;
 
 public class ClientCastleShopItem extends JButton implements ActionListener{
@@ -54,13 +55,13 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("WOOD_HOUSE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(150));
 			cost = ServerBuildingItem.WOOD_HOUSE_COST;
-			setToolTipText("Wooden house (+10 housing space)");
+			setToolTipText(String.format("Wooden house (+%d housing space)", ServerHouse.WOOD_HOUSE_POP));
 			break;
 		case ServerWorld.INN_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("INN_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(200),ClientFrame.getScaledHeight(150));
 			cost = ServerBuildingItem.INN_COST;
-			setToolTipText("Inn (+25 housing space)");
+			setToolTipText(String.format("Inn (+%d housing space)", ServerHouse.INN_POP));
 			break;
 		case ServerWorld.TOWER_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("TOWER_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));

@@ -148,6 +148,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			menu.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
 			menu.setBackground(new Color(240, 240, 240));
 			menu.setForeground(Color.black);
+			menu.setFocusable(false);
 			menu.setVisible(true);
 
 			chat = new JTextField();
@@ -173,6 +174,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			start.setBackground(Color.LIGHT_GRAY);
 			start.setOpaque(true);
 			start.setBorderPainted(false);
+			start.setFocusable(false);
 			start.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(280)));
 			start.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
@@ -187,6 +189,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			switchTeams.addActionListener(this);
 			switchTeams.setForeground(Color.black);
 			switchTeams.setBackground(new Color(240, 240, 240));
+			switchTeams.setFocusable(false);
 
 			setLayout(null);
 			add(chat);
@@ -684,6 +687,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		{
 			printToServer("M " + maps[mapBox.getSelectedIndex()]);
 			System.out.println("M " + maps[mapBox.getSelectedIndex()]);
+			requestFocusInWindow();
 		}
 		repaint();
 

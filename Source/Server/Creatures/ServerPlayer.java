@@ -2079,7 +2079,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			//forcePlayerPos(getX(), getY());
 			//Make sure the message reaches the player before we close the connection
 			try {
-				Thread.sleep(ping);
+				Thread.sleep(200);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

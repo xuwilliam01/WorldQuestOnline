@@ -192,6 +192,9 @@ public class ServerEngine implements Runnable, ActionListener {
 			} catch (ConcurrentModificationException e) {
 				System.out.println("Concurrent modification occured");
 				e.printStackTrace();
+			} catch(Exception e) {
+				System.out.println("Caught exception");
+				e.printStackTrace();
 			}
 		}
 	}

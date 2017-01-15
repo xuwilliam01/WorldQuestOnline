@@ -12,6 +12,7 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
+import Server.Buildings.ServerHouse;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
@@ -183,8 +184,26 @@ public class ClientItem extends JButton implements MouseListener{
 		case ServerWorld.DARKWAND_TYPE:
 			setToolTipText(String.format("<html>Dark Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.DARKWAND_DMG,ServerWeapon.DARKWAND_MANA));
 			break;
-		case ServerWorld.BARRACK_ITEM_TYPE:
-			setToolTipText("Barracks");
+		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
+			setToolTipText("Barracks (Spawns two soldiers and one archer each tick)");
+			break;
+		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick)");
+			break;
+		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+			setToolTipText("Giant Factory (Spawns a giant each tick)");
+			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			setToolTipText(String.format("Wooden house (+%d housing space)", ServerHouse.WOOD_HOUSE_POP));
+			break;
+		case ServerWorld.INN_ITEM_TYPE:
+			setToolTipText(String.format("Inn (+%d housing space)", ServerHouse.INN_POP));
+			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			setToolTipText("Arrow Tower (Defends against enemy units)");
+			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			setToolTipText("Gold Mine (Produces gold that players can collect for the team by walking by the mine)");
 			break;
 		}
 	}

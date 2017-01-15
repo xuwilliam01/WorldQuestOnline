@@ -84,4 +84,10 @@
     <Wins>0</Wins>
     <Losses>0</Losses>
   </User>
+  <User name="tw">
+    <Key>3573830</Key>
+    <Elo>1000</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
+  </User>
 </Root>
