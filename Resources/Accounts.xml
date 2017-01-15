@@ -2,7 +2,7 @@
 <Root>
   <User name="alex4">
     <Key>714137188</Key>
-    <Elo>1030</Elo>
+    <Elo>0</Elo>
     <Wins>1</Wins>
     <Losses>2</Losses>
   </User>
@@ -10,84 +10,36 @@
     <Key>264164651</Key>
     <Wins>22</Wins>
     <Losses>17</Losses>
-    <Elo>1205</Elo>
+    <Elo>170</Elo>
   </User>
   <User name="williamxu">
     <Key>61806513</Key>
     <Wins>14</Wins>
     <Losses>12</Losses>
-    <Elo>1852</Elo>
+    <Elo>200</Elo>
   </User>
   <User name="Williamxu98">
     <Key>1398638209</Key>
-    <Elo>1607</Elo>
+    <Elo>0</Elo>
     <Wins>30</Wins>
     <Losses>28</Losses>
   </User>
   <User name="alex 3">
     <Key>1398638247</Key>
-    <Elo>1250</Elo>
+    <Elo>0</Elo>
     <Wins>7</Wins>
     <Losses>5</Losses>
   </User>
   <User name="hola amigo yes">
     <Key>-748845520</Key>
-    <Elo>3000</Elo>
+    <Elo>120</Elo>
     <Wins>154</Wins>
     <Losses>101</Losses>
   </User>
   <User name="william">
     <Key>1208397158</Key>
-    <Elo>1000</Elo>
+    <Elo>0</Elo>
     <Wins>3</Wins>
     <Losses>7</Losses>
-  </User>
-  <User name="new">
-    <Key>-1048830976</Key>
-    <Elo>1031</Elo>
-    <Wins>1</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="hello123">
-    <Key>-908899715</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="alex">
-    <Key>-2075970468</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="123">
-    <Key>1450572480</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="231214">
-    <Key>-1415120878</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="2134">
-    <Key>-1885757922</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="12345">
-    <Key>787764799</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
-  </User>
-  <User name="tw">
-    <Key>3573830</Key>
-    <Elo>1000</Elo>
-    <Wins>0</Wins>
-    <Losses>0</Losses>
   </User>
 </Root>
