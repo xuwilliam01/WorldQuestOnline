@@ -342,6 +342,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("JO"))
 					{
+						if (chatQueue.size() >= Client.MAX_MESSAGES)
+							chatQueue.remove(0);
+						
 						int len = Integer.parseInt(tokens[++token]);
 						String name = "";
 
@@ -351,6 +354,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("RO"))
 					{
+						if (chatQueue.size() >= Client.MAX_MESSAGES)
+							chatQueue.remove(0);
+						
 						int len = Integer.parseInt(tokens[++token]);
 						String name = "";
 

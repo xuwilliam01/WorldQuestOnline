@@ -33,8 +33,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import Client.Client;
-import Client.ClientInventory;
 import Menu.MainMenu;
 
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
@@ -60,7 +58,6 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	
 	public final static String IP = "52.14.41.226";
 	
-	
 	//public final static String IP = "74.12.138.159";
 	//public final static String IP = "127.0.0.1";
 	public final static int PORT = 9977;
@@ -72,6 +69,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private static String savedPassword;
 	public static String savedKey;
 
+	public static final int MAX_NAME_LEN = 25;
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		setBackground(Color.BLACK);
@@ -112,20 +110,20 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 
 		username.setSize(200,40);
 		username.setLocation(x+deltax,y);
-		username.setDocument(new JTextFieldLimit(25));
+		username.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		username.addKeyListener(this);
 		add(username);
 
 		password.setSize(200,40);
 		password.setLocation(x+deltax,y+deltay);
-		password.setDocument(new JTextFieldLimit(25));
+		password.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		password.addKeyListener(this);
 		add(password);
 
 		confirm.setSize(200,40);
 		confirm.setLocation(x+deltax,y+2*deltay);
 		confirm.setVisible(false);
-		confirm.setDocument(new JTextFieldLimit(25));
+		confirm.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		confirm.addKeyListener(this);
 		add(confirm);
 

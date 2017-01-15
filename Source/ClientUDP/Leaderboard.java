@@ -202,9 +202,11 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 			{
 				int y = 30;
 				int delta = 20;
-				for(int i = 0; i < LEADERBOARD_DISPLAY_SIZE && i < displayboard.size();i++)
+				for(int i = 0; i < 3*LEADERBOARD_DISPLAY_SIZE && i < displayboard.size();i++)
 				{
-					graphics.drawString(String.format("%3d. %-25s R:%4d %3dW %3dL", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50, y+=delta);
+					if(i%LEADERBOARD_DISPLAY_SIZE == 0)
+						y = 30;
+					graphics.drawString(String.format("%3d. %-25s R:%4d %3dW %3dL", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50 + 400*(i/LEADERBOARD_DISPLAY_SIZE), y+=delta);
 				}
 			}
 		}

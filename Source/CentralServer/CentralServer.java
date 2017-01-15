@@ -179,6 +179,8 @@ public class CentralServer implements Runnable, ActionListener {
 					name = tokens[2];
 					for (int i = 3; i < tokens.length; i++)
 						name += " " + tokens[i];
+					if(name.length() > ClientAccountWindow.MAX_NAME_LEN)
+						name = name.substring(0, 25);
 					if (createAccount(name, key)) {
 						out = "CY";
 					} else

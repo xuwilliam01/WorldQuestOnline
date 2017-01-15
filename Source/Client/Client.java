@@ -752,6 +752,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									chatQueue.add(text2.trim());
 									break;
 								case 'd':
+									if (chatQueue.size() >= MAX_MESSAGES)
+										chatQueue.remove(0);
 									int len = Integer.parseInt(tokens[++token]);
 									String name2 = "";
 
@@ -760,6 +762,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									chatQueue.add("JO " + name2.trim());
 									break;
 								case 'o':
+									if (chatQueue.size() >= MAX_MESSAGES)
+										chatQueue.remove(0);
 									int len2 = Integer.parseInt(tokens[++token]);
 									String name3 = "";
 

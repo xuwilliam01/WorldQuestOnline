@@ -363,7 +363,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void initPlayer()
 	{
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 10, getWorld()));
+		addItem(new ServerMoney(0, 0, 100, getWorld()));
 
 		// Give the player random start weapon(s)
 		int randomStartWeapon = (int) (Math.random() * 3);
