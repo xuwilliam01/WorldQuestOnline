@@ -3,43 +3,7 @@
   <User name="alex4">
     <Key>714137188</Key>
     <Elo>0</Elo>
-    <Wins>1</Wins>
-    <Losses>2</Losses>
-  </User>
-  <User name="alex hello">
-    <Key>264164651</Key>
-    <Wins>22</Wins>
-    <Losses>17</Losses>
-    <Elo>170</Elo>
-  </User>
-  <User name="williamxu">
-    <Key>61806513</Key>
-    <Wins>14</Wins>
-    <Losses>12</Losses>
-    <Elo>200</Elo>
-  </User>
-  <User name="Williamxu98">
-    <Key>1398638209</Key>
-    <Elo>0</Elo>
-    <Wins>30</Wins>
-    <Losses>28</Losses>
-  </User>
-  <User name="alex 3">
-    <Key>1398638247</Key>
-    <Elo>0</Elo>
-    <Wins>7</Wins>
-    <Losses>5</Losses>
-  </User>
-  <User name="hola amigo yes">
-    <Key>-748845520</Key>
-    <Elo>120</Elo>
-    <Wins>154</Wins>
-    <Losses>101</Losses>
-  </User>
-  <User name="william">
-    <Key>1208397158</Key>
-    <Elo>0</Elo>
-    <Wins>3</Wins>
-    <Losses>7</Losses>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
   </User>
 </Root>
