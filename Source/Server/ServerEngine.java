@@ -156,9 +156,14 @@ public class ServerEngine implements Runnable, ActionListener {
 				endGame(ServerCreature.RED_TEAM);
 			}
 
-			try {
+			try{
 				for (ServerPlayer player : listOfPlayers) {
-					player.updateClient();
+					try {
+						player.updateClient();
+					} catch(Exception e) {
+						System.out.println("Caught exception");
+						e.printStackTrace();
+					}
 					if (endGame) {
 						player.setEndGame(true, losingTeam);
 					}
@@ -191,9 +196,6 @@ public class ServerEngine implements Runnable, ActionListener {
 
 			} catch (ConcurrentModificationException e) {
 				System.out.println("Concurrent modification occured");
-				e.printStackTrace();
-			} catch(Exception e) {
-				System.out.println("Caught exception");
 				e.printStackTrace();
 			}
 		}
@@ -338,7 +340,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	public void removeID(int id) {
 		usedIDs[id] = false;
 	}
-	
+
 	@Override
 	/**
 	 * Update the game after every game tick (15 milliseconds)
@@ -359,7 +361,7 @@ public class ServerEngine implements Runnable, ActionListener {
 				listOfPlayers.remove(player);
 			}
 		}
-		
+
 		// Move all the objects around and update them
 		world.update();
 
@@ -372,7 +374,7 @@ public class ServerEngine implements Runnable, ActionListener {
 				gui.update();
 			}
 		}
-		
+
 		// Parameters to fix the lag spike
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
 			System.out.println("~LAG DETECTED~");

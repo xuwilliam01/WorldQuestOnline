@@ -173,7 +173,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("Steel Bow (+%d Damage)",ServerWeapon.STEELBOW_DMG));
 			break;
 		case ServerWorld.MEGABOW_TYPE:
-			setToolTipText(String.format("M ega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
+			setToolTipText(String.format("Mega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setToolTipText(String.format("<html>Fire Wand (+%d Damage)<p>ManaCost: %d",ServerWeapon.FIREWAND_DMG,ServerWeapon.FIREWAND_MANA));

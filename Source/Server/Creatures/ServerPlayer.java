@@ -389,7 +389,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
-		*/
+		 */
 	}
 
 	public void setHair(String hair)
@@ -432,6 +432,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void update() {
 
 		long time = 0;
+		//Check for hacking
 		if (lastCheck == 0)
 		{
 			lastCheck = System.currentTimeMillis();
@@ -440,6 +441,21 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		else if ((time=System.currentTimeMillis()-lastCheck) >= 3000)
 		{
+			//Use this timer to also reset numHP and numMana pots
+			synchronized(getInventory())
+			{
+				numHPPots = 0;
+				numManaPots = 0;
+				
+				for(ServerItem item : getInventory())
+				{
+					if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+						numHPPots = item.getAmount();
+					else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
+						numManaPots = item.getAmount();
+				}
+			}
+
 			double x = getX()+getWidth()/2;
 			double y = getY()+getHeight()/2;
 
