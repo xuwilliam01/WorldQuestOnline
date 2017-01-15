@@ -479,6 +479,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
 									scoreboard.setWinner(team);
 									chat.setEnabled(false);
+									enter.setEnabled(false);
 									if (!scoreboard.isVisible()) {
 										scoreboard.setVisible(true);
 										add(scoreboard);

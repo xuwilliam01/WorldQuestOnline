@@ -81,6 +81,10 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
+		graphics.drawString("Barracks", 20, 100);
+		graphics.drawString("Housing", 20, 200);
+		graphics.drawString("Defence", 20, 300);
+		graphics.drawString("Resource", 20, 400);
 		graphics.drawString("Money: "+money, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
 		int delta = 0;
 		if(money >= 10)
