@@ -587,9 +587,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		// Write the players on each team
 		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = (int) (ClientFrame.getScaledWidth(785));
+		int blueX = (int) (ClientFrame.getScaledWidth(1335));
 		int blueY = (int) (ClientFrame.getScaledHeight(120));
-		int redX = (int) (ClientFrame.getScaledWidth(1335));
+		int redX = (int)(ClientFrame.getScaledWidth(785));
 		int redY = (int) (ClientFrame.getScaledHeight(120));
 		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
