@@ -45,7 +45,7 @@ public class Audio {
 				{
 					break;
 				}
-				
+
 				if (Client.Client.inGame && bgm!=null)
 				{
 					if (bgm == audioArray[audioMap.get("bgm_menu")])
@@ -100,9 +100,11 @@ public class Audio {
 
 		//Import all audio
 		addToAudioArray(new GameAudio("heartbeat"));
+		addToAudioArray(new GameAudio("ice_break"));
 		addToAudioArray(new GameAudio("gag"));
 		addToAudioArray(new GameAudio("cut"));
 		addToAudioArray(new GameAudio("fireball"));
+		addToAudioArray(new GameAudio("megabow"));
 		addToAudioArray(new GameAudio("fire_explode"));
 		
 		for (int no = 0; no < 7; no++)

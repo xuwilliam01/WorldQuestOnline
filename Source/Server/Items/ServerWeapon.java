@@ -44,13 +44,13 @@ public class ServerWeapon extends ServerItem
 	public final static int STEELBOW_DMG = 13;
 	public final static int MEGABOW_DMG = 18;
 
-	public final static int FIREWAND_DMG = 30;
-	public final static int ICEWAND_DMG = 40;
-	public final static int DARKWAND_DMG = 65;
+	public final static int FIREWAND_DMG = 35;
+	public final static int ICEWAND_DMG = 45;
+	public final static int DARKWAND_DMG = 25;
 
 	public final static int FIREWAND_MANA = 7;
 	public final static int ICEWAND_MANA = 10;
-	public final static int DARKWAND_MANA = 15;
+	public final static int DARKWAND_MANA = 3;
 
 	// Chances for item drops
 	public final static int ULTIMATE_CHANCE = 1;

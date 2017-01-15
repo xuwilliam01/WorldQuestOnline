@@ -914,6 +914,7 @@ public class MainMenu implements KeyListener {
 					lobby.setDoubleBuffered(true);
 					mainFrame.add(lobby);
 					lobby.repaint();
+					lobby.requestFocusInWindow();
 				}
 
 			}

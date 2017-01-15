@@ -1470,6 +1470,11 @@ public class Images {
 				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
 				addtoImageArray(new GameImage("BLUE_CASTLE_"+i+".png",image));
 			}
+			
+			for (int i = 1; i < 10; i++)
+			{
+				addtoImageArray(new GameImage("goldCoin" + i + ".png","Items//"));
+			}
 
 			image = null;
 		}

@@ -1135,6 +1135,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
+				
 				String[] tokens = command.split(" ");
 
 				if (tokens.length == 0) {
@@ -1171,6 +1172,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							}
 						}
 					} catch (Exception e) {
+						break;
 					}
 					break;
 				case 'c':
@@ -1696,7 +1698,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					if (getDirection().equals("LEFT")) {
 						x -= 90 - 64;
 					}
-					actionDelay = 30;
+					actionDelay = 10;
 					break;
 				}
 

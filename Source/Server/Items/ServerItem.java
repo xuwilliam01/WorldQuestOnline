@@ -47,6 +47,8 @@ public abstract class ServerItem extends ServerObject
 
 	private ServerWorld world;
 	
+	private String base;
+	
 	/**
 	 * Constructor that assigns and image and a value to every item
 	 */
@@ -85,7 +87,8 @@ public abstract class ServerItem extends ServerObject
 			value = 7;
 			break;
 		case ServerWorld.MONEY_TYPE:
-			setImage("MONEY");
+			base = "goldCoin";
+			setImage("goldCoin1");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON");
@@ -197,19 +200,19 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON");
-			value = 50;
+			value = 5;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON");
-			value = 30;
+			value = 3;
 			break;
 		case ServerWorld.ICEWAND_TYPE:
 			setImage("ICEWAND_ICON");
-			value = 15;
+			value = 1;
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			setImage("DARKWAND_ICON");
-			value = 60;
+			value = 6;
 			break;
 		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setImage("BARRACKS_ICON");
@@ -350,6 +353,42 @@ public abstract class ServerItem extends ServerObject
 	 */
 	public void update(long currentTime)
 	{
+		if (base!=null)
+		{
+			switch((int)(getWorld().getWorldCounter()%90))
+			{
+			case 0:
+				setImage(base+"1");
+				break;
+			case 10:
+				setImage(base+"2");
+				break;
+			case 20:
+				setImage(base+"3");
+				break;
+			case 30:
+				setImage(base+"4");
+				break;
+			case 40:
+				setImage(base+"5");
+				break;
+			case 50:
+				setImage(base+"6");
+				break;
+			case 60:
+				setImage(base+"7");
+				break;
+			case 70:
+				setImage(base+"8");
+				break;
+			case 80:
+				setImage(base+"9");
+				break;
+			}
+		}
+		
+		
+		
 		if(hasCoolDown && currentTime - coolDownStart > 120)
 		{
 			hasCoolDown = false;

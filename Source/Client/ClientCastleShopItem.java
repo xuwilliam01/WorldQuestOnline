@@ -1,5 +1,8 @@
 package Client;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,12 +17,13 @@ import Server.Items.ServerBuildingItem;
 
 public class ClientCastleShopItem extends JButton implements ActionListener{
 
-	public static final int WIDTH = 50;
-	public static final int HEIGHT = 50;
+	public static final int WIDTH = 75;
+	public static final int HEIGHT = 75;
 	private int cost;
 	private String type;
 	private ClientCastleShop shop;
-
+	private Image coinImage = Images.getImage("COIN");
+	
 	public ClientCastleShopItem(String type, ClientCastleShop shop)
 	{
 		this.type = type;
@@ -77,7 +81,15 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 		setFocusable(false);
 		addActionListener(this);
 	}
-
+	
+	public void paintComponent(Graphics graphics)
+	{
+		super.paintComponent(graphics);
+		String price = cost+"";
+		graphics.setColor(Color.white);
+		graphics.drawString(price,ClientFrame.getScaledWidth(WIDTH)- graphics.getFontMetrics().stringWidth(price)-3 - 10, graphics.getFontMetrics().getHeight()/2+3);
+		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(WIDTH)-10, 1, this);
+	}
 	public void actionPerformed(ActionEvent arg0) {
 		if(shop.getMoney() >= cost)
 			shop.buy(type);

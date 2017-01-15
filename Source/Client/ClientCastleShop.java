@@ -2,12 +2,14 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import Imports.Images;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerCreature;
@@ -22,6 +24,7 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	private int money;
 	
 	private JButton hireMerc;
+	private Image coinImage = Images.getImage("COIN");
 	
 	public ClientCastleShop(Client client, int money)
 	{
@@ -78,7 +81,11 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
-		graphics.drawString("Money: "+money, 400, 400);
+		graphics.drawString("Money: "+money, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
+		int delta = 0;
+		if(money >= 10)
+			delta = 5;
+		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + 55+delta, ClientFrame.getScaledHeight(450)-10,this);
 	}
 
 	@Override

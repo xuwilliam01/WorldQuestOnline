@@ -22,6 +22,7 @@ public class ServerDefense extends ServerBuilding {
 		case ServerWorld.TOWER_TYPE:
 			arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 25,
 					ServerWorld.STEELARROW_TYPE, TOWER_RANGE, this, world)));
+			setName("A Tower");
 			break;
 		}
 	}

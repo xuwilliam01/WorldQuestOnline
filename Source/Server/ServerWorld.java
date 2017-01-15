@@ -615,26 +615,26 @@ public class ServerWorld
 										break;
 									case ITEM_TYPE:
 										// If stackable items collide
-										if (object.collidesWith(otherObject)
-												&& otherObject.getType()
-												.charAt(0) == ITEM_TYPE
-												&& object.getType().charAt(1) == STACK_TYPE
-												.charAt(1)
-												&& otherObject.getType()
-												.charAt(1) == STACK_TYPE
-												.charAt(1))
-										{
-											if (object.getType().equals(
-													otherObject.getType())
-													&& object.getID() != otherObject
-													.getID())
-											{
-												((ServerItem) object)
-												.increaseAmount(((ServerItem) otherObject)
-														.getAmount());
-												otherObject.destroy();
-											}
-										}
+//										if (object.collidesWith(otherObject)
+//												&& otherObject.getType()
+//												.charAt(0) == ITEM_TYPE
+//												&& object.getType().charAt(1) == STACK_TYPE
+//												.charAt(1)
+//												&& otherObject.getType()
+//												.charAt(1) == STACK_TYPE
+//												.charAt(1))
+//										{
+//											if (object.getType().equals(
+//													otherObject.getType())
+//													&& object.getID() != otherObject
+//													.getID())
+//											{
+//												((ServerItem) object)
+//												.increaseAmount(((ServerItem) otherObject)
+//														.getAmount());
+//												otherObject.destroy();
+//											}
+//										}
 										break;
 									case ANIMATION_TYPE:
 										// Collision of weapons and creatures

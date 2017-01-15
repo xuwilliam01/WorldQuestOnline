@@ -162,6 +162,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setDamage((int) Math.ceil(ServerWeapon.MEGABOW_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
 			setSpeed(30);
+			owner.getWorld().playSound("megabow",
+					owner.getX(), owner.getY());
 			animated = false;
 			faceAngle = true;
 			break;
@@ -182,7 +184,7 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.FIREWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(15);
+			setSpeed(17);
 			animated = true;
 			faceAngle = true;
 			owner.getWorld().playSound("fireball",
@@ -193,18 +195,22 @@ public class ServerProjectile extends ServerFlyingObject
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.ICEWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(6);
+			setSpeed(10);
 			animated = true;
 			faceAngle = true;
+			owner.getWorld().playSound("fireball",
+					owner.getX(), owner.getY());
 			break;
 		case ServerWorld.DARKBALL_TYPE:
 			setImage("DARKBALL_0_0");
 			setGravity(0);
 			setDamage((int) Math.ceil(ServerWeapon.DARKWAND_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(12);
+			setSpeed(20);
 			animated = true;
 			faceAngle = true;
+			owner.getWorld().playSound("fireball",
+					owner.getX(), owner.getY());
 			break;
 		}
 		if (faceAngle)
@@ -405,6 +411,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setY(getY() - 41);
 			setImage("EXPLOSION3_0");
 			noOfExplosionFrames = 4;
+			owner.getWorld().playSound("ice_break",
+					owner.getX(), owner.getY());
 		}
 		else if (getType() == ServerWorld.MEGAARROW_TYPE)
 		{
@@ -433,6 +441,8 @@ public class ServerProjectile extends ServerFlyingObject
 			setY(getY() - 50);
 			setImage("EXPLOSION1_0");
 			noOfExplosionFrames = 10;
+			owner.getWorld().playSound("fire_explode",
+					owner.getX(), owner.getY());
 		}
 		else
 		{

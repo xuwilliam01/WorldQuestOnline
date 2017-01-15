@@ -113,6 +113,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 	// Stores the HP, mana, jump,and speed of the player
 	private int HP;
+	public static int staticHP=0;
+	
 	private int maxHP;
 	private int mana;
 	private int maxMana;
@@ -300,7 +302,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 		distanceConstant = 80.0f / (SCREEN_HEIGHT + SCREEN_WIDTH);
 
-		
+
 	}
 
 	/**
@@ -366,7 +368,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			String image = Images.getImageName(Integer.parseInt(tokens[3]));
 			int team = Integer.parseInt(tokens[4]);
 
-			HP = ServerPlayer.PLAYER_BASE_HP;
+			setHP(ServerPlayer.PLAYER_BASE_HP);
 			mana = ServerPlayer.PLAYER_BASE_MANA;
 
 			maxHP = HP;
@@ -454,7 +456,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 							try {
 								switch (tokens[token].charAt(0)) {
 								case 'L':
-									HP = Integer.parseInt(tokens[++token]);
+									setHP(Integer.parseInt(tokens[++token]));
 									break;
 								case 'A':
 									armour = Double.parseDouble(tokens[++token]);
@@ -474,7 +476,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									int team = Integer.parseInt(tokens[++token]);
 
 									//JOptionPane.showMessageDialog(Client.this, String.format(
-										//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
+									//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
 									scoreboard.setWinner(team);
 									chat.setEnabled(false);
 									if (!scoreboard.isVisible()) {
@@ -520,17 +522,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									playerY = Double.parseDouble(tokens[++token]);
 									setPos((int) playerX, (int) playerY);
 									break;
-								case 'e':
-									try {
-										ClientObject object = world.get(toInt(tokens[++token]));
-										// System.out.println("CHECK: "+(object
-										// == null));
-										object.setX(player.getX());
-										object.setY(player.getY());
-									} catch (NullPointerException e) {
-										e.printStackTrace();
-									}
-
+								case 'e':			
+									ClientObject object = world.get(toInt(tokens[++token]));
+									if(object == null)
+										break;
+									object.setX(player.getX());
+									object.setY(player.getY());
 									break;
 								case '*':
 									hSpeed = Double.parseDouble(tokens[++token]);
@@ -1210,7 +1207,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 */
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
-		
+
 		// Update the map
 		if (getWorld() != null)
 			getWorld().update(graphics, getPlayer());
@@ -1245,7 +1242,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			graphics.setColor(Color.WHITE);
 			graphics.setFont(ClientWorld.NORMAL_FONT);
 			graphics.drawString("'TAB' to show scoreboard", 270, 15);
-			
+
 			if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
 				graphics.setColor(Color.BLUE);
 			}
@@ -1703,6 +1700,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 	public void setHP(int hP) {
 		HP = hP;
+		staticHP = hP;
 	}
 
 	public int getMaxHP() {
@@ -2127,12 +2125,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	public static synchronized void setPacketNo(long no) {
 		packetNo = no;
 	}
-	
+
 	public int getRedX()
 	{
 		return redCastleX;
 	}
-	
+
 	public int getBlueX()
 	{
 		return blueCastleX;
@@ -2142,4 +2140,5 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	{
 		return leaveGame;
 	}
+
 }
