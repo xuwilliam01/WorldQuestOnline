@@ -9,7 +9,7 @@ public class ServerBuildingItem extends ServerItem{
 	public static final int GIANT_FACTORY_COST = 25;
 	public static final int WOOD_HOUSE_COST = 5;
 	public static final int INN_COST = 10;
-	public static final int TOWER_COST = 10;
+	public static final int TOWER_COST = 15;
 	public static final int GOLD_MINE_COST = 20;
 	public static final int MERC_COST = 5;
 	
