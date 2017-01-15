@@ -1,7 +1,4 @@
-6
-tunnels
-dunes
-water
-menumap
-test
-New_Map_Name
+3
+[LARGE]Tunnels
+[Medium]Dunes
+[small]Plains
