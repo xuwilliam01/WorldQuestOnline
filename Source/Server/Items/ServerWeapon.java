@@ -14,29 +14,29 @@ public class ServerWeapon extends ServerItem
 	public final static int NUM_TIERS = 5;
 
 	// Weapon damage for every weapon
-	public final static int DADIAMOND_DMG = 24;
-	public final static int DAGOLD_DMG = 20;
-	public final static int DAIRON_DMG = 17;
-	public final static int DASTONE_DMG = 13;
-	public final static int DAWOOD_DMG = 9;
+	public final static int DADIAMOND_DMG = 34;
+	public final static int DAGOLD_DMG = 26;
+	public final static int DAIRON_DMG = 20;
+	public final static int DASTONE_DMG = 14;
+	public final static int DAWOOD_DMG = 10;
 
-	public final static int AXDIAMOND_DMG = 36;
-	public final static int AXGOLD_DMG = 30;
-	public final static int AXIRON_DMG = 24;
-	public final static int AXSTONE_DMG = 17;
-	public final static int AXWOOD_DMG = 12;
+	public final static int AXDIAMOND_DMG = 45;
+	public final static int AXGOLD_DMG = 37;
+	public final static int AXIRON_DMG = 31;
+	public final static int AXSTONE_DMG = 20;
+	public final static int AXWOOD_DMG = 15;
 
-	public final static int SWDIAMOND_DMG = 27;
-	public final static int SWGOLD_DMG = 22;
-	public final static int SWIRON_DMG = 17;
-	public final static int SWSTONE_DMG = 12;
-	public final static int SWWOOD_DMG = 9;
+	public final static int SWDIAMOND_DMG = 37;
+	public final static int SWGOLD_DMG = 27;
+	public final static int SWIRON_DMG = 21;
+	public final static int SWSTONE_DMG = 14;
+	public final static int SWWOOD_DMG = 11;
 
-	public final static int HADIAMOND_DMG = 40;
-	public final static int HAGOLD_DMG = 32;
-	public final static int HAIRON_DMG = 26;
-	public final static int HASTONE_DMG = 18;
-	public final static int HAWOOD_DMG = 13;
+	public final static int HADIAMOND_DMG = 42;
+	public final static int HAGOLD_DMG = 36;
+	public final static int HAIRON_DMG = 30;
+	public final static int HASTONE_DMG = 19;
+	public final static int HAWOOD_DMG = 14;
 
 	public final static int STAR_DMG = 13;
 	public final static int SLING_DMG = 10;
@@ -46,7 +46,7 @@ public class ServerWeapon extends ServerItem
 
 	public final static int FIREWAND_DMG = 35;
 	public final static int ICEWAND_DMG = 45;
-	public final static int DARKWAND_DMG = 25;
+	public final static int DARKWAND_DMG = 23;
 
 	public final static int FIREWAND_MANA = 7;
 	public final static int ICEWAND_MANA = 10;
