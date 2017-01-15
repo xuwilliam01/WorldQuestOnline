@@ -44,15 +44,15 @@ public class ServerMine extends ServerBuilding {
 		}
 		else if (gold < MAX_GOLD*2/3.0)
 		{
-			setImage("GOLD_MINE_0");
+			setImage("GOLD_MINEg_0");
 		}
 		else if (gold < MAX_GOLD)
 		{
-			setImage("GOLD_MINE_1");
+			setImage("GOLD_MINEg_1");
 		}
 		else
 		{
-			setImage("GOLD_MINE_2");
+			setImage("GOLD_MINEg_2");
 		}
 		
 		

@@ -1372,9 +1372,9 @@ public class Images {
 			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
 			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
 			
-			addtoImageArray(new GameImage("GOLD_MINE_0.png","Buildings//"));
-			addtoImageArray(new GameImage("GOLD_MINE_1.png","Buildings//"));
-			addtoImageArray(new GameImage("GOLD_MINE_2.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINEg_0.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINEg_1.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINEg_2.png","Buildings//"));
 			
 			height = image.getHeight();
 			for (int i = 0; i < 20; i++)
