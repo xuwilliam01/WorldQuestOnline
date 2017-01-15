@@ -2266,11 +2266,15 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void unequip(int slot) {
 		if (getInventory().size() < MAX_INVENTORY) {
 			if (slot == DEFAULT_ARMOUR_SLOT) {
+				if(equippedArmour == null)
+					return;
 				getInventory().add(equippedArmour);
 				getBody().destroy();
 				setBody(null);
 				equippedArmour = null;
 			} else {
+				if(equippedWeapons[slot] == null)
+					return;
 				getInventory().add(equippedWeapons[slot]);
 				equippedWeapons[slot] = null;
 			}
