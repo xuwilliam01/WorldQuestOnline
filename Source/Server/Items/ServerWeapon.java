@@ -15,10 +15,10 @@ public class ServerWeapon extends ServerItem
 
 	// Weapon damage for every weapon
 	public final static int DADIAMOND_DMG = 24;
-	public final static int DAGOLD_DMG = 19;
-	public final static int DAIRON_DMG = 15;
-	public final static int DASTONE_DMG = 11;
-	public final static int DAWOOD_DMG = 8;
+	public final static int DAGOLD_DMG = 20;
+	public final static int DAIRON_DMG = 17;
+	public final static int DASTONE_DMG = 13;
+	public final static int DAWOOD_DMG = 9;
 
 	public final static int AXDIAMOND_DMG = 36;
 	public final static int AXGOLD_DMG = 30;

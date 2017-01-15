@@ -45,6 +45,11 @@ public class ServerCastle extends ServerBuilding {
 	 * The money invested in upgrading the castle
 	 */
 	private int money = 0;
+	
+	/**
+	 * The maximum money possible in the castle
+	 */
+	public static final int MAX_MONEY = 100;
 
 	/**
 	 * The current tier of the castle
