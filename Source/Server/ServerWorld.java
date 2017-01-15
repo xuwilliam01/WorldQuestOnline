@@ -573,7 +573,7 @@ public class ServerWorld
 										&& otherObject.getID() != object
 										.getID()
 										&& !collidedAlready
-										.contains(otherObject))
+										.contains(otherObject) && object.collidesWith(otherObject))
 								{
 									collidedAlready.add(otherObject);
 
@@ -588,9 +588,7 @@ public class ServerWorld
 										.getOwnerID()
 										&& ((ServerCreature) otherObject)
 										.getTeam() != ((ServerProjectile) object)
-										.getOwner().getTeam()
-										&& ((ServerProjectile) object)
-										.collidesWith(otherObject))
+										.getOwner().getTeam())
 										{
 											if (object.getType().contains(
 													PIERCING_TYPE))
@@ -651,10 +649,7 @@ public class ServerWorld
 													&& ((ServerCreature) otherObject)
 													.getTeam() != ((ServerWeaponSwing) object)
 													.getWielder()
-													.getTeam()
-													&& ((ServerWeaponSwing) object)
-													.collidesWith(otherObject)
-													&& !((ServerWeaponSwing) object)
+													.getTeam()  && !((ServerWeaponSwing) object)
 													.hasCollided(otherObject))
 											{
 												((ServerCreature) otherObject)
@@ -682,8 +677,6 @@ public class ServerWorld
 										&& ((ServerCreature) otherObject)
 										.getTeam() != ((ServerProjectile) object)
 										.getOwner().getTeam()
-										&& object
-										.collidesWith(otherObject)
 										&& !((ServerProjectile) object)
 										.hasCollided(otherObject))
 										{
@@ -702,8 +695,6 @@ public class ServerWorld
 
 										if (otherObject.getType().equals(
 												PLAYER_TYPE)
-												&& object
-												.collidesWith(otherObject)
 												&& getWorldCounter() % 20 == 0)
 										{
 
@@ -718,9 +709,7 @@ public class ServerWorld
 									case PLAYER_TYPE:
 										if (otherObject.getType().charAt(0) == ITEM_TYPE
 										&& ((ServerCreature) object)
-										.isAlive()
-										&& object
-										.collidesWith(otherObject))
+										.isAlive())
 										{
 											ServerItem item = (ServerItem) otherObject;
 											ServerCreature player = (ServerCreature) object;
@@ -781,9 +770,7 @@ public class ServerWorld
 									case HOLOGRAM_TYPE:
 										// Check other object collisions
 										if (((ServerHologram) object)
-												.canPlace()
-												&& (otherObject.getType()
-														.contains(BUILDING_TYPE)))
+												.canPlace() && (otherObject.getType().contains(BUILDING_TYPE)))
 										{
 											// System.out.println("HOLOGRAM
 											// COLLISION");

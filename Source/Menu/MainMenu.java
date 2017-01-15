@@ -169,9 +169,10 @@ public class MainMenu implements KeyListener {
 	public MainMenu(Point pos) {
 		Client.inGame = false;
 		main = this;
+
 		Thread loadImages = new Thread(new LoadImagesAudio());
 		loadImages.start();
-
+		
 		// Set up the dimensions of the screen
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -192,6 +193,8 @@ public class MainMenu implements KeyListener {
 			Client.SCREEN_HEIGHT = 1080;
 			tooLarge = true;
 		}
+		
+
 
 		if (!checkedSettingsAlready) {
 			checkedSettingsAlready = true;
@@ -520,7 +523,10 @@ public class MainMenu implements KeyListener {
 
 			}
 
-			graphics.drawImage(Images.getImage("menuBackground"), 0, 0, null);
+			if (Client.SCREEN_HEIGHT==1080)
+			{
+				graphics.drawImage(Images.getImage("menuBackground"), 0, 0, null);
+			}
 
 			// Draw the title image
 			graphics.drawImage(titleImage, middle - titleImage.getWidth(null) / 2 - 25,
@@ -532,7 +538,7 @@ public class MainMenu implements KeyListener {
 
 			g2d.setFont(mainFont);
 
-			g2d.drawString("William Xu and Alex Raita", 15, 20);
+			g2d.drawString("William Xu, Alex Raita, Tony Wu", 15, 20);
 
 			Font nameFont = mainFont.deriveFont(36.0f);
 			g2d.setFont(nameFont);
@@ -1376,8 +1382,7 @@ public class MainMenu implements KeyListener {
 			}
 			int maxRooms;
 			String name;
-			Images.importImages();
-			Audio.importAudio();
+			
 			Maps.importMaps();
 			while (true) {
 				try {

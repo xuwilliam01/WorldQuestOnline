@@ -11,7 +11,7 @@ public class ServerMine extends ServerBuilding {
 	 * Amount of gold added after each update
 	 */
 	public final static int GOLD_PER_TICK = 1;
-	public final static int MAX_GOLD = 25;
+	public final static int MAX_GOLD = 15;
 	public final static int TICK_DELAY = 120;
 	
 	private int gold = 0;
@@ -37,6 +37,24 @@ public class ServerMine extends ServerBuilding {
 				castle = getWorld().getRedCastle();
 			}
 		}
+		
+		if (gold < MAX_GOLD/3.0)
+		{
+			setImage("GOLD_MINE");
+		}
+		else if (gold < MAX_GOLD*2/3.0)
+		{
+			setImage("GOLD_MINE_0");
+		}
+		else if (gold < MAX_GOLD)
+		{
+			setImage("GOLD_MINE_1");
+		}
+		else
+		{
+			setImage("GOLD_MINE_2");
+		}
+		
 		
 		if ((++counter)> TICK_DELAY)
 		{
