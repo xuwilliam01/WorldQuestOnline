@@ -62,7 +62,9 @@ public class ClientScoreBoard extends JPanel{
 			if(team == ServerPlayer.RED_TEAM)
 				graphics.setColor(Color.blue);
 			String toDraw = String.format("%s won!", winner);
-			graphics.drawString(toDraw, Client.SCREEN_WIDTH/4 - graphics.getFontMetrics().stringWidth(toDraw)/2,50);
+			graphics.drawString(toDraw, Client.SCREEN_WIDTH/4+25 - graphics.getFontMetrics().stringWidth(toDraw)/2,450);
+			graphics.drawString("Your leaderboard position has been updated", Client.SCREEN_WIDTH/4+25 - graphics.getFontMetrics().stringWidth("Your leaderboard position has been updated")/2,470);
+			
 		}
 		
 		graphics.setColor(Color.WHITE);
