@@ -767,7 +767,7 @@ public class Images {
 
 			addtoImageArray(new GameImage("WorldQuestIcon.png", "Interface////"));
 			
-			addtoImageArray(new GameImage("menuBackground.png", ClientFrame.getScaledWidth(1920), ClientFrame.getScaledHeight(1080), "Interface////"));
+			addtoImageArray(new GameImage("menuBackground.png", ClientFrame.getScaledWidth(1920+ ClientInventory.INVENTORY_WIDTH), ClientFrame.getScaledHeight(1080), "Interface////"));
 
 			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
