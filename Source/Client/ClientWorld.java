@@ -924,6 +924,12 @@ public class ClientWorld {
 
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
+				
+				if (object.getID()==player.getID())
+				{
+					x = centreX;
+					y = centreY;
+				}
 
 				if(!client.leaveGame())
 				{
