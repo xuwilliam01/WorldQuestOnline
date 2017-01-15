@@ -119,7 +119,7 @@ public class ServerCastle extends ServerBuilding {
 	
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
-	public final static int[] CASTLE_TIER_XP = {500,1000,2000,3000,4000,5000}; 
+	public final static int[] CASTLE_TIER_XP = {1000,3000,5000,10000,15000,20000}; 
 
 	/**
 	 * Constructor
