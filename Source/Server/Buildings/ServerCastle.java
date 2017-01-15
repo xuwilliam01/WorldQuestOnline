@@ -119,7 +119,7 @@ public class ServerCastle extends ServerBuilding {
 	
 
 	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
-	public final static int[] CASTLE_TIER_XP = {1000,3000,5000,10000,15000,20000}; 
+	public final static int[] CASTLE_TIER_XP = {1000,2500,5000,7500,12500,15000}; 
 
 	/**
 	 * Constructor
@@ -215,11 +215,11 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * Upgrade the castle tier
 	 */
-	public void upgrade()
+	public synchronized void upgrade()
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
-		setMaxHP(getMaxHP() + 5000);
-		setHP(getHP() + 5000);
+		setMaxHP(getMaxHP() + 2500);
+		setHP(getHP() + 2500);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
 

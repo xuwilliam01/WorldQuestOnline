@@ -612,7 +612,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 					//Write the leader name under the menu button
 					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
-							(int) (ClientFrame.getScaledHeight(370)));
+							(int) (ClientFrame.getScaledHeight(380)));
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), redX + 5,
