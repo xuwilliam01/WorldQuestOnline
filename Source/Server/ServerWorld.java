@@ -190,6 +190,8 @@ public class ServerWorld
 	public final static String SMOKE_TYPE = "SMO";
 	
 	public final static String DEMOLITION_TYPE = "vEm";
+	
+	public final static String MERC_TYPE = "M";
 
 	//Player stats
 	// The starting mana and hp for the player. Change as castle upgrades

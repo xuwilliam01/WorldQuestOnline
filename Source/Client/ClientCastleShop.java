@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -46,13 +47,7 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 		add(new ClientCastleShopItem(ServerWorld.INN_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.TOWER_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.GOLD_MINE_ITEM_TYPE,this));
-		
-		hireMerc = new JButton(new ImageIcon(Images.getImage("MERC")));
-		hireMerc.setToolTipText(String.format("Hire Mercenaries (Cost: %d)", ServerBuildingItem.MERC_COST));
-		hireMerc.setLocation(ClientFrame.getScaledWidth(600),ClientFrame.getScaledHeight(400));
-		hireMerc.setSize(ClientFrame.getScaledWidth(75),ClientFrame.getScaledHeight(75));
-		hireMerc.addActionListener(this);
-		add(hireMerc);
+		add(new ClientCastleShopItem(ServerWorld.MERC_TYPE,this));
 		
 	}
 	
@@ -86,15 +81,13 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 		graphics.drawString("Housing", 20, 200);
 		graphics.drawString("Defence", 20, 300);
 		graphics.drawString("Resource", 20, 400);
-		graphics.drawString("Money: "+money, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
-		int delta = 0;
-		if(money >= 10)
-			delta = 5;
-		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + 55+delta, ClientFrame.getScaledHeight(450)-10,this);
+		graphics.drawString("Mercenaries", 460, 100);
+		String mon = "Team Gold: "+money;
+		graphics.drawString(mon, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
+		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + graphics.getFontMetrics().stringWidth(mon)+5, ClientFrame.getScaledHeight(450)-10,this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		client.printToServer("m");
 	}
 }

@@ -276,9 +276,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private ServerItem bestWeapon = null;
 	private ServerItem bestArmour = null;
-	
+
 	private boolean castleOpen = false;
-	
+
 	private boolean disconnect = false;
 	/**
 	 * Constructor for a player in the server
@@ -388,8 +388,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		addItem(new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.HP_POTION_TYPE, getWorld()));
 		addItem(new ServerPotion(0,0, ServerWorld.MANA_POTION_TYPE, getWorld()));
-		for(int i = 0; i < 5;i++)
-			addItem(new ServerPotion(0,0, ServerWorld.SPEED_POTION_TYPE, getWorld()));
 	}
 
 	public void setHair(String hair)
@@ -423,14 +421,14 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private long lastCheck = 0;
 	private double lastX = 0;
 	private double lastY = 0;
-	
-	
+
+
 	/**
 	 * Update the player after each tick
 	 */
 	@Override
 	public void update() {
-		
+
 		long time = 0;
 		if (lastCheck == 0)
 		{
@@ -442,8 +440,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		{
 			double x = getX()+getWidth()/2;
 			double y = getY()+getHeight()/2;
-			
-			
+
+
 			if (getWorld().getCollisionGrid()[(int)(y/ServerWorld.TILE_SIZE)][(int)(x/ServerWorld.TILE_SIZE)]==ServerWorld.SOLID_TILE)
 			{
 				disconnect = true;
@@ -456,11 +454,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			lastY = getY();
 			lastCheck = System.currentTimeMillis();
 		}
-		
-		
 
-		
-		
+
+
+
+
 		if (exists()) {
 			// Change the player's facing direction after its current action
 			if (actionCounter < 0 && action == NOTHING) {
@@ -627,8 +625,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 		}
 	}
-	
-	
+
+
 
 	public void setTeam(int team) {
 		super.setTeam(team);
@@ -1124,18 +1122,18 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 */
 	public void run() {
 		while (!endGame) {
-			
+
 			if (disconnect)
 			{
 				disconnect = false;
 				sendMessage("-");
 				break;
 			}
-			
+
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
-				
+
 				String[] tokens = command.split(" ");
 
 				if (tokens.length == 0) {
@@ -1750,38 +1748,44 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		for (ServerItem item : getInventory())
 		{
-			if (item.getType().equals(ServerWorld.MONEY_TYPE)
-					&& getType().substring(0, 2)
-					.equals(ServerWorld.PLAYER_TYPE))
-				money = item;
-			else if (item.getType().contains(ServerWorld.WEAPON_TYPE))
-			{
-				if(bestWeapon == null)
+			try{
+				if (item.getType().equals(ServerWorld.MONEY_TYPE)
+						&& getType().substring(0, 2)
+						.equals(ServerWorld.PLAYER_TYPE))
+					money = item;
+				else if (item.getType().contains(ServerWorld.WEAPON_TYPE))
 				{
-					bestWeapon = item;
+					if(bestWeapon == null)
+					{
+						bestWeapon = item;
+					}
+					else if(item.getCost() > bestWeapon.getCost())
+					{
+						dropItem(bestWeapon);
+						bestWeapon = item;
+					}
+					else dropItem(item);
 				}
-				else if(item.getCost() > bestWeapon.getCost())
+				else if (item.getType().contains(ServerWorld.ARMOUR_TYPE))
 				{
-					dropItem(bestWeapon);
-					bestWeapon = item;
+					if(bestArmour == null)
+					{
+						bestArmour = item;
+					}
+					else if(item.getCost() > bestArmour.getCost())
+					{
+						dropItem(bestArmour);
+						bestArmour = item;
+					}
+					else dropItem(item);
 				}
-				else dropItem(item);
+				else
+					dropItem(item);
 			}
-			else if (item.getType().contains(ServerWorld.ARMOUR_TYPE))
+			catch(NullPointerException e)
 			{
-				if(bestArmour == null)
-				{
-					bestArmour = item;
-				}
-				else if(item.getCost() > bestArmour.getCost())
-				{
-					dropItem(bestArmour);
-					bestArmour = item;
-				}
-				else dropItem(item);
+				e.printStackTrace();
 			}
-			else
-				dropItem(item);
 		}
 
 		getInventory().clear();
@@ -2100,53 +2104,60 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * Add an item to the player's inventory and also tell the client about it
 	 */
-	public int addItem(ServerItem item) {		
+	public int addItem(ServerItem item) {	
 		if((item.getType().equals(ServerWorld.HP_POTION_TYPE) && (numHPPots == MAX_HP_POTS || item.getAmount() > MAX_HP_POTS))|| (item.getType().equals(ServerWorld.MANA_POTION_TYPE) && (numManaPots == MAX_MANA_POTS|| item.getAmount() > MAX_MANA_POTS)))
 			return 0;
 
-		if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
-			for (ServerItem sItem : getInventory())
-			{
-				if (item.getType().equals(sItem.getType()))
+		try{
+			if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
+				for (ServerItem sItem : getInventory())
 				{
-					if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
+					if (item.getType().equals(sItem.getType())) //Got a null pointer here
 					{
-						if(numHPPots + item.getAmount() > MAX_HP_POTS)
+						if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
 						{
-							queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
-									+ (MAX_HP_POTS - numHPPots) + " " + item.getCost());
-							item.decreaseAmount(MAX_HP_POTS - numHPPots);
-							sItem.setAmount(MAX_HP_POTS);
-							numHPPots = MAX_HP_POTS;
-							return 2;
+							if(numHPPots + item.getAmount() > MAX_HP_POTS)
+							{
+								queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+										+ (MAX_HP_POTS - numHPPots) + " " + item.getCost());
+								item.decreaseAmount(MAX_HP_POTS - numHPPots);
+								sItem.setAmount(MAX_HP_POTS);
+								numHPPots = MAX_HP_POTS;
+								return 2;
+							}
+							else
+							{
+								numHPPots += item.getAmount();
+							}
 						}
-						else
+						else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
 						{
-							numHPPots += item.getAmount();
+							if(numManaPots + item.getAmount() > MAX_MANA_POTS)
+							{
+								queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+										+ (MAX_MANA_POTS - numManaPots) + " " + item.getCost());
+								item.decreaseAmount(MAX_MANA_POTS - numManaPots);
+								sItem.setAmount(MAX_MANA_POTS);
+								numManaPots = MAX_MANA_POTS;
+								return 2;
+							}
+							else
+							{
+								numManaPots += item.getAmount();
+							}
 						}
+						sItem.increaseAmount(item.getAmount());
+						queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+								+ item.getAmount() + " " + item.getCost());
+						return 1;
 					}
-					else if(item.getType().equals(ServerWorld.MANA_POTION_TYPE))
-					{
-						if(numManaPots + item.getAmount() > MAX_MANA_POTS)
-						{
-							queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
-									+ (MAX_MANA_POTS - numManaPots) + " " + item.getCost());
-							item.decreaseAmount(MAX_MANA_POTS - numManaPots);
-							sItem.setAmount(MAX_MANA_POTS);
-							numManaPots = MAX_MANA_POTS;
-							return 2;
-						}
-						else
-						{
-							numManaPots += item.getAmount();
-						}
-					}
-					sItem.increaseAmount(item.getAmount());
-					queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
-							+ item.getAmount() + " " + item.getCost());
-					return 1;
 				}
-			}
+		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
+		}
+
 		if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
 			numHPPots+=item.getAmount();
 		else if (item.getType().equals(ServerWorld.MANA_POTION_TYPE))
