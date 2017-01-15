@@ -114,7 +114,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	// Stores the HP, mana, jump,and speed of the player
 	private int HP;
 	public static int staticHP=0;
-	
+
 	private int maxHP;
 	private int mana;
 	private int maxMana;
@@ -788,13 +788,11 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									blueCastleX =  toInt(tokens[++token]);
 									break;
 								case 'b':
-									for (int weap = 0; weap < inventory.getEquippedWeapons().length; weap++)
-										if (inventory.getEquippedWeapons()[weap] != null
-										&& inventory.getEquippedWeapons()[weap].getType()
-										.contains(ServerWorld.BUILDING_ITEM_TYPE)) {
-											inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
-											break;
-										}
+									int weap = Integer.parseInt(tokens[++token]);
+									if (inventory.getEquippedWeapons()[weap] != null
+											&& inventory.getEquippedWeapons()[weap].getType()
+											.contains(ServerWorld.BUILDING_ITEM_TYPE))
+										inventory.removeItem(inventory.getEquippedWeapons()[weap], weap);
 									break;
 								case 'w':
 									redPop = Integer.parseInt(tokens[++token]);

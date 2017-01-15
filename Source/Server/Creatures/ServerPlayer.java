@@ -992,10 +992,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 											&& hologram.canPlace()) {
 										getWorld().add(
 												hologram.toBuilding(getTeam()));
-										queueMessage("b");
 										equippedWeapons[weaponSelected - '0'] = null;
+										//weaponSelected = DEFAULT_WEAPON_SLOT + '0';
 										hologram.destroy();
 										hologram = null;
+										queueMessage("b "+ weaponSelected);
 									} else {
 										hologram.dontPlace();
 
@@ -1332,6 +1333,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							break;
 						}
 					} catch (Exception E) {
+						System.out.println(command.substring(4));
+						E.printStackTrace();
 					}
 					break;
 
