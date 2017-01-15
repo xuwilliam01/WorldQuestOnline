@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -46,10 +47,10 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 		add(new ClientCastleShopItem(ServerWorld.TOWER_ITEM_TYPE,this));
 		add(new ClientCastleShopItem(ServerWorld.GOLD_MINE_ITEM_TYPE,this));
 		
-		hireMerc = new JButton("HIRE");
+		hireMerc = new JButton(new ImageIcon(Images.getImage("MERC")));
 		hireMerc.setToolTipText(String.format("Hire Mercenaries (Cost: %d)", ServerBuildingItem.MERC_COST));
-		hireMerc.setLocation(ClientFrame.getScaledWidth(200),ClientFrame.getScaledHeight(400));
-		hireMerc.setSize(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
+		hireMerc.setLocation(ClientFrame.getScaledWidth(600),ClientFrame.getScaledHeight(400));
+		hireMerc.setSize(ClientFrame.getScaledWidth(75),ClientFrame.getScaledHeight(75));
 		hireMerc.addActionListener(this);
 		add(hireMerc);
 		
