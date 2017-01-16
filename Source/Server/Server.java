@@ -142,13 +142,22 @@ public class Server implements Runnable {
 					needLeader = false;
 				}
 				lobbyPlayers.add(newPlayer);
-
+				
 				Thread playerThread = new Thread(newPlayer);
 				playerThread.start();
 				System.out.println("A new client has connected");
 
 				if (ServerManager.HAS_FRAME) {
 					gui.repaint();
+				}
+				
+				if(lobbyPlayers.size() >= MAX_PLAYERS)
+				{
+					if(Math.abs(ServerLobbyPlayer.numBlue - ServerLobbyPlayer.numRed) < 2)
+						start();
+					else broadcast("CH E 1 " + ServerCreature.NEUTRAL
+							+ "Server " + 5 + " "
+							+ "Balance the teams to start");
 				}
 			} catch (Exception E) {
 				System.out.println("Exited the lobby");

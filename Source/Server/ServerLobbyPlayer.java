@@ -50,7 +50,7 @@ public class ServerLobbyPlayer implements Runnable
 			this.output = output;
 
 			sendMessage("Good to go");
-			
+
 			allMaps = "";
 			BufferedReader inputMap = new BufferedReader(new FileReader(
 					new File("Resources", "Maps")));
@@ -72,8 +72,8 @@ public class ServerLobbyPlayer implements Runnable
 			e.printStackTrace();
 		}
 
-		
-		
+
+
 		// Send the maps to the client lobby
 		sendMessage(allMaps);
 
@@ -168,6 +168,19 @@ public class ServerLobbyPlayer implements Runnable
 						server.broadcast("P false " + team + " " + name);
 						if (isLeader)
 							setLeader();
+					}
+
+					System.out.printf("red:%d blue:%d%n", numRed, numBlue);
+					//Start the game if teams are full
+					if(numRed + numBlue == Server.MAX_PLAYERS)			
+					{
+						if(numRed == numBlue)
+						{
+							server.start();
+						}
+						else server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+								+ "Server " + 5 + " "
+								+ "Balance the teams to start");
 					}
 				}
 				else if (command.length() > 2 && command.charAt(0) == 'M'
