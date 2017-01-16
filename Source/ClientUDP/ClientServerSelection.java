@@ -69,14 +69,18 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 		refresh.addActionListener(this);
 		refresh.setSize(100,50);
+		refresh.setBackground(Color.white);
+		refresh.setForeground(Color.black);
 		refresh.setLocation((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2-200,75);
+				+ ClientInventory.INVENTORY_WIDTH)/2-150,75);
 		add(refresh);
 
 		connect.addActionListener(this);
 		connect.setSize(100,50);
+		connect.setBackground(Color.white);
+		connect.setForeground(Color.black);
 		connect.setLocation((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2-200,150);
+				+ ClientInventory.INVENTORY_WIDTH)/2-150,150);
 		add(connect);
 
 		socket = new DatagramSocket(port);
@@ -105,7 +109,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		scrollTable = new JScrollPane(table);
 		scrollTable.setSize(3*(Client.SCREEN_WIDTH
 				+ ClientInventory.INVENTORY_WIDTH)/8,(table.getRowHeight()+1)*NUM_ROWS - 1);
-		scrollTable.setLocation(10,50);
+		scrollTable.setLocation(30,50);
 		add(scrollTable);
 	}
 

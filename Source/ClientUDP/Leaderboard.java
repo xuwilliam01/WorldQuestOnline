@@ -51,7 +51,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 	public Leaderboard(int port) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize(1200, 480);
+		setSize(1200, 500);
 		setResizable(false);
 		setTitle("Leaderboard");
 		setLocationRelativeTo(null);
@@ -210,7 +210,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 			graphics.setColor(Color.white);
 			graphics.fillRect(25, 28, 1140, 416);
 			graphics.setColor(Color.black);
-			graphics.setFont(new Font("Consolas", Font.BOLD, 10)); //Monospace font
+			graphics.setFont(new Font("Courier", Font.PLAIN, 11)); //Monospace font
 			synchronized(leaderboard)
 			{
 				int y = 30;

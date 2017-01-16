@@ -613,7 +613,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						&& leaderName.equals(player.name))
 				{
 					graphics.setColor(Color.GREEN);
-					graphics.fillOval(redX - 30, redStart - 20, 20, 20);
+					graphics.fillOval(redX - 20, redStart - 13, 15, 15);
 					graphics.setColor(Color.RED);
 
 					//Write the leader name under the menu button
