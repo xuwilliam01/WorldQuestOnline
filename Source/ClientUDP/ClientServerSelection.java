@@ -15,6 +15,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Client.Client;
 import Client.ClientInventory;
@@ -151,8 +152,16 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		if(row > -1 && row < servers.size())
 		{
 			ServerInfo destination = servers.get(row);
-			if(destination.getNumPlayers() >= Server.Server.MAX_PLAYERS)
+			int maxPlayers = Server.Server.MAX_PLAYERS;
+			if (destination.getName().contains("1v1"))
+			{
+				maxPlayers = 2;
+			}
+			
+			
+			if(destination.getNumPlayers() >= maxPlayers)
 				return;
+			
 			String IP = destination.getIP();
 			//Checks if server IP is the same as your external IP
 			//Must use 127.0.0.1 in this case
@@ -183,31 +192,28 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				pings.clear();
 				int numInputs = 4;
 				
-				Object[][] copy = serversData.clone();
-				serversData = new Object[(tokens.length-2)/numInputs][5];
+				serversData = new Object[(tokens.length-2)/numInputs][6];
 				String thisIP = tokens[1];
 				//System.out.println("Received Servers\n"+input);
 				if(tokens.length > 2)
+				{
 					for(int i = 0; i < tokens.length-2;i+=numInputs)
 					{
 						tokens[i+2] = tokens[i+2].replace('_', ' ');
 						serversData[i/numInputs][0] = tokens[i+2];
-						serversData[i/numInputs][1] = tokens[i+5] +"/"+Server.Server.MAX_PLAYERS;
+						
+						String maxPlayers = Server.Server.MAX_PLAYERS+"";
+						if (((String)serversData[i/numInputs][0]).contains("1v1"))
+						{
+							maxPlayers = " 2";
+						}
+						
+						serversData[i/numInputs][1] = tokens[i+5] +" / "+maxPlayers;
 						serversData[i/numInputs][3] = tokens[i+3];
 						serversData[i/numInputs][4] = tokens[i+4];
+						serversData[i/numInputs][5] = tokens[i+5];
 						
-						int index = -1;
-						for(int j = 0; j < copy.length;j++)
-						{
-							if(copy[j][3].equals(tokens[i+3]) && copy[j][4].equals(tokens[i+4]))
-							{
-								index = j;
-								break;
-							}
-						}
-						if(index >= 0)
-							serversData[i/numInputs][2] = copy[index][2];
-						else serversData[i/numInputs][2] = "-";
+						serversData[i/numInputs][2] = "-";
 
 						int port = Integer.parseInt(tokens[i+4]);
 						String IP = tokens[i+3];
@@ -217,9 +223,40 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 							IP = "/127.0.0.1";
 						}
 						send("P", IP, port);
-						pings.add(new Ping(IP,port, System.currentTimeMillis()));
-						servers.add(new ServerInfo(tokens[i+2], IP, port, Integer.parseInt(tokens[i+5])));
+						
+						
 					}			
+				}
+				
+				for (int i = 0; i < serversData.length; i ++)
+				{
+					int k = i;
+					for (int j = i+1; j < serversData.length; j++)
+					{
+						if (((String)serversData[j][0]).compareTo(((String)serversData[k][0]))<0)
+						{
+							k=j;
+						}
+					}
+					
+					for (int no = 0; no < 5; no++)
+					{
+						Object object = serversData[i][no];
+						serversData[i][no]=serversData[k][no];
+						serversData[k][no]=object;
+					}
+				}
+				pings = new ArrayList<Ping>();;
+				servers =  new ArrayList<ServerInfo>();;
+				
+				for (int i=0; i< serversData.length;i++)
+				{
+					pings.add(new Ping((String)serversData[i][3],Integer.parseInt((String)serversData[i][4]), System.currentTimeMillis()));
+					servers.add(new ServerInfo((String)serversData[i][2], (String)serversData[i][3], Integer.parseInt((String)serversData[i][4]), Integer.parseInt((String) serversData[i][5])));
+				}
+				
+				
+				
 				remove(table);
 				remove(scrollTable);
 				revalidate();
