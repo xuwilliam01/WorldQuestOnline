@@ -365,11 +365,8 @@ public class ServerCastle extends ServerBuilding {
 					player.setHP(player.getMaxHP());
 					player.setMaxMana(player.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
 					player.setMana(player.getMana());
-					player.setHorizontalMovement(player
-							.getHorizontalMovement()
-							+ ServerPotion.SPEED_AMOUNT);
-					player.setVerticalMovement(player
-							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+					player.addHorizontalMovement(ServerPotion.SPEED_AMOUNT);
+					player.addVerticalMovement(ServerPotion.JUMP_AMOUNT);
 				}
 			}
 		}

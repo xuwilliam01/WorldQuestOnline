@@ -363,14 +363,11 @@ public abstract class ServerCreature extends ServerObject
 					break;
 				case ServerWorld.SPEED_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
-					thisPlayer.setHorizontalMovement(thisPlayer
-							.getHorizontalMovement()
-							+ ServerPotion.SPEED_AMOUNT);
+					thisPlayer.addHorizontalMovement(ServerPotion.SPEED_AMOUNT);
 					break;
 				case ServerWorld.JUMP_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
-					thisPlayer.setVerticalMovement(thisPlayer
-							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+					thisPlayer.addVerticalMovement(ServerPotion.JUMP_AMOUNT);
 					break;
 
 				}

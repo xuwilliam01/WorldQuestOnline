@@ -446,7 +446,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			{
 				numHPPots = 0;
 				numManaPots = 0;
-				
+
 				for(ServerItem item : getInventory())
 				{
 					if(item.getType().equals(ServerWorld.HP_POTION_TYPE))
@@ -2463,19 +2463,29 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		return horizontalMovement;
 	}
 
-	public void setHorizontalMovement(int horizontalMovement) {
+	public void addHorizontalMovement(int amount) {
 
-		this.horizontalMovement = Math.min(horizontalMovement, MAX_HSPEED);
-		respawnXSpeed = this.horizontalMovement;
+		if(isAlive())
+		{
+			this.horizontalMovement = Math.min(horizontalMovement, MAX_HSPEED);
+			respawnXSpeed = this.horizontalMovement;
+		}
+		else
+			respawnXSpeed = Math.min(respawnXSpeed + amount, MAX_HSPEED);
 	}
 
 	public int getVerticalMovement() {
 		return verticalMovement;
 	}
 
-	public void setVerticalMovement(int verticalMovement) {
-		this.verticalMovement = Math.min(verticalMovement, MAX_VSPEED);
-		respawnYSpeed = this.verticalMovement;
+	public void addVerticalMovement(int amount) {
+		if(isAlive())
+		{
+			this.verticalMovement = Math.min(verticalMovement+amount, MAX_VSPEED);
+			respawnYSpeed = this.verticalMovement;
+		}
+		else
+			respawnYSpeed = Math.min(respawnYSpeed + amount, MAX_VSPEED);
 	}
 
 	public boolean isDropping() {
