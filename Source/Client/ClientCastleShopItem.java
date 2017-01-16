@@ -37,19 +37,19 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(100),ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.BASIC_BARRACKS_COST;
-			setToolTipText("Barracks (Spawns two soldiers and one archer each tick)");
+			setToolTipText("Barracks (Spawns three soldiers and two archers each tick)");
 			break;
 		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("ADV_BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(200),ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.ADV_BARRACKS_COST;
-			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick)");
+			setToolTipText("Advanced Barracks (Spawns three knights and two wizards each tick)");
 			break;
 		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("GIANT_FACTORY_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(300),ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.GIANT_FACTORY_COST;
-			setToolTipText("Giant Factory (Spawns a giant each tick)");
+			setToolTipText("Giant Factory (Spawns three giants each tick)");
 			break;
 		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("WOOD_HOUSE_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
@@ -79,7 +79,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("MERC")));
 			setLocation(ClientFrame.getScaledWidth(550), ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.MERC_COST;
-			setToolTipText("Hire Mercenaries to fight for you");
+			setToolTipText("Hire 20 Mercenaries to fight for you");
 			break;
 		}
 		setVisible(true);
