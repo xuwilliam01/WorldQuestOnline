@@ -251,8 +251,14 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				
 				for (int i=0; i< serversData.length;i++)
 				{
-					pings.add(new Ping((String)serversData[i][3],Integer.parseInt((String)serversData[i][4]), System.currentTimeMillis()));
-					servers.add(new ServerInfo((String)serversData[i][2], (String)serversData[i][3], Integer.parseInt((String)serversData[i][4]), Integer.parseInt((String) serversData[i][5])));
+					String IP = (String)serversData[i][3];
+					if(IP.equals(thisIP))
+					{
+						System.out.println("Local server");
+						IP = "/127.0.0.1";
+					}
+					pings.add(new Ping(IP,Integer.parseInt((String)serversData[i][4]), System.currentTimeMillis()));
+					servers.add(new ServerInfo((String)serversData[i][2], IP, Integer.parseInt((String)serversData[i][4]), Integer.parseInt((String) serversData[i][5])));
 				}
 				
 				
