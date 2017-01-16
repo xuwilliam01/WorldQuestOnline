@@ -12,7 +12,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.Timer;
 
@@ -45,7 +47,9 @@ public class ServerManager implements Runnable, ActionListener{
 	private int thisPort;
 
 	private ArrayList<AddNewPlayer> listOfNewPlayers;
-	
+
+	private ArrayDeque<String> messageQueue = new ArrayDeque<String>();
+
 	private boolean canConnectCentral = false;
 	/**
 	 * 
@@ -56,6 +60,10 @@ public class ServerManager implements Runnable, ActionListener{
 	 */
 	public ServerManager(String name, int port, int maxRooms, ClientFrame mainFrame) throws SocketException {
 		this.name = name;
+		if(name.contains("1v1"))
+		{
+			Server.MAX_PLAYERS = 2;
+		}
 		this.maxRooms = maxRooms;
 		this.mainFrame = mainFrame;	
 		thisPort = port;
@@ -88,6 +96,10 @@ public class ServerManager implements Runnable, ActionListener{
 	 */
 	public ServerManager(String name, int port, int maxRooms) throws SocketException {
 		this.name = name;
+		if(name.contains("1v1"))
+		{
+			Server.MAX_PLAYERS = 2;
+		}
 		this.maxRooms = maxRooms;
 		thisPort = port;
 		HAS_FRAME = false;
@@ -149,7 +161,7 @@ public class ServerManager implements Runnable, ActionListener{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 					sendData = "P".getBytes();
 					try {
 						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
@@ -167,6 +179,17 @@ public class ServerManager implements Runnable, ActionListener{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+
+				try{
+					while(!messageQueue.isEmpty())
+					{
+						send(messageQueue.pop());
+					}
+				} catch(ConcurrentModificationException e) {
+					e.printStackTrace();
+				}
+
+
 				while(true)
 				{
 					try {
@@ -379,10 +402,15 @@ public class ServerManager implements Runnable, ActionListener{
 
 	public void send(String s)
 	{
-		if(out == null)
-			return;
-		out.println(s);
-		out.flush();
+		if(out != null)
+		{
+			out.println(s);
+			out.flush();
+		}
+		else if(s.charAt(0) == 'E')
+		{		
+			messageQueue.add(s);
+		}
 	}
 
 	public void addNewRoom() {

@@ -20,7 +20,7 @@ import Server.Items.ServerMoney;
  * 
  */
 public class Server implements Runnable {
-	public final static int MAX_PLAYERS = 12;
+	public static int MAX_PLAYERS = 12;
 
 	private ServerEngine engine;
 	private String map;
