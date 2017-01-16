@@ -101,7 +101,7 @@ public class Audio {
 		
 		if (isClient && GameAudio.audioSupported)
 		{
-			int willImport = JOptionPane.showConfirmDialog(null, "Import audio?", "Wanna hear music or not", JOptionPane.YES_NO_OPTION);
+			int willImport = JOptionPane.showConfirmDialog(null, "Import audio? Some clients may not work with it.", "Wanna hear music or not", JOptionPane.YES_NO_OPTION);
 			if (willImport != JOptionPane.YES_OPTION)
 			{
 				GameAudio.audioSupported = false;
