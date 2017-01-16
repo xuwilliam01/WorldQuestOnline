@@ -522,14 +522,14 @@ public class ClientInventory extends JPanel implements ActionListener
 
 		if (client.getBaseDamage() == ServerPlayer.MAX_DMGADD)
 			g2d.setColor(Color.green);
-		if (client.getBaseDamage() > 9)
+		if (client.getBaseDamage() > 9 && client.getDamage() > 9)
 			g2d.drawString(
 					String.format(
 							"%d(+%d%%)",
 							(int) Math.ceil(client.getDamage()
 									* (1 + client.getBaseDamage() / 100.0)),
 							client.getBaseDamage()),
-							ClientFrame.getScaledWidth(105),
+							ClientFrame.getScaledWidth(100),
 							ClientFrame.getScaledHeight(219));
 		else
 			g2d.drawString(

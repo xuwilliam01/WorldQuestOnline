@@ -2467,7 +2467,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		if(isAlive())
 		{
-			this.horizontalMovement = Math.min(horizontalMovement, MAX_HSPEED);
+			this.horizontalMovement = Math.min(horizontalMovement + amount, MAX_HSPEED);
 			respawnXSpeed = this.horizontalMovement;
 		}
 		else
