@@ -244,6 +244,7 @@ public class MainMenu implements KeyListener {
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
+		mainFrame.setLocationRelativeTo(null);
 		mainMenu.repaint();
 		generateClouds();
 
