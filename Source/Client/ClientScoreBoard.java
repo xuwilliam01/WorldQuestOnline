@@ -91,7 +91,7 @@ public class ClientScoreBoard extends JPanel{
 			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			graphics.drawString(name, ClientFrame.getScaledWidth(29), yPos);
 			graphics.drawString(String.format("%13d%13d%10d%13d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(130), yPos);
-			yPos += ClientFrame.getScaledHeight(140);
+			yPos += ClientFrame.getScaledHeight(40);
 		}
 
 		yPos = ClientFrame.getScaledHeight(140);
