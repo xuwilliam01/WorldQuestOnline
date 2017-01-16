@@ -190,6 +190,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				if(tokens.length > 2)
 					for(int i = 0; i < tokens.length-2;i+=numInputs)
 					{
+						tokens[i+2] = tokens[i+2].replace('_', ' ');
 						serversData[i/numInputs][0] = tokens[i+2];
 						serversData[i/numInputs][1] = tokens[i+5] +"/"+Server.Server.MAX_PLAYERS;
 						serversData[i/numInputs][3] = tokens[i+3];
