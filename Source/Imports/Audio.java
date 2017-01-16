@@ -161,6 +161,10 @@ public class Audio {
 	
 	public synchronized static void playAudio(int index, float dist)
 	{
+		if (!GameAudio.audioSupported)
+		{
+			return;
+		}
 		audioArray[index].play(dist);
 		
 //		ArrayList<QueuedAudio>toRemove = new ArrayList<QueuedAudio>();
