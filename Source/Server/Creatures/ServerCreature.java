@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import Imports.Audio;
 import Server.ServerObject;
@@ -26,7 +27,7 @@ public abstract class ServerCreature extends ServerObject
 	public final static int NEUTRAL = 0;
 	public final static int RED_TEAM = 1;
 	public final static int BLUE_TEAM = 2;
-
+	
 	/**
 	 * Maximum possible HP of the creature
 	 */
@@ -213,6 +214,7 @@ public abstract class ServerCreature extends ServerObject
 		//Add xp to the team of the source
 		if (source.getType().equals(ServerWorld.PLAYER_TYPE))
 		{
+			((ServerPlayer)source).addTotalDamage(amount);
 			if (source.getTeam() == RED_TEAM)
 				world.getRedCastle().addXP(amount);
 			else
@@ -229,9 +231,9 @@ public abstract class ServerCreature extends ServerObject
 	{
 		if (HP > 0)
 		{
+			addCastleXP(Math.min(amount,HP), source);
 			HP -= amount;
-			addCastleXP(amount, source);
-			
+
 			// Where the damage indicator appears
 			double damageX = Math.random() * getWidth() + getX();
 			double damageY = Math.random() * getHeight() / 2 + getY()
@@ -282,19 +284,20 @@ public abstract class ServerCreature extends ServerObject
 			inventory.add(money);
 
 	}
-	
-	public void addItem(ServerItem item)
-	{
+
+	public int addItem(ServerItem item)
+	{		
 		if (item.getType().charAt(1) == ServerWorld.STACK_TYPE.charAt(1))
 			for (ServerItem sItem : inventory)
 			{
 				if (item.getType().equals(sItem.getType()))
 				{
 					sItem.increaseAmount(item.getAmount());
-					return;
+					return 1;
 				}
 			}
 		inventory.add(item);
+		return 1;
 	}
 
 	/**
@@ -303,7 +306,6 @@ public abstract class ServerCreature extends ServerObject
 	 */
 	public void dropItem(ServerItem item)
 	{
-
 		item.setX(getX() + getWidth() / 2);
 		item.setY(getY() + getHeight() / 2 - item.getHeight());
 		item.makeExist();
@@ -336,16 +338,19 @@ public abstract class ServerCreature extends ServerObject
 				switch (item)
 				{
 				case ServerWorld.HP_POTION_TYPE:
+					ServerPlayer thisPlayer = (ServerPlayer) this;
 					HP = Math.min(maxHP, HP + ServerPotion.HEAL_AMOUNT);
+					thisPlayer.decreaseNumHPPots();
 					break;
 				case ServerWorld.MAX_HP_TYPE:
-					ServerPlayer thisPlayer = (ServerPlayer) this;
+					thisPlayer = (ServerPlayer) this;
 					thisPlayer.setMaxHP(maxHP + ServerPotion.MAX_HP_INCREASE);
 					break;
 				case ServerWorld.MANA_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
 					thisPlayer.setMana(Math.min(thisPlayer.getMaxMana(),
 							thisPlayer.getMana() + ServerPotion.MANA_AMOUNT));
+					thisPlayer.decreaseNumHPPots();
 					break;
 				case ServerWorld.MAX_MANA_TYPE:
 					thisPlayer = (ServerPlayer) this;
@@ -358,14 +363,11 @@ public abstract class ServerCreature extends ServerObject
 					break;
 				case ServerWorld.SPEED_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
-					thisPlayer.setHorizontalMovement(thisPlayer
-							.getHorizontalMovement()
-							+ ServerPotion.SPEED_AMOUNT);
+					thisPlayer.addHorizontalMovement(ServerPotion.SPEED_AMOUNT);
 					break;
 				case ServerWorld.JUMP_POTION_TYPE:
 					thisPlayer = (ServerPlayer) this;
-					thisPlayer.setVerticalMovement(thisPlayer
-							.getVerticalMovement() + ServerPotion.JUMP_AMOUNT);
+					thisPlayer.addVerticalMovement(ServerPotion.JUMP_AMOUNT);
 					break;
 
 				}
@@ -387,18 +389,19 @@ public abstract class ServerCreature extends ServerObject
 			if (sItem.getType().equals(item))
 			{
 				toRemove = sItem;
-				if (toRemove.getAmount() > 1)
-					dropItem(ServerItem.copy(sItem,world));
-				else
-					dropItem(sItem);
 				break;
 			}
 		}
-
 		if (toRemove.getAmount() > 1)
+		{
 			toRemove.decreaseAmount();
+			dropItem(ServerItem.copy(toRemove));
+		}
 		else
+		{
 			inventory.remove(toRemove);
+			dropItem(toRemove);
+		}
 	}
 
 	/**
@@ -461,6 +464,28 @@ public abstract class ServerCreature extends ServerObject
 			}
 		}
 	}
+
+	/**
+	 * Find the nearest enemy creature and attack it (in this case any creature
+	 * from the enemy team)
+	 */
+	public ServerCreature findTarget(int range) {
+		LinkedList<ServerCreature> enemyTeam = null;
+
+		if (getTeam() == ServerPlayer.BLUE_TEAM) {
+			enemyTeam = getWorld().getRedTeam();
+		} else if (getTeam() == ServerPlayer.RED_TEAM) {
+			enemyTeam = getWorld().getBlueTeam();
+		}
+		for (ServerCreature enemy : enemyTeam) {
+			if (enemy.isAlive() && quickInRange(enemy, range))
+			{
+				return enemy;
+			}
+		}
+		return null;
+	}
+
 	/////////////////////////
 	// GETTERS AND SETTERS //
 	/////////////////////////
@@ -536,17 +561,17 @@ public abstract class ServerCreature extends ServerObject
 	{
 		return baseDamage;
 	}
-	
+
 	public void setBaseDamage(int baseDamage)
 	{
 		this.baseDamage = baseDamage;
 	}
-	
+
 	public void setMaxHP(int maxHP)
 	{
 		this.maxHP = maxHP;
 	}
-	
+
 	public double getRelativeDrawX()
 	{
 		return relativeDrawX;
@@ -586,5 +611,4 @@ public abstract class ServerCreature extends ServerObject
 	{
 		this.name = name;
 	}
-
 }

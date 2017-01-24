@@ -12,6 +12,8 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
+import Server.Buildings.ServerHouse;
+import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
@@ -171,7 +173,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("Steel Bow (+%d Damage)",ServerWeapon.STEELBOW_DMG));
 			break;
 		case ServerWorld.MEGABOW_TYPE:
-			setToolTipText(String.format("M ega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
+			setToolTipText(String.format("Mega Bow (+%d Damage)",ServerWeapon.MEGABOW_DMG));
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setToolTipText(String.format("<html>Fire Wand (+%d Damage)<p>ManaCost: %d",ServerWeapon.FIREWAND_DMG,ServerWeapon.FIREWAND_MANA));
@@ -182,8 +184,26 @@ public class ClientItem extends JButton implements MouseListener{
 		case ServerWorld.DARKWAND_TYPE:
 			setToolTipText(String.format("<html>Dark Wand (+%d Damage)<p>Mana Cost: %d",ServerWeapon.DARKWAND_DMG,ServerWeapon.DARKWAND_MANA));
 			break;
-		case ServerWorld.BARRACK_ITEM_TYPE:
-			setToolTipText("Barracks");
+		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
+			setToolTipText("Barracks (Spawns two soldiers and one archer each tick)");
+			break;
+		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+			setToolTipText("Advanced Barracks (Spawns two knights and one wizard each tick)");
+			break;
+		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+			setToolTipText("Giant Factory (Spawns a giant each tick)");
+			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			setToolTipText(String.format("Wooden house (+%d housing space)", ServerHouse.WOOD_HOUSE_POP));
+			break;
+		case ServerWorld.INN_ITEM_TYPE:
+			setToolTipText(String.format("Inn (+%d housing space)", ServerHouse.INN_POP));
+			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			setToolTipText("Arrow Tower (Defends against enemy units)");
+			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			setToolTipText("Gold Mine (Produces gold that players can collect for the team by walking by the mine)");
 			break;
 		}
 	}
@@ -197,6 +217,8 @@ public class ClientItem extends JButton implements MouseListener{
 		if(amount <= 1)
 			return;
 		graphics.setColor(Color.white);
+		if((type.equals(ServerWorld.HP_POTION_TYPE) && amount == ServerPlayer.MAX_HP_POTS) || (type.equals(ServerWorld.MANA_POTION_TYPE) && amount == ServerPlayer.MAX_MANA_POTS))
+			graphics.setColor(Color.green);
 		if(amount <= 9)
 			graphics.drawString(amount+"", getWidth()-8, 10);
 		else if(amount <= 99)
@@ -309,7 +331,7 @@ public class ClientItem extends JButton implements MouseListener{
 	 * React to user clicks
 	 */
 	public void mousePressed(MouseEvent e) {
-		if(e.getButton()== MouseEvent.BUTTON1)
+		if(e.getButton()== MouseEvent.BUTTON1 && inventory.getClient().getHP() > 0)
 		{
 			//If it can be equipped
 			if(type.charAt(1) == ServerWorld.EQUIP_TYPE.charAt(1))
@@ -376,7 +398,8 @@ public class ClientItem extends JButton implements MouseListener{
 					equipSlot = pos;
 					row = -1;
 					col = -1;
-					setLocation(ClientFrame.getScaledWidth(equipSlot*Images.INVENTORY_IMAGE_SIDELENGTH+equipSlot*23+95),ClientFrame.getScaledHeight(865));
+					setLocation(ClientFrame.getScaledWidth(equipSlot*(Images.INVENTORY_IMAGE_SIDELENGTH+23)+51),
+							ClientFrame.getScaledHeight(901));
 
 					System.out.println("Selected "+inventory.getClient().getWeaponSelected());
 
@@ -418,7 +441,8 @@ public class ClientItem extends JButton implements MouseListener{
 									invGrid[row][col] = inventory.getEquippedArmour();
 									inventory.getEquippedArmour().setRow(row);
 									inventory.getEquippedArmour().setCol(col);
-									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,row*Images.INVENTORY_IMAGE_SIDELENGTH+row*20+375);
+									inventory.getEquippedArmour().setLocation(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*29,
+											row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+375);
 									shouldBreak = true;
 									break;
 
@@ -431,7 +455,7 @@ public class ClientItem extends JButton implements MouseListener{
 					selected = true;
 					inventory.setEquippedArmour(this);
 					setBorder(BorderFactory.createLineBorder(Color.white));
-					setLocation(ClientFrame.getScaledWidth(95),ClientFrame.getScaledHeight(923));
+					setLocation(ClientFrame.getScaledWidth(130),ClientFrame.getScaledHeight(989));
 					repaint();
 
 

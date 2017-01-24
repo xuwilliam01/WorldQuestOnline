@@ -128,9 +128,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public CreatorWorld(String fileName) throws NumberFormatException,
 	IOException
-	{	
-		Images.importImages();
-		Audio.importAudio();
+	{
 		ImageReferencePair.importReferences();
 
 		setDoubleBuffered(true);
@@ -242,7 +240,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		super.paintComponent(graphics);
 
 		// Draw the background
-		graphics.drawImage(Images.getImage("BACKGROUND"), 0, 0, null);
+		graphics.drawImage(Images.getImage("SKY"), 0, 0, null);
 
 		// Create new height and width if necessary
 		if (isNewHeight)
@@ -332,9 +330,23 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(CreatorWorldObject object : objects)
 		{
 			if(isEditable)
-				graphics.drawImage(object.getImage(), (int) (CENTRE_X + object.getCol()
-						* (ServerWorld.TILE_SIZE / objectFactor) - posX),(int) (CENTRE_Y + object.getRow()
-								* (ServerWorld.TILE_SIZE / objectFactor) - posY),(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+			{
+				int x = (int) (CENTRE_X + object.getCol()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posX);
+				int y = (int) (CENTRE_Y + object.getRow()
+				* (ServerWorld.TILE_SIZE / objectFactor) - posY);
+				graphics.drawImage(object.getImage(), x,y,(int)(object.getWidth()*ServerWorld.TILE_SIZE/objectFactor),(int)(object.getHeight()*ServerWorld.TILE_SIZE/objectFactor), null);
+				if(object.getName().contains("RED"))
+				{
+					graphics.setColor(Color.red);
+					graphics.fillRect(x+ object.getWidth()*ServerWorld.TILE_SIZE/4, y, 10, 10);
+				}
+				else if(object.getName().contains("BLUE"))
+				{
+					graphics.setColor(Color.blue);
+					graphics.fillRect(x+ object.getWidth()*ServerWorld.TILE_SIZE/4, y, 10, 10);
+				}
+			}
 			else
 			{
 				graphics.setColor(tiles[object.getRef()].getColor());
@@ -348,7 +360,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		if (highlightingArea)
 		{
 			canDrawObject = false;
-			graphics.setColor(Color.white);
+			graphics.setColor(Color.green);
 
 			// If we are trying to selected an area that exceeds the grid, draw
 			// a smaller grid
@@ -414,7 +426,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 				&& selectedBlock[1] <= endColumn
 				&& isEditable)
 		{
-			graphics.setColor(Color.white);
+			graphics.setColor(Color.green);
 
 			// If we are highlighting  single tile
 			if(tiles[selectedTile].isTile())
@@ -455,7 +467,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 		else canDrawObject = false;
 
-		graphics.setColor(Color.white);
+		graphics.setColor(Color.green);
 
 		// Draw an outline
 		graphics.drawRect((int) (CENTRE_X - posX), (int) (CENTRE_Y  - posY),(int)((grid[0].length)
@@ -487,7 +499,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 	 */
 	public boolean canFit(int startRow, int startCol, int width, int height, boolean isTile)
 	{
-		if(startCol + width >= grid[0].length ||startRow + height >= grid.length)
+		if(startCol + width > grid[0].length ||startRow + height > grid.length)
 			return false;
 		for(CreatorWorldObject object : objects)
 		{

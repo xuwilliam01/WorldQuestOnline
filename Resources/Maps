@@ -1,5 +1,5 @@
 4
-tunnels
-dunes
-water
-MenuMap
+[large]tunnels
+[medium]dunes
+[small]plains
+[small]bridge

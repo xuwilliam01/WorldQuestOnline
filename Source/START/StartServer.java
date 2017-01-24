@@ -1,5 +1,6 @@
 package START;
 
+import java.net.SocketException;
 import java.util.Scanner;
 
 import Client.ClientFrame;
@@ -14,20 +15,26 @@ public class StartServer {
 
 	final static int MAX_ROOMS = 1;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SocketException {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("Enter server name: ");
+		String name = scan.nextLine();
+		name = name.replace(' ', '_');
+		Imports.Audio.isServer=true;
+		
 		GameImage.hostingServer=true;
 		Images.importImages();
-		Audio.importAudio();
+		Audio.importAudio(false);
 		Maps.importMaps();
 
-		ServerManager server = new ServerManager(MainMenu.DEF_PORT, MAX_ROOMS);
+		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);
 
 		Thread serverThread = new Thread(server);
 
 		serverThread.start();
 
-		Scanner scan = new Scanner(System.in);
 		
+
 		System.out.println("Done loading");
 
 		while (true) {

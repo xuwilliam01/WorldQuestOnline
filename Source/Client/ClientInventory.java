@@ -2,10 +2,14 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -45,7 +49,7 @@ public class ClientInventory extends JPanel implements ActionListener
 
 	private Client client;
 
-	private JButton mainMenu;
+	public JButton mainMenu;
 	private JButton switchTeams;
 
 	private ArrayList<ClientItem> removeList = new ArrayList<ClientItem>();
@@ -70,15 +74,28 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (menu != null)
 		{
 			mainMenu = menu;
-			mainMenu.setSize(ClientFrame.getScaledWidth(250), ClientFrame.getScaledHeight(50));
-			mainMenu.setLocation(ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(1080- 90));
-			mainMenu.setBackground(new Color(240, 240, 240));
-			mainMenu.setForeground(Color.black);
+			mainMenu.setSize(70, 50);
+			mainMenu.setLocation(ClientFrame.getScaledWidth(215), ClientFrame.getScaledHeight(16));
+			mainMenu.setBackground(Color.black);
+			mainMenu.setForeground(new Color(240, 240, 240));
 			add(mainMenu);
 		}
 
 		inventoryImage = Images.getImage("Inventory");
-		inventoryFont = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
+		
+		try {
+			inventoryFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("Catamaran-Light.ttf"));
+		} catch (FontFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("font not found");
+			e.printStackTrace();
+		}
+		inventoryFont = inventoryFont.deriveFont(18f);
+		
+		//inventoryFont = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
 
 	}
 
@@ -95,7 +112,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			for (int row = 0; row < inventory.length; row++)
 				for (int col = 0; col < inventory[row].length; col++)
 					if (inventory[row][col] != null
-							&& inventory[row][col].getType().equals(type))
+					&& inventory[row][col].getType().equals(type))
 					{
 						inventory[row][col].increaseAmount(amount);
 						return;
@@ -124,10 +141,10 @@ public class ClientInventory extends JPanel implements ActionListener
 	public int getMoney()
 	{
 		for (int row = 0; row < inventory.length; row++)
-			for (int col = 0; col < inventory.length; col++)
+			for (int col = 0; col < inventory[0].length; col++)
 				if (inventory[row][col] != null
-						&& inventory[row][col].getType().equals(
-								ServerWorld.MONEY_TYPE))
+				&& inventory[row][col].getType().equals(
+						ServerWorld.MONEY_TYPE))
 					return inventory[row][col].getAmount();
 		return 0;
 	}
@@ -142,8 +159,8 @@ public class ClientInventory extends JPanel implements ActionListener
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[0].length; col++)
 				if (inventory[row][col] != null
-						&& inventory[row][col].getType().equals(
-								ServerWorld.MONEY_TYPE))
+				&& inventory[row][col].getType().equals(
+						ServerWorld.MONEY_TYPE))
 				{
 					inventory[row][col].decreaseAmount(amount);
 					// If we have no money, remove the button
@@ -222,12 +239,12 @@ public class ClientInventory extends JPanel implements ActionListener
 	{
 		if(client.getHP() <= 0)
 			return;
-		
+
 		// Drop 1 item at a time and tell the server
 		if (item.getAmount() > 1)
 		{
 			item.decreaseAmount();
-			client.printToServer("Dr I " + item.getType());
+			client.printToServer("v I " + item.getType());
 		}
 		else
 		{
@@ -243,7 +260,7 @@ public class ClientInventory extends JPanel implements ActionListener
 						if (inventory[row][col] == item)
 						{
 							inventory[row][col] = null;
-							client.printToServer("Dr I " + item.getType());
+							client.printToServer("v I " + item.getType());
 							repaint();
 							return;
 						}
@@ -252,7 +269,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			else if (pos == ServerPlayer.DEFAULT_ARMOUR_SLOT)
 			{
 				equippedArmour = null;
-				client.printToServer("Dr W " + item.getEquipSlot());
+				client.printToServer("v W " + item.getEquipSlot());
 
 			}
 			// If it's a weapon
@@ -260,7 +277,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			{
 				equippedWeapons[pos] = null;
 				if(!item.getType().contains(ServerWorld.BUILDING_ITEM_TYPE))
-					client.printToServer("Dr W " + item.getEquipSlot());
+					client.printToServer("v W " + item.getEquipSlot());
 
 				// If we dropped the weapon we selected, select a new weapon
 				if (client.getWeaponSelected() == pos)
@@ -310,7 +327,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (item.getAmount() > 1)
 		{
 			item.decreaseAmount();
-			client.printToServer("Dr U " + item.getType());
+			client.printToServer("v U " + item.getType());
 		}
 		else
 		{
@@ -325,7 +342,7 @@ public class ClientInventory extends JPanel implements ActionListener
 					if (inventory[row][col] == item)
 					{
 						inventory[row][col] = null;
-						client.printToServer("Dr U " + item.getType());
+						client.printToServer("v U " + item.getType());
 						repaint();
 						return;
 					}
@@ -339,6 +356,8 @@ public class ClientInventory extends JPanel implements ActionListener
 	public void clear()
 	{
 		ClientItem money = null;
+		ClientItem bestWeapon = null;
+		ClientItem bestArmour = null;
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[row].length; col++)
 				if (inventory[row][col] != null)
@@ -347,6 +366,30 @@ public class ClientInventory extends JPanel implements ActionListener
 							ServerWorld.MONEY_TYPE))
 					{
 						money = inventory[row][col];
+					}
+					else if(inventory[row][col].getType().contains(
+							ServerWorld.WEAPON_TYPE))
+					{
+						if(bestWeapon == null)
+							bestWeapon = inventory[row][col];
+						else if(inventory[row][col].getCost() > bestWeapon.getCost())
+						{
+							remove(bestWeapon);
+							bestWeapon = inventory[row][col];
+						}
+						else remove(inventory[row][col]);
+					}
+					else if(inventory[row][col].getType().contains(
+							ServerWorld.ARMOUR_TYPE))
+					{
+						if(bestArmour == null)
+							bestArmour = inventory[row][col];
+						else if(inventory[row][col].getCost() > bestArmour.getCost())
+						{
+							remove(bestArmour);
+							bestArmour = inventory[row][col];
+						}
+						else remove(inventory[row][col]);
 					}
 					else
 						remove(inventory[row][col]);
@@ -357,7 +400,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		if (money != null)
 		{
 			inventory[0][0] = money;
-			inventory[0][0].setLocation(29, 375);
+			inventory[0][0].setLocation(ClientFrame.getScaledWidth(29), ClientFrame.getScaledHeight(375));
 			inventory[0][0].setRow(0);
 			inventory[0][0].setCol(0);
 		}
@@ -365,12 +408,54 @@ public class ClientInventory extends JPanel implements ActionListener
 		// Remove all weapons
 		for (int weapon = 0; weapon < equippedWeapons.length; weapon++)
 			if (equippedWeapons[weapon] != null)
-				remove(equippedWeapons[weapon]);
+			{
+				if(bestWeapon == null)
+				{
+					bestWeapon = equippedWeapons[weapon];
+				}
+				else if(equippedWeapons[weapon].getCost() > bestWeapon.getCost())
+				{
+					remove(bestWeapon);
+					bestWeapon = equippedWeapons[weapon];
+				}
+				else remove(equippedWeapons[weapon]);
+			}
 		equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
 
 		if (equippedArmour != null)
-			remove(equippedArmour);
+		{
+			if(bestArmour == null)
+			{
+				bestArmour = equippedArmour;
+			}
+			else if(equippedArmour.getCost() > bestArmour.getCost())
+			{
+				remove(bestArmour);
+				bestArmour = equippedArmour;
+			}
+			else remove(equippedArmour);
+		}
 		equippedArmour = null;
+
+		// Reset armour and weapon
+		if (bestWeapon != null)
+		{
+			inventory[0][1] = bestWeapon;
+			bestWeapon.setSelected(false);
+			bestWeapon.setBorder(BorderFactory.createEmptyBorder());
+			inventory[0][1].setLocation(ClientFrame.getScaledWidth(1*Images.INVENTORY_IMAGE_SIDELENGTH+(2)*29 + 5), ClientFrame.getScaledHeight(375));
+			inventory[0][1].setRow(0);
+			inventory[0][1].setCol(1);
+		}
+		if (bestArmour != null)
+		{
+			inventory[0][2] = bestArmour;
+			bestArmour.setSelected(false);
+			bestArmour.setBorder(BorderFactory.createEmptyBorder());
+			inventory[0][2].setLocation(ClientFrame.getScaledWidth(2*Images.INVENTORY_IMAGE_SIDELENGTH+(3)*29 + 5), ClientFrame.getScaledHeight(375));
+			inventory[0][2].setRow(0);
+			inventory[0][2].setCol(2);
+		}
 
 		invalidate();
 		repaint();
@@ -395,72 +480,80 @@ public class ClientInventory extends JPanel implements ActionListener
 		// Background
 		graphics.drawImage(inventoryImage, 0, 0, null);
 
+		
+		Graphics2D g2d = (Graphics2D) graphics;
+		g2d.setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+		
 		// Draw stats
-		graphics.setFont(inventoryFont);
+		g2d.setFont(inventoryFont);
 
 		if (client.getHP() > 0)
 		{
-			graphics.setColor(Color.red);
-			graphics.fillRect(
-					ClientFrame.getScaledWidth(100),
+			g2d.setColor(new Color(210,37,114));
+			g2d.fillRect(
+					ClientFrame.getScaledWidth(95),
 					ClientFrame.getScaledHeight(95),
-					(int) (client.getHP() * ClientFrame.getScaledWidth(180) * 1.0 / client
+					(int) (client.getHP() * ClientFrame.getScaledWidth(170) * 1.0 / client
 							.getMaxHP()), ClientFrame.getScaledHeight(20));
-			graphics.setColor(Color.white);
+			g2d.setColor(Color.white);
 			if (client.getMaxHP() == ServerPlayer.PLAYER_MAX_HP)
-				graphics.setColor(Color.green);
-			graphics.drawString(
+				g2d.setColor(Color.green);
+			g2d.drawString(
 					String.format("%d/%d", client.getHP(), client.getMaxHP()),
 					ClientFrame.getScaledWidth(153), ClientFrame.getScaledHeight(110));
 		}
 
-		graphics.setColor(Color.blue);
-		graphics.fillRect(ClientFrame.getScaledWidth(100), ClientFrame.getScaledHeight(135),
-				(int) (client.getMana() * ClientFrame.getScaledWidth(180) * 1.0 / client
+		g2d.setColor(new Color(35,162,199));
+		g2d.fillRect(ClientFrame.getScaledWidth(95), ClientFrame.getScaledHeight(135),
+				(int) (client.getMana() * ClientFrame.getScaledWidth(170) * 1.0 / client
 						.getMaxMana()), ClientFrame.getScaledHeight(20));
-		graphics.setColor(Color.white);
+		g2d.setColor(Color.white);
 		if (client.getMaxMana() == ServerPlayer.PLAYER_MAX_MANA)
-			graphics.setColor(Color.green);
-		graphics.drawString(
+			g2d.setColor(Color.green);
+		g2d.drawString(
 				String.format("%d/%d", client.getMana(), client.getMaxMana()),
 				ClientFrame.getScaledWidth(153), ClientFrame.getScaledHeight(150));
 
-		graphics.setColor(RED);
-		graphics.drawString(String.format("%.0f%%", client.getArmour() * 100),
-				ClientFrame.getScaledWidth(115), ClientFrame.getScaledHeight(255));
+		g2d.setColor(RED);
+		g2d.drawString(String.format("%.0f%%", client.getArmour() * 100),
+				ClientFrame.getScaledWidth(105), ClientFrame.getScaledHeight(254));
 
 		if (client.getBaseDamage() == ServerPlayer.MAX_DMGADD)
-			graphics.setColor(Color.green);
-		if (client.getBaseDamage() > 9)
-			graphics.drawString(
+			g2d.setColor(Color.green);
+		if (client.getBaseDamage() > 9 && client.getDamage() > 9)
+			g2d.drawString(
 					String.format(
 							"%d(+%d%%)",
 							(int) Math.ceil(client.getDamage()
 									* (1 + client.getBaseDamage() / 100.0)),
-							client.getBaseDamage()), ClientFrame.getScaledWidth(105),
-					ClientFrame.getScaledHeight(215));
+							client.getBaseDamage()),
+							ClientFrame.getScaledWidth(100),
+							ClientFrame.getScaledHeight(219));
 		else
-			graphics.drawString(
+			g2d.drawString(
 					String.format(
 							"%d(+%d%%)",
 							(int) Math.ceil(client.getDamage()
 									* (1 + client.getBaseDamage() / 100.0)),
-							client.getBaseDamage()), ClientFrame.getScaledWidth(109),
-					ClientFrame.getScaledHeight(215));
+							client.getBaseDamage()),
+							ClientFrame.getScaledWidth(105),
+							ClientFrame.getScaledHeight(219));
 
-		graphics.setColor(RED);
+		g2d.setColor(RED);
 		if (client.getSpeed() == ServerPlayer.MAX_HSPEED)
-			graphics.setColor(Color.green);				
-		graphics.drawString(
+			g2d.setColor(Color.green);				
+		g2d.drawString(
 				String.format("%d", client.getSpeed() - ServerPlayer.DEFAULT_MOVE_SPEED
-						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(215));
+						+ 1), ClientFrame.getScaledWidth(225), ClientFrame.getScaledHeight(219));
 
-		graphics.setColor(RED);
+		g2d.setColor(RED);
 		if (client.getJump() == ServerPlayer.MAX_VSPEED)
-			graphics.setColor(Color.green);		
-		graphics.drawString(
+			g2d.setColor(Color.green);		
+		g2d.drawString(
 				String.format("%d", client.getJump() - ServerPlayer.DEFAULT_JUMP_SPEED
-						+ 1), ClientFrame.getScaledWidth(260), ClientFrame.getScaledHeight(255));
+						+ 1), ClientFrame.getScaledWidth(225), ClientFrame.getScaledHeight(254));
 	}
 
 
@@ -512,6 +605,33 @@ public class ClientInventory extends JPanel implements ActionListener
 	{
 		client.printToServer("X");
 		client.leaveGame = true;
+		Client.inGame = false;
+	}
+
+	public int getNumHP()
+	{
+		for (int row = 0; row < inventory.length; row++)
+			for (int col = 0; col < inventory[row].length; col++)
+			{
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.HP_POTION_TYPE))
+				{
+					return  inventory[row][col].getAmount();
+				}
+			}
+		return 0;
+	}
+
+	public int getNumMana()
+	{
+		for (int row = 0; row < inventory.length; row++)
+			for (int col = 0; col < inventory[row].length; col++)
+			{
+				if(inventory[row][col] != null && inventory[row][col].getType().equals(ServerWorld.MANA_POTION_TYPE))
+				{
+					return  inventory[row][col].getAmount();
+				}
+			}
+		return 0;
 	}
 
 }

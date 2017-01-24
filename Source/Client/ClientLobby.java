@@ -13,6 +13,7 @@ import Menu.MainMenu.GamePanel;
 import Server.ServerFrame;
 import Server.Creatures.ServerCreature;
 import Client.Client.JTextFieldLimit;
+import ClientUDP.ClientAccountWindow;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -28,7 +29,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -58,8 +64,8 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	private String[] maps;
 
-	private ArrayList<String> redTeam = new ArrayList<String>();
-	private ArrayList<String> blueTeam = new ArrayList<String>();
+	private ArrayList<Pair> redTeam = new ArrayList<Pair>();
+	private ArrayList<Pair> blueTeam = new ArrayList<Pair>();
 
 	private GamePanel panel;
 	private JButton menu;
@@ -74,6 +80,21 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 	private int middle;
 
+	private DatagramSocket centralSocket;
+	private DatagramPacket receive;
+	private DatagramPacket send;
+
+	private byte[] receiveData;
+	private byte[] sendData;
+
+	private Timer startTimer = new Timer(1000,new GameStartTimer());
+	private int startCounter = 5;
+
+	//If the lobby creation get's cancelled during intialization
+	public boolean cancelled;
+	
+	//When you switched teams last
+	private long switchTime = 0;
 	/**
 	 * 
 	 * @param socket
@@ -83,12 +104,13 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public ClientLobby(Socket socket, BufferedReader input, String playerName, GamePanel panel,
+	public ClientLobby(Socket socket, BufferedReader input, PrintWriter output, GamePanel panel,
 			ArrayList<ClientCloud> clouds, JButton menu)
 					throws NumberFormatException, IOException
 	{
+		System.out.println("INITIALIZING LOBBY");
 		lobbyImage = Images.getImage("Lobby");
-		background = Images.getImage("BACKGROUND");
+		background = Images.getImage("SKY");
 		middle = (Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH) / 2;
 
 		this.menu = menu;
@@ -97,18 +119,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 		this.input = input;
 
-		// Set up the output
-		try
-		{
-			output = new PrintWriter(socket.getOutputStream());
-			printToServer("Lobby");
+		this.output = output;
 
-		}
-		catch (IOException e)
-		{
-			// System.out.println("Error creating print writer");
-			e.printStackTrace();
-		}
+		printToServer("Lobby");
 
 		String message = input.readLine();
 		if (message.equals("Start"))
@@ -118,17 +131,24 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			input.close();
 			panel.startGame(this);
 		}
+		else if(message.equals("Full"))
+		{
+			JOptionPane.showMessageDialog(MainMenu.mainFrame, "This game is full");
+			cancelled = true;
+			return;
+		}
 		else
 		{
 			this.socket = socket;
-			name = playerName;
 			this.panel = panel;
+			name = ClientAccountWindow.savedUser;
 
 			menu.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(320)));
 			menu.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
 			menu.setBackground(new Color(240, 240, 240));
 			menu.setForeground(Color.black);
+			menu.setFocusable(false);
 			menu.setVisible(true);
 
 			chat = new JTextField();
@@ -154,6 +174,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			start.setBackground(Color.LIGHT_GRAY);
 			start.setOpaque(true);
 			start.setBorderPainted(false);
+			start.setFocusable(false);
 			start.setLocation((int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(280)));
 			start.setSize(ClientFrame.getScaledWidth(270),ClientFrame.getScaledHeight(20));
@@ -168,6 +189,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			switchTeams.addActionListener(this);
 			switchTeams.setForeground(Color.black);
 			switchTeams.setBackground(new Color(240, 240, 240));
+			switchTeams.setFocusable(false);
 
 			setLayout(null);
 			add(chat);
@@ -181,7 +203,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			requestFocusInWindow();
 			setSize(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH,
 					Client.SCREEN_HEIGHT);
-			addKeyListener(this);
+			
 			this.setBackground(Color.BLACK);
 
 			// Add maps on server (first thing read)
@@ -207,15 +229,22 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 			add(mapBox);
 
+			printToServer("Na "+name);
+
+			GetRating rating = new GetRating();
+			Thread ratingThread = new Thread(rating);
+			ratingThread.start();
+
 			ReadServer reader = new ReadServer();
 			Thread startReader = new Thread(reader);
 			startReader.start();
 
-			printToServer("Na " + name);
-
 			Timer repaintTimer = new Timer(15, this);
 			repaintTimer.start();
 
+			setFocusable(true);
+			requestFocusInWindow();
+			addKeyListener(this);
 		}
 
 	}
@@ -249,18 +278,44 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 							name += tokens[i] + " ";
 						name = name.trim();
 
-						if (team == ServerCreature.RED_TEAM)
+						synchronized(redTeam)
 						{
-							if (!isNew)
-								blueTeam.remove(name);
-							redTeam.add(name);
+							synchronized(blueTeam)
+							{
+								if (team == ServerCreature.RED_TEAM)
+								{
+									if (!isNew)
+									{
+										Pair toRemove = null;
+										for(Pair p : blueTeam)
+										{
+											if(p.name.equals(name))
+												toRemove = p;
+										}					
+										blueTeam.remove(toRemove);
+									}
+									redTeam.add(new Pair(name));
+								}
+								else
+								{
+									if (!isNew)
+									{
+										Pair toRemove = null;
+										for(Pair p : redTeam)
+										{
+											if(p.name.equals(name))
+												toRemove = p;
+										}					
+										redTeam.remove(toRemove);
+									}
+									blueTeam.add(new Pair(name));
+								}
+							}
 						}
-						else
-						{
-							if (!isNew)
-								redTeam.remove(name);
-							blueTeam.add(name);
-						}
+
+						sendData = ("S "+name).getBytes();
+						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientAccountWindow.IP), ClientAccountWindow.PORT);
+						centralSocket.send(send);
 					}
 					else if (tokens[token].equals("CH"))
 					{
@@ -287,6 +342,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("JO"))
 					{
+						if (chatQueue.size() >= Client.MAX_MESSAGES)
+							chatQueue.remove(0);
+						
 						int len = Integer.parseInt(tokens[++token]);
 						String name = "";
 
@@ -296,6 +354,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("RO"))
 					{
+						if (chatQueue.size() >= Client.MAX_MESSAGES)
+							chatQueue.remove(0);
+						
 						int len = Integer.parseInt(tokens[++token]);
 						String name = "";
 
@@ -306,21 +367,39 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 						if (name.charAt(0) - '0' == ServerCreature.RED_TEAM)
 						{
-							redTeam.remove(name.substring(1));
+							Pair toRemove = null;
+							for(Pair p : redTeam)
+							{
+								if(p.name.equals(name.substring(1)))
+									toRemove = p;
+							}					
+							redTeam.remove(toRemove);
 						}
 						else
 						{
-							blueTeam.remove(name.substring(1));
+							Pair toRemove = null;
+							for(Pair p : blueTeam)
+							{
+								if(p.name.equals(name.substring(1)))
+									toRemove = p;
+							}					
+							blueTeam.remove(toRemove);
 						}
 					}
 					else if (tokens[token].equals("Start"))
 					{
 						System.out.println("Started");
+						centralSocket.close();
 						socket.close();
 						output.close();
 						input.close();
-						panel.startGame(lobby);
-						System.out.println("Break");
+						//menu.setEnabled(false);
+						mapBox.setEnabled(false);
+						switchTeams.setEnabled(false);
+						start.setEnabled(false);
+						enter.setEnabled(false);
+						repaint();
+						startTimer.start();
 						break;
 					}
 					else if (tokens[token].equals("L"))
@@ -455,7 +534,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						else
 							graphics.setColor(Color.GRAY);
 						graphics.drawString(coloured + " ", 10, textY);
-						graphics.setColor(Color.YELLOW);
+						graphics.setColor(Color.BLACK);
 						graphics.drawString(mssg, 10 + graphics
 								.getFontMetrics().stringWidth(coloured + " "),
 								textY);
@@ -514,9 +593,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		// Write the players on each team
 		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = (int) (ClientFrame.getScaledWidth(785));
+		int blueX = (int) (ClientFrame.getScaledWidth(1335));
 		int blueY = (int) (ClientFrame.getScaledHeight(120));
-		int redX = (int) (ClientFrame.getScaledWidth(1335));
+		int redX = (int)(ClientFrame.getScaledWidth(785));
 		int redY = (int) (ClientFrame.getScaledHeight(120));
 		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
@@ -526,35 +605,55 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		graphics.setFont(ClientWorld.PLAYER_NAME_FONT);
 
 		graphics.setColor(Color.RED);
-		for (String player : redTeam)
+		synchronized(redTeam)
 		{
-			if (leaderTeam == ServerCreature.RED_TEAM
-					&& leaderName.equals(player))
+			for (Pair player : redTeam)
 			{
-				graphics.setColor(Color.GREEN);
-				graphics.fillOval(redX - 30, redStart - 20, 20, 20);
-				graphics.setColor(Color.RED);
-			}
+				if (leaderTeam == ServerCreature.RED_TEAM
+						&& leaderName.equals(player.name))
+				{
+					graphics.setColor(Color.GREEN);
+					graphics.fillOval(redX - 20, redStart - 13, 15, 15);
+					graphics.setColor(Color.RED);
 
-			graphics.drawString(player, redX + 5,
-					redStart);
-			redStart += 40;
+					//Write the leader name under the menu button
+					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
+							(int) (ClientFrame.getScaledHeight(380)));
+				}
+
+				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), redX + 5,
+						redStart);
+				redStart += 40;
+			}
+		}
+		graphics.setColor(Color.BLUE);
+		synchronized(blueTeam)
+		{
+			for (Pair player : blueTeam)
+			{
+				if (leaderTeam == ServerCreature.BLUE_TEAM
+						&& leaderName.equals(player.name))
+				{
+					graphics.setColor(Color.GREEN);
+					graphics.fillOval(blueX - 30, blueStart - 20, 20, 20);
+					graphics.setColor(Color.BLUE);
+
+					//Write the leader name under the menu button
+					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
+							(int) (ClientFrame.getScaledHeight(370)));
+				}
+
+				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), blueX + 5,
+						blueStart);
+				blueStart += 40;
+			}
 		}
 
-		graphics.setColor(Color.BLUE);
-		for (String player : blueTeam)
+		graphics.setColor(Color.black);
+		if(startTimer.isRunning())
 		{
-			if (leaderTeam == ServerCreature.BLUE_TEAM
-					&& leaderName.equals(player))
-			{
-				graphics.setColor(Color.GREEN);
-				graphics.fillOval(blueX - 30, blueStart - 20, 20, 20);
-				graphics.setColor(Color.BLUE);
-			}
-
-			graphics.drawString(player, blueX + 5,
-					blueStart);
-			blueStart += 40;
+			graphics.drawString("Starting in: "+startCounter, (int) (ClientFrame.getScaledWidth(337)),
+					(int) (ClientFrame.getScaledHeight(410)));
 		}
 
 		// if(!chat.hasFocus() && !mapBox.hasFocus())
@@ -566,13 +665,16 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		if (e.getSource() == enter)
 		{
 			// Send the message
-			String message = chat.getText();
-			if (message.length() > 0)
+			if(!startTimer.isRunning())
 			{
-				printToServer("C " + message);
+				String message = chat.getText();
+				if (message.length() > 0)
+				{
+					printToServer("C " + message);
+				}
+				chat.setForeground(Color.GRAY);
+				chat.setText("");
 			}
-			chat.setForeground(Color.GRAY);
-			chat.setText("");
 			requestFocusInWindow();
 		}
 		else if (e.getSource() == start && isLeader)
@@ -581,12 +683,17 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		}
 		else if (e.getSource() == switchTeams)
 		{
-			printToServer("X");
+			if(System.currentTimeMillis() - switchTime >= 1000)
+			{
+				printToServer("X");
+				switchTime = System.currentTimeMillis();
+			}
 		}
 		else if (e.getSource() == mapBox)
 		{
 			printToServer("M " + maps[mapBox.getSelectedIndex()]);
 			System.out.println("M " + maps[mapBox.getSelectedIndex()]);
+			requestFocusInWindow();
 		}
 		repaint();
 
@@ -611,7 +718,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		public void keyPressed(KeyEvent e)
 		{
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
+			{
 				enter.doClick();
+			}
 
 		}
 
@@ -634,12 +743,11 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		System.out.println("key pressed");
 		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
 			chat.requestFocus();
 		}
-
-
 	}
 
 	@Override
@@ -655,14 +763,121 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	public void close()
 	{
 		try{
+			startTimer.stop();
+			if(centralSocket != null)
+				centralSocket.close();
 			goToMenu = true;
-			socket.close();
-			input.close();
-			output.close();
+			if(socket != null)
+			{
+				socket.close();
+				input.close();
+				output.close();
+			}
 		}
 		catch(Exception E)
 		{
 			E.printStackTrace();
 		}
+	}
+
+	private class GetRating implements Runnable
+	{
+		public void run() {
+			try {
+				centralSocket = new DatagramSocket(MainMenu.LOBBY_UDP_PORT);
+			} catch (SocketException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			receiveData = new byte[1024];
+			sendData = new byte[1024];
+
+			try
+			{
+				while(true)
+				{
+					receiveData = new byte[1024];
+					receive = new DatagramPacket(receiveData, receiveData.length);
+					centralSocket.receive(receive);
+
+					String input = new String(receive.getData()).trim();
+					switch(input.charAt(0))
+					{
+					case 'S':
+						//System.out.println(input);
+						String tokens[] = input.split(" ");
+						String rating = tokens[1];
+						//tokens[2] and tokens[3] are wins and losses. We can ignore those
+						String name = tokens[4];
+						for(int i = 5; i < tokens.length;i++)
+						{
+							name += " " + tokens[i];
+						}
+						synchronized(redTeam)
+						{
+							for(Pair p : redTeam)
+							{
+								if(p.name.equals(name))
+								{
+									p.rating = rating;
+									repaint();
+									break;
+								}
+							}
+						}
+						synchronized(blueTeam)
+						{
+							for(Pair p : blueTeam)
+							{
+								if(p.name.equals(name))
+								{
+									p.rating = rating;
+									repaint();
+									break;
+								}
+							}
+						}
+						break;
+					}
+				}
+			}
+			catch(Exception E)
+			{
+				return;
+			}
+		}
+
+	}
+
+	private class Pair
+	{
+		String name;
+		String rating = "-";
+
+		public Pair(String name)
+		{
+			this.name = name;
+		}
+	}
+
+	private class GameStartTimer implements ActionListener
+	{
+		public void actionPerformed(ActionEvent arg0) {
+			startCounter--;
+			if(startCounter == 0)
+			{
+				startTimer.stop();
+				try {
+					panel.startGame(lobby);
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
 	}
 }

@@ -203,7 +203,7 @@ public class ServerBat extends ServerEnemy
 				}
 
 			}
-			findTarget();
+			findPlayerTarget();
 
 		}
 		else if (getTarget().getHP() <= 0 || getTarget().isDisconnected()

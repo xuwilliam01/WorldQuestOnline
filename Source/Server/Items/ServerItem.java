@@ -47,6 +47,8 @@ public abstract class ServerItem extends ServerObject
 
 	private ServerWorld world;
 	
+	private String base;
+	
 	/**
 	 * Constructor that assigns and image and a value to every item
 	 */
@@ -85,7 +87,8 @@ public abstract class ServerItem extends ServerObject
 			value = 7;
 			break;
 		case ServerWorld.MONEY_TYPE:
-			setImage("MONEY");
+			base = "goldCoin";
+			setImage("goldCoin1");
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON");
@@ -211,9 +214,33 @@ public abstract class ServerItem extends ServerObject
 			setImage("DARKWAND_ICON");
 			value = 60;
 			break;
-		case ServerWorld.BARRACK_ITEM_TYPE:
+		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setImage("BARRACKS_ICON");
-			value = ServerBuildingItem.BARRACK_COST; //Change?
+			value = ServerBuildingItem.BASIC_BARRACKS_COST;
+			break;
+		case ServerWorld.ADV_BARRACKS_ITEM_TYPE:
+			setImage("ADV_BARRACKS_ICON");
+			value = ServerBuildingItem.ADV_BARRACKS_COST;
+			break;
+		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
+			setImage("GIANT_FACTORY_ICON");
+			value = ServerBuildingItem.GIANT_FACTORY_COST;
+			break;
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			setImage("WOOD_HOUSE_ICON");
+			value = ServerBuildingItem.WOOD_HOUSE_COST;
+			break;
+		case ServerWorld.INN_ITEM_TYPE:
+			setImage("INN_ICON");
+			value = ServerBuildingItem.INN_COST;
+			break;
+		case ServerWorld.TOWER_ITEM_TYPE:
+			setImage("TOWER_ICON");
+			value = ServerBuildingItem.TOWER_COST;
+			break;
+		case ServerWorld.GOLD_MINE_ITEM_TYPE:
+			setImage("GOLD_MINE_ICON");
+			value = ServerBuildingItem.GOLD_MINE_COST;
 			break;
 		}
 
@@ -227,15 +254,15 @@ public abstract class ServerItem extends ServerObject
 	 */
 	public static ServerItem randomItem(double x, double y, ServerWorld world)
 	{
-		int randType = (int) (Math.random() * 13 + 1);
+		int randType = (int) (Math.random() * 20 + 1);
 
-		if (randType <= 7)
+		if (randType <= 12)
 			return new ServerMoney(x, y,world);
-		if (randType <= 8)
-			return ServerArmour.randomArmour(x, y,world);
-		if (randType <= 10)
-			return ServerPotion.randomPotion(x, y,world);
 		if (randType <= 13)
+			return ServerArmour.randomArmour(x, y,world);
+		if (randType <= 18)
+			return ServerPotion.randomPotion(x, y,world);
+		if (randType <= 20)
 			return ServerWeapon.randomWeapon(x, y,world);
 
 		// This won't happen
@@ -248,7 +275,7 @@ public abstract class ServerItem extends ServerObject
 	 * @param item the item to be copied
 	 * @return a copy of the item
 	 */
-	public static ServerItem copy(ServerItem item, ServerWorld world)
+	public static ServerItem copy(ServerItem item)
 	{
 		switch (item.getType())
 		{
@@ -259,14 +286,14 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.DMG_POTION_TYPE:
 		case ServerWorld.SPEED_POTION_TYPE:
 		case ServerWorld.JUMP_POTION_TYPE:
-			return new ServerPotion(item.getX(), item.getY(), item.getType(),world);
+			return new ServerPotion(item.getX(), item.getY(), item.getType(), item.getWorld());
 		case ServerWorld.MONEY_TYPE:
-			return new ServerMoney(item.getX(), item.getY(),world);
+			return new ServerMoney(item.getX(), item.getY(),item.getWorld());
 		case ServerWorld.STEEL_ARMOUR:
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 		case ServerWorld.RED_NINJA_ARMOUR:
 		case ServerWorld.GREY_NINJA_ARMOUR:
-			return new ServerArmour(item.getX(), item.getY(), item.getType(),world);
+			return new ServerArmour(item.getX(), item.getY(), item.getType(),item.getWorld());
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
@@ -294,14 +321,15 @@ public abstract class ServerItem extends ServerObject
 		case ServerWorld.FIREWAND_TYPE:
 		case ServerWorld.ICEWAND_TYPE:
 		case ServerWorld.DARKWAND_TYPE:
-			return new ServerWeapon(item.getX(), item.getY(), item.getType(),world);
+			return new ServerWeapon(item.getX(), item.getY(), item.getType(),item.getWorld());
 		case ServerWorld.BARRACK_ITEM_TYPE:
-			return new ServerBuildingItem(item.getType(),world);
+		case ServerWorld.WOOD_HOUSE_ITEM_TYPE:
+			return new ServerBuildingItem(item.getType(),item.getWorld());
 
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Start a cooldown before the item can be picked up again so it isn't
 	 * instantly picked up by the creature that dropped it
@@ -325,6 +353,42 @@ public abstract class ServerItem extends ServerObject
 	 */
 	public void update(long currentTime)
 	{
+		if (base!=null)
+		{
+			switch((int)(getWorld().getWorldCounter()%90))
+			{
+			case 0:
+				setImage(base+"1");
+				break;
+			case 10:
+				setImage(base+"2");
+				break;
+			case 20:
+				setImage(base+"3");
+				break;
+			case 30:
+				setImage(base+"4");
+				break;
+			case 40:
+				setImage(base+"5");
+				break;
+			case 50:
+				setImage(base+"6");
+				break;
+			case 60:
+				setImage(base+"7");
+				break;
+			case 70:
+				setImage(base+"8");
+				break;
+			case 80:
+				setImage(base+"9");
+				break;
+			}
+		}
+		
+		
+		
 		if(hasCoolDown && currentTime - coolDownStart > 120)
 		{
 			hasCoolDown = false;

@@ -1,6 +1,6 @@
 package Server;
 
-import java.awt.event.ActionEvent;
+import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import javax.swing.Timer;
 import Imports.Audio;
 import Imports.ImageReferencePair;
 import Imports.Images;
+import Imports.Maps;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -43,20 +44,20 @@ public class ServerEngine implements Runnable, ActionListener {
 	public static final int NUMBER_OF_IDS = 100000;
 
 	private final int normalIDStart = 500;
-	
+
 	/**
 	 * The highest ID not used yet for normal objects
 	 */
 	private int nextID = normalIDStart;
-	
+
 	/**
 	 * The highest ID not used yet for building objects
 	 */
 	private int nextBuildingID = 0;
 
 	private boolean[] usedIDs= new boolean[NUMBER_OF_IDS];
-	
-	
+
+
 
 	// /**
 	// * Stack of freeIDs to use
@@ -102,6 +103,7 @@ public class ServerEngine implements Runnable, ActionListener {
 	private int losingTeam;
 	private Server server;
 
+	private ArrayList<SavedPlayer> savedPlayers = new ArrayList<SavedPlayer>();
 	/**
 	 * Constructor for the engine
 	 */
@@ -109,7 +111,8 @@ public class ServerEngine implements Runnable, ActionListener {
 		// Start importing the images from the file (place in a loading screen
 		// or something later)
 		Images.importImages();
-		Audio.importAudio();
+		Audio.importAudio(false);
+		Maps.importMaps();
 		this.server = server;
 		ImageReferencePair.importReferences();
 
@@ -139,28 +142,64 @@ public class ServerEngine implements Runnable, ActionListener {
 	/**
 	 * Send messages to all the clients updating their player's data
 	 */
-	public synchronized void updateClients() {
-		if (!toRemove.isEmpty()) {
-			for (ServerPlayer player : toRemove)
-				listOfPlayers.remove(player);
-			toRemove.clear();
-		}
-		try {
-			for (ServerPlayer player : listOfPlayers) {
-				player.updateClient();
-				if (endGame) {
-					player.setEndGame(true, losingTeam);
-				}
-			}
-			if (endGame) {
-				ServerManager.removeRoom(server);
-				close();
-				server.close();
+	public void updateClients() {
+		synchronized(listOfPlayers)
+		{
+			if (!toRemove.isEmpty()) {
+				for (ServerPlayer player : toRemove)
+					listOfPlayers.remove(player);
+				toRemove.clear();
 			}
 
-		} catch (ConcurrentModificationException e) {
-			System.out.println("Concurrent modification occured");
-			e.printStackTrace();
+			//Everyone left the game, so end it
+			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
+			{
+				server.getAllConnectedPlayers().clear();
+				endGame(ServerCreature.RED_TEAM);
+			}
+
+			try{
+				for (ServerPlayer player : listOfPlayers) {
+					try {
+						player.updateClient();
+					} catch(Exception e) {
+						System.out.println("Caught exception");
+						e.printStackTrace();
+					}
+					if (endGame) {
+						player.setEndGame(true, losingTeam);
+					}
+				}
+				if (endGame) {
+					String redPlayers ="";
+					String bluePlayers ="";
+					int winner = ServerCreature.BLUE_TEAM;
+					if(losingTeam == ServerCreature.BLUE_TEAM)
+						winner = ServerCreature.RED_TEAM;
+					int numRed = 0;
+					int numBlue = 0;
+					for (ServerPlayer player : server.getAllConnectedPlayers()) {
+						if(player.getTeam() == ServerCreature.RED_TEAM)
+						{
+							numRed++;
+							redPlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+						} else 
+						{
+							numBlue++;
+							bluePlayers += " "+player.getName().split(" ").length+" "+player.getName()+" "+player.getKills();
+						}
+					}
+					if(server.getAllConnectedPlayers().size() > 1)
+						server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
+					server.getManager().removeRoom(server);
+					close();
+					server.close();
+				}
+
+			} catch (ConcurrentModificationException e) {
+				System.out.println("Concurrent modification occured");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -184,8 +223,11 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Send an instant message to all clients
 	 */
 	public void broadcast(String message) {
-		for (ServerPlayer player : listOfPlayers) {
-			player.sendMessage(message);
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				player.sendMessage(message);
+			}
 		}
 		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
@@ -196,9 +238,12 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * Sends a message to the given team
 	 */
 	public void broadCastTeam(String message, int team) {
-		for (ServerPlayer player : listOfPlayers) {
-			if (player.getTeam() == team)
-				player.sendMessage(message);
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				if (player.getTeam() == team)
+					player.sendMessage(message);
+			}
 		}
 		if (ServerManager.HAS_FRAME) {
 			gui.addToChat(message);
@@ -213,14 +258,17 @@ public class ServerEngine implements Runnable, ActionListener {
 	public synchronized void removePlayer(ServerPlayer remove) {
 		toRemove.add(remove);
 		lastTeam--;
-		listOfPlayers.remove(remove);
+		synchronized(listOfPlayers)
+		{
+			listOfPlayers.remove(remove);
+		}
 		world.remove(remove);
 		server.decreaseNumPlayer();
 		broadcast("R " + ServerPlayer.toChars(remove.getID()));
-		broadcast("RO " + remove.getName().split(" ").length + " "
+		broadcast("o " + remove.getName().split(" ").length + " "
 				+ remove.getTeam() + remove.getName());
 		//Remove from the scoreboard
-		broadcast("RP " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
+		broadcast("n " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
 	}
 
 	/**
@@ -230,18 +278,20 @@ public class ServerEngine implements Runnable, ActionListener {
 	 *            the new player
 	 */
 	public void addPlayer(ServerPlayer newPlayer) {
-		listOfPlayers.add(newPlayer);
-
-		//For the scoreboard
-		broadcast("SP " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
-				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ 0 +" "+ 0);
-		for(ServerPlayer player : listOfPlayers)
+		synchronized(listOfPlayers)
 		{
-			if(player.getID() != newPlayer.getID())
-				newPlayer.sendMessage("SP " + player.getName().split(" ").length + " " + player.getName() + " "
-						+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths());
-		}
+			listOfPlayers.add(newPlayer);
 
+			//For the scoreboard
+			broadcast("^ " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
+					+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ newPlayer.getKills() +" "+ newPlayer.getDeaths() + " " + ServerPlayer.toChars(newPlayer.getScore()) + " " + newPlayer.getPing());
+			for(ServerPlayer player : listOfPlayers)
+			{
+				if(player.getID() != newPlayer.getID())
+					newPlayer.sendMessage("^ " + player.getName().split(" ").length + " " + player.getName() + " "
+							+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
+			}
+		}
 		world.add(newPlayer);
 	}
 
@@ -264,7 +314,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 
 	}
-	
+
 	/**
 	 * Use and reserve the next available building ID (to make sure they underlap other objects) in the list of booleans
 	 * 
@@ -299,15 +349,19 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		// Remove disconnected players
-		ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
-		for (ServerPlayer player : listOfPlayers) {
-			if (player.isDisconnected()) {
-				listOfRemovedPlayers.add(player);
+		// Remove disconnected players and update all player scores/pings
+		synchronized(listOfPlayers)
+		{
+			ArrayList<ServerPlayer> listOfRemovedPlayers = new ArrayList<ServerPlayer>();
+			for (ServerPlayer player : listOfPlayers) {
+				broadcast("s "+ServerPlayer.toChars(player.getID())+" "+ServerPlayer.toChars(player.getScore())+" "+player.getPing()+" "+player.getTeam());
+				if (player.isDisconnected()) {
+					listOfRemovedPlayers.add(player);
+				}
 			}
-		}
-		for (ServerPlayer player : listOfRemovedPlayers) {
-			listOfPlayers.remove(player);
+			for (ServerPlayer player : listOfRemovedPlayers) {
+				listOfPlayers.remove(player);
+			}
 		}
 
 		// Move all the objects around and update them
@@ -322,23 +376,6 @@ public class ServerEngine implements Runnable, ActionListener {
 				gui.update();
 			}
 		}
-		// if (checkObjects)
-		// {
-		// int noOfObjects = 0;
-		//
-		// // Clear the object grid
-		// for (int row = 0; row < world.getObjectGrid().length; row++)
-		// {
-		// for (int column = 0; column < world.getObjectGrid()[0].length;
-		// column++)
-		// {
-		// noOfObjects += world.getObjectGrid()[row][column].size();
-		// world.getObjectGrid()[row][column] = new ArrayList<ServerObject>();
-		// }
-		// }
-		// System.out.println("Number of objects without lag: " + noOfObjects);
-		// checkObjects = false;
-		// }
 
 		// Parameters to fix the lag spike
 		if (world.getWorldCounter() > 1000 && getCurrentFPS() < 30 && !lagSpike) {
@@ -362,18 +399,6 @@ public class ServerEngine implements Runnable, ActionListener {
 		}
 
 		startTime = System.nanoTime();
-
-		// // Add free IDs to free ID list
-		// for (int ID : IDsToAdd) {
-		// freeIDs.add(ID);
-		// }
-		// IDsToAdd.clear();
-		//
-		// // Second rounds of adding
-		// for (int ID : IDsToAdd2) {
-		// IDsToAdd.add(ID);
-		// }
-		// IDsToAdd2.clear();
 	}
 
 	boolean lagSpike = false;
@@ -387,14 +412,16 @@ public class ServerEngine implements Runnable, ActionListener {
 	public int getNextTeam() {
 		int noOfBlue = 0;
 		int noOfRed = 0;
-		for (ServerPlayer player : listOfPlayers) {
-			if (player.getTeam() == ServerCreature.RED_TEAM) {
-				noOfRed++;
-			} else {
-				noOfBlue++;
+		synchronized(listOfPlayers)
+		{
+			for (ServerPlayer player : listOfPlayers) {
+				if (player.getTeam() == ServerCreature.RED_TEAM) {
+					noOfRed++;
+				} else {
+					noOfBlue++;
+				}
 			}
 		}
-
 		if (noOfBlue == noOfRed) {
 			if (Math.random() < 0.5) {
 				return ServerCreature.BLUE_TEAM;
@@ -431,5 +458,10 @@ public class ServerEngine implements Runnable, ActionListener {
 
 	public void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
+	}
+
+	public ArrayList<SavedPlayer> getSavedPlayers()
+	{
+		return savedPlayers;
 	}
 }

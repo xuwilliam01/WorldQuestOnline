@@ -18,6 +18,8 @@ public class GameAudio {
 	private String name;
 	private Clip audio;
 	private FloatControl gainControl;
+	public static final float MAX_DISTANCE = 1080;
+	public static boolean audioSupported = true;
 	
 	public GameAudio(String name)
 	{
@@ -37,6 +39,13 @@ public class GameAudio {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 			System.out.println("Audio not working: " + name);
+		} catch (IllegalArgumentException e){
+			e.printStackTrace();
+			System.out.println("No audio output enabled on this device");
+			audioSupported = false;
+		} catch (Exception e){
+			e.printStackTrace();
+			System.out.println("Unknown issue with audio");
 		}
 
 	}
@@ -62,9 +71,67 @@ public class GameAudio {
 		return audio.isActive();
 	}
 
-	public void play(int dist)
+	public void play(float dist)
 	{
-		gainControl.setValue(1f - Client.Client.distanceConstant*dist);
-		audio.loop(1);
+		if (!audioSupported)
+		{
+			return;
+		}
+		try
+		{
+		gainControl.setValue(Math.max(-3-dist*Client.Client.distanceConstant,-50));
+		audio.setFramePosition(0);
+		audio.start();
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+			audioSupported = false;
+		}
 	}
+	
+	public void loop()
+	{
+		if (!audioSupported)
+		{
+			return;
+		}
+		try
+		{
+		audio.setFramePosition(0);
+		audio.loop(99);
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+			audioSupported = false;
+		}
+	}
+	
+	public void stop()
+	{
+		if (!audioSupported)
+		{
+			return;
+		}
+		try
+		{
+			audio.setFramePosition(0);
+			audio.stop();
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+			System.out.println("No sound file available");
+			audioSupported = false;
+		}
+	}
+	
+	public boolean isRunning()
+	{
+		return audio.isRunning();
+	}
+
 }

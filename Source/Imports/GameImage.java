@@ -91,9 +91,9 @@ public class GameImage implements Comparable<GameImage> {
 			MainMenu.imageLoadFailed = true;
 			e.printStackTrace();
 		}
-		if (bufferedImage.getWidth() != width
-				|| bufferedImage.getHeight() != height) {
-			image = bufferedImage.getScaledInstance(width, height, 0);
+		if (Math.abs(bufferedImage.getWidth()-width)>2
+				|| Math.abs(bufferedImage.getHeight()-height)>2) {
+			image = bufferedImage.getScaledInstance(width, height, image.SCALE_SMOOTH);
 		} else {
 			image = bufferedImage;
 		}
@@ -144,7 +144,8 @@ public class GameImage implements Comparable<GameImage> {
 	public GameImage(String name, BufferedImage image, int width, int height) {
 		this.name = name.substring(0, name.indexOf('.'));
 
-		if (image.getWidth(null) != width || image.getHeight(null) != height) {
+		if (Math.abs(image.getWidth()-width)>2
+				|| Math.abs(image.getHeight()-height)>2) {
 			this.image = image.getScaledInstance(width, height, 0);
 		} else {
 			this.image = image;

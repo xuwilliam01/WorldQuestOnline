@@ -1,6 +1,7 @@
 package WorldCreator;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,11 +22,12 @@ import Imports.Images;
  */
 public class CreatorObject extends JButton implements MouseListener
 {
-	public final static int SCALE = 1;
+	public final static double SCALE = 1.5;
 	private CreatorWorld world;
 	private ImageReferencePair imageRef;
 	private boolean isTile;
-
+	private String name;
+	
 	/**
 	 * Constructor
 	 * @param ref the reference
@@ -37,8 +39,7 @@ public class CreatorObject extends JButton implements MouseListener
 	public CreatorObject(char ref, String name, boolean isTile,
 			String description, CreatorWorld world)
 	{
-
-		setIcon(new ImageIcon(Images.getImage(name.substring(0,
+		super(new ImageIcon(Images.getImage(name.substring(0,
 				name.length())
 				+ "_ICON")));
 		setSize(ClientFrame.getScaledWidth(getIcon().getIconWidth()), ClientFrame.getScaledHeight(getIcon().getIconHeight()));
@@ -48,7 +49,7 @@ public class CreatorObject extends JButton implements MouseListener
 
 		this.world = world;
 		this.isTile = isTile;
-
+		this.name = name;
 		setBorder(BorderFactory.createEmptyBorder());
 		setContentAreaFilled(false);
 		setFocusable(false);
@@ -56,6 +57,22 @@ public class CreatorObject extends JButton implements MouseListener
 		setToolTipText(description);
 
 
+	}
+	
+	public void paintComponent(Graphics graphics)
+	{
+		super.paintComponent(graphics);
+		if(name.contains("RED"))
+		{
+			graphics.setColor(new Color(255, 0,0, 60));
+			graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+		else if(name.contains("BLUE"))
+		{
+			graphics.setColor(new Color(0, 0,255, 60));
+			graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
+		repaint();
 	}
 
 	public String getImageName()
@@ -97,12 +114,12 @@ public class CreatorObject extends JButton implements MouseListener
 	public void setPosition(int row, int col)
 	{
 		if (isTile)
-			setLocation(ClientFrame.getScaledWidth(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
-					* 12)),ClientFrame.getScaledHeight(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
-					+ 80));
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
+					* 12))),ClientFrame.getScaledHeight((int)(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
+					+ 80)));
 		else
-			setLocation(ClientFrame.getScaledWidth(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12)), ClientFrame.getScaledHeight(SCALE*(row
-					* getIcon().getIconHeight()/SCALE + row * 10) + 500));
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12))), ClientFrame.getScaledHeight((int)(SCALE*(row
+					* getIcon().getIconHeight()/SCALE + row * 10) + 425)));
 	}
 
 	@Override
@@ -147,6 +164,11 @@ public class CreatorObject extends JButton implements MouseListener
 	public void setColor(Color color)
 	{
 		imageRef.setColor(color);
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 
 }

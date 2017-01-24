@@ -1,6 +1,7 @@
 package Imports;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import Server.ServerObject;
 
@@ -42,14 +43,14 @@ public class Map
 	public void setCollisionGrid(char[][] collisionGrid) {
 		this.collisionGrid = collisionGrid;
 	}
-	public ArrayList<ServerObject>[][] getObjectGrid() {
+	public LinkedList<ServerObject>[][] getObjectGrid() {
 		@SuppressWarnings("unchecked")
-		ArrayList<ServerObject>[][]newObjectGrid = new ArrayList[objectGrid.length][objectGrid[0].length];
+		LinkedList<ServerObject>[][]newObjectGrid = new LinkedList[objectGrid.length][objectGrid[0].length];
 		for (int row = 0; row < objectGrid.length; row++)
 		{
 			for (int col = 0; col < objectGrid[0].length; col++)
 			{
-				newObjectGrid[row][col] = new ArrayList<ServerObject>();
+				newObjectGrid[row][col] = new LinkedList<ServerObject>();
 				for (ServerObject object:objectGrid[row][col])
 				{
 					newObjectGrid[row][col].add(object);

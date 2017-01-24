@@ -32,6 +32,8 @@ import WorldCreator.CreatorObject;
 public class Images {
 	
 	public final static Color YELLOW = new Color(204, 153, 0);
+	public final static Color LIGHT_YELLOW = new Color(255, 255, 0);
+	public final static Color LIGHT_GREEN = new Color(0, 204, 0);
 	public final static Color RED = new Color(153, 0, 38);
 	public final static Color DARK_RED = new Color(102,0,0);
 	public final static Color BLUE = new Color(0, 161, 230);
@@ -46,6 +48,16 @@ public class Images {
 	 * Array of yellow starting from lowest opacity to highest opacity
 	 */
 	public static Color[] yellows = new Color[100];
+	
+	/**
+	 * Array of yellow starting from lowest opacity to highest opacity
+	 */
+	public static Color[] lightYellows = new Color[100];
+	
+	/**
+	 * Array of green starting from lowest opacity to highest opacity
+	 */
+	public static Color[] lightGreens = new Color[100];
 	
 	/**
 	 * Array of red starting from lowest opacity to highest opacity
@@ -104,7 +116,7 @@ public class Images {
 	/**
 	 * Determines whether images were already imported or not
 	 */
-	private static boolean imported = false;
+	static boolean imported = false;
 
 	/**
 	 * Modify images using java and write them to the file
@@ -176,6 +188,18 @@ public class Images {
 			yellows[no] = new Color (YELLOW.getRed(), YELLOW.getGreen(), YELLOW.getBlue(), (int)((1.0*(no+1)/yellows.length)*255.0));
 		}
 		
+		// Create array of lightYellows with varying opacity
+		for (int no = 0; no < lightYellows.length;no++)
+		{
+			lightYellows[no] = new Color (LIGHT_YELLOW.getRed(), LIGHT_YELLOW.getGreen(), LIGHT_YELLOW.getBlue(), (int)((1.0*(no+1)/lightYellows.length)*255.0));
+		}
+		
+		// Create array of lightgreens with varying opacity
+		for (int no = 0; no < lightGreens.length;no++)
+		{
+			lightGreens[no] = new Color (LIGHT_GREEN.getRed(), LIGHT_GREEN.getGreen(), LIGHT_GREEN.getBlue(), (int)((1.0*(no+1)/lightGreens.length)*255.0));
+		}
+		
 		// Create array of blues with varying opacity
 		for (int no = 0; no < blues.length;no++)
 		{
@@ -223,7 +247,7 @@ public class Images {
 		imported = true;
 		// Only import if the images haven't been imported already
 		if (imageMap.isEmpty()) {
-			BufferedImage image;
+			BufferedImage image = null;
 
 			// Import sprite sheets to create images with
 			try {
@@ -304,6 +328,30 @@ public class Images {
 							+ IMAGE_FORMAT, image.getSubimage(no * 82, 0, 82,
 							82), 82, 82));
 				}
+				
+				for (int no = 0; no < 14; no++)
+				{
+					BufferedImage buffImage= ImageIO.read(new File("Images//Effects//"
+							+ "SMOKE_" + no + ".png"));
+					addtoImageArray(new GameImage("SMOKE_RIGHT_" + no
+							+ IMAGE_FORMAT, buffImage,320,180));
+					
+					AffineTransform tx;
+					tx = AffineTransform.getScaleInstance(-1, 1);
+					tx.translate(-buffImage.getWidth(null), 0);
+					AffineTransformOp op = new AffineTransformOp(tx,
+							AffineTransformOp.TYPE_BILINEAR);
+					addtoImageArray(new GameImage("SMOKE_LEFT_" + no
+							+ IMAGE_FORMAT,
+							op.filter(buffImage, null).getSubimage(
+									0, 0, buffImage.getWidth(),
+									buffImage.getHeight()),320,180));
+					
+				}
+				
+				
+
+
 
 				image = ImageIO
 						.read(new File("Images//Weapons//" + "STAR0.png"));
@@ -718,211 +766,213 @@ public class Images {
 			addtoImageArray(new GameImage("Cursorclick.png", "Interface////"));
 
 			addtoImageArray(new GameImage("WorldQuestIcon.png", "Interface////"));
+			
+			addtoImageArray(new GameImage("menuBackground.png", ClientFrame.getScaledWidth(1920), ClientFrame.getScaledHeight(1080), "Interface////"));
 
 			addtoImageArray(new GameImage("BRICK.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			GameImage newImage = new GameImage("BRICK.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			GameImage newImage = new GameImage("BRICK.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BRICK_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("GRASS.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("GRASS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("GRASS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("GRASS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("WATER.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("WATER.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("WATER.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("WATER_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("DIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("DIRT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("DIRT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("DIRT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("DIRTGRASS.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("DIRTGRASS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("DIRTGRASS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("DIRTGRASS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("COBBLESTONE.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("COBBLESTONE.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("COBBLESTONE.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("COBBLESTONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("STONEBRICKS.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("STONEBRICKS.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("STONEBRICKS.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("STONEBRICKS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("NOTHING.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("NOTHING.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("NOTHING.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("NOTHING_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BLACK.jpg", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BLACK.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BLACK.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BLACK_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BDIRT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BDIRT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BDIRT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BDIRT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BDIRTPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BDIRTPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BDIRTPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BDIRTPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("PLAT.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("PLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("PLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("PLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("WATERPLAT.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("WATERPLAT.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("WATERPLAT.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("WATERPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("SAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("SAND.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("SAND.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("SAND_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSAND.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSAND.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSAND.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSAND_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSANDPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSANDPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSANDPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSANDPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSTONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONE.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSTONE.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSTONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("BSTONEPLAT.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("BSTONEPLAT.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("BSTONEPLAT.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("BSTONEPLAT_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("PLANKS.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("PLANKS.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("PLANKS.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("PLANKS_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("STONE.png", ServerWorld.TILE_SIZE,
 					ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("STONE.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("STONE.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("STONE_ICON");
 			addtoImageArray(newImage);
 
 			addtoImageArray(new GameImage("SANDSTONE.jpg",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Tiles//"));
-			newImage = new GameImage("SANDSTONE.jpg", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Tiles//");
+			newImage = new GameImage("SANDSTONE.jpg", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Tiles//");
 			newImage.setName("SANDSTONE_ICON");
 			addtoImageArray(newImage);
 
 			// Rest of the icons
 			addtoImageArray(new GameImage("SLIME_6_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("RED_CASTLE_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_CASTLE_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
-			addtoImageArray(new GameImage("CHEST_ICON.png", CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, CreatorObject.SCALE
-					* ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
+			addtoImageArray(new GameImage("CHEST_ICON.png", (int)(CreatorObject.SCALE
+					* ServerWorld.TILE_SIZE), (int)(CreatorObject.SCALE
+							* ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("VENDOR_LEFT_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("SLIME_SPAWN.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("SLIME_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("BAT_SPAWN.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BAT_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("RED_GOBLIN_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN.png",
 					ServerWorld.TILE_SIZE, ServerWorld.TILE_SIZE, "Creatures//"));
 			addtoImageArray(new GameImage("BLUE_GOBLIN_SPAWN_ICON.png",
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE,
-					CreatorObject.SCALE * ServerWorld.TILE_SIZE, "Creatures//"));
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),
+					(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE), "Creatures//"));
 
 			addtoImageArray(new GameImage("VENDOR_RIGHT.png",
 					56, 72,
@@ -933,10 +983,6 @@ public class Images {
 
 			addtoImageArray(new GameImage("CHEST.png",
 					80, 48,
-					"Creatures//"));
-			addtoImageArray(new GameImage("RED_CASTLE.png",
-					"Creatures//"));
-			addtoImageArray(new GameImage("BLUE_CASTLE.png",
 					"Creatures//"));
 			addtoImageArray(new GameImage("COIN.png",
 					ClientFrame.getScaledWidth(10),
@@ -969,7 +1015,10 @@ public class Images {
 					INVENTORY_IMAGE_SIDELENGTH, INVENTORY_IMAGE_SIDELENGTH,
 					"Items//"));
 
-			addtoImageArray(new GameImage("BACKGROUND.png",
+			addtoImageArray(new GameImage("SKY.jpg",Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
+					"Background//"));
+			
+			addtoImageArray(new GameImage("DUSK.jpg",
 					Client.Client.SCREEN_WIDTH, Client.Client.SCREEN_HEIGHT,
 					"Background//"));
 
@@ -986,11 +1035,11 @@ public class Images {
 					(int) (ClientFrame.getScaledWidth(360)),
 					(int) (ClientFrame.getScaledHeight(400)), "Interface//"));
 			addtoImageArray(new GameImage("FindAGame.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("FindAGameClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAServer.png",
 					(int) (ClientFrame.getScaledWidth(268)),
 					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
@@ -998,24 +1047,66 @@ public class Images {
 					(int) (ClientFrame.getScaledWidth(268)),
 					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAMap.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("CreateAMapClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("Instructions.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("Leaderboards.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("LeaderboardsClicked.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
 			addtoImageArray(new GameImage("InstructionsClicked.png",
-					(int) (ClientFrame.getScaledWidth(268)),
-					(int) (ClientFrame.getScaledHeight(77)), "Interface//"));
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("Exit.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("ExitClicked.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(120)), "Interface//"));
+			addtoImageArray(new GameImage("Login.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("LoginClicked.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("Logout.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			addtoImageArray(new GameImage("LogoutClicked.png",
+					(int) (ClientFrame.getScaledWidth(180)),
+					(int) (ClientFrame.getScaledHeight(60)), "Interface//"));
+			
+			
 			addtoImageArray(new GameImage("WorldQuestOnline.png",
 					(int) (ClientFrame.getScaledWidth(1000)),
 					(int) (ClientFrame.getScaledHeight(250)), "Interface//"));
-
+			addtoImageArray(new GameImage("ProfileBackground.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(300)), "Interface//"));
+			addtoImageArray(new GameImage("nameGlow.png",
+					(int) (ClientFrame.getScaledWidth(360)),
+					(int) (ClientFrame.getScaledHeight(200)), "Interface//"));
+			
 			addtoImageArray(new GameImage("Inventory.png",
 					(int) (ClientFrame.getScaledWidth(300)),
 					Client.Client.SCREEN_HEIGHT, "Interface//"));
+			addtoImageArray(new GameImage("InventoryShadow.png",
+					(int) (ClientFrame.getScaledWidth(100)),
+					Client.Client.SCREEN_HEIGHT, "Interface//"));
+			
+			addtoImageArray(new GameImage("castleBarRed.png",
+					500,
+					40, "Interface//"));
+			addtoImageArray(new GameImage("castleBarBlue.png",
+					500,
+					40, "Interface//"));
 			
 			addtoImageArray(new GameImage("scoreboard.png",
 					(int) (ClientFrame.getScaledWidth(1366)),
@@ -1191,11 +1282,206 @@ public class Images {
 					ServerWorld.TILE_SIZE, "Tiles//"));
 			
 			addtoImageArray(new GameImage("Upgrade.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Interface//"));
-			addtoImageArray(new GameImage("BARRACKS_ICON.png", ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT,"Items//"));
 			
-			addtoImageArray(new GameImage("BARRACKS.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_GOOD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
-			addtoImageArray(new GameImage("BARRACKS_BAD.png",10*ServerWorld.TILE_SIZE, 8*ServerWorld.TILE_SIZE,"Buildings//"));
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_BARRACKS.png", image));
+			addtoImageArray(new GameImage("RED_BARRACKS.png", image));
+			addtoImageArray(new GameImage("BLUE_BARRACKS_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_BARRACKS_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BARRACKS.png",image));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "TOWER.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_TOWER.png", image));
+			addtoImageArray(new GameImage("RED_TOWER.png", image));
+			addtoImageArray(new GameImage("BLUE_TOWER_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_TOWER_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("TOWER_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("TOWER.png",image));
+			addtoImageArray(new GameImage("TOWER_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("TOWER_VALID.png","Buildings//"));
+			
+			
+			int height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("TOWER_"+i+".png",image));
+			}
+			
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("BARRACKS.png",image));
+			addtoImageArray(new GameImage("BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("BARRACKS_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("BARRACKS_"+i+".png",image));
+			}
+
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "WOOD_HOUSE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_WOOD_HOUSE.png", image));
+			addtoImageArray(new GameImage("RED_WOOD_HOUSE.png", image));
+			addtoImageArray(new GameImage("BLUE_WOOD_HOUSE_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_WOOD_HOUSE_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("WOOD_HOUSE_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("WOOD_HOUSE.png",image));
+			addtoImageArray(new GameImage("WOOD_HOUSE_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("WOOD_HOUSE_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("WOOD_HOUSE_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "GOLD_MINE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_GOLD_MINE.png", image));
+			addtoImageArray(new GameImage("RED_GOLD_MINE.png", image));
+			addtoImageArray(new GameImage("BLUE_GOLD_MINE_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_GOLD_MINE_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("GOLD_MINE_ICON.png",image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("GOLD_MINE.png",image));
+			addtoImageArray(new GameImage("GOLD_MINE_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINE_VALID.png","Buildings//"));
+			
+			addtoImageArray(new GameImage("GOLD_MINEg_0.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINEg_1.png","Buildings//"));
+			addtoImageArray(new GameImage("GOLD_MINEg_2.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("GOLD_MINE_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "ADV_BARRACKS.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_ADV_BARRACKS.png", image));
+			addtoImageArray(new GameImage("RED_ADV_BARRACKS.png", image));
+			addtoImageArray(new GameImage("BLUE_ADV_BARRACKS_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_ADV_BARRACKS_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("ADV_BARRACKS_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("ADV_BARRACKS.png",image));
+			addtoImageArray(new GameImage("ADV_BARRACKS_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("ADV_BARRACKS_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("ADV_BARRACKS_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "GIANT_FACTORY.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_GIANT_FACTORY.png", image));
+			addtoImageArray(new GameImage("RED_GIANT_FACTORY.png", image));
+			addtoImageArray(new GameImage("BLUE_GIANT_FACTORY_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_GIANT_FACTORY_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("GIANT_FACTORY_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("GIANT_FACTORY.png",image));
+			addtoImageArray(new GameImage("GIANT_FACTORY_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("GIANT_FACTORY_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("GIANT_FACTORY_"+i+".png",image));
+			}
+			
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "INN.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_INN.png", image));
+			addtoImageArray(new GameImage("RED_INN.png", image));
+			addtoImageArray(new GameImage("BLUE_INN_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("RED_INN_ICON.png", image,(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE),(int)(CreatorObject.SCALE * ServerWorld.TILE_SIZE)));
+			addtoImageArray(new GameImage("INN_ICON.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("INN.png",image));
+			addtoImageArray(new GameImage("INN_INVALID.png","Buildings//"));
+			addtoImageArray(new GameImage("INN_VALID.png","Buildings//"));
+			
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(null),image.getHeight(null)-(height/20));
+				addtoImageArray(new GameImage("INN_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "RED_CASTLE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("RED_CASTLE.png",
+					image));
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("RED_CASTLE_"+i+".png",image));
+			}
+			
+			try {
+				image = ImageIO.read(new File("Images//Buildings//" + "BLUE_CASTLE.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("BLUE_CASTLE.png",
+					image));
+			height = image.getHeight();
+			for (int i = 0; i < 20; i++)
+			{
+				image = image.getSubimage(0,0,image.getWidth(),image.getHeight()-(height/20));
+				addtoImageArray(new GameImage("BLUE_CASTLE_"+i+".png",image));
+			}
+			
+			for (int i = 1; i < 10; i++)
+			{
+				addtoImageArray(new GameImage("goldCoin" + i + ".png","Items//"));
+			}
+			
+			addtoImageArray(new GameImage("MERC.png","Interface//"));
+
 			image = null;
 		}
 

@@ -102,7 +102,7 @@ public class ServerWeaponSwing extends ServerObject
 			int timeInFrames, int damage)
 	{
 		super(owner.getX(), owner.getY(), -1, -1, 0, image,
-				ServerWorld.WEAPON_SWING_TYPE,owner.getWorld().getEngine());
+				ServerWorld.WEAPON_SWING_TYPE, owner.getWorld().getEngine());
 
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;
@@ -158,9 +158,10 @@ public class ServerWeaponSwing extends ServerObject
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
 		setImage(getBaseImage() + "_" + currentAngle + "");
-		
-		int soundNo = (int)(Math.random()*11);
-		owner.getWorld().playSound("cut_air"+soundNo, getX()+getWidth()/2, getY()+getHeight()/2);
+
+		int soundNo = (int) (Math.random() * 7);
+		owner.getWorld().playSound("cut_air" + soundNo,
+				getX() + getWidth() / 2, getY() + getHeight() / 2);
 
 	}
 
@@ -200,16 +201,24 @@ public class ServerWeaponSwing extends ServerObject
 		// Lock the weapon onto the player
 		setX(wielder.getX() + wielder.getWidth() / 2 - width / 2 + relativeX);
 		setY(wielder.getY() + wielder.getHeight() / 2 - height / 2 + relativeY);
-		
+
 		// Rotate the hitbox for the weapon
 		hitbox.setLine(
-				getX() + width / 2
+				getX()
+						+ width
+						/ 2
 						+ ((width / 8) * Math.cos(Math.toRadians(currentAngle))),
-				getY() + height / 2
+				getY()
+						+ height
+						/ 2
 						+ ((width / 8) * Math.sin(Math.toRadians(currentAngle))),
-				getX() + width / 2
+				getX()
+						+ width
+						/ 2
 						+ ((width / 2) * Math.cos(Math.toRadians(currentAngle))),
-				getY() + height / 2
+				getY()
+						+ height
+						/ 2
 						+ ((width / 2) * Math.sin(Math.toRadians(currentAngle))));
 
 		counter++;
@@ -245,20 +254,20 @@ public class ServerWeaponSwing extends ServerObject
 	public void addCollided(ServerObject other)
 	{
 		objectsCollided.add(other.getID());
-		owner.getWorld().playSound("cut", other.getX() + other.getWidth() / 2,
-				other.getY() + other.getHeight() / 2, this,
-				other);
+//		owner.getWorld().playSound("cut", other.getX() + other.getWidth() / 2,
+//				other.getY() + other.getHeight() / 2, this,
+//				other);
 	}
 
 	// ///////////////////////
 	// GETTERS AND SETTERS //
 	// ///////////////////////
-	
+
 	public ServerCreature getWielder()
 	{
 		return wielder;
 	}
-	
+
 	public int getDamage()
 	{
 		return damage;

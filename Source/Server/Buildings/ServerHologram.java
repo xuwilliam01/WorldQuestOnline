@@ -32,10 +32,40 @@ public class ServerHologram extends ServerObject{
 		
 		switch (imageType)
 		{
-		case ServerWorld.BARRACK_TYPE:
-			setImage("BARRACKS");
-			goodImageIndex = Images.getImageIndex("BARRACKS_GOOD");
-			badImageIndex = Images.getImageIndex("BARRACKS_BAD");
+		case ServerWorld.BASIC_BARRACKS_TYPE:
+			setImage("BARRACKS_VALID");
+			goodImageIndex = Images.getImageIndex("BARRACKS_VALID");
+			badImageIndex = Images.getImageIndex("BARRACKS_INVALID");
+			break;
+		case ServerWorld.ADV_BARRACKS_TYPE:
+			setImage("ADV_BARRACKS_VALID");
+			goodImageIndex = Images.getImageIndex("ADV_BARRACKS_VALID");
+			badImageIndex = Images.getImageIndex("ADV_BARRACKS_INVALID");
+			break;
+		case ServerWorld.GIANT_FACTORY_TYPE:
+			setImage("GIANT_FACTORY_VALID");
+			goodImageIndex = Images.getImageIndex("GIANT_FACTORY_VALID");
+			badImageIndex = Images.getImageIndex("GIANT_FACTORY_INVALID");
+			break;
+		case ServerWorld.WOOD_HOUSE_TYPE:
+			setImage("WOOD_HOUSE_VALID");
+			goodImageIndex = Images.getImageIndex("WOOD_HOUSE_VALID");
+			badImageIndex = Images.getImageIndex("WOOD_HOUSE_INVALID");
+			break;
+		case ServerWorld.INN_TYPE:
+			setImage("INN_VALID");
+			goodImageIndex = Images.getImageIndex("INN_VALID");
+			badImageIndex = Images.getImageIndex("INN_INVALID");
+			break;
+		case ServerWorld.TOWER_TYPE:
+			setImage("TOWER_INVALID");
+			goodImageIndex = Images.getImageIndex("TOWER_VALID");
+			badImageIndex = Images.getImageIndex("TOWER_INVALID");
+			break;
+		case ServerWorld.GOLD_MINE_TYPE:
+			setImage("GOLD_MINE_INVALID");
+			goodImageIndex = Images.getImageIndex("GOLD_MINE_VALID");
+			badImageIndex = Images.getImageIndex("GOLD_MINE_INVALID");
 			break;
 		}
 		

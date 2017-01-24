@@ -14,7 +14,7 @@ public class ServerChest extends ServerCreature
 	/**
 	 * The default HP of a chest
 	 */
-	public final static int CHEST_HP = 200;
+	public final static int CHEST_HP = 50;
 
 	/**
 	 * Max items a chest can have

@@ -12,6 +12,8 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
+import Server.Creatures.ServerCreature;
+import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
 import Server.Items.ServerWeapon;
@@ -30,6 +32,7 @@ public class ClientShopItem extends JButton implements ActionListener{
 	private int row;
 	private int col;
 	private ClientShop inventory;
+	
 	//private Image image;
 
 	/**
@@ -45,7 +48,7 @@ public class ClientShopItem extends JButton implements ActionListener{
 		this.row = row;
 		this.col = col;
 		this.inventory = inventory;
-
+		
 		setSize(ClientFrame.getScaledWidth(Images.INVENTORY_IMAGE_SIDELENGTH),ClientFrame.getScaledHeight(Images.INVENTORY_IMAGE_SIDELENGTH));
 		setLocation(ClientFrame.getScaledWidth(col*Images.INVENTORY_IMAGE_SIDELENGTH+(col+1)*20+20),ClientFrame.getScaledHeight(60 + row*(Images.INVENTORY_IMAGE_SIDELENGTH+20)+40));
 		setVisible(true);
@@ -184,21 +187,30 @@ public class ClientShopItem extends JButton implements ActionListener{
 	{
 		System.out.println("clicked");
 		//If the user has enough money
+		if(type.equals(ServerWorld.HP_POTION_TYPE) && inventory.getClient().getInventory().getNumHP() >= ServerPlayer.MAX_HP_POTS)
+			return;
+		if(type.equals(ServerWorld.MANA_POTION_TYPE) && inventory.getClient().getInventory().getNumMana() >= ServerPlayer.MAX_MANA_POTS)
+			return;
+		
 		if(inventory.getClient().getMoney() >= cost)
 		{
-			inventory.getClient().printToServer("B "+type);
-			inventory.getClient().decreaseMoney(cost);
-
-			if(amount > 1)
-			{
-				amount--;
-			}
-			else 
-				inventory.removeItem(this);
+			inventory.getClient().printToServer("B "+type+" "+ row + " "+col);
 		}	
-		repaint();
 	}
 
+	public void sell()
+	{
+		inventory.getClient().decreaseMoney(cost);
+
+		if(amount > 1)
+		{
+			amount--;
+		}
+		else 
+			inventory.removeItem(this);
+		repaint();
+	}
+	
 	/**
 	 * Paint the amount of the item
 	 */
