@@ -5,4 +5,11 @@
     <Elo>0</Elo>
     <Wins>0</Wins>
     <Losses>0</Losses>
-  </User></Root>
+  </User>
+  <User name="123123">
+    <Key>1616103354</Key>
+    <Elo>0</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
+  </User>
+</Root>

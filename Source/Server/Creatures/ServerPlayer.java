@@ -1428,7 +1428,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				//e.printStackTrace();
 				break;
 			} catch (NullPointerException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				break;
 			} catch (IndexOutOfBoundsException e) {
 				System.out.println("Indexing problem caught");

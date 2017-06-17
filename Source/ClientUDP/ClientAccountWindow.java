@@ -56,7 +56,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JButton menuLoginButton;
 	private Image logoutOver;
 	
-	public final static String IP = "45.32.7.97";
+	public final static String IP = "127.0.0.1";
 	
 	// public final static String IP = "74.12.138.159";
 	//public final static String IP = "127.0.0.1";
