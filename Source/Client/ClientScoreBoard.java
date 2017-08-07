@@ -3,16 +3,14 @@ package Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.ArrayList;
 import java.util.PriorityQueue;
-
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
+@SuppressWarnings("serial")
 public class ClientScoreBoard extends JPanel{
 
 	private PriorityQueue<ClientPlayerScore> redTeam = new PriorityQueue<ClientPlayerScore>();
@@ -21,7 +19,6 @@ public class ClientScoreBoard extends JPanel{
 	private boolean gameover = false;
 	private String winner = "Red Team";
 	private int team = 0;
-	private Client client;
 	
 	public ClientScoreBoard(Client client)
 	{
@@ -32,7 +29,6 @@ public class ClientScoreBoard extends JPanel{
 		setSize((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2);
 		setLocation((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/4 - ClientInventory.INVENTORY_WIDTH/2, Client.SCREEN_HEIGHT/4);
 		scoreboardImage = Images.getImage("scoreboard");
-		this.client = client;
 	}
 
 	public void setWinner(int loser)
@@ -50,8 +46,7 @@ public class ClientScoreBoard extends JPanel{
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		
-		int yPos = 100;
-		int xPos = (int)(0.5*Client.SCREEN_WIDTH/8);
+		int yPos = 100;;
 
 		graphics.drawImage(scoreboardImage, 0, 0, (Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2, null);
 
@@ -69,7 +64,6 @@ public class ClientScoreBoard extends JPanel{
 		
 		graphics.setColor(Color.WHITE);
 		yPos = ClientFrame.getScaledHeight(140);
-		xPos = ClientFrame.getScaledWidth(58);
 		
 		for(ClientPlayerScore player: redTeam)
 		{
@@ -95,14 +89,12 @@ public class ClientScoreBoard extends JPanel{
 		}
 
 		yPos = ClientFrame.getScaledHeight(140);
-		xPos = ClientFrame.getScaledWidth(440);
 		graphics.setColor(Color.WHITE);
 		for(ClientPlayerScore player: blueTeam)
 		{
 			int fieldWidth = 130;
 			String name = player.getName();
 			int currentWidth = graphics.getFontMetrics().stringWidth("...");
-			int endIndex = 0;
 			for (int i=0; i<name.length(); i++){
 				int letterWidth = graphics.getFontMetrics().stringWidth(name.charAt(i)+"");
 				currentWidth += letterWidth;

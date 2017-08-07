@@ -2,11 +2,8 @@ package Server.Creatures;
 
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Items.ServerPotion;
 import Server.Items.ServerItem;
 import Server.Spawners.ServerBatSpawner;
-import Server.Spawners.ServerSlimeSpawner;
-import Server.Spawners.ServerSpawner;
 
 /**
  * A bat enemy

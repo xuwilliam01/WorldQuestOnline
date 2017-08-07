@@ -6,15 +6,11 @@ import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import Imports.ImageReferencePair;
 import Imports.Images;
@@ -179,7 +175,7 @@ public class ClientWorld {
 	 */
 	private double alphaMultiplier;
 
-	private ArrayList<ClientStar> stars;
+	//private ArrayList<ClientStar> stars;
 
 	private Client client;
 
@@ -593,7 +589,7 @@ public class ClientWorld {
 			clouds.add(new ClientCloud(x, y, hSpeed, 0, image));
 		}
 
-		stars = new ArrayList<ClientStar>();
+		//stars = new ArrayList<ClientStar>();
 
 		centreX = Client.SCREEN_WIDTH / 2 - ServerPlayer.DEFAULT_WIDTH / 2;
 		centreY = Client.SCREEN_HEIGHT / 2 - ServerPlayer.DEFAULT_HEIGHT / 2;
@@ -1209,7 +1205,7 @@ public class ClientWorld {
 	}
 
 	public void setWorldTime(int worldTime) {
-		this.worldTime = worldTime;
+		ClientWorld.worldTime = worldTime;
 	}
 
 	public void addToRemove(ClientObject object) {

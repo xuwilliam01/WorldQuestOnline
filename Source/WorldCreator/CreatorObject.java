@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import Client.ClientFrame;
-import Imports.GameImage;
 import Imports.ImageReferencePair;
 import Imports.Images;
 
@@ -20,6 +19,7 @@ import Imports.Images;
  * @author Alex Raita & William Xu
  *
  */
+@SuppressWarnings("serial")
 public class CreatorObject extends JButton implements MouseListener
 {
 	public final static double SCALE = 1.5;

@@ -2,9 +2,6 @@ package Server.Spawners;
 
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Creatures.ServerCreature;
-import Server.Creatures.ServerEnemy;
-import Server.Creatures.ServerPlayer;
 
 /**
  * Spawns a given creature to the world

@@ -12,10 +12,10 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Buildings.ServerCastle;
 import Server.Buildings.ServerHouse;
 import Server.Items.ServerBuildingItem;
 
+@SuppressWarnings("serial")
 public class ClientCastleShopItem extends JButton implements ActionListener{
 
 	public static final int WIDTH = 75;

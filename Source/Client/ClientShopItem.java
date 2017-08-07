@@ -2,7 +2,6 @@ package Client;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,7 +11,6 @@ import javax.swing.JButton;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;
@@ -23,9 +21,9 @@ import Server.Items.ServerWeapon;
  * @author Alex Raita & William Xu
  *
  */
+@SuppressWarnings("serial")
 public class ClientShopItem extends JButton implements ActionListener{
 
-	private String imageName;
 	private String type;
 	private int amount;
 	private int cost;
@@ -41,7 +39,6 @@ public class ClientShopItem extends JButton implements ActionListener{
 	public ClientShopItem(String imageName, String type,int amount,int cost,int row, int col, ClientShop inventory)
 	{
 		super(new ImageIcon(Images.getImage(imageName).getScaledInstance(ClientFrame.getScaledWidth(Images.INVENTORY_IMAGE_SIDELENGTH), ClientFrame.getScaledHeight(Images.INVENTORY_IMAGE_SIDELENGTH), 0)));
-		this.imageName = imageName;
 		this.type = type;
 		this.amount = amount;
 		this.cost = cost;

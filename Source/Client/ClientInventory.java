@@ -19,7 +19,6 @@ import javax.swing.ToolTipManager;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
@@ -50,7 +49,6 @@ public class ClientInventory extends JPanel implements ActionListener
 	private Client client;
 
 	public JButton mainMenu;
-	private JButton switchTeams;
 
 	private ArrayList<ClientItem> removeList = new ArrayList<ClientItem>();
 

@@ -5,8 +5,6 @@ import java.io.IOException;
 import org.jdom2.JDOMException;
 
 import CentralServer.CentralServer;
-import ClientUDP.ClientAccountWindow;
-import ClientUDP.Leaderboard;
 
 public class StartCentralServer {
 	public static void main(String[] args) throws IOException, JDOMException {

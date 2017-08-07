@@ -12,17 +12,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Timer;
-import java.awt.Canvas;
-import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -34,8 +27,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import com.sun.corba.se.spi.activation.Server;
-
 import ClientUDP.ClientAccountWindow;
 import Imports.Audio;
 import Imports.Images;
@@ -43,7 +34,6 @@ import Server.ServerEngine;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
-import Server.Items.ServerPotion;
 
 @SuppressWarnings("serial")
 /**
@@ -194,11 +184,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private int FPScounter = 0;
 
 	/**
-	 * The startTime for checking FPS (for server reading)
-	 */
-	private long startTime2 = 0;
-
-	/**
 	 * A counter updating every repaint and reseting at the expected FPS (for
 	 * server reading)
 	 */
@@ -238,9 +223,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private boolean writingMessage = false;
 
 	public boolean leaveGame;
-
-	private int deathTime = 0;
-	private float fillAmount = 0;
 
 	private boolean isDropping = false;
 	private boolean inAction = false;
@@ -441,7 +423,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					// Update the FPS counter
 					if (FPScounter2 >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5)) {
 						FPScounter2 = 0;
-						startTime2 = System.currentTimeMillis();
 					}
 
 					FPScounter2++;
@@ -1216,8 +1197,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			// Draw death message if applicable
 			if (getHP() > 0) {
 				setJustDied(true);
-				deathTime = 1;
-				fillAmount = 0;
 			} else {
 				if (isJustDied()) {
 					getInventory().clear();

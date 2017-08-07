@@ -2,10 +2,8 @@ package Server.Creatures;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import Imports.Audio;
@@ -22,7 +20,6 @@ import Server.Items.ServerArmour;
 import Server.Items.ServerBuildingItem;
 import Server.Items.ServerItem;
 import Server.Items.ServerMoney;
-import Server.Items.ServerPotion;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
@@ -236,11 +233,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private int maxMana;
 
 	/**
-	 * When the player joined the server
-	 */
-	private long joinTime;
-
-	/**
 	 * The current text floating on top of the player
 	 */
 	private String currentText = "";
@@ -329,7 +321,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		this.engine = engine;
 		xUpdated = true;
 		yUpdated = true;
-		this.joinTime = getWorld().getWorldCounter();
 
 		this.output = output;
 		this.input = input;
@@ -422,7 +413,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private long lastCheck = 0;
 	private double lastX = 0;
-	private double lastY = 0;
 
 
 	/**
@@ -437,7 +427,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		{
 			lastCheck = System.currentTimeMillis();
 			lastX = getX();
-			lastY = getY();
 		}
 		else if ((time=System.currentTimeMillis()-lastCheck) >= 3000)
 		{
@@ -469,7 +458,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				disconnect = true;
 			}
 			lastX = getX();
-			lastY = getY();
 			lastCheck = System.currentTimeMillis();
 		}
 

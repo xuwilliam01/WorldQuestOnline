@@ -1,8 +1,6 @@
 package ClientUDP;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -15,19 +13,18 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
 
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+@SuppressWarnings("serial")
 public class ClientServerSelection extends JFrame implements Runnable, WindowListener, ActionListener{
 
 	private DatagramSocket socket;

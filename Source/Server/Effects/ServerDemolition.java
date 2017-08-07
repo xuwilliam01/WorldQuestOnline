@@ -2,7 +2,6 @@ package Server.Effects;
 
 import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 public class ServerDemolition extends ServerObject{

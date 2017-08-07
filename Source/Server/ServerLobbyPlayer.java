@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -12,7 +11,6 @@ import Server.Creatures.ServerCreature;
 
 public class ServerLobbyPlayer implements Runnable
 {
-	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
 	private boolean isLeader = false;
@@ -31,7 +29,6 @@ public class ServerLobbyPlayer implements Runnable
 
 	public ServerLobbyPlayer(Socket socket, BufferedReader input, PrintWriter output, Server server)
 	{
-		this.socket = socket;
 		this.IP = socket.getInetAddress().toString();
 		this.server = server;
 		this.team = nextTeam % 2 + 1;

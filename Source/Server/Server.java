@@ -11,7 +11,6 @@ import java.util.ConcurrentModificationException;
 
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
-import Server.Items.ServerMoney;
 
 /**
  * Creates a new world and accepts new client connections

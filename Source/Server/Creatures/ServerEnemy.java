@@ -2,8 +2,6 @@ package Server.Creatures;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import Server.ServerEngine;
 import Server.ServerWorld;
 import Server.Spawners.ServerSpawner;
 

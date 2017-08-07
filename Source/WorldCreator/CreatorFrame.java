@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 
 import Client.Client;
 import Client.ClientInventory;
-import Server.Creatures.ServerPlayer;
 
 /**
  * Frame for the world creator
@@ -17,6 +16,7 @@ import Server.Creatures.ServerPlayer;
  * @author Alex Raita & William Xu
  *
  */
+@SuppressWarnings("serial")
 public class CreatorFrame extends JFrame {
 
 	/**

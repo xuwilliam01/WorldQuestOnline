@@ -2,7 +2,6 @@ package Server.Buildings;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 import Server.ServerObject;
@@ -14,9 +13,7 @@ import Server.Effects.ServerText;
 import Server.Items.ServerBuildingItem;
 import Server.Items.ServerMoney;
 import Server.Items.ServerPotion;
-import Server.Items.ServerProjectile;
 import Server.Spawners.ServerGoblinSpawner;
-import Server.Spawners.ServerSpawner;
 
 /**
  * A castle for a given team

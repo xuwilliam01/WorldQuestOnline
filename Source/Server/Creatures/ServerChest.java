@@ -2,7 +2,6 @@ package Server.Creatures;
 
 import Server.ServerWorld;
 import Server.Items.ServerItem;
-import Server.Items.ServerPotion;
 
 /**
  * A chest that contains items

@@ -1,16 +1,13 @@
 package Server;
 
-import Client.ClientInventory;
 import Client.ClientWorld;
 import Client.Client.JTextFieldLimit;
 import Imports.ImageReferencePair;
-import Imports.Images;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -153,7 +150,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 */
 	private int dragSourceY;
 
-	private Image background = Images.getImage("SKY");
+	//private Image background = Images.getImage("SKY");
 
 	// Movement booleans
 	private boolean up = false;

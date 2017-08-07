@@ -3,7 +3,6 @@ package START;
 import java.net.SocketException;
 import java.util.Scanner;
 
-import Client.ClientFrame;
 import Imports.Audio;
 import Imports.GameImage;
 import Imports.Images;

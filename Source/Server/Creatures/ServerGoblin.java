@@ -1,9 +1,5 @@
 package Server.Creatures;
 
-import java.util.ArrayList;
-
-import Imports.Audio;
-import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
 import Server.Effects.ServerText;

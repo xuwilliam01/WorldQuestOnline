@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import Imports.Images;
 import Server.ServerWorld;
 import Server.Buildings.ServerHouse;
-import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 import Server.Items.ServerArmour;
 import Server.Items.ServerPotion;

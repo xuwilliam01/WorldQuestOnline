@@ -1,17 +1,10 @@
 package Client;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-
-import Imports.Images;
 
 @SuppressWarnings("serial")
 /**
@@ -50,14 +43,6 @@ public class ClientFrame extends JFrame
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 		setVisible(true);
-
-	}
-
-	/**
-	 * Have the player choose their account
-	 */
-	private void chooseAccount()
-	{
 
 	}
 

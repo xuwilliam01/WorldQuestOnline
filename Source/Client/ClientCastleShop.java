@@ -6,17 +6,12 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Buildings.ServerCastle;
-import Server.Creatures.ServerCreature;
-import Server.Items.ServerBuildingItem;
 
+@SuppressWarnings("serial")
 public class ClientCastleShop extends JPanel implements ActionListener{
 	
 	public final static int SHOP_WIDTH = 1000;
@@ -25,7 +20,6 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	private Client client; //Maybe not needed
 	private int money;
 	
-	private JButton hireMerc;
 	private Image coinImage = Images.getImage("COIN");
 	
 	public ClientCastleShop(Client client, int money)

@@ -12,12 +12,14 @@ import Menu.MainMenu;
  */
 public class StartGame {
 
+	static MainMenu menu;
+	
 	/**
 	 * Start the game
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MainMenu menu = new MainMenu(null);
+		menu = new MainMenu(null);
 
 	}
 	
@@ -31,6 +33,6 @@ public class StartGame {
 		oldFrame.setVisible(false);
 		oldFrame.dispose();
 		oldFrame.removeAll();
-		MainMenu menu = new MainMenu(pos);
+		menu = new MainMenu(pos);
 	}
 }

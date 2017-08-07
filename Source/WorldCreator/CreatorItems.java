@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,21 +14,19 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 
 import Client.ClientFrame;
-import Imports.Images;
 
 /**
  * Stores the possible items that can be added to the world
  * 
  * @author Alex Raita & William Xu
  */
+@SuppressWarnings("serial")
 public class CreatorItems extends JPanel implements ActionListener {
 
 	public static int WIDTH = 300;

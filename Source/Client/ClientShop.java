@@ -9,13 +9,13 @@ import javax.swing.JPanel;
 
 import Imports.Images;
 import Server.ServerWorld;
-import Server.Creatures.ServerVendor;
 
 /**
  * The shop for the client. Works very similar to the inventory
  * @author Alex Raita & William Xu
  *
  */
+@SuppressWarnings("serial")
 public class ClientShop extends JPanel{
 
 	public final static int SHOP_WIDTH = 560;

@@ -1,6 +1,5 @@
 package Server.Effects;
 
-import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 

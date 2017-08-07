@@ -23,10 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import CentralServer.LeaderboardPlayer;
-import Client.Client;
-import Client.ClientInventory;
 import Menu.MainMenu;
 
+@SuppressWarnings("serial")
 public class Leaderboard extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener{
 
 	public static final int LEADERBOARD_DISPLAY_SIZE = 20;

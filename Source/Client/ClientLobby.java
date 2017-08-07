@@ -10,7 +10,6 @@ import javax.swing.Timer;
 import Imports.Images;
 import Menu.MainMenu;
 import Menu.MainMenu.GamePanel;
-import Server.ServerFrame;
 import Server.Creatures.ServerCreature;
 import Client.Client.JTextFieldLimit;
 import ClientUDP.ClientAccountWindow;
@@ -23,11 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -38,6 +33,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+@SuppressWarnings("serial")
 public class ClientLobby extends JPanel implements ActionListener, KeyListener
 {
 
@@ -319,7 +315,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("CH"))
 					{
-						char who = tokens[++token].charAt(0);
 						int nameLen = Integer.parseInt(tokens[++token]);
 						String name = tokens[++token];
 

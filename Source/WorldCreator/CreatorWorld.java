@@ -15,30 +15,24 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import Imports.Audio;
 import Imports.ImageReferencePair;
 import Imports.Images;
-import Server.ServerFrame;
-import Server.ServerGUI;
-import Server.ServerObject;
 import Server.ServerWorld;
-import Server.Creatures.ServerSlime;
 
 /**
  * The world for the creator that draws everything
  * @author Alex Raita & William Xu
  *
  */
+@SuppressWarnings("serial")
 public class CreatorWorld extends JPanel implements KeyListener,
 ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 {

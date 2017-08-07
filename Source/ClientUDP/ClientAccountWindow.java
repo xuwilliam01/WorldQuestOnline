@@ -13,14 +13,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,6 +32,7 @@ import javax.swing.text.PlainDocument;
 
 import Menu.MainMenu;
 
+@SuppressWarnings("serial")
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
 
 	public static final String CREDS_PATH = "Resources//savedata";
@@ -350,7 +348,9 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	}
 	
 	public class JTextFieldLimit extends PlainDocument {
-		  private int limit;
+
+		private static final long serialVersionUID = 1L;
+		private int limit;
 
 		  JTextFieldLimit(int limit) {
 		   super();

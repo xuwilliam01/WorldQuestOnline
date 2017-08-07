@@ -4,7 +4,6 @@ import Imports.Images;
 import Server.ServerWorld;
 import Server.Creatures.ServerCreature;
 import Server.Effects.ServerDemolition;
-import Server.Effects.ServerSmoke;
 
 public abstract class ServerBuilding extends ServerCreature {
 

@@ -1,7 +1,6 @@
 package Client;
 
 import java.awt.Color;
-import java.awt.Font;
 
 import Imports.Images;
 import Server.ServerWorld;

@@ -1,7 +1,5 @@
 package Server.Effects;
 
-import java.util.ArrayList;
-
 import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
