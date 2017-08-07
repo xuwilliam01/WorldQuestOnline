@@ -829,7 +829,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					}
 				}
 
-				if (System.nanoTime() - startPaint > 14 * 1000000) {
+				if (System.nanoTime() - startPaint > 7 * 1000000) {
 					clientUpdatePlayer(System.nanoTime() - startPaint);
 					startPaint = System.nanoTime();
 					repaint();
@@ -1247,7 +1247,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			}
 
 			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-			graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()), Client.SCREEN_WIDTH - 60, 40);
+			graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 60, 40);
 
 			graphics.drawImage(Images.getImage("InventoryShadow"),
 					Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
@@ -1426,8 +1426,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		// Update the FPS counter
 		if (FPScounter >= (1000.0 / ServerEngine.UPDATE_RATE + 0.5)) {
 			FPScounter = 0;
-			currentFPS = Math
-					.min((int) ((1000.0 / (System.currentTimeMillis() - startTime) * (1000.0 / ServerEngine.UPDATE_RATE)
+			currentFPS = Math.min((int) ((1000.0 / (System.currentTimeMillis() - startTime) * (1000.0 / ServerEngine.UPDATE_RATE)
 							+ 0.5)), 120);
 			startTime = System.currentTimeMillis();
 		}
@@ -1436,8 +1435,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		// graphics.drawImage(Images.getImage("Cursor"),mouseX,mouseY,null);
 
 		if ((++noOfTicks) > 60) {
-			// System.out.println("Repaints per second: " +
-			// (int)(noOfTicks/(1.0*System.currentTimeMillis()-start)*1000.0));
 			start = System.currentTimeMillis();
 			noOfTicks = 0;
 		}
