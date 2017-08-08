@@ -599,7 +599,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									jump = Integer.parseInt(tokens[++token]);
 									break;
 								case 'a':
-
 									Audio.playAudio(Integer.parseInt(tokens[++token]),
 											(float) (Math.sqrt((toInt(tokens[++token]) - playerX)
 													* (toInt(tokens[token]) - playerX)

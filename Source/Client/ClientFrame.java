@@ -20,7 +20,6 @@ public class ClientFrame extends JFrame
 	 */
 	public ClientFrame(boolean tooLarge, Point pos)
 	{
-
 		setBackground(Color.BLACK);
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH
 				+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));

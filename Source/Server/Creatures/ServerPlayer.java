@@ -461,10 +461,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			lastCheck = System.currentTimeMillis();
 		}
 
-
-
-
-
 		if (exists()) {
 			// Change the player's facing direction after its current action
 			if (actionCounter < 0 && action == NOTHING) {
