@@ -584,7 +584,7 @@ public class MainMenu implements KeyListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			statsCounter++;
-			if (statsCounter % 60 == 0)
+			if (statsCounter % 60 == 0 && numTries < 3)
 			{
 				if (ClientAccountWindow.loggedIn && rating.equals("-")) {
 					sendData = ("S " + ClientAccountWindow.savedUser).getBytes();
@@ -607,10 +607,9 @@ public class MainMenu implements KeyListener {
 					e1.printStackTrace();
 				}
 				numTries++;
-				if(numTries > 5)
+				if(numTries == 3)
 				{
-					JOptionPane.showMessageDialog(this, "Could not connect to the Central Server\n(Check online for an update?)");
-					numTries = 0;
+					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or join a friend's)");
 				}
 			}
 			repaint();
