@@ -230,7 +230,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 	private static long packetNo = 0;
 
-	private int respawnTime = 10;
+	private int respawnTime = 5;
 
 	public static boolean inGame = false;
 
@@ -783,7 +783,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									bluePopLimit = Integer.parseInt(tokens[++token]);
 									break;
 								case 'r':
-									respawnTime = 10 - Integer.parseInt(tokens[++token]) / 60;
+									respawnTime = 5 - Integer.parseInt(tokens[++token]) / 60;
 									break;
 								case '-':
 									JOptionPane.showMessageDialog(null,
@@ -834,6 +834,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		}
 		double currHSpeed = 0;
 		double currVSpeed = 0;
+		
+		if (this.getHP()<=0)
+		{
+			hSpeed = 0;
+		}
+		
 		if (!inAction) {
 			double gravity = ServerWorld.GRAVITY * (timeForTick / (ServerEngine.UPDATE_RATE * 1000000.0));
 

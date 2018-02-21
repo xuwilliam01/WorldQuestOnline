@@ -537,7 +537,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					setRowCol(new RowCol(5, 1));
 				} else if (getWorld().getWorldCounter() - deathCounter < 20) {
 					setRowCol(new RowCol(5, 2));
-				} else if (getWorld().getWorldCounter() - deathCounter < 600) {
+				} else if (getWorld().getWorldCounter() - deathCounter < 300) { // Respawn time here
 					setRowCol(new RowCol(5, 4));
 				} else {
 					int randomStartWeapon = (int) (Math.random() * 3);
