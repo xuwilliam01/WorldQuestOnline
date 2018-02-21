@@ -233,6 +233,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	private int respawnTime = 5;
 
 	public static boolean inGame = false;
+	
+	private boolean isDead = false;
 
 	/**
 	 * Constructor for the client
@@ -837,7 +839,16 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 		
 		if (this.getHP()<=0)
 		{
-			hSpeed = 0;
+			if (!this.isDead())
+			{
+				this.setDead(true);
+				hSpeed = 0;
+				vSpeed = 0;
+			}
+		}
+		else if (this.isDead())
+		{
+			this.setDead(false);
 		}
 		
 		if (!inAction) {
@@ -2120,5 +2131,15 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	{
 		return leaveGame;
 	}
+
+	public boolean isDead() {
+		return isDead;
+	}
+
+	public void setDead(boolean isDead) {
+		this.isDead = isDead;
+	}
+	
+	
 
 }
