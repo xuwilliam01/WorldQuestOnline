@@ -11,7 +11,7 @@ public class ServerBuildingItem extends ServerItem{
 	public static final int INN_COST = 10;
 	public static final int TOWER_COST = 12;
 	public static final int GOLD_MINE_COST = 20;
-	public static final int MERC_COST = 8;
+	public static final int MERC_COST = 10;
 	
 	private String buildingType;
 	

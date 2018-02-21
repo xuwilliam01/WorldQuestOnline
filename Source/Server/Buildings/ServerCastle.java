@@ -374,7 +374,7 @@ public class ServerCastle extends ServerBuilding {
 		if (getMoney()>= ServerBuildingItem.MERC_COST && population < popLimit)
 		{
 			spendMoney(ServerBuildingItem.MERC_COST);
-			for (int no = 0; no < 10; no++)
+			for (int no = 0; no < 5; no++)
 			{
 				spawnGoblin(ServerGoblin.GOBLIN_NINJA_NO);
 				spawnGoblin(ServerGoblin.GOBLIN_SAMURAI_NO);

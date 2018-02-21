@@ -79,7 +79,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("MERC")));
 			setLocation(ClientFrame.getScaledWidth(550), ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.MERC_COST;
-			setToolTipText("Hire 20 Mercenaries to fight for you");
+			setToolTipText("Hire 10 mercenaries to fight for you");
 			break;
 		}
 		setVisible(true);
