@@ -1031,7 +1031,10 @@ public class ClientWorld {
 					// Draw a hint if necessary
 					// DOES NOT DRAW OVER SOLID TILES
 					if (player.collidesWith(object) && !object.getHint().equals("")) {
-						displayedText = object.getHint();
+						if (!object.getType().equals(ServerWorld.CASTLE_TYPE) || object.getTeam()==player.getTeam())
+						{
+							displayedText = object.getHint();
+						}
 					}
 				}
 			}
