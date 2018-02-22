@@ -407,7 +407,7 @@ public class MainMenu implements KeyListener {
 			exitButton = new JButton(new ImageIcon(exitImage));
 			exitButton.setSize(exitImage.getWidth(null), exitImage.getHeight(null));
 			exitButton.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - exitImage.getWidth(null),
-					currentButtonY - 50);
+					currentButtonY - 75);
 			exitButton.setBorder(BorderFactory.createEmptyBorder());
 			exitButton.setContentAreaFilled(false);
 			exitButton.setOpaque(false);

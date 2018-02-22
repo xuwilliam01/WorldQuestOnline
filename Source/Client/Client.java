@@ -1241,8 +1241,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 				graphics.setColor(Color.BLUE);
 			}
 
-			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 60, 20);
-			graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 60, 40);
+			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 70, 20);
+			graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 70, 40);
 
 			graphics.drawImage(Images.getImage("InventoryShadow"),
 					Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
@@ -1294,8 +1294,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 				hourString += hour;
 				minuteString += minute;
 
-				graphics.drawString(hourString + ":" + minuteString + " " + amPm, Client.SCREEN_WIDTH - 60, 60);
-				graphics.drawString(timeOfDay, Client.SCREEN_WIDTH - 60, 80);
+				graphics.drawString(hourString + ":" + minuteString + " " + amPm, Client.SCREEN_WIDTH - 70, 60);
+				graphics.drawString(timeOfDay, Client.SCREEN_WIDTH - 70, 80);
 			}
 
 			// Draw the chat

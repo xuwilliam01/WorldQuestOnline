@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class ClientServerSelection extends JFrame implements Runnable, WindowListener, ActionListener{
@@ -40,12 +41,18 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private JButton refresh = new JButton("Refresh");
 	private JButton connect = new JButton("Connect");
 	private JButton manualConnect = new JButton("Manual Connect");
+	private Timer timer;
 	
 	
 	private JTable table;
 	private JScrollPane scrollTable;
 	private int NUM_ROWS = 12;
 	private final static String[] columns = {"Name", "Status", "Ping"};
+	
+	// For checking if a server exists, using system elapsed time
+	private long signalBegin = Long.MAX_VALUE / 2;
+	private final long SIGNAL_TIME_LIMIT = 500;
+	
 	/**
 	 * Name, capacity, ping
 	 */
@@ -99,8 +106,10 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		refresh.doClick();
 		repaint();
 
+		timer = new Timer(200, this);
+		timer.start();
 	}
-
+	
 	public void initTable()
 	{
 		table = new JTable(serversData, columns)
@@ -134,7 +143,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			socket.send(send);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -191,7 +200,36 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			//Checks if server IP is the same as your external IP
 			//Must use 127.0.0.1 in this case
 			send("C", IP, destination.getPort());
+			this.setSignalBegin(System.currentTimeMillis());
 		}
+	}
+	
+	public void manualConnect()
+	{
+		String IP = JOptionPane.showInputDialog("Please enter the server's IP address");
+		
+		if (IP == null)
+		{
+			return;
+		}
+		else if (IP == "")
+		{
+			JOptionPane.showMessageDialog(null, "Could not connect to server", "Sorry!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		//Checks if server IP is the same as your external IP
+		//Must use 127.0.0.1 in this case
+		try {
+			send("C", IP, MainMenu.DEF_PORT);
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "Could not connect to server", "Sorry!", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		this.setSignalBegin(System.currentTimeMillis());
 	}
 
 	public void run() {
@@ -202,6 +240,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			try {
 				receiveData = new byte[1024];
 				receive = new DatagramPacket(receiveData, receiveData.length);
+				
 				try {
 					socket.receive(receive);
 				} catch (Exception e) {
@@ -337,6 +376,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 					break;
 				case 'C':
 					open = false;
+					this.setSignalBegin(Long.MAX_VALUE / 2);
 					IP = receive.getAddress().toString();
 					if(!Character.isDigit(IP.charAt(0)))
 						IP = IP.substring(1);
@@ -409,12 +449,21 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent button) {
-		if(button.getSource() == refresh)
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == timer)
+		{
+			if (System.currentTimeMillis() >= this.getSignalBegin() + this.SIGNAL_TIME_LIMIT)
+			{
+				JOptionPane.showMessageDialog(null, "Could not connect to server", "Sorry!", JOptionPane.ERROR_MESSAGE);
+				this.setSignalBegin(Long.MAX_VALUE / 2);
+			}
+		}
+		else if(event.getSource() == refresh)
 			refresh();
-		else if(button.getSource() == connect)
+		else if(event.getSource() == connect)
 			connect();
-
+		else if (event.getSource() == manualConnect)
+			manualConnect();
 	}
 
 	private class TableListener implements MouseListener {
@@ -467,6 +516,15 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 	}
 
+	public long getSignalBegin() {
+		return signalBegin;
+	}
+
+	public void setSignalBegin(long signalBegin) {
+		this.signalBegin = signalBegin;
+	}
+
+	
 
 }
 
