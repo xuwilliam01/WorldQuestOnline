@@ -407,7 +407,7 @@ public class MainMenu implements KeyListener {
 			exitButton = new JButton(new ImageIcon(exitImage));
 			exitButton.setSize(exitImage.getWidth(null), exitImage.getHeight(null));
 			exitButton.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - exitImage.getWidth(null),
-					currentButtonY + 20);
+					currentButtonY - 50);
 			exitButton.setBorder(BorderFactory.createEmptyBorder());
 			exitButton.setContentAreaFilled(false);
 			exitButton.setOpaque(false);
@@ -425,16 +425,18 @@ public class MainMenu implements KeyListener {
 			// directConnect.addMouseListener(this);
 			// add(directConnect);
 
+			/*
 			createServer = new JButton(new ImageIcon(createServerImage));
 			createServer.setSize(createServerImage.getWidth(null), createServerImage.getHeight(null));
-			createServer.setLocation(300 + middle - instructionsImage.getWidth(null) / 2,
-					(int) (990 * (Client.SCREEN_HEIGHT / 1080.0)));
+			createServer.setLocation(Client.SCREEN_WIDTH + ClientInventory.INVENTORY_WIDTH - exitImage.getWidth(null),
+					currentButtonY + 30);
 			createServer.setBorder(BorderFactory.createEmptyBorder());
 			createServer.setContentAreaFilled(false);
 			createServer.setOpaque(false);
 			createServer.addActionListener(new StartServer());
 			createServer.addMouseListener(this);
-			//add(createServer);
+			add(createServer);
+			*/
 
 			ClientAccountWindow.checkLogin();
 			if (ClientAccountWindow.loggedIn) {

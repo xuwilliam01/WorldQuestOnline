@@ -342,6 +342,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			graphics.drawString(map, 270 + graphics.getFontMetrics()
 					.stringWidth("Map: "), 15);
 		}
+		else
+		{
+			graphics.drawString("In Lobby", 270 + graphics.getFontMetrics()
+			.stringWidth("Map: "), 15);
+		}
 		while (true)
 		{
 			try

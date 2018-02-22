@@ -26,7 +26,7 @@ public class StartServer {
 		Audio.importAudio(false);
 		Maps.importMaps();
 
-		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS);
+		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS, false, true);
 
 		Thread serverThread = new Thread(server);
 

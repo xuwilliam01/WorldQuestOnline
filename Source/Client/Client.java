@@ -294,9 +294,9 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 */
 	private void serverClosed() {
 		if (!leaveGame) {
-			System.out.println("Server was closed");
+			System.out.println("Connection lost");
 			world.clear();
-			JOptionPane.showMessageDialog(null, "Server was closed", "Server", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Connection lost", "Server", JOptionPane.ERROR_MESSAGE);
 			inventory.getMenuButton().doClick();
 			leaveGame = true;
 		}

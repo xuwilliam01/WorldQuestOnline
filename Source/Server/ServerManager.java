@@ -15,6 +15,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import Client.ClientFrame;
@@ -58,11 +59,31 @@ public class ServerManager implements Runnable, ActionListener{
 	 * @throws SocketException 
 	 */
 	public ServerManager(String name, int port, int maxRooms, ClientFrame mainFrame) throws SocketException {
+		
+		// Inactive constructor
+		
 		this.name = name;
 		if(name.contains("1v1"))
 		{
 			Server.MAX_PLAYERS = 2;
 		}
+		else if (name.contains("2v2"))
+		{
+			Server.MAX_PLAYERS = 4;
+		}
+		else if (name.contains("3v3"))
+		{
+			Server.MAX_PLAYERS = 6;
+		}
+		else if (name.contains("4v4"))
+		{
+			Server.MAX_PLAYERS = 8;
+		}
+		else if (name.contains("5v5"))
+		{
+			Server.MAX_PLAYERS = 10;
+		}
+		
 		this.maxRooms = maxRooms;
 		this.mainFrame = mainFrame;	
 		thisPort = port;
@@ -93,15 +114,31 @@ public class ServerManager implements Runnable, ActionListener{
 	 * @param mainFrame
 	 * @throws SocketException 
 	 */
-	public ServerManager(String name, int port, int maxRooms) throws SocketException {
+	public ServerManager(String name, int port, int maxRooms, boolean withWindow, boolean isListed) throws SocketException {
 		this.name = name;
 		if(name.contains("1v1"))
 		{
 			Server.MAX_PLAYERS = 2;
 		}
+		else if (name.contains("2v2"))
+		{
+			Server.MAX_PLAYERS = 4;
+		}
+		else if (name.contains("3v3"))
+		{
+			Server.MAX_PLAYERS = 6;
+		}
+		else if (name.contains("4v4"))
+		{
+			Server.MAX_PLAYERS = 8;
+		}
+		else if (name.contains("5v5"))
+		{
+			Server.MAX_PLAYERS = 10;
+		}
 		this.maxRooms = maxRooms;
 		thisPort = port;
-		HAS_FRAME = false;
+		HAS_FRAME = withWindow;
 		addNewRoom();
 		UDPSocket = new DatagramSocket(port);
 		sendData = new byte[1024];
@@ -115,10 +152,12 @@ public class ServerManager implements Runnable, ActionListener{
 			e.printStackTrace();
 		}
 
-		Thread centralServerThread = new Thread(new CentralServerReceive());
-		centralServerThread.start();
-
-		updateCentral.start();
+		if (isListed)
+		{
+			Thread centralServerThread = new Thread(new CentralServerReceive());
+			centralServerThread.start();
+			updateCentral.start();
+		}
 		Maps.importMaps();
 	}
 
@@ -232,6 +271,11 @@ public class ServerManager implements Runnable, ActionListener{
 							e1.printStackTrace();
 						}
 						System.out.println("Central Server Closed");
+						if (HAS_FRAME)
+						{
+							JOptionPane.showMessageDialog(null, "Connection to global server list has closed");
+						}
+						
 						//e.printStackTrace();
 						break;
 					}
@@ -421,10 +465,14 @@ public class ServerManager implements Runnable, ActionListener{
 		if (HAS_FRAME)
 		{
 			ServerGUI gui = new ServerGUI(newServer);
-			mainFrame.dispose();
+			if (mainFrame!=null)
+			{
+				mainFrame.dispose();
+			}
 			ServerFrame myFrame = new ServerFrame();
 			gui.setLocation(0, 0);
 			myFrame.add(gui);
+			myFrame.requestFocus();
 			gui.revalidate();
 			newServer.setGUI(gui);
 		}
