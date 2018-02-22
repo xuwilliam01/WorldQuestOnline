@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import Client.Client;
 import Client.ClientInventory;
 import Menu.MainMenu;
+import Server.Server;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -37,10 +39,13 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private ArrayList<ServerInfo> servers = new ArrayList<ServerInfo>();
 	private JButton refresh = new JButton("Refresh");
 	private JButton connect = new JButton("Connect");
+	private JButton manualConnect = new JButton("Manual Connect");
+	
+	
 	private JTable table;
 	private JScrollPane scrollTable;
-	private int NUM_ROWS = 24;
-	private final static String[] columns = {"Name", "Capacity", "Ping"};
+	private int NUM_ROWS = 12;
+	private final static String[] columns = {"Name", "Status", "Ping"};
 	/**
 	 * Name, capacity, ping
 	 */
@@ -51,7 +56,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	public ClientServerSelection(int port) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize(960, 540);
+		setSize(515, 350);
 		setResizable(false);
 		setTitle("Server Selection");
 		setLocationRelativeTo(null);
@@ -69,17 +74,23 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		refresh.setSize(100,50);
 		refresh.setBackground(Color.white);
 		refresh.setForeground(Color.black);
-		refresh.setLocation((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2-150,75);
+		refresh.setLocation(scrollTable.getX() + scrollTable.getWidth() + 10, scrollTable.getY());
 		add(refresh);
 
 		connect.addActionListener(this);
 		connect.setSize(100,50);
 		connect.setBackground(Color.white);
 		connect.setForeground(Color.black);
-		connect.setLocation((Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/2-150,150);
+		connect.setLocation(scrollTable.getX() + scrollTable.getWidth() + 10, scrollTable.getY() + 60);
 		add(connect);
+		
+		manualConnect.addActionListener(this);
+		manualConnect.setSize(150,50);
+		manualConnect.setBackground(Color.white);
+		manualConnect.setForeground(Color.black);
+		manualConnect.setLocation(scrollTable.getX() + scrollTable.getWidth() + 10 , 
+				scrollTable.getY() + scrollTable.getHeight() - manualConnect.getHeight());
+		add(manualConnect);
 
 		socket = new DatagramSocket(port);
 		receiveData = new byte[1024];
@@ -105,9 +116,8 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		table.getTableHeader().setReorderingAllowed(false);
 		table.addMouseListener(new TableListener(table));
 		scrollTable = new JScrollPane(table);
-		scrollTable.setSize(3*(Client.SCREEN_WIDTH
-				+ ClientInventory.INVENTORY_WIDTH)/8,(table.getRowHeight()+1)*NUM_ROWS - 1);
-		scrollTable.setLocation(30,50);
+		scrollTable.setSize(300,(table.getRowHeight()+1)*NUM_ROWS - 1);
+		scrollTable.setLocation(30,30);
 		add(scrollTable);
 	}
 
@@ -149,15 +159,33 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		if(row > -1 && row < servers.size())
 		{
 			ServerInfo destination = servers.get(row);
-			int maxPlayers = Server.Server.MAX_PLAYERS;
+			int maxPlayers = Server.MAX_PLAYERS;
 			if (destination.getName().contains("1v1"))
 			{
 				maxPlayers = 2;
 			}
-			
+			else if (destination.getName().contains("2v2"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("3v3"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("4v4"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("5v5"))
+			{
+				maxPlayers = 2;
+			}
 			
 			if(destination.getNumPlayers() >= maxPlayers)
+			{
+				JOptionPane.showMessageDialog(null, "This server is full");
 				return;
+			}
 			
 			String IP = destination.getIP();
 			//Checks if server IP is the same as your external IP
@@ -171,125 +199,156 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		refresh();
 		while(true)
 		{
-			receiveData = new byte[1024];
-			receive = new DatagramPacket(receiveData, receiveData.length);
 			try {
-				socket.receive(receive);
-			} catch (Exception e) {
-				return;
-			}
-			//Get input
-			String input = new String(receive.getData()).trim();
-			switch(input.charAt(0))
-			{
-			case 'S':
-				String[] tokens = input.split(" ");
-				System.out.println(input);
-				servers.clear();
-				pings.clear();
-				int numInputs = 4;
-				
-				serversData = new Object[(tokens.length-2)/numInputs][6];
-				String thisIP = tokens[1];
-				//System.out.println("Received Servers\n"+input);
-				if(tokens.length > 2)
+				receiveData = new byte[1024];
+				receive = new DatagramPacket(receiveData, receiveData.length);
+				try {
+					socket.receive(receive);
+				} catch (Exception e) {
+					return;
+				}
+				//Get input
+				String input = new String(receive.getData()).trim();
+				switch(input.charAt(0))
 				{
-					for(int i = 0; i < tokens.length-2;i+=numInputs)
+				case 'S':
+					String[] tokens = input.split(" ");
+					System.out.println(input);
+					servers.clear();
+					pings.clear();
+					int numInputs = 4;
+					
+					serversData = new Object[(tokens.length-2)/numInputs][6];
+					String thisIP = tokens[1];
+					//System.out.println("Received Servers\n"+input);
+					if(tokens.length > 2)
 					{
-						tokens[i+2] = tokens[i+2].replace('_', ' ');
-						serversData[i/numInputs][0] = tokens[i+2];
-						
-						String maxPlayers = Server.Server.MAX_PLAYERS+"";
-						if (((String)serversData[i/numInputs][0]).contains("1v1"))
+						for(int i = 0; i < tokens.length-2;i+=numInputs)
 						{
-							maxPlayers = " 2";
+							tokens[i+2] = tokens[i+2].replace('_', ' ');
+							serversData[i/numInputs][0] = tokens[i+2];
+
+							serversData[i/numInputs][1] = "Connecting...";
+							serversData[i/numInputs][2] = "-";
+							serversData[i/numInputs][3] = tokens[i+3];
+							serversData[i/numInputs][4] = tokens[i+4];
+							serversData[i/numInputs][5] = tokens[i+5];
+
+							int port = Integer.parseInt(tokens[i+4]);
+							String IP = tokens[i+3];
+							if(IP.equals(thisIP))
+							{
+								System.out.println("Local server");
+								IP = "/127.0.0.1";
+							}
+							send("P", IP, port);
+						}			
+					}
+					
+					for (int i = 0; i < serversData.length; i ++)
+					{
+						int k = i;
+						for (int j = i+1; j < serversData.length; j++)
+						{
+							if (((String)serversData[j][0]).compareTo(((String)serversData[k][0]))<0)
+							{
+								k=j;
+							}
 						}
 						
-						serversData[i/numInputs][1] = tokens[i+5] +" / "+maxPlayers;
-						serversData[i/numInputs][3] = tokens[i+3];
-						serversData[i/numInputs][4] = tokens[i+4];
-						serversData[i/numInputs][5] = tokens[i+5];
-						
-						serversData[i/numInputs][2] = "-";
-
-						int port = Integer.parseInt(tokens[i+4]);
-						String IP = tokens[i+3];
+						for (int no = 0; no < 5; no++)
+						{
+							Object object = serversData[i][no];
+							serversData[i][no]=serversData[k][no];
+							serversData[k][no]=object;
+						}
+					}
+					pings = new ArrayList<Ping>();;
+					servers =  new ArrayList<ServerInfo>();;
+					
+					for (int i=0; i< serversData.length;i++)
+					{
+						String IP = (String)serversData[i][3];
 						if(IP.equals(thisIP))
 						{
 							System.out.println("Local server");
 							IP = "/127.0.0.1";
 						}
-						send("P", IP, port);
-						
-						
-					}			
-				}
-				
-				for (int i = 0; i < serversData.length; i ++)
-				{
-					int k = i;
-					for (int j = i+1; j < serversData.length; j++)
-					{
-						if (((String)serversData[j][0]).compareTo(((String)serversData[k][0]))<0)
-						{
-							k=j;
-						}
+						pings.add(new Ping(IP,Integer.parseInt((String)serversData[i][4]), System.currentTimeMillis()));
+						servers.add(new ServerInfo((String)serversData[i][2], IP, Integer.parseInt((String)serversData[i][4]), Integer.parseInt((String) serversData[i][5])));
 					}
 					
-					for (int no = 0; no < 5; no++)
+					remove(table);
+					remove(scrollTable);
+					revalidate();
+					initTable();
+					revalidate();
+					repaint();
+					break;
+				case 'P':
+					long end = System.currentTimeMillis();
+					String IP = receive.getAddress().toString();
+					int port = receive.getPort();
+					int index = 0;
+					for(Ping ping : pings)
 					{
-						Object object = serversData[i][no];
-						serversData[i][no]=serversData[k][no];
-						serversData[k][no]=object;
+						if(ping.getPort() == port && ping.getIP().equals(IP))
+						{
+							int maxPlayers = Server.MAX_PLAYERS;
+							if (((String)serversData[index][0]).contains("1v1"))
+							{
+								maxPlayers = 2;
+							}
+							else if (((String)serversData[index][0]).contains("2v2"))
+							{
+								maxPlayers = 4;
+							}
+							else if (((String)serversData[index][0]).contains("3v3"))
+							{
+								maxPlayers = 6;
+							}
+							else if (((String)serversData[index][0]).contains("4v4"))
+							{
+								maxPlayers = 8;
+							}
+							else if (((String)serversData[index][0]).contains("5v5"))
+							{
+								maxPlayers = 10;
+							}
+							
+							if (Integer.parseInt((String)serversData[index][5]) >= maxPlayers)
+							{
+								serversData[index][1] = "Full";
+							}
+							else
+							{
+								serversData[index][1] = "Available";
+							}
+							
+							table.setValueAt(serversData[index][1], index, 1);
+							
+							serversData[index][2] = end - ping.getStart();
+							table.setValueAt(end - ping.getStart(), index, 2);
+							
+							break;
+						}
+						index++;
 					}
+					break;
+				case 'C':
+					open = false;
+					IP = receive.getAddress().toString();
+					if(!Character.isDigit(IP.charAt(0)))
+						IP = IP.substring(1);
+					dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+					MainMenu.joinLobby(IP, receive.getPort());
+					break;
 				}
-				pings = new ArrayList<Ping>();;
-				servers =  new ArrayList<ServerInfo>();;
-				
-				for (int i=0; i< serversData.length;i++)
-				{
-					String IP = (String)serversData[i][3];
-					if(IP.equals(thisIP))
-					{
-						System.out.println("Local server");
-						IP = "/127.0.0.1";
-					}
-					pings.add(new Ping(IP,Integer.parseInt((String)serversData[i][4]), System.currentTimeMillis()));
-					servers.add(new ServerInfo((String)serversData[i][2], IP, Integer.parseInt((String)serversData[i][4]), Integer.parseInt((String) serversData[i][5])));
-				}
-				
-				
-				
-				remove(table);
-				remove(scrollTable);
-				revalidate();
-				initTable();
-				revalidate();
-				repaint();
-				break;
-			case 'P':
-				long end = System.currentTimeMillis();
-				String IP = receive.getAddress().toString();
-				int port = receive.getPort();
-				int index = 0;
-				for(Ping ping : pings)
-				{
-					if(ping.getPort() == port && ping.getIP().equals(IP))
-					{
-						serversData[index][2] = end - ping.getStart();
-						table.setValueAt(end - ping.getStart(), index, 2);
-						break;
-					}
-					index++;
-				}
-				break;
-			case 'C':
-				open = false;
-				IP = receive.getAddress().toString();
-				if(!Character.isDigit(IP.charAt(0)))
-					IP = IP.substring(1);
-				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-				MainMenu.joinLobby(IP, receive.getPort());
+			}
+			
+			catch (Exception e)
+			{
+				e.printStackTrace();
 				break;
 			}
 		}

@@ -153,8 +153,8 @@ public class GameImage implements Comparable<GameImage> {
 
 		this.width = width;
 		this.height = height;
-		color = new Color(image.getRGB(image.getWidth() / 2,
-				image.getHeight() / 2));
+		color = new Color(image.getRGB(image.getWidth() / 3,
+				image.getHeight() / 3));
 
 		if (hostingServer) {
 			this.image = null;
