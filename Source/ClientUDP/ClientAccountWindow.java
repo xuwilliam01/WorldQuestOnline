@@ -172,9 +172,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.");
 				break;
 			}
-
 		}
-
 	}
 
 	public static boolean checkLogin()

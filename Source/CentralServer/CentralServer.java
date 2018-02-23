@@ -183,8 +183,9 @@ public class CentralServer implements Runnable, ActionListener {
 						name = name.substring(0, 25);
 					if (createAccount(name, key)) {
 						out = "CY";
-					} else
+					} else {
 						out = "CN";
+					}
 					sendData = out.getBytes();
 					send = new DatagramPacket(sendData, sendData.length, receive.getAddress(), receive.getPort());
 					socket.send(send);
@@ -349,13 +350,9 @@ public class CentralServer implements Runnable, ActionListener {
 	}
 
 	public boolean createAccount(String user, String key) {
+		// Wtf why are we doing O(n) search
 		for (Element username : root.getChildren()) {
 			if (username.getAttribute("name").getValue().equals(user)) {
-				// If account already exists, but the username and password
-				// match, then pretend we made a new account
-				if (key.equals(username.getChild("Key").getValue()))
-					return true;
-
 				return false;
 			}
 		}
