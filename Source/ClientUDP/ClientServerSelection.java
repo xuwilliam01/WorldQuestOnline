@@ -62,8 +62,9 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 
 	public ClientServerSelection(int port) throws SocketException
 	{
-		setBackground(Color.BLACK);
-		setSize(515, 350);
+		//this.getContentPane().setBackground(Color.BLACK);
+		
+		setSize(515, 300);
 		setResizable(false);
 		setTitle("Server Selection");
 		setLocationRelativeTo(null);
@@ -523,8 +524,6 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	public void setSignalBegin(long signalBegin) {
 		this.signalBegin = signalBegin;
 	}
-
-	
 
 }
 

@@ -49,8 +49,8 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 
 	public Leaderboard(int port) throws SocketException
 	{
-		setBackground(Color.BLACK);
-		setSize(1200, 500);
+		//setBackground(Color.BLACK);
+		setSize(450, 510);
 		setResizable(false);
 		setTitle("Leaderboard");
 		setLocationRelativeTo(null);
@@ -186,19 +186,25 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		{
 			setLayout(null);
 
-			refresh.setSize(100,20);
-			refresh.setLocation(380,5);
+			refresh.setSize(70,20);
+			refresh.setLocation(295,10);
 			refresh.addActionListener(Leaderboard.this);
+			refresh.setBackground(Color.WHITE);
+			refresh.setForeground(Color.BLACK);
 			add(refresh);
 			refresh.doClick();
 
-			search.setSize(300,20);
-			search.setLocation(70,5);
+			search.setSize(200,20);
+			search.setLocation(85,10);
+			//search.setForeground(Color.DARK_GRAY);
+			search.setBackground(Color.DARK_GRAY);
+			search.setForeground(Color.WHITE);
+			//search.setSelectedTextColor(Color.white);
 			search.addKeyListener(Leaderboard.this);
 			add(search);
 
 			searchL.setSize(60,20);
-			searchL.setLocation(10,5);
+			searchL.setLocation(25,10);
 			add(searchL);
 		}
 
@@ -206,19 +212,21 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
-			graphics.setColor(Color.white);
-			graphics.fillRect(25, 28, 1140, 416);
 			graphics.setColor(Color.black);
-			graphics.setFont(new Font("Courier", Font.PLAIN, 11)); //Monospace font
+			graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
+			graphics.setColor(Color.DARK_GRAY);
+			graphics.fillRect(25, 43, 400, 416);
+			graphics.setColor(Color.white);
+			graphics.setFont(new Font("Monospaced", Font.BOLD, 11)); //Monospace font
 			synchronized(leaderboard)
 			{
-				int y = 30;
+				int y = 45;
 				int delta = 20;
-				for(int i = 0; i < 3*LEADERBOARD_DISPLAY_SIZE && i < displayboard.size();i++)
+				for(int i = 0; i < LEADERBOARD_DISPLAY_SIZE && i < displayboard.size();i++)
 				{
 					if(i%LEADERBOARD_DISPLAY_SIZE == 0)
-						y = 30;
-					graphics.drawString(String.format("%3d. %-25s R:%-4d W:%-3d L:%-3d", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50 + 375*(i/LEADERBOARD_DISPLAY_SIZE), y+=delta);
+						y = 45;
+					graphics.drawString(String.format("%3d. %-20s Rating:%-4d W:%-3d L:%-3d", displayboard.get(i).getRank(), displayboard.get(i).getName(), displayboard.get(i).getRating(),displayboard.get(i).getWins(), displayboard.get(i).getLosses()), 50, y+=delta);
 				}
 			}
 		}
@@ -238,7 +246,7 @@ public class Leaderboard extends JFrame implements Runnable, ActionListener, Win
 		{
 			if(player.getName().toLowerCase().contains(text))
 				displayboard.add(player);
-			if(displayboard.size() >= 3*LEADERBOARD_DISPLAY_SIZE)
+			if(displayboard.size() >= LEADERBOARD_DISPLAY_SIZE)
 				break;
 		}
 		repaint();	

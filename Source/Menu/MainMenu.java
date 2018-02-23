@@ -611,7 +611,7 @@ public class MainMenu implements KeyListener {
 				numTries++;
 				if(numTries == 3)
 				{
-					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or join a friend's)");
+					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or manually connect to a friend's)");
 				}
 			}
 			repaint();
