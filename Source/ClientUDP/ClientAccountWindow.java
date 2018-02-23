@@ -43,7 +43,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private byte[] receiveData;
 	private byte[] sendData;
 
-	private JButton create = new JButton("Create");
+	private JButton create = new JButton("New User");
 	private JButton login = new JButton("Login");
 	private JLabel usernameL = new JLabel("Username:");
 	private JLabel passwordL = new JLabel("Password: ");
@@ -66,12 +66,17 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public static String savedUser;
 	private static String savedPassword;
 	public static String savedKey;
+	
+	int deltay = 45;
+	int y = 25;
+	int x = 15;
+	int deltax = 140;
 
 	public static final int MAX_NAME_LEN = 20;
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		setBackground(Color.BLACK);
-		setSize(480, 308);
+		setSize(400, 270);
 		setResizable(false);
 		setTitle("Account Login");
 		setLocationRelativeTo(null);
@@ -89,50 +94,48 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		this.menuLoginButton = menuLoginButton;
 		this.logoutOver = logoutOver;
 
-		int deltay = 45;
-		int y = 25;
-		int x = 10;
-		int deltax = 140;
+		
+		
+		usernameL.setLocation(x + 3,y - 5);
 		usernameL.setSize(150,50);
-		usernameL.setLocation(x,y);
 		add(usernameL);
 
+		passwordL.setLocation(x + 3,y+deltay - 5);
 		passwordL.setSize(150,50);
-		passwordL.setLocation(x,y+deltay);
 		add(passwordL);
 
+		confirmL.setLocation(x + 3,y+2*deltay - 5);
 		confirmL.setSize(150,50);
-		confirmL.setLocation(x,y+2*deltay);
 		confirmL.setVisible(false);
 		add(confirmL);
 
-		username.setSize(200,40);
 		username.setLocation(x+deltax,y);
+		username.setSize(this.getWidth() - username.getX() - x,40);
 		username.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		username.addKeyListener(this);
 		add(username);
 
-		password.setSize(200,40);
 		password.setLocation(x+deltax,y+deltay);
+		password.setSize(this.getWidth() - password.getX() - x,40);
 		password.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		password.addKeyListener(this);
 		add(password);
 
-		confirm.setSize(200,40);
 		confirm.setLocation(x+deltax,y+2*deltay);
+		confirm.setSize(this.getWidth() - confirm.getX() - x,40);
 		confirm.setVisible(false);
 		confirm.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		confirm.addKeyListener(this);
 		add(confirm);
 
 		create.addActionListener(this);
-		create.setSize(100,50);
+		create.setSize(120,50);
 		create.setLocation(x,y+(int)(3.5*deltay));
 		add(create);
 
 		login.addActionListener(this);
 		login.setSize(100,50);
-		login.setLocation(x+deltax,y+(int)(3.5*deltay));
+		login.setLocation(this.getWidth() - login.getWidth() - x,y+(int)(3.5*deltay));
 		add(login);
 
 	}
@@ -154,16 +157,16 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			{
 			case "LY":
 				saveCredentials();
-				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				JOptionPane.showMessageDialog(this, "Login Successful!");
+				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				break;
 			case "LN":
 				JOptionPane.showMessageDialog(this, "Login Failed! Either your username or password is incorrect!");
 				break;
 			case "CY":
 				saveCredentials();
-				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				JOptionPane.showMessageDialog(this, "Created Account! You are now logged in.");
+				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				break;
 			case "CN":
 				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.");
@@ -265,30 +268,35 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			{
 				confirm.setVisible(true);
 				confirmL.setVisible(true);
+				login.setVisible(false);
+				create.setText("Create");
+				create.setSize(100, 50);
+				create.setLocation(this.getWidth()/2 - create.getWidth()/2, create.getY());
 				repaint();
-				return;
 			}
-			if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
+			else
 			{
-				JOptionPane.showMessageDialog(this, "Username and password are too short");
-				return;
-			}
-			if(!new String(password.getPassword()).equals(new String(confirm.getPassword())))
-			{
-				JOptionPane.showMessageDialog(this, "Passwords do not match");
-				return;
-			}
-			String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
-			sendData = out.getBytes();
-			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), PORT);
-				socket.send(send);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
+				{
+					JOptionPane.showMessageDialog(this, "Username and password are too short", "", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if(!new String(password.getPassword()).equals(new String(confirm.getPassword())))
+				{
+					JOptionPane.showMessageDialog(this, "Passwords do not match", "", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
+				sendData = out.getBytes();
+				try {
+					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), PORT);
+					socket.send(send);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-
 	}
 
 	@Override
