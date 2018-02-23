@@ -20,7 +20,7 @@ public class ClientFrame extends JFrame
 	 */
 	public ClientFrame(boolean tooLarge, Point pos)
 	{
-		setBackground(Color.BLACK);
+		this.getContentPane().setBackground(Color.BLACK);
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH
 				+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));
 
@@ -30,6 +30,8 @@ public class ClientFrame extends JFrame
 		setLocationRelativeTo(null);
 		if(tooLarge && pos != null)
 			setLocation(pos.x, pos.y);
+		else
+			setLocation(0,0);
 		setLayout(null);
 		setUndecorated(false);
 		if (!tooLarge)
@@ -42,7 +44,6 @@ public class ClientFrame extends JFrame
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 		setVisible(true);
-
 	}
 
 	/**

@@ -545,7 +545,7 @@ public class MainMenu implements KeyListener {
 
 			g2d.setFont(mainFont);
 
-			g2d.drawString("William Xu, Alex Raita, Tony Wu", 15, 20);
+			//g2d.drawString("William Xu, Alex Raita, Tony Wu", 15, 20);
 
 			Font nameFont = mainFont.deriveFont(36.0f);
 			g2d.setFont(nameFont);

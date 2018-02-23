@@ -362,7 +362,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 							}
 							else
 							{
-								serversData[index][1] = "Available";
+								serversData[index][1] = "Open";
 							}
 							
 							table.setValueAt(serversData[index][1], index, 1);

@@ -75,7 +75,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public static final int MAX_NAME_LEN = 20;
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
-		setBackground(Color.BLACK);
+		this.getContentPane().setBackground(Color.BLACK);
 		setSize(400, 270);
 		setResizable(false);
 		setTitle("Account Login");
@@ -94,31 +94,36 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		this.menuLoginButton = menuLoginButton;
 		this.logoutOver = logoutOver;
 
-		
-		
 		usernameL.setLocation(x + 3,y - 5);
 		usernameL.setSize(150,50);
+		usernameL.setForeground(Color.white);
 		add(usernameL);
 
 		passwordL.setLocation(x + 3,y+deltay - 5);
 		passwordL.setSize(150,50);
+		passwordL.setForeground(Color.white);
 		add(passwordL);
 
 		confirmL.setLocation(x + 3,y+2*deltay - 5);
 		confirmL.setSize(150,50);
 		confirmL.setVisible(false);
+		confirmL.setForeground(Color.white);
 		add(confirmL);
 
 		username.setLocation(x+deltax,y);
 		username.setSize(this.getWidth() - username.getX() - x,40);
 		username.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		username.addKeyListener(this);
+		username.setBackground(Color.DARK_GRAY);
+		username.setForeground(Color.white);
 		add(username);
 
 		password.setLocation(x+deltax,y+deltay);
 		password.setSize(this.getWidth() - password.getX() - x,40);
 		password.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		password.addKeyListener(this);
+		password.setBackground(Color.DARK_GRAY);
+		password.setForeground(Color.white);
 		add(password);
 
 		confirm.setLocation(x+deltax,y+2*deltay);
@@ -126,16 +131,20 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 		confirm.setVisible(false);
 		confirm.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 		confirm.addKeyListener(this);
+		confirm.setBackground(Color.DARK_GRAY);
+		confirm.setForeground(Color.white);
 		add(confirm);
 
 		create.addActionListener(this);
 		create.setSize(120,50);
 		create.setLocation(x,y+(int)(3.5*deltay));
+		create.setBackground(Color.gray);
 		add(create);
 
 		login.addActionListener(this);
 		login.setSize(100,50);
 		login.setLocation(this.getWidth() - login.getWidth() - x,y+(int)(3.5*deltay));
+		login.setBackground(Color.gray);
 		add(login);
 
 	}
@@ -242,12 +251,10 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == login)
 		{
-			confirm.setVisible(false);
-			confirmL.setVisible(false);
 			repaint();
 			if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
 			{
-				JOptionPane.showMessageDialog(this, "Username and password are too short");
+				JOptionPane.showMessageDialog(this, "Username and/or password is too short");
 				return;
 			}
 			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
@@ -376,11 +383,14 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
 		{
-			if(arg0.getSource() == confirm)
+			if(confirm.isVisible())
 			{
 				create.doClick();
 			}
-			else login.doClick();
+			else
+			{
+				login.doClick();
+			}
 		}
 		
 	}
