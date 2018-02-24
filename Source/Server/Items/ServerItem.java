@@ -22,8 +22,7 @@ public abstract class ServerItem extends ServerObject
 	 * The creature who owns or previously owned the item
 	 */
 	private ServerCreature source;
-
-
+	
 	/**
 	 * The money value of the item
 	 */
@@ -188,19 +187,19 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.SLINGSHOT_TYPE:
 			setImage("SLINGSHOT_ICON");
-			value = 2;
+			value = 5;
 			break;
 		case ServerWorld.WOODBOW_TYPE:
 			setImage("WOODBOW_ICON");
-			value = 15;
+			value = 20;
 			break;
 		case ServerWorld.STEELBOW_TYPE:
 			setImage("STEELBOW_ICON");
-			value = 30;
+			value = 35;
 			break;
 		case ServerWorld.MEGABOW_TYPE:
 			setImage("MEGABOW_ICON");
-			value = 50;
+			value = 55;
 			break;
 		case ServerWorld.FIREWAND_TYPE:
 			setImage("FIREWAND_ICON");
@@ -212,7 +211,7 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.DARKWAND_TYPE:
 			setImage("DARKWAND_ICON");
-			value = 60;
+			value = 70;
 			break;
 		case ServerWorld.BASIC_BARRACKS_ITEM_TYPE:
 			setImage("BARRACKS_ICON");
