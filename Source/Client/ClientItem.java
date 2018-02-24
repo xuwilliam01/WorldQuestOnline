@@ -79,7 +79,7 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("M ax Mana +%d",ServerPotion.MAX_MANA_INCREASE));
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
-			setToolTipText(String.format("+%d Base Damage",ServerPotion.DMG_AMOUNT));
+			setToolTipText(String.format("+%d% Base Damage",ServerPotion.DMG_AMOUNT));
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setToolTipText(String.format("+%d Speed",ServerPotion.SPEED_AMOUNT));

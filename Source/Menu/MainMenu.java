@@ -193,6 +193,12 @@ public class MainMenu implements KeyListener {
 			tooLarge = true;
 		}
 		Client.SCREEN_HEIGHT = dm.getHeight();
+		
+		if (System.getProperty("os.name").toLowerCase().contains("mac"))
+		{
+			Client.SCREEN_HEIGHT -= 100;
+		}
+		
 		if (Client.SCREEN_HEIGHT > 1080) {
 			Client.SCREEN_HEIGHT = 1080;
 			tooLarge = true;

@@ -81,10 +81,12 @@ public class ClientScoreBoard extends JPanel{
 				}
 			}
 			
-			
 			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
 			graphics.drawString(name, ClientFrame.getScaledWidth(29), yPos);
-			graphics.drawString(String.format("%13d%13d%10d%13d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(130), yPos);
+			graphics.drawString(String.format("%13d",player.getKills()), ClientFrame.getScaledWidth(135), yPos);
+			graphics.drawString(String.format("%13d", player.getDeaths()), ClientFrame.getScaledWidth(130) + ClientFrame.getScaledWidth(85), yPos);
+			graphics.drawString(String.format("%13d", player.getScore()), ClientFrame.getScaledWidth(130) + ClientFrame.getScaledWidth(155), yPos);
+			graphics.drawString(String.format("%13d", player.getPing()), ClientFrame.getScaledWidth(130) + ClientFrame.getScaledWidth(215), yPos);
 			yPos += ClientFrame.getScaledHeight(40);
 		}
 
@@ -104,8 +106,12 @@ public class ClientScoreBoard extends JPanel{
 				}
 			}
 			//graphics.drawString(String.format("%-24s%-10d%-10d%-15d%-10d",player.getName(),player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), xPos, yPos);
-			graphics.drawString(name, ClientFrame.getScaledWidth(515), yPos);
-			graphics.drawString(String.format("%13d%13d%10d%13d",player.getKills(), player.getDeaths(), player.getScore(), player.getPing()), ClientFrame.getScaledWidth(610), yPos);
+			graphics.drawString(name, ClientFrame.getScaledWidth(525), yPos);
+			graphics.drawString(String.format("%13d",player.getKills()), ClientFrame.getScaledWidth(630), yPos);
+			graphics.drawString(String.format("%13d", player.getDeaths()), ClientFrame.getScaledWidth(625) + ClientFrame.getScaledWidth(85), yPos);
+			graphics.drawString(String.format("%13d", player.getScore()), ClientFrame.getScaledWidth(625) + ClientFrame.getScaledWidth(155), yPos);
+			graphics.drawString(String.format("%13d", player.getPing()), ClientFrame.getScaledWidth(625) + ClientFrame.getScaledWidth(215), yPos);
+			
 			yPos += ClientFrame.getScaledHeight(40);
 		}
 	}

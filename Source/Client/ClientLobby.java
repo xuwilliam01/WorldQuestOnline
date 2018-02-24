@@ -36,7 +36,6 @@ import java.util.ConcurrentModificationException;
 @SuppressWarnings("serial")
 public class ClientLobby extends JPanel implements ActionListener, KeyListener
 {
-
 	private Socket socket;
 	private BufferedReader input;
 	private PrintWriter output;
@@ -388,9 +387,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						socket.close();
 						output.close();
 						input.close();
-						//menu.setEnabled(false);
 						mapBox.setEnabled(false);
 						switchTeams.setEnabled(false);
+						menu.setEnabled(false);
 						start.setEnabled(false);
 						enter.setEnabled(false);
 						repaint();

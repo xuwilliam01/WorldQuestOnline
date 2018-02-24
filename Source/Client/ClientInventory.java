@@ -91,7 +91,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			System.out.println("font not found");
 			e.printStackTrace();
 		}
-		inventoryFont = inventoryFont.deriveFont(18f);
+		inventoryFont = inventoryFont.deriveFont((ClientFrame.getScaledWidth(18) + ClientFrame.getScaledHeight(18))/2.0f);
 		
 		//inventoryFont = new Font("Courier", Font.PLAIN, ClientFrame.getScaledWidth(15));
 
@@ -517,6 +517,11 @@ public class ClientInventory extends JPanel implements ActionListener
 			g2d.drawString(
 					String.format("%d/%d", client.getHP(), client.getMaxHP()),
 					ClientFrame.getScaledWidth(153), ClientFrame.getScaledHeight(110));
+			
+			/*
+			g2d.drawString(hpString,ClientFrame.getScaledWidth(95) + ClientFrame.getScaledWidth(170)/2 - 
+					graphics.getFontMetrics().stringWidth(hpString)/2, ClientFrame.getScaledHeight(110));
+					*/
 		}
 
 		g2d.setColor(new Color(35,162,199));
