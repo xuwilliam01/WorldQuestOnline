@@ -186,7 +186,6 @@ public class ServerManager implements Runnable, ActionListener{
 
 	private class CentralServerReceive implements Runnable
 	{
-
 		@Override
 		public void run() {
 			while(true)
@@ -560,6 +559,4 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		this.name = name;
 	}
-
-
 }

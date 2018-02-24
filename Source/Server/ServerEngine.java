@@ -148,11 +148,13 @@ public class ServerEngine implements Runnable, ActionListener {
 			}
 
 			//Everyone left the game, so end it
+			/*
 			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
 			{
 				server.getAllConnectedPlayers().clear();
 				endGame(ServerCreature.RED_TEAM);
 			}
+			*/
 
 			try{
 				for (ServerPlayer player : listOfPlayers) {

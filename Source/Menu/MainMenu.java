@@ -1303,7 +1303,6 @@ public class MainMenu implements KeyListener {
 			client.getOutput().close();
 			StartGame.restart(mainFrame);
 			addedKeyListener = false;
-
 		}
 	}
 
