@@ -707,7 +707,7 @@ public class ClientWorld {
 	public void setObject(int id, int x, int y, String image, int team, String type, String name, int hp) {
 		try {
 			if (objects[id] == null) {
-				if (name.equals("{")) {
+				if (name != null && name.equals("{")) {
 					objects[id] = new ClientObject(id, x, y, image, team, type, hp);
 				} else {
 					objects[id] = new ClientObject(id, x, y, image, team, type, name, hp);
