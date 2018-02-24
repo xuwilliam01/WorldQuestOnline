@@ -51,7 +51,7 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_KNIGHT_NO = 8;
 	
-	public final static int GOBLIN_GIANT_HP = 650;
+	public final static int GOBLIN_GIANT_HP = 500;
 	public final static int GOBLIN_GIANT_NO = 9;
 	
 	public final static int GOBLIN_GENERAL_HP = 150;
@@ -182,7 +182,7 @@ public class ServerGoblin extends ServerCreature {
 
 			armour = 0.1;
 			weapon = ServerWorld.WOODARROW_TYPE;
-			damage = 7;
+			damage = 5;
 			isMelee = false;
 			housingSpace = 2;
 
@@ -291,12 +291,12 @@ public class ServerGoblin extends ServerCreature {
 			armour = 0.2;
 			int weaponChoice = (int) (Math.random() * 5);
 			weapon = ServerWorld.ICEBALL_TYPE;
-			damage = ServerWeapon.ICEWAND_DMG;
+			damage = (int)(ServerWeapon.ICEWAND_DMG/1.5);
 			actionDelay = 240;
 			if (weaponChoice == 4) {
 				weapon = ServerWorld.FIREBALL_TYPE;
-				actionDelay = 180;
-				damage = ServerWeapon.FIREWAND_DMG;
+				actionDelay = 120;
+				damage = (int)(ServerWeapon.FIREWAND_DMG/1.5);
 			}
 			isMelee = false;
 			housingSpace = 3;

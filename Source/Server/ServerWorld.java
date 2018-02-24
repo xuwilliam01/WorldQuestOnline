@@ -1141,9 +1141,7 @@ public class ServerWorld
 			}
 
 		}
-		catch (
-
-				ConcurrentModificationException e)
+		catch (ConcurrentModificationException e)
 		{
 			System.out.println("Concurrent Modification Exception");
 		}

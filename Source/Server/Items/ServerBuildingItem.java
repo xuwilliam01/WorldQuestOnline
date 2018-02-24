@@ -5,12 +5,12 @@ import Server.ServerWorld;
 public class ServerBuildingItem extends ServerItem{
 
 	public static final int BASIC_BARRACKS_COST = 10;
-	public static final int ADV_BARRACKS_COST = 20;
+	public static final int ADV_BARRACKS_COST = 25;
 	public static final int GIANT_FACTORY_COST = 25;
-	public static final int WOOD_HOUSE_COST = 5;
-	public static final int INN_COST = 10;
-	public static final int TOWER_COST = 12;
-	public static final int GOLD_MINE_COST = 20;
+	public static final int WOOD_HOUSE_COST = 8;
+	public static final int INN_COST = 16;
+	public static final int TOWER_COST = 15;
+	public static final int GOLD_MINE_COST = 35;
 	public static final int MERC_COST = 10;
 	
 	private String buildingType;

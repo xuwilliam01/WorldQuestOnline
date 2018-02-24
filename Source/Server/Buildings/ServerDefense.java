@@ -7,7 +7,7 @@ import Server.ServerWorld;
 
 public class ServerDefense extends ServerBuilding {
 
-	public final static int TOWER_RANGE = 700;
+	public final static int TOWER_RANGE = 600;
 	
 	private ArrayList<ServerObject> arrowSources;
 	

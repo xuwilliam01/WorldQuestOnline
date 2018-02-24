@@ -168,7 +168,6 @@ public class Images {
 	
 	public static String getImageName(int index)
 	{
-		//System.out.println(index);
 		return imageArray[index].getName();
 	}
 	
@@ -1425,7 +1424,6 @@ public class Images {
 				addtoImageArray(new GameImage("GIANT_FACTORY_"+i+".png",image));
 			}
 			
-			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "INN.png"));
 			} catch (IOException e) {
@@ -1447,13 +1445,12 @@ public class Images {
 				addtoImageArray(new GameImage("INN_"+i+".png",image));
 			}
 			
-			
 			try {
 				image = ImageIO.read(new File("Images//Interface//" + "MERC.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			addtoImageArray(new GameImage("MERC.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			addtoImageArray(new GameImage("MERC.png", image, 75, 75));
 			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "RED_CASTLE.png"));

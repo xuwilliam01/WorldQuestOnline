@@ -528,6 +528,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 											onSurface = true;
 											isDropping = false;
 										}
+										x = player.getX();
+										y = player.getY();
 									}
 									if (tokens[token + 4].equals("{")) {
 										try {
@@ -557,17 +559,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										for (int i = 0; i < len; i++) {
 											name += tokens[token + 5 + i] + " ";
 										}
-										if (id == player.getID()) {
-											x = player.getX();
-											y = player.getY();
-										}
 										world.setObject(id, x, y,
 												Images.getImageName(Integer.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]), tokens[++token], name.trim(),
 												Integer.parseInt(tokens[token + len + 2]));
 										token += len + 2;
 									}
-
 									break;
 								case 't':
 									world.setObject(new ClientText(toInt(tokens[++token]), toInt(tokens[++token]),
