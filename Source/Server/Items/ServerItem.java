@@ -60,11 +60,11 @@ public abstract class ServerItem extends ServerObject
 		{
 		case ServerWorld.HP_POTION_TYPE:
 			setImage("HP_POTION");
-			value = 3;
+			value = 4;
 			break;
 		case ServerWorld.MAX_HP_TYPE:
 			setImage("MAX_HP_POTION");
-			value = 8;
+			value = 15;
 			break;
 		case ServerWorld.MANA_POTION_TYPE:
 			setImage("MANA_POTION");
@@ -72,19 +72,19 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.MAX_MANA_TYPE:
 			setImage("MAX_MANA_POTION");
-			value = 7;
+			value = 11;
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
 			setImage("DMG_POTION");
-			value = 12;
+			value = 10;
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setImage("SPEED_POTION");
-			value = 10;
+			value = 20;
 			break;
 		case ServerWorld.JUMP_POTION_TYPE:
 			setImage("JUMP_POTION");
-			value = 7;
+			value = 6;
 			break;
 		case ServerWorld.MONEY_TYPE:
 			base = "goldCoin";
@@ -92,19 +92,19 @@ public abstract class ServerItem extends ServerObject
 			break;
 		case ServerWorld.STEEL_ARMOUR:
 			setImage("OUTFITARMOR_ICON");
-			value = 30;
+			value = 40;
 			break;
 		case ServerWorld.RED_NINJA_ARMOUR:
 			setImage("OUTFITNINJARED_ICON");
-			value = 15;
+			value = 22;
 			break;
 		case ServerWorld.BLUE_NINJA_ARMOUR:
 			setImage("OUTFITNINJABLUE_ICON");
-			value = 8;
+			value = 12;
 			break;
 		case ServerWorld.GREY_NINJA_ARMOUR:
 			setImage("OUTFITNINJAGREY_ICON");
-			value = 3;
+			value = 5;
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setImage("DADIAMOND_ICON");
@@ -246,7 +246,6 @@ public abstract class ServerItem extends ServerObject
 
 		setWidth(Images.getGameImage(getImage()).getWidth());
 		setHeight(Images.getGameImage(getImage()).getHeight());
-
 	}
 
 	/**
@@ -256,9 +255,9 @@ public abstract class ServerItem extends ServerObject
 	{
 		int randType = (int) (Math.random() * 20 + 1);
 
-		if (randType <= 12)
-			return new ServerMoney(x, y,world);
 		if (randType <= 13)
+			return new ServerMoney(x, y,world);
+		if (randType <= 14)
 			return ServerArmour.randomArmour(x, y,world);
 		if (randType <= 18)
 			return ServerPotion.randomPotion(x, y,world);
@@ -267,7 +266,6 @@ public abstract class ServerItem extends ServerObject
 
 		// This won't happen
 		return null;
-
 	}
 
 	/**

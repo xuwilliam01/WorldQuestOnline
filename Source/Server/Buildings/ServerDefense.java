@@ -7,10 +7,9 @@ import Server.ServerWorld;
 
 public class ServerDefense extends ServerBuilding {
 
-	public final static int TOWER_RANGE = 1000;
+	public final static int TOWER_RANGE = 700;
 	
 	private ArrayList<ServerObject> arrowSources;
-	
 	
 	public ServerDefense(double x, double y, String type, int team, ServerWorld world) {
 		super(x, y, type, team, world);
@@ -20,9 +19,9 @@ public class ServerDefense extends ServerBuilding {
 		switch(type)
 		{
 		case ServerWorld.TOWER_TYPE:
-			arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 25,
-					ServerWorld.STEELARROW_TYPE, TOWER_RANGE, this, world)));
-			setName("A Tower");
+			arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 20,
+					ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, world)));
+			setName("An Arrow Tower");
 			break;
 		}
 	}
@@ -57,9 +56,4 @@ public class ServerDefense extends ServerBuilding {
 		}
 		arrowSources.clear();
 	}
-	
-	
-	
-	}
-
-
+}
