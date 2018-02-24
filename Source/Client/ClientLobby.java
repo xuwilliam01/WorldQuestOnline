@@ -588,9 +588,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		// Write the players on each team
 		graphics.setFont(ClientWorld.TEAM_TITLE_FONT);
 		graphics.setColor(Color.BLUE);
-		int blueX = (int) (ClientFrame.getScaledWidth(1335));
+		int blueX = (int) (ClientFrame.getScaledWidth(1350));
 		int blueY = (int) (ClientFrame.getScaledHeight(120));
-		int redX = (int)(ClientFrame.getScaledWidth(785));
+		int redX = (int)(ClientFrame.getScaledWidth(820));
 		int redY = (int) (ClientFrame.getScaledHeight(120));
 		graphics.drawString("Blue Team", blueX, blueY);
 		graphics.setColor(Color.RED);
@@ -630,7 +630,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						&& leaderName.equals(player.name))
 				{
 					graphics.setColor(Color.GREEN);
-					graphics.fillOval(blueX - 30, blueStart - 20, 20, 20);
+					graphics.fillOval(blueX - 20, blueStart - 13, 15, 15);
 					graphics.setColor(Color.BLUE);
 
 					//Write the leader name under the menu button
