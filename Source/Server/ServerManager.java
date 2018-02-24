@@ -194,7 +194,7 @@ public class ServerManager implements Runnable, ActionListener{
 				while(!canConnectCentral)
 				{
 					try {
-						Thread.sleep(100);
+						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -213,6 +213,7 @@ public class ServerManager implements Runnable, ActionListener{
 					centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
 					out = new PrintWriter(centralServer.getOutputStream());
 					in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
+					System.out.println("Connected to central server");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
