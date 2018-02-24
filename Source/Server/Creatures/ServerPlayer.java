@@ -1804,6 +1804,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			getInventory().add(money);
 
 		for (int item = 0; item < equippedWeapons.length; item++)
+		{
 			if (equippedWeapons[item] != null)
 			{
 				/*
@@ -1817,6 +1818,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				*/
 				dropItem(equippedWeapons[item]);
 			}
+		}
+		
 		equippedWeapons = new ServerItem[MAX_WEAPONS];
 
 		if (equippedArmour != null)
@@ -1834,6 +1837,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		equippedArmour = null;
 
+		/*
 		if(bestWeapon != null)
 		{
 			System.out.println("BEST W: "+bestWeapon.getType());
@@ -1844,6 +1848,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			System.out.println("BEST A: "+bestArmour.getType());
 			getInventory().add(bestArmour);
 		}
+		*/
 	}
 
 	/**
@@ -2223,9 +2228,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 *            the type of armor to equip
 	 */
 	public void equipArmour(String itemType) {
-		// First replace the shield in the inventory with the current shield, if
+		// First replace the armor in the inventory with the current armor, if
 		// it exists
-		// UNCOMMENT
 		if (equippedArmour != null) {
 			getInventory().add(equippedArmour);
 		}
@@ -2236,11 +2240,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				toRemove = item;
 			}
 		}
+		
+		equippedArmour = (ServerArmour) toRemove;
+		
 		if (toRemove != null) {
 			getInventory().remove(toRemove);
 		}
-
-		equippedArmour = (ServerArmour) toRemove;
 
 		ServerAccessory newArmour = new ServerAccessory(this,
 				equippedArmour.getArmourImage(), equippedArmour.getArmour(),
@@ -2250,7 +2255,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		setBody(newArmour);
 		getWorld().add(newArmour);
-
 	}
 
 	/**

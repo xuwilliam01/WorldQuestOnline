@@ -71,13 +71,13 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	{
 		super.paintComponent(graphics);
 		graphics.setColor(Color.white);
-		graphics.drawString("Barracks", 20, 100);
-		graphics.drawString("Housing", 20, 200);
-		graphics.drawString("Defence", 20, 300);
-		graphics.drawString("Resource", 20, 400);
-		graphics.drawString("Mercenaries", 460, 100);
-		graphics.drawString("Uses 20 housing", 440, 130);
-		String mon = "Team Gold: "+money;
+		graphics.drawString("Barracks", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(100));
+		graphics.drawString("Housing", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(200));
+		graphics.drawString("Defence", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(300));
+		graphics.drawString("Resource", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(400));
+		graphics.drawString("Mercenaries", ClientFrame.getScaledWidth(460), ClientFrame.getScaledHeight(100));
+		graphics.drawString("Uses 20 housing", ClientFrame.getScaledWidth(440), ClientFrame.getScaledHeight(130));
+		String mon = "Team Gold: "+ money;
 		graphics.drawString(mon, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
 		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + graphics.getFontMetrics().stringWidth(mon)+5, ClientFrame.getScaledHeight(450)-10,this);
 	}

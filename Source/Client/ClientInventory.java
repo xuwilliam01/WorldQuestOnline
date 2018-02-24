@@ -354,8 +354,10 @@ public class ClientInventory extends JPanel implements ActionListener
 	public void clear()
 	{
 		ClientItem money = null;
+		/*
 		ClientItem bestWeapon = null;
 		ClientItem bestArmour = null;
+		*/
 		for (int row = 0; row < inventory.length; row++)
 			for (int col = 0; col < inventory[row].length; col++)
 				if (inventory[row][col] != null)
@@ -368,6 +370,7 @@ public class ClientInventory extends JPanel implements ActionListener
 					else if(inventory[row][col].getType().contains(
 							ServerWorld.WEAPON_TYPE))
 					{
+						/*
 						if(bestWeapon == null)
 							bestWeapon = inventory[row][col];
 						else if(inventory[row][col].getCost() > bestWeapon.getCost())
@@ -375,11 +378,14 @@ public class ClientInventory extends JPanel implements ActionListener
 							remove(bestWeapon);
 							bestWeapon = inventory[row][col];
 						}
-						else remove(inventory[row][col]);
+						else 
+						*/
+						remove(inventory[row][col]);
 					}
 					else if(inventory[row][col].getType().contains(
 							ServerWorld.ARMOUR_TYPE))
 					{
+						/*
 						if(bestArmour == null)
 							bestArmour = inventory[row][col];
 						else if(inventory[row][col].getCost() > bestArmour.getCost())
@@ -387,7 +393,9 @@ public class ClientInventory extends JPanel implements ActionListener
 							remove(bestArmour);
 							bestArmour = inventory[row][col];
 						}
-						else remove(inventory[row][col]);
+						else 
+						*/
+						remove(inventory[row][col]);
 					}
 					else
 						remove(inventory[row][col]);
@@ -407,6 +415,7 @@ public class ClientInventory extends JPanel implements ActionListener
 		for (int weapon = 0; weapon < equippedWeapons.length; weapon++)
 			if (equippedWeapons[weapon] != null)
 			{
+				/*
 				if(bestWeapon == null)
 				{
 					bestWeapon = equippedWeapons[weapon];
@@ -416,12 +425,15 @@ public class ClientInventory extends JPanel implements ActionListener
 					remove(bestWeapon);
 					bestWeapon = equippedWeapons[weapon];
 				}
-				else remove(equippedWeapons[weapon]);
+				else 
+				*/
+				remove(equippedWeapons[weapon]);
 			}
 		equippedWeapons = new ClientItem[ServerPlayer.MAX_WEAPONS];
 
 		if (equippedArmour != null)
 		{
+			/*
 			if(bestArmour == null)
 			{
 				bestArmour = equippedArmour;
@@ -431,10 +443,13 @@ public class ClientInventory extends JPanel implements ActionListener
 				remove(bestArmour);
 				bestArmour = equippedArmour;
 			}
-			else remove(equippedArmour);
+			else 
+			*/
+			remove(equippedArmour);
 		}
 		equippedArmour = null;
 
+		/*
 		// Reset armour and weapon
 		if (bestWeapon != null)
 		{
@@ -454,6 +469,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			inventory[0][2].setRow(0);
 			inventory[0][2].setCol(2);
 		}
+		*/
 
 		invalidate();
 		repaint();

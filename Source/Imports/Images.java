@@ -1447,6 +1447,14 @@ public class Images {
 				addtoImageArray(new GameImage("INN_"+i+".png",image));
 			}
 			
+			
+			try {
+				image = ImageIO.read(new File("Images//Interface//" + "MERC.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			addtoImageArray(new GameImage("MERC.png", image,ClientCastleShopItem.WIDTH,ClientCastleShopItem.HEIGHT));
+			
 			try {
 				image = ImageIO.read(new File("Images//Buildings//" + "RED_CASTLE.png"));
 			} catch (IOException e) {
@@ -1479,8 +1487,6 @@ public class Images {
 			{
 				addtoImageArray(new GameImage("goldCoin" + i + ".png","Items//"));
 			}
-			
-			addtoImageArray(new GameImage("MERC.png","Interface//"));
 
 			image = null;
 		}
