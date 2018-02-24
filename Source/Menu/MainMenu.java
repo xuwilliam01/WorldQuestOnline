@@ -1556,6 +1556,7 @@ public class MainMenu implements KeyListener {
 					break;
 				}
 			}
+			
 			mainFrame.remove(mainMenu);
 			mainMenu.close();
 			mainFrame.invalidate();
@@ -1566,7 +1567,13 @@ public class MainMenu implements KeyListener {
 			mainFrame.add(creatorPanel);
 			mainFrame.setVisible(true);
 			creatorPanel.revalidate();
-
+			JOptionPane.showMessageDialog(mainFrame, 
+					"\nA playable map must have spawners and a castle for both teams as well"
+					+ "\nas a clear path between the castles for goblins."
+					+ "\n\nIf you save your own map, it'll be playable on your own server!"
+					+ "\nIf you think you made a great map, we'd love to add it to our servers!"
+					+ "\nYou'll find it in the Resources folder in your game directory."
+					+ "\n\nContact us at worldquestdev@gmail.com!", "Creator instructions", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}

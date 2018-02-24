@@ -113,13 +113,15 @@ public class CreatorObject extends JButton implements MouseListener
 
 	public void setPosition(int row, int col)
 	{
+		
+		int delta = 12;
 		if (isTile)
-			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * imageRef.getImage().getWidth(null) + (col + 1)
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(delta + col * imageRef.getImage().getWidth(null) + (col + 1)
 					* 12))),ClientFrame.getScaledHeight((int)(SCALE*(row * imageRef.getImage().getHeight(null) + row * 10)
-					+ 80)));
+					+ 35)));
 		else
-			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(col * getIcon().getIconWidth()/SCALE + (col + 1) * 12))), ClientFrame.getScaledHeight((int)(SCALE*(row
-					* getIcon().getIconHeight()/SCALE + row * 10) + 425)));
+			setLocation(ClientFrame.getScaledWidth((int)(SCALE*(delta + col * getIcon().getIconWidth()/SCALE + (col + 1) * 12))), ClientFrame.getScaledHeight((int)(SCALE*(row
+					* getIcon().getIconHeight()/SCALE + row * 10) + 350)));
 	}
 
 	@Override

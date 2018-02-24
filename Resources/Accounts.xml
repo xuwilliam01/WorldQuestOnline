@@ -276,4 +276,10 @@
     <Wins>0</Wins>
     <Losses>0</Losses>
   </User>
+  <User name="Squidward">
+    <Key>-908899981</Key>
+    <Elo>0</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
+  </User>
 </Root>

@@ -96,6 +96,11 @@ public class ServerCastle extends ServerBuilding {
 	 * Goblins that this castle provides each spawn tick
 	 */
 	private int castleGoblins[];
+	
+	/**
+	 * The tier of goblins this castle will spawn up to given current tier
+	 */
+	private int goblinTierLimit = 0;
 
 	/**
 	 * All the spawners of this team
@@ -117,11 +122,21 @@ public class ServerCastle extends ServerBuilding {
 	 * Delay between each spawning session
 	 */
 	public static final int spawnDelay = 1000;
-	
-	
 
-	//public final static int[] CASTLE_TIER_XP = {100, 500, 1000, 5000, 10000, 100000}; //Change later
-	public final static int[] CASTLE_TIER_XP = {1000,2500,5000,7500,12500,15000}; 
+	/**
+	 * The amount of xp it takes to advance from each level
+	 */
+	public final static int[] CASTLE_TIER_XP = {1000, 2500, 3500, 5000, 7500, 10000}; 
+	
+	/**
+	 * Amount of income castle gains every minute
+	 */
+	public final static int[] CASTLE_TIER_INCOME = {10, 12, 15, 18, 22, 26, 30};
+	
+	/**
+	 * The progress made until 1
+	 */
+	private double incomeGathered = 0;
 
 	/**
 	 * Constructor
@@ -172,13 +187,19 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 
-			for (Integer goblin:castleGoblins)
+			for (int i = 0; i < 7; i++)
 			{
-				spawnGoblin(goblin);
+				int randomGoblin = (int)(Math.random()*(this.goblinTierLimit + 1));
+				spawnGoblin(randomGoblin);
 			}
 		}
-
-
+		
+		this.setIncomeGathered(this.getIncomeGathered() + CASTLE_TIER_INCOME[this.getTier()]/3600.0);
+		if (this.getIncomeGathered() >= 1.0)
+		{
+			this.addMoney(1);
+			this.setIncomeGathered(0);
+		}
 	}
 
 	/**
@@ -224,7 +245,7 @@ public class ServerCastle extends ServerBuilding {
 		setHP(getHP() + 2500);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
-
+		this.setGoblinTierLimit(this.getGoblinTierLimit() + 2);
 
 		for (ServerObject object: arrowSources)
 		{
@@ -233,10 +254,10 @@ public class ServerCastle extends ServerBuilding {
 
 		arrowSources.clear();
 
-		if (tier == 3) {
+		if (tier == 2) {
 			arrowType = ServerWorld.STEELARROW_TYPE;
 			
-		} else if (tier == 5) {
+		} else if (tier == 4) {
 			arrowType = ServerWorld.MEGAARROW_TYPE;
 		}
 
@@ -431,5 +452,28 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void addSpawner(ServerGoblinSpawner spawner)
 	{
 		this.spawners.add(spawner);
+	}
+
+	public int getGoblinTierLimit() {
+		return goblinTierLimit;
+	}
+
+	public void setGoblinTierLimit(int goblinTierLimit) {
+		if (goblinTierLimit >= ServerGoblin.noOfGoblinTypes)
+		{
+			this.goblinTierLimit = ServerGoblin.noOfGoblinTypes-1;
+		}
+		else
+		{
+			this.goblinTierLimit = goblinTierLimit;
+		}
+	}
+
+	public double getIncomeGathered() {
+		return incomeGathered;
+	}
+
+	public void setIncomeGathered(double incomeGathered) {
+		this.incomeGathered = incomeGathered;
 	}
 }

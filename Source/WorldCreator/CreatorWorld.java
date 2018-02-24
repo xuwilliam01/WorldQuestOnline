@@ -461,7 +461,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		}
 		else canDrawObject = false;
 
-		graphics.setColor(Color.green);
+		graphics.setColor(Color.GRAY);
 
 		// Draw an outline
 		graphics.drawRect((int) (CENTRE_X - posX), (int) (CENTRE_Y  - posY),(int)((grid[0].length)
