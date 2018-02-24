@@ -16,7 +16,7 @@ public class ServerBat extends ServerEnemy
 	/**
 	 * The default HP of a bat
 	 */
-	public final static int BAT_HP = 35;
+	public final static int BAT_HP = 40;
 
 	/**
 	 * The minimum amount of time before the bat manually changes direction
@@ -101,7 +101,7 @@ public class ServerBat extends ServerEnemy
 			setDirection("RIGHT");
 		}
 
-		setDamage((int) (Math.random() * 2) + 2);
+		setDamage((int) (Math.random() * 2) + 3);
 		maxSpeed = (int) (Math.random() * 3 + 4);
 
 		setTargetRange(500);
@@ -120,8 +120,8 @@ public class ServerBat extends ServerEnemy
 		else if (batType == 30)
 		{
 			setImage("BATD_RIGHT_0");
-			setDamage((int) (Math.random() * 2) + 13);
-			setHP(80);
+			setDamage((int) (Math.random() * 2) + 18);
+			setHP(100);
 			setName("Dark Bat");
 			addItem(ServerItem.randomItem(getX(), getY(),world));
 			addItem(ServerItem.randomItem(getX(), getY(),world));

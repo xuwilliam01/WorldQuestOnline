@@ -77,7 +77,7 @@ public class ServerSlime extends ServerEnemy
 		}
 		landCounter = 0;
 
-		setDamage((int) (Math.random() * 3) + 2);
+		setDamage((int) (Math.random() * 3) + 3);
 		jumpHeight = (int) (Math.random() * 3 + 14);
 		speed = (int) (Math.random() * 3 + 4);
 
@@ -119,7 +119,7 @@ public class ServerSlime extends ServerEnemy
 			setImage("DARKSLIME_6");
 			setWidth(-1);
 			setHeight(-1);
-			setDamage(20);
+			setDamage(18);
 			setHP(50);
 			setName("Dark Slime");
 			addItem(ServerItem.randomItem(getX(), getY(),world));

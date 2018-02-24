@@ -841,6 +841,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 				this.setDead(true);
 				hSpeed = 0;
 				vSpeed = 0;
+				System.out.println("Setting vspeed to 0");
 			}
 		}
 		else if (this.isDead())
@@ -848,7 +849,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			this.setDead(false);
 		}
 		
-		if (!inAction) {
+		if (!inAction || this.isDead()) {
 			double gravity = ServerWorld.GRAVITY * (timeForTick / (ServerEngine.UPDATE_RATE * 1000000.0));
 
 			// Apply gravity first (DEFINITELY BEFORE CHECKING
