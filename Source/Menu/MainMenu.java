@@ -81,7 +81,7 @@ public class MainMenu implements KeyListener {
 	/**
 	 * The IP address for the dedicated server
 	 */
-	public final static String DEDICATED_IP = "127.0.0.1";
+	public static String DEDICATED_IP = "127.0.0.1";
 
 	/**
 	 * Default port number
@@ -488,6 +488,8 @@ public class MainMenu implements KeyListener {
 
 			setVisible(true);
 			repaint();
+			
+			ClientAccountWindow.IP = JOptionPane.showInputDialog(this, " (Temporary) What's the IP of the server manager?");
 		}
 
 		public void close() {
@@ -903,6 +905,7 @@ public class MainMenu implements KeyListener {
 						input.close();
 						output.close();
 						mySocket.close();
+					/*
 					} else if (line.equals("INVALID")) {
 						JOptionPane.showMessageDialog(this,
 								"Invalid login credentials. Try to logout and login again.");
@@ -910,6 +913,7 @@ public class MainMenu implements KeyListener {
 						input.close();
 						output.close();
 						mySocket.close();
+						*/
 					} else if (line.equals("ERROR")) {
 						JOptionPane.showMessageDialog(this, "Error Connecting");
 						exit = true;
@@ -1077,10 +1081,12 @@ public class MainMenu implements KeyListener {
 				leaderboard.toFront();
 				return;
 			}
+			/*
 			if (!ClientAccountWindow.loggedIn) {
 				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
+			*/
 			serverList = null;
 			try {
 				serverList = new ClientServerSelection(DEF_UDP_PORT);
@@ -1329,10 +1335,12 @@ public class MainMenu implements KeyListener {
 				leaderboard.toFront();
 				return;
 			}
+			/*
 			if (!ClientAccountWindow.loggedIn) {
 				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
 				return;
 			}
+			*/
 			// Get user info. If it invalid, then ask for it again or exit back
 			// to the main menu
 			String serverIP;

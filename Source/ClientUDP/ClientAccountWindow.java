@@ -57,7 +57,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	// public final static String IP = "52.15.92.225";
 	
 	// public final static String IP = "74.12.138.159";
-	public final static String IP = "127.0.0.1";
+	public static String IP = "";
 	public final static int PORT = 9977;
 
 	public static boolean open = false;

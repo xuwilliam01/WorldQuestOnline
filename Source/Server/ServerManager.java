@@ -375,9 +375,9 @@ public class ServerManager implements Runnable, ActionListener{
 						Thread.sleep(200);
 						if(!validCredentials)
 						{
-							throw new Exception();
+							//throw new Exception();
 						}
-						validCredentials = false;
+						//validCredentials = false;
 
 					}
 					else throw new Exception();	
