@@ -16,8 +16,8 @@ import Server.Buildings.ServerCastle;
 @SuppressWarnings("serial")
 public class ClientCastleShop extends JPanel implements ActionListener{
 	
-	public final static int SHOP_WIDTH = 1000;
-	public final static int SHOP_HEIGHT = 500;
+	public final static int SHOP_WIDTH = 725;
+	public final static int SHOP_HEIGHT = 475;
 
 	private Client client; //Maybe not needed
 	private int money;
@@ -29,7 +29,7 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 		this.client = client;
 		this.money = money;
 		setDoubleBuffered(true);
-		setBackground(Color.black);
+		setBackground(Color.darkGray);
 		setFocusable(true);
 		requestFocusInWindow();
 		setLayout(null);
@@ -71,21 +71,28 @@ public class ClientCastleShop extends JPanel implements ActionListener{
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
+		
+		graphics.setColor(Color.BLACK);
+		graphics.fillRect(ClientFrame.getScaledWidth(15), ClientFrame.getScaledHeight(15), ClientFrame.getScaledWidth(SHOP_WIDTH - 30), ClientFrame.getScaledHeight(SHOP_HEIGHT - 30));
+		
 		graphics.setColor(Color.white);
-		graphics.drawString("Barracks", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(100));
-		graphics.drawString("Housing", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(200));
-		graphics.drawString("Defence", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(300));
-		graphics.drawString("Resource", ClientFrame.getScaledWidth(20), ClientFrame.getScaledHeight(400));
-		graphics.drawString("Mercenaries", ClientFrame.getScaledWidth(440), ClientFrame.getScaledHeight(80));
-		graphics.drawString("Uses 20 housing", ClientFrame.getScaledWidth(440), ClientFrame.getScaledHeight(110));
+		
+		int delta = 45;
+		
+		graphics.drawString("Barracks", ClientFrame.getScaledWidth(delta), ClientFrame.getScaledHeight(100));
+		graphics.drawString("Housing", ClientFrame.getScaledWidth(delta), ClientFrame.getScaledHeight(200));
+		graphics.drawString("Defence", ClientFrame.getScaledWidth(delta), ClientFrame.getScaledHeight(300));
+		graphics.drawString("Resource", ClientFrame.getScaledWidth(delta), ClientFrame.getScaledHeight(400));
+		graphics.drawString("Mercenaries", ClientFrame.getScaledWidth(335 + delta), ClientFrame.getScaledHeight(240));
+		graphics.drawString("Uses 20 housing", ClientFrame.getScaledWidth(335 + delta), ClientFrame.getScaledHeight(270));
 		String mon = "Team Gold: "+ money;
-		graphics.drawString(mon, ClientFrame.getScaledWidth(400), ClientFrame.getScaledHeight(450));
-		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(400) + graphics.getFontMetrics().stringWidth(mon)+5, ClientFrame.getScaledHeight(450)-8,this);
+		graphics.drawString(mon, ClientFrame.getScaledWidth(220+ delta), ClientFrame.getScaledHeight(420));
+		graphics.drawImage(coinImage, ClientFrame.getScaledWidth(220+ delta) + graphics.getFontMetrics().stringWidth(mon)+5, ClientFrame.getScaledHeight(420)-8,this);
 		graphics.setColor(Color.gray);
 		String income =  " (+" + ServerCastle.CASTLE_TIER_INCOME
 				[(client.getPlayer().getTeam()==ServerCreature.RED_TEAM)?client.getRedCastleTier():client.getBlueCastleTier()]
-						+ " gold/min)";
-		graphics.drawString(income,  ClientFrame.getScaledWidth(400) + graphics.getFontMetrics().stringWidth(mon)+30, ClientFrame.getScaledHeight(450));
+						+ " gold/min until " + ServerCastle.MAX_MONEY_FOR_INCOME + " gold)";
+		graphics.drawString(income,  ClientFrame.getScaledWidth(205 + delta) + graphics.getFontMetrics().stringWidth(mon)+30, ClientFrame.getScaledHeight(420));
 	}
 
 	@Override

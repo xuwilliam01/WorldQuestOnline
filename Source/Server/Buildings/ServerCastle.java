@@ -134,6 +134,11 @@ public class ServerCastle extends ServerBuilding {
 	public final static int[] CASTLE_TIER_INCOME = {10, 12, 15, 18, 22, 26, 30};
 	
 	/**
+	 * Castle will no longer get passive income when gold passes this point
+	 */
+	public final static int MAX_MONEY_FOR_INCOME = 50;
+	
+	/**
 	 * The progress made until 1
 	 */
 	private double incomeGathered = 0;
@@ -194,7 +199,11 @@ public class ServerCastle extends ServerBuilding {
 			}
 		}
 		
-		this.setIncomeGathered(this.getIncomeGathered() + CASTLE_TIER_INCOME[this.getTier()]/3600.0);
+		if (this.getMoney() < MAX_MONEY_FOR_INCOME)
+		{
+			this.setIncomeGathered(this.getIncomeGathered() + CASTLE_TIER_INCOME[this.getTier()]/3600.0);
+		}
+		
 		if (this.getIncomeGathered() >= 1.0)
 		{
 			this.addMoney(1);

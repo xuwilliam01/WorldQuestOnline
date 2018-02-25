@@ -6,15 +6,15 @@ import Server.Creatures.ServerCreature;
 import Server.Effects.ServerDemolition;
 
 public abstract class ServerBuilding extends ServerCreature {
-
-	public final static int BARRACKS_HP = 1000;
-	public final static int ADV_BARRACKS_HP = 1500;
-	public final static int GIANT_FACTORY_HP = 1500;
-	public final static int WOOD_HOUSE_HP = 500;
-	public final static int INN_HP = 800;
+	
+	public final static int BARRACKS_HP = 700;
+	public final static int ADV_BARRACKS_HP = 1000;
+	public final static int GIANT_FACTORY_HP = 1200;
+	public final static int WOOD_HOUSE_HP = 450;
+	public final static int INN_HP = 700;
 	public final static int TOWER_HP = 750;
 	public final static int CASTLE_HP = 5000;
-	public final static int GOLD_MINE_HP = 1500;
+	public final static int GOLD_MINE_HP = 1200;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
 		super(x, y, 0, 0, 0, 0, 0, "SERVERBUILDING", type, 0, world, true);

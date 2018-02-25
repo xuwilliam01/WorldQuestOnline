@@ -282,4 +282,16 @@
     <Wins>0</Wins>
     <Losses>0</Losses>
   </User>
+  <User name="lmfao">
+    <Key>1179232847</Key>
+    <Elo>0</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
+  </User>
+  <User name="aiden">
+    <Key>-1609393490</Key>
+    <Elo>0</Elo>
+    <Wins>0</Wins>
+    <Losses>0</Losses>
+  </User>
 </Root>
