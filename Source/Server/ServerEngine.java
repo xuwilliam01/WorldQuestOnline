@@ -94,6 +94,8 @@ public class ServerEngine implements Runnable, ActionListener {
 	 * The map for the server
 	 */
 	private ServerGUI gui = null;
+	
+	private int restartCounter = 0;
 
 	private boolean endGame = false;
 	private int losingTeam;
@@ -147,14 +149,22 @@ public class ServerEngine implements Runnable, ActionListener {
 				toRemove.clear();
 			}
 
-			//Everyone left the game, so end it
-			/*
 			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
 			{
-				server.getAllConnectedPlayers().clear();
-				endGame(ServerCreature.RED_TEAM);
+				restartCounter++;
+				
+				// Everyone left the game, so end it after 20 seconds
+				if (restartCounter >= 1200)
+				{
+					server.getAllConnectedPlayers().clear();
+					endGame(ServerCreature.RED_TEAM);
+					restartCounter = 0;
+				}
 			}
-			*/
+			else
+			{
+				restartCounter = 0;
+			}
 
 			try{
 				for (ServerPlayer player : listOfPlayers) {
