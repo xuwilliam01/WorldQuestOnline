@@ -44,7 +44,6 @@ public class CreatorObject extends JButton implements MouseListener
 				+ "_ICON")));
 		setSize(ClientFrame.getScaledWidth(getIcon().getIconWidth()), ClientFrame.getScaledHeight(getIcon().getIconHeight()));
 
-
 		imageRef = new ImageReferencePair(ref, name);
 
 		this.world = world;
@@ -55,8 +54,6 @@ public class CreatorObject extends JButton implements MouseListener
 		setFocusable(false);
 		addMouseListener(this);
 		setToolTipText(description);
-
-
 	}
 	
 	public void paintComponent(Graphics graphics)
@@ -90,7 +87,6 @@ public class CreatorObject extends JButton implements MouseListener
 		imageRef.setReference(reference);
 	}
 	
-
 	public Image getImage()
 	{
 		return imageRef.getImage();

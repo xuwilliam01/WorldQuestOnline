@@ -93,7 +93,7 @@ public class GameImage implements Comparable<GameImage> {
 		}
 		if (Math.abs(bufferedImage.getWidth()-width)>2
 				|| Math.abs(bufferedImage.getHeight()-height)>2) {
-			image = bufferedImage.getScaledInstance(width, height, image.SCALE_SMOOTH);
+			image = bufferedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		} else {
 			image = bufferedImage;
 		}
@@ -113,7 +113,6 @@ public class GameImage implements Comparable<GameImage> {
 		if (hostingServer) {
 			bufferedImage = null;
 			image = null;
-			color = null;
 		}
 	}
 
@@ -153,8 +152,8 @@ public class GameImage implements Comparable<GameImage> {
 
 		this.width = width;
 		this.height = height;
-		color = new Color(image.getRGB(image.getWidth() / 3,
-				image.getHeight() / 3));
+		color = new Color(image.getRGB(image.getWidth() / 2,
+				image.getHeight() / 2));
 
 		if (hostingServer) {
 			this.image = null;

@@ -5,6 +5,7 @@ import Client.Client.JTextFieldLimit;
 import Imports.ImageReferencePair;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
+import Tools.RowCol;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -66,7 +68,18 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	 * Grid of all the tiles
 	 */
 	private char[][] grid;
-
+	
+	/**
+	 * Grid of the sidelength of all tiles
+	 */
+	private int[][] sideLengthGrid;
+	
+	/**
+	 * Grid of the column to skip to if reaching a blank tile
+	 * covered by a larger merged tile
+	 */
+	private int[][] columnSkipGrid;
+	
 	/**
 	 * Position of the map when viewing the world
 	 */
@@ -220,12 +233,108 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		this.world = world;
 		this.engine = engine;
 
-		grid = world.getGrid();
-
+		//this.grid = world.getGrid();
+		//this.columnSkipGrid = new int[grid.length][grid[0].length];
+		//this.sideLengthGrid = new int[grid.length][grid[0].length];
+		this.setUpTileGrids();
+		
 		// Add key, mouse wheel listener and repaint timer
 		addMouseWheelListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+	
+	private void setUpTileGrids()
+	{
+		this.grid = world.getGrid();
+		this.columnSkipGrid = new int[grid.length][grid[0].length];
+		this.sideLengthGrid = new int[grid.length][grid[0].length];
+		for (int row = 0; row < this.sideLengthGrid.length; row++)
+		{
+			for (int col = 0; col < this.sideLengthGrid[0].length; col++)
+			{
+				this.sideLengthGrid[row][col] = 1;
+			}
+		}
+		
+		// The column of the empty tile we want to add a skip to
+		// Set to -1 when there's nothing currently
+		int savedCol = -1;
+		
+		// Go through once to set up skips for rows of empty tiles
+		for (int row = 0; row < grid.length; row++)
+		{
+			for (int col = 0; col < grid[0].length; col++)
+			{
+				if (this.grid[row][col] == ' ' && savedCol == -1)
+				{
+					savedCol = col;
+				}
+				else if (savedCol != -1)
+				{
+					// Skip to this tile from the saved empty tile
+					// therefore skipping a row of empty tiles
+					this.columnSkipGrid[row][savedCol] = col;
+					savedCol = -1;
+				}
+			}
+		}
+		
+		// Go through and merge squares of tiles into one
+		// as well as skips for already merged tiles
+		for (int row = 0; row < grid.length; row++)
+		{
+			for (int col = 0; col < grid[0].length; col++)
+			{
+				if (this.columnSkipGrid[row][col] != 0)
+				{
+					col = this.columnSkipGrid[row][col];
+				}
+				else
+				{
+					char tileType = grid[row][col];
+					int sideLength = 1;
+					
+					checkLoop:
+					while (true)
+					{
+						if (row + sideLength >= grid.length || col + sideLength >= grid[0].length)
+						{
+							break checkLoop;
+						}
+						
+						for (int checkCol = col; checkCol <= col + sideLength; checkCol++)
+						{
+							// Check if the tile is the same as the one we're trying to expand
+							// and also if the tile is already covered by an above merged tile
+							if (grid[row + sideLength][checkCol] != tileType || 
+									this.columnSkipGrid[row + sideLength][checkCol] != 0)
+							{
+								break checkLoop;
+							}
+						}
+						
+						for (int checkRow = row; checkRow <= row + sideLength; checkRow++)
+						{
+							// Don't need if the tile is covered because it won't be,
+							// since it's below the one we're currently checking
+							if (grid[checkRow][col + sideLength] != tileType)
+							{
+								break checkLoop;
+							}
+						}
+						
+						// Set up the skips
+						this.columnSkipGrid[row][col + 1] = col + sideLength + 1;
+						this.columnSkipGrid[row + sideLength][col] = col + sideLength + 1;
+						
+						sideLength++;
+					}
+					
+					this.sideLengthGrid[row][col] = sideLength;
+				}
+			}
+		}
 	}
 
 	/**
@@ -251,33 +360,33 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			{
 				endRow = grid.length - 1;
 			}
-			int startColumn = (int) ((posX - CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
-			if (startColumn < 0)
+			int startCol = (int) ((posX - CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
+			if (startCol < 0)
 			{
-				startColumn = 0;
+				startCol = 0;
 			}
-			int endColumn = (int) ((CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
-			if (endColumn >= grid[0].length)
+			int endCol = (int) ((CENTRE_X + posX + 5) / (ServerWorld.TILE_SIZE / objectFactor));
+			if (endCol >= grid[0].length)
 			{
-				endColumn = grid[0].length - 1;
+				endCol = grid[0].length - 1;
 			}
 			for (int row = startRow; row <= endRow; row++)
 			{
-				for (int column = startColumn; column <= endColumn; column++)
+				for (int col = startCol; col <= endCol; col++)
 				{
-					if (grid[row][column] != ' ')
+					if (this.columnSkipGrid[row][col] != 0)
 					{
-						graphics.setColor(ImageReferencePair.getImages()[grid[row][column]]
-								.getColor());
-						graphics.fillRect(
-								(int) (CENTRE_X
-										+ column
-										* (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-										(int) (CENTRE_Y
-												+ row
-												* (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1,
-												(int) (ServerWorld.TILE_SIZE / objectFactor) + 1);
+						col = this.columnSkipGrid[row][col];
+					}
+					else if (grid[row][col] != ' ')
+					{
+						Color color = ImageReferencePair.getImages()[grid[row][col]]
+								.getColor();
+						graphics.setColor(color);
+						graphics.fillRect((int) (CENTRE_X + col * (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
+									(int) (CENTRE_Y + row * (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
+									((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]),
+									((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]));
 					}
 				}
 			}
@@ -327,8 +436,8 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		// else
 		// {
 		graphics.setColor(Color.BLACK);
-		graphics.setFont(Client.ClientWorld.BIG_NORMAL_FONT);
-		graphics.drawString("The server runs faster when the map is hidden",
+		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
+		graphics.drawString("If you've got an older rig, showing the map may slow down your server!",
 				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
 				- 55);
 		// }

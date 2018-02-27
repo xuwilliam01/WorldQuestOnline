@@ -40,13 +40,24 @@ public class ImageReferencePair {
 		GameImage gameImage = Images.getGameImage(name);
 		image = Images.getImage(name);
 		color = gameImage.getCentreColor();
-
 	}
 
 	/**
 	 * Imports the reference
 	 */
 	public static void importReferences() throws IOException {
+		
+		while (!Images.imported)
+		{
+			System.out.println("Waiting for image imports");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		BufferedReader br = new BufferedReader(new FileReader(new File(
 				"Resources", "WorldCreator.cfg")));
 		String line;

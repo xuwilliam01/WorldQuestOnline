@@ -116,7 +116,7 @@ public class Images {
 	/**
 	 * Determines whether images were already imported or not
 	 */
-	static boolean imported = false;
+	public static boolean imported = false;
 
 	/**
 	 * Modify images using java and write them to the file
@@ -243,7 +243,6 @@ public class Images {
 		
 		imageArray = new GameImage[10000];
 
-		imported = true;
 		// Only import if the images haven't been imported already
 		if (imageMap.isEmpty()) {
 			BufferedImage image = null;
@@ -1495,6 +1494,8 @@ public class Images {
 			imageArray[no] = clone[no];
 			imageMap.put(imageArray[no].getName(), no);
 		}
+		
+		imported = true;
 	}
 
 	/**
@@ -1505,7 +1506,6 @@ public class Images {
 	private static void addtoImageArray(GameImage gameImage) {
 		imageArray[noOfImages] = gameImage;
 		noOfImages++;
-
 	}
 
 	/**
