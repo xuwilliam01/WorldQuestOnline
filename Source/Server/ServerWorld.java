@@ -6,11 +6,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.HashMap;
 
 import Imports.ImageReferencePair;
 import Imports.GameMap;
@@ -316,7 +312,7 @@ public class ServerWorld
 	 * List of all the non-tile objects in the world (for movement and collision
 	 * detection)
 	 */
-	private TreeMap<Integer, ServerObject> objects;
+	private HashMap<Integer, ServerObject> objects;
 
 	/**
 	 * List of objects to add to the world next refresh (based on the user's
@@ -358,7 +354,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine) throws IOException
 	{
-		objects = new TreeMap<Integer, ServerObject>();
+		objects = new HashMap<Integer, ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
@@ -372,7 +368,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine, String map) throws IOException
 	{
-		objects = new TreeMap<Integer, ServerObject>();
+		objects = new HashMap<Integer, ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
@@ -516,9 +512,8 @@ public class ServerWorld
 		try
 		{
 			// Go through and update each object in the game
-			for (Map.Entry<Integer, ServerObject> entry : objects.entrySet())
+			for (ServerObject object : objects.values())
 			{
-				ServerObject object = entry.getValue();
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
 				{
@@ -1151,9 +1146,9 @@ public class ServerWorld
 		}
 
 		// Iterate through objects once more at the end
-		for (Map.Entry<Integer, ServerObject> entry : objects.entrySet())
+		for (ServerObject object : objects.values())
 		{
-			entry.getValue().setPlayedSound(false);
+			object.setPlayedSound(false);
 		}
 
 		// Increase the world counter by 1 after this game tick
@@ -1378,7 +1373,7 @@ public class ServerWorld
 		this.tileGrid = grid;
 	}
 
-	public TreeMap<Integer, ServerObject> getObjects()
+	public HashMap<Integer, ServerObject> getObjects()
 	{
 		return objects;
 	}

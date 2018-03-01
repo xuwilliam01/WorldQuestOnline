@@ -393,9 +393,8 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 
 			// Draw each object on the gui if it's inside the screen
-			for (Map.Entry<Integer, ServerObject> entry : world.getObjects().entrySet())
+			for (ServerObject object : world.getObjects().values())
 			{
-				ServerObject object = entry.getValue();
 				if (object.isMapVisible()
 						&&
 						((CENTRE_X + object.getX() / objectFactor - posX)
