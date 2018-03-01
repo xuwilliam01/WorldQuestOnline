@@ -13,9 +13,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-
-import Client.Client;
-import Client.ClientInventory;
 import Menu.MainMenu;
 import Server.Server;
 

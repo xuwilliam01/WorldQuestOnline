@@ -5,10 +5,8 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +17,6 @@ import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientShop;
 import Server.ServerWorld;
-import Server.Creatures.ServerPlayer;
-import Tools.BinaryTree;
 import WorldCreator.CreatorObject;
 
 /**

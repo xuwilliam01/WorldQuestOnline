@@ -6,9 +6,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import Menu.MainMenu;
-import Server.ServerEngine;
-
 public class Audio {
 
 	private static GameAudio[] audioArray;
@@ -151,8 +148,6 @@ public class Audio {
 //		audioArray[audioMap.get(name)].play(dist);
 //	}
 
-	private static long cooldownStart = 0;
-	
 	public static ArrayList<QueuedAudio> currentlyPlaying = new ArrayList<QueuedAudio>();
 	public final static int maxConcurrentAudio = 5;
 	

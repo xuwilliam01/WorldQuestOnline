@@ -5,7 +5,6 @@ import Client.Client.JTextFieldLimit;
 import Imports.ImageReferencePair;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
-import Tools.RowCol;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -18,10 +17,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;

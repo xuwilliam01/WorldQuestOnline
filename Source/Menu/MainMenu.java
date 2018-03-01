@@ -1,7 +1,6 @@
 package Menu;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -26,7 +25,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
@@ -36,9 +34,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import javafx.scene.effect.DropShadow;
-import javafx.scene.text.Text;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -54,7 +49,6 @@ import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
-import Client.ClientWorld;
 import ClientUDP.ClientAccountWindow;
 import ClientUDP.ClientServerSelection;
 import ClientUDP.Leaderboard;
@@ -62,9 +56,6 @@ import Imports.Audio;
 import Imports.Images;
 import Imports.GameMaps;
 import START.StartGame;
-import Server.Server;
-import Server.ServerFrame;
-import Server.ServerGUI;
 import Server.ServerManager;
 import WorldCreator.CreatorItems;
 import WorldCreator.CreatorWorld;

@@ -1,7 +1,6 @@
 package START;
 
 import java.net.SocketException;
-import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 

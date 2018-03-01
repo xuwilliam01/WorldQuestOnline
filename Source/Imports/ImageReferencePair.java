@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import WorldCreator.CreatorObject;
-
 /**
  * Links an image with a character reference
  * 
