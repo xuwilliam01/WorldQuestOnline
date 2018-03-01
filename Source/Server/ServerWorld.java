@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.Set;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import Imports.ImageReferencePair;
-import Imports.Map;
-import Imports.Maps;
+import Imports.GameMap;
+import Imports.GameMaps;
 import Server.Buildings.*;
 import Server.Creatures.ServerChest;
 import Server.Creatures.ServerCreature;
@@ -311,7 +316,7 @@ public class ServerWorld
 	 * List of all the non-tile objects in the world (for movement and collision
 	 * detection)
 	 */
-	private LinkedList<ServerObject> objects;
+	private TreeMap<Integer, ServerObject> objects;
 
 	/**
 	 * List of objects to add to the world next refresh (based on the user's
@@ -353,7 +358,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine) throws IOException
 	{
-		objects = new LinkedList<ServerObject>();
+		objects = new TreeMap<Integer, ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
@@ -367,7 +372,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine, String map) throws IOException
 	{
-		objects = new LinkedList<ServerObject>();
+		objects = new TreeMap<Integer, ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
@@ -406,7 +411,7 @@ public class ServerWorld
 	public void newWorld() throws IOException
 	{
 		// Get the map from pre-existing loading
-		Map map = Maps.getMapWithName(mapFile);
+		GameMap map = GameMaps.getMapWithName(mapFile);
 		tileGrid = map.getTileGrid();
 		collisionGrid = map.getCollisionGrid();
 		objectGrid = map.getObjectGrid();
@@ -452,12 +457,12 @@ public class ServerWorld
 							blueCastle.reinitialize();
 						}
 					}
-					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE+"")
 							&& obj.getImage().equals("RED_GOBLIN_SPAWN"))
 					{
 						redSpawners.add((ServerSpawner) newObject);
 					}
-					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE)
+					else if (obj.getType().equals(ServerWorld.SPAWN_TYPE+"")
 							&& obj.getImage().equals("BLUE_GOBLIN_SPAWN"))
 					{
 						blueSpawners.add((ServerSpawner) newObject);
@@ -490,7 +495,7 @@ public class ServerWorld
 		for (ServerObject object : objectsToRemove)
 		{
 			removeFromObjectTiles(object);
-			objects.remove(object);
+			this.remove(object);
 			blueTeam.remove(object);
 			redTeam.remove(object);
 			engine.removeID(object.getID());
@@ -505,19 +510,18 @@ public class ServerWorld
 			{
 				((ServerItem) newObject).setDropTime(worldCounter);
 			}
-			objects.add(newObject);
+			objects.put(newObject.hashCode(), newObject);
 		}
 
 		try
 		{
 			// Go through and update each object in the game
-			for (ServerObject object : objects)
+			for (Map.Entry<Integer, ServerObject> entry : objects.entrySet())
 			{
-
+				ServerObject object = entry.getValue();
 				// This will remove the object a frame after it stops existing
 				if (object.exists())
 				{
-
 					// Add the object to all the object tiles that it collides
 					// with
 					// currently
@@ -1147,9 +1151,9 @@ public class ServerWorld
 		}
 
 		// Iterate through objects once more at the end
-		for (ServerObject object : objects)
+		for (Map.Entry<Integer, ServerObject> entry : objects.entrySet())
 		{
-			object.setPlayedSound(false);
+			entry.getValue().setPlayedSound(false);
 		}
 
 		// Increase the world counter by 1 after this game tick
@@ -1185,7 +1189,7 @@ public class ServerWorld
 	 */
 	public void remove(ServerObject object)
 	{
-		objects.remove(object);
+		objects.remove(object.hashCode());
 	}
 
 	/**
@@ -1374,7 +1378,7 @@ public class ServerWorld
 		this.tileGrid = grid;
 	}
 
-	public LinkedList<ServerObject> getObjects()
+	public TreeMap<Integer, ServerObject> getObjects()
 	{
 		return objects;
 	}

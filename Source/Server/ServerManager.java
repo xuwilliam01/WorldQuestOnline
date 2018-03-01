@@ -20,7 +20,7 @@ import javax.swing.Timer;
 
 import Client.ClientFrame;
 import ClientUDP.ClientAccountWindow;
-import Imports.Maps;
+import Imports.GameMaps;
 import Server.Creatures.ServerPlayer;
 
 public class ServerManager implements Runnable, ActionListener{
@@ -158,7 +158,7 @@ public class ServerManager implements Runnable, ActionListener{
 			centralServerThread.start();
 			updateCentral.start();
 		}
-		Maps.importMaps();
+		GameMaps.importMaps();
 	}
 
 	@Override

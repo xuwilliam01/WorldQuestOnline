@@ -60,7 +60,7 @@ import ClientUDP.ClientServerSelection;
 import ClientUDP.Leaderboard;
 import Imports.Audio;
 import Imports.Images;
-import Imports.Maps;
+import Imports.GameMaps;
 import START.StartGame;
 import Server.Server;
 import Server.ServerFrame;
@@ -1427,7 +1427,7 @@ public class MainMenu implements KeyListener {
 			int maxRooms;
 			String name;
 
-			Maps.importMaps();
+			GameMaps.importMaps();
 			while (true) {
 				try {
 					String maxRoomsStr = JOptionPane

@@ -10,14 +10,14 @@ import Server.ServerObject;
  * @author William
  *
  */
-public class Map
+public class GameMap
 {
 	private String name;
 	private char[][]tileGrid;
 	private char[][]collisionGrid;
 	private ArrayList<ServerObject>[][]objectGrid;
 	private ArrayList<String> startingObjects;
-	public Map(String name, char[][] tileGrid, char[][] collisionGrid, ArrayList<ServerObject>[][]objectGrid, ArrayList<String> startingObjects)
+	public GameMap(String name, char[][] tileGrid, char[][] collisionGrid, ArrayList<ServerObject>[][]objectGrid, ArrayList<String> startingObjects)
 	{
 		this.name=name;
 		this.tileGrid = tileGrid;

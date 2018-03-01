@@ -11,13 +11,13 @@ import java.util.StringTokenizer;
 import Server.ServerObject;
 import Server.ServerWorld;
 
-public class Maps 
+public class GameMaps 
 {
 	static boolean imported = false;
 	/**
 	 * ArrayList of maps
 	 */
-	public static ArrayList<Map> maps = new ArrayList<Map>();
+	public static ArrayList<GameMap> maps = new ArrayList<GameMap>();
 	
 	public static void importMaps()
 	{
@@ -144,7 +144,7 @@ public class Maps
 				e.printStackTrace();
 			}
 			
-			maps.add(new Map(mapFile, tileGrid, collisionGrid, objectGrid, startingObjects));
+			maps.add(new GameMap(mapFile, tileGrid, collisionGrid, objectGrid, startingObjects));
 		}
 		
 		try {
@@ -161,9 +161,9 @@ public class Maps
 	 * @param name
 	 * @return
 	 */
-	public static Map getMapWithName(String name)
+	public static GameMap getMapWithName(String name)
 	{
-		for (Map map:maps)
+		for (GameMap map:maps)
 		{
 			if (map.getName().equalsIgnoreCase(name))
 			{

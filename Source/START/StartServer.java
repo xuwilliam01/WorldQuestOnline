@@ -6,7 +6,7 @@ import java.util.Scanner;
 import Imports.Audio;
 import Imports.GameImage;
 import Imports.Images;
-import Imports.Maps;
+import Imports.GameMaps;
 import Menu.MainMenu;
 import Server.ServerManager;
 
@@ -24,7 +24,7 @@ public class StartServer {
 		GameImage.hostingServer=true;
 		Images.importImages();
 		Audio.importAudio(false);
-		Maps.importMaps();
+		GameMaps.importMaps();
 
 		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS, false, true);
 

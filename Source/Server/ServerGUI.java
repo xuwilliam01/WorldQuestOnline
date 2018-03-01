@@ -21,6 +21,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -392,8 +393,9 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 
 			// Draw each object on the gui if it's inside the screen
-			for (ServerObject object : world.getObjects())
+			for (Map.Entry<Integer, ServerObject> entry : world.getObjects().entrySet())
 			{
+				ServerObject object = entry.getValue();
 				if (object.isMapVisible()
 						&&
 						((CENTRE_X + object.getX() / objectFactor - posX)
