@@ -723,7 +723,6 @@ public class ClientWorld {
 				}
 				objects[id].setLastCounter(Client.getPacketNo());
 				objects[id].setHP(hp);
-
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -731,6 +730,10 @@ public class ClientWorld {
 		} catch (NullPointerException e2) {
 			e2.printStackTrace();
 			System.out.println(id + " " + name + " " + type + " " + image);
+			if (objects[id]==null)
+			{
+				System.out.println("Object no longer exists!");
+			}
 		}
 	}
 

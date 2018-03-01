@@ -284,13 +284,13 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		{
 			for (int col = 0; col < grid[0].length; col++)
 			{
+				char tileType = grid[row][col];
 				if (this.columnSkipGrid[row][col] != 0)
 				{
 					col = this.columnSkipGrid[row][col];
 				}
-				else
+				else if (tileType != ' ')
 				{
-					char tileType = grid[row][col];
 					int sideLength = 1;
 					
 					checkLoop:
@@ -316,17 +316,24 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 						{
 							// Don't need if the tile is covered because it won't be,
 							// since it's below the one we're currently checking
-							if (grid[checkRow][col + sideLength] != tileType)
+							if (grid[checkRow][col + sideLength] != tileType || 
+									this.columnSkipGrid[checkRow][col + sideLength] != 0)
 							{
 								break checkLoop;
 							}
 						}
 						
 						// Set up the skips
-						this.columnSkipGrid[row][col + 1] = col + sideLength + 1;
-						this.columnSkipGrid[row + sideLength][col] = col + sideLength + 1;
+						this.columnSkipGrid[row][col + 1] = col + sideLength;
+						this.columnSkipGrid[row + sideLength][col] = col + sideLength;
 						
 						sideLength++;
+						
+						// When it gets really big it glitches out for some reason
+						if (sideLength >= 20)
+						{
+							break checkLoop;
+						}
 					}
 					
 					this.sideLengthGrid[row][col] = sideLength;
@@ -348,7 +355,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		if (visible & started)
 		{
 			// Draw each tile on the screen
-			int startRow = (int) ((posY - CENTRE_Y - 5) / (ServerWorld.TILE_SIZE / objectFactor));
+			int startRow = (int) ((posY - CENTRE_Y - 150) / (ServerWorld.TILE_SIZE / objectFactor));
 			if (startRow < 0)
 			{
 				startRow = 0;
@@ -358,7 +365,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			{
 				endRow = grid.length - 1;
 			}
-			int startCol = (int) ((posX - CENTRE_X - 5) / (ServerWorld.TILE_SIZE / objectFactor));
+			int startCol = (int) ((posX - CENTRE_X - 150) / (ServerWorld.TILE_SIZE / objectFactor));
 			if (startCol < 0)
 			{
 				startCol = 0;
@@ -372,19 +379,25 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			{
 				for (int col = startCol; col <= endCol; col++)
 				{
-					if (this.columnSkipGrid[row][col] != 0)
+					if (this.columnSkipGrid[row][col] > 0)
 					{
 						col = this.columnSkipGrid[row][col];
 					}
 					else if (grid[row][col] != ' ')
 					{
-						Color color = ImageReferencePair.getImages()[grid[row][col]]
-								.getColor();
+						Color color = ImageReferencePair.getImages()[grid[row][col]].getColor();
 						graphics.setColor(color);
-						graphics.fillRect((int) (CENTRE_X + col * (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1,
-									(int) (CENTRE_Y + row * (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1,
-									((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]),
-									((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]));
+						
+						int x = (int) (CENTRE_X + col * (ServerWorld.TILE_SIZE / objectFactor) - posX) + 1;
+						int y = (int) (CENTRE_Y + row * (ServerWorld.TILE_SIZE / objectFactor) - posY) + 1;
+						int width = ((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]);
+						int height = ((int) (ServerWorld.TILE_SIZE / objectFactor) + 1) * (this.sideLengthGrid[row][col]);
+						
+						if (x + width >= 0 && y + height >= 0 && x <= Client.Client.SCREEN_WIDTH / ServerFrame.FRAME_FACTOR
+								&& y <= Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR)
+						{
+							graphics.fillRect(x, y, width, height);
+						}
 					}
 				}
 			}
@@ -435,7 +448,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 		// {
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(Client.ClientWorld.NORMAL_FONT);
-		graphics.drawString("If you've got an older rig, showing the map may slow down your server!",
+		graphics.drawString("Showing the map may slow down your server!",
 				250, Client.Client.SCREEN_HEIGHT / ServerFrame.FRAME_FACTOR
 				- 55);
 		// }
@@ -887,7 +900,7 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 			}
 			else if (notches < 0)
 			{
-				if (objectFactor / (1.1 * (-notches)) >= 1)
+				if (objectFactor / (1.1 * (-notches)) > ServerFrame.FRAME_FACTOR * 3)
 				{
 					objectFactor /= (1.1 * (-notches));
 					posX *= 1.1 * -notches;
@@ -895,9 +908,9 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 				}
 				else
 				{
-					posX *= objectFactor;
-					posY *= objectFactor;
-					objectFactor = 1;
+					posX /= ServerFrame.FRAME_FACTOR * 3 / objectFactor;
+					posY /= ServerFrame.FRAME_FACTOR * 3 / objectFactor;
+					objectFactor = ServerFrame.FRAME_FACTOR * 3;
 				}
 			}
 		}
