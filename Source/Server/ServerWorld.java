@@ -432,7 +432,14 @@ public class ServerWorld
 					ServerObject newObject = ServerObject.copy(obj);
 					newObject.setX(col * ServerWorld.TILE_SIZE);
 					newObject.setY(row * ServerWorld.TILE_SIZE);
-
+					
+					int tileUnder = (int)((newObject.getY() + newObject.getHeight()) / ServerWorld.TILE_SIZE);
+					
+					if (collisionGrid[tileUnder][col] == SOLID_TILE)
+					{
+						newObject.setY(tileUnder * ServerWorld.TILE_SIZE - newObject.getHeight());
+					}
+					
 					if (obj.getType().equals(ServerWorld.CASTLE_TYPE))
 					{
 
