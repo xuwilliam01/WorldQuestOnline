@@ -68,12 +68,6 @@ import WorldCreator.CreatorWorld;
  */
 public class MainMenu implements KeyListener {
 	static MainMenu main;
-
-	/**
-	 * The IP address for the dedicated server
-	 */
-	public static String DEDICATED_IP = "127.0.0.1";
-
 	/**
 	 * Default port number
 	 */
@@ -479,8 +473,6 @@ public class MainMenu implements KeyListener {
 
 			setVisible(true);
 			repaint();
-			
-			ClientAccountWindow.Domain = JOptionPane.showInputDialog(this, " (Temporary) What's the IP of the server manager?");
 		}
 
 		public void close() {

@@ -808,7 +808,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					}
 				}
 
-				if (System.nanoTime() - startPaint > 7 * 1000000) {
+				if (System.nanoTime() - startPaint > 15000000) {
 					clientUpdatePlayer(System.nanoTime() - startPaint);
 					startPaint = System.nanoTime();
 					repaint();
@@ -1240,7 +1240,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			}
 
 			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 70, 20);
-			graphics.drawString("FPS: " + getCurrentFPS(), Client.SCREEN_WIDTH - 70, 40);
+			graphics.drawString("FPS: " + Math.min(60, getCurrentFPS()), Client.SCREEN_WIDTH - 70, 40);
 
 			graphics.drawImage(Images.getImage("InventoryShadow"),
 					Client.SCREEN_WIDTH - ClientFrame.getScaledWidth(100), 0, null);
