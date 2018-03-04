@@ -521,23 +521,21 @@ public class CentralServer implements Runnable, ActionListener {
 						}
 					} catch (NullPointerException e) {
 						System.out.println("Server Disconnected");
-						return;
+						break;
 					}
 				}
 			} catch (IOException e) {
 				System.out.println("Server Disconnected");
-				return;
 			} catch(Exception e) {
-				try {
-					input.close();
-					output.close();
-					server.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				System.out.print("Bad Server Input");
-				return;
+			}
+			
+			try {
+				input.close();
+				output.close();
+				server.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 		}
 

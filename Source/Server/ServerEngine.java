@@ -21,7 +21,7 @@ import Server.Creatures.ServerPlayer;
  * @author William Xu & Alex Raita
  *
  */
-public class ServerEngine implements Runnable, ActionListener {
+public class ServerEngine implements ActionListener {
 
 	/**
 	 * A list of all the players in the server
@@ -116,6 +116,10 @@ public class ServerEngine implements Runnable, ActionListener {
 
 		listOfPlayers = new ArrayList<ServerPlayer>();
 		world = new ServerWorld(this, map);
+		
+		updateTimer = new Timer(UPDATE_RATE, this);
+		startTime = System.currentTimeMillis();
+		updateTimer.start();
 	}
 
 	/**
@@ -125,16 +129,6 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void setGui(ServerGUI gui) {
 		this.gui = gui;
-	}
-
-	@Override
-	/**
-	 * Constantly update the game
-	 */
-	public void run() {
-		updateTimer = new Timer(UPDATE_RATE, this);
-		startTime = System.currentTimeMillis();
-		updateTimer.start();
 	}
 
 	/**
@@ -200,7 +194,7 @@ public class ServerEngine implements Runnable, ActionListener {
 					if(server.getAllConnectedPlayers().size() > 1)
 						server.getManager().send("E "+winner+" "+numRed+" "+numBlue+redPlayers+bluePlayers);
 					server.getManager().removeRoom(server);
-					close();
+					closeEngine();
 					server.close();
 				}
 
@@ -219,7 +213,7 @@ public class ServerEngine implements Runnable, ActionListener {
 		nextBuildingID = 0;
 	}
 
-	public void close() {
+	public void closeEngine() {
 		updateTimer.stop();
 		listOfPlayers.clear();
 		toRemove.clear();
@@ -357,6 +351,12 @@ public class ServerEngine implements Runnable, ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
+		if (!server.isRunning())
+		{
+			this.closeEngine();
+			return;
+		}
+		
 		// Remove disconnected players and update all player scores/pings
 		synchronized(listOfPlayers)
 		{
@@ -471,5 +471,9 @@ public class ServerEngine implements Runnable, ActionListener {
 	public ArrayList<SavedPlayer> getSavedPlayers()
 	{
 		return savedPlayers;
+	}
+
+	public Server getServer() {
+		return server;
 	}
 }

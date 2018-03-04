@@ -86,7 +86,7 @@ public class ServerLobbyPlayer implements Runnable
 	 */
 	public void run()
 	{
-		while (true)
+		while (server.isRunning())
 		{
 			try
 			{

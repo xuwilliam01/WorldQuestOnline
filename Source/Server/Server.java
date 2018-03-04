@@ -48,10 +48,13 @@ public class Server implements Runnable {
 	//Use this to keep track of all the players who joined
 	private ArrayList<ServerPlayer> allConnectedPlayers = new ArrayList<ServerPlayer>();
 	private ArrayList<String> allowedPlayers = new ArrayList<String>();
+	
+	private boolean running;
 
 	public Server(ServerManager manager)
 	{
 		this.manager = manager;
+		System.out.println("Server opened");
 	}
 
 	public ServerManager getManager() {
@@ -124,9 +127,17 @@ public class Server implements Runnable {
 		return newPlayerWaiting.get(sizeIndex - 1);
 	}
 
+	public void terminate()
+	{
+		running = false;
+		System.out.println("Server closed");
+	}
+	
 	@Override
 	public void run() {
-		while (true) {
+		running = true;
+		
+		while (running) {
 			try {
 				Socket newClient = nextClient();
 				output = new PrintWriter(newClient.getOutputStream());
@@ -165,6 +176,11 @@ public class Server implements Runnable {
 				break;
 			}
 		}
+		
+		if (!running)
+		{
+			return;
+		}
 
 		long startTime = System.currentTimeMillis();
 		ServerLobbyPlayer.numRed = 0;
@@ -194,8 +210,6 @@ public class Server implements Runnable {
 			gui.startGame(engine.getWorld(), engine);
 		}
 
-		Thread newEngine = new Thread(engine);
-		newEngine.start();
 		broadcast("Start");
 
 		// Accept players into the server
@@ -204,7 +218,7 @@ public class Server implements Runnable {
 		for (ServerLobbyPlayer player : lobbyPlayers) {
 			lobbyPlayersToAdd.add(player);
 		}
-		while (true) {
+		while (running) {
 			try {
 				Triple next = nextGameClient();
 				Socket newClient = next.socket;
@@ -393,7 +407,6 @@ public class Server implements Runnable {
 				System.out.println("Error connecting to client");
 				e.printStackTrace();
 			} catch (NullPointerException e) {
-				//manager.addNewRoom();
 				return;
 			}
 		}
@@ -499,5 +512,13 @@ public class Server implements Runnable {
 	public ArrayList<String> getAllowedPlayers()
 	{
 		return allowedPlayers;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 }

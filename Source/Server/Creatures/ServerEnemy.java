@@ -10,8 +10,7 @@ import Server.Spawners.ServerSpawner;
  * @author Alex Raita & William Xu
  *
  */
-public abstract class ServerEnemy extends ServerCreature implements
-		ActionListener
+public abstract class ServerEnemy extends ServerCreature
 {
 
 	/**
@@ -99,10 +98,6 @@ public abstract class ServerEnemy extends ServerCreature implements
 	public void setCounter(int counter)
 	{
 		this.counter = counter;
-	}
-	public void actionPerformed(ActionEvent arg0)
-	{
-		update();
 	}
 	public int getDamage()
 	{

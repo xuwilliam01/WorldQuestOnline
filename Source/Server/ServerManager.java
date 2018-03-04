@@ -51,61 +51,6 @@ public class ServerManager implements Runnable, ActionListener{
 	private ArrayDeque<String> messageQueue = new ArrayDeque<String>();
 
 	private boolean canConnectCentral = false;
-	/**
-	 * 
-	 * @param port
-	 * @param maxRooms
-	 * @param mainFrame
-	 * @throws SocketException 
-	 */
-	public ServerManager(String name, int port, int maxRooms, ClientFrame mainFrame) throws SocketException {
-		
-		// Inactive constructor
-		
-		this.name = name;
-		if(name.contains("1v1"))
-		{
-			Server.MAX_PLAYERS = 2;
-		}
-		else if (name.contains("2v2"))
-		{
-			Server.MAX_PLAYERS = 4;
-		}
-		else if (name.contains("3v3"))
-		{
-			Server.MAX_PLAYERS = 6;
-		}
-		else if (name.contains("4v4"))
-		{
-			Server.MAX_PLAYERS = 8;
-		}
-		else if (name.contains("5v5"))
-		{
-			Server.MAX_PLAYERS = 10;
-		}
-		
-		this.maxRooms = maxRooms;
-		this.mainFrame = mainFrame;	
-		thisPort = port;
-		addNewRoom();
-		UDPSocket = new DatagramSocket(port);
-		sendData = new byte[1024];
-		PingReceiver ping = new PingReceiver();
-		Thread pingThread = new Thread(ping);
-		pingThread.start();
-
-		try {
-			socket = new ServerSocket(thisPort);
-		} catch (IOException e) {
-			System.out.println("Server cannot be created with given port");
-			e.printStackTrace();
-		}
-
-		Thread centralServerThread = new Thread(new CentralServerReceive());
-		centralServerThread.start();
-
-		updateCentral.start();
-	}
 
 	/**
 	 * 
@@ -177,7 +122,6 @@ public class ServerManager implements Runnable, ActionListener{
 				newPlayerAccept.start();
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -195,7 +139,6 @@ public class ServerManager implements Runnable, ActionListener{
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
@@ -204,7 +147,6 @@ public class ServerManager implements Runnable, ActionListener{
 						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
 						UDPSocket.send(send);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -214,7 +156,6 @@ public class ServerManager implements Runnable, ActionListener{
 					in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 					System.out.println("Connected to central server");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -438,7 +379,6 @@ public class ServerManager implements Runnable, ActionListener{
 		public void actionPerformed(ActionEvent arg0) {
 			((Timer)arg0.getSource()).stop();
 			timeout = true;
-
 		}
 
 	}
@@ -480,6 +420,7 @@ public class ServerManager implements Runnable, ActionListener{
 
 	public void removeRoom(Server remove)
 	{
+		remove.terminate();
 		rooms.remove(remove);
 	}
 

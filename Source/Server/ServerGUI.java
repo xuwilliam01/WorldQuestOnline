@@ -983,7 +983,11 @@ MouseWheelListener, MouseListener, MouseMotionListener, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-
+		if (!server.isRunning())
+		{
+			return;
+		}
+		
 		if (e.getSource() == enter)
 		{
 			// Send the message

@@ -3,6 +3,7 @@ package START;
 import java.net.SocketException;
 import java.util.Scanner;
 
+import ClientUDP.ClientAccountWindow;
 import Imports.Audio;
 import Imports.GameImage;
 import Imports.Images;
@@ -19,6 +20,11 @@ public class StartServer {
 		System.out.print("Enter server name: ");
 		String name = scan.nextLine();
 		name = name.replace(' ', '_');
+		
+		System.out.print("Enter central server IP: ");
+		ClientAccountWindow.IP = scan.nextLine();
+		scan.close();
+		
 		Imports.Audio.isServer=true;
 		
 		GameImage.hostingServer=true;
@@ -26,23 +32,20 @@ public class StartServer {
 		Audio.importAudio(false);
 		GameMaps.importMaps();
 
-		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS, false, true);
-
-		Thread serverThread = new Thread(server);
-
-		serverThread.start();
-
 		
+		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS, false, true);
+		Thread serverThread = new Thread(server);
+		serverThread.start();
 
 		System.out.println("Done loading");
 
-		while (true) {
-			if (scan.nextLine().equalsIgnoreCase("exit")) {
-				System.out.println("Server closed");
-				scan.close();
-				System.exit(0);
-			}
-		}
+//		while (true) {
+//			if (scan.nextLine().equalsIgnoreCase("exit")) {
+//				System.out.println("Server closed");
+//				scan.close();
+//				System.exit(0);
+//			}
+//		}
 	}
 
 }

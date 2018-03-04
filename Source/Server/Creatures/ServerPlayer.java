@@ -1104,7 +1104,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	class WriterThread implements Runnable {
 		@Override
 		public void run() {
-			while (!closeWriter) {
+			while (!closeWriter && engine.getServer().isRunning()) {
 				if (flushWriterNow) {
 					flushWriter();
 					flushWriterNow = false;
@@ -1124,7 +1124,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * Main thread of the class receiving input from the player
 	 */
 	public void run() {
-		while (!endGame) {
+		while (!endGame && this.engine.getServer().isRunning()) {
 
 			if (disconnect)
 			{

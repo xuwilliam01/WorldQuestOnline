@@ -1394,6 +1394,7 @@ public class MainMenu implements KeyListener {
 
 	/**
 	 * Starts the server when this button is pressed
+	 * Currently inactive, please fix constructor in server manager
 	 * 
 	 * @author Alex Raita & William Xu
 	 *
@@ -1477,12 +1478,12 @@ public class MainMenu implements KeyListener {
 			// Starts the server
 			System.out.println("rooms " + maxRooms);
 			ServerManager server = null;
-			try {
-				server = new ServerManager(name, portNum, maxRooms, mainFrame);
-			} catch (SocketException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			try {
+//				server = new ServerManager(name, portNum, maxRooms, mainFrame, false);
+//			} catch (SocketException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 
 			Thread serverThread = new Thread(server);
 
