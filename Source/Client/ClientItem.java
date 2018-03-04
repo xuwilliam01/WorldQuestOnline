@@ -76,10 +76,10 @@ public class ClientItem extends JButton implements MouseListener{
 			setToolTipText(String.format("+%d Mana",ServerPotion.MANA_AMOUNT));
 			break;
 		case ServerWorld.MAX_MANA_TYPE:
-			setToolTipText(String.format("M ax Mana +%d",ServerPotion.MAX_MANA_INCREASE));
+			setToolTipText(String.format("Max Mana +%d",ServerPotion.MAX_MANA_INCREASE));
 			break;
 		case ServerWorld.DMG_POTION_TYPE:
-			setToolTipText(String.format("+%d% Base Damage",ServerPotion.DMG_AMOUNT));
+			setToolTipText(String.format("+%d%% Base Damage",ServerPotion.DMG_AMOUNT));
 			break;
 		case ServerWorld.SPEED_POTION_TYPE:
 			setToolTipText(String.format("+%d Speed",ServerPotion.SPEED_AMOUNT));
@@ -104,64 +104,64 @@ public class ClientItem extends JButton implements MouseListener{
 			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Dagger (+%d Damage)",ServerWeapon.DADIAMOND_DMG));
-		break;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Dagger (+%d Damage)",ServerWeapon.DAGOLD_DMG));
-		break;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Dagger (+%d Damage)",ServerWeapon.DAIRON_DMG));
-		break;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Dagger (+%d Damage)",ServerWeapon.DASTONE_DMG));
-		break;
+			break;
 		case ServerWorld.DAGGER_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Dagger (+%d Damage)",ServerWeapon.DAWOOD_DMG));
-		break;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Ax (+%d Damage)",ServerWeapon.AXDIAMOND_DMG));
-		break;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Ax (+%d Damage)",ServerWeapon.AXGOLD_DMG));
-		break;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Ax (+%d Damage)",ServerWeapon.AXIRON_DMG));
-		break;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Ax (+%d Damage)",ServerWeapon.AXSTONE_DMG));
-		break;
+			break;
 		case ServerWorld.AX_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Ax (+%d Damage)",ServerWeapon.AXWOOD_DMG));
-		break;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Sword (+%d Damage)",ServerWeapon.SWDIAMOND_DMG));
-		break;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Sword (+%d Damage)",ServerWeapon.SWGOLD_DMG));
-		break;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Sword (+%d Damage)",ServerWeapon.SWIRON_DMG));
-		break;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Sword (+%d Damage)",ServerWeapon.SWSTONE_DMG));
-		break;
+			break;
 		case ServerWorld.SWORD_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Sword (+%d Damage)",ServerWeapon.SWWOOD_DMG));
-		break;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.DIAMOND_TIER:
 			setToolTipText(String.format("Diamond Halberd (+%d Damage)",ServerWeapon.HADIAMOND_DMG));
-		break;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.GOLD_TIER:
 			setToolTipText(String.format("Gold Halberd (+%d Damage)",ServerWeapon.HAGOLD_DMG));
-		break;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.IRON_TIER:
 			setToolTipText(String.format("Iron Halberd (+%d Damage)",ServerWeapon.HAIRON_DMG));
-		break;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.STONE_TIER:
 			setToolTipText(String.format("Stone Halberd (+%d Damage)",ServerWeapon.HASTONE_DMG));
-		break;
+			break;
 		case ServerWorld.HALBERD_TYPE + ServerWorld.WOOD_TIER:
 			setToolTipText(String.format("Wood Halberd (+%d Damage)",ServerWeapon.HAWOOD_DMG));
-		break;
+			break;
 		case ServerWorld.SLINGSHOT_TYPE:
 			setToolTipText(String.format("Slingshot (+%d Damage)",ServerWeapon.SLING_DMG));
 			break;

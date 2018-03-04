@@ -584,6 +584,7 @@ public class MainMenu implements KeyListener {
 					try {
 						send = new DatagramPacket(sendData, sendData.length,
 								InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), ClientAccountWindow.PORT);
+						System.out.println(InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain));
 						socket.send(send);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
