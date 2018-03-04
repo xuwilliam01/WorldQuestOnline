@@ -480,7 +480,7 @@ public class MainMenu implements KeyListener {
 			setVisible(true);
 			repaint();
 			
-			ClientAccountWindow.IP = JOptionPane.showInputDialog(this, " (Temporary) What's the IP of the server manager?");
+			ClientAccountWindow.Domain = JOptionPane.showInputDialog(this, " (Temporary) What's the IP of the server manager?");
 		}
 
 		public void close() {
@@ -591,7 +591,7 @@ public class MainMenu implements KeyListener {
 					sendData = ("S " + ClientAccountWindow.savedUser).getBytes();
 					try {
 						send = new DatagramPacket(sendData, sendData.length,
-								InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+								InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), ClientAccountWindow.PORT);
 						socket.send(send);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -601,7 +601,7 @@ public class MainMenu implements KeyListener {
 				sendData = "P".getBytes();
 				try {
 					send = new DatagramPacket(sendData, sendData.length,
-							InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+							InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), ClientAccountWindow.PORT);
 					socket.send(send);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

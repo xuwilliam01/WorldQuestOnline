@@ -22,7 +22,7 @@ public class StartServer {
 		name = name.replace(' ', '_');
 		
 		System.out.print("Enter central server IP: ");
-		ClientAccountWindow.IP = scan.nextLine();
+		ClientAccountWindow.Domain = scan.nextLine();
 		scan.close();
 		
 		Imports.Audio.isServer=true;

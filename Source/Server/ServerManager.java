@@ -144,14 +144,14 @@ public class ServerManager implements Runnable, ActionListener{
 
 					sendData = "P".getBytes();
 					try {
-						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), ClientAccountWindow.PORT);
+						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), ClientAccountWindow.PORT);
 						UDPSocket.send(send);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 				try {
-					centralServer = new Socket(ClientUDP.ClientAccountWindow.IP, ClientAccountWindow.PORT);
+					centralServer = new Socket(ClientUDP.ClientAccountWindow.Domain, ClientAccountWindow.PORT);
 					out = new PrintWriter(centralServer.getOutputStream());
 					in = new BufferedReader(new InputStreamReader(centralServer.getInputStream()));
 					System.out.println("Connected to central server");

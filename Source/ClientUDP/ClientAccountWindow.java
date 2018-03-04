@@ -54,7 +54,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JButton menuLoginButton;
 	private Image logoutOver;
 	
-	public static String IP = ""; // This will default to 127.0.0.1
+	public static String Domain = "http://www.worldquest.online/";
 	public final static int PORT = 9977;
 
 	public static boolean open = false;
@@ -257,7 +257,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 			sendData = out.getBytes();
 			try {
-				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), PORT);
+				send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), PORT);
 				socket.send(send);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -291,7 +291,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 				String out = "C "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();
 				sendData = out.getBytes();
 				try {
-					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.IP), PORT);
+					send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), PORT);
 					socket.send(send);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

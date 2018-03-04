@@ -309,7 +309,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						}
 
 						sendData = ("S "+name).getBytes();
-						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientAccountWindow.IP), ClientAccountWindow.PORT);
+						send = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(ClientAccountWindow.Domain), ClientAccountWindow.PORT);
 						centralSocket.send(send);
 					}
 					else if (tokens[token].equals("CH"))
