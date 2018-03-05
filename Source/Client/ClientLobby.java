@@ -612,7 +612,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 					//Write the leader name under the menu button
 					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
-							(int) (ClientFrame.getScaledHeight(380)));
+							(int) (ClientFrame.getScaledHeight(385)));
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), redX + 5,
@@ -634,7 +634,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 					//Write the leader name under the menu button
 					graphics.drawString("Lobby Leader: "+leaderName, (int) (ClientFrame.getScaledWidth(337)),
-							(int) (ClientFrame.getScaledHeight(370)));
+							(int) (ClientFrame.getScaledHeight(385)));
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), blueX + 5,
@@ -647,7 +647,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		if(startTimer.isRunning())
 		{
 			graphics.drawString("Starting in: "+startCounter, (int) (ClientFrame.getScaledWidth(337)),
-					(int) (ClientFrame.getScaledHeight(410)));
+					(int) (ClientFrame.getScaledHeight(414)));
 		}
 
 		// if(!chat.hasFocus() && !mapBox.hasFocus())
