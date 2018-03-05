@@ -745,14 +745,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												+ " "
 												+ toChars(y)
 												+ " "
-												// + object.getX()
-												// + " "
-												// + object.getY()
-												// + " "
-												// + object.getHSpeed()
-												// + " "
-												// + object.getVSpeed()
-												// + " "
 												+ inAction
 												+ " "
 												+ object.getImageIndex()
@@ -770,13 +762,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												+ ((ServerPlayer) object)
 												.getCurrentText()
 												+ " "
-												+ Math.max(
-														0,
-														Math.round(100.0
-																* ((ServerPlayer) object)
-																.getHP()
-																/ ((ServerPlayer) object)
-																.getMaxHP())));
+												+ Math.max(0, Math.round(100.0
+													* ((ServerPlayer) object).getHP()
+													/ ((ServerPlayer) object).getMaxHP())));
 									} else {
 										queueMessage("O "
 												+ toChars(object.getID())
@@ -800,17 +788,42 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 												+ ((ServerPlayer) object)
 												.getCurrentText()
 												+ " "
-												+ Math.max(
-														0,
-														Math.round(100.0
-																* ((ServerPlayer) object)
-																.getHP()
-																/ ((ServerPlayer) object)
-																.getMaxHP())));
+												+ Math.max(0, Math.round(100.0 
+														* ((ServerPlayer) object).getHP()
+														/ ((ServerPlayer) object).getMaxHP())));
 									}
 									continue;
 								}
-
+								else if (object.getType().equals(
+												ServerWorld.PLAYER_AI_TYPE))
+								{
+									queueMessage("O "
+											+ toChars(object.getID())
+											+ " "
+											+ toChars(x)
+											+ " "
+											+ toChars(y)
+											+ " "
+											+ object.getImageIndex()
+											+ " "
+											+ team
+											+ " "
+											+ object.getType()
+											+ " "
+											+ ((ServerAIPlayer) object)
+											.getName().split(" ").length
+											+ " "
+											+ ((ServerAIPlayer) object)
+											.getName()
+											+ '`'
+											+ ((ServerAIPlayer) object)
+											.getCurrentText()
+											+ " "
+											+ Math.max(0, Math.round(100.0 
+													* ((ServerAIPlayer) object).getHP()
+													/ ((ServerAIPlayer) object).getMaxHP())));
+									continue;
+								}
 								break;
 							case ServerWorld.PROJECTILE_TYPE:
 								x = ((ServerProjectile) object).getDrawX();

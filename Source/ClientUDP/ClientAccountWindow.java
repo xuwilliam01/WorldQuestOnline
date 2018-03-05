@@ -54,7 +54,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	private JButton menuLoginButton;
 	private Image logoutOver;
 	
-	public static String Domain = "";//"138.68.246.64";
+	public static String Domain = "";//"worldquest.online";
 	public final static int PORT = 9977;
 
 	public static boolean open = false;

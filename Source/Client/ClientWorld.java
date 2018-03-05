@@ -924,7 +924,7 @@ public class ClientWorld {
 				int x = centreX + object.getX() - playerX;
 				int y = centreY + object.getY() - playerY;
 				
-				if (object.getID()==player.getID())
+				if (object.getID() == player.getID())
 				{
 					x = centreX;
 					y = centreY;
@@ -982,8 +982,9 @@ public class ClientWorld {
 						graphics.setColor(Color.blue);
 						break;
 					}
+					
 					graphics.setFont(DAMAGE_FONT);
-
+					
 					if (object.getTeam() != ServerCreature.NEUTRAL) {
 						if (object.getName().equals("") && !object.getType().equals(ServerWorld.CASTLE_TYPE)) {
 							if (object.getType().contains(ServerWorld.BUILDING_TYPE)) {
@@ -999,8 +1000,6 @@ public class ClientWorld {
 								graphics.fillRect(x + object.getWidth() / 2 - 5, y + object.getHeight() / 4, 10, 10);
 						} else {
 							if (object.getType().equals(ServerWorld.PLAYER_TYPE) || object.getType().equals(ServerWorld.PLAYER_AI_TYPE)) {
-
-								// System.out.println(object.getName());
 								String[] tokens = object.getName().split("`");
 								String name = tokens[0];
 								graphics.drawString(name, (int) (x + object.getWidth() / 2
@@ -1023,8 +1022,11 @@ public class ClientWorld {
 											- currentText.length() * DAMAGE_FONT_WIDTH / 2), y - 7);
 								}
 							} else {
-								graphics.drawString(object.getName(), (int) (x + object.getWidth() / 2
-										- object.getName().trim().length() * DAMAGE_FONT_WIDTH / 2), y + 15);
+								if (object.getName().length()>=1)
+								{
+									graphics.drawString(object.getName(), (int) (x + object.getWidth() / 2
+											- object.getName().trim().length() * DAMAGE_FONT_WIDTH / 2), y + 15);
+								}
 							}
 						}
 					}

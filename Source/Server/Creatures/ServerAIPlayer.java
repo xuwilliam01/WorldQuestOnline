@@ -247,6 +247,11 @@ public class ServerAIPlayer extends ServerCreature{
 		setHair(hair);
 		
 		this.initPlayer();
+		
+		if (isAlive()) {
+			setHSpeed(horizontalMovement);
+			movingDirection = 1;
+		}
 	}
 	
 	public void kick()

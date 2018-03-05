@@ -539,12 +539,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 													Integer.parseInt(tokens[++token]));
 										} catch (ArrayIndexOutOfBoundsException e) {
 											e.printStackTrace();
-											// System.out.printf("%d %d %d %d %d
-											// %s %s %d%n", id, x, y, Integer
-											// .parseInt(tokens[token-1]),Integer
-											// .parseInt(tokens[token]),tokens[token+1],
-											// tokens[token+2], Integer
-											// .parseInt(tokens[token+3]));
 										}
 									} else {
 										int len = 0;
@@ -559,6 +553,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										for (int i = 0; i < len; i++) {
 											name += tokens[token + 5 + i] + " ";
 										}
+										
 										world.setObject(id, x, y,
 												Images.getImageName(Integer.parseInt(tokens[++token])),
 												Integer.parseInt(tokens[++token]), tokens[++token], name.trim(),
