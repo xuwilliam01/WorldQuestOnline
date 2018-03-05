@@ -298,9 +298,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			PrintWriter output) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
 				+ skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
-				world.getBluePlayerStartHP(), world, true); // player start HP doesn't
-		// matter since it will
-		// change
+				world.getBluePlayerStartHP(), world, true);
+		
 		disconnect = false;
 		// Set the name of the player
 		setName(name);
@@ -627,8 +626,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 		}
 	}
-
-
 
 	public void setTeam(int team) {
 		super.setTeam(team);
@@ -1901,7 +1898,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					if (source.getType().equals(ServerWorld.PLAYER_TYPE)) {
 						engine.broadcast("@ " + toChars(source.getID()) + " "
 								+ source.getTeam());
-						((ServerPlayer) source).kills++;
+						((ServerPlayer) source).addKill();
 					}
 					engine.broadcast("! " + toChars(getID()) + " " + getTeam());
 
@@ -2531,6 +2528,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public void setKills(int kills) {
 		this.kills = kills;
+	}
+	
+	public void addKill() {
+		this.kills++;
 	}
 
 	public int getDeaths() {

@@ -9,6 +9,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import Server.Creatures.ServerAIPlayer;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -385,6 +386,12 @@ public class Server implements Runnable {
 				}
 
 				engine.addPlayer(newPlayer);
+				
+				ServerAIPlayer ai = new ServerAIPlayer(engine.getWorld().getRedCastleX(),
+						engine.getWorld().getRedCastleY(), ServerPlayer.DEFAULT_WIDTH, 
+						ServerPlayer.DEFAULT_HEIGHT, ServerWorld.GRAVITY, engine.getWorld(),ServerPlayer.RED_TEAM);
+				
+				engine.getWorld().add(ai);
 
 				//This is to keep track of all players who joined
 				ServerPlayer toRemove = null;
@@ -520,5 +527,21 @@ public class Server implements Runnable {
 
 	public void setRunning(boolean running) {
 		this.running = running;
+	}
+
+	public String[] getPlayerColours() {
+		return playerColours;
+	}
+
+	public void setPlayerColours(String[] playerColours) {
+		this.playerColours = playerColours;
+	}
+
+	public String[] getPlayerHairs() {
+		return playerHairs;
+	}
+
+	public void setPlayerHairs(String[] playerHairs) {
+		this.playerHairs = playerHairs;
 	}
 }

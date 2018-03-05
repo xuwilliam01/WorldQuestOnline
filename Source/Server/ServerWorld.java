@@ -57,6 +57,7 @@ public class ServerWorld
 
 	public final static char CREATURE_TYPE = 'C';
 	public final static String PLAYER_TYPE = CREATURE_TYPE + "C";
+	public final static String PLAYER_AI_TYPE = CREATURE_TYPE + "A";
 	public final static String PLAYER_GHOST_TYPE = PLAYER_TYPE + "G";
 	public final static String NPC_TYPE = CREATURE_TYPE + "N";
 
@@ -548,7 +549,7 @@ public class ServerWorld
 							endColumn);
 
 					// //////FIX THIS LATER//////////////
-					if (object.getType().equals(SPAWN_TYPE))
+					if (object.getType().equals(SPAWN_TYPE+""))
 					{
 						object.update();
 						continue;

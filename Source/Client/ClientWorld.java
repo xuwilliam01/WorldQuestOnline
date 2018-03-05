@@ -998,7 +998,7 @@ public class ClientWorld {
 							} else
 								graphics.fillRect(x + object.getWidth() / 2 - 5, y + object.getHeight() / 4, 10, 10);
 						} else {
-							if (object.getType().equals(ServerWorld.PLAYER_TYPE)) {
+							if (object.getType().equals(ServerWorld.PLAYER_TYPE) || object.getType().equals(ServerWorld.PLAYER_AI_TYPE)) {
 
 								// System.out.println(object.getName());
 								String[] tokens = object.getName().split("`");

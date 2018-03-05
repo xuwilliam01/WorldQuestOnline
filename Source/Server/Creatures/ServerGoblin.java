@@ -432,13 +432,6 @@ public class ServerGoblin extends ServerCreature {
 			}
 			// Follow and attack the target
 			else {
-				// if (getType().equals(ServerWorld.GOBLIN_ARCHER_TYPE)) {
-				// if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
-				// fightingRange = 200;
-				// } else {
-				// fightingRange = 1200;
-				// }
-				// }
 
 				// Attack the target with the weapon the goblin uses.
 				if (quickInRange(getTarget(), fightingRange)) {
