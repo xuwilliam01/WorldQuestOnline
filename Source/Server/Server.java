@@ -278,10 +278,10 @@ public class Server implements Runnable {
 					continue;
 				}
 
-
-
 				ServerPlayer newPlayer = null;
-
+				boolean inServer = false;
+				
+				
 				//Check if the player already joined
 				synchronized(engine.getSavedPlayers())
 				{
@@ -337,7 +337,7 @@ public class Server implements Runnable {
 						int randomHair = (int)(Math.random() * playerHairs.length);
 
 						int team = -1;
-						boolean inServer = false;
+						
 						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
 							if (player.getIP().equals(IP)) {
 								if (name.equals(player.getName())) {
@@ -386,13 +386,12 @@ public class Server implements Runnable {
 				}
 
 				engine.addPlayer(newPlayer);
-				
-				ServerAIPlayer ai = new ServerAIPlayer(engine.getWorld().getRedCastleX(),
-						engine.getWorld().getRedCastleY(), ServerPlayer.DEFAULT_WIDTH, 
-						ServerPlayer.DEFAULT_HEIGHT, ServerWorld.GRAVITY, engine.getWorld(),ServerPlayer.RED_TEAM);
-				
-				engine.getWorld().add(ai);
 
+				if (!inServer || lobbyPlayersToAdd.isEmpty())
+				{
+					engine.rebalanceAIPlayers();
+				}
+				
 				//This is to keep track of all players who joined
 				ServerPlayer toRemove = null;
 				for(ServerPlayer player : allConnectedPlayers)
@@ -403,7 +402,9 @@ public class Server implements Runnable {
 					}
 				}
 				if(toRemove != null)
+				{
 					allConnectedPlayers.remove(toRemove);
+				}
 				allConnectedPlayers.add(newPlayer);
 
 				Thread playerThread = new Thread(newPlayer);

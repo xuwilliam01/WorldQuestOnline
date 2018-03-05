@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 
 import javax.swing.Timer;
 
@@ -12,6 +13,7 @@ import Imports.Audio;
 import Imports.ImageReferencePair;
 import Imports.Images;
 import Imports.GameMaps;
+import Server.Creatures.ServerAIPlayer;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -26,12 +28,17 @@ public class ServerEngine implements ActionListener {
 	/**
 	 * A list of all the players in the server
 	 */
-	private ArrayList<ServerPlayer> listOfPlayers;
+	private LinkedList<ServerPlayer> listOfPlayers;
+	
+	/**
+	 * A list of all the bots in the server
+	 */
+	private LinkedList<ServerAIPlayer> listOfAIPlayers;
 
 	/**
 	 * Player to remove
 	 */
-	private ArrayList<ServerPlayer> toRemove = new ArrayList<ServerPlayer>();
+	private LinkedList<ServerPlayer> toRemove = new LinkedList<ServerPlayer>();
 
 	/**
 	 * The number of possible ID's for any objects. The number of objects
@@ -114,7 +121,8 @@ public class ServerEngine implements ActionListener {
 		this.server = server;
 		ImageReferencePair.importReferences();
 
-		listOfPlayers = new ArrayList<ServerPlayer>();
+		listOfPlayers = new LinkedList<ServerPlayer>();
+		listOfAIPlayers = new LinkedList<ServerAIPlayer>();
 		world = new ServerWorld(this, map);
 		
 		updateTimer = new Timer(UPDATE_RATE, this);
@@ -271,6 +279,8 @@ public class ServerEngine implements ActionListener {
 				+ remove.getTeam() + remove.getName());
 		//Remove from the scoreboard
 		broadcast("n " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
+		
+		this.rebalanceAIPlayers();
 	}
 
 	/**
@@ -293,8 +303,151 @@ public class ServerEngine implements ActionListener {
 					newPlayer.sendMessage("^ " + player.getName().split(" ").length + " " + player.getName() + " "
 							+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
 			}
+			for(ServerAIPlayer player : listOfAIPlayers)
+			{
+				newPlayer.sendMessage("^ " + player.getName().split(" ").length + " " + player.getName() + " "
+							+ ServerPlayer.toChars(player.getID()) + " " + player.getTeam()+" "+ player.getKills()+" "+ player.getDeaths() + " "+ServerPlayer.toChars(player.getScore()) + " " + player.getPing());
+			}
 		}
 		world.add(newPlayer);
+	}
+	
+	private void addAIPlayer(int team)
+	{
+		ServerAIPlayer newPlayer;
+		if (team == ServerPlayer.RED_TEAM)
+		{
+			newPlayer = new ServerAIPlayer(this.getWorld().getRedCastleX(),
+					this.getWorld().getRedCastleY(), ServerPlayer.DEFAULT_WIDTH, 
+					ServerPlayer.DEFAULT_HEIGHT, ServerWorld.GRAVITY, this.getWorld(),ServerPlayer.RED_TEAM);
+		}
+		else
+		{
+			newPlayer = new ServerAIPlayer(this.getWorld().getBlueCastleX(),
+					this.getWorld().getBlueCastleY(), ServerPlayer.DEFAULT_WIDTH, 
+					ServerPlayer.DEFAULT_HEIGHT, ServerWorld.GRAVITY, this.getWorld(), ServerPlayer.BLUE_TEAM);
+		}
+		
+		synchronized(listOfAIPlayers)
+		{
+			this.listOfAIPlayers.add(newPlayer);
+		}
+		this.getWorld().add(newPlayer);
+		broadcast("^ " + newPlayer.getName().split(" ").length + " " + newPlayer.getName() + " "
+				+ ServerPlayer.toChars(newPlayer.getID()) + " " + newPlayer.getTeam()+" "+ newPlayer.getKills() +
+				" "+ newPlayer.getDeaths() + " " + ServerPlayer.toChars(newPlayer.getScore()) + " " + newPlayer.getPing());
+	}
+	
+	private void removeAIPlayer(ServerAIPlayer remove)
+	{
+		synchronized(listOfAIPlayers)
+		{
+			this.listOfAIPlayers.remove(remove);
+		}
+		broadcast("R " + ServerPlayer.toChars(remove.getID()));
+		broadcast("o " + remove.getName().split(" ").length + " " + remove.getTeam() + remove.getName());
+		broadcast("n " + ServerPlayer.toChars(remove.getID()) + " " + remove.getTeam());
+		remove.destroy();
+	}
+	
+	/**
+	 * Calculates and rebalances the teams using a.i. players
+	 * @param newPlayer
+	 */
+	public void rebalanceAIPlayers()
+	{
+		LinkedList<ServerPlayer> redPlayers = new LinkedList<ServerPlayer>();
+		LinkedList<ServerPlayer> bluePlayers = new LinkedList<ServerPlayer>();
+		
+		for (ServerPlayer player: this.listOfPlayers)
+		{
+			if (player.getTeam() == ServerPlayer.RED_TEAM)
+			{
+				redPlayers.add(player);
+			}
+			else
+			{
+				bluePlayers.add(player);
+			}
+		}
+		
+		LinkedList<ServerAIPlayer> redAIPlayers = new LinkedList<ServerAIPlayer>();
+		LinkedList<ServerAIPlayer> blueAIPlayers = new LinkedList<ServerAIPlayer>();
+		
+		for (ServerAIPlayer player: this.listOfAIPlayers)
+		{
+			if (player.getTeam() == ServerPlayer.RED_TEAM)
+			{
+				redAIPlayers.add(player);
+			}
+			else
+			{
+				blueAIPlayers.add(player);
+			}
+		}
+		
+		if (redPlayers.size() < bluePlayers.size())
+		{
+			for (ServerAIPlayer player: blueAIPlayers)
+			{
+				this.removeAIPlayer(player);
+			}
+			
+			if (redAIPlayers.size() < bluePlayers.size() - redPlayers.size())
+			{
+				for (int i = 0; i < bluePlayers.size() - redPlayers.size() - redAIPlayers.size(); i++)
+				{
+					this.addAIPlayer(ServerPlayer.RED_TEAM);
+				}
+			}
+			else if (redAIPlayers.size() > bluePlayers.size() - redPlayers.size())
+			{
+				int noOfRemoves = redAIPlayers.size() - (bluePlayers.size() - redPlayers.size());
+				for (int i = 0; i < noOfRemoves; i++)
+				{
+					ServerAIPlayer player = redAIPlayers.removeFirst();
+					this.removeAIPlayer(player);
+				}
+			}
+		}
+		else if (redPlayers.size() > bluePlayers.size())
+		{
+			for (ServerAIPlayer player: redAIPlayers)
+			{
+				this.removeAIPlayer(player);
+			}
+			
+			if (blueAIPlayers.size() < redPlayers.size() - bluePlayers.size())
+			{
+				for (int i = 0; i < redPlayers.size() - bluePlayers.size() - blueAIPlayers.size(); i++)
+				{
+					this.addAIPlayer(ServerPlayer.BLUE_TEAM);
+				}
+			}
+			else if (blueAIPlayers.size() > redPlayers.size() - bluePlayers.size())
+			{
+				int noOfRemoves = blueAIPlayers.size() - (redPlayers.size() - bluePlayers.size());
+				for (int i = 0; i < noOfRemoves; i++)
+				{
+					ServerAIPlayer player = blueAIPlayers.removeFirst();
+					this.removeAIPlayer(player);
+				}
+			}
+		}
+		else
+		{
+			for (ServerAIPlayer player: blueAIPlayers)
+			{
+				this.removeAIPlayer(player);
+			}
+			
+			for (ServerAIPlayer player: redAIPlayers)
+			{
+				this.removeAIPlayer(player);
+			}
+		}
+		
+		System.out.println("Done balancing teams with a.i.");
 	}
 
 	/**
@@ -460,11 +613,11 @@ public class ServerEngine implements ActionListener {
 		return world;
 	}
 
-	public ArrayList<ServerPlayer> getListOfPlayers() {
+	public LinkedList<ServerPlayer> getListOfPlayers() {
 		return listOfPlayers;
 	}
 
-	public void setListOfPlayers(ArrayList<ServerPlayer> newListOfPlayers) {
+	public void setListOfPlayers(LinkedList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
 	}
 

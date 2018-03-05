@@ -1,21 +1,14 @@
 package Server.Creatures;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedList;
-
-import Imports.Images;
-import Server.ServerEngine;
 import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
-import Server.Buildings.ServerHologram;
 import Server.Effects.ServerText;
 import Server.Items.ServerAccessory;
 import Server.Items.ServerArmour;
 import Server.Items.ServerItem;
-import Server.Items.ServerMoney;
 import Server.Items.ServerWeapon;
 import Tools.RowCol;
 
@@ -254,8 +247,10 @@ public class ServerAIPlayer extends ServerCreature{
 		}
 	}
 	
-	public void kick()
+	@Override
+	public void destroy()
 	{
+		super.destroy();
 		namesList.add(getName());
 	}
 
@@ -627,14 +622,13 @@ public class ServerAIPlayer extends ServerCreature{
 				}
 				setHSpeed(0);
 				setVSpeed(0);
-
 				setAttackable(false);
 			}
 		}
 	}
 	
 	/**
-	 * Drop inventory and equipment
+	 * Don't actually drop anything, just destroy it
 	 */
 	@Override
 	public void dropInventory() {
