@@ -62,13 +62,6 @@ public class ServerAIPlayer extends ServerCreature{
 	private boolean yUpdated;
 
 	/**
-	 * The direction the player is trying to move (so player continues to move
-	 * in that direction even after collision, until release of the key) (1 is
-	 * right, -1 is left)
-	 */
-	private int movingDirection = 0;
-
-	/**
 	 * The speed the player moves horizontally
 	 */
 	private int horizontalMovement;
@@ -205,6 +198,21 @@ public class ServerAIPlayer extends ServerCreature{
 	public final static int WAND_TYPE = 2;
 	private int weaponType;
 	
+	/**
+	 * The target for the a.i. to follow and attack
+	 */
+	private ServerCreature target;
+
+	/**
+	 * Whether or not the a.i. is actually at the target
+	 */
+	private boolean onTarget = false;
+
+	/**
+	 * The range to lock on to an enemy
+	 */
+	private int targetRange = 250;
+	
 	public ServerAIPlayer(double x, double y, int width, int height, double gravity, ServerWorld world, int team) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
 				+ world.getEngine().getServer().getPlayerColours()[(int) (Math.random() * world.getEngine().getServer().getPlayerColours().length)] 
@@ -240,11 +248,6 @@ public class ServerAIPlayer extends ServerCreature{
 		setHair(hair);
 		
 		this.initPlayer();
-		
-		if (isAlive()) {
-			setHSpeed(horizontalMovement);
-			movingDirection = 1;
-		}
 	}
 	
 	@Override
@@ -274,6 +277,14 @@ public class ServerAIPlayer extends ServerCreature{
 			this.setWeaponType(ServerAIPlayer.BOW_TYPE);
 			break;
 		}
+		
+		int randomStartArmor = (int) (Math.random() * 1);
+		switch (randomStartArmor) {
+		case 0:
+			addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR, getWorld()));
+			this.equipArmour(ServerWorld.STEEL_ARMOUR);
+			break;
+		}
 	}
 	
 	/**
@@ -282,9 +293,45 @@ public class ServerAIPlayer extends ServerCreature{
 	@Override
 	public void update() {
 		if (exists()) {
-			// Change the player's facing direction after its current action
-			if (actionCounter < 0 && action == ServerPlayer.NOTHING) {
-				super.setDirection(getNextDirection());
+			// Update the player's direction or try to jump over tiles
+			if (getHSpeed() > 0) {
+				setDirection("RIGHT");
+			} else if (getHSpeed() < 0) {
+				setDirection("LEFT");
+			}
+
+			if (getHSpeed() == 0 && isOnSurface() && !onTarget && action == ServerPlayer.NOTHING) {
+				setVSpeed(-verticalMovement);
+				setOnSurface(false);
+			}
+			
+			// Have the bot move towards the enemy base when it has no target
+			if (getTarget() == null) {
+				if (getWorld().getWorldCounter() % 15 == 0) {
+					//setTarget(findTarget(targetRange));
+				}
+
+				onTarget = false;
+				if (getTarget() == null && action == ServerPlayer.NOTHING) {
+					if (getTeam() == ServerPlayer.BLUE_TEAM) {
+						if (quickInRange(getWorld().getRedCastle(), (double) targetRange)) {
+							//setTarget(getWorld().getRedCastle());
+						} else if (getX() - getWorld().getRedCastleX() < 0) {
+							setHSpeed(horizontalMovement);
+						} else if (getX() - getWorld().getRedCastleX() > 0) {
+							setHSpeed(-horizontalMovement);
+						}
+
+					} else if (getTeam() == ServerPlayer.RED_TEAM) {
+						if (quickInRange(getWorld().getBlueCastle(), (double) targetRange)) {
+							//setTarget(getWorld().getBlueCastle());
+						} else if (getX() - getWorld().getBlueCastleX() < 0) {
+							setHSpeed(horizontalMovement);
+						} else {
+							setHSpeed(-horizontalMovement);
+						}
+					}
+				}
 			}
 
 			// Update the counter for weapon delay
@@ -844,5 +891,13 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public void setWeaponType(int weaponType) {
 		this.weaponType = weaponType;
+	}
+
+	public ServerCreature getTarget() {
+		return target;
+	}
+
+	public void setTarget(ServerCreature target) {
+		this.target = target;
 	}
 }
