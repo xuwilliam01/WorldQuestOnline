@@ -649,9 +649,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			graphics.drawString("Starting in: "+startCounter, (int) (ClientFrame.getScaledWidth(337)),
 					(int) (ClientFrame.getScaledHeight(414)));
 		}
-
-		// if(!chat.hasFocus() && !mapBox.hasFocus())
-		// requestFocusInWindow();
 	}
 
 	public void actionPerformed(ActionEvent e)
