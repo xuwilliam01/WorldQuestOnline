@@ -352,7 +352,7 @@ public class ServerProjectile extends ServerFlyingObject
 	 */
 	public void addCollided(ServerObject other)
 	{
-		if (objectsCollided.size() < 3)
+		if (objectsCollided.size() < 1)
 		{
 			objectsCollided.add(other.getID());
 		}

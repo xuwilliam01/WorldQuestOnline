@@ -392,7 +392,7 @@ public class ServerGoblin extends ServerCreature {
 			} else {
 				action = null;
 				actionCounter = -1;
-				setRowCol(new RowCol(0, 0));
+				setRowCol(0, 0);
 			}
 
 			// Have the goblin move towards the enemy base when it has no target
@@ -570,16 +570,16 @@ public class ServerGoblin extends ServerCreature {
 			case "SWING":
 				switch (actionCounter) {
 				case 0:
-					setRowCol(new RowCol(2, 0));
+					setRowCol(2, 0);
 					break;
 				case 4:
-					setRowCol(new RowCol(2, 1));
+					setRowCol(2, 1);
 					break;
 				case 8:
-					setRowCol(new RowCol(2, 2));
+					setRowCol(2, 2);
 					break;
 				case 12:
-					setRowCol(new RowCol(2, 3));
+					setRowCol(2, 3);
 					break;
 				}
 				break;
@@ -589,36 +589,36 @@ public class ServerGoblin extends ServerCreature {
 				case ServerWorld.GOBLIN_NINJA_TYPE:
 					switch (actionCounter) {
 					case 0:
-						setRowCol(new RowCol(2, 4));
+						setRowCol(2, 4);
 						break;
 					case 4:
-						setRowCol(new RowCol(2, 5));
+						setRowCol(2, 5);
 						break;
 					case 8:
-						setRowCol(new RowCol(2, 6));
+						setRowCol(2, 6);
 						break;
 					case 40:
-						setRowCol(new RowCol(0, 0));
+						setRowCol(0, 0);
 						break;
 					}
 					break;
 				case ServerWorld.GOBLIN_ARCHER_TYPE:
 					if (actionCounter == 0) {
-						setRowCol(new RowCol(2, 7));
+						setRowCol(2, 7);
 					}
 					break;
 				}
 				break;
 			case "BLOCK":
-				setRowCol(new RowCol(2, 9));
+				setRowCol(2, 9);
 				break;
 			case "PUNCH":
 				switch (actionCounter) {
 				case 0:
-					setRowCol(new RowCol(2, 7));
+					setRowCol(2, 7);
 					break;
 				case 10:
-					setRowCol(new RowCol(2, 8));
+					setRowCol(2, 8);
 					if (!isHasPunched()) {
 						punch(damage);
 						setHasPunched(true);
@@ -631,37 +631,37 @@ public class ServerGoblin extends ServerCreature {
 		if (getHSpeed() != 0 && isOnSurface()) {
 			int checkFrame = (int) (getWorld().getWorldCounter() % 30);
 			if (checkFrame < 5) {
-				setRowCol(new RowCol(0, 1));
+				setRowCol(0, 1);
 			} else if (checkFrame < 10) {
-				setRowCol(new RowCol(0, 2));
+				setRowCol(0, 2);
 			} else if (checkFrame < 15) {
-				setRowCol(new RowCol(0, 3));
+				setRowCol(0, 3);
 			} else if (checkFrame < 20) {
-				setRowCol(new RowCol(0, 4));
+				setRowCol(0, 4);
 			} else if (checkFrame < 25) {
-				setRowCol(new RowCol(0, 5));
+				setRowCol(0, 5);
 			} else {
-				setRowCol(new RowCol(0, 6));
+				setRowCol(0, 6);
 			}
 		} else if (!isAlive()) {
 			if (deathCounter < 0) {
 				deathCounter = getWorld().getWorldCounter();
-				setRowCol(new RowCol(1, 2));
+				setRowCol(1, 2);
 			} else if (getWorld().getWorldCounter() - deathCounter < 15) {
-				setRowCol(new RowCol(1, 3));
+				setRowCol(1, 3);
 			} else if (getWorld().getWorldCounter() - deathCounter < 30) {
-				setRowCol(new RowCol(1, 4));
+				setRowCol(1, 4);
 			} else if (getWorld().getWorldCounter() - deathCounter < 100) {
-				setRowCol(new RowCol(1, 6));
+				setRowCol(1, 6);
 			} else {
 				destroy();
 			}
 		} else if (Math.abs(getVSpeed()) < 4 && !isOnSurface()) {
-			setRowCol(new RowCol(0, 8));
+			setRowCol(0, 8);
 		} else if (getVSpeed() < 0) {
-			setRowCol(new RowCol(0, 9));
+			setRowCol(0, 9);
 		} else if (getVSpeed() > 0) {
-			setRowCol(new RowCol(0, 7));
+			setRowCol(0, 7);
 		}
 		setImage(getBaseImage() + "_" + getDirection() + "_" + getRowCol().getRow() + "_" + getRowCol().getColumn()
 				+ "");

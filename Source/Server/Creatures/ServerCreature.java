@@ -92,7 +92,7 @@ public abstract class ServerCreature extends ServerObject
 	/**
 	 * The current frame of the creature's animation
 	 */
-	private RowCol rowCol = new RowCol(0, 0);
+	private RowCol rowCol;
 
 	/**
 	 * Whether or not the creature is alive
@@ -133,6 +133,8 @@ public abstract class ServerCreature extends ServerObject
 
 		// Calculate the resistance to knockback based on weight
 		knockBackResistance = Math.sqrt((getWidth() * getHeight())) / 16;
+		
+		this.rowCol = new RowCol(0, 0);
 	}
 
 	public boolean isAttackable()
@@ -543,9 +545,10 @@ public abstract class ServerCreature extends ServerObject
 	{
 		return rowCol;
 	}
-	public void setRowCol(RowCol rowCol)
+	public void setRowCol(int row, int col)
 	{
-		this.rowCol = rowCol;
+		this.rowCol.setRow(row);
+		this.rowCol.setColumn(col);
 	}
 	public boolean isAlive()
 	{

@@ -351,23 +351,23 @@ public class ServerAIPlayer extends ServerCreature{
 
 			// Update the animation of the player and its accessories
 			// The row and column of the frame in the sprite sheet for the image
-			setRowCol(new RowCol(0, 0));
+			setRowCol(0, 0);
 			if (actionCounter >= 0) {
 				if (action.equals("SWING")) {
 					if (actionCounter < 1.0 * actionSpeed / 4.0) {
-						setRowCol(new RowCol(2, 0));
+						setRowCol(2, 0);
 					} else if (actionCounter < 1.0 * actionSpeed / 2.0) {
-						setRowCol(new RowCol(2, 1));
+						setRowCol(2, 1);
 					} else if (actionCounter < 1.0 * actionSpeed / 4.0 * 3) {
-						setRowCol(new RowCol(2, 2));
+						setRowCol(2, 2);
 					} else if (actionCounter < actionSpeed) {
-						setRowCol(new RowCol(2, 3));
+						setRowCol(2, 3);
 					}
 				} else if (action.equals("PUNCH")) {
 					if (actionCounter < 5) {
-						setRowCol(new RowCol(2, 7));
+						setRowCol(2, 7);
 					} else if (actionCounter < 16) {
-						setRowCol(new RowCol(2, 8));
+						setRowCol(2, 8);
 						if (!isHasPunched()) {
 							punch((int) Math.ceil(PUNCHING_DAMAGE
 									* (1 + getBaseDamage() / 100.0)));
@@ -375,13 +375,13 @@ public class ServerAIPlayer extends ServerCreature{
 						}
 					}
 				} else if (action.equals("BOW")) {
-					setRowCol(new RowCol(2, 7));
+					setRowCol(2, 7);
 					if (heldWeapon != null) {
 						heldWeapon.setX(getDrawX());
 						heldWeapon.setY(getDrawY());
 					}
 				} else if (action.equals("WAND")) {
-					setRowCol(new RowCol(2, 5));
+					setRowCol(2, 5);
 					if (heldWeapon != null) {
 						if (getDirection().equals("LEFT")) {
 							heldWeapon.setX(getDrawX() - (90 - 64));
@@ -391,18 +391,18 @@ public class ServerAIPlayer extends ServerCreature{
 						heldWeapon.setY(getDrawY());
 					}
 				} else if (action.equals("BLOCK")) {
-					setRowCol(new RowCol(2, 9));
+					setRowCol(2, 9);
 				}
 			} else if (!isAlive()) {
 				if (deathCounter < 0) {
 					deathCounter = getWorld().getWorldCounter();
-					setRowCol(new RowCol(5, 1));
+					setRowCol(5, 1);
 				} else if (getWorld().getWorldCounter() - deathCounter < 10) {
-					setRowCol(new RowCol(5, 1));
+					setRowCol(5, 1);
 				} else if (getWorld().getWorldCounter() - deathCounter < 20) {
-					setRowCol(new RowCol(5, 2));
+					setRowCol(5, 2);
 				} else if (getWorld().getWorldCounter() - deathCounter < 300) { // Respawn time here
-					setRowCol(new RowCol(5, 4));
+					setRowCol(5, 4);
 				} else {
 					int randomStartWeapon = (int) (Math.random() * 3);
 
@@ -454,25 +454,25 @@ public class ServerAIPlayer extends ServerCreature{
 			} else if (getHSpeed() != 0 && getVSpeed() == 0) {
 				int checkFrame = (int) (getWorld().getWorldCounter() % 30);
 				if (checkFrame < 5) {
-					setRowCol(new RowCol(0, 1));
+					setRowCol(0, 1);
 				} else if (checkFrame < 10) {
-					setRowCol(new RowCol(0, 2));
+					setRowCol(0, 2);
 				} else if (checkFrame < 15) {
-					setRowCol(new RowCol(0, 3));
+					setRowCol(0, 3);
 				} else if (checkFrame < 20) {
-					setRowCol(new RowCol(0, 4));
+					setRowCol(0, 4);
 				} else if (checkFrame < 25) {
-					setRowCol(new RowCol(0, 5));
+					setRowCol(0, 5);
 				} else {
-					setRowCol(new RowCol(0, 6));
+					setRowCol(0, 6);
 				}
 			} else if (!isOnSurface()) {
 				if (Math.abs(getVSpeed()) < 5) {
-					setRowCol(new RowCol(1, 8));
+					setRowCol(1, 8);
 				} else if (getVSpeed() < -5) {
-					setRowCol(new RowCol(1, 7));
+					setRowCol(1, 7);
 				} else if (getVSpeed() > 5) {
-					setRowCol(new RowCol(1, 9));
+					setRowCol(1, 9);
 				}
 			}
 			// Update the player's image
