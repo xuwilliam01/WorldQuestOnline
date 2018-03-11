@@ -721,7 +721,8 @@ public class ClientWorld {
 				if (name != null && name.length() > 0) {
 					objects[id].setName(name);
 				}
-				objects[id].setLastCounter(Client.getPacketNo());
+				long packetNo = Client.getPacketNo();
+				objects[id].setLastCounter(packetNo);
 				objects[id].setHP(hp);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
