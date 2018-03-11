@@ -151,12 +151,12 @@ public class ServerEngine implements ActionListener {
 				toRemove.clear();
 			}
 
-//			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
+//			if(listOfPlayers.isEmpty())// && !savedPlayers.isEmpty())
 //			{
 //				restartCounter++;
 //				
 //				// Everyone left the game, so end it after 20 seconds
-//				if (restartCounter >= 1200)
+//				if (restartCounter >= 180000)
 //				{
 //					server.getAllConnectedPlayers().clear();
 //					endGame(ServerCreature.RED_TEAM);
@@ -629,4 +629,10 @@ public class ServerEngine implements ActionListener {
 	public Server getServer() {
 		return server;
 	}
+
+	public int getNextID() {
+		return nextID;
+	}
+	
+	
 }

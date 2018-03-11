@@ -1,6 +1,8 @@
 package Server;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -1151,12 +1153,25 @@ public class ServerWorld
 		catch (ConcurrentModificationException e)
 		{
 			System.out.println("Concurrent Modification Exception");
+			e.printStackTrace();
 		}
-
-		// Iterate through objects once more at the end
-		for (ServerObject object : objects.values())
+		
+		try
 		{
-			object.setPlayedSound(false);
+			// Iterate through objects once more at the end
+			for (ServerObject object : objects.values())
+			{
+				object.setPlayedSound(false);
+			}
+		}
+		catch (ConcurrentModificationException e)
+		{
+			System.out.println("Concurrent Modification Exception");
+			e.printStackTrace();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			LocalDateTime now = LocalDateTime.now();
+			System.out.println(dtf.format(now));
+			System.out.println("Next object id: " + this.engine.getNextID());
 		}
 
 		// Increase the world counter by 1 after this game tick
@@ -1171,6 +1186,11 @@ public class ServerWorld
 			{
 				worldTime = 0;
 			}
+		}
+		
+		if (worldCounter % (900*60) == 0)
+		{
+			System.out.println("Next object id: " + this.engine.getNextID());
 		}
 	}
 
@@ -1471,8 +1491,6 @@ public class ServerWorld
 		this.worldTime = worldTime;
 	}
 	
-	
-
 	public int getBluePlayerStartHP() {
 		return bluePlayerStartHP;
 	}
