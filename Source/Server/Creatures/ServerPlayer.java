@@ -413,7 +413,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private long lastCheck = 0;
 	private double lastX = 0;
 
-
 	/**
 	 * Update the player after each tick
 	 */
@@ -479,9 +478,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				actionCounter = -1;
 				action = NOTHING;
 				canPerformAction = true;
-
-				// Inform that the action is finished
-				// queueMessage("^");
 			}
 
 			// Update the animation of the player and its accessories

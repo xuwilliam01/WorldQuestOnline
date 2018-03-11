@@ -151,22 +151,22 @@ public class ServerEngine implements ActionListener {
 				toRemove.clear();
 			}
 
-			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
-			{
-				restartCounter++;
-				
-				// Everyone left the game, so end it after 20 seconds
-				if (restartCounter >= 1200)
-				{
-					server.getAllConnectedPlayers().clear();
-					endGame(ServerCreature.RED_TEAM);
-					restartCounter = 0;
-				}
-			}
-			else
-			{
-				restartCounter = 0;
-			}
+//			if(listOfPlayers.isEmpty() && !savedPlayers.isEmpty())
+//			{
+//				restartCounter++;
+//				
+//				// Everyone left the game, so end it after 20 seconds
+//				if (restartCounter >= 1200)
+//				{
+//					server.getAllConnectedPlayers().clear();
+//					endGame(ServerCreature.RED_TEAM);
+//					restartCounter = 0;
+//				}
+//			}
+//			else
+//			{
+//				restartCounter = 0;
+//			}
 
 			try{
 				for (ServerPlayer player : listOfPlayers) {

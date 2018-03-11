@@ -80,7 +80,7 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * Starting limit of population
 	 */
-	public static final int POP_LIMIT = 20;
+	public static final int POP_LIMIT = 9999;
 
 	/**
 	 * Current limit of population
@@ -192,7 +192,7 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 100; i++)
 			{
 				int randomGoblin = (int)(Math.random()*(this.goblinTierLimit + 1));
 				spawnGoblin(randomGoblin);
@@ -220,13 +220,8 @@ public class ServerCastle extends ServerBuilding {
 		if(spawners.size() == 0)
 			return;
 		
-		ServerGoblinSpawner spawner = spawners.get(spawnerNo);
+		ServerGoblinSpawner spawner = spawners.get((int)(Math.random() * spawners.size()));
 		getWorld().add(new ServerGoblin(spawner.getX(), spawner.getY() - spawner.getHeight() - ServerWorld.TILE_SIZE, getWorld(), getTeam(), goblinNo));
-
-		if ((++spawnerNo)>=spawners.size())
-		{
-			spawnerNo = 0;
-		}
 	}
 
 	public synchronized void addGoblin(ServerGoblin goblin)
