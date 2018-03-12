@@ -705,35 +705,38 @@ public class ClientWorld {
 	 *            the hp out of 100
 	 */
 	public void setObject(int id, int x, int y, String image, int team, String type, String name, int hp) {
-		try {
-			if (objects[id] == null) {
-				if (name != null && name.equals("{")) {
-					objects[id] = new ClientObject(id, x, y, image, team, type, hp);
+		synchronized (objects)
+		{
+			try {
+				if (objects[id] == null) {
+					if (name != null && name.equals("{")) {
+						objects[id] = new ClientObject(id, x, y, image, team, type, hp);
+					} else {
+						objects[id] = new ClientObject(id, x, y, image, team, type, name, hp);
+					}
+					addObjectNo();
 				} else {
-					objects[id] = new ClientObject(id, x, y, image, team, type, name, hp);
+					objects[id].setX(x);
+					objects[id].setY(y);
+					objects[id].setTeam(team);
+					objects[id].setImage(image);
+					if (name != null && name.length() > 0) {
+						objects[id].setName(name);
+					}
+					long packetNo = Client.getPacketNo();
+					objects[id].setLastCounter(packetNo);
+					objects[id].setHP(hp);
 				}
-				addObjectNo();
-			} else {
-				objects[id].setX(x);
-				objects[id].setY(y);
-				objects[id].setTeam(team);
-				objects[id].setImage(image);
-				if (name != null && name.length() > 0) {
-					objects[id].setName(name);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				e.printStackTrace();
+				System.out.println(id + " " + name + " " + type + " " + image);
+			} catch (NullPointerException e2) {
+				e2.printStackTrace();
+				System.out.println(id + " " + name + " " + type + " " + image);
+				if (objects[id]==null)
+				{
+					System.out.println("Object no longer exists!");
 				}
-				long packetNo = Client.getPacketNo();
-				objects[id].setLastCounter(packetNo);
-				objects[id].setHP(hp);
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
-			System.out.println(id + " " + name + " " + type + " " + image);
-		} catch (NullPointerException e2) {
-			e2.printStackTrace();
-			System.out.println(id + " " + name + " " + type + " " + image);
-			if (objects[id]==null)
-			{
-				System.out.println("Object no longer exists!");
 			}
 		}
 	}
