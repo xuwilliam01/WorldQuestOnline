@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import Imports.ImageReferencePair;
 import Imports.Images;
@@ -45,7 +46,7 @@ public class ClientWorld {
 	 * HashMap of client objects, where the index of the object in the array is
 	 * its ID
 	 */
-	private HashMap<Integer, ClientObject> objects = new HashMap<Integer, ClientObject>();
+	private TreeMap<Integer, ClientObject> objects = new TreeMap<Integer, ClientObject>();
 
 	/**
 	 * List of objects to remove
@@ -1197,7 +1198,7 @@ public class ClientWorld {
 		objects.clear();
 	}
 
-	public HashMap<Integer, ClientObject> getObjects() {
+	public TreeMap<Integer, ClientObject> getObjects() {
 		return objects;
 	}
 
