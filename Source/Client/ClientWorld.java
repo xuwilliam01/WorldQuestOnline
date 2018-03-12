@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 
 import Imports.ImageReferencePair;
 import Imports.Images;
@@ -41,10 +42,10 @@ public class ClientWorld {
 	private char[][] collisionGrid;
 
 	/**
-	 * Array of client objects, where the index of the object in the array is
+	 * HashMap of client objects, where the index of the object in the array is
 	 * its ID
 	 */
-	private ClientObject[] objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
+	private HashMap<Integer, ClientObject> objects = new HashMap<Integer, ClientObject>();
 
 	/**
 	 * List of objects to remove
@@ -691,7 +692,7 @@ public class ClientWorld {
 	 * @return the desired object
 	 */
 	public ClientObject get(int id) {
-		return objects[id];
+		return objects.get(id);
 	}
 
 	/**
@@ -706,24 +707,26 @@ public class ClientWorld {
 	 */
 	public void setObject(int id, int x, int y, String image, int team, String type, String name, int hp) {
 		try {
-			if (objects[id] == null) {
+			if (!objects.containsKey(id)) {
 				if (name != null && name.equals("{")) {
-					objects[id] = new ClientObject(id, x, y, image, team, type, hp);
+					objects.put(id, new ClientObject(id, x, y, image, team, type, hp));
 				} else {
-					objects[id] = new ClientObject(id, x, y, image, team, type, name, hp);
+					objects.put(id, new ClientObject(id, x, y, image, team, type, name, hp));
 				}
 				addObjectNo();
 			} else {
-				objects[id].setX(x);
-				objects[id].setY(y);
-				objects[id].setTeam(team);
-				objects[id].setImage(image);
+				ClientObject object = objects.get(id);
+				
+				object.setX(x);
+				object.setY(y);
+				object.setTeam(team);
+				object.setImage(image);
 				if (name != null && name.length() > 0) {
-					objects[id].setName(name);
+					object.setName(name);
 				}
 				long packetNo = Client.getPacketNo();
-				objects[id].setLastCounter(packetNo);
-				objects[id].setHP(hp);
+				object.setLastCounter(packetNo);
+				object.setHP(hp);
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -731,7 +734,7 @@ public class ClientWorld {
 		} catch (NullPointerException e2) {
 			e2.printStackTrace();
 			System.out.println(id + " " + name + " " + type + " " + image);
-			if (objects[id]==null)
+			if (!objects.containsKey(id))
 			{
 				System.out.println("Object no longer exists!");
 			}
@@ -746,11 +749,10 @@ public class ClientWorld {
 	 *            the object to add
 	 */
 	public void setObject(ClientObject object) {
-		if (objects[object.getID()] == null) {
+		if (!objects.containsKey(object.getID())) {
 			addObjectNo();
 		}
-		objects[object.getID()] = object;
-
+		objects.put(object.getID(), object);
 	}
 
 	/**
@@ -760,13 +762,10 @@ public class ClientWorld {
 	 *            the object to remove
 	 */
 	public void remove(int id) {
-		try {
-			if (objects[id] != null) {
-				subtractObjectNo();
-			}
-			objects[id] = null;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
+		if (objects.containsKey(id))
+		{
+			subtractObjectNo();
+			objects.remove(id);
 		}
 	}
 
@@ -913,7 +912,7 @@ public class ClientWorld {
 		// player's position. If it is outside of the screen, don't draw it just
 		// remove it
 		try {
-			for (ClientObject object : objects) {
+			for (ClientObject object : objects.values()) {
 				if (object == null) {
 					continue;
 				}
@@ -1050,7 +1049,8 @@ public class ClientWorld {
 				remove(object.getID());
 			}
 			objectsToRemove.clear();
-		} catch (ConcurrentModificationException E) {
+		} catch (ConcurrentModificationException e) {
+			e.printStackTrace();
 			System.out.println("Tried to access the object list while it was being used");
 		}
 
@@ -1194,10 +1194,10 @@ public class ClientWorld {
 	}
 
 	public void clear() {
-		objects = new ClientObject[ServerEngine.NUMBER_OF_IDS];
+		objects.clear();
 	}
 
-	public ClientObject[] getObjects() {
+	public HashMap<Integer, ClientObject> getObjects() {
 		return objects;
 	}
 
