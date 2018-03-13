@@ -181,7 +181,7 @@ public class MainMenu implements KeyListener {
 		
 		if (System.getProperty("os.name").toLowerCase().contains("mac"))
 		{
-			Client.SCREEN_HEIGHT -= 95;
+			Client.SCREEN_HEIGHT -= 97;
 		}
 		
 		if (Client.SCREEN_HEIGHT > 1080) {
