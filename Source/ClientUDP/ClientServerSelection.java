@@ -250,7 +250,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 				{
 				case 'S':
 					String[] tokens = input.split(" ");
-					System.out.println(input);
+					//System.out.println(input);
 					servers.clear();
 					pings.clear();
 					int numInputs = 4;

@@ -157,7 +157,7 @@ public abstract class ServerCreature extends ServerObject
 
 			if (getType().equals(ServerWorld.CASTLE_TYPE))
 			{
-				System.out.println("BlueCastle " + getX() + " " + getY());
+				//System.out.println("BlueCastle " + getX() + " " + getY());
 			}
 		}
 		else if (team == ServerPlayer.RED_TEAM)
@@ -165,7 +165,7 @@ public abstract class ServerCreature extends ServerObject
 			world.addToRed(this);
 			if (getType().equals(ServerWorld.CASTLE_TYPE))
 			{
-				System.out.println("RedCastle " + getX() + " " + getY());
+				//System.out.println("RedCastle " + getX() + " " + getY());
 			}
 		}
 	}

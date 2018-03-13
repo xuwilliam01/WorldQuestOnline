@@ -181,7 +181,7 @@ public class MainMenu implements KeyListener {
 		
 		if (System.getProperty("os.name").toLowerCase().contains("mac"))
 		{
-			Client.SCREEN_HEIGHT -= 100;
+			Client.SCREEN_HEIGHT -= 95;
 		}
 		
 		if (Client.SCREEN_HEIGHT > 1080) {
@@ -584,7 +584,7 @@ public class MainMenu implements KeyListener {
 					try {
 						send = new DatagramPacket(sendData, sendData.length,
 								InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain), ClientAccountWindow.PORT);
-						System.out.println(InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain));
+						//System.out.println(InetAddress.getByName(ClientUDP.ClientAccountWindow.Domain));
 						socket.send(send);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block

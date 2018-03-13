@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.*;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
@@ -1172,7 +1173,7 @@ public class ServerWorld
 			System.out.println("Concurrent Modification Exception");
 			e.printStackTrace();
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
 			System.out.println(dtf.format(now));
 			System.out.println("Next object id: " + this.engine.getNextID());
 		}

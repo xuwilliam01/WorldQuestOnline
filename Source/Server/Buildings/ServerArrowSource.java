@@ -49,7 +49,7 @@ public class ServerArrowSource extends ServerObject
 		this.world = world;
 		this.owner = owner;
 		
-		System.out.println("Added arrow source " + x + " " + y + team);
+		//System.out.println("Added arrow source " + x + " " + y + team);
 	}
 
 	@Override

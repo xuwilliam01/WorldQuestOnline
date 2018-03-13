@@ -53,8 +53,6 @@ public class ServerBatSpawner extends ServerSpawner
 			batCount++;
 
 			getWorld().add(newbat);
-
-			System.out.println("Added bat");
 		}
 	}
 

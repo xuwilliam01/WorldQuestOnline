@@ -422,6 +422,15 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		remove.terminate();
 		rooms.remove(remove);
+		if (rooms.size() < maxRooms) {
+			//output.println("CONNECTED");
+			//System.out.println("CONNECTED NEW ROOM");
+			//output.flush();
+			addNewRoom();
+			rooms.get(rooms.size() - 1).start();
+			System.out.println("Game restarted");
+			//rooms.get(rooms.size() - 1).addClient(newClientSocket, input, name);
+		}
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

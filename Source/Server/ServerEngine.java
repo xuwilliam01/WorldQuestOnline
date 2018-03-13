@@ -3,6 +3,9 @@ package Server;
 import java.awt.event.ActionEvent; 
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
@@ -151,22 +154,25 @@ public class ServerEngine implements ActionListener {
 				toRemove.clear();
 			}
 
-//			if(listOfPlayers.isEmpty())// && !savedPlayers.isEmpty())
-//			{
-//				restartCounter++;
-//				
-//				// Everyone left the game, so end it after 20 seconds
-//				if (restartCounter >= 180000)
-//				{
-//					server.getAllConnectedPlayers().clear();
-//					endGame(ServerCreature.RED_TEAM);
-//					restartCounter = 0;
-//				}
-//			}
-//			else
-//			{
-//				restartCounter = 0;
-//			}
+			if(listOfPlayers.isEmpty())// && !savedPlayers.isEmpty())
+			{
+				restartCounter++;
+				
+				// Everyone left the game, so end it after 20 seconds (30 mins) 180000
+				if (restartCounter >= 180000)
+				{
+					server.getAllConnectedPlayers().clear();
+					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+					LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
+					System.out.println("Scheduled restart of game. Current time: " + dtf.format(now));
+					endGame(ServerCreature.RED_TEAM);
+					restartCounter = 0;
+				}
+			}
+			else
+			{
+				restartCounter = 0;
+			}
 
 			try{
 				for (ServerPlayer player : listOfPlayers) {
