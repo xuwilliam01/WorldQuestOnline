@@ -716,20 +716,24 @@ public class ClientWorld {
 					}
 					addObjectNo();
 				} else {
-					objects[id].setX(x);
-					objects[id].setY(y);
-					objects[id].setTeam(team);
-					objects[id].setImage(image);
-					if (name != null && name.length() > 0) {
-						objects[id].setName(name);
-					}
-					long packetNo = Client.getPacketNo();
-					if (objects[id]==null)
+					if (id != client.getPlayer().getID() || !image.toLowerCase().contains("go")) // Hacky fix for goblin image replacing player
 					{
-						System.out.println("Wow it's actually null");
+						objects[id].setX(x);
+						objects[id].setY(y);
+						objects[id].setTeam(team);
+						objects[id].setImage(image);
+						if (name != null && name.length() > 0) {
+							objects[id].setName(name);
+						}
+						long packetNo = Client.getPacketNo();
+						if (objects[id]==null)
+						{
+							System.out.println("Null Pointer issue in ClientWorld setObject");
+							return;
+						}
+						objects[id].setLastCounter(packetNo);
+						objects[id].setHP(hp);
 					}
-					objects[id].setLastCounter(packetNo);
-					objects[id].setHP(hp);
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
 				e.printStackTrace();
@@ -1114,10 +1118,14 @@ public class ClientWorld {
 
 			graphics.setColor(Color.WHITE);
 
-			g2d.drawString(String.format("%d/%d", client.getRedCastleHP(), client.getRedCastleMaxHP()), 270,
+			String redHpString = String.format("%d/%d", client.getRedCastleHP(), client.getRedCastleMaxHP());
+			
+			g2d.drawString(redHpString, 102 + 379 / 2 - g2d.getFontMetrics().stringWidth(redHpString) / 2,
 					Client.SCREEN_HEIGHT - 15);
-			g2d.drawString(String.format("%d/%d", client.getBlueCastleHP(), client.getBlueCastleMaxHP()),
-					Client.SCREEN_WIDTH - 300, Client.SCREEN_HEIGHT - 15);
+			
+			String blueHpString = String.format("%d/%d", client.getBlueCastleHP(), client.getBlueCastleMaxHP());
+			g2d.drawString(blueHpString, Client.SCREEN_WIDTH - 481 + 379 / 2 - g2d.getFontMetrics().stringWidth(blueHpString) / 2,
+					Client.SCREEN_HEIGHT - 15);
 
 			graphics.setFont(CASTLE_FONT);
 			g2d.setFont(CASTLE_FONT);
