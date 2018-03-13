@@ -148,7 +148,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 			chat = new JTextField();
 			chat.setLocation(1, 0);
-			chat.setSize(ClientFrame.getScaledWidth(200), ClientFrame.getScaledHeight(20));
+			chat.setSize(200, 20);
 			chat.addKeyListener(new JTextFieldEnter());
 			chat.setVisible(true);
 			chat.setFocusable(true);
@@ -157,7 +157,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			chat.setToolTipText("Press 'enter' as a shortcut to chat");
 
 			enter = new JButton("Chat");
-			enter.setLocation(ClientFrame.getScaledWidth(200), 0);
+			enter.setLocation(200, 0);
 			enter.setSize(60, 20);
 			enter.setVisible(true);
 			enter.addActionListener(this);

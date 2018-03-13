@@ -724,6 +724,10 @@ public class ClientWorld {
 						objects[id].setName(name);
 					}
 					long packetNo = Client.getPacketNo();
+					if (objects[id]==null)
+					{
+						System.out.println("Wow it's actually null");
+					}
 					objects[id].setLastCounter(packetNo);
 					objects[id].setHP(hp);
 				}
