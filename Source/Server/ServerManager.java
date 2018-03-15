@@ -21,7 +21,6 @@ import javax.swing.Timer;
 import Client.ClientFrame;
 import ClientUDP.ClientAccountWindow;
 import Imports.GameMaps;
-import START.StartServer;
 import Server.Creatures.ServerPlayer;
 
 public class ServerManager implements Runnable, ActionListener{
@@ -105,12 +104,6 @@ public class ServerManager implements Runnable, ActionListener{
 			updateCentral.start();
 		}
 		GameMaps.importMaps();
-		
-		if (StartServer.autoStart)
-		{
-			addNewRoom();
-			rooms.get(0).start();
-		}
 	}
 
 	@Override
@@ -429,23 +422,15 @@ public class ServerManager implements Runnable, ActionListener{
 	{
 		remove.terminate();
 		rooms.remove(remove);
-		restartProgram();
-		
-//		if (rooms.size() < maxRooms) {
-//			addNewRoom();
-//			rooms.get(rooms.size() - 1).start();
-//			System.out.println("Game restarted");
-//		}
-	}
-	
-	private void restartProgram()
-	{
-		try {
-			Runtime.getRuntime().exec("java -jar StartServer.jar " + name + " " + ClientAccountWindow.Domain);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (rooms.size() < maxRooms) {
+			//output.println("CONNECTED");
+			//System.out.println("CONNECTED NEW ROOM");
+			//output.flush();
+			addNewRoom();
+			rooms.get(rooms.size() - 1).start();
+			System.out.println("Game restarted");
+			//rooms.get(rooms.size() - 1).addClient(newClientSocket, input, name);
 		}
-		System.exit(0);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
