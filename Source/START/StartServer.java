@@ -17,25 +17,44 @@ import Server.ServerManager;
 public class StartServer {
 
 	final static int MAX_ROOMS = 1;
+	public static boolean autoStart = false;
 
 	public static void main(String[] args) throws SocketException {
-		Scanner scan = new Scanner(System.in);
-		System.out.print("Enter server name: ");
-		String name = scan.nextLine();
-		name = name.replace(' ', '_');
-		
-		System.out.print("Enter central server IP: ");
-		ClientAccountWindow.Domain = scan.nextLine();
-		scan.close();
+		String name = "";
+		if (args.length == 0)
+		{
+			Scanner scan = new Scanner(System.in);
+			System.out.print("Enter server name: ");
+			name = scan.nextLine().replace(' ', '_');
+			System.out.print("Enter central server IP: ");
+			ClientAccountWindow.Domain = scan.nextLine();
+			scan.close();
+		}
+		else if (args.length == 1)
+		{
+			name = args[0];
+			System.out.println("Server name set to: " + name);
+		}
+		else
+		{
+			StringBuilder fullName = new StringBuilder();
+			fullName.append(args[0]);
+			for (int i = 1; i < args.length - 1; i++)
+			{
+				fullName.append(" " + args[i]);
+			}
+			name = fullName.toString().replace(' ', '_');
+			System.out.println("Server name set to: " + name);
+			ClientAccountWindow.Domain = args[args.length-1];
+			autoStart = true;
+		}
 		
 		Imports.Audio.isServer=true;
-		
 		GameImage.hostingServer=true;
 		Images.importImages();
 		Audio.importAudio(false);
 		GameMaps.importMaps();
 
-		
 		ServerManager server = new ServerManager(name, MainMenu.DEF_PORT, MAX_ROOMS, false, true);
 		Thread serverThread = new Thread(server);
 		serverThread.start();
