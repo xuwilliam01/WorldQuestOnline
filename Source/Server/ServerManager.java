@@ -438,23 +438,14 @@ public class ServerManager implements Runnable, ActionListener{
 //		}
 	}
 	
-	public void restartProgram()
+	private void restartProgram()
 	{
-	  /* Build command: java -jar application.jar */
-	  final ArrayList<String> command = new ArrayList<String>();
-	  command.add("java");
-	  command.add("-jar");
-	  command.add("StartServer.jar");
-	  command.add(name);
-	  command.add(ClientAccountWindow.Domain);
-
-	  final ProcessBuilder builder = new ProcessBuilder(command);
-	  try {
-		builder.start();
+		try {
+			Runtime.getRuntime().exec("java -jar StartServer.jar " + name + " " + ClientAccountWindow.Domain);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.exit(0);
-	  } catch (IOException e) {
-		e.printStackTrace();
-	  }
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
