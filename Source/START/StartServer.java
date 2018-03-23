@@ -44,13 +44,18 @@ public class StartServer {
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
-		System.out.println(dtf.format(now));
+		System.out.println(dtf.format(now) + " UTC");
 
+		scan = new Scanner(System.in);
+		
 		while (true) {
-			if (scan.nextLine().equalsIgnoreCase("exit")) {
-				System.out.println("Server closed");
-				scan.close();
-				System.exit(0);
+			if (scan.hasNextLine()) {
+				if (scan.nextLine().equalsIgnoreCase("exit"))
+				{
+					System.out.println("Server closed");
+					scan.close();
+					System.exit(0);
+				}
 			}
 		}
 	}

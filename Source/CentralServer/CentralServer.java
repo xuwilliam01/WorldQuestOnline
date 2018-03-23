@@ -435,6 +435,7 @@ public class CentralServer implements Runnable, ActionListener {
 		Socket server;
 		BufferedReader input;
 		PrintWriter output;
+		ServerInfo serverInfo;
 
 		public ReadIn(Socket server) {
 			this.server = server;
@@ -452,21 +453,21 @@ public class CentralServer implements Runnable, ActionListener {
 						// Get info from servers
 						case 'A':
 							String[] tokens = command.split(" ");
-							ServerInfo newServer = new ServerInfo(tokens[1], server.getInetAddress().toString(),
+							serverInfo = new ServerInfo(tokens[1], server.getInetAddress().toString(),
 									Integer.parseInt(tokens[3]), Integer.parseInt(tokens[2]));
 							synchronized (servers) {
-								if (!servers.contains(newServer)) {
+								if (!servers.contains(serverInfo)) {
 									// System.out.println(newServer.getIP() + "
 									// " + newServer.getPort());
-									servers.add(newServer);
-									listServers += newServer.getName() + " " + newServer.getIP() + " "
-											+ newServer.getPort() + " " + newServer.getNumPlayers() + " ";
+									servers.add(serverInfo);
+									listServers += serverInfo.getName() + " " + serverInfo.getIP() + " "
+											+ serverInfo.getPort() + " " + serverInfo.getNumPlayers() + " ";
 
-									if (!pastServers.contains(newServer.getName())) {
-										pastServers.add(newServer.getName());
+									if (!pastServers.contains(serverInfo.getName())) {
+										pastServers.add(serverInfo.getName());
 										System.out.println(
-												"Server added: " + newServer.getName() + " " + newServer.getIP() + " "
-														+ newServer.getPort() + " " + newServer.getNumPlayers());
+												"Server added: " + serverInfo.getName() + " " + serverInfo.getIP() + " "
+														+ serverInfo.getPort() + " " + serverInfo.getNumPlayers());
 									}
 
 								}
@@ -520,14 +521,41 @@ public class CentralServer implements Runnable, ActionListener {
 							break;
 						}
 					} catch (NullPointerException e) {
-						System.out.println("Server Disconnected");
+						if (serverInfo != null)
+						{
+							System.out.println("Server Disconnected: " + serverInfo.getName() + " " + serverInfo.getIP() 
+									+ " " + serverInfo.getPort() + " " + serverInfo.getNumPlayers());
+						}
+						else
+						{
+							System.out.println("Server Disconnected before it sent its info. We have its IP though: "
+									+ server.getInetAddress().toString());
+						}
 						break;
 					}
 				}
 			} catch (IOException e) {
-				System.out.println("Server Disconnected");
+				if (serverInfo != null)
+				{
+					System.out.println("Server Disconnected: " + serverInfo.getName() + " " + serverInfo.getIP() 
+							+ " " + serverInfo.getPort() + " " + serverInfo.getNumPlayers());
+				}
+				else
+				{
+					System.out.println("Server Disconnected before it sent its info. We have its IP though: "
+							+ server.getInetAddress().toString());
+				}
 			} catch(Exception e) {
-				System.out.print("Bad Server Input");
+				if (serverInfo != null)
+				{
+					System.out.println("(Unknown exception) Server Disconnected: " + serverInfo.getName() + " " + serverInfo.getIP() 
+							+ " " + serverInfo.getPort() + " " + serverInfo.getNumPlayers());
+				}
+				else
+				{
+					System.out.println("(Unknown exception) Server Disconnected before it sent its info. We have its IP though: "
+							+ server.getInetAddress().toString());
+				}
 			}
 			
 			try {
