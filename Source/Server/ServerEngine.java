@@ -159,8 +159,8 @@ public class ServerEngine implements ActionListener {
 			{
 				restartCounter++;
 				
-				// Everyone left the game, so end it after 20 seconds (30 mins) 180000
-				if (restartCounter >= 1200)
+				// Everyone left the game, so end it after (30 mins) 180000
+				if (restartCounter >= 180000)
 				{
 					server.getAllConnectedPlayers().clear();
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
