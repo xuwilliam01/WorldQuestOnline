@@ -226,13 +226,14 @@ public class ServerEngine implements ActionListener {
 		usedIDs= new boolean[NUMBER_OF_IDS];
 		nextID = normalIDStart;
 		nextBuildingID = 0;
+		updateTimer.stop();
 	}
 
 	public void closeEngine() {
 		updateTimer.stop();
 		listOfPlayers.clear();
 		toRemove.clear();
-		// gui.close();
+		server.close();
 		world.close();
 	}
 

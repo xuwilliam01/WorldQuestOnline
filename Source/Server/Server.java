@@ -131,6 +131,7 @@ public class Server implements Runnable {
 	public void terminate()
 	{
 		running = false;
+		close();
 		System.out.println("Server closed");
 	}
 	
@@ -138,7 +139,7 @@ public class Server implements Runnable {
 	public void run() {
 		running = true;
 		
-		while (running) {
+		while (running && !Thread.interrupted()) {
 			try {
 				Socket newClient = nextClient();
 				output = new PrintWriter(newClient.getOutputStream());
@@ -180,7 +181,7 @@ public class Server implements Runnable {
 			}
 		}
 		
-		if (!running)
+		if (!running || Thread.interrupted())
 		{
 			return;
 		}
@@ -221,7 +222,7 @@ public class Server implements Runnable {
 		for (ServerLobbyPlayer player : lobbyPlayers) {
 			lobbyPlayersToAdd.add(player);
 		}
-		while (running) {
+		while (running && !Thread.interrupted()) {
 			try {
 				Triple next = nextGameClient();
 				Socket newClient = next.socket;

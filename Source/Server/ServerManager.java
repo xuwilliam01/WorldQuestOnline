@@ -81,6 +81,59 @@ public class ServerManager implements Runnable, ActionListener{
 		timers.add(timer);
 	}
 	
+	public static synchronized void purgeServices()
+	{
+		for (Socket socket: sockets)
+		{
+			if (!socket.isClosed())
+			{
+				System.out.println("Socket was still alive");
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		sockets.clear();
+		
+		for (Thread thread: threads)
+		{
+			if (thread.isAlive())
+			{
+				System.out.println("Thread was still alive");
+				thread.interrupt();
+			}
+		}
+		threads.clear();
+		
+		for (PrintWriter writer : writers)
+		{
+			writer.close();
+		}
+		writers.clear();
+		
+		for (BufferedReader reader: readers)
+		{
+			try {
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		readers.clear();
+		
+		for (Timer timer: timers)
+		{
+			if (timer.isRunning())
+			{
+				System.out.println("Timer was still alive");
+				timer.stop();
+			}
+		}
+		timers.clear();
+	}
+	
 	/**
 	 * 
 	 * @param port
@@ -455,6 +508,12 @@ public class ServerManager implements Runnable, ActionListener{
 	public void removeRoom(Server remove)
 	{
 		remove.terminate();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		purgeServices();
 		rooms.remove(remove);
 		if (rooms.size() < maxRooms) {
 			//output.println("CONNECTED");

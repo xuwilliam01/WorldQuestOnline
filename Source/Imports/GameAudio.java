@@ -22,28 +22,31 @@ public class GameAudio {
 	public GameAudio(String name)
 	{
 		this.name = name;
-		File soundFile = new File("Audio//"+name+".wav");
-		try {
-			AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
-			DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
-		    audio = (Clip) AudioSystem.getLine(info);
-		    audio.open(sound);
-			gainControl = 
-				    (FloatControl) audio.getControl(FloatControl.Type.MASTER_GAIN);
-		} catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-			System.out.println("Audio not working: " + name);
-		} catch (IllegalArgumentException e){
-			e.printStackTrace();
-			System.out.println("No audio output enabled on this device");
-			audioSupported = false;
-		} catch (Exception e){
-			e.printStackTrace();
-			System.out.println("Unknown issue with audio");
+		if (!Audio.isServer)
+		{
+			File soundFile = new File("Audio//"+name+".wav");
+			try {
+				AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
+				DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
+			    audio = (Clip) AudioSystem.getLine(info);
+			    audio.open(sound);
+				gainControl = 
+					    (FloatControl) audio.getControl(FloatControl.Type.MASTER_GAIN);
+			} catch (UnsupportedAudioFileException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				e.printStackTrace();
+				System.out.println("Audio not working: " + name);
+			} catch (IllegalArgumentException e){
+				e.printStackTrace();
+				System.out.println("No audio output enabled on this device");
+				audioSupported = false;
+			} catch (Exception e){
+				e.printStackTrace();
+				System.out.println("Unknown issue with audio");
+			}
 		}
 
 	}
