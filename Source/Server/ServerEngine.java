@@ -129,6 +129,7 @@ public class ServerEngine implements ActionListener {
 		world = new ServerWorld(this, map);
 		
 		updateTimer = new Timer(UPDATE_RATE, this);
+		ServerManager.trackService(updateTimer);
 		startTime = System.currentTimeMillis();
 		updateTimer.start();
 	}
@@ -159,7 +160,7 @@ public class ServerEngine implements ActionListener {
 				restartCounter++;
 				
 				// Everyone left the game, so end it after 20 seconds (30 mins) 180000
-				if (restartCounter >= 180000)
+				if (restartCounter >= 1200)
 				{
 					server.getAllConnectedPlayers().clear();
 					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

@@ -46,13 +46,13 @@ public class StartServer {
 		LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
 		System.out.println(dtf.format(now));
 
-//		while (true) {
-//			if (scan.nextLine().equalsIgnoreCase("exit")) {
-//				System.out.println("Server closed");
-//				scan.close();
-//				System.exit(0);
-//			}
-//		}
+		while (true) {
+			if (scan.nextLine().equalsIgnoreCase("exit")) {
+				System.out.println("Server closed");
+				scan.close();
+				System.exit(0);
+			}
+		}
 	}
 
 }

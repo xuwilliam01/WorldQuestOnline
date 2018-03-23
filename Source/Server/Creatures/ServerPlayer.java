@@ -9,6 +9,7 @@ import java.util.ConcurrentModificationException;
 import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
+import Server.ServerManager;
 import Server.SavedPlayer;
 import Server.ServerObject;
 import Server.ServerObjectShown;
@@ -346,6 +347,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		// Use a separate thread to print to the client to prevent the client
 		// from lagging the server itself
 		Thread writer = new Thread(new WriterThread());
+		ServerManager.trackService(writer);
 		writer.start();
 
 	}

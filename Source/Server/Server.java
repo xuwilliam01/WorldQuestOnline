@@ -142,9 +142,10 @@ public class Server implements Runnable {
 			try {
 				Socket newClient = nextClient();
 				output = new PrintWriter(newClient.getOutputStream());
+				ServerManager.trackService(output);
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(newClient.getInputStream()));
-
+				ServerManager.trackService(input);
 				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,
 						input, output, this);
 
@@ -155,6 +156,7 @@ public class Server implements Runnable {
 				lobbyPlayers.add(newPlayer);
 				
 				Thread playerThread = new Thread(newPlayer);
+				ServerManager.trackService(playerThread);
 				playerThread.start();
 				System.out.println("A new client has connected");
 
@@ -236,11 +238,12 @@ public class Server implements Runnable {
 				}
 
 				output = new PrintWriter(newClient.getOutputStream());
+				ServerManager.trackService(output);
 				noOfPlayers++;
 
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(newClient.getInputStream()));
-
+				ServerManager.trackService(input);
 				String IP = newClient.getInetAddress().toString();
 				ServerLobbyPlayer playerToRemove = null;
 
@@ -408,6 +411,7 @@ public class Server implements Runnable {
 				allConnectedPlayers.add(newPlayer);
 
 				Thread playerThread = new Thread(newPlayer);
+				ServerManager.trackService(playerThread);
 				playerThread.start();
 
 				System.out.println("A new client has connected");

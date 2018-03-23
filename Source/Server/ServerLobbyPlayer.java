@@ -51,6 +51,7 @@ public class ServerLobbyPlayer implements Runnable
 			allMaps = "";
 			BufferedReader inputMap = new BufferedReader(new FileReader(
 					new File("Resources", "Maps")));
+			ServerManager.trackService(inputMap);
 			int numMaps = Integer.parseInt(inputMap.readLine());
 			for (int i = 0; i < numMaps; i++)
 			{

@@ -27,10 +27,11 @@ public class ServerManager implements Runnable, ActionListener{
 
 	private ServerSocket socket;
 	private static ArrayList<Server> rooms = new ArrayList<Server>();
+
 	private int maxRooms;
 	private ClientFrame mainFrame;
 	public static boolean HAS_FRAME = true;
-	private Timer updateCentral = new Timer(50,this);
+	private Timer updateCentral;
 	private String name = "Default";
 
 	//Variables for central server comm
@@ -51,7 +52,35 @@ public class ServerManager implements Runnable, ActionListener{
 	private ArrayDeque<String> messageQueue = new ArrayDeque<String>();
 
 	private boolean canConnectCentral = false;
+	
+	// These only store services that will be discarded when a room ends
+	private static ArrayList<Socket> sockets = new ArrayList<Socket>();
+	private static ArrayList<Thread> threads = new ArrayList<Thread>();
+	private static ArrayList<BufferedReader> readers = new ArrayList<BufferedReader>();
+	private static ArrayList<PrintWriter> writers = new ArrayList<PrintWriter>();
+	private static ArrayList<Timer> timers = new ArrayList<Timer>();
 
+	public static synchronized void trackService(Socket socket)
+	{
+		sockets.add(socket);
+	}
+	public static synchronized void trackService(Thread thread)
+	{
+		threads.add(thread);
+	}
+	public static synchronized void trackService(PrintWriter writer)
+	{
+		writers.add(writer);
+	}
+	public static synchronized void trackService(BufferedReader reader)
+	{
+		readers.add(reader);
+	}
+	public static synchronized void trackService(Timer timer)
+	{
+		timers.add(timer);
+	}
+	
 	/**
 	 * 
 	 * @param port
@@ -101,6 +130,7 @@ public class ServerManager implements Runnable, ActionListener{
 		{
 			Thread centralServerThread = new Thread(new CentralServerReceive());
 			centralServerThread.start();
+			updateCentral = new Timer(50,this);
 			updateCentral.start();
 		}
 		GameMaps.importMaps();
@@ -112,6 +142,7 @@ public class ServerManager implements Runnable, ActionListener{
 		while (true) {
 			try {
 				Socket newClient = socket.accept();
+				trackService(newClient);
 				System.out.println("New player JOINED");
 				AddNewPlayer toAdd = new AddNewPlayer(newClient);
 				synchronized(listOfNewPlayers)
@@ -119,6 +150,7 @@ public class ServerManager implements Runnable, ActionListener{
 					listOfNewPlayers.add(toAdd);
 				}
 				Thread newPlayerAccept = new Thread(toAdd);
+				trackService(newPlayerAccept);
 				newPlayerAccept.start();
 
 			} catch (IOException e) {
@@ -167,7 +199,6 @@ public class ServerManager implements Runnable, ActionListener{
 				} catch(ConcurrentModificationException e) {
 					e.printStackTrace();
 				}
-
 
 				while(true)
 				{
@@ -238,15 +269,17 @@ public class ServerManager implements Runnable, ActionListener{
 			this.newClientSocket = socket;
 		}
 
-		@SuppressWarnings("resource")
 		@Override
 		public void run() {
 			try{
 				PrintWriter output = new PrintWriter(
 						newClientSocket.getOutputStream());
+				trackService(output);
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(newClientSocket.getInputStream()));
+				trackService(input);
 				Timer inputTimer = new Timer(400,this);
+				trackService(inputTimer);
 				inputTimer.start();
 				while(!input.ready())
 				{
@@ -400,6 +433,7 @@ public class ServerManager implements Runnable, ActionListener{
 		Server newServer = new Server(this);
 		rooms.add(newServer);
 		Thread serverThread = new Thread(newServer);
+		trackService(serverThread);
 		serverThread.start();
 
 		if (HAS_FRAME)
