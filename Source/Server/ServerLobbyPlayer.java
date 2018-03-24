@@ -198,9 +198,11 @@ public class ServerLobbyPlayer implements Runnable
 			{
 				break;
 			}
-
 		}
+		
 		System.out.println("A client has disconnected");
+		output.close();
+		
 		try
 		{
 			input.close();
