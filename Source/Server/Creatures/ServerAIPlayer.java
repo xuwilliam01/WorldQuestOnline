@@ -1,6 +1,7 @@
 package Server.Creatures;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import Server.ServerObject;
 import Server.ServerWorld;
@@ -217,12 +218,14 @@ public class ServerAIPlayer extends ServerCreature{
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
 				+ world.getEngine().getServer().getPlayerColours()[(int) (Math.random() * world.getEngine().getServer().getPlayerColours().length)] 
 						+ "_RIGHT_0_0", ServerWorld.PLAYER_AI_TYPE, world.getBluePlayerStartHP(), world, true); 
+		
 		if (namesList == null)
 		{
 			namesList = new LinkedList<String>(Arrays.asList(botNames));
+			Collections.shuffle(namesList);
 		}
-		setName(namesList.removeFirst());
 		
+		setName(namesList.removeFirst());
 		setTeam(team);
 		
 		// Set the initial variables
