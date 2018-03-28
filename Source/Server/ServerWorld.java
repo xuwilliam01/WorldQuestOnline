@@ -316,7 +316,7 @@ public class ServerWorld
 	 * List of all the non-tile objects in the world (for movement and collision
 	 * detection)
 	 */
-	private HashMap<Integer, ServerObject> objects;
+	private LinkedList<ServerObject> objects;
 
 	/**
 	 * List of objects to add to the world next refresh (based on the user's
@@ -358,7 +358,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine) throws IOException
 	{
-		objects = new HashMap<Integer, ServerObject>();
+		objects = new LinkedList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 
 		this.engine = engine;
@@ -372,7 +372,7 @@ public class ServerWorld
 	 */
 	public ServerWorld(ServerEngine engine, String map) throws IOException
 	{
-		objects = new HashMap<Integer, ServerObject>();
+		objects = new LinkedList<ServerObject>();
 		objectsToAdd = new ArrayDeque<ServerObject>();
 		mapFile = map;
 		this.engine = engine;
@@ -517,7 +517,7 @@ public class ServerWorld
 			{
 				((ServerItem) newObject).setDropTime(worldCounter);
 			}
-			objects.put(newObject.hashCode(), newObject);
+			objects.add(newObject);
 		}
 
 		synchronized (objects)
@@ -525,7 +525,7 @@ public class ServerWorld
 			try
 			{
 				// Go through and update each object in the game
-				for (ServerObject object : objects.values())
+				for (ServerObject object : objects)
 				{
 					// This will remove the object a frame after it stops existing
 					if (object.exists())
@@ -1162,7 +1162,7 @@ public class ServerWorld
 		try
 		{
 			// Iterate through objects once more at the end
-			for (ServerObject object : objects.values())
+			for (ServerObject object : objects)
 			{
 				object.setPlayedSound(false);
 			}
@@ -1215,7 +1215,7 @@ public class ServerWorld
 	 */
 	public void remove(ServerObject object)
 	{
-		objects.remove(object.hashCode());
+		objects.remove(object);
 	}
 
 	/**
@@ -1404,7 +1404,7 @@ public class ServerWorld
 		this.tileGrid = grid;
 	}
 
-	public HashMap<Integer, ServerObject> getObjects()
+	public LinkedList<ServerObject> getObjects()
 	{
 		return objects;
 	}
