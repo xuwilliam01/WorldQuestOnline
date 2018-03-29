@@ -342,21 +342,21 @@ public class Server implements Runnable {
 
 						int team = -1;
 						
-						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
-							if (player.getIP().equals(IP)) {
-								if (name.equals(player.getName())) {
-									team = player.getTeam();
-									name = player.getName();
-									engine.broadcast("d "
-											+ player.getName().split(" ").length + " "
-											+ player.getTeam() + player.getName());
-									playerToRemove = player;
-									inServer = true;
-									break;
-								}
-							}
-						}
-
+//						for (ServerLobbyPlayer player : lobbyPlayersToAdd) {
+//							if (player.getIP().equals(IP)) {
+//								if (name.equals(player.getName())) {
+//									team = player.getTeam();
+//									name = player.getName();
+//									engine.broadcast("d "
+//											+ player.getName().split(" ").length + " "
+//											+ player.getTeam() + player.getName());
+//									playerToRemove = player;
+//									inServer = true;
+//									break;
+//								}
+//							}
+//						}
+						
 						if (!inServer) {
 							team = engine.getNextTeam();
 							engine.broadcast("d " + name.split(" ").length + " "
