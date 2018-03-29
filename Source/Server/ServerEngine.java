@@ -110,6 +110,11 @@ public class ServerEngine implements ActionListener {
 	private boolean endGame = false;
 	private int losingTeam;
 	private Server server;
+	
+	/**
+	 * Number of players already updated for this tick
+	 */
+	private int playersUpdated;
 
 	private ArrayList<SavedPlayer> savedPlayers = new ArrayList<SavedPlayer>();
 	/**
@@ -132,6 +137,13 @@ public class ServerEngine implements ActionListener {
 		ServerManager.trackService(updateTimer);
 		startTime = System.currentTimeMillis();
 		updateTimer.start();
+		
+		playersUpdated = 0;
+	}
+	
+	public synchronized void addUpdated()
+	{
+		playersUpdated++;
 	}
 
 	/**
@@ -536,9 +548,21 @@ public class ServerEngine implements ActionListener {
 		// Move all the objects around and update them
 		world.update();
 
+		
+		playersUpdated = 0;
+		
 		// Update all the clients with the new player data
 		updateClients();
 
+		while (playersUpdated < listOfPlayers.size())
+		{
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 		// Update the gui
 		if (ServerManager.HAS_FRAME) {
 			if (gui != null) {

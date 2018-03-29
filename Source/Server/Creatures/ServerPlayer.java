@@ -273,6 +273,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private boolean castleOpen = false;
 
 	private boolean disconnect = false;
+	
+	private boolean toUpdateClient = false;
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -349,7 +351,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		Thread writer = new Thread(new WriterThread());
 		ServerManager.trackService(writer);
 		writer.start();
-
 	}
 
 	public void initPlayer()
@@ -672,11 +673,16 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		queueMessage("* " + hSpeed + " " + vSpeed);
 	}
 
+	public void updateClient()
+	{
+		toUpdateClient = true;
+	}
+	
 	/**
 	 * Send to the client all the updated values (x and y must be rounded to
 	 * closest integer)
 	 */
-	public void updateClient() {
+	private void buildUpdateMessage() {
 		// Slowly regenerate the player's mana and hp, and send it to the client
 		if (getWorld().getWorldCounter() % 40 == 0 && mana < maxMana) {
 			mana++;
@@ -1098,7 +1104,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				queueMessage("r "+(getWorld().getWorldCounter() - deathCounter));
 			// Signal a repaint
 			queueMessage("U");
-			flushWriterNow = true;
+			
+			this.engine.addUpdated();
 		}
 
 	}
@@ -1113,12 +1120,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
-				if (flushWriterNow) {
+				if (toUpdateClient) {
+					buildUpdateMessage();
 					flushWriter();
-					flushWriterNow = false;
+					toUpdateClient = false;
 				}
 				try {
-					Thread.sleep(1);
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
