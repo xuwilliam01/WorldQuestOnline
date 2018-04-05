@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
 import Imports.Images;
+import Menu.MainMenu;
 import Server.ServerWorld;
 import Server.Creatures.ServerPlayer;
 
@@ -74,7 +75,11 @@ public class ClientInventory extends JPanel implements ActionListener
 			mainMenu = menu;
 			mainMenu.setSize(ClientFrame.getScaledWidth(80), ClientFrame.getScaledHeight(60));
 			mainMenu.setLocation(ClientFrame.getScaledWidth(210), ClientFrame.getScaledHeight(12));
-			mainMenu.setBackground(Color.black);
+			
+			if (MainMenu.isMac)
+			{
+				mainMenu.setBackground(Color.black);
+			}
 			mainMenu.setForeground(Color.black);
 			mainMenu.setText("Menu");
 			add(mainMenu);

@@ -61,7 +61,14 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	{
 		//this.getContentPane().setBackground(Color.BLACK);
 		
-		setSize(515, 300);
+		int height = 300;
+		
+		if (MainMenu.tooLarge)
+		{
+			height = 335;
+		}
+		
+		setSize(515, height);
 		setResizable(false);
 		setTitle("Server Selection");
 		setLocationRelativeTo(null);

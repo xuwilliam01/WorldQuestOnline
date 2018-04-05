@@ -111,8 +111,10 @@ public class MainMenu implements KeyListener {
 	// private static JButton login;
 	private static JButton loginLogout;
 
-	private static boolean tooLarge;
+	public static boolean tooLarge;
 	private static boolean checkedSettingsAlready = false;
+	
+	public static boolean isMac = false;
 
 	private static Font mainFont = null;
 
@@ -182,6 +184,7 @@ public class MainMenu implements KeyListener {
 		if (System.getProperty("os.name").toLowerCase().contains("mac"))
 		{
 			Client.SCREEN_HEIGHT -= 97;
+			isMac = true;
 		}
 		
 		if (Client.SCREEN_HEIGHT > 1080) {
@@ -205,7 +208,7 @@ public class MainMenu implements KeyListener {
 		}
 		if(tooLarge)
 		{
-			Client.SCREEN_HEIGHT+=40;
+			Client.SCREEN_HEIGHT +=60;
 		}
 		mainFrame = new ClientFrame(tooLarge, pos);
 		mainFrame.addKeyListener(this);
@@ -213,7 +216,7 @@ public class MainMenu implements KeyListener {
 
 		if(tooLarge)
 		{
-			Client.SCREEN_HEIGHT-=40;
+			Client.SCREEN_HEIGHT -=60;
 		}
 
 		while (!(imagesAudioLoaded)) {
