@@ -248,7 +248,6 @@ public class ServerAIPlayer extends ServerCreature{
 
 		// Set a random hair style for the player
 		this.hair = world.getEngine().getServer().getPlayerHairs()[(int)(Math.random() * world.getEngine().getServer().getPlayerHairs().length)];
-		setHair(hair);
 		
 		this.initPlayer();
 	}
@@ -257,11 +256,20 @@ public class ServerAIPlayer extends ServerCreature{
 	public void destroy()
 	{
 		super.destroy();
+		// Destroy all the accessories the player has
+		if (getHead() != null) {
+			getHead().destroy();
+			setHead(null);
+		}
+		if (getBody() != null) {
+			getBody().destroy();
+			setBody(null);
+		}
 		namesList.add(getName());
 	}
 
 	public void initPlayer()
-	{
+	{	
 		// Give the player random start weapon(s)
 		int randomStartWeapon = (int) (Math.random() * 3);
 		switch (randomStartWeapon) {
@@ -288,6 +296,8 @@ public class ServerAIPlayer extends ServerCreature{
 			this.equipArmour(ServerWorld.STEEL_ARMOUR);
 			break;
 		}
+		
+		setHair(hair);
 	}
 	
 	/**
@@ -407,32 +417,18 @@ public class ServerAIPlayer extends ServerCreature{
 				} else if (getWorld().getWorldCounter() - deathCounter < 300) { // Respawn time here
 					setRowCol(5, 4);
 				} else {
-					int randomStartWeapon = (int) (Math.random() * 3);
-
-					//If we already have a weapon, don't add a random one
-					for(ServerItem sItem : getInventory())
+					if (getBody() != null) {
+						getBody().destroy();
+						setBody(null);
+					}
+					
+					if (getHead() != null)
 					{
-						if(sItem.getType().contains(ServerWorld.WEAPON_TYPE))
-						{
-							randomStartWeapon = -1;
-							break;
-						}
+						getHead().destroy();
+						setHead(null);
 					}
-
-					switch (randomStartWeapon) {
-					case 0:
-						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-								+ ServerWorld.STONE_TIER, getWorld()));
-						break;
-					case 1:
-						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-								+ ServerWorld.STONE_TIER, getWorld()));
-						break;
-					case 2:
-						addItem(new ServerWeapon(0, 0,
-								ServerWorld.SLINGSHOT_TYPE, getWorld()));
-						break;
-					}
+					
+					initPlayer();
 
 					setAlive(true);
 
@@ -666,10 +662,6 @@ public class ServerAIPlayer extends ServerCreature{
 				verticalMovement = 0;
 				horizontalMovement = 0;
 
-				if (getBody() != null) {
-					getBody().destroy();
-					setBody(null);
-				}
 				setHSpeed(0);
 				setVSpeed(0);
 				setAttackable(false);
