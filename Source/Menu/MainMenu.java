@@ -210,7 +210,7 @@ public class MainMenu implements KeyListener {
 		{
 			Client.SCREEN_HEIGHT +=60;
 		}
-		mainFrame = new ClientFrame(tooLarge, pos);
+		mainFrame = new ClientFrame(tooLarge, isMac, pos);
 		mainFrame.addKeyListener(this);
 		mainFrame.requestFocus();
 

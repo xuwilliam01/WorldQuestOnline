@@ -625,8 +625,8 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		for(CreatorWorldObject object : objects)
 		{
 			object.setRow(object.getRow()+deltaHeight/2);
-			repaint();
 		}
+		repaint();
 	}
 
 	/**

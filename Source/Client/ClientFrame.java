@@ -18,7 +18,7 @@ public class ClientFrame extends JFrame
 	/**
 	 * Constructor for the game frame
 	 */
-	public ClientFrame(boolean tooLarge, Point pos)
+	public ClientFrame(boolean tooLarge, boolean isMac, Point pos)
 	{
 		this.getContentPane().setBackground(Color.BLACK);
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH
@@ -33,10 +33,13 @@ public class ClientFrame extends JFrame
 		else
 			setLocation(0,0);
 		setLayout(null);
-		setUndecorated(false);
-		if (!tooLarge)
+		if (!tooLarge && !isMac)
 		{
 			setUndecorated(true);
+		}
+		else
+		{
+			setUndecorated(false);
 		}
 		pack();
 		if (!tooLarge)

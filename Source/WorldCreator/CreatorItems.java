@@ -88,7 +88,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 		clear.setForeground(Color.black);
 		add(clear);
 
-		updateWidth = new JButton("Change Width "+"("+world.getGrid()[0].length+")");
+		updateWidth = new JButton("Change Width ("+world.getGrid()[0].length+")");
 		updateWidth.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
 		updateWidth.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(160+delta));
 		updateWidth.addActionListener(this);
@@ -96,7 +96,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 		updateWidth.setForeground(Color.black);
 		add(updateWidth);
 
-		updateHeight = new JButton("Change Height "+"("+world.getGrid().length+")");
+		updateHeight = new JButton("Change Height ("+world.getGrid().length+")");
 		updateHeight.setSize(ClientFrame.getScaledWidth(225),ClientFrame.getScaledHeight(50));
 		updateHeight.setLocation(WIDTH-ClientFrame.getScaledWidth(250),Client.Client.SCREEN_HEIGHT-ClientFrame.getScaledHeight(220+delta));
 		updateHeight.addActionListener(this);
@@ -207,7 +207,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 					if (newWidthNum < MIN_WORLD_SIZE || newWidthNum > MAX_WORLD_SIZE)
 						continue;
 					world.setNewWidth(newWidthNum);
-					updateWidth.setText("Change Width " + "(Current: " + Integer.parseInt(newWidth) + ")");
+					updateWidth.setText("Change Width (" + Integer.parseInt(newWidth) + ")");
 					break;
 
 				} catch (NumberFormatException e) {
@@ -319,7 +319,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 					if (newHeightNum < MIN_WORLD_SIZE || newHeightNum > MAX_WORLD_SIZE)
 						continue;
 					world.setNewHeight(newHeightNum);
-					updateHeight.setText("Change Height " + "(Current: " + Integer.parseInt(newHeight) + ")");
+					updateHeight.setText("Change Height (" + Integer.parseInt(newHeight) + ")");
 					break;
 
 				} catch (NumberFormatException e) {
