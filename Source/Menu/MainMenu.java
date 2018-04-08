@@ -1547,7 +1547,7 @@ public class MainMenu implements KeyListener {
 							new String[] { "Next", "Cancel" }, null);
 					if (result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION)
 						throw new NullPointerException();
-					fileName = ((String) jcb.getSelectedItem()).trim();
+					fileName = ((String) jcb.getSelectedItem()).trim().replace(' ', '_');
 				} catch (NullPointerException e2) {
 					mainFrame.requestFocus();
 					return;

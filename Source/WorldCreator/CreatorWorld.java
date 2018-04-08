@@ -136,10 +136,10 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		// Set the scale of objects
 		objectFactor = FRAME_FACTOR;
 
-		this.fileName = fileName;
+		this.fileName = fileName.replace('_', ' ');
 
 		// Check if the file already exists
-		File file = new File("Resources",fileName);
+		File file = new File("Resources", this.fileName);
 		if (file.exists() && !file.isDirectory())
 			importGrid();
 		else
