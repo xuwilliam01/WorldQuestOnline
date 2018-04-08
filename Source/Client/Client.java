@@ -1231,7 +1231,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			graphics.drawString("'TAB' to show scoreboard", 270, 15);
 
 			if (getWorld() != null && getWorld().getBackgroundChoice() == 1) {
-				graphics.setColor(Color.BLUE);
+				//graphics.setColor(Color.BLUE);
 			}
 
 			graphics.drawString(getPingString(), Client.SCREEN_WIDTH - 70, 20);

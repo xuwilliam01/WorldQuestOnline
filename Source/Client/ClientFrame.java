@@ -33,7 +33,7 @@ public class ClientFrame extends JFrame
 		else
 			setLocation(0,0);
 		setLayout(null);
-		if (!tooLarge && !isMac)
+		if (!tooLarge)
 		{
 			setUndecorated(true);
 		}

@@ -54,6 +54,7 @@ public class GameMaps
 				e.printStackTrace();
 			}
 			
+			mapFile = mapFile.replace(' ', '_');
 			
 			StringTokenizer tokenizer = null;
 			try {

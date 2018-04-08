@@ -202,14 +202,14 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			this.setBackground(Color.BLACK);
 
 			// Add maps on server (first thing read)
-			String[] readMaps = input.readLine().split(" ");
+			String read = input.readLine();
+			String[] readMaps = read.split(" ");
 			maps = new String[readMaps.length];
 			for (int i = 0; i < readMaps.length; i++)
 			{
-				maps[i] = Character.toUpperCase(readMaps[i].charAt(0))
-						+ readMaps[i].substring(1);
-				System.out.println(Character.toUpperCase(readMaps[i].charAt(0))
-						+ readMaps[i].substring(1));
+				maps[i] = (Character.toUpperCase(readMaps[i].charAt(0))
+						+ readMaps[i].substring(1)).replace('_', ' ');
+				System.out.println(maps[i]);
 			}
 
 			// Create the map box
@@ -682,8 +682,8 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		}
 		else if (e.getSource() == mapBox)
 		{
-			printToServer("M " + maps[mapBox.getSelectedIndex()]);
-			System.out.println("M " + maps[mapBox.getSelectedIndex()]);
+			printToServer("M " + maps[mapBox.getSelectedIndex()].replace(' ', '_'));
+			System.out.println("M " + maps[mapBox.getSelectedIndex()].replace(' ', '_'));
 			requestFocusInWindow();
 		}
 		repaint();

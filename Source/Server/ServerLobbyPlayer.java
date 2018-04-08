@@ -55,7 +55,7 @@ public class ServerLobbyPlayer implements Runnable
 			int numMaps = Integer.parseInt(inputMap.readLine());
 			for (int i = 0; i < numMaps; i++)
 			{
-				allMaps += inputMap.readLine() + " ";
+				allMaps += inputMap.readLine().replace(' ', '_') + " ";
 				if (Server.defaultMap == null && i == 0)
 				{
 					Server.defaultMap = allMaps.trim();
