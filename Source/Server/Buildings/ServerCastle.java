@@ -80,7 +80,7 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * Starting limit of population
 	 */
-	public static final int POP_LIMIT = 9999;
+	public static final int POP_LIMIT = 20;
 
 	/**
 	 * Current limit of population
@@ -192,7 +192,7 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 7; i++)
 			{
 				int randomGoblin = (int)(Math.random()*(this.goblinTierLimit + 1));
 				spawnGoblin(randomGoblin);
