@@ -415,6 +415,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	private long lastCheck = 0;
 	private double lastX = 0;
+	private int collisionStrikes = 0;
+	private long lastCollisionStrike = 0;
 
 	/**
 	 * Update the player after each tick
@@ -429,7 +431,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			lastCheck = System.currentTimeMillis();
 			lastX = getX();
 		}
-		else if ((time=System.currentTimeMillis()-lastCheck) >= 3000)
+		else if ((time=System.currentTimeMillis()-lastCheck) >= 1000)
 		{
 			//Use this timer to also reset numHP and numMana pots
 			synchronized(getInventory())
@@ -448,12 +450,23 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 			double x = getX()+getWidth()/2;
 			double y = getY()+getHeight()/2;
-
-
+			
 			if (getWorld().getCollisionGrid()[(int)(y/ServerWorld.TILE_SIZE)][(int)(x/ServerWorld.TILE_SIZE)]==ServerWorld.SOLID_TILE)
 			{
-				disconnect = true;
+				if (System.currentTimeMillis() - lastCollisionStrike > 60000)
+				{
+					collisionStrikes = 0;
+				}
+				collisionStrikes++;
+				lastCollisionStrike = System.currentTimeMillis();
+				
+				if (collisionStrikes >= 5)
+				{
+					disconnect = true;
+				}
 			}
+			
+			
 			if (lastX != -1 && isAlive() && Math.abs(lastX-getX())>1.5* horizontalMovement*((1.0*time)/ServerEngine.UPDATE_RATE))
 			{
 				disconnect = true;

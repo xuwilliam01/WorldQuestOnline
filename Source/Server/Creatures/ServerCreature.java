@@ -220,6 +220,14 @@ public abstract class ServerCreature extends ServerObject
 			else
 				world.getBlueCastle().addXP(amount);
 		}
+		else if (source.getType().equals(ServerWorld.PLAYER_AI_TYPE))
+		{
+			((ServerAIPlayer)source).addTotalDamage(amount);
+			if (source.getTeam() == RED_TEAM)
+				world.getRedCastle().addXP(amount);
+			else
+				world.getBlueCastle().addXP(amount);
+		}
 	}
 	/**
 	 * Inflict a certain amount of damage to the npc and destroy if less than 0

@@ -462,7 +462,7 @@ public class ServerAIPlayer extends ServerCreature{
 						// System.out.println(getTarget().getImage() + " " +
 						// getTarget().getX());
 						onTarget = true;
-						if (isOnSurface() && getWorld().getWorldCounter() % 10 == 0) {
+						if (isOnSurface() && getWorld().getWorldCounter() % 30 == 0) {
 							int actionChoice = (int) (Math.random() * 36);
 							canPerformAction = false;
 							
@@ -690,18 +690,21 @@ public class ServerAIPlayer extends ServerCreature{
 						onTarget = false;
 					}
 	
-					if (getTarget() != null && !onTarget) {
-						if ((getX() + getWidth() / 2 < getTarget().getX())) {
-							if (getHSpeed() == 0 || getWorld().getWorldCounter() % 20 == 0) {
-								setHSpeed(this.horizontalMovement);
+					if (!action.equals("HOP"))
+					{
+						if (getTarget() != null && !onTarget) {
+							if ((getX() + getWidth() / 2 < getTarget().getX())) {
+								if (getHSpeed() == 0 || getWorld().getWorldCounter() % 20 == 0) {
+									setHSpeed(this.horizontalMovement);
+								}
+							} else {
+								if (getHSpeed() == 0 || getWorld().getWorldCounter() % 20 == 0) {
+									setHSpeed(-this.horizontalMovement);
+								}
 							}
 						} else {
-							if (getHSpeed() == 0 || getWorld().getWorldCounter() % 20 == 0) {
-								setHSpeed(-this.horizontalMovement);
-							}
+							setHSpeed(0);
 						}
-					} else {
-						setHSpeed(0);
 					}
 				}
 			}
@@ -889,12 +892,6 @@ public class ServerAIPlayer extends ServerCreature{
 	 *            the type of armor to equip
 	 */
 	public void equipArmour(String itemType) {
-		// First replace the armor in the inventory with the current armor, if
-		// it exists
-		if (equippedArmour != null) {
-			getInventory().add(equippedArmour);
-		}
-
 		ServerItem toRemove = null;
 		for (ServerItem item : getInventory()) {
 			if (item.getType().equals(itemType)) {
@@ -905,6 +902,13 @@ public class ServerAIPlayer extends ServerCreature{
 		if (toRemove == null)
 		{
 			System.out.println("Couldn't find armour to equip in inventory!");
+			return;
+		}
+		
+		// First replace the armor in the inventory with the current armor, if
+		// it exists
+		if (equippedArmour != null) {
+			getInventory().add(equippedArmour);
 		}
 		
 		equippedArmour = (ServerArmour) toRemove;
@@ -1039,8 +1043,8 @@ public class ServerAIPlayer extends ServerCreature{
 			}
 			else
 			{
-				if (source.getType().equals(ServerWorld.PLAYER_TYPE) && getTarget() == null 
-						|| !getTarget().getType().equals(ServerWorld.PLAYER_TYPE))
+				if (source.getType().equals(ServerWorld.PLAYER_TYPE) && (getTarget() == null 
+						|| !getTarget().getType().equals(ServerWorld.PLAYER_TYPE)))
 				{
 					setTarget(source);
 				}
