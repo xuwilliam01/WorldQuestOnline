@@ -1,5 +1,6 @@
 package Server.Creatures;
 
+import Server.ServerObject;
 import Server.ServerWorld;
 import Server.Buildings.ServerCastle;
 import Server.Effects.ServerText;
@@ -75,7 +76,7 @@ public class ServerGoblin extends ServerCreature {
 	/**
 	 * The action currently performed by the goblin
 	 */
-	private String action;
+	private int action = ServerCreature.NO_ACTION;
 
 	/**
 	 * The number of frames before the goblin can perform another action
@@ -147,6 +148,11 @@ public class ServerGoblin extends ServerCreature {
 	 * Reference to the castle
 	 */
 	private ServerCastle castle = null;
+	
+	/**
+	 * The weapon being held by the goblin during action (ex. bows and wands)
+	 */
+	private ServerObject heldWeapon;
 
 	/**
 	 * Constructor for a random goblin type
@@ -381,16 +387,16 @@ public class ServerGoblin extends ServerCreature {
 				setDirection("LEFT");
 			}
 
-			if (getHSpeed() == 0 && isOnSurface() && !onTarget && action == null) {
+			if (getHSpeed() == 0 && isOnSurface() && !onTarget && action == ServerCreature.NO_ACTION) {
 				setVSpeed(-jumpSpeed);
 				setOnSurface(false);
 			}
 
 			// Update the action counter for the goblin
-			if (action != null && actionCounter < actionDelay) {
+			if (action == ServerCreature.NO_ACTION && actionCounter < actionDelay) {
 				actionCounter++;
 			} else {
-				action = null;
+				action = ServerCreature.NO_ACTION;
 				actionCounter = -1;
 				setRowCol(0, 0);
 			}
@@ -402,7 +408,7 @@ public class ServerGoblin extends ServerCreature {
 				}
 
 				onTarget = false;
-				if (getTarget() == null && action == null) {
+				if (getTarget() == null && action == ServerCreature.NO_ACTION) {
 					if (getTeam() == ServerPlayer.BLUE_TEAM) {
 						if (quickInRange(getWorld().getRedCastle(), (double) targetRange)) {
 							setTarget(getWorld().getRedCastle());
@@ -431,7 +437,7 @@ public class ServerGoblin extends ServerCreature {
 				}
 			}
 			// Follow and attack the target
-			else if (action == null) {
+			else if (action == ServerCreature.NO_ACTION) {
 				// Attack the target with the weapon the goblin uses.
 				if (quickInRange(getTarget(), fightingRange)) {
 					// System.out.println(getTarget().getImage() + " " +
@@ -455,16 +461,16 @@ public class ServerGoblin extends ServerCreature {
 						}
 						// Block occasionally
 						else if (actionChoice == 1 || actionChoice == 2) {
-							action = "BLOCK";
+							action = ServerCreature.BLOCK;
 							actionDelay = 55;
 						} else {
 							if (isMelee) {
 								if (getType().equals(ServerWorld.GOBLIN_GIANT_TYPE)) {
-									action = "PUNCH";
+									action = ServerCreature.PUNCH;
 									setHasPunched(false);
 									actionDelay = 60;
 								} else {
-									action = "SWING";
+									action = ServerCreature.SWING;
 									actionDelay = 16;
 	
 									int angle = 180;
@@ -473,15 +479,17 @@ public class ServerGoblin extends ServerCreature {
 									}
 	
 									if (getType().equals(ServerWorld.GOBLIN_SAMURAI_TYPE)) {
-										getWorld().add(new ServerWeaponSwing(this, 0, -16, weapon, angle, actionDelay,
-												damage));
+										heldWeapon = new ServerWeaponSwing(this, 0, -16, weapon, angle, actionDelay,
+												damage);
+										getWorld().add(heldWeapon);
 									} else {
-										getWorld().add(new ServerWeaponSwing(this, 4, -19, weapon, angle, actionDelay,
-												damage));
+										heldWeapon = new ServerWeaponSwing(this, 4, -19, weapon, angle, actionDelay,
+												damage);
+										getWorld().add(heldWeapon);
 									}
 								}
 							} else {
-								action = "SHOOT";
+								action = ServerCreature.SHOOT;
 								actionDelay = 60;
 	
 								int xDist = (int) (getTarget().getX() + getTarget().getWidth() / 2
@@ -566,7 +574,7 @@ public class ServerGoblin extends ServerCreature {
 		// Update the animation of the goblin
 		if (actionCounter >= 0) {
 			switch (action) {
-			case "SWING":
+			case ServerCreature.SWING:
 				switch (actionCounter) {
 				case 0:
 					setRowCol(2, 0);
@@ -582,7 +590,7 @@ public class ServerGoblin extends ServerCreature {
 					break;
 				}
 				break;
-			case "SHOOT":
+			case ServerCreature.SHOOT:
 				switch (getType()) {
 				case ServerWorld.GOBLIN_WIZARD_TYPE:
 				case ServerWorld.GOBLIN_NINJA_TYPE:
@@ -608,10 +616,10 @@ public class ServerGoblin extends ServerCreature {
 					break;
 				}
 				break;
-			case "BLOCK":
+			case ServerCreature.BLOCK:
 				setRowCol(2, 9);
 				break;
-			case "PUNCH":
+			case ServerCreature.PUNCH:
 				switch (actionCounter) {
 				case 0:
 					setRowCol(2, 7);
@@ -691,7 +699,7 @@ public class ServerGoblin extends ServerCreature {
 		}
 
 		char textColour = ServerText.YELLOW_TEXT;
-		if (action == "BLOCK") {
+		if (action == ServerCreature.BLOCK) {
 			textColour = ServerText.BLUE_TEXT;
 			amount = 0;
 		}
@@ -706,6 +714,10 @@ public class ServerGoblin extends ServerCreature {
 		// Play the death animation for a goblin when it dies
 		if (getHP() <= 0 && isAlive()) {
 			setAlive(false);
+			if (heldWeapon != null)
+			{
+				heldWeapon.destroy();
+			}
 
 			dropInventory();
 			setHSpeed(0);
@@ -714,7 +726,7 @@ public class ServerGoblin extends ServerCreature {
 			setAttackable(false);
 
 			actionCounter = -1;
-			action = null;
+			action = ServerCreature.NO_ACTION;
 		}
 	}
 

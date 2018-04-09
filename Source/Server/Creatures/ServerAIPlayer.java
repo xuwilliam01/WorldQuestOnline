@@ -14,7 +14,6 @@ import Server.Items.ServerItem;
 import Server.Items.ServerProjectile;
 import Server.Items.ServerWeapon;
 import Server.Items.ServerWeaponSwing;
-import Tools.RowCol;
 
 /**
  * The player (Type 'P')
@@ -99,7 +98,7 @@ public class ServerAIPlayer extends ServerCreature{
 	/**
 	 * The specific action being performed alongside the action counter
 	 */
-	private String action = ServerPlayer.NOTHING;
+	private int action = ServerCreature.NO_ACTION;
 
 	/**
 	 * The counter that plays the death animation
@@ -250,7 +249,7 @@ public class ServerAIPlayer extends ServerCreature{
 		actionDelay = 20;
 		actionSpeed = 13;
 		canPerformAction = true;
-		action = ServerPlayer.NOTHING;
+		action = ServerCreature.NO_ACTION;
 		performingAction = false;
 		newMouseX = 0;
 		newMouseY = 0;
@@ -302,7 +301,7 @@ public class ServerAIPlayer extends ServerCreature{
 	{	
 		int randomStartMelee = (int) (Math.random() * 2);
 		randomStartMelee += Math.min(castle.getTier(), 5);
-		switch (randomStartMelee) {
+		switch (3) {
 		case 0:
 			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 					+ ServerWorld.STONE_TIER, getWorld());
@@ -335,7 +334,7 @@ public class ServerAIPlayer extends ServerCreature{
 		
 		int randomStartRanged = (int) (Math.random() * 2);
 		randomStartMelee += Math.min(castle.getTier(), 5);
-		switch (randomStartRanged) {
+		switch (2) {
 		case 0:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
@@ -422,7 +421,7 @@ public class ServerAIPlayer extends ServerCreature{
 					setDirection("LEFT");
 				}
 	
-				if (getHSpeed() == 0 && isOnSurface() && !onTarget && action == ServerPlayer.NOTHING) {
+				if (getHSpeed() == 0 && isOnSurface() && !onTarget && action == ServerCreature.NO_ACTION) {
 					setVSpeed(-verticalMovement);
 					setOnSurface(false);
 				}
@@ -434,7 +433,7 @@ public class ServerAIPlayer extends ServerCreature{
 					}
 	
 					onTarget = false;
-					if (getTarget() == null && action == ServerPlayer.NOTHING) {
+					if (getTarget() == null && action == ServerCreature.NO_ACTION) {
 						if (getTeam() == ServerPlayer.BLUE_TEAM) {
 							if (quickInRange(getWorld().getRedCastle(), (double) targetRange)) {
 								setTarget(getWorld().getRedCastle());
@@ -460,14 +459,14 @@ public class ServerAIPlayer extends ServerCreature{
 					setTarget(null);
 				}
 				// Follow and attack the target
-				else if (action.equals(ServerPlayer.NOTHING))
+				else if (action == ServerCreature.NO_ACTION)
 				{
 					// Attack the target with the weapon the goblin uses.
 					if (quickInRange(getTarget(), fightingRange)) {
 						// System.out.println(getTarget().getImage() + " " +
 						// getTarget().getX());
 						onTarget = true;
-						if (isOnSurface() && getWorld().getWorldCounter() % 30 == 0) {
+						if (isOnSurface() && getWorld().getWorldCounter() % 5 == 0) {
 							int actionChoice = (int) (Math.random() * 36);
 							canPerformAction = false;
 							
@@ -480,7 +479,7 @@ public class ServerAIPlayer extends ServerCreature{
 							// Jump occasionally
 							if (actionChoice < 2) {
 								setTarget(null);
-								action = "HOP";
+								action = ServerCreature.HOP;
 								actionDelay = 30;
 								setVSpeed(-verticalMovement/1.5);
 								setOnSurface(false);
@@ -505,7 +504,7 @@ public class ServerAIPlayer extends ServerCreature{
 							}
 							// Block occasionally
 							else if (actionChoice == 3) {
-								action = "BLOCK";
+								action = ServerCreature.BLOCK;
 								actionDelay = 55;
 							} else {
 								if (weaponType == MELEE_TYPE) {
@@ -513,15 +512,16 @@ public class ServerAIPlayer extends ServerCreature{
 									if (getDirection().equals("RIGHT")) {
 										angle = 0;
 									}
-									actionDelay = meleeWeapon.getActionDelay();
+									actionDelay = meleeWeapon.getActionDelay() * 2;
 									actionSpeed = meleeWeapon.getActionSpeed();
-									getWorld().add(new ServerWeaponSwing(this,
+									heldWeapon = new ServerWeaponSwing(this,
 											0, -20, meleeWeapon.getActionImage(),
 											(int) (Math.toDegrees(angle) + 0.5),
 											meleeWeapon.getActionSpeed(),
 											(int) Math.ceil((meleeWeapon).getDamage()
-											* (1 + getBaseDamage() / 100.0))));
-									action = "SWING";
+											* (1 + getBaseDamage() / 100.0)));
+									getWorld().add(heldWeapon);
+									action = ServerCreature.SWING;
 								} else {
 	
 									int x = getDrawX();
@@ -576,8 +576,8 @@ public class ServerAIPlayer extends ServerCreature{
 											arrowType = ServerWorld.STEELARROW_TYPE;
 											image = "STEELBOW";
 										}
-										action = "BOW";
-										actionDelay = 16;
+										action = ServerCreature.BOW;
+										actionDelay = 36;
 										
 										yDist = (int) ((getY() + getHeight() / 3.0)
 												- (getTarget().getY() + getTarget().getHeight() / targetHeightFactor));
@@ -601,16 +601,16 @@ public class ServerAIPlayer extends ServerCreature{
 										
 										break;
 									case ServerWorld.MEGABOW_TYPE:
-										action = "BOW";
+										action = ServerCreature.BOW;
 										arrowType = ServerWorld.MEGAARROW_TYPE;
 										image = "MEGABOW";
-										actionDelay = 25;
+										actionDelay = 48;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
 										break;
 									case ServerWorld.FIREWAND_TYPE:
-										action = "WAND";
+										action = ServerCreature.WAND;
 										if (mana >= ServerWeapon.FIREWAND_MANA) {
 											mana -= ServerWeapon.FIREWAND_MANA;
 										} else {
@@ -621,13 +621,13 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 25;
+										actionDelay = 48;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
 										break;
 									case ServerWorld.ICEWAND_TYPE:
-										action = "WAND";
+										action = ServerCreature.WAND;
 										if (mana >= ServerWeapon.ICEWAND_MANA) {
 											mana -= ServerWeapon.ICEWAND_MANA;
 										} else {
@@ -638,13 +638,13 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 30;
+										actionDelay = 64;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
 										break;
 									case ServerWorld.DARKWAND_TYPE:
-										action = "WAND";
+										action = ServerCreature.WAND;
 										if (mana >= ServerWeapon.DARKWAND_MANA) {
 											mana -= ServerWeapon.DARKWAND_MANA;
 										} else {
@@ -655,7 +655,7 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 10;
+										actionDelay = 20;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
@@ -681,11 +681,12 @@ public class ServerAIPlayer extends ServerCreature{
 										heldWeapon.setSolid(false);
 										getWorld().add(heldWeapon);
 									} else {
-										action = "";
+										action = ServerCreature.OUT_OF_MANA;
 										actionDelay = 0;
 										ServerText message = new ServerText(
 												getX() + getWidth() / 2, getY() - getHeight() / 2,
 												"!M", ServerText.PURPLE_TEXT, getWorld());
+										this.setWeaponType(MELEE_TYPE);
 										getWorld().add(message);
 									}
 								}
@@ -695,7 +696,7 @@ public class ServerAIPlayer extends ServerCreature{
 						onTarget = false;
 					}
 	
-					if (!action.equals("HOP"))
+					if (action != ServerCreature.HOP)
 					{
 						if (getTarget() != null && !onTarget) {
 							if ((getX() + getWidth() / 2 < getTarget().getX())) {
@@ -727,8 +728,9 @@ public class ServerAIPlayer extends ServerCreature{
 					heldWeapon.destroy();
 					heldWeapon = null;
 				}
+				setRowCol(0, 0);
 				actionCounter = -1;
-				action = ServerPlayer.NOTHING;
+				action = ServerPlayer.NO_ACTION;
 				canPerformAction = true;
 			}
 
@@ -764,11 +766,15 @@ public class ServerAIPlayer extends ServerCreature{
 					horizontalMovement = respawnXSpeed;
 
 					if (getTeam() == RED_TEAM) {
-						setX(getWorld().getRedCastleX());
+						setX(getWorld().getRedCastleX() + 
+								getWorld().getRedCastle().getWidth()/2 +
+								Math.random() * 200 - 100);
 						setY(getWorld().getRedCastleY());
 
 					} else {
-						setX(getWorld().getBlueCastleX());
+						setX(getWorld().getBlueCastleX() + 
+								getWorld().getBlueCastle().getWidth()/2 +
+								Math.random() * 200 - 100);
 						setY(getWorld().getBlueCastleY());
 					}
 
@@ -805,7 +811,7 @@ public class ServerAIPlayer extends ServerCreature{
 				}
 			} 
 			else if (actionCounter >= 0) {
-				if (action.equals("SWING")) {
+				if (action == ServerPlayer.SWING) {
 					if (actionCounter < 1.0 * actionSpeed / 4.0) {
 						setRowCol(2, 0);
 					} else if (actionCounter < 1.0 * actionSpeed / 2.0) {
@@ -814,8 +820,28 @@ public class ServerAIPlayer extends ServerCreature{
 						setRowCol(2, 2);
 					} else if (actionCounter < actionSpeed) {
 						setRowCol(2, 3);
+					} else {
+						setRowCol(0, 0);
 					}
-				} else if (action.equals("PUNCH")) {
+				} else if (action == ServerPlayer.BOW) {
+					setRowCol(2, 7);
+					if (heldWeapon != null) {
+						heldWeapon.setX(getDrawX());
+						heldWeapon.setY(getDrawY());
+					}
+				} else if (action == ServerPlayer.WAND) {
+					setRowCol(2, 5);
+					if (heldWeapon != null) {
+						if (getDirection().equals("LEFT")) {
+							heldWeapon.setX(getDrawX() - (90 - 64));
+						} else {
+							heldWeapon.setX(getDrawX());
+						}
+						heldWeapon.setY(getDrawY());
+					}
+				} else if (action == ServerPlayer.BLOCK) {
+					setRowCol(2, 9);
+				} else if (action == ServerPlayer.PUNCH) {
 					if (actionCounter < 5) {
 						setRowCol(2, 7);
 					} else if (actionCounter < 16) {
@@ -826,24 +852,6 @@ public class ServerAIPlayer extends ServerCreature{
 							setHasPunched(true);
 						}
 					}
-				} else if (action.equals("BOW")) {
-					setRowCol(2, 7);
-					if (heldWeapon != null) {
-						heldWeapon.setX(getDrawX());
-						heldWeapon.setY(getDrawY());
-					}
-				} else if (action.equals("WAND")) {
-					setRowCol(2, 5);
-					if (heldWeapon != null) {
-						if (getDirection().equals("LEFT")) {
-							heldWeapon.setX(getDrawX() - (90 - 64));
-						} else {
-							heldWeapon.setX(getDrawX());
-						}
-						heldWeapon.setY(getDrawY());
-					}
-				} else if (action.equals("BLOCK")) {
-					setRowCol(2, 9);
 				}
 			} 
 			
@@ -986,7 +994,7 @@ public class ServerAIPlayer extends ServerCreature{
 			}
 
 			char textColour = ServerText.RED_TEXT;
-			if (action == "BLOCK") {
+			if (action == ServerCreature.BLOCK) {
 				textColour = ServerText.BLUE_TEXT;
 				amount = 0;
 			}
@@ -1035,6 +1043,10 @@ public class ServerAIPlayer extends ServerCreature{
 					}
 				}
 				setAlive(false);
+				if (heldWeapon != null)
+				{
+					heldWeapon.destroy();
+				}
 
 				dropInventory();
 

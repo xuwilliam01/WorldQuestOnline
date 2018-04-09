@@ -18,6 +18,18 @@ import Tools.RowCol;
  */
 public abstract class ServerCreature extends ServerObject
 {
+	/**
+	 * Actions
+	 */
+	public final static int NO_ACTION = 0;
+	public final static int SWING = 1;
+	public final static int BOW = 2;
+	public final static int WAND = 3;
+	public final static int BLOCK = 4;
+	public final static int HOP = 5;
+	public final static int PUNCH = 6;
+	public final static int OUT_OF_MANA = 7;
+	public final static int SHOOT = 8;
 
 	/**
 	 * Teams

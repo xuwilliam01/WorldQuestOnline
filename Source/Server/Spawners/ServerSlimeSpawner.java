@@ -20,6 +20,11 @@ public class ServerSlimeSpawner extends ServerSpawner
 	 * Max number of slimes per slime spawner
 	 */
 	public final static int MAX_SLIMES = 5;
+	
+	/**
+	 * The delay before spawning another slime for a 12 man game (60 counters per second)
+	 */
+	public final static int SLIME_SPAWN_DELAY = 600;
 
 	/**
 	 * Constructor
@@ -32,7 +37,8 @@ public class ServerSlimeSpawner extends ServerSpawner
 	{
 		super(x, y, world, ServerWorld.SLIME_SPAWN_TYPE);
 		setImage("SLIME_SPAWN");
-		setDelay(2000);
+		setDelay(SLIME_SPAWN_DELAY * (13 / (1 + world.getEngine().getListOfPlayers().size() + 
+				world.getEngine().getListOfAIPlayers().size())));
 	}
 
 	/**

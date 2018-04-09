@@ -652,6 +652,10 @@ public class ServerEngine implements ActionListener {
 	public void setListOfPlayers(LinkedList<ServerPlayer> newListOfPlayers) {
 		listOfPlayers = newListOfPlayers;
 	}
+	
+	public LinkedList<ServerAIPlayer> getListOfAIPlayers() {
+		return listOfAIPlayers;
+	}
 
 	public ArrayList<SavedPlayer> getSavedPlayers()
 	{

@@ -1190,11 +1190,6 @@ public class ServerWorld
 				worldTime = 0;
 			}
 		}
-		
-		if (worldCounter % (900*60) == 0)
-		{
-			System.out.println("Next object id: " + this.engine.getNextID());
-		}
 	}
 
 	/**

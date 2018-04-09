@@ -20,6 +20,11 @@ public class ServerBatSpawner extends ServerSpawner
 	 * Max number of bats per bat spawner
 	 */
 	public final static int MAX_BATS = 5;
+	
+	/**
+	 * The delay before spawning another bat for a 12 man game (60 counters per second)
+	 */
+	public final static int BAT_SPAWN_DELAY = 1100;
 
 	/**
 	 * Constructor
@@ -32,7 +37,8 @@ public class ServerBatSpawner extends ServerSpawner
 	{
 		super(x, y, world, ServerWorld.BAT_SPAWN_TYPE);
 		setImage("BAT_SPAWN");
-		setDelay(3000);
+		setDelay(BAT_SPAWN_DELAY * (13 / (1 + world.getEngine().getListOfPlayers().size() + 
+				world.getEngine().getListOfAIPlayers().size())));
 	}
 
 	/**

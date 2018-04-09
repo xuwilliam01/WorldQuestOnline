@@ -33,8 +33,6 @@ import Tools.RowCol;
  *
  */
 public class ServerPlayer extends ServerCreature implements Runnable {
-	public final static String NOTHING = "0";
-
 	// The starting locations of the player, to change later on
 	public final static int PLAYER_X = 50;
 	public final static int PLAYER_Y = 50;
@@ -146,7 +144,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * The specific action being performed alongside the action counter
 	 */
-	private String action = NOTHING;
+	private int action = ServerCreature.NO_ACTION;
 
 	/**
 	 * The counter that plays the death animation
@@ -212,11 +210,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * The weapon being held by the player during action (ex. bows and wands)
 	 */
 	private ServerObject heldWeapon;
-
-	/**
-	 * Signaling the writer thread to flush
-	 */
-	private boolean flushWriterNow = false;
 
 	/**
 	 * Whether or not the player is trying to drop from a platform
@@ -311,7 +304,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		actionDelay = 20;
 		actionSpeed = 13;
 		canPerformAction = true;
-		action = NOTHING;
+		action = ServerCreature.NO_ACTION;
 		performingAction = false;
 		newMouseX = 0;
 		newMouseY = 0;
@@ -477,7 +470,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		if (exists()) {
 			// Change the player's facing direction after its current action
-			if (actionCounter < 0 && action == NOTHING) {
+			if (actionCounter < 0 && action == ServerCreature.NO_ACTION) {
 				super.setDirection(getNextDirection());
 			}
 
@@ -492,7 +485,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					heldWeapon = null;
 				}
 				actionCounter = -1;
-				action = NOTHING;
+				action = ServerCreature.NO_ACTION;
 				canPerformAction = true;
 			}
 
@@ -500,7 +493,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// The row and column of the frame in the sprite sheet for the image
 			setRowCol(0, 0);
 			if (actionCounter >= 0) {
-				if (action.equals("SWING")) {
+				if (action == ServerCreature.SWING) {
 					if (actionCounter < 1.0 * actionSpeed / 4.0) {
 						setRowCol(2, 0);
 					} else if (actionCounter < 1.0 * actionSpeed / 2.0) {
@@ -510,7 +503,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					} else if (actionCounter < actionSpeed) {
 						setRowCol(2, 3);
 					}
-				} else if (action.equals("PUNCH")) {
+				} else if (action == ServerCreature.PUNCH) {
 					if (actionCounter < 5) {
 						setRowCol(2, 7);
 					} else if (actionCounter < 16) {
@@ -521,13 +514,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 							setHasPunched(true);
 						}
 					}
-				} else if (action.equals("BOW")) {
+				} else if (action == ServerCreature.BOW) {
 					setRowCol(2, 7);
 					if (heldWeapon != null) {
 						heldWeapon.setX(getDrawX());
 						heldWeapon.setY(getDrawY());
 					}
-				} else if (action.equals("WAND")) {
+				} else if (action == ServerCreature.WAND) {
 					setRowCol(2, 5);
 					if (heldWeapon != null) {
 						if (getDirection().equals("LEFT")) {
@@ -537,7 +530,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						}
 						heldWeapon.setY(getDrawY());
 					}
-				} else if (action.equals("BLOCK")) {
+				} else if (action == ServerCreature.BLOCK) {
 					setRowCol(2, 9);
 				}
 			} else if (!isAlive()) {
@@ -584,13 +577,17 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					horizontalMovement = respawnXSpeed;
 
 					if (getTeam() == RED_TEAM) {
-						setX(getWorld().getRedCastleX());
+						setX(getWorld().getRedCastleX() + 
+								getWorld().getRedCastle().getWidth()/2 +
+								Math.random() * 200 - 100);
 						setY(getWorld().getRedCastleY());
 						forcePlayerPos(getX(), getY());
 						forcePlayerSpeed(getHSpeed(), getVSpeed());
 
 					} else {
-						setX(getWorld().getBlueCastleX());
+						setX(getWorld().getBlueCastleX() + 
+								getWorld().getBlueCastle().getWidth()/2 +
+								Math.random() * 200 - 100);
 						setY(getWorld().getBlueCastleY());
 						forcePlayerPos(getX(), getY());
 						forcePlayerSpeed(getHSpeed(), getVSpeed());
@@ -1143,7 +1140,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				try {
 					Thread.sleep(5);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -1629,10 +1625,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			actionDelay = 15;
 			if (rightClick) {
 				actionDelay = 300;
-				action = "BLOCK";
+				action = ServerCreature.BLOCK;
 				rightClick = false;
 			} else if (weaponNo == 9 || equippedWeapons[weaponNo] == null) {
-				action = "PUNCH";
+				action = ServerCreature.PUNCH;
 				actionDelay = 16;
 				setHasPunched(false);
 			} else if (equippedWeapons[weaponNo].getType().contains(
@@ -1654,7 +1650,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						(int) Math.ceil(((ServerWeapon) equippedWeapons[weaponNo])
 								.getDamage()
 								* (1 + getBaseDamage() / 100.0))));
-				action = "SWING";
+				action = ServerCreature.SWING;
 			} else if (equippedWeapons[weaponNo].getType().contains(
 					ServerWorld.RANGED_TYPE)) {
 				int x = getDrawX();
@@ -1669,31 +1665,31 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				// equipped
 				switch (equippedWeapons[weaponNo].getType()) {
 				case ServerWorld.SLINGSHOT_TYPE:
-					action = "BOW";
+					action = ServerCreature.BOW;
 					arrowType = ServerWorld.BULLET_TYPE;
 					image = "SLINGSHOT";
 					actionDelay = 16;
 					break;
 				case ServerWorld.WOODBOW_TYPE:
-					action = "BOW";
+					action = ServerCreature.BOW;
 					arrowType = ServerWorld.WOODARROW_TYPE;
 					image = "WOODBOW";
 					actionDelay = 16;
 					break;
 				case ServerWorld.STEELBOW_TYPE:
-					action = "BOW";
+					action = ServerCreature.BOW;
 					arrowType = ServerWorld.STEELARROW_TYPE;
 					image = "STEELBOW";
 					actionDelay = 16;
 					break;
 				case ServerWorld.MEGABOW_TYPE:
-					action = "BOW";
+					action = ServerCreature.BOW;
 					arrowType = ServerWorld.MEGAARROW_TYPE;
 					image = "MEGABOW";
 					actionDelay = 25;
 					break;
 				case ServerWorld.FIREWAND_TYPE:
-					action = "WAND";
+					action = ServerCreature.WAND;
 					if (mana >= ServerWeapon.FIREWAND_MANA) {
 						mana -= ServerWeapon.FIREWAND_MANA;
 					} else {
@@ -1707,7 +1703,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					actionDelay = 25;
 					break;
 				case ServerWorld.ICEWAND_TYPE:
-					action = "WAND";
+					action = ServerCreature.WAND;
 					if (mana >= ServerWeapon.ICEWAND_MANA) {
 						mana -= ServerWeapon.ICEWAND_MANA;
 					} else {
@@ -1721,7 +1717,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					actionDelay = 30;
 					break;
 				case ServerWorld.DARKWAND_TYPE:
-					action = "WAND";
+					action = ServerCreature.WAND;
 					if (mana >= ServerWeapon.DARKWAND_MANA) {
 						mana -= ServerWeapon.DARKWAND_MANA;
 					} else {
@@ -1755,7 +1751,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					heldWeapon.setSolid(false);
 					getWorld().add(heldWeapon);
 				} else {
-					action = "";
+					action = ServerCreature.OUT_OF_MANA;
 					actionDelay = 0;
 					ServerText message = new ServerText(
 							getX() + getWidth() / 2, getY() - getHeight() / 2,
@@ -1903,7 +1899,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 
 			char textColour = ServerText.RED_TEXT;
-			if (action == "BLOCK") {
+			if (action == ServerCreature.BLOCK) {
 				textColour = ServerText.BLUE_TEXT;
 				amount = 0;
 			}
@@ -1952,6 +1948,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 				}
 				setAlive(false);
+				if (heldWeapon != null)
+				{
+					heldWeapon.destroy();
+				}
 
 				dropInventory();
 
@@ -2132,7 +2132,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			output.close();
