@@ -1585,11 +1585,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			direction = 'L';
 		}
 
-		if (event.getButton() == MouseEvent.BUTTON1 && currentMessage.charAt(0) != 'A') {
+		if (event.getButton() == MouseEvent.BUTTON1 && currentMessage.charAt(0) != 'A' && this.vSpeed == 0) {
 			// A for action
 			currentMessage = "A " + event.getX() + " " + event.getY() + " t";
 			printToServer(currentMessage);
 			inAction = true;
+			this.hSpeed = 0;
 
 			// System.out.println("Pressed");
 		} else if (event.getButton() == MouseEvent.BUTTON3 && currentMessage.charAt(0) != 'a') {
