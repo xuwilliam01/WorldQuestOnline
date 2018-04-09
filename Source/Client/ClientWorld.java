@@ -1075,7 +1075,6 @@ public class ClientWorld {
 							centreY + row * ServerWorld.TILE_SIZE - playerY, null);
 				}
 			}
-
 		}
 
 		if (displayedText != null) {

@@ -19,12 +19,6 @@ public class ServerDefense extends ServerBuilding {
 		switch(type)
 		{
 		case ServerWorld.TOWER_TYPE:
-			// if x and y are 0 then this is a dummy tower
-			if (x > 1 || y > 1)
-			{
-				arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 20,
-						ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, world)));
-			}
 			setName("An Arrow Tower");
 			break;
 		}
@@ -34,6 +28,11 @@ public class ServerDefense extends ServerBuilding {
 	public void setX(double x)
 	{
 		super.setX(x);
+		if (arrowSources.size() == 0 && getX() > 0 && getY() > 0)
+		{
+			arrowSources.add(getWorld().add(new ServerArrowSource(getX() + getWidth()/2, getY() + getHeight()/4, getTeam(), 20,
+					ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, getWorld())));
+		}
 		for (ServerObject object:arrowSources)
 		{
 			object.setX(x + getWidth()/2);
@@ -44,6 +43,11 @@ public class ServerDefense extends ServerBuilding {
 	public void setY(double y)
 	{
 		super.setY(y);
+		if (arrowSources.size() == 0 && getX() > 0 && getY() > 0)
+		{
+			arrowSources.add(getWorld().add(new ServerArrowSource(getX() + getWidth()/2, getY() + getHeight()/4, getTeam(), 20,
+					ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, getWorld())));
+		}
 		for (ServerObject object:arrowSources)
 		{
 			object.setY(y + getHeight()/4);
