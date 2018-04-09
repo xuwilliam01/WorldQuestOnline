@@ -477,7 +477,7 @@ public class ServerAIPlayer extends ServerCreature{
 								setTarget(null);
 								action = "HOP";
 								actionDelay = 30;
-								setVSpeed(-verticalMovement);
+								setVSpeed(-verticalMovement/1.5);
 								setOnSurface(false);
 								if (actionChoice == 0)
 								{
@@ -729,7 +729,6 @@ public class ServerAIPlayer extends ServerCreature{
 
 			// Update the animation of the player and its accessories
 			// The row and column of the frame in the sprite sheet for the image
-			setRowCol(0, 0);
 			if (!isAlive()) {
 				if (deathCounter < 0) {
 					deathCounter = getWorld().getWorldCounter();
@@ -776,7 +775,7 @@ public class ServerAIPlayer extends ServerCreature{
 				}
 			}
 			else if (!isOnSurface()) {
-				if (Math.abs(getVSpeed()) < 5) {
+				if (Math.abs(getVSpeed()) <= 5) {
 					setRowCol(1, 8);
 				} else if (getVSpeed() < -5) {
 					setRowCol(1, 7);
