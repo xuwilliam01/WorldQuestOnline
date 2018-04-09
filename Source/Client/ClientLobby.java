@@ -843,7 +843,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private class Pair
 	{
 		String name;
-		String rating = "-";
+		String rating = "0";
 
 		public Pair(String name)
 		{

@@ -39,7 +39,9 @@ public class ServerLobbyPlayer implements Runnable
 			numRed++;
 		}
 		else
+		{
 			numBlue++;
+		}
 
 		// Set up the output
 		try
@@ -156,7 +158,6 @@ public class ServerLobbyPlayer implements Runnable
 						server.broadcast("P false " + team + " " + name);
 						if (isLeader)
 							setLeader();
-
 					}
 					else
 					{
