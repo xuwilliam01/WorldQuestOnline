@@ -220,7 +220,12 @@ public class ServerAIPlayer extends ServerCreature{
 	/**
 	 * The range to lock on to an enemy
 	 */
-	private int targetRange = 1000;
+	private int targetRange = 750;
+	
+	/**
+	 * Whether or not to jump again
+	 */
+	private boolean jumpAgain = false;
 	
 	public ServerAIPlayer(double x, double y, int width, int height, double gravity, ServerWorld world, int team) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
@@ -319,6 +324,19 @@ public class ServerAIPlayer extends ServerCreature{
 		if (exists()) {
 			if (isAlive())
 			{
+				// On average, will change weapons every 20 seconds
+				if (getWorld().getWorldCounter() % 60 == 0 && Math.random() < 0.05)
+				{
+					if (this.getWeaponType() == MELEE_TYPE)
+					{
+						this.setWeaponType(this.myRangedType);
+					}
+					else
+					{
+						this.setWeaponType(MELEE_TYPE);
+					}
+				}
+				
 				// Update the player's direction or try to jump over tiles
 				if (getHSpeed() > 0) {
 					setDirection("RIGHT");
@@ -362,18 +380,6 @@ public class ServerAIPlayer extends ServerCreature{
 				// Remove the target when it is out of range or dies
 				else if (!getTarget().isAlive() || !getTarget().exists() || !quickInRange(getTarget(), targetRange)) {
 					setTarget(null);
-					if (weaponType == MELEE_TYPE)
-					{
-						fightingRange = MELEE_RANGE;
-					}
-					else if (weaponType == BOW_TYPE)
-					{
-						fightingRange = BOW_RANGE;
-					}
-					else if (weaponType == WAND_TYPE)
-					{
-						fightingRange = WAND_RANGE;
-					}
 				}
 				// Follow and attack the target
 				else if (action.equals(ServerPlayer.NOTHING))
@@ -384,26 +390,46 @@ public class ServerAIPlayer extends ServerCreature{
 						// getTarget().getX());
 						onTarget = true;
 						if (isOnSurface() && getWorld().getWorldCounter() % 10 == 0) {
-							int actionChoice = (int) (Math.random() * 12);
+							int actionChoice = (int) (Math.random() * 36);
 							canPerformAction = false;
 							
+							if (jumpAgain)
+							{
+								actionChoice = 0;
+								jumpAgain = false;
+							}
+							
 							// Jump occasionally
-							if (actionChoice == 0) {
+							if (actionChoice < 2) {
 								setTarget(null);
+								action = "HOP";
+								actionDelay = 30;
 								setVSpeed(-verticalMovement);
 								setOnSurface(false);
+								if (actionChoice == 0)
+								{
+									setDirection("LEFT");
+								}
+								else
+								{
+									setDirection("RIGHT");
+								}
+								
 								if (getDirection().equals("RIGHT")) {
 									setHSpeed(this.horizontalMovement);
 								} else {
 									setHSpeed(-this.horizontalMovement);
 								}
+								if ((int)(Math.random() * 2) == 0)
+								{
+									jumpAgain = true;
+								}
 							}
 							// Block occasionally
-							else if (actionChoice == 1 || actionChoice == 2) {
+							else if (actionChoice == 3) {
 								action = "BLOCK";
 								actionDelay = 55;
 							} else {
-								weaponType = MELEE_TYPE;
 								if (weaponType == MELEE_TYPE) {
 									int angle = 180;
 									if (getDirection().equals("RIGHT")) {
@@ -933,6 +959,14 @@ public class ServerAIPlayer extends ServerCreature{
 				setVSpeed(0);
 				setAttackable(false);
 			}
+			else
+			{
+				if (source.getType().equals(ServerWorld.PLAYER_TYPE) && getTarget() == null 
+						|| !getTarget().getType().equals(ServerWorld.PLAYER_TYPE))
+				{
+					setTarget(source);
+				}
+			}
 		}
 	}
 	
@@ -1148,6 +1182,18 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public void setWeaponType(int weaponType) {
 		this.weaponType = weaponType;
+		if (weaponType == MELEE_TYPE)
+		{
+			fightingRange = MELEE_RANGE;
+		}
+		else if (weaponType == BOW_TYPE)
+		{
+			fightingRange = BOW_RANGE;
+		}
+		else if (weaponType == WAND_TYPE)
+		{
+			fightingRange = WAND_RANGE;
+		}
 	}
 
 	public ServerCreature getTarget() {
