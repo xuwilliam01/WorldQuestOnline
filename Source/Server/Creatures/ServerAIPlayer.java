@@ -26,15 +26,25 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public static String[] botNames = 
 		{
-			"Bot Richard", 
-			"Bot Stephen", 
-			"Bot John",
-			"Bot Geralt",
-			"Bot Stephen",
-			"Bot Gaben",
-			"Bot Arnold",
-			"Bot Harry",
-			"Bot Peter"
+			"Bot George", 
+			"Bot Nick", 
+			"Bot Wilson",
+			"Bot Manuel",
+			"Bot Colin",
+			"Bot Sam",
+			"Bot Brenton",
+			"Bot Vytas",
+			"Bot Clive",
+			"Bot Aiden",
+			"Bot Daniel",
+			"Bot Peter",
+			"Bot Michael",
+			"Bot Yulong",
+			"Bot Alex",
+			"Bot Jerry",
+			"Bot Andrew",
+			"Bot Brian",
+			"Bot Jesse",
 		};
 	
 	public static LinkedList<String> namesList;
@@ -67,11 +77,6 @@ public class ServerAIPlayer extends ServerCreature{
 	 * The speed the player moves vertically
 	 */
 	private int verticalMovement;
-
-	/**
-	 * The current weapon selected (change later to actual inventory slot)
-	 */
-	private char weaponSelected = '9';
 
 	/**
 	 * Whether or not the player can use the item/perform the current action
