@@ -393,7 +393,7 @@ public class ServerGoblin extends ServerCreature {
 			}
 
 			// Update the action counter for the goblin
-			if (action == ServerCreature.NO_ACTION && actionCounter < actionDelay) {
+			if (action != ServerCreature.NO_ACTION && actionCounter < actionDelay) {
 				actionCounter++;
 			} else {
 				action = ServerCreature.NO_ACTION;
@@ -574,7 +574,7 @@ public class ServerGoblin extends ServerCreature {
 		// Update the animation of the goblin
 		if (actionCounter >= 0) {
 			switch (action) {
-			case ServerCreature.SWING:
+			case ServerCreature.SWING:	
 				switch (actionCounter) {
 				case 0:
 					setRowCol(2, 0);
