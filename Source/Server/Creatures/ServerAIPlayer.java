@@ -301,7 +301,7 @@ public class ServerAIPlayer extends ServerCreature{
 	{	
 		int randomStartMelee = (int) (Math.random() * 2);
 		randomStartMelee += Math.min(castle.getTier(), 5);
-		switch (3) {
+		switch (randomStartMelee) {
 		case 0:
 			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 					+ ServerWorld.STONE_TIER, getWorld());
@@ -333,8 +333,8 @@ public class ServerAIPlayer extends ServerCreature{
 		}
 		
 		int randomStartRanged = (int) (Math.random() * 2);
-		randomStartMelee += Math.min(castle.getTier(), 5);
-		switch (2) {
+		randomStartRanged += Math.min(castle.getTier(), 5);
+		switch (randomStartRanged) {
 		case 0:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
@@ -512,8 +512,11 @@ public class ServerAIPlayer extends ServerCreature{
 									if (getDirection().equals("RIGHT")) {
 										angle = 0;
 									}
-									actionDelay = meleeWeapon.getActionDelay() * 2;
+									actionDelay = meleeWeapon.getActionDelay() + meleeWeapon.getActionDelay()/2;
 									actionSpeed = meleeWeapon.getActionSpeed();
+									if (heldWeapon != null) {
+										heldWeapon.destroy();
+									}
 									heldWeapon = new ServerWeaponSwing(this,
 											0, -20, meleeWeapon.getActionImage(),
 											(int) (Math.toDegrees(angle) + 0.5),
@@ -577,7 +580,7 @@ public class ServerAIPlayer extends ServerCreature{
 											image = "STEELBOW";
 										}
 										action = ServerCreature.BOW;
-										actionDelay = 36;
+										actionDelay = 24;
 										
 										yDist = (int) ((getY() + getHeight() / 3.0)
 												- (getTarget().getY() + getTarget().getHeight() / targetHeightFactor));
@@ -604,7 +607,7 @@ public class ServerAIPlayer extends ServerCreature{
 										action = ServerCreature.BOW;
 										arrowType = ServerWorld.MEGAARROW_TYPE;
 										image = "MEGABOW";
-										actionDelay = 48;
+										actionDelay = 37;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
@@ -621,7 +624,7 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 48;
+										actionDelay = 37;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
@@ -638,7 +641,7 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 64;
+										actionDelay = 45;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
@@ -655,7 +658,7 @@ public class ServerAIPlayer extends ServerCreature{
 										if (getDirection().equals("LEFT")) {
 											x -= 90 - 64;
 										}
-										actionDelay = 20;
+										actionDelay = 15;
 										yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 												- (getY() + getHeight() / targetHeightFactor));
 										angle = Math.atan2(yDist, xDist);
@@ -674,7 +677,10 @@ public class ServerAIPlayer extends ServerCreature{
 										} else {
 											image += "_RIGHT";
 										}
-	
+										if (heldWeapon != null) {
+											heldWeapon.destroy();
+										}
+										
 										heldWeapon = new ServerObjectShown(x, y, 0, 0, 0, image,
 												ServerWorld.WEAPON_HOLD_TYPE, getWorld()
 												.getEngine());

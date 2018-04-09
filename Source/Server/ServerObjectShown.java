@@ -6,14 +6,11 @@ public class ServerObjectShown extends ServerObject
 			double gravity, String image, String type, ServerEngine engine)
 	{
 		super(x, y, width, height, gravity, image, type, engine);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void update()
 	{
-		// TODO Auto-generated method stub
-		
 	}
 
 }

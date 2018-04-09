@@ -528,6 +528,20 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 											onSurface = true;
 											isDropping = false;
 										}
+										else
+										{
+											if (hSpeed == 0)
+											{
+												if (moveHeld == 'R')
+												{
+													hSpeed = speed;
+												}
+												else if (moveHeld == 'L')
+												{
+													hSpeed = -speed;
+												}
+											}
+										}
 										x = player.getX();
 										y = player.getY();
 									}
@@ -1427,6 +1441,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			noOfTicks = 0;
 		}
 	}
+	
+	char moveHeld;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -1450,6 +1466,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 				currentMessage = "R";
 				printToServer(currentMessage);
 				hSpeed = speed;
+				moveHeld = 'R';
 			}
 			break;
 		case KeyEvent.VK_A:
@@ -1458,6 +1475,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 				currentMessage = "L";
 				printToServer(currentMessage);
 				hSpeed = -speed;
+				moveHeld = 'L';
 			}
 			break;
 		case KeyEvent.VK_SPACE:
@@ -1551,6 +1569,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					hSpeed = 0;
 				}
 			}
+			moveHeld = 0;
 			break;
 		case KeyEvent.VK_A:
 			if (!currentMessage.equals("l")) {
@@ -1559,6 +1578,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 					hSpeed = 0;
 				}
 			}
+			moveHeld = 0;
 			break;
 		case KeyEvent.VK_W:
 		case KeyEvent.VK_SPACE:
@@ -1573,6 +1593,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			printToServer(currentMessage);
 		}
 	}
+	
+	
 
 	@Override
 	public void mousePressed(MouseEvent event) {
@@ -1591,7 +1613,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 			printToServer(currentMessage);
 			inAction = true;
 			this.hSpeed = 0;
-
 			// System.out.println("Pressed");
 		} else if (event.getButton() == MouseEvent.BUTTON3 && currentMessage.charAt(0) != 'a') {
 			// A for action
