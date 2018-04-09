@@ -262,6 +262,18 @@ public class ServerAIPlayer extends ServerCreature{
 		// Set a random hair style for the player
 		this.hair = world.getEngine().getServer().getPlayerHairs()[(int)(Math.random() * world.getEngine().getServer().getPlayerHairs().length)];
 		
+		if (castle == null)
+		{
+			if (getTeam() == RED_TEAM)
+			{
+				castle = getWorld().getRedCastle();
+			}
+			else
+			{
+				castle = getWorld().getBlueCastle();
+			}
+		}
+		
 		this.initPlayer();
 	}
 	
@@ -283,29 +295,90 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public void initPlayer()
 	{	
-		int randomStartMelee = (int) (Math.random() * 1);
+		int randomStartMelee = (int) (Math.random() * 2);
+		randomStartMelee += Math.min(castle.getTier(), 5);
 		switch (randomStartMelee) {
 		case 0:
 			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
 					+ ServerWorld.STONE_TIER, getWorld());
 			break;
+		case 1:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+					+ ServerWorld.STONE_TIER, getWorld());
+			break;
+		case 2:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+					+ ServerWorld.IRON_TIER, getWorld());
+			break;
+		case 3:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+					+ ServerWorld.IRON_TIER, getWorld());
+			break;
+		case 4:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+					+ ServerWorld.GOLD_TIER, getWorld());
+			break;
+		case 5:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+					+ ServerWorld.GOLD_TIER, getWorld());
+			break;
+		case 6:
+			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+					+ ServerWorld.DIAMOND_TIER, getWorld());
+			break;
 		}
 		
 		int randomStartRanged = (int) (Math.random() * 2);
+		randomStartMelee += Math.min(castle.getTier(), 5);
 		switch (randomStartRanged) {
 		case 0:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
 			break;
 		case 1:
+			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE, getWorld());
+			myRangedType = ServerAIPlayer.BOW_TYPE;
+			break;
+		case 2:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE, getWorld());
+			myRangedType = ServerAIPlayer.WAND_TYPE;
+			break;
+		case 3:
+			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, getWorld());
+			myRangedType = ServerAIPlayer.BOW_TYPE;
+			break;
+		case 4:
+			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE, getWorld());
+			myRangedType = ServerAIPlayer.WAND_TYPE;
+			break;
+		case 5:
+			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE, getWorld());
+			myRangedType = ServerAIPlayer.BOW_TYPE;
+			break;
+		case 6:
+			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.DARKWAND_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.WAND_TYPE;
 			break;
 		}
 		
-		int randomStartArmor = (int) (Math.random() * 1);
+		int randomStartArmor = (int) (Math.random() * 2);
+		randomStartArmor += Math.min(castle.getTier(), 3);
+		
 		switch (randomStartArmor) {
 		case 0:
+			addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR, getWorld()));
+			this.equipArmour(ServerWorld.GREY_NINJA_ARMOUR);
+			break;
+		case 1:
+			addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR, getWorld()));
+			this.equipArmour(ServerWorld.BLUE_NINJA_ARMOUR);
+			break;
+		case 2:
+			addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR, getWorld()));
+			this.equipArmour(ServerWorld.RED_NINJA_ARMOUR);
+			break;
+		case 3:
+		case 4:
 			addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.STEEL_ARMOUR);
 			break;
@@ -827,6 +900,11 @@ public class ServerAIPlayer extends ServerCreature{
 			if (item.getType().equals(itemType)) {
 				toRemove = item;
 			}
+		}
+		
+		if (toRemove == null)
+		{
+			System.out.println("Couldn't find armour to equip in inventory!");
 		}
 		
 		equippedArmour = (ServerArmour) toRemove;
