@@ -431,16 +431,17 @@ public class ServerGoblin extends ServerCreature {
 				}
 			}
 			// Follow and attack the target
-			else {
-
+			else if (action == null) {
 				// Attack the target with the weapon the goblin uses.
 				if (quickInRange(getTarget(), fightingRange)) {
 					// System.out.println(getTarget().getImage() + " " +
 					// getTarget().getX());
 					onTarget = true;
-					if (action == null && getWorld().getWorldCounter() % 30 == 0) {
+					
+					if (getWorld().getWorldCounter() % 30 == 0)
+					{
 						int actionChoice = (int) (Math.random() * 12);
-
+	
 						// Jump occasionally
 						if (actionChoice == 0) {
 							setTarget(null);
@@ -465,12 +466,12 @@ public class ServerGoblin extends ServerCreature {
 								} else {
 									action = "SWING";
 									actionDelay = 16;
-
+	
 									int angle = 180;
 									if (getDirection().equals("RIGHT")) {
 										angle = 0;
 									}
-
+	
 									if (getType().equals(ServerWorld.GOBLIN_SAMURAI_TYPE)) {
 										getWorld().add(new ServerWeaponSwing(this, 0, -16, weapon, angle, actionDelay,
 												damage));
@@ -482,31 +483,30 @@ public class ServerGoblin extends ServerCreature {
 							} else {
 								action = "SHOOT";
 								actionDelay = 60;
-
+	
 								int xDist = (int) (getTarget().getX() + getTarget().getWidth() / 2
 										- (getX() + getWidth() / 2));
-
+	
 								if (xDist > 0) {
 									setDirection("RIGHT");
 								} else if (xDist < 0) {
 									setDirection("LEFT");
 								}
-
+	
 								int yDist;
-
+	
 								double angle = 0;
 								double targetHeightFactor = 5;
+								if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
+									targetHeightFactor = 1.3;
+								}
+								
 								if (weapon.equals(ServerWorld.WOODARROW_TYPE)) {
-
-									if (getTarget().getType().equals(ServerWorld.CASTLE_TYPE)) {
-										targetHeightFactor = 1.3;
-									}
-
 									yDist = (int) ((getY() + getHeight() / 3.0)
 											- (getTarget().getY() + getTarget().getHeight() / targetHeightFactor));
-
+	
 									int sign = -1;
-
+	
 									angle = Math.atan(((ServerProjectile.ARROW_SPEED * ServerProjectile.ARROW_SPEED)
 											+ sign * Math.sqrt(Math.pow(ServerProjectile.ARROW_SPEED, 4)
 													- ServerProjectile.ARROW_GRAVITY
@@ -514,33 +514,32 @@ public class ServerGoblin extends ServerCreature {
 																	+ 2 * yDist * ServerProjectile.ARROW_SPEED
 																			* ServerProjectile.ARROW_SPEED)))
 											/ (ServerProjectile.ARROW_GRAVITY * xDist));
-
+	
 									if (!(angle <= Math.PI && angle >= -Math.PI)) {
 										fightingRange = (int) (privateFightingRange / 1.5);
 									}
-
+	
 									if (xDist <= 0) {
 										angle = Math.PI - angle;
 									} else {
 										angle *= -1;
 									}
-
+	
 								} else {
 									yDist = (int) (getTarget().getY() + getTarget().getHeight() / 2
 											- (getY() + getHeight() / targetHeightFactor));
 									angle = Math.atan2(yDist, xDist);
 								}
 								double random = Math.random() * 6;
-
+	
 								if (random < 2) {
 									angle += (Math.PI / 8) * (random - 1);
 								}
-
+	
 								ServerProjectile projectile = new ServerProjectile(getX() + getWidth() / 2,
 										getY() + getHeight() / 3, this, angle, weapon, getWorld());
 								projectile.setDamage(damage);
 								getWorld().add(projectile);
-
 							}
 						}
 					}
@@ -548,7 +547,7 @@ public class ServerGoblin extends ServerCreature {
 					onTarget = false;
 				}
 
-				if (getTarget() != null && !onTarget && action == null) {
+				if (getTarget() != null && !onTarget) {
 					if ((getX() + getWidth() / 2 < getTarget().getX())) {
 						if (getHSpeed() == 0 || getWorld().getWorldCounter() % 20 == 0) {
 							setHSpeed(movementSpeed);

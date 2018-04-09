@@ -19,8 +19,12 @@ public class ServerDefense extends ServerBuilding {
 		switch(type)
 		{
 		case ServerWorld.TOWER_TYPE:
-			arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 20,
-					ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, world)));
+			// if x and y are 0 then this is a dummy tower
+			if (x > 1 || y > 1)
+			{
+				arrowSources.add(world.add(new ServerArrowSource(x + getWidth()/2, y + getHeight()/4, team, 20,
+						ServerWorld.WOODARROW_TYPE, TOWER_RANGE, this, world)));
+			}
 			setName("An Arrow Tower");
 			break;
 		}

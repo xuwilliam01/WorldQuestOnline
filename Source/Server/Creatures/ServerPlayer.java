@@ -640,6 +640,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			setMaxHP(getWorld().getRedPlayerStartHP());
 			setHP(getMaxHP());
 			setBaseDamage(getWorld().getRedStartBaseDamage());
+			setDirection("RIGHT");
 		} else {
 			respawnXSpeed = getWorld().getBlueMoveSpeed();
 			respawnYSpeed = getWorld().getBlueJumpSpeed();
@@ -650,6 +651,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			setMaxHP(getWorld().getBluePlayerStartHP());
 			setHP(getMaxHP());
 			setBaseDamage(getWorld().getBlueStartBaseDamage());
+			setDirection("LEFT");
 		}
 	}
 

@@ -17,19 +17,24 @@ import Server.Creatures.ServerCreature;
 public class ServerProjectile extends ServerFlyingObject
 {
 	/**
-	 * The default damage for a bullet
-	 */
-	public static final int BULLET_DAMAGE = 5;
-	
-	/**
 	 * The default damage for an arrow
 	 */
-	public static final int ARROW_SPEED = 20;
+	public static final int ARROW_SPEED = 25;
 	
 	/**
 	 * The default gravity for an arrow
 	 */
 	public static final double ARROW_GRAVITY = 0.25;
+	
+	/**
+	 * The default damage for a bullet
+	 */
+	public static final int BULLET_SPEED = 15;
+	
+	/**
+	 * The default gravity for a bullet
+	 */
+	public static final double BULLET_GRAVITY = 0.3;
 
 	/**
 	 * Counter
@@ -169,10 +174,10 @@ public class ServerProjectile extends ServerFlyingObject
 			break;
 		case ServerWorld.BULLET_TYPE:
 			setImage("BULLET_0");
-			setGravity(0.4);
+			setGravity(BULLET_GRAVITY);
 			setDamage((int) Math.ceil(ServerWeapon.SLING_DMG
 					* (1 + owner.getBaseDamage() / 100.0)));
-			setSpeed(15);
+			setSpeed(BULLET_SPEED);
 			animated = false;
 			faceAngle = false;
 			soundNo = (int) (Math.random() * 7);

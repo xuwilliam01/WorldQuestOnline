@@ -192,7 +192,7 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 0; i++)
 			{
 				int randomGoblin = (int)(Math.random()*(this.goblinTierLimit + 1));
 				spawnGoblin(randomGoblin);
@@ -289,10 +289,10 @@ public class ServerCastle extends ServerBuilding {
 		else
 			setName("Blue Team's Castle");
 
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 45,
-				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
-		arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 45,
-				ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+			arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 25, getY() + 225, getTeam(), 45,
+					ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
+			arrowSources.add(getWorld().add(new ServerArrowSource(getX() + 815, getY() + 225, getTeam(), 45,
+					ServerWorld.WOODARROW_TYPE, targetRange, this, getWorld())));
 	}
 
 	@Override
