@@ -1083,7 +1083,7 @@ public class ClientWorld {
 			graphics.setFont(MESSAGE_FONT);
 			graphics.drawString(displayedText,
 					(int) (Client.SCREEN_WIDTH / 2 - (displayedText.length() * MESSAGE_FONT_WIDTH) * (2.0 / 5) + 0.5),
-					Client.SCREEN_HEIGHT / 3);
+					(int)(Client.SCREEN_HEIGHT / 2.75));
 		}
 
 		// Draw the hologram if it exists

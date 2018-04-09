@@ -364,7 +364,6 @@ public class ClientObject implements Comparable<ClientObject>
 		return hint;
 	}
 	
-
 	public String getType() {
 		return type;
 	}
