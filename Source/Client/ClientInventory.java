@@ -80,6 +80,7 @@ public class ClientInventory extends JPanel implements ActionListener
 			{
 				mainMenu.setBackground(Color.black);
 			}
+			
 			mainMenu.setForeground(Color.black);
 			mainMenu.setText("Menu");
 			add(mainMenu);

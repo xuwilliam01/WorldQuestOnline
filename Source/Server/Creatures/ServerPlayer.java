@@ -2124,8 +2124,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		output.flush();
 
 		if (endGame) {
-			sendMessage("B " + losingTeam);
-			//forcePlayerPos(getX(), getY());
 			//Make sure the message reaches the player before we close the connection
 			try {
 				Thread.sleep(200);

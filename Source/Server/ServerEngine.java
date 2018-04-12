@@ -233,11 +233,17 @@ public class ServerEngine implements ActionListener {
 	}
 
 	public void endGame(int losingTeam) {
-		endGame = true;
+		this.broadcast("B " + losingTeam);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		this.losingTeam = losingTeam;
 		usedIDs= new boolean[NUMBER_OF_IDS];
 		nextID = normalIDStart;
 		nextBuildingID = 0;
+		endGame = true;
 		updateTimer.stop();
 	}
 

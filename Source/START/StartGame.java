@@ -19,7 +19,7 @@ public class StartGame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		menu = new MainMenu(null);
+		menu = new MainMenu(null, false);
 
 	}
 	
@@ -27,12 +27,12 @@ public class StartGame {
 	 * Restarts the game on a new frame
 	 * @param oldFrame the frame that should be closed
 	 */
-	public static void restart(JFrame oldFrame)
+	public static void restart(JFrame oldFrame, boolean openServerList)
 	{	
 		Point pos = oldFrame.getLocationOnScreen();
 		oldFrame.setVisible(false);
 		oldFrame.dispose();
 		oldFrame.removeAll();
-		menu = new MainMenu(pos);
+		menu = new MainMenu(pos, openServerList);
 	}
 }

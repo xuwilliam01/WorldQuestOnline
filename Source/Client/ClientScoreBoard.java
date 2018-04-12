@@ -3,7 +3,11 @@ package Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.PriorityQueue;
+
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import Imports.Images;
@@ -11,7 +15,7 @@ import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
 @SuppressWarnings("serial")
-public class ClientScoreBoard extends JPanel{
+public class ClientScoreBoard extends JPanel implements ActionListener{
 
 	private PriorityQueue<ClientPlayerScore> redTeam = new PriorityQueue<ClientPlayerScore>();
 	private PriorityQueue<ClientPlayerScore> blueTeam = new PriorityQueue<ClientPlayerScore>();
@@ -19,6 +23,7 @@ public class ClientScoreBoard extends JPanel{
 	private boolean gameover = false;
 	private String winner = "Red Team";
 	private int team = 0;
+	private JButton mainMenu;
 	
 	public ClientScoreBoard(Client client)
 	{
@@ -29,9 +34,10 @@ public class ClientScoreBoard extends JPanel{
 		setSize((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/2, Client.SCREEN_HEIGHT/2);
 		setLocation((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/4 - ClientInventory.INVENTORY_WIDTH/2, Client.SCREEN_HEIGHT/4);
 		scoreboardImage = Images.getImage("scoreboard");
+		mainMenu = client.getInventory().mainMenu;
 	}
 
-	public void setWinner(int loser)
+	public void setLoser(int loser)
 	{
 		gameover = true;
 		this.team = loser;
@@ -53,13 +59,18 @@ public class ClientScoreBoard extends JPanel{
 		graphics.setFont(ClientWorld.BIG_NORMAL_FONT);
 		if(gameover)
 		{
-			graphics.setColor(Color.red);
+			graphics.setColor(Color.pink);
 			if(team == ServerPlayer.RED_TEAM)
-				graphics.setColor(Color.blue);
-			String toDraw = String.format("%s won!", winner);
-			graphics.drawString(toDraw, Client.SCREEN_WIDTH/4+25 - graphics.getFontMetrics().stringWidth(toDraw)/2,450);
-			graphics.drawString("Your leaderboard position has been updated", Client.SCREEN_WIDTH/4+25 - graphics.getFontMetrics().stringWidth("Your leaderboard position has been updated")/2,470);
-			
+				graphics.setColor(Color.CYAN);
+			String message = String.format("%s wins!", winner);
+			graphics.drawString(message, this.getWidth()/2 - graphics.getFontMetrics().stringWidth(message)/2,this.getHeight() - 85);
+			message = "Your ranking has been updated";
+			graphics.drawString(message, this.getWidth()/2 - graphics.getFontMetrics().stringWidth(message)/2,this.getHeight() - 65);
+			mainMenu.setSize(200, 25);
+			mainMenu.setLocation(this.getWidth()/2 - mainMenu.getWidth()/2, this.getHeight() - mainMenu.getHeight() - 25);
+			mainMenu.setText("Back to main menu");
+			mainMenu.setVisible(true);
+			add(mainMenu);
 		}
 		
 		graphics.setColor(Color.WHITE);
@@ -114,6 +125,8 @@ public class ClientScoreBoard extends JPanel{
 			
 			yPos += ClientFrame.getScaledHeight(40);
 		}
+		
+		
 	}
 
 
@@ -210,5 +223,10 @@ public class ClientScoreBoard extends JPanel{
 				toRemove = player;
 			}
 		players.remove(toRemove);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
 	}
 }

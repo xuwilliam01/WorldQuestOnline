@@ -156,7 +156,7 @@ public class MainMenu implements KeyListener {
 	/**
 	 * Constructor
 	 */
-	public MainMenu(Point pos) {
+	public MainMenu(Point pos, boolean openServerList) {
 		Client.inGame = false;
 		main = this;
 		numTries = 0;
@@ -232,7 +232,7 @@ public class MainMenu implements KeyListener {
 			}
 		}
 		mainFrame.setLayout(null);
-		mainMenu = new MainPanel();
+		mainMenu = new MainPanel(openServerList);
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
@@ -329,11 +329,15 @@ public class MainMenu implements KeyListener {
 		String rating;
 		String wins;
 		String losses;
-
+		
+		boolean openServerList = false;
+		
 		/**
 		 * Constructor
 		 */
-		public MainPanel() {
+		public MainPanel(boolean openServerList) {
+			this.openServerList = openServerList;
+			
 			// Set the Icon
 			mainFrame.setIconImage(Images.getImage("WorldQuestIcon"));
 			numTries = 0;
@@ -601,14 +605,23 @@ public class MainMenu implements KeyListener {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				if (numTries == 0 && openServerList)
+				{
+					OnlineButton.openServerSelection();
+					openServerList = false;
+					serverList.refresh();
+				}
+				
 				numTries++;
+				
 				if(numTries == 3)
 				{
 					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or manually connect to a friend's)", "Uh oh", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			repaint();
-
+			
 		}
 
 		@Override
@@ -926,7 +939,7 @@ public class MainMenu implements KeyListener {
 				mainFrame.invalidate();
 				mainFrame.validate();
 
-				mainMenu = new MainPanel();
+				mainMenu = new MainPanel(false);
 				mainMenu.setVisible(true);
 				mainFrame.add(mainMenu);
 
@@ -1049,7 +1062,13 @@ public class MainMenu implements KeyListener {
 	 */
 	private static class OnlineButton implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			openServerSelection();
+		}
+		
+		public static void openServerSelection()
+		{
 			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
 				newLogin.toFront();
@@ -1066,12 +1085,10 @@ public class MainMenu implements KeyListener {
 				leaderboard.toFront();
 				return;
 			}
-			/*
 			if (!ClientAccountWindow.loggedIn) {
-				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!");
+				JOptionPane.showMessageDialog(MainMenu.mainFrame, "You are not logged in!", "Oops", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			*/
 			serverList = null;
 			try {
 				serverList = new ClientServerSelection(DEF_UDP_PORT);
@@ -1081,9 +1098,7 @@ public class MainMenu implements KeyListener {
 			}
 			Thread listThread = new Thread(serverList);
 			listThread.start();
-
 		}
-
 	}
 
 	/**
@@ -1168,7 +1183,7 @@ public class MainMenu implements KeyListener {
 				mainFrame.validate();
 				creatorPanel = null;
 
-				mainMenu = new MainPanel();
+				mainMenu = new MainPanel(false);
 				mainFrame.add(mainMenu);
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
@@ -1193,7 +1208,7 @@ public class MainMenu implements KeyListener {
 			mainFrame.validate();
 			lobby = null;
 
-			mainMenu = new MainPanel();
+			mainMenu = new MainPanel(true);
 			mainFrame.add(mainMenu);
 			mainFrame.setVisible(true);
 			mainFrame.requestFocus();
@@ -1270,7 +1285,7 @@ public class MainMenu implements KeyListener {
 				mainFrame.invalidate();
 				mainFrame.validate();
 
-				mainMenu = new MainPanel();
+				mainMenu = new MainPanel(false);
 				mainFrame.add(mainMenu);
 				mainFrame.setVisible(true);
 				mainMenu.revalidate();
@@ -1292,7 +1307,7 @@ public class MainMenu implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			client.leaveGame = true;
 			client.getOutput().close();
-			StartGame.restart(mainFrame);
+			StartGame.restart(mainFrame, true);
 			addedKeyListener = false;
 		}
 	}

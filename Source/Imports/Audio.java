@@ -98,14 +98,13 @@ public class Audio {
 		
 		if (isClient && GameAudio.audioSupported)
 		{
-			int willImport = JOptionPane.showConfirmDialog(null, "Import audio? Some clients may not work with it.", "Wanna hear music or not", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+			int willImport = JOptionPane.showConfirmDialog(null, "\nImport audio? Some clients may not work with it.\n\n", "Wanna hear music or not", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
 			if (willImport != JOptionPane.YES_OPTION)
 			{
 				GameAudio.audioSupported = false;
 				return;
 			}
 		}
-		
 		audioArray = new GameAudio[1000];
 
 		//Import all audio

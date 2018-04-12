@@ -32,6 +32,7 @@ import Imports.Audio;
 import Imports.Images;
 import Server.ServerEngine;
 import Server.ServerWorld;
+import Server.Buildings.ServerCastle;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerPlayer;
 
@@ -448,11 +449,12 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 								case 'B':
 									// End the game
 									leaveGame = true;
-									int team = Integer.parseInt(tokens[++token]);
+									int losingTeam = Integer.parseInt(tokens[++token]);
 
-									//JOptionPane.showMessageDialog(Client.this, String.format(
-									//	"The %s castle has been destroyed, the winner is the %s!", loser, winner));
-									scoreboard.setWinner(team);
+//									JOptionPane.showMessageDialog(Client.this, String.format(
+//											"The %s castle has been destroyed, the winner is the %s! Your ranking has been updated.", 
+//											losingTeam == ServerCastle.RED_TEAM ? "red team's" : "blue team's", losingTeam == ServerCastle.RED_TEAM ? "blue team" : "red team"));
+									scoreboard.setLoser(losingTeam);
 									chat.setEnabled(false);
 									enter.setEnabled(false);
 									if (!scoreboard.isVisible()) {
@@ -461,9 +463,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 										revalidate();
 									}
 									repaint();
-									//if (inventory.getMenuButton() != null) {
-									//	inventory.getMenuButton().doClick();
-									//}
 									break;
 								case 'U':
 									// startPaint = System.currentTimeMillis();
@@ -1228,7 +1227,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 				graphics.setColor(Color.white);
 				graphics.setFont(ClientWorld.MESSAGE_FONT);
-				graphics.drawString(String.format("YOU ARE DEAD. Wait %d seconds to respawn", respawnTime),
+				graphics.drawString(String.format("YOU ARE DEAD. Wait %d seconds to respawn", Math.max(respawnTime, 5)),
 						ClientFrame.getScaledWidth(600), ClientFrame.getScaledHeight(450));
 			}
 

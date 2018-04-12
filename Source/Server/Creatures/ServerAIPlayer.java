@@ -364,7 +364,7 @@ public class ServerAIPlayer extends ServerCreature{
 			break;
 		}
 		
-		int randomStartArmor = (int) (Math.random() * (1 + Math.min(castle.getTier(), 5)));
+		int randomStartArmor = (int) (Math.random() * (2 + Math.min(castle.getTier(), 4)));
 		switch (randomStartArmor) {
 		case 0:
 			break;
