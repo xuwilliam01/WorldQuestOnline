@@ -198,9 +198,9 @@ public class CreatorItems extends JPanel implements ActionListener {
 		else if (button.getSource() == updateWidth) {
 			while (true)
 				try {
-					String newWidth = (String) JOptionPane.showInputDialog(
+					String newWidth = (String) JOptionPane.showInputDialog(world,
 							String.format("Please input the new width (larger than %d and less than %d): ",
-									MIN_WORLD_SIZE, MAX_WORLD_SIZE));
+									MIN_WORLD_SIZE, MAX_WORLD_SIZE), "", JOptionPane.PLAIN_MESSAGE);
 					if (newWidth == null)
 						break;
 					int newWidthNum = Integer.parseInt(newWidth);
@@ -223,7 +223,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 		// Get a name
 		else if(button.getSource() == rename)
 		{
-			String newName = JOptionPane.showInputDialog(world, "Please enter a new name");
+			String newName = JOptionPane.showInputDialog(world, "Please enter a new name", "", JOptionPane.PLAIN_MESSAGE);
 			if(newName != null)
 			{
 				try {
@@ -270,7 +270,7 @@ public class CreatorItems extends JPanel implements ActionListener {
 		}
 		else if(button.getSource() == delete)
 		{
-			int result = JOptionPane.showConfirmDialog(null, "Do you want to delete this map?","Warning",JOptionPane.YES_NO_OPTION);
+			int result = JOptionPane.showConfirmDialog(world, "Do you want to delete this map?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
 				world.setJustSaved(true);
@@ -310,9 +310,9 @@ public class CreatorItems extends JPanel implements ActionListener {
 		else {
 			while (true)
 				try {
-					String newHeight = (String) JOptionPane.showInputDialog(
+					String newHeight = (String) JOptionPane.showInputDialog(world,
 							String.format("Please input the new height (larger than %d and less than %d): ",
-									MIN_WORLD_SIZE, MAX_WORLD_SIZE));
+									MIN_WORLD_SIZE, MAX_WORLD_SIZE), "", JOptionPane.PLAIN_MESSAGE);
 					if (newHeight == null)
 						break;
 					int newHeightNum = Integer.parseInt(newHeight);

@@ -19,7 +19,7 @@ public class StartServerWithWindow {
 	public static void main(String[] args) throws SocketException {
 		while (true) {
 			try {
-				name = JOptionPane.showInputDialog("What would you like to name the room? (No spaces)");
+				name = JOptionPane.showInputDialog(null, "What would you like to name the room? (No spaces)", "", JOptionPane.PLAIN_MESSAGE);
 				
 				if (name == null)
 				{
@@ -36,14 +36,14 @@ public class StartServerWithWindow {
 			}
 		}
 		
-		int listServer = JOptionPane.showOptionDialog(null, "Would you like to list your server on the global server list?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+		int listServer = JOptionPane.showOptionDialog(null, "Would you like to list your server on the global server list?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 				null, null, null);
 		
 		if (listServer == JOptionPane.CLOSED_OPTION) {
 			return;
 		}
 		
-		JOptionPane.showMessageDialog(null, "Remember to forward port 9988 to open public access to your server!");
+		JOptionPane.showMessageDialog(null, "Remember to forward port 9988 to open public access to your server!", "", JOptionPane.PLAIN_MESSAGE);
 		
 		Imports.Audio.isServer=true;
 		GameImage.hostingServer=true;

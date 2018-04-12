@@ -163,19 +163,19 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			{
 			case "LY":
 				saveCredentials();
-				JOptionPane.showMessageDialog(this, "Login Successful!");
+				JOptionPane.showMessageDialog(this, "Login Successful!", "Yay", JOptionPane.PLAIN_MESSAGE);
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				break;
 			case "LN":
-				JOptionPane.showMessageDialog(this, "Login Failed! Either your username or password is incorrect!");
+				JOptionPane.showMessageDialog(this, "Login Failed! Either your username or password is incorrect!", "fuck", JOptionPane.ERROR_MESSAGE);
 				break;
 			case "CY":
 				saveCredentials();
-				JOptionPane.showMessageDialog(this, "Created Account! You are now logged in.");
+				JOptionPane.showMessageDialog(this, "Created Account! You are now logged in.", "Yay", JOptionPane.PLAIN_MESSAGE);
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 				break;
 			case "CN":
-				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.");
+				JOptionPane.showMessageDialog(this, "Username already in use. Please pick another one.", "fuck", JOptionPane.ERROR_MESSAGE);
 				break;
 			}
 		}
@@ -251,7 +251,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 			repaint();
 			if(username.getText().length() == 0 || new String(password.getPassword()).length() == 0)
 			{
-				JOptionPane.showMessageDialog(this, "Username and/or password is too short");
+				JOptionPane.showMessageDialog(this, "Username and/or password is too short", ":P", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			String out = "L "+hash(username.getText(),new String(password.getPassword()))+" "+username.getText();

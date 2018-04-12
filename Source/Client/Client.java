@@ -800,7 +800,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									inventory.mainMenu.doClick();
 									break;
 								case '~':
-									JOptionPane.showMessageDialog(null, tokens[++token]);
+									JOptionPane.showMessageDialog(null, tokens[++token], "", JOptionPane.PLAIN_MESSAGE);
 									break;
 								}
 

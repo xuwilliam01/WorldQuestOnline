@@ -201,7 +201,7 @@ public class MainMenu implements KeyListener {
 
 			if (tooLarge) {
 				JOptionPane.showMessageDialog(null,
-						"Please set your monitor to 1920x1080 or smaller for an optimized experience");
+						"Please set your monitor to 1920x1080 or smaller for an optimized experience", "Too big", JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 		if(tooLarge)
@@ -604,7 +604,7 @@ public class MainMenu implements KeyListener {
 				numTries++;
 				if(numTries == 3)
 				{
-					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or manually connect to a friend's)");
+					JOptionPane.showMessageDialog(this, "Could not connect to official servers\n(Apologies! You can still host your own or manually connect to a friend's)", "Uh oh", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			repaint();
@@ -854,7 +854,7 @@ public class MainMenu implements KeyListener {
 					e1.printStackTrace();
 				}
 				if (!canConnect) {
-					serverIP = JOptionPane.showInputDialog("Connection Failed. Please re-enter the IP.");
+					serverIP = JOptionPane.showInputDialog(null, "Connection Failed. Please re-enter the IP.", "", JOptionPane.PLAIN_MESSAGE);
 					if (serverIP == null)
 						exit = true;
 					else {
@@ -885,7 +885,7 @@ public class MainMenu implements KeyListener {
 						output.close();
 						mySocket.close();
 					} else if (line.equals("DOUBLEACC")) {
-						JOptionPane.showMessageDialog(this, "You are already playing a game on this account!");
+						JOptionPane.showMessageDialog(this, "You are already playing a game on this account!", "", JOptionPane.PLAIN_MESSAGE);
 						exit = true;
 						input.close();
 						output.close();
@@ -900,7 +900,7 @@ public class MainMenu implements KeyListener {
 						mySocket.close();
 						*/
 					} else if (line.equals("ERROR")) {
-						JOptionPane.showMessageDialog(this, "Error Connecting");
+						JOptionPane.showMessageDialog(this, "Error Connecting", "", JOptionPane.ERROR_MESSAGE);
 						exit = true;
 						input.close();
 						output.close();
@@ -909,7 +909,7 @@ public class MainMenu implements KeyListener {
 
 					connected = true;
 				} catch (IOException e) {
-					serverIP = JOptionPane.showInputDialog("Connection Failed. Please re-enter the IP.");
+					serverIP = JOptionPane.showInputDialog(null, "Connection Failed. Please re-enter the IP.", "", JOptionPane.PLAIN_MESSAGE);
 					if (serverIP == null)
 						exit = true;
 				}
@@ -919,7 +919,7 @@ public class MainMenu implements KeyListener {
 
 			if (exit) {
 				if (full)
-					JOptionPane.showMessageDialog(null, "This game is full");
+					JOptionPane.showMessageDialog(null, "This game is full", "Whoops", JOptionPane.PLAIN_MESSAGE);
 
 				setVisible(false);
 				mainFrame.remove(this);
@@ -1116,7 +1116,7 @@ public class MainMenu implements KeyListener {
 				// login.setText("Login");
 				Image logoutImage = Images.getImage("Login");
 				loginLogout.setIcon(new ImageIcon(logoutImage));
-				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!");
+				JOptionPane.showMessageDialog(mainFrame, "Successfully Logged Out!", ":)", JOptionPane.PLAIN_MESSAGE);
 				mainFrame.requestFocus();
 				return;
 			}
@@ -1153,7 +1153,7 @@ public class MainMenu implements KeyListener {
 			int dialogResult = JOptionPane.NO_OPTION;
 			if (!creator.justSaved())
 				dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to save your map?", "Warning",
-						JOptionPane.YES_NO_CANCEL_OPTION);
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 			if (dialogResult == JOptionPane.YES_OPTION)
 				try {
 					creator.save();
@@ -1332,7 +1332,7 @@ public class MainMenu implements KeyListener {
 			int port = DEF_PORT;
 			// String playerName;
 
-			serverIP = JOptionPane.showInputDialog("Enter the server IP or leave blank for a server on this machine");
+			serverIP = JOptionPane.showInputDialog(mainFrame, "Enter the server IP or leave blank for a server on this machine", "", JOptionPane.PLAIN_MESSAGE);
 			if (serverIP == null) {
 				mainFrame.requestFocus();
 				return;
@@ -1384,107 +1384,6 @@ public class MainMenu implements KeyListener {
 		mainFrame.add(gamePanel);
 		mainFrame.setVisible(true);
 		gamePanel.revalidate();
-	}
-
-	/**
-	 * Starts the server when this button is pressed
-	 * Currently inactive, please fix constructor in server manager
-	 * 
-	 * @author Alex Raita & William Xu
-	 *
-	 */
-	private static class StartServer implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (ClientServerSelection.open) {
-				serverList.setVisible(true);
-				serverList.toFront();
-				return;
-			}
-			if (ClientAccountWindow.open) {
-				newLogin.setVisible(true);
-				newLogin.toFront();
-				return;
-			}
-			if (Leaderboard.open) {
-				leaderboard.setVisible(true);
-				leaderboard.toFront();
-				return;
-			}
-			int maxRooms;
-			String name;
-
-			GameMaps.importMaps();
-			while (true) {
-				try {
-					String maxRoomsStr = JOptionPane
-							.showInputDialog("What is the maximum number of gamerooms you would like?");
-					if (maxRoomsStr == null) {
-						mainFrame.requestFocus();
-						return;
-					}
-					maxRooms = Integer.parseInt(maxRoomsStr);
-					if (maxRooms < 1)
-						maxRooms = 1;
-					break;
-				} catch (Exception E) {
-
-				}
-			}
-
-			while (true) {
-				try {
-					name = JOptionPane.showInputDialog("What would you like to name the room? (No spaces)");
-					if (name == null) {
-						mainFrame.requestFocus();
-						return;
-					}
-					if (name.contains(" ") || name.equals(""))
-						throw new Exception();
-					break;
-				} catch (Exception E) {
-
-				}
-			}
-
-			int portNum = DEF_PORT;
-			// while (true)
-			// {
-			// String port = JOptionPane
-			// .showInputDialog("Please enter the port you want to use for the
-			// server (Default "
-			// + DEF_PORT + ")");
-			// if (port == null)
-			// return;
-			// else if (port.equals(""))
-			// {
-			// port = "" + DEF_PORT;
-			// }
-			// try
-			// {
-			// portNum = Integer.parseInt(port);
-			// break;
-			// }
-			// catch (NumberFormatException E)
-			// {
-			// }
-			// }
-
-			// Starts the server
-			System.out.println("rooms " + maxRooms);
-			ServerManager server = null;
-//			try {
-//				server = new ServerManager(name, portNum, maxRooms, mainFrame, false);
-//			} catch (SocketException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-
-			Thread serverThread = new Thread(server);
-
-			serverThread.start();
-
-		}
-
 	}
 
 	/**
@@ -1541,7 +1440,7 @@ public class MainMenu implements KeyListener {
 						}
 					});
 					int result = JOptionPane.showOptionDialog(null, jcb, "Choose A Map To Edit",
-							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+							JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 							new String[] { "Next", "Cancel" }, null);
 					if (result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION)
 						throw new NullPointerException();
@@ -1572,7 +1471,7 @@ public class MainMenu implements KeyListener {
 					+ "\n\nIf you save your own map, it'll be playable on your own server!"
 					+ "\nIf you think you made a great map, we'd love to add it to our servers!"
 					+ "\nYou'll find it in the Resources folder in your game directory."
-					+ "\n\nContact us at worldquestdev@gmail.com!", "Creator instructions", JOptionPane.INFORMATION_MESSAGE);
+					+ "\n\nContact us at worldquestdev@gmail.com!", "Creator instructions", JOptionPane.PLAIN_MESSAGE);
 		}
 
 	}
@@ -1602,7 +1501,7 @@ public class MainMenu implements KeyListener {
 			}
 			JOptionPane.showMessageDialog(null,
 					"We are updating the instructions! The controls are shown in the lobby.", "Sorry",
-					JOptionPane.ERROR_MESSAGE);
+					JOptionPane.PLAIN_MESSAGE);
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
@@ -1641,8 +1540,8 @@ public class MainMenu implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			Object[] options = { "Exit", "Cancel" };
 			Frame dialogueFrame = new Frame();
-			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame, "Exit the game?", "Confirm Exit",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); // default
+			int confirmExit = JOptionPane.showOptionDialog(dialogueFrame, "                 Exit the game?", "Confirm Exit",
+					JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]); // default
 			// button
 			// title
 			mainFrame.requestFocus();

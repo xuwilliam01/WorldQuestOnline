@@ -128,7 +128,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 		}
 		else if(message.equals("Full"))
 		{
-			JOptionPane.showMessageDialog(MainMenu.mainFrame, "This game is full");
+			JOptionPane.showMessageDialog(MainMenu.mainFrame, "This game is full", "Sorry", JOptionPane.PLAIN_MESSAGE);
 			cancelled = true;
 			return;
 		}

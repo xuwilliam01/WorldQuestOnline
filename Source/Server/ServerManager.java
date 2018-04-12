@@ -298,7 +298,7 @@ public class ServerManager implements Runnable, ActionListener{
 						System.out.println("Central Server Closed");
 						if (HAS_FRAME)
 						{
-							JOptionPane.showMessageDialog(null, "Connection to global server list has closed");
+							JOptionPane.showMessageDialog(null, "Connection to global server list has closed", "", JOptionPane.PLAIN_MESSAGE);
 						}
 						
 						//e.printStackTrace();

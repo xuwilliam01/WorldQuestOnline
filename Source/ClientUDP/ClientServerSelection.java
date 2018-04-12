@@ -197,7 +197,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			
 			if(destination.getNumPlayers() >= maxPlayers)
 			{
-				JOptionPane.showMessageDialog(null, "This server is full");
+				JOptionPane.showMessageDialog(null, "This server is full", "", JOptionPane.PLAIN_MESSAGE);
 				return;
 			}
 			
@@ -211,7 +211,7 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	
 	public void manualConnect()
 	{
-		String IP = JOptionPane.showInputDialog("Please enter the server's IP address");
+		String IP = JOptionPane.showInputDialog(null, "Please enter the server's IP address", "Need IP", JOptionPane.PLAIN_MESSAGE);
 		
 		if (IP == null)
 		{
