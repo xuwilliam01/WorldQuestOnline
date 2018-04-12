@@ -519,7 +519,9 @@ public class ServerManager implements Runnable, ActionListener{
 			//output.println("CONNECTED");
 			//System.out.println("CONNECTED NEW ROOM");
 			//output.flush();
-			addNewRoom();
+			
+			// Start a new game
+			//addNewRoom();
 			rooms.get(rooms.size() - 1).start();
 			System.out.println("Game restarted");
 			//rooms.get(rooms.size() - 1).addClient(newClientSocket, input, name);
