@@ -306,14 +306,6 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 	 * Start the client
 	 */
 	public void initialize() {
-
-		// Set the cursor transparent
-		// Toolkit toolkit = Toolkit.getDefaultToolkit();
-		// Cursor cursor =
-		// toolkit.createCustomCursor(Images.getImage("NOTHING"), new Point(
-		// getX(), getY()), "img");
-		// setCursor(cursor);
-
 		setDoubleBuffered(true);
 		setFocusable(true);
 		requestFocusInWindow();

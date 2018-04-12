@@ -1554,19 +1554,9 @@ public class MainMenu implements KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
+	public void keyPressed(KeyEvent arg0) {}
 	@Override
-	public void keyReleased(KeyEvent event) {
-
-	}
-
+	public void keyReleased(KeyEvent event) {}
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void keyTyped(KeyEvent arg0) {}
 }

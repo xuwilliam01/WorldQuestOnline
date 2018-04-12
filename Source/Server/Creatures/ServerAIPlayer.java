@@ -299,8 +299,7 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public void initPlayer()
 	{	
-		int randomStartMelee = (int) (Math.random() * 2);
-		randomStartMelee += Math.min(castle.getTier(), 5);
+		int randomStartMelee = (int) (Math.random() * (2 + Math.min(castle.getTier(), 5)));
 		switch (randomStartMelee) {
 		case 0:
 			meleeWeapon = new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
@@ -332,57 +331,57 @@ public class ServerAIPlayer extends ServerCreature{
 			break;
 		}
 		
-		int randomStartRanged = (int) (Math.random() * 2);
-		randomStartRanged += Math.min(castle.getTier(), 5);
+		int randomStartRanged = (int) (Math.random() * (3 + Math.min(castle.getTier(), 5)));
 		switch (randomStartRanged) {
 		case 0:
+		case 1:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.SLINGSHOT_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
 			break;
-		case 1:
+		case 2:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.WOODBOW_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
 			break;
-		case 2:
+		case 3:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.ICEWAND_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.WAND_TYPE;
 			break;
-		case 3:
+		case 4:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.STEELBOW_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
 			break;
-		case 4:
+		case 5:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.FIREWAND_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.WAND_TYPE;
 			break;
-		case 5:
+		case 6:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.MEGABOW_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.BOW_TYPE;
 			break;
-		case 6:
+		case 7:
 			rangedWeapon = new ServerWeapon(0, 0, ServerWorld.DARKWAND_TYPE, getWorld());
 			myRangedType = ServerAIPlayer.WAND_TYPE;
 			break;
 		}
 		
-		int randomStartArmor = (int) (Math.random() * 2);
-		randomStartArmor += Math.min(castle.getTier(), 3);
-		
+		int randomStartArmor = (int) (Math.random() * (1 + Math.min(castle.getTier(), 5)));
 		switch (randomStartArmor) {
 		case 0:
+			break;
+		case 1:
 			addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.GREY_NINJA_ARMOUR);
 			break;
-		case 1:
+		case 2:
 			addItem(new ServerArmour(0, 0, ServerWorld.BLUE_NINJA_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.BLUE_NINJA_ARMOUR);
 			break;
-		case 2:
+		case 3:
 			addItem(new ServerArmour(0, 0, ServerWorld.RED_NINJA_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.RED_NINJA_ARMOUR);
 			break;
-		case 3:
 		case 4:
+		case 5:
 			addItem(new ServerArmour(0, 0, ServerWorld.STEEL_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.STEEL_ARMOUR);
 			break;
@@ -765,7 +764,6 @@ public class ServerAIPlayer extends ServerCreature{
 					}
 					
 					initPlayer();
-
 					setAlive(true);
 
 					verticalMovement = respawnYSpeed;

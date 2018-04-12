@@ -1787,7 +1787,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				{
 					money = item;
 				}
-				/* For now we won't allow player to keep anything but money
 				else if (item.getType().contains(ServerWorld.WEAPON_TYPE))
 				{
 					if(bestWeapon == null)
@@ -1801,6 +1800,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 					else dropItem(item);
 				}
+				/*
 				else if (item.getType().contains(ServerWorld.ARMOUR_TYPE))
 				{
 					if(bestArmour == null)
@@ -1834,7 +1834,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		{
 			if (equippedWeapons[item] != null)
 			{
-				/*
 				if(bestWeapon == null || equippedWeapons[item].getCost() > bestWeapon.getCost())
 				{
 					if(bestWeapon != null)
@@ -1842,7 +1841,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					bestWeapon = equippedWeapons[item];
 				}
 				else 
-				*/
 				dropItem(equippedWeapons[item]);
 			}
 		}
@@ -1864,12 +1862,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		}
 		equippedArmour = null;
 
-		/*
 		if(bestWeapon != null)
 		{
 			System.out.println("BEST W: "+bestWeapon.getType());
 			getInventory().add(bestWeapon);
 		}
+		/*
 		if(bestArmour != null)
 		{
 			System.out.println("BEST A: "+bestArmour.getType());
