@@ -102,7 +102,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	
 	private ArrayList<String> botNames = new ArrayList<String>();
 	
-	
 	/**
 	 * 
 	 * @param socket
@@ -294,29 +293,32 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	
 	public void rebalanceAIPlayers()
 	{
-		redTeamBots.clear();
-		blueTeamBots.clear();
-		
-		Queue<String> namesQueue = new LinkedList<String>();
-		
-		for (String name : botNames)
+		if (!botNames.isEmpty())
 		{
-			namesQueue.add(name);
-		}
-		
-		if (redTeam.size() < 2 || redTeam.size() < blueTeam.size())
-		{
-			for (int i = 0; i < Math.max(2 - redTeam.size(), blueTeam.size() - redTeam.size()); i++)
+			redTeamBots.clear();
+			blueTeamBots.clear();
+			
+			Queue<String> namesQueue = new LinkedList<String>();
+			
+			for (String name : botNames)
 			{
-				redTeamBots.add(namesQueue.remove());
+				namesQueue.add(name);
 			}
-		}
-		
-		if (blueTeam.size() < 2 || blueTeam.size() < redTeam.size())
-		{
-			for (int i = 0; i < Math.max(2 - blueTeam.size(), redTeam.size() - blueTeam.size()); i++)
+			
+			if (redTeam.size() < 2 || redTeam.size() < blueTeam.size())
 			{
-				blueTeamBots.add(namesQueue.remove());
+				for (int i = 0; i < Math.max(2 - redTeam.size(), blueTeam.size() - redTeam.size()); i++)
+				{
+					redTeamBots.add(namesQueue.remove());
+				}
+			}
+			
+			if (blueTeam.size() < 2 || blueTeam.size() < redTeam.size())
+			{
+				for (int i = 0; i < Math.max(2 - blueTeam.size(), redTeam.size() - blueTeam.size()); i++)
+				{
+					blueTeamBots.add(namesQueue.remove());
+				}
 			}
 		}
 	}

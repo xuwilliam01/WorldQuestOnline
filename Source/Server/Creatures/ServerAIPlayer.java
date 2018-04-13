@@ -263,7 +263,7 @@ public class ServerAIPlayer extends ServerCreature{
 			getBody().destroy();
 			setBody(null);
 		}
-		getWorld().getEngine().getServer().getNamesList().add(getName());
+		getWorld().getEngine().getServer().getNamesList().addFirst(getName());
 	}
 
 	public void initPlayer()
@@ -440,7 +440,7 @@ public class ServerAIPlayer extends ServerCreature{
 							
 							if (jumpAgain)
 							{
-								actionChoice = 0;
+								actionChoice = actionChoice % 2;
 								jumpAgain = false;
 							}
 							
@@ -448,7 +448,7 @@ public class ServerAIPlayer extends ServerCreature{
 							if (actionChoice < 2) {
 								setTarget(null);
 								action = ServerCreature.HOP;
-								actionDelay = 30;
+								actionDelay = 20;
 								setVSpeed(-verticalMovement/1.5);
 								setOnSurface(false);
 								if (actionChoice == 0)

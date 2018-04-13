@@ -506,6 +506,7 @@ public class ServerEngine implements ActionListener {
 			}
 			
 			noRemoved = 0;
+			
 			for (ServerAIPlayer player: redAIPlayers)
 			{
 				if (redPlayers.size() + redAIPlayers.size() - noRemoved > 2)
@@ -552,20 +553,20 @@ public class ServerEngine implements ActionListener {
 		
 		// Make sure each team has a minimum of two players/a.i.'s
 		int difference = 0;
-		if (((difference = 2 - (bluePlayers.size() + blueAIPlayers.size())) > 0))
-		{
-			for (int i = 0; i < difference; i++)
-			{
-				this.addAIPlayer(ServerPlayer.BLUE_TEAM);
-			}
-		}
-		
-		difference = 0;
 		if (((difference = 2 - (redPlayers.size() + redAIPlayers.size())) > 0))
 		{
 			for (int i = 0; i < difference; i++)
 			{
 				this.addAIPlayer(ServerPlayer.RED_TEAM);
+			}
+		}
+		
+		difference = 0;
+		if (((difference = 2 - (bluePlayers.size() + blueAIPlayers.size())) > 0))
+		{
+			for (int i = 0; i < difference; i++)
+			{
+				this.addAIPlayer(ServerPlayer.BLUE_TEAM);
 			}
 		}
 		
