@@ -1372,8 +1372,8 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 
 							graphics.setColor(Color.ORANGE);
 
-							String killWord = "slain";
-							String secondKillWord = "defeated";
+							String killWord = "killed";
+							String secondKillWord = "killed";
 
 							if (str.charAt(0) == 'k')
 								graphics.drawString("was " + killWord + " by a ",

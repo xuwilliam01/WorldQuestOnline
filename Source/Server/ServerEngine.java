@@ -414,62 +414,158 @@ public class ServerEngine implements ActionListener {
 		
 		if (redPlayers.size() < bluePlayers.size())
 		{
+			int noRemoved = 0;
+			boolean done = false;
 			for (ServerAIPlayer player: blueAIPlayers)
 			{
-				this.removeAIPlayer(player);
+				if (bluePlayers.size() + blueAIPlayers.size() - noRemoved > 2)
+				{
+					this.removeAIPlayer(player);
+				}
+				else
+				{
+					done = true;
+					break;
+				}
+				noRemoved++;
 			}
 			
-			if (redAIPlayers.size() < bluePlayers.size() - redPlayers.size())
+			if (!done)
 			{
-				for (int i = 0; i < bluePlayers.size() - redPlayers.size() - redAIPlayers.size(); i++)
+				if (redAIPlayers.size() < bluePlayers.size() - redPlayers.size())
 				{
-					this.addAIPlayer(ServerPlayer.RED_TEAM);
+					for (int i = 0; i < bluePlayers.size() - redPlayers.size() - redAIPlayers.size(); i++)
+					{
+						this.addAIPlayer(ServerPlayer.RED_TEAM);
+					}
 				}
-			}
-			else if (redAIPlayers.size() > bluePlayers.size() - redPlayers.size())
-			{
-				int noOfRemoves = redAIPlayers.size() - (bluePlayers.size() - redPlayers.size());
-				for (int i = 0; i < noOfRemoves; i++)
+				else if (redAIPlayers.size() > bluePlayers.size() - redPlayers.size())
 				{
-					ServerAIPlayer player = redAIPlayers.removeFirst();
-					this.removeAIPlayer(player);
+					int noOfRemoves = redAIPlayers.size() - (bluePlayers.size() - redPlayers.size());
+					for (int i = 0; i < noOfRemoves; i++)
+					{
+						ServerAIPlayer player = redAIPlayers.removeFirst();
+						this.removeAIPlayer(player);
+					}
 				}
 			}
 		}
 		else if (redPlayers.size() > bluePlayers.size())
 		{
+			int noRemoved = 0;
+			boolean done = false;
 			for (ServerAIPlayer player: redAIPlayers)
 			{
-				this.removeAIPlayer(player);
+				if (redPlayers.size() + redAIPlayers.size() - noRemoved > 2)
+				{
+					this.removeAIPlayer(player);
+				}
+				else
+				{
+					done = true;
+					break;
+				}
+				noRemoved++;
 			}
 			
-			if (blueAIPlayers.size() < redPlayers.size() - bluePlayers.size())
+			if (!done)
 			{
-				for (int i = 0; i < redPlayers.size() - bluePlayers.size() - blueAIPlayers.size(); i++)
+				if (blueAIPlayers.size() < redPlayers.size() - bluePlayers.size())
 				{
-					this.addAIPlayer(ServerPlayer.BLUE_TEAM);
+					for (int i = 0; i < redPlayers.size() - bluePlayers.size() - blueAIPlayers.size(); i++)
+					{
+						this.addAIPlayer(ServerPlayer.BLUE_TEAM);
+					}
 				}
-			}
-			else if (blueAIPlayers.size() > redPlayers.size() - bluePlayers.size())
-			{
-				int noOfRemoves = blueAIPlayers.size() - (redPlayers.size() - bluePlayers.size());
-				for (int i = 0; i < noOfRemoves; i++)
+				else if (blueAIPlayers.size() > redPlayers.size() - bluePlayers.size())
 				{
-					ServerAIPlayer player = blueAIPlayers.removeFirst();
-					this.removeAIPlayer(player);
+					int noOfRemoves = blueAIPlayers.size() - (redPlayers.size() - bluePlayers.size());
+					for (int i = 0; i < noOfRemoves; i++)
+					{
+						ServerAIPlayer player = blueAIPlayers.removeFirst();
+						this.removeAIPlayer(player);
+					}
 				}
 			}
 		}
 		else
 		{
+			int noRemoved = 0;
+			
 			for (ServerAIPlayer player: blueAIPlayers)
 			{
-				this.removeAIPlayer(player);
+				if (bluePlayers.size() + blueAIPlayers.size() - noRemoved > 2)
+				{
+					this.removeAIPlayer(player);
+				}
+				else
+				{
+					break;
+				}
+				noRemoved++;
 			}
 			
+			noRemoved = 0;
 			for (ServerAIPlayer player: redAIPlayers)
 			{
-				this.removeAIPlayer(player);
+				if (redPlayers.size() + redAIPlayers.size() - noRemoved > 2)
+				{
+					this.removeAIPlayer(player);
+				}
+				else
+				{
+					break;
+				}
+				noRemoved++;
+			}
+		}
+		
+		redPlayers.clear();
+		bluePlayers.clear();
+		
+		for (ServerPlayer player: this.listOfPlayers)
+		{
+			if (player.getTeam() == ServerPlayer.RED_TEAM)
+			{
+				redPlayers.add(player);
+			}
+			else
+			{
+				bluePlayers.add(player);
+			}
+		}
+		
+		redAIPlayers.clear();
+		blueAIPlayers.clear();
+		
+		for (ServerAIPlayer player: this.listOfAIPlayers)
+		{
+			if (player.getTeam() == ServerPlayer.RED_TEAM)
+			{
+				redAIPlayers.add(player);
+			}
+			else
+			{
+				blueAIPlayers.add(player);
+			}
+		}
+		
+		// Make sure each team has a minimum of two players/a.i.'s
+		int difference = 0;
+		if (((difference = 2 - (bluePlayers.size() + blueAIPlayers.size())) > 0))
+		{
+			for (int i = 0; i < difference; i++)
+			{
+				this.addAIPlayer(ServerPlayer.BLUE_TEAM);
+			}
+		}
+		
+		difference = 0;
+		if (((difference = 2 - (redPlayers.size() + redAIPlayers.size())) > 0))
+		{
+			for (int i = 0; i < difference; i++)
+			{
+				this.addAIPlayer(ServerPlayer.RED_TEAM);
 			}
 		}
 		

@@ -515,6 +515,8 @@ public class ServerManager implements Runnable, ActionListener{
 		}
 		purgeServices();
 		rooms.remove(remove);
+		
+		// No longer restart games automatically
 		if (rooms.size() < maxRooms) {
 			//output.println("CONNECTED");
 			//System.out.println("CONNECTED NEW ROOM");
@@ -522,8 +524,8 @@ public class ServerManager implements Runnable, ActionListener{
 			
 			// Start a new game
 			//addNewRoom();
-			rooms.get(rooms.size() - 1).start();
-			System.out.println("Game restarted");
+			//rooms.get(rooms.size() - 1).start();
+			//System.out.println("Game restarted");
 			//rooms.get(rooms.size() - 1).addClient(newClientSocket, input, name);
 		}
 	}

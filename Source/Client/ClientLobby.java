@@ -166,7 +166,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			chat.setVisible(true);
 			chat.setFocusable(true);
 			chat.setDocument(new JTextFieldLimit(Client.MAX_CHARACTERS));
-			chat.setForeground(Color.GRAY);
+			chat.setForeground(Color.BLACK);
 			chat.setToolTipText("Press 'enter' as a shortcut to chat");
 
 			enter = new JButton("Chat");
@@ -391,6 +391,10 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 					}
 					else if (tokens[token].equals("CH"))
 					{
+						if (tokens[token+1].equals("E"))
+						{
+							token++;
+						}
 						int nameLen = Integer.parseInt(tokens[++token]);
 						String name = tokens[++token];
 
