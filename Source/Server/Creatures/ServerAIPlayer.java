@@ -3,6 +3,8 @@ package Server.Creatures;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+
+import Server.Server;
 import Server.ServerObject;
 import Server.ServerObjectShown;
 import Server.ServerWorld;
@@ -23,33 +25,7 @@ import Server.Items.ServerWeaponSwing;
  */
 public class ServerAIPlayer extends ServerCreature{
 
-	public static String[] botNames = 
-		{
-			"Bot George", 
-			"Bot Nick", 
-			"Bot Wilson",
-			"Bot Manuel",
-			"Bot Colin",
-			"Bot Sam",
-			"Bot Brenton",
-			"Bot Vytas",
-			"Bot Clive",
-			"Bot Aiden",
-			"Bot Daniel",
-			"Bot Peter",
-			"Bot Michael",
-			"Bot Yulong",
-			"Bot Alex",
-			"Bot Jerry",
-			"Bot Andrew",
-			"Bot Brian",
-			"Bot Jesse",
-		};
-	
-	public static LinkedList<String> namesList;
-	
 	private boolean disconnected = false;
-
 	private int respawnXSpeed;
 	private int respawnYSpeed;
 
@@ -104,7 +80,6 @@ public class ServerAIPlayer extends ServerCreature{
 	 * The counter that plays the death animation
 	 */
 	private long deathCounter = -1;
-
 
 	/**
 	 * Stores the equipped weapons
@@ -233,16 +208,10 @@ public class ServerAIPlayer extends ServerCreature{
 	
 	public ServerAIPlayer(double x, double y, int width, int height, double gravity, ServerWorld world, int team) {
 		super(x, y, width, height, RELATIVE_X, RELATIVE_Y, gravity, "BASE_"
-				+ world.getEngine().getServer().getPlayerColours()[(int) (Math.random() * world.getEngine().getServer().getPlayerColours().length)] 
+				+ Server.playerColours[(int) (Math.random() * Server.playerColours.length)] 
 						+ "_RIGHT_0_0", ServerWorld.PLAYER_AI_TYPE, world.getBluePlayerStartHP(), world, true); 
 		
-		if (namesList == null)
-		{
-			namesList = new LinkedList<String>(Arrays.asList(botNames));
-			Collections.shuffle(namesList);
-		}
-		
-		setName(namesList.removeFirst());
+		setName(world.getEngine().getServer().getNamesList().removeFirst());
 		setTeam(team);
 		
 		// Set the initial variables
@@ -260,11 +229,11 @@ public class ServerAIPlayer extends ServerCreature{
 		xUpdated = true;
 		yUpdated = true;
 		
-		this.skinColour = world.getEngine().getServer().getPlayerColours()[(int) (Math.random() * world.getEngine().getServer().getPlayerColours().length)];
+		this.skinColour = Server.playerColours[(int) (Math.random() * Server.playerColours.length)];
 		baseImage = "BASE_" + skinColour;
 
 		// Set a random hair style for the player
-		this.hair = world.getEngine().getServer().getPlayerHairs()[(int)(Math.random() * world.getEngine().getServer().getPlayerHairs().length)];
+		this.hair = Server.playerHairs[(int)(Math.random() * Server.playerHairs.length)];
 		
 		if (castle == null)
 		{
@@ -294,7 +263,7 @@ public class ServerAIPlayer extends ServerCreature{
 			getBody().destroy();
 			setBody(null);
 		}
-		namesList.add(getName());
+		getWorld().getEngine().getServer().getNamesList().add(getName());
 	}
 
 	public void initPlayer()

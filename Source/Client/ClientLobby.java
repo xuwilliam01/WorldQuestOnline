@@ -32,6 +32,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
 @SuppressWarnings("serial")
 public class ClientLobby extends JPanel implements ActionListener, KeyListener
@@ -60,7 +63,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private String[] maps;
 
 	private ArrayList<Pair> redTeam = new ArrayList<Pair>();
+	private ArrayList<String> redTeamBots = new ArrayList<String>();
 	private ArrayList<Pair> blueTeam = new ArrayList<Pair>();
+	private ArrayList<String> blueTeamBots = new ArrayList<String>();
 
 	private GamePanel panel;
 	private JButton menu;
@@ -85,11 +90,19 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	private Timer startTimer = new Timer(1000,new GameStartTimer());
 	private int startCounter = 5;
 
-	//If the lobby creation get's cancelled during intialization
+	/**
+	 * If the lobby creation get's cancelled during intialization
+	 */
 	public boolean cancelled;
 	
-	//When you switched teams last
+	/**
+	 * When you switched teams last
+	 */
 	private long switchTime = 0;
+	
+	private ArrayList<String> botNames = new ArrayList<String>();
+	
+	
 	/**
 	 * 
 	 * @param socket
@@ -241,9 +254,73 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			requestFocusInWindow();
 			addKeyListener(this);
 		}
-
 	}
-
+	
+	public void addRed(Pair player, boolean rebalance)
+	{
+		redTeam.add(player);
+		if (rebalance)
+		{
+			rebalanceAIPlayers();
+		}
+	}
+	
+	public void addBlue(Pair player, boolean rebalance)
+	{
+		blueTeam.add(player);
+		if (rebalance)
+		{
+			rebalanceAIPlayers();
+		}
+	}
+	
+	public void removeRed(Pair player, boolean rebalance)
+	{
+		redTeam.remove(player);
+		if (rebalance)
+		{
+			rebalanceAIPlayers();
+		}
+	}
+	
+	public void removeBlue(Pair player, boolean rebalance)
+	{
+		blueTeam.remove(player);
+		if (rebalance)
+		{
+			rebalanceAIPlayers();
+		}
+	}
+	
+	public void rebalanceAIPlayers()
+	{
+		redTeamBots.clear();
+		blueTeamBots.clear();
+		
+		Queue<String> namesQueue = new LinkedList<String>();
+		
+		for (String name : botNames)
+		{
+			namesQueue.add(name);
+		}
+		
+		if (redTeam.size() < 2 || redTeam.size() < blueTeam.size())
+		{
+			for (int i = 0; i < Math.max(2 - redTeam.size(), blueTeam.size() - redTeam.size()); i++)
+			{
+				redTeamBots.add(namesQueue.remove());
+			}
+		}
+		
+		if (blueTeam.size() < 2 || blueTeam.size() < redTeam.size())
+		{
+			for (int i = 0; i < Math.max(2 - blueTeam.size(), redTeam.size() - blueTeam.size()); i++)
+			{
+				blueTeamBots.add(namesQueue.remove());
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @author William
@@ -287,9 +364,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 											if(p.name.equals(name))
 												toRemove = p;
 										}					
-										blueTeam.remove(toRemove);
+										removeBlue(toRemove, false);
 									}
-									redTeam.add(new Pair(name));
+									addRed(new Pair(name), true);
 								}
 								else
 								{
@@ -301,9 +378,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 											if(p.name.equals(name))
 												toRemove = p;
 										}					
-										redTeam.remove(toRemove);
+										removeRed(toRemove, false);
 									}
-									blueTeam.add(new Pair(name));
+									addBlue(new Pair(name), true);
 								}
 							}
 						}
@@ -367,7 +444,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 								if(p.name.equals(name.substring(1)))
 									toRemove = p;
 							}					
-							redTeam.remove(toRemove);
+							removeRed(toRemove, true);
 						}
 						else
 						{
@@ -377,7 +454,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 								if(p.name.equals(name.substring(1)))
 									toRemove = p;
 							}					
-							blueTeam.remove(toRemove);
+							removeBlue(toRemove, true);
 						}
 					}
 					else if (tokens[token].equals("Start"))
@@ -435,6 +512,15 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 
 							mapBox.setSelectedItem(map);
 							//System.out.println(map);
+						}
+					}
+					else if (tokens[token].equals("N"))
+					{
+						int noOfBotNames = Integer.parseInt(tokens[++token]);
+						for (int i = 0; i < noOfBotNames; i++)
+						{
+							String name = tokens[++token].replace('_', ' ');
+							botNames.add(name);
 						}
 					}
 					repaint();
@@ -619,6 +705,13 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 						redStart);
 				redStart += 40;
 			}
+			
+			for (String botName : redTeamBots)
+			{
+				graphics.drawString(String.format("%s", botName), redX + 5,
+						redStart);
+				redStart += 40;
+			}
 		}
 		graphics.setColor(Color.BLUE);
 		synchronized(blueTeam)
@@ -638,6 +731,13 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 				}
 
 				graphics.drawString(String.format("%s  [%s]", player.name, player.rating), blueX + 5,
+						blueStart);
+				blueStart += 40;
+			}
+			
+			for (String botName : blueTeamBots)
+			{
+				graphics.drawString(String.format("%s", botName), blueX + 5,
 						blueStart);
 				blueStart += 40;
 			}
@@ -734,7 +834,6 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		System.out.println("key pressed");
 		if (e.getKeyCode() == KeyEvent.VK_ENTER)
 		{
 			chat.requestFocus();

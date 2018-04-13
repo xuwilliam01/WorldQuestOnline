@@ -7,7 +7,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 
 import Server.Creatures.ServerAIPlayer;
 import Server.Creatures.ServerCreature;
@@ -21,6 +24,33 @@ import Server.Creatures.ServerPlayer;
  */
 public class Server implements Runnable {
 	public static int MAX_PLAYERS = 12;
+	public static String[] playerColours = { "DARK", "LIGHT", "TAN" };
+	public static String[] playerHairs = {"HAIR0BEIGE", "HAIR1BEIGE", "HAIR0BLACK", "HAIR1BLACK", "HAIR0BLOND", "HAIR1BLOND", "HAIR0GREY","HAIR1GREY"};
+	
+	public static String[] botNames = 
+	{
+		"Bot George", 
+		"Bot Nick", 
+		"Bot Wilson",
+		"Bot Manuel",
+		"Bot Colin",
+		"Bot Sam",
+		"Bot Brenton",
+		"Bot Vytas",
+		"Bot Clive",
+		"Bot Aiden",
+		"Bot Daniel",
+		"Bot Peter",
+		"Bot Michael",
+		"Bot Yulong",
+		"Bot Alex",
+		"Bot Jerry",
+		"Bot Andrew",
+		"Bot Brian",
+		"Bot Jesse",
+	};
+	
+	private String namesToSend;
 
 	private ServerEngine engine;
 	private String map;
@@ -32,9 +62,6 @@ public class Server implements Runnable {
 	private ArrayList<Triple> newPlayerWaiting = new ArrayList<Triple>();
 	private int sizeIndex = 0;
 	public static String defaultMap;
-
-	private String[] playerColours = { "DARK", "LIGHT", "TAN" };
-	private String[] playerHairs = {"HAIR0BEIGE", "HAIR1BEIGE", "HAIR0BLACK", "HAIR1BLACK", "HAIR0BLOND", "HAIR1BLOND", "HAIR0GREY","HAIR1GREY"};
 
 	// Lobby variables
 	private boolean needLeader = true;
@@ -51,10 +78,24 @@ public class Server implements Runnable {
 	private ArrayList<String> allowedPlayers = new ArrayList<String>();
 	
 	private boolean running;
+	private LinkedList<String> namesList;
 
 	public Server(ServerManager manager)
 	{
 		this.manager = manager;
+		namesList = new LinkedList<String>(Arrays.asList(Server.botNames));
+		Collections.shuffle(namesList);
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("N 6");
+		
+		for (int i = 0; i < 6; i++)
+		{
+			builder.append(" " + namesList.get(i).replace(' ', '_'));
+		}
+		
+		namesToSend = builder.toString();
+		
 		System.out.println("Server opened");
 	}
 
@@ -98,7 +139,6 @@ public class Server implements Runnable {
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -147,7 +187,7 @@ public class Server implements Runnable {
 				BufferedReader input = new BufferedReader(
 						new InputStreamReader(newClient.getInputStream()));
 				ServerManager.trackService(input);
-				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient,
+				ServerLobbyPlayer newPlayer = new ServerLobbyPlayer(newClient, namesToSend,
 						input, output, this);
 
 				if (needLeader) {
@@ -272,7 +312,9 @@ public class Server implements Runnable {
 						}
 					}
 					else
+					{
 						output.println("Start");
+					}
 					output.flush();
 					output.close();
 					input.close();
@@ -535,19 +577,11 @@ public class Server implements Runnable {
 		this.running = running;
 	}
 
-	public String[] getPlayerColours() {
-		return playerColours;
+	public LinkedList<String> getNamesList() {
+		return namesList;
 	}
 
-	public void setPlayerColours(String[] playerColours) {
-		this.playerColours = playerColours;
-	}
-
-	public String[] getPlayerHairs() {
-		return playerHairs;
-	}
-
-	public void setPlayerHairs(String[] playerHairs) {
-		this.playerHairs = playerHairs;
+	public void setNamesList(LinkedList<String> namesList) {
+		this.namesList = namesList;
 	}
 }

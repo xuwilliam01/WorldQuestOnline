@@ -27,7 +27,7 @@ public class ServerLobbyPlayer implements Runnable
 
 	private String allMaps = "";
 
-	public ServerLobbyPlayer(Socket socket, BufferedReader input, PrintWriter output, Server server)
+	public ServerLobbyPlayer(Socket socket, String namesToSend, BufferedReader input, PrintWriter output, Server server)
 	{
 		this.IP = socket.getInetAddress().toString();
 		this.server = server;
@@ -72,16 +72,15 @@ public class ServerLobbyPlayer implements Runnable
 			e.printStackTrace();
 		}
 
-
-
 		// Send the maps to the client lobby
 		sendMessage(allMaps);
 
 		// Send the current map
 		sendMessage("M " + server.getMap());
+		
+		sendMessage(namesToSend);
 
 		this.input = input;
-
 	}
 
 	/**
