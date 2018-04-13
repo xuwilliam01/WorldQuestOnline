@@ -302,7 +302,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 			
 			for (String name : botNames)
 			{
-				namesQueue.add(name);
+				namesQueue.add("BOT"); // Just use the word BOT for now
 			}
 			
 			if (redTeam.size() < 2 || redTeam.size() < blueTeam.size())
