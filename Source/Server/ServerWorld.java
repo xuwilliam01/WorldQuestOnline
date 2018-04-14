@@ -266,8 +266,7 @@ public class ServerWorld
 	 */
 	public ServerObject[] objectTypes;
 
-	// Store the goblin spawners so the castles can access them and change their
-	// settings
+	// Store the goblin spawners so the castles can access them and change their settings
 	ArrayList<ServerSpawner> redSpawners = new ArrayList<ServerSpawner>();
 	ArrayList<ServerSpawner> blueSpawners = new ArrayList<ServerSpawner>();
 

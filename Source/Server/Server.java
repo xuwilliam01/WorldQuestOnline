@@ -175,6 +175,8 @@ public class Server implements Runnable {
 		System.out.println("Server closed");
 	}
 	
+	
+	
 	@Override
 	public void run() {
 		running = true;
@@ -207,11 +209,12 @@ public class Server implements Runnable {
 				
 				if(lobbyPlayers.size() >= MAX_PLAYERS)
 				{
-					if(Math.abs(ServerLobbyPlayer.numBlue - ServerLobbyPlayer.numRed) < 2)
-						start();
-					else broadcast("CH E 1 " + ServerCreature.NEUTRAL
-							+ "Server " + 5 + " "
-							+ "Balance the teams to start");
+					start();
+//					if(Math.abs(ServerLobbyPlayer.numBlue - ServerLobbyPlayer.numRed) < 2)
+//						start();
+//					else broadcast("CH E 1 " + ServerCreature.NEUTRAL
+//							+ "Server " + 5 + " "
+//							+ "Balance the teams to start");
 				}
 			} catch (Exception E) {
 				System.out.println("Exited the lobby");
@@ -259,9 +262,13 @@ public class Server implements Runnable {
 		// Accept players into the server
 		System.out.println("Waiting for clients to connect");
 		ArrayList<ServerLobbyPlayer> lobbyPlayersToAdd = new ArrayList<ServerLobbyPlayer>();
+		
 		for (ServerLobbyPlayer player : lobbyPlayers) {
 			lobbyPlayersToAdd.add(player);
 		}
+		
+		
+		
 		while (running && !Thread.interrupted()) {
 			try {
 				Triple next = nextGameClient();
