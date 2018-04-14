@@ -255,27 +255,27 @@ public class ServerWeapon extends ServerItem
 	 */
 	public static ServerWeapon randomWeapon(double x, double y, ServerWorld world)
 	{
-		int randType = (int) (Math.random() * 215) + 1;
+		int randType = (int) (Math.random() * 209);
 
-		int num = 1;
+		int num = 0;
 
-		if (randType <= ULTIMATE_CHANCE)
-			return new ServerWeapon(x, y, ServerWorld.DARKWAND_TYPE,world);
-		else if (randType <= (num += ULTIMATE_CHANCE))
-			return new ServerWeapon(x, y, ServerWorld.MEGABOW_TYPE,world);
-		else if (randType <= (num += DIAMOND_CHANCE))
-			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
-					+ ServerWorld.DIAMOND_TIER,world);
-		else if (randType <= (num += DIAMOND_CHANCE))
-			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
-					+ ServerWorld.DIAMOND_TIER,world);
-		else if (randType <= (num += DIAMOND_CHANCE))
-			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
-					+ ServerWorld.DIAMOND_TIER,world);
-		else if (randType <= (num += DIAMOND_CHANCE))
-			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
-					+ ServerWorld.DIAMOND_TIER,world);
-		else if (randType <= (num += GOLD_CHANCE))
+//		if (randType <= ULTIMATE_CHANCE)
+//			return new ServerWeapon(x, y, ServerWorld.DARKWAND_TYPE,world);
+//		else if (randType <= (num += ULTIMATE_CHANCE))
+//			return new ServerWeapon(x, y, ServerWorld.MEGABOW_TYPE,world);
+//		else if (randType <= (num += DIAMOND_CHANCE))
+//			return new ServerWeapon(x, y, ServerWorld.DAGGER_TYPE
+//					+ ServerWorld.DIAMOND_TIER,world);
+//		else if (randType <= (num += DIAMOND_CHANCE))
+//			return new ServerWeapon(x, y, ServerWorld.AX_TYPE
+//					+ ServerWorld.DIAMOND_TIER,world);
+//		else if (randType <= (num += DIAMOND_CHANCE))
+//			return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
+//					+ ServerWorld.DIAMOND_TIER,world);
+//		else if (randType <= (num += DIAMOND_CHANCE))
+//			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
+//					+ ServerWorld.DIAMOND_TIER,world);
+		if (randType <= (num += GOLD_CHANCE))
 			return new ServerWeapon(x, y, ServerWorld.HALBERD_TYPE
 					+ ServerWorld.GOLD_TIER,world);
 		else if (randType <= (num += IRON_CHANCE))
@@ -335,7 +335,8 @@ public class ServerWeapon extends ServerItem
 			return new ServerWeapon(x, y, ServerWorld.ICEWAND_TYPE,world);
 
 		// This won't happen
-		return null;
+		return new ServerWeapon(x, y, ServerWorld.SWORD_TYPE
+				+ ServerWorld.IRON_TIER,world);
 	}
 
 	/**

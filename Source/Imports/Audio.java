@@ -128,7 +128,11 @@ public class Audio {
 			addToAudioArray(new GameAudio("bgm_game"+no));
 		}
 		
-
+		for (int no = 0; no < 12; no++)
+		{
+			addToAudioArray(new GameAudio("scream"+no));
+		}
+		
 		//Configure storage for audio
 		GameAudio[] clone = audioArray;
 		audioArray = new GameAudio[numAudioClips];

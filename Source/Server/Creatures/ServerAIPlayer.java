@@ -336,7 +336,6 @@ public class ServerAIPlayer extends ServerCreature{
 		int randomStartArmor = (int) (Math.random() * (2 + Math.min(castle.getTier(), 4)));
 		switch (randomStartArmor) {
 		case 0:
-			break;
 		case 1:
 			addItem(new ServerArmour(0, 0, ServerWorld.GREY_NINJA_ARMOUR, getWorld()));
 			this.equipArmour(ServerWorld.GREY_NINJA_ARMOUR);
@@ -1029,6 +1028,10 @@ public class ServerAIPlayer extends ServerCreature{
 				setHSpeed(0);
 				setVSpeed(0);
 				setAttackable(false);
+				
+				int soundNo = (int) (Math.random() * 12);
+				getWorld().playSound("scream" + soundNo,
+						getX() + getWidth() / 2, getY() + getHeight() / 2);
 			}
 			else
 			{

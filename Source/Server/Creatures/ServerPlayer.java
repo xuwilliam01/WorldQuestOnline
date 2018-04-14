@@ -1968,6 +1968,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 				numHPPots = 0;
 				numManaPots = 0;
+				
+				int soundNo = (int) (Math.random() * 12);
+				getWorld().playSound("scream" + soundNo,
+						getX() + getWidth() / 2, getY() + getHeight() / 2);
 			}
 		}
 	}
