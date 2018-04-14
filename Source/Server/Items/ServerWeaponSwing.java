@@ -162,7 +162,6 @@ public class ServerWeaponSwing extends ServerObject
 		int soundNo = (int) (Math.random() * 7);
 		owner.getWorld().playSound("cut_air" + soundNo,
 				getX() + getWidth() / 2, getY() + getHeight() / 2);
-
 	}
 
 	/**
