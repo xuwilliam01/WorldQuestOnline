@@ -634,7 +634,4 @@ public abstract class ServerObject implements Comparable<ServerObject>
 	public void setPlayedSound(boolean playedSound) {
 		this.playedSound = playedSound;
 	}
-	
-	
-
 }
