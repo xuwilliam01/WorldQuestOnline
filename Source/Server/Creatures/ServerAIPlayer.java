@@ -1162,7 +1162,7 @@ public class ServerAIPlayer extends ServerCreature{
 				getWorld().playSound("scream" + soundNo,
 						getX() + getWidth() / 2, getY() + getHeight() / 2);
 				
-				if (Math.random() < 0.33)
+				if (Math.random() < 0.15)
 				{
 					this.sayDeathMessage();
 				}
@@ -1172,7 +1172,7 @@ public class ServerAIPlayer extends ServerCreature{
 				if (source.getType().equals(ServerWorld.PLAYER_TYPE) && (getTarget() == null 
 						|| !getTarget().getType().equals(ServerWorld.PLAYER_TYPE)))
 				{
-					if (Math.random() < 0.5)
+					if (Math.random() < 0.33)
 					{
 						this.sayTargetMessage();
 						setTarget(source);
