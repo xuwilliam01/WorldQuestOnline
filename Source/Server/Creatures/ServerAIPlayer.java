@@ -1158,7 +1158,7 @@ public class ServerAIPlayer extends ServerCreature{
 				setVSpeed(0);
 				setAttackable(false);
 				
-				int soundNo = (int) (Math.random() * 12);
+				int soundNo = (int) (Math.random() * 10);
 				getWorld().playSound("scream" + soundNo,
 						getX() + getWidth() / 2, getY() + getHeight() / 2);
 				

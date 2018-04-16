@@ -446,7 +446,7 @@ public class ServerGoblin extends ServerCreature {
 					
 					if (getWorld().getWorldCounter() % 30 == 0)
 					{
-						int actionChoice = (int) (Math.random() * 12);
+						int actionChoice = (int) (Math.random() * 10);
 	
 						// Jump occasionally
 						if (actionChoice == 0) {
