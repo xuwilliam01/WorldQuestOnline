@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import Server.ServerObject;
 import Server.ServerWorld;
+import Server.Creatures.ServerAIPlayer;
 import Server.Creatures.ServerCreature;
 import Server.Creatures.ServerGoblin;
 import Server.Creatures.ServerPlayer;
@@ -245,8 +246,8 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void upgrade()
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
-		setMaxHP(getMaxHP() + 2500);
-		setHP(getHP() + 2500);
+		setMaxHP(getMaxHP() + 2000);
+		setHP(getHP() + 2000);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
 		this.setGoblinTierLimit(this.getGoblinTierLimit() + 2);
@@ -277,6 +278,18 @@ public class ServerCastle extends ServerBuilding {
 		{
 			if (player.getTeam()==getTeam())
 			{
+				getWorld().playSound("level_up",
+						player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2);
+				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 30, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
+			}
+		}
+		
+		for (ServerAIPlayer player: getWorld().getEngine().getListOfAIPlayers())
+		{
+			if (player.getTeam()==getTeam())
+			{
+				getWorld().playSound("level_up",
+						player.getX() + player.getWidth()/2, player.getY() + player.getHeight()/2);
 				getWorld().add(new ServerText(player.getX()+player.getWidth()/2, player.getY() - 30, "***Level Up***", ServerText.LIGHT_GREEN_TEXT, getWorld()));
 			}
 		}
@@ -379,6 +392,21 @@ public class ServerCastle extends ServerBuilding {
 
 			//Upgrade all players
 			for (ServerPlayer player : getWorld().getEngine().getListOfPlayers())
+			{
+				if(player.getTeam() == getTeam())
+				{
+					player.setBaseDamage(player.getBaseDamage()+ServerPotion.DMG_AMOUNT);
+					player.setMaxHP(player.getMaxHP()+ServerPotion.MAX_HP_INCREASE);
+					player.setHP(player.getMaxHP());
+					player.setMaxMana(player.getMaxMana()+ServerPotion.MAX_MANA_INCREASE);
+					player.setMana(player.getMana());
+					player.addHorizontalMovement(ServerPotion.SPEED_AMOUNT);
+					player.addVerticalMovement(ServerPotion.JUMP_AMOUNT);
+				}
+			}
+			
+			//Upgrade all players
+			for (ServerAIPlayer player : getWorld().getEngine().getListOfAIPlayers())
 			{
 				if(player.getTeam() == getTeam())
 				{

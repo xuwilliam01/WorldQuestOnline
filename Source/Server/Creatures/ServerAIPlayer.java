@@ -3,6 +3,7 @@ package Server.Creatures;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import Server.Server;
 import Server.ServerObject;
@@ -25,6 +26,55 @@ import Server.Items.ServerWeaponSwing;
  */
 public class ServerAIPlayer extends ServerCreature{
 
+	public static String [] killMessages = {
+			"That'll do, pig, that'll do",
+			"Go ahead, make my day",
+			"Hasta la vista",
+			"I'm not bad. I'm just drawn that way",
+			"I love the smell of napalm in the morning",
+			"Yippie-ki-yay, motherfucker!",
+			"You can't handle the truth!",
+			"Killing spree",
+			"Invincible",
+			"Killionaire",
+			"You're fired",
+			"Consider that a divorce"
+	};
+	public static String [] targetMessages = {
+			"How fast can you run?",
+			"What if it isn’t a train you’re running for, but your life?",
+			"You complete me",
+			"Chewie, we're home",
+			"Yo, Adrian!",
+			"Wax on, wax off",
+			"Show me the money!",
+			"You had me at hello",
+	};
+	public static String [] deathMessages = {
+			"I thank thee... go and leave me to oblivion at last... sweet sleep...",
+			"To end... like this?",
+			"Major, I...",
+			"So the crybaby's acting all big now. Cheeky bastard.",
+			"Uh, uhn, ahhhh...Guillooooooooo!!",
+			"Aaaaaargh...! Too... much... power...!!",
+			"Aaaah.... I thank you for the excitement....",
+			"Now I shall truly awaken again.... This too is destiny....",
+			"What's... going... on? Can't... breathe...",
+			"No! Please! I never meant to do this! Daddy, please! Don't let them take me!",
+			"I should have killed you long ago",
+			"Live... my pride and dreams, I give them all to you",
+			"Nail me to the fucking cross and let me be REBORN!",
+			"O, I am slain!",
+			"O, yet defend me friends; I am but hurt",
+			"Et Tu, Brute?",
+			"Ask me not what I know",
+			"O damn'd Iago! O inhuman dog!",
+			"Thus with a kiss I die"
+	};
+	public static LinkedList<String> killMessageQueue = new LinkedList<String>();
+	public static LinkedList<String> targetMessageQueue = new LinkedList<String>();
+	public static LinkedList<String> deathMessageQueue = new LinkedList<String>();
+	
 	private boolean disconnected = false;
 	private int respawnXSpeed;
 	private int respawnYSpeed;
@@ -250,6 +300,74 @@ public class ServerAIPlayer extends ServerCreature{
 		this.initPlayer();
 	}
 	
+	/**
+	 * Say something in-game
+	 * @param message
+	 */
+	public void speak(String message)
+	{
+		String[] tokens2 = message.split(" ");
+		
+		getWorld().getEngine().broadcast("l " + "E "
+				+ (getTeam() + getName()).split(" ").length
+				+ " " + getTeam() + getName() + " "
+				+ tokens2.length + " " + message);
+
+		if (message.length() > 0) {
+			currentText = message.replace(' ', '_');
+			textStartTime = getWorld().getWorldCounter();
+			textDuration = (int) (60 * 3 + currentText.length() * 60 * 0.1);
+		}
+	}
+	
+	public void sayKillMessage()
+	{
+		if (currentText.length() == 0)
+		{
+			synchronized (killMessageQueue)
+			{
+				if (killMessageQueue.isEmpty())
+				{
+					killMessageQueue.addAll(Arrays.asList(killMessages));
+					Collections.shuffle(killMessageQueue);
+				}
+				speak(killMessageQueue.removeFirst());
+			}
+		}
+	}
+	
+	public void sayDeathMessage()
+	{
+		if (currentText.length() == 0)
+		{
+			synchronized (deathMessageQueue)
+			{
+				if (deathMessageQueue.isEmpty())
+				{
+					deathMessageQueue.addAll(Arrays.asList(deathMessages));
+					Collections.shuffle(deathMessageQueue);
+				}
+				speak(deathMessageQueue.removeFirst());
+			}
+		}
+	}
+	
+	public void sayTargetMessage()
+	{
+		if (currentText.length() == 0)
+		{
+			synchronized (targetMessageQueue)
+			{
+				if (targetMessageQueue.isEmpty())
+				{
+					targetMessageQueue.addAll(Arrays.asList(targetMessages));
+					Collections.shuffle(targetMessageQueue);
+				}
+				speak(targetMessageQueue.removeFirst());
+			}
+		}
+	}
+	
 	@Override
 	public void destroy()
 	{
@@ -379,6 +497,10 @@ public class ServerAIPlayer extends ServerCreature{
 					{
 						this.setWeaponType(MELEE_TYPE);
 					}
+				}
+				
+				if (getWorld().getWorldCounter() - textStartTime > textDuration) {
+					currentText = "";
 				}
 				
 				// Update the player's direction or try to jump over tiles
@@ -717,7 +839,7 @@ public class ServerAIPlayer extends ServerCreature{
 					setRowCol(5, 1);
 				} else if (getWorld().getWorldCounter() - deathCounter < 20) {
 					setRowCol(5, 2);
-				} else if (getWorld().getWorldCounter() - deathCounter < 300) { // Respawn time here
+				} else if (getWorld().getWorldCounter() - deathCounter < 600) { // Respawn time here
 					setRowCol(5, 4);
 				} else {
 					if (getBody() != null) {
@@ -972,7 +1094,9 @@ public class ServerAIPlayer extends ServerCreature{
 			}
 
 			if(source != this)
+			{
 				addCastleXP(Math.min(amount, getHP()), source);
+			}
 
 			setHP(getHP() - amount);
 
@@ -996,6 +1120,11 @@ public class ServerAIPlayer extends ServerCreature{
 						getWorld().getEngine().broadcast("@ " + ServerPlayer.toChars(source.getID()) + " "
 								+ source.getTeam());
 						((ServerPlayer) source).addKill();
+					}
+					else if (source.getType().equals(ServerWorld.PLAYER_AI_TYPE)) {
+						getWorld().getEngine().broadcast("@ " + ServerPlayer.toChars(source.getID()) + " "
+								+ source.getTeam());
+						((ServerAIPlayer) source).addKill();
 					}
 					getWorld().getEngine().broadcast("! " + ServerPlayer.toChars(getID()) + " " + getTeam());
 
@@ -1032,13 +1161,22 @@ public class ServerAIPlayer extends ServerCreature{
 				int soundNo = (int) (Math.random() * 12);
 				getWorld().playSound("scream" + soundNo,
 						getX() + getWidth() / 2, getY() + getHeight() / 2);
+				
+				if (Math.random() < 0.33)
+				{
+					this.sayDeathMessage();
+				}
 			}
 			else
 			{
 				if (source.getType().equals(ServerWorld.PLAYER_TYPE) && (getTarget() == null 
 						|| !getTarget().getType().equals(ServerWorld.PLAYER_TYPE)))
 				{
-					setTarget(source);
+					if (Math.random() < 0.5)
+					{
+						this.sayTargetMessage();
+						setTarget(source);
+					}
 				}
 			}
 		}
@@ -1195,6 +1333,10 @@ public class ServerAIPlayer extends ServerCreature{
 
 	public void setKills(int kills) {
 		this.kills = kills;
+	}
+	
+	public void addKill() {
+		this.kills++;
 	}
 
 	public int getDeaths() {

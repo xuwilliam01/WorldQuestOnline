@@ -1146,7 +1146,7 @@ public class ClientWorld {
 					redX = 16;
 				else
 					redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
-				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 90);
+				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 80);
 			} else {
 				String printThis = String.format("Team Level %d (XP For Next Level  %d/%d)",
 						client.getRedCastleTier() + 1, client.getRedCastleXP(),
@@ -1155,7 +1155,7 @@ public class ClientWorld {
 					redX = 16;
 				else
 					redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
-				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 90);
+				g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 80);
 			}
 
 			String printThis = String.format("Housing %d/%d", client.getRedPop(), client.getRedPopLimit());
@@ -1163,7 +1163,7 @@ public class ClientWorld {
 				redX = 16;
 			else
 				redX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
-			g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 65);
+			g2d.drawString(printThis, redX, Client.SCREEN_HEIGHT - 55);
 
 			// g2d.setColor(new Color(217,53,53)); //Blue
 			if (client.getBlueCastleTier() == 6)
@@ -1174,7 +1174,7 @@ public class ClientWorld {
 				else
 					blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
 				g2d.drawString(printThis, blueX,
-						Client.SCREEN_HEIGHT - 90);
+						Client.SCREEN_HEIGHT - 80);
 			}
 			else {
 				printThis = String.format("Team Level %d (XP For Next Level  %d/%d)", client.getBlueCastleTier() + 1,
@@ -1184,7 +1184,7 @@ public class ClientWorld {
 				else
 					blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
 				g2d.drawString(printThis,
-						blueX, Client.SCREEN_HEIGHT - 90);
+						blueX, Client.SCREEN_HEIGHT - 80);
 			}
 			printThis = String.format("Housing %d/%d", client.getBluePop(), client.getBluePopLimit());
 			if(client.getBlueX() < client.getRedX())
@@ -1192,7 +1192,7 @@ public class ClientWorld {
 			else
 				blueX = Client.SCREEN_WIDTH - 16 - g2d.getFontMetrics().stringWidth(printThis);
 			g2d.drawString(printThis, blueX,
-					Client.SCREEN_HEIGHT - 65);
+					Client.SCREEN_HEIGHT - 55);
 
 			// for (int row = 0; row < Client.SCREEN_HEIGHT/16; row++)
 			// {

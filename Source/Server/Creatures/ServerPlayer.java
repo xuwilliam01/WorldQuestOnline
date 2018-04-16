@@ -537,6 +537,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				if (deathCounter < 0) {
 					deathCounter = getWorld().getWorldCounter();
 					setRowCol(5, 1);
+					if (bestWeapon != null)
+					{
+						addItem(bestWeapon);
+					}
 				} else if (getWorld().getWorldCounter() - deathCounter < 10) {
 					setRowCol(5, 1);
 				} else if (getWorld().getWorldCounter() - deathCounter < 20) {
@@ -544,31 +548,24 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				} else if (getWorld().getWorldCounter() - deathCounter < 300) { // Respawn time here
 					setRowCol(5, 4);
 				} else {
-					int randomStartWeapon = (int) (Math.random() * 3);
-
-					//If we already have a weapon, don't add a random one
-					for(ServerItem sItem : getInventory())
+					if (bestWeapon == null)
 					{
-						if(sItem.getType().contains(ServerWorld.WEAPON_TYPE))
-						{
-							randomStartWeapon = -1;
+						int randomStartWeapon = (int) (Math.random() * 3);
+	
+						switch (randomStartWeapon) {
+						case 0:
+							addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+									+ ServerWorld.STONE_TIER, getWorld()));
+							break;
+						case 1:
+							addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
+									+ ServerWorld.STONE_TIER, getWorld()));
+							break;
+						case 2:
+							addItem(new ServerWeapon(0, 0,
+									ServerWorld.SLINGSHOT_TYPE, getWorld()));
 							break;
 						}
-					}
-
-					switch (randomStartWeapon) {
-					case 0:
-						addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
-								+ ServerWorld.STONE_TIER, getWorld()));
-						break;
-					case 1:
-						addItem(new ServerWeapon(0, 0, ServerWorld.AX_TYPE
-								+ ServerWorld.STONE_TIER, getWorld()));
-						break;
-					case 2:
-						addItem(new ServerWeapon(0, 0,
-								ServerWorld.SLINGSHOT_TYPE, getWorld()));
-						break;
 					}
 
 					setAlive(true);
@@ -1286,22 +1283,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 									+ (getTeam() + getName()).split(" ").length
 									+ " " + getTeam() + getName() + " "
 									+ tokens2.length + " " + message);
-
 						}
 
-						String text = "";
-						for (int no = 0; no < message.length(); no++) {
-							if (message.charAt(no) == ' ') {
-								text += '_';
-							} else {
-								text += message.charAt(no);
-							}
-						}
-
-						if (text.length() > 0) {
-							currentText = text;
+						if (message.length() > 0) {
+							currentText = message.replace(' ', '_');
 							textStartTime = getWorld().getWorldCounter();
-							textDuration = (int) (60 * 3 + text.length() * 60 * 0.1);
+							textDuration = (int) (60 * 3 + currentText.length() * 60 * 0.1);
 						}
 					}
 					break;
@@ -1773,6 +1760,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	/**
 	 * Drop inventory and equipment
 	 */
+	@Override
 	public void dropInventory() {
 		ServerItem money = null;
 		bestWeapon = null;
@@ -1798,7 +1786,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						dropItem(bestWeapon);
 						bestWeapon = item;
 					}
-					else dropItem(item);
+					else 
+					{
+						dropItem(item);
+					}
 				}
 				/*
 				else if (item.getType().contains(ServerWorld.ARMOUR_TYPE))
@@ -1825,7 +1816,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
+		
 		getInventory().clear();
 		if (money != null)
 			getInventory().add(money);
@@ -1840,8 +1831,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 						dropItem(bestWeapon);
 					bestWeapon = equippedWeapons[item];
 				}
-				else 
-				dropItem(equippedWeapons[item]);
+				else
+				{
+					dropItem(equippedWeapons[item]);
+				}
 			}
 		}
 		
@@ -1864,8 +1857,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 		if(bestWeapon != null)
 		{
-			System.out.println("BEST W: "+bestWeapon.getType());
-			getInventory().add(bestWeapon);
+			//addItem(new ServerWeapon(0, 0, bestWeapon.getType(), getWorld()));
+			//addItem(new ServerWeapon(0, 0, ServerWorld.SWORD_TYPE
+			//		+ ServerWorld.STONE_TIER, getWorld()));
+			//getInventory().add(bestWeapon);
 		}
 		/*
 		if(bestArmour != null)
@@ -1928,6 +1923,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 								+ source.getTeam());
 						((ServerPlayer) source).addKill();
 					}
+					else if (source.getType().equals(ServerWorld.PLAYER_AI_TYPE)) {
+						engine.broadcast("@ " + toChars(source.getID()) + " "
+								+ source.getTeam());
+						((ServerAIPlayer) source).addKill();
+						((ServerAIPlayer) source).sayKillMessage();
+					}
+					
 					engine.broadcast("! " + toChars(getID()) + " " + getTeam());
 
 					if (source.getTeam() == ServerCreature.NEUTRAL) {
@@ -1946,12 +1948,12 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					}
 				}
 				setAlive(false);
+
+				dropInventory();
 				if (heldWeapon != null)
 				{
 					heldWeapon.destroy();
 				}
-
-				dropInventory();
 
 				verticalMovement = 0;
 				horizontalMovement = 0;

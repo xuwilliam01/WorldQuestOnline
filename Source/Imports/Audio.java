@@ -109,6 +109,7 @@ public class Audio {
 
 		//Import all audio
 		addToAudioArray(new GameAudio("heartbeat"));
+		addToAudioArray(new GameAudio("level_up"));
 		addToAudioArray(new GameAudio("ice_break"));
 		addToAudioArray(new GameAudio("gag"));
 		addToAudioArray(new GameAudio("cut"));

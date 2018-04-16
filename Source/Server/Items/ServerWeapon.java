@@ -92,8 +92,6 @@ public class ServerWeapon extends ServerItem
 	public final static int AX_DELAY = SWING_SPEED+10;
 	public final static int SWORD_DELAY = SWING_SPEED;
 	public final static int HALBERD_DELAY = STAB_SPEED+10;
-	
-	
 
 	/**
 	 * Constructor builds a weapon
