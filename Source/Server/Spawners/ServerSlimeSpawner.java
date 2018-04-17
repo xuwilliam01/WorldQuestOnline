@@ -19,7 +19,7 @@ public class ServerSlimeSpawner extends ServerSpawner
 	/**
 	 * Max number of slimes per slime spawner
 	 */
-	public final static int MAX_SLIMES = 5;
+	public final static int MAX_SLIMES = 10;
 	
 	/**
 	 * The delay before spawning another slime for a 12 man game (60 counters per second)

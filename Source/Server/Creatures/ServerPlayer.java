@@ -349,7 +349,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void initPlayer()
 	{
 		// Start the player off with some gold
-		addItem(new ServerMoney(0, 0, 130, getWorld()));
+		addItem(new ServerMoney(0, 0, 10, getWorld()));
 
 		// Give the player random start weapon(s)
 		int randomStartWeapon = (int) (Math.random() * 3);
@@ -453,7 +453,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				collisionStrikes++;
 				lastCollisionStrike = System.currentTimeMillis();
 				
-				if (collisionStrikes >= 3)
+				if (collisionStrikes >= 6)
 				{
 					disconnect = true;
 				}
@@ -1114,7 +1114,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// Signal a repaint
 			queueMessage("U");
 			
-			this.engine.addUpdated();
+			this.engine.addPlayerUpdated(this);
 		}
 
 	}
@@ -2402,6 +2402,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 
 	public void setDisconnected(boolean disconnected) {
 		this.disconnected = disconnected;
+	}
+	
+	public void disconnect()
+	{
+		this.disconnect = true;
 	}
 
 	public void setX(double x) {
