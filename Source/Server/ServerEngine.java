@@ -665,19 +665,8 @@ public class ServerEngine implements ActionListener {
 					Thread.sleep(2);
 					waitedTime += 2;
 				}
-				else if (waitedTime <= 180)
-				{
-					break;
-				}
 				else
 				{
-					for (ServerPlayer player : listOfPlayers)
-					{
-						if (!playersUpdated.contains(player))
-						{
-							player.disconnect();
-						}
-					}
 					break;
 				}
 			} catch (InterruptedException e1) {

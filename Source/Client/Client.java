@@ -786,7 +786,7 @@ public class Client extends JPanel implements KeyListener, MouseListener, Action
 									break;
 								case '-':
 									JOptionPane.showMessageDialog(null,
-											"Kicked from server (cheating or *very* high ping)", "Sorry",
+											"You have been disconnected (Cheating or high ping) If this is a mistake, just rejoin the game", "Sorry",
 											JOptionPane.ERROR_MESSAGE);
 									inventory.mainMenu.doClick();
 									break;
