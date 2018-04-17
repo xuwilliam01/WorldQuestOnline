@@ -13,7 +13,7 @@ public abstract class ServerBuilding extends ServerCreature {
 	public final static int WOOD_HOUSE_HP = 450;
 	public final static int INN_HP = 700;
 	public final static int TOWER_HP = 750;
-	public final static int CASTLE_HP = 12000;
+	public final static int CASTLE_HP = 3500;
 	public final static int GOLD_MINE_HP = 1200;
 	
 	public ServerBuilding(double x, double y, String type, int team, ServerWorld world) {
