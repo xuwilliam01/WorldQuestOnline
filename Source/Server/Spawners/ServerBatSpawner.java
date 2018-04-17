@@ -24,7 +24,7 @@ public class ServerBatSpawner extends ServerSpawner
 	/**
 	 * The delay before spawning another bat for a 12 man game (60 counters per second)
 	 */
-	public final static int BAT_SPAWN_DELAY = 250;
+	public final static int BAT_SPAWN_DELAY = 60;
 
 	/**
 	 * Constructor
