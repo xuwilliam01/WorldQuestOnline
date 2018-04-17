@@ -101,7 +101,7 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * The tier of goblins this castle will spawn up to given current tier
 	 */
-	private int goblinTierLimit = 0;
+	private int goblinTierLimit = 5;
 
 	/**
 	 * All the spawners of this team
@@ -193,7 +193,7 @@ public class ServerCastle extends ServerBuilding {
 				}
 			}
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 0; i < 15; i++)
 			{
 				int randomGoblin = (int)(Math.random()*(this.goblinTierLimit + 1));
 				spawnGoblin(randomGoblin);
@@ -246,8 +246,8 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void upgrade()
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
-		setMaxHP(getMaxHP() + 2000);
-		setHP(getHP() + 2000);
+		setMaxHP(getMaxHP() + 1500);
+		setHP(getHP() + 1500);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
 		this.setGoblinTierLimit(this.getGoblinTierLimit() + 2);
