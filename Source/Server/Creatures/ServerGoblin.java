@@ -34,7 +34,7 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_SOLDIER_HP = 70;
 	public final static int GOBLIN_SOLDIER_NO = 2;
 	
-	public final static int GOBLIN_WIZARD_HP = 60;
+	public final static int GOBLIN_WIZARD_HP = 50;
 	public final static int GOBLIN_WIZARD_NO = 3;
 	
 	public final static int GOBLIN_SAMURAI_HP = 80;
@@ -43,7 +43,7 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_NINJA_HP = 60;
 	public final static int GOBLIN_NINJA_NO = 5;
 	
-	public final static int GOBLIN_LORD_HP = 150;
+	public final static int GOBLIN_LORD_HP = 125;
 	public final static int GOBLIN_LORD_NO = 6;
 
 	public final static int GOBLIN_GUARD_HP = 90;
@@ -52,13 +52,13 @@ public class ServerGoblin extends ServerCreature {
 	public final static int GOBLIN_KNIGHT_HP = 125;
 	public final static int GOBLIN_KNIGHT_NO = 8;
 	
-	public final static int GOBLIN_GIANT_HP = 500;
+	public final static int GOBLIN_GIANT_HP = 550;
 	public final static int GOBLIN_GIANT_NO = 9;
 	
 	public final static int GOBLIN_GENERAL_HP = 150;
 	public final static int GOBLIN_GENERAL_NO = 10;
 	
-	public final static int GOBLIN_KING_HP = 250;
+	public final static int GOBLIN_KING_HP = 200;
 	public final static int GOBLIN_KING_NO = 11;
 	
 	public final static int noOfGoblinTypes = 12;

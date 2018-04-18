@@ -1448,7 +1448,10 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		synchronized(engine.getSavedPlayers())
 		{
 			inflictDamage(1000, this);
-			//engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour, bestWeapon, bestArmour,getWorld().getWorldCounter()));
+			if (!disconnect)
+			{
+				engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour, bestWeapon, bestArmour,getWorld().getWorldCounter()));
+			}
 		}
 
 		// If the buffered reader breaks, the player has disconnected

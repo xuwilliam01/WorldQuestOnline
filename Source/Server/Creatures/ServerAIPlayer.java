@@ -36,7 +36,7 @@ public class ServerAIPlayer extends ServerCreature{
 			"You can't handle the truth!",
 			"Killing spree",
 			"Invincible",
-			"Killionaire",
+			"HahahAHAHaa",
 			"You're fired",
 			"Consider that a divorce"
 	};
@@ -69,7 +69,8 @@ public class ServerAIPlayer extends ServerCreature{
 			"Et Tu, Brute?",
 			"Ask me not what I know",
 			"O damn'd Iago! O inhuman dog!",
-			"Thus with a kiss I die"
+			"Thus with a kiss I die",
+			".....Mom?"
 	};
 	public static LinkedList<String> killMessageQueue = new LinkedList<String>();
 	public static LinkedList<String> targetMessageQueue = new LinkedList<String>();

@@ -1515,12 +1515,16 @@ public class MainMenu implements KeyListener {
 				return;
 			}
 			JOptionPane.showMessageDialog(null,
-					"We are updating the instructions! The controls are shown in the lobby.", "Sorry",
+					"Who reads instructions?! Just play the game! Just remember these few tips:\n\n"
+					+ "Press E on the Castle to open the castle shop and purchase buildings with your castle money (There is passive team income!)\n"
+					+ "Right click an item in your inventory while talking to a merchant to sell it, otherwise right click to drop it\n"
+					+ "Left click weapons/armor in your inventory to equip them and use 1-4 to scroll through your equipped weapons\n"
+					+ "Destroy the enemy castle to win!", "Mmm",
 					JOptionPane.PLAIN_MESSAGE);
 
 			mainFrame.requestFocus();
 			// mainFrame.remove(mainMenu);
-			//mainMenu.close();
+			// mainMenu.close();
 			// mainFrame.invalidate();
 			// mainFrame.validate();
 			// mainMenu = null;

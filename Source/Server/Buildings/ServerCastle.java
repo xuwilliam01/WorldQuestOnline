@@ -132,7 +132,7 @@ public class ServerCastle extends ServerBuilding {
 	/**
 	 * Amount of income castle gains every minute
 	 */
-	public final static int[] CASTLE_TIER_INCOME = {10, 12, 15, 18, 22, 26, 30};
+	public final static int[] CASTLE_TIER_INCOME = {10, 10, 10, 10, 10, 10, 10};
 	
 	/**
 	 * Castle will no longer get passive income when gold passes this point
