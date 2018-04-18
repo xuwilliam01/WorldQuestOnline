@@ -177,13 +177,6 @@ public class ServerLobbyPlayer implements Runnable
 					{
 						started = true;
 						server.start();
-//						if(numRed == numBlue)
-//						{
-//							server.start();
-//						}
-//						else server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
-//								+ "Server " + 5 + " "
-//								+ "Balance the teams to start");
 					}
 				}
 				else if (command.length() > 2 && command.charAt(0) == 'M'
