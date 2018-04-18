@@ -42,7 +42,7 @@ public class ServerAIPlayer extends ServerCreature{
 	};
 	public static String [] targetMessages = {
 			"How fast can you run?",
-			"What if it isn’t a train you’re running for, but your life?",
+			"What if it isn't a train you're running for, but your life?",
 			"You complete me",
 			"Chewie, we're home",
 			"Yo, Adrian!",
