@@ -175,8 +175,6 @@ public class Server implements Runnable {
 		System.out.println("Server closed");
 	}
 	
-	
-	
 	@Override
 	public void run() {
 		running = true;
