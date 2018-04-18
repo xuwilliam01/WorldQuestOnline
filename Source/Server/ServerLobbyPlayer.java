@@ -107,17 +107,20 @@ public class ServerLobbyPlayer implements Runnable
 				}
 				else if (command.equals("S") && isLeader)
 				{
-					if (Math.abs(numBlue - numRed) < 2)
-					{
-						started = true;
-						server.start();
-					}
-					else
-					{
-						server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
-								+ "Server " + 5 + " "
-								+ "Balance the teams to start");
-					}
+					started = true;
+					server.start();
+					
+//					if (Math.abs(numBlue - numRed) < 2)
+//					{
+//						started = true;
+//						server.start();
+//					}
+//					else
+//					{
+//						server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+//								+ "Server " + 5 + " "
+//								+ "Balance the teams to start");
+//					}
 				}
 				else if (command.length() > 2
 						&& command.substring(0, 2).equals("Na"))
@@ -172,13 +175,15 @@ public class ServerLobbyPlayer implements Runnable
 					//Start the game if teams are full
 					if(numRed + numBlue == Server.MAX_PLAYERS)			
 					{
-						if(numRed == numBlue)
-						{
-							server.start();
-						}
-						else server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
-								+ "Server " + 5 + " "
-								+ "Balance the teams to start");
+						started = true;
+						server.start();
+//						if(numRed == numBlue)
+//						{
+//							server.start();
+//						}
+//						else server.broadcast("CH E 1 " + ServerCreature.NEUTRAL
+//								+ "Server " + 5 + " "
+//								+ "Balance the teams to start");
 					}
 				}
 				else if (command.length() > 2 && command.charAt(0) == 'M'
