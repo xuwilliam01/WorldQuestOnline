@@ -50,14 +50,15 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 	private long signalBegin = Long.MAX_VALUE / 2;
 	private final long SIGNAL_TIME_LIMIT = 500;
 	
+	public static ServerInfo savedDestination;
+	
 	/**
 	 * Name, capacity, ping
 	 */
 	private Object[][] serversData = new Object[0][3];
 	public static boolean open = false;
 
-
-	public ClientServerSelection(int port) throws SocketException
+	public ClientServerSelection(int port, boolean joinSavedLobby) throws SocketException
 	{
 		//this.getContentPane().setBackground(Color.BLACK);
 		
@@ -74,7 +75,15 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 		setLocationRelativeTo(null);
 		setLayout(null);
 		setUndecorated(false);
-		setVisible(true);
+		
+		if (!joinSavedLobby)
+		{
+			setVisible(true);
+		}
+		else
+		{
+			setVisible(false);
+		}
 		revalidate();
 		addWindowListener(this);
 		requestFocus();
@@ -166,7 +175,51 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void connectToSaved()
+	{
+		if (savedDestination != null)
+		{
+			ServerInfo destination = savedDestination;
+			savedDestination = null;
+			
+			int maxPlayers = Server.MAX_PLAYERS;
+			if (destination.getName().contains("1v1"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("2v2"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("3v3"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("4v4"))
+			{
+				maxPlayers = 2;
+			}
+			else if (destination.getName().contains("5v5"))
+			{
+				maxPlayers = 2;
+			}
+			
+			if(destination.getNumPlayers() >= maxPlayers)
+			{
+				JOptionPane.showMessageDialog(null, "This server is full", "", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+			
+			String IP = destination.getIP();
+			//Checks if server IP is the same as your external IP
+			//Must use 127.0.0.1 in this case
+			send("C", IP, destination.getPort());
+			this.setSignalBegin(System.currentTimeMillis());
+			
+		}
+	}
+	
 	public void connect()
 	{
 		int row = table.getSelectedRow();
@@ -206,6 +259,8 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			//Must use 127.0.0.1 in this case
 			send("C", IP, destination.getPort());
 			this.setSignalBegin(System.currentTimeMillis());
+			
+			savedDestination = destination;
 		}
 	}
 	

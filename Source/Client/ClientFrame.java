@@ -24,6 +24,8 @@ public class ClientFrame extends JFrame
 		setPreferredSize(new Dimension(Client.SCREEN_WIDTH
 				+ ClientInventory.INVENTORY_WIDTH, Client.SCREEN_HEIGHT));
 
+		setBackground(Color.BLACK);
+		
 		setResizable(false);
 		setTitle("WorldQuest Online");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
