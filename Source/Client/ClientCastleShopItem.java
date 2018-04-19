@@ -43,7 +43,7 @@ public class ClientCastleShopItem extends JButton implements ActionListener{
 			setIcon(new ImageIcon(Images.getImage("ADV_BARRACKS_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
 			setLocation(ClientFrame.getScaledWidth(222),ClientFrame.getScaledHeight(50));
 			cost = ServerBuildingItem.ADV_BARRACKS_COST;
-			setToolTipText("Advanced Barracks (Spawns three knights and two wizards each tick)");
+			setToolTipText("Advanced Barracks (Spawns three knights and one wizard each tick)");
 			break;
 		case ServerWorld.GIANT_FACTORY_ITEM_TYPE:
 			setIcon(new ImageIcon(Images.getImage("GIANT_FACTORY_ICON").getScaledInstance(ClientFrame.getScaledWidth(WIDTH), ClientFrame.getScaledHeight(HEIGHT), 0)));
