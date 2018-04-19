@@ -20,7 +20,7 @@ public class ClientScoreBoard extends JPanel implements ActionListener{
 	private PriorityQueue<ClientPlayerScore> redTeam = new PriorityQueue<ClientPlayerScore>();
 	private PriorityQueue<ClientPlayerScore> blueTeam = new PriorityQueue<ClientPlayerScore>();
 	Image scoreboardImage;
-	public static boolean gameover = false;
+	private boolean gameover = false;
 	private String winner = "Red Team";
 	private int team = 0;
 	private JButton mainMenu;
@@ -35,7 +35,6 @@ public class ClientScoreBoard extends JPanel implements ActionListener{
 		setLocation((Client.SCREEN_WIDTH+ClientInventory.INVENTORY_WIDTH)/4 - ClientInventory.INVENTORY_WIDTH/2, Client.SCREEN_HEIGHT/4);
 		scoreboardImage = Images.getImage("scoreboard");
 		mainMenu = client.getInventory().mainMenu;
-		gameover = false;
 	}
 
 	public void setLoser(int loser)
@@ -69,7 +68,7 @@ public class ClientScoreBoard extends JPanel implements ActionListener{
 			graphics.drawString(message, this.getWidth()/2 - graphics.getFontMetrics().stringWidth(message)/2,this.getHeight() - 65);
 			mainMenu.setSize(200, 25);
 			mainMenu.setLocation(this.getWidth()/2 - mainMenu.getWidth()/2, this.getHeight() - mainMenu.getHeight() - 25);
-			mainMenu.setText("Back to lobby");
+			mainMenu.setText("Back to main menu");
 			mainMenu.setVisible(true);
 			add(mainMenu);
 		}

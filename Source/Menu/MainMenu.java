@@ -49,7 +49,6 @@ import Client.ClientCloud;
 import Client.ClientFrame;
 import Client.ClientInventory;
 import Client.ClientLobby;
-import Client.ClientScoreBoard;
 import ClientUDP.ClientAccountWindow;
 import ClientUDP.ClientServerSelection;
 import ClientUDP.Leaderboard;
@@ -157,7 +156,7 @@ public class MainMenu implements KeyListener {
 	/**
 	 * Constructor
 	 */
-	public MainMenu(Point pos, boolean reconnectToLobby) {
+	public MainMenu(Point pos, boolean openServerList) {
 		Client.inGame = false;
 		main = this;
 		numTries = 0;
@@ -233,7 +232,7 @@ public class MainMenu implements KeyListener {
 			}
 		}
 		mainFrame.setLayout(null);
-		mainMenu = new MainPanel(reconnectToLobby);
+		mainMenu = new MainPanel(openServerList);
 		mainFrame.add(mainMenu);
 		mainMenu.revalidate();
 		mainFrame.setVisible(true);
@@ -331,17 +330,21 @@ public class MainMenu implements KeyListener {
 		String wins;
 		String losses;
 		
+		boolean openServerList = false;
+		
 		/**
 		 * Constructor
 		 */
-		public MainPanel(boolean reconnectToLobby) {
+		public MainPanel(boolean openServerList) {
+			this.openServerList = openServerList;
 			
 			// Set the Icon
 			mainFrame.setIconImage(Images.getImage("WorldQuestIcon"));
 			numTries = 0;
 			setDoubleBuffered(true);
+			// setBackground(Color.white);
 
-			setBackground(Color.BLACK);
+			// setBackground(Color.BLACK);
 			setFocusable(true);
 			setLayout(null);
 			setLocation(0, 0);
@@ -475,18 +478,6 @@ public class MainMenu implements KeyListener {
 
 			setVisible(true);
 			repaint();
-			
-			if (reconnectToLobby && ClientScoreBoard.gameover)
-			{
-				try {
-					Thread.sleep(1000);
-					OnlineButton.openServerSelection(true);
-					reconnectToLobby = false;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				ClientScoreBoard.gameover = false;
-			}
 		}
 
 		public void close() {
@@ -613,6 +604,13 @@ public class MainMenu implements KeyListener {
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
+				
+				if (numTries == 0 && openServerList)
+				{
+					OnlineButton.openServerSelection();
+					openServerList = false;
+					serverList.refresh();
 				}
 				
 				numTries++;
@@ -1066,10 +1064,10 @@ public class MainMenu implements KeyListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			openServerSelection(false);
+			openServerSelection();
 		}
 		
-		public static void openServerSelection(boolean joinSavedLobby)
+		public static void openServerSelection()
 		{
 			if (ClientAccountWindow.open) {
 				newLogin.setVisible(true);
@@ -1093,18 +1091,13 @@ public class MainMenu implements KeyListener {
 			}
 			serverList = null;
 			try {
-				serverList = new ClientServerSelection(DEF_UDP_PORT, joinSavedLobby);
+				serverList = new ClientServerSelection(DEF_UDP_PORT);
 			} catch (SocketException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Thread listThread = new Thread(serverList);
 			listThread.start();
-			
-			if (joinSavedLobby)
-			{
-				serverList.connectToSaved();
-			}
 		}
 	}
 
@@ -1314,7 +1307,7 @@ public class MainMenu implements KeyListener {
 		public void actionPerformed(ActionEvent e) {
 			client.leaveGame = true;
 			client.getOutput().close();
-			StartGame.restart(mainFrame, ClientScoreBoard.gameover);
+			StartGame.restart(mainFrame, true);
 			addedKeyListener = false;
 		}
 	}
@@ -1522,11 +1515,11 @@ public class MainMenu implements KeyListener {
 				return;
 			}
 			JOptionPane.showMessageDialog(null,
-					"Who reads instructions?! Play the game!\n\n Just remember these few tips:\n\n"
-					+ "- Press E on the Castle to open the castle shop and purchase buildings with your castle money (There is passive team income!)\n"
-					+ "- Right click an item in your inventory while talking to a merchant to sell it, otherwise right click to drop it\n"
-					+ "- Left click weapons/armor in your inventory to equip them and use 1-4 to scroll through your equipped weapons\n"
-					+ "- Destroy the enemy castle to win!", "Mmm",
+					"Who reads instructions?! Just play the game! Just remember these few tips:\n\n"
+					+ "Press E on the Castle to open the castle shop and purchase buildings with your castle money (There is passive team income!)\n"
+					+ "Right click an item in your inventory while talking to a merchant to sell it, otherwise right click to drop it\n"
+					+ "Left click weapons/armor in your inventory to equip them and use 1-4 to scroll through your equipped weapons\n"
+					+ "Destroy the enemy castle to win!", "Mmm",
 					JOptionPane.PLAIN_MESSAGE);
 
 			mainFrame.requestFocus();

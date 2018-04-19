@@ -246,7 +246,7 @@ public class ServerCastle extends ServerBuilding {
 	public synchronized void upgrade()
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
-		setMaxHP(getMaxHP() + 1250);
+		setMaxHP(getMaxHP() + 1500);
 		setHP(getHP() + 1500);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];

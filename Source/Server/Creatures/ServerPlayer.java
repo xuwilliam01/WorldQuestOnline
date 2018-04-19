@@ -444,20 +444,20 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			double x = getX()+getWidth()/2;
 			double y = getY()+getHeight()/2;
 			
-			if (getWorld().getCollisionGrid()[(int)(y/ServerWorld.TILE_SIZE)][(int)(x/ServerWorld.TILE_SIZE)]==ServerWorld.SOLID_TILE)
-			{
-				if (System.currentTimeMillis() - lastCollisionStrike > 10000)
-				{
-					collisionStrikes = 0;
-				}
-				collisionStrikes++;
-				lastCollisionStrike = System.currentTimeMillis();
-				
-				if (collisionStrikes >= 6)
-				{
-					disconnect = true;
-				}
-			}
+//			if (getWorld().getCollisionGrid()[(int)(y/ServerWorld.TILE_SIZE)][(int)(x/ServerWorld.TILE_SIZE)]==ServerWorld.SOLID_TILE)
+//			{
+//				if (System.currentTimeMillis() - lastCollisionStrike > 60000)
+//				{
+//					collisionStrikes = 0;
+//				}
+//				collisionStrikes++;
+//				lastCollisionStrike = System.currentTimeMillis();
+//				
+//				if (collisionStrikes >= 6)
+//				{
+//					disconnect = true;
+//				}
+//			}
 			
 			if (lastX != -1 && isAlive() && Math.abs(lastX-getX())>1.75* horizontalMovement*((1.0*time)/ServerEngine.UPDATE_RATE))
 			{

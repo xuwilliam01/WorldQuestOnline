@@ -31,7 +31,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 import Menu.MainMenu;
-import Server.ServerFrame;
 
 @SuppressWarnings("serial")
 public class ClientAccountWindow extends JFrame implements Runnable, ActionListener, WindowListener, KeyListener {
@@ -74,15 +73,7 @@ public class ClientAccountWindow extends JFrame implements Runnable, ActionListe
 	public ClientAccountWindow(int port, JButton menuLoginButton, Image logoutOver) throws SocketException
 	{
 		this.getContentPane().setBackground(Color.BLACK);
-		
-		if (MainMenu.isMac)
-		{
-			setSize(400, 270);
-		}
-		else
-		{
-			setSize(400, 300);
-		}
+		setSize(400, 270);
 		setResizable(false);
 		setTitle("Account Login");
 		setLocationRelativeTo(null);
