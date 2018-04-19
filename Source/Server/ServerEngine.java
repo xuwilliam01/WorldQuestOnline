@@ -670,7 +670,10 @@ public class ServerEngine implements ActionListener {
 					for (ServerPlayer player : listOfPlayers) {
 						if (!playersUpdated.contains(player))
 						{
-							player.disconnect();
+							if (System.currentTimeMillis() - player.getJoinTime() > 5000)
+							{
+								player.disconnect();
+							}
 						}
 					}
 					break;

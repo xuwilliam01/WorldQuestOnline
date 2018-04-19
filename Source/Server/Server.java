@@ -335,52 +335,52 @@ public class Server implements Runnable {
 				synchronized(engine.getSavedPlayers())
 				{
 					SavedPlayer toRemove = null;
-//					for(SavedPlayer p : engine.getSavedPlayers())
-//					{
-//						if(name.equals(p.name))
-//						{
-//							int x = engine.getWorld().getBlueCastleX();
-//							int y = engine.getWorld().getBlueCastleY();
-//							if (p.team == ServerPlayer.RED_TEAM) {
-//								x = engine.getWorld().getRedCastleX();
-//								y = engine.getWorld().getRedCastleY();
-//							}
-//
-//							newPlayer = new ServerPlayer(name, x, y,
-//									ServerPlayer.DEFAULT_WIDTH,
-//									ServerPlayer.DEFAULT_HEIGHT,
-//									ServerWorld.GRAVITY, p.skinColour, p.hair,
-//									newClient, engine, engine.getWorld(), input, output);
-//
-//							newPlayer.increaseMoney(p.money);
-//							newPlayer.setKills(p.kills);
-//							newPlayer.setDeaths(p.deaths);
-//							newPlayer.addTotalDamage(p.totalDmg);
-//							newPlayer.addTotalMoneySpent(p.totalMoney);
-//							newPlayer.setTeam(p.team);
-//							if(p.bestWeapon != null)
-//								newPlayer.addItem(p.bestWeapon);
-//							if(p.bestArmour != null)
-//								newPlayer.addItem(p.bestArmour);
-//							if(engine.getWorld().getWorldCounter() - p.leaveTime < 600)
-//							{
-//								newPlayer.setAlive(false);
-//								newPlayer.setDeathCounter(p.leaveTime);
-//								newPlayer.setHP(0);
-//							}	
-//							toRemove = p;
-//							engine.broadcast("d "
-//									+ newPlayer.getName().split(" ").length + " "
-//									+ newPlayer.getTeam() + newPlayer.getName());
-//							break;
-//						}
-//					}
-//					if(toRemove != null)
-//					{
-//						engine.getSavedPlayers().remove(toRemove);
-//					}
+					for(SavedPlayer p : engine.getSavedPlayers())
+					{
+						if(name.equals(p.name))
+						{
+							int x = engine.getWorld().getBlueCastleX();
+							int y = engine.getWorld().getBlueCastleY();
+							if (p.team == ServerPlayer.RED_TEAM) {
+								x = engine.getWorld().getRedCastleX();
+								y = engine.getWorld().getRedCastleY();
+							}
+
+							newPlayer = new ServerPlayer(name, x, y,
+									ServerPlayer.DEFAULT_WIDTH,
+									ServerPlayer.DEFAULT_HEIGHT,
+									ServerWorld.GRAVITY, p.skinColour, p.hair,
+									newClient, engine, engine.getWorld(), input, output);
+
+							newPlayer.increaseMoney(p.money);
+							newPlayer.setKills(p.kills);
+							newPlayer.setDeaths(p.deaths);
+							newPlayer.addTotalDamage(p.totalDmg);
+							newPlayer.addTotalMoneySpent(p.totalMoney);
+							newPlayer.setTeam(p.team);
+							if(p.bestWeapon != null)
+								newPlayer.addItem(p.bestWeapon);
+							if(p.bestArmour != null)
+								newPlayer.addItem(p.bestArmour);
+							if(engine.getWorld().getWorldCounter() - p.leaveTime < 600)
+							{
+								newPlayer.setAlive(false);
+								newPlayer.setDeathCounter(p.leaveTime);
+								newPlayer.setHP(0);
+							}	
+							toRemove = p;
+							engine.broadcast("d "
+									+ newPlayer.getName().split(" ").length + " "
+									+ newPlayer.getTeam() + newPlayer.getName());
+							break;
+						}
+					}
+					if(toRemove != null)
+					{
+						engine.getSavedPlayers().remove(toRemove);
+					}
 					//If a new player, initialize them
-					//else 
+					else 
 					{
 						int characterSelection = (int) (Math.random() * playerColours.length);
 						int randomHair = (int)(Math.random() * playerHairs.length);

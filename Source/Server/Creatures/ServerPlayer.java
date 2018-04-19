@@ -268,6 +268,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private boolean disconnect = false;
 	
 	private boolean toUpdateClient = false;
+	
+	private long joinTime;
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -296,6 +298,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				+ skinColour + "_RIGHT_0_0", ServerWorld.PLAYER_TYPE,
 				world.getBluePlayerStartHP(), world, true);
 		
+		joinTime = System.currentTimeMillis();
 		disconnect = false;
 		// Set the name of the player
 		setName(name);
@@ -1448,10 +1451,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		synchronized(engine.getSavedPlayers())
 		{
 			inflictDamage(1000, this);
-			if (!disconnect)
-			{
-				engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour, bestWeapon, bestArmour,getWorld().getWorldCounter()));
-			}
+			engine.getSavedPlayers().add(new SavedPlayer(getName(), getMoney(), kills, deaths, totalDamageDealt, totalMoneySpent, getTeam(),hair, skinColour, bestWeapon, bestArmour,getWorld().getWorldCounter()));
 		}
 
 		// If the buffered reader breaks, the player has disconnected
@@ -2638,5 +2638,13 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public void setDeathCounter(long amount)
 	{
 		deathCounter = amount;
+	}
+
+	public long getJoinTime() {
+		return joinTime;
+	}
+
+	public void setJoinTime(long joinTime) {
+		this.joinTime = joinTime;
 	}
 }
