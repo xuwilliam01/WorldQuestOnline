@@ -36,8 +36,8 @@ public class StartServer {
 		}
 		else
 		{
-			System.out.print("Enter central server IP: ");
-			ClientAccountWindow.Domain = scan.nextLine();
+//			System.out.print("Enter central server IP: ");
+//			ClientAccountWindow.Domain = scan.nextLine();
 			scan.close();
 			
 			Imports.Audio.isServer=true;
