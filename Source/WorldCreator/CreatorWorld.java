@@ -475,7 +475,7 @@ ActionListener, MouseWheelListener, MouseListener, MouseMotionListener
 		graphics.drawString("Place objects using left click", 10, 50);
 		graphics.drawString("Delete objects using ctrl+right click", 10, 65);
 		graphics.drawString(
-				"Use arrow keys to scroll or ctrl + left click to drag the map",
+				"Use the WASD keys to scroll or ctrl + left click to drag the map",
 				10, 80);
 		graphics.drawString(
 				"Highlight and fill areas of the map with tiles using right click",

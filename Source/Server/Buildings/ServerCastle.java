@@ -247,7 +247,7 @@ public class ServerCastle extends ServerBuilding {
 	{
 		xp -= ServerCastle.CASTLE_TIER_XP[tier];
 		setMaxHP(getMaxHP() + 1250);
-		setHP(getHP() + 1500);
+		setHP(getHP() + 1250);
 		tier++;
 		castleGoblins = GOBLIN_SPAWNS[tier];
 		this.setGoblinTierLimit(this.getGoblinTierLimit() + 2);

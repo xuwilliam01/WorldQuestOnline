@@ -507,9 +507,9 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 							token++;
 							for (int no = 0; no < maps.length; no++)
 							{
-								if (maps[no].equalsIgnoreCase(Character
+								if (maps[no].equalsIgnoreCase((Character
 										.toUpperCase(tokens[token].charAt(0))
-										+ tokens[token].substring(1)))
+										+ tokens[token].substring(1)).replace('_', ' ')))
 								{
 									map = maps[no];
 									break;
@@ -517,7 +517,7 @@ public class ClientLobby extends JPanel implements ActionListener, KeyListener
 							}
 
 							mapBox.setSelectedItem(map);
-							//System.out.println(map);
+							System.out.println(map);
 						}
 					}
 					else if (tokens[token].equals("N"))
