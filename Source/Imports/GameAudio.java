@@ -19,12 +19,12 @@ public class GameAudio {
 	public static final float MAX_DISTANCE = 1080;
 	public static boolean audioSupported = true;
 	
-	public GameAudio(String name)
+	public GameAudio(String name, String folder)
 	{
 		this.name = name;
 		if (!Audio.isServer)
 		{
-			File soundFile = new File("Audio//"+name+".wav");
+			File soundFile = new File("Audio//"+folder+"//"+name+".wav");
 			try {
 				AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
 				DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());

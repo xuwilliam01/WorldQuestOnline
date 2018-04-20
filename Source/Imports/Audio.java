@@ -108,30 +108,30 @@ public class Audio {
 		audioArray = new GameAudio[1000];
 
 		//Import all audio
-		addToAudioArray(new GameAudio("heartbeat"));
-		addToAudioArray(new GameAudio("level_up"));
-		addToAudioArray(new GameAudio("ice_break"));
-		addToAudioArray(new GameAudio("gag"));
-		addToAudioArray(new GameAudio("cut"));
-		addToAudioArray(new GameAudio("fireball"));
-		addToAudioArray(new GameAudio("megabow"));
-		addToAudioArray(new GameAudio("fire_explode"));
-		
-		for (int no = 0; no < 7; no++)
-		{
-			addToAudioArray(new GameAudio("cut_air"+no));
-		}
-		
-		addToAudioArray(new GameAudio("bgm_menu"));
+		addToAudioArray(new GameAudio("bgm_menu", "BGM"));
 		
 		for (int no = 0; no < 5; no++)
 		{
-			addToAudioArray(new GameAudio("bgm_game"+no));
+			addToAudioArray(new GameAudio("bgm_game"+no, "BGM"));
+		}
+		
+		addToAudioArray(new GameAudio("heartbeat", "SFX"));
+		addToAudioArray(new GameAudio("level_up", "SFX"));
+		addToAudioArray(new GameAudio("ice_break", "SFX"));
+		addToAudioArray(new GameAudio("gag", "SFX"));
+		addToAudioArray(new GameAudio("cut", "SFX"));
+		addToAudioArray(new GameAudio("fireball", "SFX"));
+		addToAudioArray(new GameAudio("megabow", "SFX"));
+		addToAudioArray(new GameAudio("fire_explode", "SFX"));
+		
+		for (int no = 0; no < 7; no++)
+		{
+			addToAudioArray(new GameAudio("cut_air"+no, "SFX"));
 		}
 		
 		for (int no = 0; no < 10; no++)
 		{
-			addToAudioArray(new GameAudio("scream"+no));
+			addToAudioArray(new GameAudio("scream"+no, "SFX"));
 		}
 		
 		//Configure storage for audio
