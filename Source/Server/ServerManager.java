@@ -155,14 +155,7 @@ public class ServerManager implements Runnable, ActionListener{
 		{
 			Server.MAX_PLAYERS = 6;
 		}
-		else if (name.contains("4v4"))
-		{
-			Server.MAX_PLAYERS = 8;
-		}
-		else if (name.contains("5v5"))
-		{
-			Server.MAX_PLAYERS = 10;
-		}
+
 		this.maxRooms = maxRooms;
 		thisPort = port;
 		HAS_FRAME = withWindow;

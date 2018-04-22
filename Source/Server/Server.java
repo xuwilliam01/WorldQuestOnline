@@ -23,7 +23,7 @@ import Server.Creatures.ServerPlayer;
  * 
  */
 public class Server implements Runnable {
-	public static int MAX_PLAYERS = 12;
+	public static int MAX_PLAYERS = 8;
 	public static String[] playerColours = { "DARK", "LIGHT", "TAN" };
 	public static String[] playerHairs = {"HAIR0BEIGE", "HAIR1BEIGE", "HAIR0BLACK", "HAIR1BLACK", "HAIR0BLOND", "HAIR1BLOND", "HAIR0GREY","HAIR1GREY"};
 	

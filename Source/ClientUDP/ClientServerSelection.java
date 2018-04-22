@@ -190,19 +190,11 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			}
 			else if (destination.getName().contains("2v2"))
 			{
-				maxPlayers = 2;
+				maxPlayers = 4;
 			}
 			else if (destination.getName().contains("3v3"))
 			{
-				maxPlayers = 2;
-			}
-			else if (destination.getName().contains("4v4"))
-			{
-				maxPlayers = 2;
-			}
-			else if (destination.getName().contains("5v5"))
-			{
-				maxPlayers = 2;
+				maxPlayers = 6;
 			}
 			
 			if(destination.getNumPlayers() >= maxPlayers)
@@ -233,19 +225,11 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 			}
 			else if (destination.getName().contains("2v2"))
 			{
-				maxPlayers = 2;
+				maxPlayers = 4;
 			}
 			else if (destination.getName().contains("3v3"))
 			{
-				maxPlayers = 2;
-			}
-			else if (destination.getName().contains("4v4"))
-			{
-				maxPlayers = 2;
-			}
-			else if (destination.getName().contains("5v5"))
-			{
-				maxPlayers = 2;
+				maxPlayers = 6;
 			}
 			
 			if(destination.getNumPlayers() >= maxPlayers)
@@ -405,14 +389,6 @@ public class ClientServerSelection extends JFrame implements Runnable, WindowLis
 							else if (((String)serversData[index][0]).contains("3v3"))
 							{
 								maxPlayers = 6;
-							}
-							else if (((String)serversData[index][0]).contains("4v4"))
-							{
-								maxPlayers = 8;
-							}
-							else if (((String)serversData[index][0]).contains("5v5"))
-							{
-								maxPlayers = 10;
 							}
 							
 							if (Integer.parseInt((String)serversData[index][5]) >= maxPlayers)
