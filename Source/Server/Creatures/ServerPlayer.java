@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import Imports.Audio;
 import Imports.Images;
@@ -66,6 +68,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	public final static int PLAYER_MAX_MANA = 250;
 
 	private StringBuilder message = new StringBuilder();
+	private Queue<StringBuilder> messageQueue = new LinkedList<StringBuilder>();
 
 	private boolean disconnected = false;
 
@@ -266,8 +269,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private boolean castleOpen = false;
 
 	private boolean disconnect = false;
-	
-	private boolean toUpdateClient = false;
 	
 	private long joinTime;
 	/**
@@ -685,16 +686,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		queueMessage("* " + hSpeed + " " + vSpeed);
 	}
 
-	public void updateClient()
-	{
-		toUpdateClient = true;
-	}
-	
 	/**
 	 * Send to the client all the updated values (x and y must be rounded to
 	 * closest integer)
 	 */
-	private void buildUpdateMessage() {
+	public void updateClient() {
 		// Slowly regenerate the player's mana and hp, and send it to the client
 		if (getWorld().getWorldCounter() % 40 == 0 && mana < maxMana) {
 			mana++;
@@ -1117,7 +1113,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			// Signal a repaint
 			queueMessage("U");
 			
-			this.engine.addPlayerUpdated(this);
+			synchronized (messageQueue)
+			{
+				messageQueue.add(this.message);
+			}
+			this.message = new StringBuilder("Z");
 		}
 
 	}
@@ -1132,13 +1132,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
-				if (toUpdateClient) {
-					buildUpdateMessage();
+				if (!messageQueue.isEmpty()) {
 					flushWriter();
-					toUpdateClient = false;
 				}
 				try {
-					Thread.sleep(5);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -1163,7 +1161,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			try {
 				// Read the next line the player sent in
 				String command = input.readLine();
-
 				String[] tokens = command.split(" ");
 
 				if (tokens.length == 0) {
@@ -2129,7 +2126,15 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	 * Flush all queued messages to the client
 	 */
 	public void flushWriter() {
-		output.println(message);
+		
+		StringBuilder flushMessage;
+		
+		synchronized (messageQueue)
+		{
+			 flushMessage = messageQueue.remove();
+		}
+		
+		output.println(flushMessage);
 		output.flush();
 
 		if (endGame) {
@@ -2148,7 +2153,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			closeWriter = true;
 
 		}
-		message = new StringBuilder("Z");
 	}
 
 	/**

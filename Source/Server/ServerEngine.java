@@ -111,11 +111,6 @@ public class ServerEngine implements ActionListener {
 	private int losingTeam;
 	private Server server;
 	
-	/**
-	 * Players already updated for this tick
-	 */
-	private ArrayList<ServerPlayer> playersUpdated;
-	
 	private ArrayList<SavedPlayer> savedPlayers = new ArrayList<SavedPlayer>();
 	/**
 	 * Constructor for the engine
@@ -137,13 +132,6 @@ public class ServerEngine implements ActionListener {
 		ServerManager.trackService(updateTimer);
 		startTime = System.currentTimeMillis();
 		updateTimer.start();
-		
-		playersUpdated = new ArrayList<ServerPlayer>();
-	}
-	
-	public synchronized void addPlayerUpdated(ServerPlayer player)
-	{
-		playersUpdated.add(player);
 	}
 
 	/**
@@ -653,37 +641,6 @@ public class ServerEngine implements ActionListener {
 		
 		// Update all the clients with the new player data
 		updateClients();
-
-		int waitedTime = 0;
-		
-		while (playersUpdated.size() < listOfPlayers.size())
-		{
-			try {
-				
-				if (waitedTime <= 1000)
-				{
-					Thread.sleep(2);
-					waitedTime += 2;
-				}
-				else
-				{
-					for (ServerPlayer player : listOfPlayers) {
-						if (!playersUpdated.contains(player))
-						{
-							if (System.currentTimeMillis() - player.getJoinTime() > 5000)
-							{
-								player.disconnect();
-							}
-						}
-					}
-					break;
-				}
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-		playersUpdated.clear();
 		
 		// Update the gui
 		if (ServerManager.HAS_FRAME) {
