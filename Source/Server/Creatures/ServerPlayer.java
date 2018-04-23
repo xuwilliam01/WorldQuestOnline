@@ -2225,8 +2225,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			numManaPots+=item.getAmount();
 
 		getInventory().add(item);
-		queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
-				+ item.getAmount() + " " + item.getCost());
+		synchronized (message)
+		{
+			queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+					+ item.getAmount() + " " + item.getCost());
+		}
 		return 1;
 	}
 
