@@ -1136,18 +1136,6 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
-				if (System.currentTimeMillis() - lastPing >= 3000 && System.currentTimeMillis() - joinTime >= 10000)
-				{
-					disconnect = true;
-					try {
-						input.close();
-						output.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					break;
-				}
 				
 				if (!messageQueue.isEmpty()) {
 					flushWriter();
@@ -1156,11 +1144,36 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					break;
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
 				}
 			}
+			
+			disconnect();
 		}
 	}
 	
+	public long getLastPing()
+	{
+		return lastPing;
+	}
+	
+	public void closeInput()
+	{
+		try {
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeOutput()
+	{
+		output.close();
+	}
 	
 
 	@Override
