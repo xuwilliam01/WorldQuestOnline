@@ -1136,7 +1136,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
-				if (System.currentTimeMillis() - lastPing >= 3000)
+				if (System.currentTimeMillis() - lastPing >= 3000 && System.currentTimeMillis() - joinTime >= 10000)
 				{
 					disconnect = true;
 					try {
