@@ -271,6 +271,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private boolean disconnect = false;
 	
 	private long joinTime;
+	
+	private long lastPing;
+	
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -320,6 +323,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		this.engine = engine;
 		xUpdated = true;
 		yUpdated = true;
+		this.lastPing = Integer.MAX_VALUE;
 
 		this.output = output;
 		this.input = input;
@@ -1132,6 +1136,19 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
+				if (System.currentTimeMillis() - lastPing >= 3000)
+				{
+					disconnect = true;
+					try {
+						input.close();
+						output.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				}
+				
 				if (!messageQueue.isEmpty()) {
 					flushWriter();
 				}
@@ -1143,6 +1160,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			}
 		}
 	}
+	
+	
 
 	@Override
 	/**
