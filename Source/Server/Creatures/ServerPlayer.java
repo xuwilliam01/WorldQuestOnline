@@ -1182,6 +1182,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				String command = input.readLine();
 				String[] tokens = command.split(" ");
 
+				lastPing = System.currentTimeMillis();
+				
 				if (tokens.length == 0) {
 					continue;
 				}
