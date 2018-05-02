@@ -271,6 +271,9 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 	private boolean disconnect = false;
 	
 	private long joinTime;
+	
+	private long lastPing;
+	
 	/**
 	 * Constructor for a player in the server
 	 * 
@@ -320,6 +323,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		this.engine = engine;
 		xUpdated = true;
 		yUpdated = true;
+		this.lastPing = Integer.MAX_VALUE;
 
 		this.output = output;
 		this.input = input;
@@ -1132,6 +1136,7 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 		@Override
 		public void run() {
 			while (!closeWriter && engine.getServer().isRunning()) {
+				
 				if (!messageQueue.isEmpty()) {
 					flushWriter();
 				}
@@ -1139,10 +1144,37 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					break;
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+					break;
 				}
 			}
+			
+			disconnect();
 		}
 	}
+	
+	public long getLastPing()
+	{
+		return lastPing;
+	}
+	
+	public void closeInput()
+	{
+		try {
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeOutput()
+	{
+		output.close();
+	}
+	
 
 	@Override
 	/**
@@ -1163,6 +1195,8 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 				String command = input.readLine();
 				String[] tokens = command.split(" ");
 
+				lastPing = System.currentTimeMillis();
+				
 				if (tokens.length == 0) {
 					continue;
 				}
@@ -2225,8 +2259,11 @@ public class ServerPlayer extends ServerCreature implements Runnable {
 			numManaPots+=item.getAmount();
 
 		getInventory().add(item);
-		queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
-				+ item.getAmount() + " " + item.getCost());
+		synchronized (message)
+		{
+			queueMessage("I " + item.getImageIndex() + " " + item.getType() + " "
+					+ item.getAmount() + " " + item.getCost());
+		}
 		return 1;
 	}
 

@@ -636,6 +636,20 @@ public class ServerEngine implements ActionListener {
 			}
 		}
 
+		if (world.getWorldCounter() % 300 == 0)
+		{
+			System.out.println("Server running");
+			for (ServerPlayer player : listOfPlayers) {
+				if (System.currentTimeMillis() - player.getLastPing() >= 3000 && System.currentTimeMillis() - player.getJoinTime() >= 10000)
+				{
+					player.disconnect();
+					player.closeInput();
+					player.closeOutput();
+					break;
+				}
+			}
+		}
+		
 		// Move all the objects around and update them
 		world.update();
 		
