@@ -19,7 +19,7 @@ public class LeaderboardPlayer implements Comparable<LeaderboardPlayer>{
 	@Override
 	public int compareTo(LeaderboardPlayer o) {
 		// TODO Auto-generated method stub
-		return o.getRating() - getRating();
+		return getRating() - o.getRating();
 	}
 	public int getRating() {
 		return rating;
