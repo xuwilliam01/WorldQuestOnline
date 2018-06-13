@@ -126,7 +126,7 @@ public class CentralServer implements Runnable, ActionListener {
 			int counter = 0;
 			while (!leaderboard.isEmpty() && counter < 3000) {
 				LeaderboardPlayer next = leaderboard.poll();
-				leaderboardString.append(next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
+				leaderboardString.insert(0, next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " ");
 				counter++;
 			}
