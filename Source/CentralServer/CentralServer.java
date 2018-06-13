@@ -103,7 +103,7 @@ public class CentralServer implements Runnable, ActionListener {
 		synchronized (leaderboardS) {
 			leaderboardS = "";
 			int counter = 0;
-			while (!leaderboard.isEmpty() && counter < 100) {
+			while (!leaderboard.isEmpty() && counter < 18) {
 				LeaderboardPlayer next = leaderboard.poll();
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
@@ -126,7 +126,7 @@ public class CentralServer implements Runnable, ActionListener {
 		synchronized (leaderboardS) {
 			leaderboardS = "";
 			int counter = 0;
-			while (!leaderboard.isEmpty() && counter < 100) {
+			while (!leaderboard.isEmpty() && counter < 18) {
 				LeaderboardPlayer next = leaderboard.poll();
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
