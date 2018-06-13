@@ -88,31 +88,29 @@ public class CentralServer implements Runnable, ActionListener {
 	}
 
 	//No currently using this method
-	public void createLeaderboard2() {
-		leaderboard.clear();
-		for (Element user : root.getChildren("User")) {
-			int elo = Integer.parseInt(user.getChild("Elo").getValue());
-			int wins = Integer.parseInt(user.getChild("Wins").getValue());
-			int losses = Integer.parseInt(user.getChild("Losses").getValue());
-			if (leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
-				continue;
-			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses, leaderboard.size()+1));
-			if (leaderboard.size() > LEADERBOARD_SIZE)
-				leaderboard.poll();
-		}
-		synchronized (leaderboardS) {
-			leaderboardS = "";
-			int counter = 0;
-			while (!leaderboard.isEmpty() && counter < 10) {
-				LeaderboardPlayer next = leaderboard.poll();
-				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
-						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
-				counter++;
-			}
-			leaderboardS.trim();
-		}
-
-	}
+//	public void createLeaderboard2() {
+//		leaderboard.clear();
+//		for (Element user : root.getChildren("User")) {
+//			int elo = Integer.parseInt(user.getChild("Elo").getValue());
+//			int wins = Integer.parseInt(user.getChild("Wins").getValue());
+//			int losses = Integer.parseInt(user.getChild("Losses").getValue());
+//			if (leaderboard.size() >= LEADERBOARD_SIZE && elo <= leaderboard.peek().getRating())
+//				continue;
+//			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses, leaderboard.size()+1));
+//			if (leaderboard.size() > LEADERBOARD_SIZE)
+//				leaderboard.poll();
+//		}
+//		synchronized (leaderboardS) {
+//			leaderboardS = "";
+//			while (!leaderboard.isEmpty()) {
+//				LeaderboardPlayer next = leaderboard.poll();
+//				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
+//						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
+//			}
+//			leaderboardS.trim();
+//		}
+//
+//	}
 
 	public void createLeaderboard()
 	{
@@ -126,7 +124,7 @@ public class CentralServer implements Runnable, ActionListener {
 		synchronized (leaderboardS) {
 			leaderboardS = "";
 			int counter = 0;
-			while (!leaderboard.isEmpty() && counter < 10) {
+			while (!leaderboard.isEmpty() && counter < 3000) {
 				LeaderboardPlayer next = leaderboard.poll();
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
