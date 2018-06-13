@@ -102,10 +102,12 @@ public class CentralServer implements Runnable, ActionListener {
 		}
 		synchronized (leaderboardS) {
 			leaderboardS = "";
-			while (!leaderboard.isEmpty()) {
+			int counter = 0;
+			while (!leaderboard.isEmpty() && counter < 3000) {
 				LeaderboardPlayer next = leaderboard.poll();
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
+				counter++;
 			}
 			leaderboardS.trim();
 		}
@@ -123,10 +125,12 @@ public class CentralServer implements Runnable, ActionListener {
 		}
 		synchronized (leaderboardS) {
 			leaderboardS = "";
-			while (!leaderboard.isEmpty()) {
+			int counter = 0;
+			while (!leaderboard.isEmpty() && counter < 3000) {
 				LeaderboardPlayer next = leaderboard.poll();
 				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
 						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
+				counter++;
 			}
 			leaderboardS.trim();
 		}
