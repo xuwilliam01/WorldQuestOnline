@@ -122,15 +122,15 @@ public class CentralServer implements Runnable, ActionListener {
 			leaderboard.add(new LeaderboardPlayer(user.getAttributeValue("name"), elo, wins, losses, leaderboard.size()+1));
 		}
 		synchronized (leaderboardS) {
-			StringBuffer leaderboardString = new StringBuffer();
+			leaderboardS = "";
 			int counter = 0;
 			while (!leaderboard.isEmpty() && counter < 3000) {
 				LeaderboardPlayer next = leaderboard.poll();
-				leaderboardString.insert(0, next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
-						+ next.getLosses() + " " + next.getName() + " ");
+				leaderboardS = next.getName().split(" ").length + " " + next.getRating() + " " + next.getWins() + " "
+						+ next.getLosses() + " " + next.getName() + " " + leaderboardS;
 				counter++;
 			}
-			leaderboardS = leaderboardString.toString().trim();
+			leaderboardS.trim();
 		}
 	}
 	
